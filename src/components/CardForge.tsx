@@ -262,6 +262,39 @@ export function CardForge() {
     }
   };
 
+  const handleUpdateArenaName = async (arenaId: string, newName: string) => {
+    if (!newName.trim()) {
+      alert('Arena name cannot be empty');
+      return;
+    }
+
+    try {
+      const response = await fetch(`https://${projectId}.supabase.co/functions/v1/make-server-c701770f/arenas/${arenaId}`, {
+        method: 'PUT',
+        headers: {
+          'Authorization': `Bearer ${publicAnonKey}`,
+          'Content-Type': 'application/json'
+        },
+        body: JSON.stringify({ name: newName })
+      });
+      
+      if (response.ok) {
+        const updatedArena = await response.json();
+        // Update local state
+        setArenas(arenas.map(a => a.id === arenaId ? updatedArena : a));
+        if (selectedArena?.id === arenaId) {
+          setSelectedArena(updatedArena);
+        }
+      } else {
+        console.error('Failed to update arena name:', await response.text());
+        alert('Failed to update arena name');
+      }
+    } catch (error) {
+      console.error('Error updating arena name:', error);
+      alert('Error updating arena name');
+    }
+  };
+
   const updateField = (field: string, value: any) => {
     if (!selectedCard) return;
     setSelectedCard({ ...selectedCard, [field]: value });
@@ -673,7 +706,25 @@ export function CardForge() {
                   <div className="bg-gradient-to-br from-purple-900/20 to-pink-900/20 rounded-xl p-6 border border-purple-500/30">
                     <div className="text-center mb-6">
                       <div className="text-3xl mb-2">🏟️</div>
-                      <h4 className="text-2xl text-white">{selectedArena.name}</h4>
+                      <input
+                        type="text"
+                        value={selectedArena.name}
+                        onChange={(e) => {
+                          setSelectedArena({ ...selectedArena, name: e.target.value });
+                        }}
+                        onBlur={(e) => {
+                          if (selectedArena.id && e.target.value !== arenas.find(a => a.id === selectedArena.id)?.name) {
+                            handleUpdateArenaName(selectedArena.id, e.target.value);
+                          }
+                        }}
+                        onKeyDown={(e) => {
+                          if (e.key === 'Enter' && selectedArena.id) {
+                            e.currentTarget.blur();
+                          }
+                        }}
+                        className="text-2xl text-white bg-purple-900/10 border-2 border-purple-500/40 hover:border-purple-500/60 focus:border-purple-500 focus:bg-purple-900/20 focus:outline-none text-center transition-colors px-4 py-2 rounded-lg"
+                        placeholder="Arena Name"
+                      />
                       <p className="text-sm text-gray-400 mt-2">Arena Configuration</p>
                     </div>
                     

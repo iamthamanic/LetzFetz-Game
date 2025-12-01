@@ -1,4 +1,5 @@
 import React, { useState, useEffect } from 'react';
+import { createPortal } from 'react-dom';
 import { X, Save, MessageSquare, Trash2 } from 'lucide-react';
 import { projectId, publicAnonKey } from '../utils/supabase/info';
 
@@ -158,9 +159,9 @@ export function CardNotes({
 
   if (!isOpen) return null;
 
-  return (
-    <div className="fixed inset-0 bg-black/80 backdrop-blur-sm z-50 flex items-center justify-center p-4">
-      <div className="bg-gray-900 rounded-xl border border-gray-800 w-full max-w-7xl max-h-[95vh] flex flex-col shadow-2xl">
+  const modalContent = (
+    <div className="fixed inset-0 bg-black/50 backdrop-blur-sm z-50 flex items-center justify-center p-4">
+      <div className="bg-gray-900 rounded-xl border border-gray-800 w-full max-w-6xl max-h-[90vh] flex flex-col shadow-2xl">
         {/* Header */}
         <div className="flex items-center justify-between p-6 border-b border-gray-800">
           <div>
@@ -177,7 +178,7 @@ export function CardNotes({
 
         {/* Content */}
         <div className="flex-1 overflow-y-auto p-6">
-          <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
+          <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
             {/* Left Column: Notes */}
             <div className="space-y-4">
               <div className="bg-gray-800 rounded-lg p-4 border border-gray-700">
@@ -328,4 +329,6 @@ export function CardNotes({
       </div>
     </div>
   );
+
+  return createPortal(modalContent, document.body);
 }

@@ -1,6 +1,7 @@
 import React, { useState } from 'react';
 import { ImageWithFallback } from './figma/ImageWithFallback';
 import { CardNotes } from './CardNotes';
+import { createPortal } from 'react-dom';
 
 interface CardProps {
   id: string;
@@ -126,7 +127,7 @@ export function Card({
         <div className="flex items-center justify-between">
           <div className="flex items-center gap-2">
             <span className="text-xl">{type ? typeIcons[type] : '❓'}</span>
-            <h3 className="text-white truncate">{name || 'Unnamed Card'}</h3>
+            <h3 className="text-white truncate text-sm">{name || 'Unnamed Card'}</h3>
           </div>
           <div className="flex items-center gap-2">
             <div className="text-xs text-white/70 bg-black/40 px-2 py-1 rounded">
@@ -148,6 +149,7 @@ export function Card({
             src={image_asset} 
             alt={name}
             className="w-full h-full object-cover"
+            loading="lazy"
           />
         ) : (
           <div className="w-full h-full flex items-center justify-center bg-black/30">
@@ -224,27 +226,27 @@ export function Card({
       )}
       
       {/* Effects Modal */}
-      {effectsModalOpen && (
+      {effectsModalOpen && createPortal(
         <div 
           className="fixed inset-0 bg-black/80 backdrop-blur-sm flex items-center justify-center z-[9999] p-4"
           onClick={() => setEffectsModalOpen(false)}
         >
           <div 
-            className="bg-gradient-to-br from-gray-900 to-gray-950 rounded-2xl border-2 border-purple-500/50 shadow-2xl max-w-2xl w-full max-h-[80vh] overflow-hidden"
+            className="bg-gradient-to-br from-gray-900 to-gray-950 rounded-2xl border-2 border-purple-500/50 shadow-2xl max-w-6xl w-full max-h-[90vh] flex flex-col overflow-hidden"
             onClick={(e) => e.stopPropagation()}
           >
             {/* Modal Header */}
             <div className="bg-gradient-to-r from-purple-900/50 to-indigo-900/50 border-b border-white/10 p-6 flex items-center justify-between">
               <div>
-                <h3 className="text-white text-xl flex items-center gap-3">
-                  <span className="text-2xl">{typeIcons[type]}</span>
+                <h3 className="text-white text-2xl flex items-center gap-3">
+                  <span className="text-3xl">{typeIcons[type]}</span>
                   <span>{name}</span>
                 </h3>
-                <p className="text-purple-300 text-sm mt-1">Card Effects</p>
+                <p className="text-purple-300 mt-1">Card Effects</p>
               </div>
               <button
                 onClick={() => setEffectsModalOpen(false)}
-                className="text-gray-400 hover:text-white transition-colors text-2xl leading-none"
+                className="text-gray-400 hover:text-white transition-colors text-3xl leading-none"
                 title="Close"
               >
                 ✕
@@ -252,22 +254,23 @@ export function Card({
             </div>
             
             {/* Modal Content */}
-            <div className="p-6 overflow-y-auto max-h-[calc(80vh-120px)]">
+            <div className="flex-1 overflow-y-auto p-8">
               {effectsList.length > 0 ? (
                 <ul className="space-y-4">
                   {effectsList.map((effect, index) => (
-                    <li key={index} className="flex items-start gap-3 bg-black/30 p-4 rounded-lg border border-white/5">
-                      <span className="text-yellow-400 text-lg mt-0.5 flex-shrink-0">•</span>
-                      <span className="text-white/90 leading-relaxed flex-1">{effect}</span>
+                    <li key={index} className="flex items-start gap-4 bg-black/30 p-6 rounded-lg border border-white/10">
+                      <span className="text-yellow-400 text-2xl mt-1 flex-shrink-0">•</span>
+                      <span className="text-white/90 leading-relaxed flex-1 text-lg">{effect}</span>
                     </li>
                   ))}
                 </ul>
               ) : (
-                <p className="text-white/60 italic text-center py-8">No effects described.</p>
+                <p className="text-white/60 italic text-center py-12 text-lg">No effects described.</p>
               )}
             </div>
           </div>
-        </div>
+        </div>,
+        document.body
       )}
     </div>
   );

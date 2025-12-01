@@ -3,6 +3,8 @@ import { Dices, Menu, X, Search, ZoomIn, ZoomOut, Maximize2 } from 'lucide-react
 import { Card } from './Card';
 import { PlayerHUD } from './PlayerHUD';
 import { DiceRoller } from './DiceRoller';
+import { ArenaInfoPanel } from './ArenaInfoPanel';
+import { RoundCounter } from './RoundCounter';
 import { projectId, publicAnonKey } from '../utils/supabase/info';
 
 interface PlacedCard {
@@ -22,10 +24,20 @@ export function Arena() {
   const [p2Hp, setP2Hp] = useState(20);
   const [p1Notes, setP1Notes] = useState('');
   const [p2Notes, setP2Notes] = useState('');
+  const [p1CustomFields, setP1CustomFields] = useState([
+    { name: 'Stat 1', value: 0 },
+    { name: 'Stat 2', value: 0 },
+    { name: 'Stat 3', value: 0 }
+  ]);
+  const [p2CustomFields, setP2CustomFields] = useState([
+    { name: 'Stat 1', value: 0 },
+    { name: 'Stat 2', value: 0 },
+    { name: 'Stat 3', value: 0 }
+  ]);
   const [diceHistory, setDiceHistory] = useState<any[]>([]);
   const [draggedCard, setDraggedCard] = useState<any>(null);
   const [draggedElement, setDraggedElement] = useState<HTMLElement | null>(null);
-  const [nextZIndex, setNextZIndex] = useState(1);
+  const [nextZIndex, setNextZIndex] = useState(100); // Start bei 100 statt 1, damit Karten über dem Panel (z-index 50) liegen
   const tableRef = useRef<HTMLDivElement>(null);
   const [arenas, setArenas] = useState<any[]>([]);
   const [showArenaModal, setShowArenaModal] = useState(false);
@@ -38,6 +50,14 @@ export function Arena() {
   const [panStart, setPanStart] = useState({ x: 0, y: 0 });
   const dragAnimationRef = useRef<number | null>(null);
   const currentDragPos = useRef<{ x: number; y: number } | null>(null);
+  const [activeArenaBiom, setActiveArenaBiom] = useState<any>(null);
+  const [activeArenaMutation, setActiveArenaMutation] = useState<any>(null);
+  const [arenaInfoExpanded, setArenaInfoExpanded] = useState(true);
+  const [showArenaInfo, setShowArenaInfo] = useState(false);
+  const [arenaInfoPosition, setArenaInfoPosition] = useState({ x: 100, y: 100 });
+  const [draggedArenaPanel, setDraggedArenaPanel] = useState<{ offsetX: number; offsetY: number } | null>(null);
+  const [roundCounter, setRoundCounter] = useState(1);
+  const [roundNotes, setRoundNotes] = useState('');
 
   useEffect(() => {
     fetchCards();
@@ -50,21 +70,37 @@ export function Arena() {
 
   // Update placed cards when cards data changes (e.g., edited in CardForge)
   useEffect(() => {
+    // Don't update during active dragging
+    if (draggedPlacedCard) return;
+    
     if (cards.length > 0 && placedCards.length > 0) {
-      const updatedPlacedCards = placedCards.map(placedCard => {
-        // Find the updated card data from the cards array
-        const updatedCardData = cards.find(card => card.id === placedCard.cardData.id);
-        if (updatedCardData) {
-          return {
-            ...placedCard,
-            cardData: updatedCardData
-          };
+      setPlacedCards(currentPlacedCards => {
+        const updatedPlacedCards = currentPlacedCards.map(placedCard => {
+          // Safety check for position
+          if (!placedCard.position || typeof placedCard.position.x !== 'number' || typeof placedCard.position.y !== 'number') {
+            console.warn('PlacedCard missing valid position, skipping:', placedCard);
+            return null;
+          }
+          
+          // Find the updated card data from the cards array
+          const updatedCardData = cards.find(card => card.id === placedCard.cardData.id);
+          if (updatedCardData) {
+            return {
+              ...placedCard,
+              cardData: updatedCardData
+            };
+          }
+          return placedCard;
+        }).filter(Boolean) as PlacedCard[];
+        
+        // Only update if something actually changed
+        if (JSON.stringify(updatedPlacedCards) !== JSON.stringify(currentPlacedCards)) {
+          return updatedPlacedCards;
         }
-        return placedCard;
+        return currentPlacedCards;
       });
-      setPlacedCards(updatedPlacedCards);
     }
-  }, [cards]);
+  }, [cards, draggedPlacedCard]);
 
   const fetchCards = async () => {
     setLoading(true);
@@ -167,24 +203,26 @@ export function Arena() {
       zIndex: nextZIndex
     };
     
-    setPlacedCards([...placedCards, newPlacedCard]);
+    setPlacedCards(prev => [...prev, newPlacedCard]);
     setNextZIndex(nextZIndex + 1);
     setDraggedCard(null);
   };
 
   const handleCardClick = (index: number) => {
     // Bring clicked card to front
-    const updatedCards = [...placedCards];
-    updatedCards[index] = {
-      ...updatedCards[index],
-      zIndex: nextZIndex
-    };
-    setPlacedCards(updatedCards);
+    setPlacedCards(prev => {
+      const updated = [...prev];
+      updated[index] = {
+        ...updated[index],
+        zIndex: nextZIndex
+      };
+      return updated;
+    });
     setNextZIndex(nextZIndex + 1);
   };
 
   const handleRemoveCard = (index: number) => {
-    setPlacedCards(placedCards.filter((_, i) => i !== index));
+    setPlacedCards(prev => prev.filter((_, i) => i !== index));
   };
 
   const handleCardNotesChange = async (cardId: string, notes: string) => {
@@ -206,7 +244,7 @@ export function Arena() {
         setCards(cards.map(card => card.id === cardId ? updatedCard : card));
         
         // Update placed cards
-        setPlacedCards(placedCards.map(placedCard => 
+        setPlacedCards(prev => prev.map(placedCard => 
           placedCard.cardData.id === cardId 
             ? { ...placedCard, cardData: updatedCard }
             : placedCard
@@ -231,16 +269,21 @@ export function Arena() {
     const offsetX = (e.clientX - rect.left) / zoomLevel;
     const offsetY = (e.clientY - rect.top) / zoomLevel;
     
-    setDraggedPlacedCard({ index, offsetX, offsetY });
-    currentDragPos.current = { ...placedCards[index].position };
-    
     // Bring card to front immediately
-    const updatedCards = [...placedCards];
-    updatedCards[index] = {
-      ...updatedCards[index],
-      zIndex: nextZIndex
-    };
-    setPlacedCards(updatedCards);
+    setPlacedCards(prev => {
+      const updated = [...prev];
+      const card = updated[index];
+      if (!card) return prev;
+      
+      currentDragPos.current = { ...card.position };
+      updated[index] = {
+        ...card,
+        zIndex: nextZIndex
+      };
+      return updated;
+    });
+    
+    setDraggedPlacedCard({ index, offsetX, offsetY });
     setNextZIndex(nextZIndex + 1);
   };
 
@@ -262,6 +305,28 @@ export function Arena() {
       return;
     }
 
+    // Handle Arena Panel dragging
+    if (draggedArenaPanel && tableRef.current) {
+      if (dragAnimationRef.current) {
+        cancelAnimationFrame(dragAnimationRef.current);
+      }
+      dragAnimationRef.current = requestAnimationFrame(() => {
+        if (!tableRef.current || !draggedArenaPanel) return;
+        
+        const rect = tableRef.current.getBoundingClientRect();
+        const x = (e.clientX - rect.left - panOffset.x) / zoomLevel - draggedArenaPanel.offsetX;
+        const y = (e.clientY - rect.top - panOffset.y) / zoomLevel - draggedArenaPanel.offsetY;
+        
+        if (typeof x !== 'number' || typeof y !== 'number' || !isFinite(x) || !isFinite(y)) {
+          console.warn('Invalid arena panel drag position:', { x, y });
+          return;
+        }
+        
+        setArenaInfoPosition({ x, y });
+      });
+      return;
+    }
+
     // Handle card dragging
     if (!draggedPlacedCard || !tableRef.current) return;
     
@@ -270,17 +335,29 @@ export function Arena() {
     }
     
     dragAnimationRef.current = requestAnimationFrame(() => {
-      const rect = tableRef.current!.getBoundingClientRect();
+      if (!tableRef.current || !draggedPlacedCard) return;
+      
+      const rect = tableRef.current.getBoundingClientRect();
       
       // Adjust for zoom level and pan offset
       const x = (e.clientX - rect.left - panOffset.x) / zoomLevel - draggedPlacedCard.offsetX;
       const y = (e.clientY - rect.top - panOffset.y) / zoomLevel - draggedPlacedCard.offsetY;
+      
+      // Validate position
+      if (typeof x !== 'number' || typeof y !== 'number' || !isFinite(x) || !isFinite(y)) {
+        console.warn('Invalid drag position calculated:', { x, y });
+        return;
+      }
       
       currentDragPos.current = { x, y };
       
       // Update immediately without batching
       setPlacedCards(prev => {
         const updated = [...prev];
+        if (!updated[draggedPlacedCard.index]) {
+          console.warn('Card at index not found:', draggedPlacedCard.index);
+          return prev;
+        }
         updated[draggedPlacedCard.index] = {
           ...updated[draggedPlacedCard.index],
           position: { x, y }
@@ -296,25 +373,16 @@ export function Arena() {
       dragAnimationRef.current = null;
     }
     
-    // Final position update
-    if (draggedPlacedCard && currentDragPos.current) {
-      setPlacedCards(prev => {
-        const updated = [...prev];
-        updated[draggedPlacedCard.index] = {
-          ...updated[draggedPlacedCard.index],
-          position: currentDragPos.current!
-        };
-        return updated;
-      });
-    }
-    
+    // No need for final update since handleMouseMove already updated position
+    // Just clean up the drag state
     currentDragPos.current = null;
     setDraggedPlacedCard(null);
+    setDraggedArenaPanel(null);
     setIsPanning(false);
   };
 
   useEffect(() => {
-    if (draggedPlacedCard || isPanning) {
+    if (draggedPlacedCard || isPanning || draggedArenaPanel) {
       window.addEventListener('mousemove', handleMouseMove);
       window.addEventListener('mouseup', handleMouseUp);
       return () => {
@@ -322,10 +390,45 @@ export function Arena() {
         window.removeEventListener('mouseup', handleMouseUp);
       };
     }
-  }, [draggedPlacedCard, placedCards, isPanning, panStart, panOffset]);
+  }, [draggedPlacedCard, placedCards, isPanning, panStart, panOffset, draggedArenaPanel, arenaInfoPosition]);
 
   const handleArenaGenerator = async () => {
     setShowArenaModal(true);
+  };
+
+  // 🧪 TEMPORARY TEST FUNCTION - Activate mock arena WITHOUT backend
+  const activateMockArena = () => {
+    const mockBiomCard = {
+      id: 'mock-biom-1',
+      name: '🔥 Vulkan Base (MOCK)',
+      element: 'Fire',
+      effects: ['Burn Damage +2', 'Heat Wave on Roll 5+'],
+      trigger_dice_value: 3,
+      type: 'Arena_Biom'
+    };
+    
+    const mockMutationCard = {
+      id: 'mock-mutation-1', 
+      name: '⚡ Lava Burst (MOCK)',
+      element: 'Fire',
+      effects: ['Fire spread to adjacent tiles', 'Melt armor -1'],
+      trigger_dice_value: 5,
+      type: 'Arena_Mutation'
+    };
+    
+    const rollResult = {
+      timestamp: new Date().toISOString(),
+      arenaName: '🧪 MOCK ARENA (Test)',
+      biom: mockBiomCard,
+      mutation: mockMutationCard
+    };
+    
+    setDiceHistory([rollResult, ...diceHistory]);
+    setActiveArenaBiom(mockBiomCard);
+    setActiveArenaMutation(mockMutationCard);
+    setShowArenaInfo(true);
+    
+    alert('🧪 MOCK Arena Activated!\nDas Panel sollte JETZT sichtbar sein!');
   };
 
   const activateArena = (arena: any) => {
@@ -340,7 +443,10 @@ export function Arena() {
     };
     
     setDiceHistory([rollResult, ...diceHistory]);
+    setActiveArenaBiom(biomCard);
+    setActiveArenaMutation(mutationCard);
     setShowArenaModal(false);
+    setShowArenaInfo(true);
     
     // Show notification
     const biomEffects = biomCard?.effects?.join('\n') || biomCard?.effects_text || 'No effects';
@@ -355,40 +461,39 @@ export function Arena() {
       {/* Sidebar - Deck */}
       <div 
         className={`bg-gray-900 border-r border-gray-800 transition-all duration-300 ${
-          sidebarOpen ? 'w-80' : 'w-0'
+          sidebarOpen ? 'w-48' : 'w-0'
         } flex flex-col overflow-hidden`}
       >
-        <div className="p-4 border-b border-gray-800">
+        <div className="p-3 border-b border-gray-800">
           <div className="flex items-center justify-between mb-3">
-            <h2 className="text-xl text-white">Card Deck</h2>
+            <h2 className="text-lg text-white">Card Deck</h2>
             <button
               onClick={() => setSidebarOpen(false)}
               className="text-gray-400 hover:text-white transition-colors lg:hidden"
             >
-              <X className="w-5 h-5" />
+              <X className="w-4 h-4" />
             </button>
           </div>
           <div className="relative">
-            <Search className="absolute left-3 top-1/2 transform -translate-y-1/2 w-4 h-4 text-gray-500" />
+            <Search className="absolute left-2 top-1/2 transform -translate-y-1/2 w-3 h-3 text-gray-500" />
             <input
               type="text"
               placeholder="Search cards..."
               value={searchTerm}
               onChange={(e) => setSearchTerm(e.target.value)}
-              className="w-full bg-gray-800 border border-gray-700 rounded-lg pl-10 pr-4 py-2 text-white placeholder-gray-500 focus:outline-none focus:ring-2 focus:ring-purple-500"
+              className="w-full bg-gray-800 border border-gray-700 rounded-lg pl-7 pr-2 py-1.5 text-sm text-white placeholder-gray-500 focus:outline-none focus:ring-2 focus:ring-purple-500"
             />
           </div>
         </div>
         
-        <div className="flex-1 overflow-y-auto p-4 space-y-4">
+        <div className="flex-1 overflow-y-auto p-2 space-y-4">
           {loading ? (
-            <div className="text-gray-500 text-center py-8">Loading cards...</div>
+            <div className="text-gray-500 text-center py-8 text-xs">Loading cards...</div>
           ) : cards.length === 0 ? (
-            <div className="text-gray-500 text-center py-8">
+            <div className="text-gray-500 text-center py-8 text-xs">
               No cards available. Create cards in Card Forge first!
             </div>
-          ) : (
-            (() => {
+          ) : (() => {
               const filteredCards = cards.filter(card => {
                 const search = searchTerm.toLowerCase();
                 return (
@@ -402,7 +507,7 @@ export function Arena() {
               
               if (filteredCards.length === 0) {
                 return (
-                  <div className="text-gray-500 text-center py-8">
+                  <div className="text-gray-500 text-center py-8 text-xs">
                     No cards found matching "{searchTerm}"
                   </div>
                 );
@@ -413,15 +518,15 @@ export function Arena() {
                   key={card.id}
                   draggable
                   onDragStart={(e) => handleDragStart(e, card)}
-                  className="cursor-grab active:cursor-grabbing transform hover:scale-105 transition-transform"
+                  className="cursor-grab active:cursor-grabbing transform hover:scale-105 transition-transform h-48 overflow-hidden"
                 >
-                  <div className="scale-75 origin-top">
+                  <div className="scale-50 origin-top">
                     <Card {...card} preview={false} />
                   </div>
                 </div>
               ));
             })()
-          )}
+          }
         </div>
       </div>
 
@@ -497,7 +602,7 @@ export function Arena() {
               className="bg-gradient-to-r from-purple-600 to-pink-600 hover:from-purple-700 hover:to-pink-700 text-white px-6 py-2 rounded-lg flex items-center gap-2 transition-colors"
             >
               <Dices className="w-5 h-5" />
-              New Arena Round
+              Pick Arena
             </button>
           </div>
         </div>
@@ -540,9 +645,13 @@ export function Arena() {
               setPanStart({ x: e.clientX, y: e.clientY });
             }
           }}
-          className="flex-1 relative bg-gradient-to-br from-gray-900 via-gray-950 to-black overflow-hidden cursor-grab active:cursor-grabbing"
+          className="flex-1 relative overflow-hidden cursor-grab active:cursor-grabbing"
           style={{
-            backgroundImage: 'radial-gradient(circle at 20% 50%, rgba(120, 119, 198, 0.1), transparent 50%), radial-gradient(circle at 80% 80%, rgba(168, 85, 247, 0.1), transparent 50%)',
+            backgroundImage: 'linear-gradient(to bottom right, rgb(17, 24, 39), rgb(3, 7, 18), rgb(0, 0, 0)), radial-gradient(circle at 20% 50%, rgba(120, 119, 198, 0.1), transparent 50%), radial-gradient(circle at 80% 80%, rgba(168, 85, 247, 0.1), transparent 50%)',
+            backgroundSize: 'cover',
+            backgroundPosition: 'center',
+            backgroundRepeat: 'no-repeat',
+            backgroundColor: 'rgb(3, 7, 18)',
           }}
         >
           {/* Zoomable Inner Canvas */}
@@ -577,29 +686,70 @@ export function Arena() {
               </div>
             )}
 
-            {/* Placed Cards */}
-            {placedCards.map((placedCard, index) => (
-              <div
-                key={placedCard.id}
-                className="absolute cursor-move select-none touch-none"
+            {/* Arena Info Panel - Draggable with Close and Collapse */}
+            {showArenaInfo && (activeArenaBiom || activeArenaMutation) && (
+              <div 
+                className="absolute pointer-events-auto cursor-move"
                 style={{
-                  left: `${placedCard.position.x}px`,
-                  top: `${placedCard.position.y}px`,
-                  zIndex: placedCard.zIndex,
-                  willChange: draggedPlacedCard?.index === index ? 'transform' : 'auto',
-                  transition: draggedPlacedCard?.index === index ? 'none' : 'transform 0.1s ease-out'
+                  left: `${arenaInfoPosition.x}px`,
+                  top: `${arenaInfoPosition.y}px`,
+                  zIndex: 50,
                 }}
-                onMouseDown={(e) => handlePlacedCardMouseDown(e, index)}
+                onMouseDown={(e) => {
+                  if (e.button !== 0) return;
+                  e.stopPropagation();
+                  
+                  const target = e.currentTarget as HTMLElement;
+                  const rect = target.getBoundingClientRect();
+                  
+                  const offsetX = (e.clientX - rect.left) / zoomLevel;
+                  const offsetY = (e.clientY - rect.top) / zoomLevel;
+                  
+                  setDraggedArenaPanel({ offsetX, offsetY });
+                }}
               >
-                <Card 
-                  {...placedCard.cardData} 
-                  preview={false} 
-                  scale={0.6} 
-                  onRemove={() => handleRemoveCard(index)}
-                  onNotesChange={(notes) => handleCardNotesChange(placedCard.cardData.id, notes)}
+                <ArenaInfoPanel
+                  arenaName={diceHistory[0]?.arenaName || 'Arena'}
+                  biom={activeArenaBiom}
+                  mutation={activeArenaMutation}
+                  isExpanded={arenaInfoExpanded}
+                  onToggle={() => setArenaInfoExpanded(!arenaInfoExpanded)}
+                  onClose={() => setShowArenaInfo(false)}
                 />
               </div>
-            ))}
+            )}
+
+            {/* Placed Cards */}
+            {placedCards.map((placedCard, index) => {
+              // Safety check for position
+              if (!placedCard.position || typeof placedCard.position.x !== 'number' || typeof placedCard.position.y !== 'number') {
+                console.warn('Skipping card with invalid position:', placedCard);
+                return null;
+              }
+              
+              return (
+                <div
+                  key={placedCard.id}
+                  className="absolute cursor-move select-none touch-none"
+                  style={{
+                    left: `${placedCard.position.x}px`,
+                    top: `${placedCard.position.y}px`,
+                    zIndex: placedCard.zIndex || 1,
+                    willChange: draggedPlacedCard?.index === index ? 'transform' : 'auto',
+                    transition: draggedPlacedCard?.index === index ? 'none' : 'transform 0.1s ease-out'
+                  }}
+                  onMouseDown={(e) => handlePlacedCardMouseDown(e, index)}
+                >
+                  <Card 
+                    {...placedCard.cardData} 
+                    preview={false} 
+                    scale={0.6} 
+                    onRemove={() => handleRemoveCard(index)}
+                    onNotesChange={(notes) => handleCardNotesChange(placedCard.cardData.id, notes)}
+                  />
+                </div>
+              );
+            })}
           </div>
         </div>
 
@@ -611,6 +761,17 @@ export function Arena() {
           notes={p1Notes}
           onNotesChange={setP1Notes}
           position="bottom-left"
+          customFields={p1CustomFields}
+          onCustomFieldChange={(index, value) => {
+            const updated = [...p1CustomFields];
+            updated[index] = { ...updated[index], value };
+            setP1CustomFields(updated);
+          }}
+          onCustomFieldNameChange={(index, name) => {
+            const updated = [...p1CustomFields];
+            updated[index] = { ...updated[index], name };
+            setP1CustomFields(updated);
+          }}
         />
         <PlayerHUD
           playerName="Player 2"
@@ -619,13 +780,32 @@ export function Arena() {
           notes={p2Notes}
           onNotesChange={setP2Notes}
           position="bottom-right"
+          customFields={p2CustomFields}
+          onCustomFieldChange={(index, value) => {
+            const updated = [...p2CustomFields];
+            updated[index] = { ...updated[index], value };
+            setP2CustomFields(updated);
+          }}
+          onCustomFieldNameChange={(index, name) => {
+            const updated = [...p2CustomFields];
+            updated[index] = { ...updated[index], name };
+            setP2CustomFields(updated);
+          }}
+        />
+        
+        {/* Round Counter */}
+        <RoundCounter
+          round={roundCounter}
+          onRoundChange={setRoundCounter}
+          notes={roundNotes}
+          onNotesChange={setRoundNotes}
         />
       </div>
 
       {/* Arena Selection Modal */}
       {showArenaModal && (
         <div className="fixed inset-0 bg-black/70 backdrop-blur-sm z-50 flex items-center justify-center p-4">
-          <div className="bg-gray-900 rounded-xl border border-gray-800 w-full max-w-2xl shadow-2xl">
+          <div className="bg-gray-900/30 rounded-xl border border-gray-800/30 w-full max-w-2xl shadow-2xl">
             <div className="p-6 border-b border-gray-800">
               <div className="flex items-center justify-between mb-4">
                 <h2 className="text-2xl text-white">Select Arena</h2>

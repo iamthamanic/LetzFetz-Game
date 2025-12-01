@@ -540,11 +540,12 @@ app.put('/make-server-c701770f/arenas/:id', async (c) => {
       return c.json({ error: 'Arena not found' }, 404);
     }
     
+    // Only update fields that are provided in the request
     const updatedArena = {
       ...(existingArena as object),
-      name: arenaData.name,
-      biom_card_id: arenaData.biom_card_id,
-      mutation_card_id: arenaData.mutation_card_id,
+      ...(arenaData.name !== undefined && { name: arenaData.name }),
+      ...(arenaData.biom_card_id !== undefined && { biom_card_id: arenaData.biom_card_id }),
+      ...(arenaData.mutation_card_id !== undefined && { mutation_card_id: arenaData.mutation_card_id }),
       id
     };
     
