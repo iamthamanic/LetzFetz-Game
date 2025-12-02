@@ -187,3 +187,19 @@
 html {
   font-size: var(--font-size);
 }
+
+/* Subtle lock pulse animation */
+@keyframes lockPulse {
+  0%, 100% {
+    opacity: 0.5;
+    transform: scale(1);
+  }
+  50% {
+    opacity: 0.85;
+    transform: scale(1.08);
+  }
+}
+
+.lock-pulse {
+  animation: lockPulse 2.5s ease-in-out infinite;
+}
