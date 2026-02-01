@@ -1,0 +1,11 @@
+# Supabase
+.branches
+.temp
+
+# Backups: ignore all SQL dumps except the versioned LATEST snapshot (see repo root .gitignore)
+# supabase/backups/*.sql and !schema_and_data_LATEST.sql are in root .gitignore
+
+# dotenvx
+.env.keys
+.env.local
+.env.*.local
