@@ -297,6 +297,9 @@
     letter-spacing: inherit;
     color: inherit;
     opacity: 1;
+    --lightningcss-light: initial;
+    --lightningcss-dark: ;
+    color-scheme: light;
     background-color: #0000;
     border-radius: 0;
   }
@@ -308,6 +311,9 @@
     letter-spacing: inherit;
     color: inherit;
     opacity: 1;
+    --lightningcss-light: initial;
+    --lightningcss-dark: ;
+    color-scheme: light;
     background-color: #0000;
     border-radius: 0;
   }
@@ -493,6 +499,10 @@
 
   .pointer-events-none {
     pointer-events: none;
+  }
+
+  .visible {
+    visibility: visible;
   }
 
   .absolute {
@@ -820,6 +830,10 @@
     max-height: 95vh;
   }
 
+  .max-h-full {
+    max-height: 100%;
+  }
+
   .min-h-\[60px\] {
     min-height: 60px;
   }
@@ -906,6 +920,10 @@
 
   .max-w-7xl {
     max-width: var(--container-7xl);
+  }
+
+  .max-w-full {
+    max-width: 100%;
   }
 
   .min-w-0 {
@@ -995,6 +1013,10 @@
 
   .grid-cols-1 {
     grid-template-columns: repeat(1, minmax(0, 1fr));
+  }
+
+  .grid-cols-2 {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
   }
 
   .grid-cols-3 {
@@ -1248,6 +1270,10 @@
     }
   }
 
+  .border-purple-400 {
+    border-color: var(--color-purple-400);
+  }
+
   .border-purple-400\/50 {
     border-color: color-mix(in srgb, oklch(.714 .203 305.504) 50%, transparent);
   }
@@ -1298,6 +1324,10 @@
 
   .border-red-500 {
     border-color: var(--color-red-500);
+  }
+
+  .border-transparent {
+    border-color: #0000;
   }
 
   .border-white\/10 {
@@ -1432,6 +1462,16 @@
 
   .bg-gray-700 {
     background-color: var(--color-gray-700);
+  }
+
+  .bg-gray-700\/50 {
+    background-color: color-mix(in srgb, oklch(.373 .034 259.733) 50%, transparent);
+  }
+
+  @supports (color: color-mix(in lab, red, red)) {
+    .bg-gray-700\/50 {
+      background-color: color-mix(in oklab, var(--color-gray-700) 50%, transparent);
+    }
   }
 
   .bg-gray-800 {
@@ -1775,6 +1815,10 @@
   .to-purple-900 {
     --tw-gradient-to: var(--color-purple-900);
     --tw-gradient-stops: var(--tw-gradient-via-stops, var(--tw-gradient-position), var(--tw-gradient-from) var(--tw-gradient-from-position), var(--tw-gradient-to) var(--tw-gradient-to-position));
+  }
+
+  .object-contain {
+    object-fit: contain;
   }
 
   .object-cover {
@@ -2152,6 +2196,10 @@
 
   .opacity-50 {
     opacity: .5;
+  }
+
+  .opacity-75 {
+    opacity: .75;
   }
 
   .shadow-2xl {
