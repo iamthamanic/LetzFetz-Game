@@ -8,14 +8,19 @@ interface PanelProps {
   children: React.ReactNode;
   className?: string;
   title?: string;
+  dense?: boolean;
 }
 
-export function Panel({ children, className = '', title }: PanelProps) {
+export function Panel({ children, className = '', title, dense = false }: PanelProps) {
   return (
     <div
-      className={`bg-gradient-to-br from-gray-900 to-gray-950 border-2 border-purple-500/50 rounded-xl p-4 shadow-2xl backdrop-blur-sm ${className}`}
+      className={`rounded-lg border border-stone-800 bg-stone-900/95 shadow-xl ${dense ? 'p-3' : 'p-4'} ${className}`}
     >
-      {title && <h3 className="text-white text-sm mb-2">{title}</h3>}
+      {title && (
+        <h3 className="mb-3 border-b border-stone-800 pb-2 text-xs font-semibold uppercase tracking-wider text-stone-400">
+          {title}
+        </h3>
+      )}
       {children}
     </div>
   );

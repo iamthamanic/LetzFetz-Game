@@ -1,5 +1,12 @@
+/**
+ * Player status HUD for sandbox arena.
+ * Location: src/components/PlayerHUD.tsx
+ */
 import React from 'react';
 import { Heart, Plus, Minus } from 'lucide-react';
+import { Panel } from './ui/Panel';
+import { Button } from './ui/Button';
+import { Input } from './ui/Input';
 
 interface PlayerHUDProps {
   playerName: string;
@@ -13,24 +20,20 @@ interface PlayerHUDProps {
   onCustomFieldNameChange: (index: number, name: string) => void;
 }
 
-export function PlayerHUD({ 
-  playerName, 
-  hp, 
-  onHpChange, 
-  position, 
-  notes, 
+export function PlayerHUD({
+  playerName,
+  hp,
+  onHpChange,
+  position,
+  notes,
   onNotesChange,
   customFields,
   onCustomFieldChange,
-  onCustomFieldNameChange
+  onCustomFieldNameChange,
 }: PlayerHUDProps) {
   const positionClasses = {
     'bottom-left': 'bottom-4 left-4',
-    'bottom-right': 'bottom-4 right-4'
-  };
-
-  const handleIncrement = (amount: number) => {
-    onHpChange(Math.max(0, hp + amount));
+    'bottom-right': 'bottom-4 right-4',
   };
 
   const handleCustomFieldIncrement = (index: number, amount: number) => {
@@ -39,87 +42,82 @@ export function PlayerHUD({
   };
 
   return (
-    <div 
-      className={`absolute ${positionClasses[position]} bg-gradient-to-br from-gray-900 to-gray-950 border-2 border-purple-500/50 rounded-xl p-3 shadow-2xl backdrop-blur-sm w-[240px]`}
+    <Panel
+      className={`absolute ${positionClasses[position]} w-[260px] space-y-3`}
     >
-      <div className="flex items-center justify-between mb-2">
-        <h3 className="text-white text-sm">{playerName}</h3>
-        <Heart className="w-4 h-4 text-red-500" />
-      </div>
-      
-      <div className="flex items-center justify-between gap-2">
-        <button
-          onClick={() => handleIncrement(-1)}
-          className="bg-red-600 hover:bg-red-700 text-white p-1.5 rounded-lg transition-colors"
-        >
-          <Minus className="w-3.5 h-3.5" />
-        </button>
-        
-        <div className="flex-1 text-center">
-          <input
-            type="number"
-            value={hp}
-            onChange={(e) => onHpChange(Math.max(0, parseInt(e.target.value) || 0))}
-            className="w-full bg-gray-800 text-white text-xl text-center py-1.5 rounded-lg border border-gray-700 focus:border-purple-500 focus:outline-none"
-          />
-          <div className="text-[10px] text-gray-400 mt-0.5">HP</div>
-        </div>
-        
-        <button
-          onClick={() => handleIncrement(1)}
-          className="bg-green-600 hover:bg-green-700 text-white p-1.5 rounded-lg transition-colors"
-        >
-          <Plus className="w-3.5 h-3.5" />
-        </button>
+      <div className="flex items-center justify-between">
+        <span className="text-sm font-bold text-stone-100">{playerName}</span>
+        <Heart className="h-4 w-4 text-red-500" />
       </div>
 
-      {/* Custom Fields Row */}
-      <div className="grid grid-cols-3 gap-1 mt-2">
+      <div className="flex items-center gap-2">
+        <Button
+          variant="danger"
+          size="sm"
+          icon={<Minus className="h-3.5 w-3.5" />}
+          onClick={() => onHpChange(Math.max(0, hp - 1))}
+          className="px-2"
+        />
+        <Input
+          type="number"
+          min={0}
+          value={hp}
+          onChange={(e) => onHpChange(Math.max(0, parseInt(e.target.value) || 0))}
+          className="flex-1 text-center"
+        />
+        <Button
+          variant="success"
+          size="sm"
+          icon={<Plus className="h-3.5 w-3.5" />}
+          onClick={() => onHpChange(hp + 1)}
+          className="px-2"
+        />
+      </div>
+
+      <div className="grid grid-cols-3 gap-2">
         {customFields.map((field, index) => (
-          <div key={index} className="flex flex-col items-center gap-0.5">
-            <div className="flex items-center gap-0.5 w-full">
-              <button
+          <div key={index} className="space-y-1">
+            <div className="flex items-center gap-1">
+              <Button
+                variant="danger"
+                size="sm"
+                icon={<Minus className="h-3 w-3" />}
                 onClick={() => handleCustomFieldIncrement(index, -1)}
-                className="bg-red-600/70 hover:bg-red-700 text-white p-0.5 rounded transition-colors shrink-0"
-              >
-                <Minus className="w-2 h-2" />
-              </button>
-              
+                className="px-1 py-1"
+              />
               <input
                 type="number"
                 value={field.value}
+                min={0}
                 onChange={(e) => onCustomFieldChange(index, Math.max(0, parseInt(e.target.value) || 0))}
-                className="flex-1 bg-gray-800 text-white text-center py-0.5 rounded border border-gray-700 focus:border-purple-500 focus:outline-none text-[11px] min-w-0"
+                className="w-full rounded border border-stone-700 bg-stone-900 py-0.5 text-center text-xs text-stone-100 outline-none focus:border-purple-500"
               />
-              
-              <button
+              <Button
+                variant="success"
+                size="sm"
+                icon={<Plus className="h-3 w-3" />}
                 onClick={() => handleCustomFieldIncrement(index, 1)}
-                className="bg-green-600/70 hover:bg-green-700 text-white p-0.5 rounded transition-colors shrink-0"
-              >
-                <Plus className="w-2 h-2" />
-              </button>
+                className="px-1 py-1"
+              />
             </div>
-            
             <input
               type="text"
               value={field.name}
               onChange={(e) => onCustomFieldNameChange(index, e.target.value)}
-              className="w-full bg-gray-900/50 text-gray-400 text-center py-0.5 rounded border border-gray-700/50 focus:border-purple-500 focus:outline-none text-[8px] truncate"
               placeholder="Stat"
+              className="w-full rounded border border-stone-800 bg-stone-900/50 py-0.5 text-center text-[9px] text-stone-400 outline-none focus:border-purple-500"
             />
           </div>
         ))}
       </div>
 
-      <div className="mt-2">
-        <textarea
-          value={notes}
-          onChange={(e) => onNotesChange(e.target.value)}
-          placeholder="Player notes..."
-          className="w-full bg-gray-800 text-white text-[10px] px-2 py-1.5 rounded-lg border border-gray-700 focus:border-purple-500 focus:outline-none resize-none"
-          rows={2}
-        />
-      </div>
-    </div>
+      <textarea
+        value={notes}
+        onChange={(e) => onNotesChange(e.target.value)}
+        placeholder="Notizen…"
+        className="w-full rounded-lg border border-stone-700 bg-stone-900 px-2 py-1.5 text-xs text-stone-100 outline-none transition-colors focus:border-purple-500 resize-none"
+        rows={2}
+      />
+    </Panel>
   );
 }

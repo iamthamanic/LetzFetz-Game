@@ -232,7 +232,7 @@ export function CardForge() {
     );
 
   return (
-    <div className="flex h-screen bg-gray-950">
+    <div className="flex h-full bg-stone-950 text-stone-100">
       <CardForgeSidebar
         cards={cards}
         filteredCards={filteredCards}
@@ -249,7 +249,7 @@ export function CardForge() {
         onCreateNew={handleCreateNew}
       />
 
-      <div className="flex-1 flex flex-col">
+      <div className="flex-1 flex flex-col min-w-0">
         {selectedCard ? (
           <CardForgeCardEditor
             selectedCard={selectedCard}
@@ -278,11 +278,13 @@ export function CardForge() {
             }}
           />
         ) : (
-          <div className="flex-1 flex items-center justify-center text-gray-500">
-            <div className="text-center">
-              <div className="text-6xl mb-4">🃏</div>
-              <p className="text-xl">Karte zum Bearbeiten wählen</p>
-              <p className="text-sm text-gray-600 mt-2">90 V1-Karten — Bilder & Notizen optional speichern</p>
+          <div className="flex-1 flex items-center justify-center p-8">
+            <div className="text-center space-y-3 max-w-md">
+              <div className="text-5xl opacity-50">🃏</div>
+              <h3 className="text-lg font-semibold text-stone-300">Karte zum Bearbeiten wählen</h3>
+              <p className="text-sm text-stone-500">
+                90 V1-Karten verfügbar. Bilder und Notizen können für Base-Pack-Karten überschrieben werden.
+              </p>
             </div>
           </div>
         )}

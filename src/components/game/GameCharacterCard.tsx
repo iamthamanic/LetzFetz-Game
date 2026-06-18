@@ -1,0 +1,26 @@
+/**
+ * Character / Ultimate / Arena / Glitch card in the game view.
+ * Location: src/components/game/GameCharacterCard.tsx
+ */
+import React from 'react';
+import { LetzFetzCard } from '../cards/LetzFetzCard';
+import type { LetzFetzCardProps } from '../cards/LetzFetzCard';
+
+export function GameCharacterCard(props: Partial<LetzFetzCardProps> & { size?: 'sm' | 'lg' }) {
+  const { size = 'lg', ...cardProps } = props;
+  return (
+    <LetzFetzCard
+      id={cardProps.id ?? ''}
+      name={cardProps.name ?? ''}
+      type={cardProps.type ?? 'Character'}
+      element={cardProps.element ?? 'Neutral'}
+      elementDisplay={cardProps.elementDisplay}
+      stats_json={cardProps.stats_json}
+      effects={cardProps.effects}
+      effects_text={cardProps.effects_text}
+      image_asset={cardProps.image_asset}
+      size={size}
+      interactive={false}
+    />
+  );
+}

@@ -1,6 +1,13 @@
+/**
+ * Arena sandbox card deck sidebar.
+ * Location: src/components/ArenaDeck.tsx
+ */
 import React from 'react';
-import { Menu, X, Search } from 'lucide-react';
+import { Menu, X, Search, Loader2 } from 'lucide-react';
 import { Card } from './Card';
+import { Input } from './ui/Input';
+import { EmptyState } from './ui/EmptyState';
+import { Button } from './ui/Button';
 
 interface PlacedCard {
   cardData: any;
@@ -22,7 +29,6 @@ interface ArenaDeckProps {
 
 export function ArenaDeck({
   cards,
-  placedCards,
   loading,
   sidebarOpen,
   searchTerm,
@@ -33,63 +39,63 @@ export function ArenaDeck({
   const filteredCards = cards.filter((card) => {
     const search = searchTerm.toLowerCase();
     return (
-      card.name.toLowerCase().includes(search) ||
-      card.type.toLowerCase().includes(search) ||
-      card.element.toLowerCase().includes(search) ||
-      (card.effects && card.effects.some((effect: string) => effect.toLowerCase().includes(search))) ||
-      (card.effects_text && card.effects_text.toLowerCase().includes(search))
+      card.name?.toLowerCase().includes(search) ||
+      card.type?.toLowerCase().includes(search) ||
+      card.element?.toLowerCase().includes(search) ||
+      card.effects?.some((effect: string) => effect.toLowerCase().includes(search)) ||
+      card.effects_text?.toLowerCase().includes(search)
     );
   });
 
   return (
     <>
       <div
-        className={`bg-gray-900 border-r border-gray-800 transition-all duration-300 ${
-          sidebarOpen ? 'w-48' : 'w-0'
-        } flex flex-col overflow-hidden`}
+        className={`flex flex-col border-r border-stone-800 bg-stone-900 transition-all duration-300 ${
+          sidebarOpen ? 'w-56' : 'w-0'
+        }`}
       >
-        <div className="p-3 border-b border-gray-800">
-          <div className="flex items-center justify-between mb-3">
-            <h2 className="text-lg text-white">Card Deck</h2>
-            <button
+        <div className="flex-none space-y-3 border-b border-stone-800 p-3">
+          <div className="flex items-center justify-between">
+            <h2 className="text-sm font-bold text-stone-100">Karten-Deck</h2>
+            <Button
+              variant="ghost"
+              size="sm"
+              icon={<X className="h-4 w-4" />}
               onClick={onToggleSidebar}
-              className="text-gray-400 hover:text-white transition-colors lg:hidden"
-            >
-              <X className="w-4 h-4" />
-            </button>
-          </div>
-          <div className="relative">
-            <Search className="absolute left-2 top-1/2 transform -translate-y-1/2 w-3 h-3 text-gray-500" />
-            <input
-              type="text"
-              placeholder="Search cards..."
-              value={searchTerm}
-              onChange={(e) => onSearchChange(e.target.value)}
-              className="w-full bg-gray-800 border border-gray-700 rounded-lg pl-7 pr-2 py-1.5 text-sm text-white placeholder-gray-500 focus:outline-none focus:ring-2 focus:ring-purple-500"
+              className="px-2 lg:hidden"
             />
           </div>
+          <Input
+            placeholder="Karten suchen…"
+            value={searchTerm}
+            onChange={(e) => onSearchChange(e.target.value)}
+            className="w-full"
+          />
         </div>
 
-        <div className="flex-1 overflow-y-auto p-2 space-y-4">
+        <div className="flex-1 space-y-3 overflow-y-auto p-3">
           {loading ? (
-            <div className="text-gray-500 text-center py-8 text-xs">Loading cards...</div>
+            <div className="flex flex-col items-center justify-center py-8 text-stone-500">
+              <Loader2 className="mb-2 h-5 w-5 animate-spin" />
+              <span className="text-xs">Lade Karten…</span>
+            </div>
           ) : cards.length === 0 ? (
-            <div className="text-gray-500 text-center py-8 text-xs">
-              No cards available. Create cards in Card Forge first!
-            </div>
+            <EmptyState
+              title="Keine Karten"
+              subtitle="Erstelle Karten in der Card Forge, um sie hier zu platzieren."
+              icon="🃏"
+            />
           ) : filteredCards.length === 0 ? (
-            <div className="text-gray-500 text-center py-8 text-xs">
-              No cards found matching &quot;{searchTerm}&quot;
-            </div>
+            <EmptyState title="Keine Treffer" subtitle={`Für „${searchTerm}“`} />
           ) : (
             filteredCards.map((card) => (
               <div
                 key={card.id}
                 draggable
                 onDragStart={(e) => onDragStart(e, card)}
-                className="cursor-grab active:cursor-grabbing transform hover:scale-105 transition-transform h-48 overflow-hidden"
+                className="cursor-grab active:cursor-grabbing"
               >
-                <div className="scale-50 origin-top">
+                <div className="origin-top scale-[0.55] transition-transform hover:scale-[0.6]">
                   <Card {...card} preview={false} />
                 </div>
               </div>
@@ -99,12 +105,15 @@ export function ArenaDeck({
       </div>
 
       {!sidebarOpen && (
-        <button
+        <Button
+          variant="secondary"
+          size="sm"
+          icon={<Menu className="h-4 w-4" />}
           onClick={onToggleSidebar}
-          className="absolute top-16 left-2 z-40 text-gray-400 hover:text-white transition-colors p-2 rounded-lg hover:bg-gray-800"
+          className="absolute left-3 top-20 z-40"
         >
-          <Menu className="w-5 h-5" />
-        </button>
+          Deck
+        </Button>
       )}
     </>
   );
