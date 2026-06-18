@@ -3,6 +3,62 @@ import Cropper from 'react-easy-crop';
 import { X, Save, ZoomIn, ZoomOut, Crop, Maximize2 } from 'lucide-react';
 import { ImageWithFallback } from './figma/ImageWithFallback';
 
+// Helper: Load image from URL and wait for it to be ready
+function loadImage(url: string): Promise<HTMLImageElement> {
+  return new Promise((resolve, reject) => {
+    const img = new Image();
+    img.onload = () => resolve(img);
+    img.onerror = reject;
+    img.src = url;
+  });
+}
+
+// Helper: Create a canvas with the configured aspect ratio dimensions
+function createCanvas(config: { width: number; height: number }, scale = 1) {
+  const canvas = document.createElement('canvas');
+  canvas.width = config.width * scale;
+  canvas.height = config.height * scale;
+  const ctx = canvas.getContext('2d');
+  if (!ctx) throw new Error('Failed to get canvas context');
+  return { canvas, ctx };
+}
+
+// Helper: Draw fit mode (blur background + centered sharp image) onto canvas
+function drawFitMode(
+  ctx: CanvasRenderingContext2D,
+  image: HTMLImageElement,
+  config: { width: number; height: number },
+  imageSize: number,
+  blurIntensity: number,
+  scale = 1
+) {
+  const w = config.width * scale;
+  const h = config.height * scale;
+
+  // Layer 1: Blur Background
+  ctx.filter = `blur(${blurIntensity}px)`;
+  ctx.drawImage(image, 0, 0, w, h);
+
+  // Layer 2: Sharp Image (centered, scaled)
+  ctx.filter = 'none';
+  const s = imageSize / 100;
+  const imgAspect = image.width / image.height;
+  const canvasAspect = w / h;
+
+  let drawWidth: number, drawHeight: number;
+  if (imgAspect > canvasAspect) {
+    drawWidth = w * s;
+    drawHeight = (w / imgAspect) * s;
+  } else {
+    drawHeight = h * s;
+    drawWidth = (h * imgAspect) * s;
+  }
+
+  const x = (w - drawWidth) / 2;
+  const y = (h - drawHeight) / 2;
+  ctx.drawImage(image, x, y, drawWidth, drawHeight);
+}
+
 interface ImageCropModalProps {
   isOpen: boolean;
   onClose: () => void;
@@ -68,90 +124,24 @@ export function ImageCropModal({
     [mode]
   );
 
-  // Generate Crop Mode Preview
   const generateCropPreview = async (cropArea: CropArea) => {
     if (!cropArea) return;
-
     try {
-      const image = new Image();
-      image.src = imageUrl;
-      await new Promise((resolve) => {
-        image.onload = resolve;
-      });
-
-      const canvas = document.createElement('canvas');
-      const ctx = canvas.getContext('2d');
-      if (!ctx) return;
-
-      const config = ASPECT_RATIOS[aspectRatio];
-      canvas.width = config.width;
-      canvas.height = config.height;
-
-      ctx.drawImage(
-        image,
-        cropArea.x,
-        cropArea.y,
-        cropArea.width,
-        cropArea.height,
-        0,
-        0,
-        canvas.width,
-        canvas.height
-      );
-
-      const preview = canvas.toDataURL('image/jpeg', 0.9);
-      setPreviewUrl(preview);
+      const image = await loadImage(imageUrl);
+      const { canvas, ctx } = createCanvas(ASPECT_RATIOS[aspectRatio]);
+      ctx.drawImage(image, cropArea.x, cropArea.y, cropArea.width, cropArea.height, 0, 0, canvas.width, canvas.height);
+      setPreviewUrl(canvas.toDataURL('image/jpeg', 0.9));
     } catch (error) {
       console.error('Error generating crop preview:', error);
     }
   };
 
-  // Generate Fit Mode Preview
   const generateFitPreview = useCallback(async () => {
     try {
-      const image = new Image();
-      image.src = imageUrl;
-      await new Promise((resolve) => {
-        image.onload = resolve;
-      });
-
-      const canvas = document.createElement('canvas');
-      const ctx = canvas.getContext('2d');
-      if (!ctx) return;
-
-      const config = ASPECT_RATIOS[aspectRatio];
-      canvas.width = config.width;
-      canvas.height = config.height;
-
-      // Layer 1: Blur Background (stretched to fill)
-      ctx.filter = `blur(${blurIntensity}px)`;
-      ctx.drawImage(image, 0, 0, canvas.width, canvas.height);
-
-      // Layer 2: Sharp Image (centered, scaled)
-      ctx.filter = 'none';
-      
-      const scale = imageSize / 100;
-      const imgAspect = image.width / image.height;
-      const canvasAspect = canvas.width / canvas.height;
-      
-      let drawWidth, drawHeight;
-      
-      // Fit image proportionally
-      if (imgAspect > canvasAspect) {
-        drawWidth = canvas.width * scale;
-        drawHeight = (canvas.width / imgAspect) * scale;
-      } else {
-        drawHeight = canvas.height * scale;
-        drawWidth = (canvas.height * imgAspect) * scale;
-      }
-      
-      const x = (canvas.width - drawWidth) / 2;
-      const y = (canvas.height - drawHeight) / 2;
-      
-      ctx.drawImage(image, x, y, drawWidth, drawHeight);
-
-      const preview = canvas.toDataURL('image/jpeg', 0.9);
-      setPreviewUrl(preview);
+      const image = await loadImage(imageUrl);
+      const { canvas, ctx } = createCanvas(ASPECT_RATIOS[aspectRatio]);
+      drawFitMode(ctx, image, ASPECT_RATIOS[aspectRatio], imageSize, blurIntensity);
+      setPreviewUrl(canvas.toDataURL('image/jpeg', 0.9));
     } catch (error) {
       console.error('Error generating fit preview:', error);
     }
@@ -166,40 +156,19 @@ export function ImageCropModal({
 
   const handleSave = async () => {
     try {
-      const image = new Image();
-      image.src = imageUrl;
-      await new Promise((resolve) => {
-        image.onload = resolve;
-      });
-
-      const canvas = document.createElement('canvas');
-      const ctx = canvas.getContext('2d');
-      if (!ctx) return;
-
+      const image = await loadImage(imageUrl);
       const config = ASPECT_RATIOS[aspectRatio];
 
       if (mode === 'crop') {
-        // Crop Mode: Use cropped area
         if (!croppedAreaPixels) return;
-        
-        // If zoom < 1, use blur background technique
+
         if (zoom < 1) {
-          // Higher resolution for quality
-          canvas.width = config.width * 4;
-          canvas.height = config.height * 4;
-
-          // Layer 1: Blur Background (stretched to fill)
-          ctx.filter = `blur(${blurIntensity}px)`;
-          ctx.drawImage(image, 0, 0, canvas.width, canvas.height);
-
-          // Layer 2: Cropped Image (centered)
+          const { canvas, ctx } = createCanvas(config, 4);
+          drawFitMode(ctx, image, config, imageSize, blurIntensity, 4);
           ctx.filter = 'none';
-          
-          // Scale cropped image to fit canvas proportionally
           const cropAspect = croppedAreaPixels.width / croppedAreaPixels.height;
           const canvasAspect = canvas.width / canvas.height;
-          
-          let drawWidth, drawHeight;
+          let drawWidth: number, drawHeight: number;
           if (cropAspect > canvasAspect) {
             drawWidth = canvas.width;
             drawHeight = canvas.width / cropAspect;
@@ -207,79 +176,34 @@ export function ImageCropModal({
             drawHeight = canvas.height;
             drawWidth = canvas.height * cropAspect;
           }
-          
           const x = (canvas.width - drawWidth) / 2;
           const y = (canvas.height - drawHeight) / 2;
-          
           ctx.drawImage(
             image,
-            croppedAreaPixels.x,
-            croppedAreaPixels.y,
-            croppedAreaPixels.width,
-            croppedAreaPixels.height,
-            x,
-            y,
-            drawWidth,
-            drawHeight
+            croppedAreaPixels.x, croppedAreaPixels.y,
+            croppedAreaPixels.width, croppedAreaPixels.height,
+            x, y, drawWidth, drawHeight
           );
+          canvas.toBlob((blob) => blob && onCropComplete(blob), 'image/jpeg', 0.95);
         } else {
-          // Normal crop (zoom >= 1)
+          const canvas = document.createElement('canvas');
           canvas.width = croppedAreaPixels.width;
           canvas.height = croppedAreaPixels.height;
-
+          const ctx = canvas.getContext('2d')!;
           ctx.drawImage(
             image,
-            croppedAreaPixels.x,
-            croppedAreaPixels.y,
-            croppedAreaPixels.width,
-            croppedAreaPixels.height,
-            0,
-            0,
-            croppedAreaPixels.width,
-            croppedAreaPixels.height
+            croppedAreaPixels.x, croppedAreaPixels.y,
+            croppedAreaPixels.width, croppedAreaPixels.height,
+            0, 0, croppedAreaPixels.width, croppedAreaPixels.height
           );
+          canvas.toBlob((blob) => blob && onCropComplete(blob), 'image/jpeg', 0.95);
         }
       } else {
-        // Fit Mode: Blur background + centered image
-        canvas.width = config.width * 4; // Higher resolution
-        canvas.height = config.height * 4;
-
-        // Layer 1: Blur Background
-        ctx.filter = `blur(${blurIntensity}px)`;
-        ctx.drawImage(image, 0, 0, canvas.width, canvas.height);
-
-        // Layer 2: Sharp Image
-        ctx.filter = 'none';
-        
-        const scale = imageSize / 100;
-        const imgAspect = image.width / image.height;
-        const canvasAspect = canvas.width / canvas.height;
-        
-        let drawWidth, drawHeight;
-        
-        if (imgAspect > canvasAspect) {
-          drawWidth = canvas.width * scale;
-          drawHeight = (canvas.width / imgAspect) * scale;
-        } else {
-          drawHeight = canvas.height * scale;
-          drawWidth = (canvas.height * imgAspect) * scale;
-        }
-        
-        const x = (canvas.width - drawWidth) / 2;
-        const y = (canvas.height - drawHeight) / 2;
-        
-        ctx.drawImage(image, x, y, drawWidth, drawHeight);
+        const { canvas } = createCanvas(config, 4);
+        const ctx = canvas.getContext('2d')!;
+        drawFitMode(ctx, image, config, imageSize, blurIntensity, 4);
+        canvas.toBlob((blob) => blob && onCropComplete(blob), 'image/jpeg', 0.95);
       }
-
-      canvas.toBlob(
-        (blob) => {
-          if (blob) {
-            onCropComplete(blob);
-          }
-        },
-        'image/jpeg',
-        0.95
-      );
     } catch (error) {
       console.error('Error processing image:', error);
     }

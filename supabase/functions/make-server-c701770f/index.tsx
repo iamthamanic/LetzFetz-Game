@@ -14,6 +14,19 @@ const app = new Hono();
 app.use('*', cors());
 app.use('*', logger(console.log));
 
+// ---- Generic helpers ----
+
+async function getList<T>(prefix: string, indexKey: string, sortKey?: string): Promise<T[]> {
+  const ids = ((await kv.get(indexKey)) as string[]) || [];
+  if (ids.length === 0) return [];
+  const items = await kv.mget(ids.map((id) => `${prefix}:${id}`));
+  const valid = items.filter((i) => i !== null) as T[];
+  if (sortKey) {
+    valid.sort((a: any, b: any) => new Date(b[sortKey]).getTime() - new Date(a[sortKey]).getTime());
+  }
+  return valid;
+}
+
 const supabase = createClient(
   Deno.env.get('SUPABASE_URL')!,
   Deno.env.get('SUPABASE_SERVICE_ROLE_KEY')!
@@ -73,15 +86,8 @@ initializeDatabase();
 // Get all cards
 app.get('/make-server-c701770f/cards', async (c) => {
   try {
-    const cardIndex = await kv.get('card_index') || [];
-    const cardIds = cardIndex as string[];
-    
-    if (cardIds.length === 0) {
-      return c.json([]);
-    }
-    
-    const cards = await kv.mget(cardIds.map(id => `card:${id}`));
-    return c.json(cards.filter(card => card !== null));
+    const cards = await getList<any>('card', 'card_index');
+    return c.json(cards);
   } catch (error) {
     console.error('Error fetching cards:', error);
     return c.json({ error: 'Failed to fetch cards', details: error.message }, 500);
@@ -304,17 +310,9 @@ app.get('/make-server-c701770f/session/:id', async (c) => {
 app.get('/make-server-c701770f/cards-by-type/:type', async (c) => {
   try {
     const type = c.req.param('type');
-    const cardIndex = await kv.get('card_index') || [];
-    const cardIds = cardIndex as string[];
-    
-    if (cardIds.length === 0) {
-      return c.json([]);
-    }
-    
-    const cards = await kv.mget(cardIds.map(id => `card:${id}`));
-    const filteredCards = cards.filter(card => card !== null && (card as any).type === type);
-    
-    return c.json(filteredCards);
+    const cards = await getList<any>('card', 'card_index');
+    const filtered = cards.filter((card) => card.type === type);
+    return c.json(filtered);
   } catch (error) {
     console.error('Error fetching cards by type:', error);
     return c.json({ error: 'Failed to fetch cards by type', details: error.message }, 500);
@@ -326,20 +324,8 @@ app.get('/make-server-c701770f/cards-by-type/:type', async (c) => {
 // Get all notes
 app.get('/make-server-c701770f/notes', async (c) => {
   try {
-    const noteIndex = await kv.get('note_index') || [];
-    const noteIds = noteIndex as string[];
-    
-    if (noteIds.length === 0) {
-      return c.json([]);
-    }
-    
-    const notes = await kv.mget(noteIds.map(id => `note:${id}`));
-    const validNotes = notes.filter(note => note !== null);
-    
-    // Sort by created_at descending (newest first)
-    validNotes.sort((a: any, b: any) => new Date(b.created_at).getTime() - new Date(a.created_at).getTime());
-    
-    return c.json(validNotes);
+    const notes = await getList<any>('note', 'note_index', 'created_at');
+    return c.json(notes);
   } catch (error) {
     console.error('Error fetching notes:', error);
     return c.json({ error: 'Failed to fetch notes', details: error.message }, 500);
@@ -489,17 +475,8 @@ app.delete('/make-server-c701770f/notes/:noteId/comments/:commentId', async (c) 
 // Get all arenas
 app.get('/make-server-c701770f/arenas', async (c) => {
   try {
-    const arenaIndex = await kv.get('arena_index') || [];
-    const arenaIds = arenaIndex as string[];
-    
-    if (arenaIds.length === 0) {
-      return c.json([]);
-    }
-    
-    const arenas = await kv.mget(arenaIds.map(id => `arena:${id}`));
-    const validArenas = arenas.filter(arena => arena !== null);
-    
-    return c.json(validArenas);
+    const arenas = await getList<any>('arena', 'arena_index');
+    return c.json(arenas);
   } catch (error) {
     console.error('Error fetching arenas:', error);
     return c.json({ error: 'Failed to fetch arenas', details: error.message }, 500);

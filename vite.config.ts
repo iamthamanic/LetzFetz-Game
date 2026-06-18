@@ -1,10 +1,20 @@
 
-  import { defineConfig } from 'vite';
+  import { defineConfig } from 'vitest/config';
   import react from '@vitejs/plugin-react-swc';
   import path from 'path';
+  import { loadEnv } from 'vite';
 
-  export default defineConfig({
+  export default defineConfig(({ mode }) => {
+    const env = loadEnv(mode, process.cwd(), '');
+    const devPort = Number(env.VITE_DEV_PORT) || 4789;
+
+    return {
     plugins: [react()],
+    test: {
+      globals: false,
+      environment: 'node',
+      include: ['src/**/*.test.ts'],
+    },
     resolve: {
       extensions: ['.js', '.jsx', '.ts', '.tsx', '.json'],
       alias: {
@@ -56,7 +66,9 @@
       outDir: 'build',
     },
     server: {
-      port: 3000,
+      port: devPort,
+      strictPort: true,
       open: true,
     },
+  };
   });

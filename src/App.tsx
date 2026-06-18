@@ -1,10 +1,11 @@
 import React, { useState } from 'react';
-import { Hammer, Swords, StickyNote } from 'lucide-react';
+import { Hammer, Swords, StickyNote, Gamepad2 } from 'lucide-react';
 import { CardForge } from './components/CardForge';
 import { Arena } from './components/Arena';
 import { Notes } from './components/Notes';
+import { GameView } from './components/game/GameView';
 
-type View = 'forge' | 'arena';
+type View = 'forge' | 'arena' | 'play';
 
 export default function App() {
   const [currentView, setCurrentView] = useState<View>('forge');
@@ -27,6 +28,17 @@ export default function App() {
             
             <nav className="flex gap-2">
               <button
+                onClick={() => setCurrentView('play')}
+                className={`flex items-center gap-2 px-6 py-3 rounded-lg transition-all ${
+                  currentView === 'play'
+                    ? 'bg-white text-purple-900 shadow-lg'
+                    : 'bg-purple-800/50 text-white hover:bg-purple-800'
+                }`}
+              >
+                <Gamepad2 className="w-5 h-5" />
+                Spielen
+              </button>
+              <button
                 onClick={() => setCurrentView('forge')}
                 className={`flex items-center gap-2 px-6 py-3 rounded-lg transition-all ${
                   currentView === 'forge'
@@ -35,12 +47,12 @@ export default function App() {
                 }`}
               >
                 <Hammer className="w-5 h-5" />
-                Edit
+                Bearbeiten
               </button>
               <button
                 onClick={() => {
                   setCurrentView('arena');
-                  setArenaKey(prev => prev + 1); // Force Arena to reload cards
+                  setArenaKey(prev => prev + 1);
                 }}
                 className={`flex items-center gap-2 px-6 py-3 rounded-lg transition-all ${
                   currentView === 'arena'
@@ -49,14 +61,14 @@ export default function App() {
                 }`}
               >
                 <Swords className="w-5 h-5" />
-                Test Live
+                Sandbox
               </button>
               <button
                 onClick={() => setNotesOpen(true)}
                 className="flex items-center gap-2 px-6 py-3 rounded-lg transition-all bg-amber-600/80 text-white hover:bg-amber-600"
               >
                 <StickyNote className="w-5 h-5" />
-                Notes
+                Notizen
               </button>
             </nav>
           </div>
@@ -65,7 +77,9 @@ export default function App() {
 
       {/* Main Content */}
       <main className="h-[calc(100vh-88px)]">
-        {currentView === 'forge' ? <CardForge /> : <Arena key={arenaKey} />}
+        {currentView === 'forge' && <CardForge />}
+        {currentView === 'arena' && <Arena key={arenaKey} />}
+        {currentView === 'play' && <GameView />}
       </main>
 
       {/* Notes Modal */}
