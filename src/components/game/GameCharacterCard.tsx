@@ -6,8 +6,10 @@ import React from 'react';
 import { LetzFetzCard } from '../cards/LetzFetzCard';
 import type { LetzFetzCardProps } from '../cards/LetzFetzCard';
 
-export function GameCharacterCard(props: Partial<LetzFetzCardProps> & { size?: 'sm' | 'lg' }) {
-  const { size = 'lg', ...cardProps } = props;
+export function GameCharacterCard(
+  props: Partial<LetzFetzCardProps> & { size?: 'sm' | 'lg'; footerNote?: string },
+) {
+  const { size = 'lg', footerNote, ...cardProps } = props;
   return (
     <LetzFetzCard
       id={cardProps.id ?? ''}
@@ -21,6 +23,7 @@ export function GameCharacterCard(props: Partial<LetzFetzCardProps> & { size?: '
       image_asset={cardProps.image_asset}
       size={size}
       interactive={false}
+      footerNote={footerNote ?? cardProps.footerNote}
     />
   );
 }

@@ -137,10 +137,14 @@ export function applyUltimateEffect(
     }
     case 'ulti-mysterium': {
       const oppUltId = findUltimateId(pack, next.players[opponent].characterId);
-      if (oppUltId) {
+      // Copying Echo against Echo would recurse forever in mirror matches.
+      if (oppUltId && oppUltId !== 'ulti-mysterium') {
         next = applyUltimateEffect(next, pack, playerId, oppUltId, rng, ruleset);
         next = drawForPlayer(next, playerId, 1, rng, ruleset);
         next.lastEvent = 'Echo: Gegner-Ulti kopiert.';
+      } else if (oppUltId === 'ulti-mysterium') {
+        next = drawForPlayer(next, playerId, 1, rng, ruleset);
+        next.lastEvent = 'Echo: Spiegel-Duell — 1 Karte gezogen.';
       } else {
         next.lastEvent = 'Echo: Kein Gegner-Ulti gefunden.';
       }

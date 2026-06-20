@@ -9,7 +9,7 @@ import type { ForgeElement } from '../../services/cardForge/types';
 import { buildCardDisplayModel } from './cardDisplayModel';
 import { ELEMENT_ACCENTS, KIND_LABELS } from './cardFrameTokens';
 
-export type LetzFetzCardSize = 'sm' | 'lg';
+export type LetzFetzCardSize = 'sm' | 'md' | 'lg';
 
 export interface LetzFetzCardProps {
   id: string;
@@ -34,11 +34,14 @@ export interface LetzFetzCardProps {
   draggable?: boolean;
   onClick?: () => void;
   onEffectsClick?: () => void;
+  disabled?: boolean;
+  footerNote?: string;
   className?: string;
 }
 
 const SIZE_CLASSES: Record<LetzFetzCardSize, string> = {
   lg: 'w-64 h-96',
+  md: 'w-36 h-52',
   sm: 'w-24 h-32',
 };
 
@@ -60,6 +63,8 @@ export function LetzFetzCard({
   draggable = false,
   onClick,
   onEffectsClick,
+  disabled = false,
+  footerNote,
   className = '',
 }: LetzFetzCardProps) {
   const accent = ELEMENT_ACCENTS[element] ?? ELEMENT_ACCENTS.Neutral;
@@ -84,13 +89,16 @@ export function LetzFetzCard({
   }
 
   if (size === 'sm') {
+    const smDisabled = disabled || !onClick;
     return (
       <button
         type="button"
-        onClick={onClick}
-        disabled={!onClick}
+        onClick={smDisabled ? undefined : onClick}
+        disabled={smDisabled}
+        aria-disabled={smDisabled}
+        aria-label={name || KIND_LABELS[type]}
         data-card-id={id}
-        className={`${SIZE_CLASSES.sm} relative overflow-hidden rounded-sm border-2 border-stone-700 bg-[#12100e] text-left shadow-lg transition-all ${selected ? 'ring-2 ring-amber-400 scale-105' : ''} ${exhausted ? 'opacity-50 rotate-90' : ''} ${onClick ? 'cursor-pointer hover:scale-105' : ''} ${className}`}
+        className={`${SIZE_CLASSES.sm} relative overflow-hidden rounded-sm border-2 border-stone-700 bg-[#12100e] text-left shadow-lg transition-all ${selected ? 'ring-2 ring-amber-400 scale-105' : ''} ${exhausted ? 'opacity-50 rotate-90' : ''} ${!smDisabled ? 'cursor-pointer hover:scale-105' : 'cursor-not-allowed'} ${className}`}
       >
         <div className={`absolute left-0 top-0 bottom-0 w-1 ${accent.stripe}`} />
         <GrungeOverlay />
@@ -116,126 +124,116 @@ export function LetzFetzCard({
     );
   }
 
-  const rootTag = onClick ? 'button' : 'div';
-  const rootProps = onClick
-    ? { type: 'button' as const, onClick, disabled: !onClick }
-    : {};
+  const compact = size === 'md';
+  const usesButton = onClick !== undefined || disabled;
+  const isDisabled = disabled || !onClick;
 
-  return React.createElement(
-    rootTag,
-    {
-      ...rootProps,
-      'data-card-id': id,
-      draggable,
-      className: [
-        SIZE_CLASSES.lg,
-        'relative overflow-hidden rounded-sm border-2 border-stone-800 bg-[#0f0d0b] shadow-2xl',
-        interactive ? 'cursor-grab active:cursor-grabbing hover:scale-[1.02] transition-transform' : '',
-        selected ? 'ring-2 ring-amber-400' : '',
-        exhausted ? 'opacity-60 rotate-2' : '',
-        className,
-      ]
-        .filter(Boolean)
-        .join(' '),
-    },
+  const frameClass = [
+    SIZE_CLASSES[size],
+    'relative overflow-hidden rounded-sm border-2 border-stone-700/90 bg-[#0f0d0b] shadow-2xl',
+    'ring-1 ring-inset ring-amber-950/30',
+    interactive ? 'cursor-grab active:cursor-grabbing hover:scale-[1.02] transition-transform' : '',
+    usesButton && !isDisabled && !interactive ? 'cursor-pointer hover:scale-[1.02] transition-transform' : '',
+    usesButton && isDisabled ? 'cursor-not-allowed' : '',
+    selected ? 'ring-2 ring-amber-400 ring-offset-1 ring-offset-stone-950' : '',
+    exhausted ? 'opacity-60 rotate-2' : '',
+    className,
+  ]
+    .filter(Boolean)
+    .join(' ');
+
+  const cardBody = (
     <>
-      <div className={`absolute left-0 top-0 bottom-0 w-1.5 ${accent.stripe} z-20`} />
+      <div className={`absolute left-0 top-0 bottom-0 ${compact ? 'w-1' : 'w-1.5'} ${accent.stripe} z-20`} />
       <GrungeOverlay />
 
-      {/* Top torn banner */}
       <div
-        className="relative z-10 border-b border-amber-900/40 bg-[#2a2218] px-3 pb-2 pt-2"
-        style={{
-          clipPath: 'polygon(0 0, 100% 0, 98% 100%, 2% 92%, 0 100%)',
-        }}
+        className={`relative z-10 border-b border-amber-900/50 bg-[#2a2218] ${compact ? 'px-2 pb-1 pt-1' : 'px-3 pb-2 pt-2'}`}
+        style={{ clipPath: 'polygon(0 0, 100% 0, 98% 100%, 2% 92%, 0 100%)' }}
       >
-        <div className="flex items-start justify-between gap-2">
-          <span className="text-[9px] font-bold uppercase tracking-[0.18em] text-amber-500/90">
+        <div className="flex items-start justify-between gap-1">
+          <span className={`font-bold uppercase tracking-[0.18em] text-amber-500/90 ${compact ? 'text-[8px]' : 'text-[9px]'}`}>
             {KIND_LABELS[type]}
           </span>
           {display.elementLabel && (
-            <span
-              className={`rounded border px-1.5 py-0.5 text-[9px] font-semibold uppercase tracking-wide ${accent.badge}`}
-            >
+            <span className={`rounded border font-semibold uppercase tracking-wide ${accent.badge} ${compact ? 'px-1 text-[7px]' : 'px-1.5 py-0.5 text-[9px]'}`}>
               {display.elementLabel}
             </span>
           )}
         </div>
-        <h3 className="mt-1 truncate font-serif text-sm font-bold uppercase tracking-wide text-amber-50">
+        <h3 className={`mt-0.5 truncate font-serif font-bold uppercase tracking-wide text-amber-50 ${compact ? 'text-[11px]' : 'text-sm'}`}>
           {name || 'Unnamed Card'}
         </h3>
       </div>
 
-      {/* Illustration */}
-      <div className="relative h-[58%] w-full overflow-hidden bg-[#090807]">
+      <div className={`relative w-full overflow-hidden bg-[#090807] ${compact ? 'h-[48%]' : 'h-[58%]'}`}>
         {image_asset ? (
-          <ImageWithFallback
-            src={image_asset}
-            alt={name}
-            className="h-full w-full object-cover object-center"
-            loading="lazy"
-          />
+          <ImageWithFallback src={image_asset} alt={name} className="h-full w-full object-cover object-center" loading="lazy" />
         ) : (
           <div className={`flex h-full w-full items-center justify-center bg-gradient-to-b ${accent.glow}`}>
-            <span className="text-5xl opacity-30">{typeIcon(type)}</span>
+            <span className={`opacity-30 ${compact ? 'text-3xl' : 'text-5xl'}`}>{typeIcon(type)}</span>
           </div>
         )}
         <div className="pointer-events-none absolute inset-0 bg-gradient-to-t from-[#0f0d0b] via-transparent to-[#0f0d0b]/30" />
-        <div className="pointer-events-none absolute inset-0 bg-[radial-gradient(circle_at_center,transparent_40%,rgba(0,0,0,0.55)_100%)]" />
+        {exhausted && (
+          <div className="absolute inset-0 z-20 flex items-center justify-center bg-black/55">
+            <span className={`rotate-[-12deg] rounded border border-stone-600 bg-stone-900/90 font-bold uppercase tracking-wider text-stone-400 ${compact ? 'px-1 text-[8px]' : 'px-1.5 py-0.5 text-[9px]'}`}>
+              Erschöpft
+            </span>
+          </div>
+        )}
       </div>
 
-      {/* Stat strip */}
       {display.statCells.length > 0 && (
         <div className="relative z-10 flex border-y border-stone-800 bg-[#15110d]">
           {display.statCells.map((cell) => (
-            <div key={cell.label} className="flex-1 border-r border-stone-800/80 px-2 py-1.5 last:border-r-0">
-              <div className="text-[8px] font-bold uppercase tracking-widest text-stone-500">{cell.label}</div>
-              <div className="text-sm font-black text-amber-50">{cell.value}</div>
+            <div key={cell.label} className={`flex-1 border-r border-stone-800/80 last:border-r-0 ${compact ? 'px-1 py-0.5' : 'px-2 py-1.5'}`}>
+              <div className={`font-bold uppercase tracking-widest text-stone-500 ${compact ? 'text-[7px]' : 'text-[8px]'}`}>{cell.label}</div>
+              <div className={`font-black text-amber-50 ${compact ? 'text-[11px]' : 'text-sm'}`}>{cell.value}</div>
             </div>
           ))}
         </div>
       )}
 
-      {/* Parchment rule text */}
-      <div
-        className={`relative z-10 overflow-y-auto bg-[#1f1812] px-2.5 py-2 ${display.statCells.length > 0 ? 'max-h-[26%]' : 'max-h-[34%]'}`}
-        onClick={(e) => {
-          if (onEffectsClick) {
-            e.stopPropagation();
-            onEffectsClick();
-          }
-        }}
-        role={onEffectsClick ? 'button' : undefined}
-        title={onEffectsClick ? 'Click to view full effects' : undefined}
-      >
-        <div
-          className="pointer-events-none absolute inset-0 opacity-30"
-          style={{
-            backgroundImage:
-              'repeating-linear-gradient(0deg, rgba(0,0,0,0.04) 0px, rgba(0,0,0,0.04) 1px, transparent 1px, transparent 3px)',
-          }}
-        />
-        <div className="relative space-y-1.5">
-          {display.textBlocks.length > 0 ? (
-            display.textBlocks.map((block, index) => (
-              <div key={`${block.label}-${index}`}>
-                <div className="text-[8px] font-bold uppercase tracking-widest text-amber-600/90">
-                  {block.label}
-                </div>
-                <p className="line-clamp-2 text-[10px] leading-snug text-amber-100/90">{block.text}</p>
-              </div>
-            ))
-          ) : (
-            <p className="text-[10px] italic text-stone-500">No effects described.</p>
-          )}
-          {display.footerBullets.slice(0, 2).map((line, index) => (
-            <p key={`footer-${index}`} className="line-clamp-1 text-[9px] text-stone-400">
-              {line}
-            </p>
+      <div className={`relative z-10 overflow-hidden bg-[#1f1812] ${compact ? 'px-1.5 py-1 max-h-[24%]' : 'px-2.5 py-2 max-h-[26%]'}`}>
+        <div className="relative space-y-0.5">
+          {display.textBlocks.slice(0, compact ? 2 : 2).map((block, index) => (
+            <div key={`${block.label}-${index}`}>
+              <div className={`font-bold uppercase tracking-widest text-amber-600/90 ${compact ? 'text-[7px]' : 'text-[8px]'}`}>{block.label}</div>
+              <p className={`leading-snug text-amber-100/90 line-clamp-2 ${compact ? 'text-[9px]' : 'text-[10px]'}`}>{block.text}</p>
+            </div>
           ))}
         </div>
+        {footerNote && (
+          <p className={`mt-1 border-t border-amber-900/40 pt-1 font-semibold text-amber-400/90 ${compact ? 'text-[8px]' : 'text-[10px]'}`}>
+            {footerNote}
+          </p>
+        )}
       </div>
-    </>,
+    </>
+  );
+
+  if (!usesButton) {
+    return (
+      <div data-card-id={id} draggable={draggable} className={frameClass} aria-label={name || KIND_LABELS[type]}>
+        {cardBody}
+      </div>
+    );
+  }
+
+  return (
+    <button
+      type="button"
+      onClick={isDisabled ? undefined : onClick}
+      disabled={isDisabled}
+      aria-disabled={isDisabled}
+      aria-label={name || KIND_LABELS[type]}
+      data-card-id={id}
+      draggable={draggable}
+      className={frameClass}
+    >
+      {cardBody}
+    </button>
   );
 }
 
@@ -261,6 +259,11 @@ function GrungeOverlay() {
         }}
       />
       <div className="pointer-events-none absolute inset-0 z-30 opacity-20 [background-image:radial-gradient(rgba(255,255,255,0.08)_0.5px,transparent_0.5px)] [background-size:3px_3px]" />
+      <div className="pointer-events-none absolute inset-0 z-40 shadow-[inset_0_0_12px_rgba(0,0,0,0.45)]" />
+      <div className="pointer-events-none absolute left-0 top-0 z-40 h-2 w-2 border-l border-t border-amber-700/40" />
+      <div className="pointer-events-none absolute right-0 top-0 z-40 h-2 w-2 border-r border-t border-amber-700/40" />
+      <div className="pointer-events-none absolute bottom-0 left-0 z-40 h-2 w-2 border-b border-l border-amber-900/50" />
+      <div className="pointer-events-none absolute bottom-0 right-0 z-40 h-2 w-2 border-b border-r border-amber-900/50" />
     </>
   );
 }

@@ -22,3 +22,12 @@ supabase/backups/*.sql
 
 # Vite
 *.local
+
+# Playwright / verify-ui (see also .qa/.gitignore at repo root)
+.qa/evidence/
+.qa/test-results/
+.qa/runs/
+/test-results/
+/playwright-report/
+/blob-report/
+/playwright/.cache/
