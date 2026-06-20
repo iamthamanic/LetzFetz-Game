@@ -1,39 +1,71 @@
 /**
- * Horizontal tab navigation primitive.
+ * Horizontal tab navigation primitive with per-tab tone variants.
  * Location: src/components/ui/Tabs.tsx
  */
 import React from 'react';
+
+export type TabTone = 'play' | 'editor' | 'sandbox';
 
 export interface TabItem {
   id: string;
   label: string;
   icon?: React.ReactNode;
+  tone?: TabTone;
 }
 
 interface TabsProps {
   items: TabItem[];
   active: string;
   onChange: (id: string) => void;
+  ariaLabel?: string;
 }
 
-export function Tabs({ items, active, onChange }: TabsProps) {
+function activeClasses(tone: TabTone): string {
+  switch (tone) {
+    case 'play':
+      return 'bg-purple-900/90 text-white shadow-[0_0_14px_rgba(52,211,153,0.35)] ring-2 ring-emerald-400/70';
+    case 'sandbox':
+      return 'bg-stone-800 text-amber-100 ring-1 ring-amber-500/50 shadow-sm';
+    case 'editor':
+    default:
+      return 'bg-stone-800 text-stone-100 shadow-sm';
+  }
+}
+
+function inactiveClasses(tone: TabTone): string {
+  switch (tone) {
+    case 'play':
+      return 'text-stone-300 hover:bg-stone-800 hover:text-emerald-200/90';
+    case 'sandbox':
+      return 'text-stone-400 hover:bg-stone-800 hover:text-amber-200/90';
+    case 'editor':
+    default:
+      return 'text-stone-400 hover:bg-stone-800 hover:text-stone-200';
+  }
+}
+
+export function Tabs({ items, active, onChange, ariaLabel = 'Tabs' }: TabsProps) {
   return (
-    <nav className="flex items-center gap-1 rounded-lg bg-stone-900/80 p-1 border border-stone-800">
+    <nav
+      aria-label={ariaLabel}
+      className="inline-flex items-center gap-1 rounded-xl border border-stone-800 bg-stone-900/80 p-1"
+    >
       {items.map((item) => {
         const isActive = item.id === active;
+        const tone = item.tone ?? 'editor';
         return (
           <button
             key={item.id}
             type="button"
             onClick={() => onChange(item.id)}
-            className={`flex items-center gap-2 rounded-md px-4 py-2 text-sm font-medium transition-all ${
-              isActive
-                ? 'bg-purple-700 text-white shadow-sm'
-                : 'text-stone-400 hover:bg-stone-800 hover:text-stone-200'
+            aria-current={isActive ? 'page' : undefined}
+            data-testid={`nav-tab-${item.id}`}
+            className={`flex shrink-0 items-center gap-2 rounded-lg px-3 py-2 text-sm font-medium transition-all focus:outline-none focus-visible:ring-2 focus-visible:ring-purple-500 focus-visible:ring-offset-2 focus-visible:ring-offset-stone-950 sm:px-4 ${
+              isActive ? activeClasses(tone) : inactiveClasses(tone)
             }`}
           >
             {item.icon}
-            {item.label}
+            <span className="whitespace-nowrap">{item.label}</span>
           </button>
         );
       })}

@@ -1,88 +1,45 @@
 import React, { useState } from 'react';
-import { Hammer, Swords, StickyNote, Gamepad2 } from 'lucide-react';
 import { CardForge } from './components/CardForge';
 import { Arena } from './components/Arena';
 import { Notes } from './components/Notes';
 import { GameView } from './components/game/GameView';
-
-type View = 'forge' | 'arena' | 'play';
+import { AppBrand } from './components/AppBrand';
+import { AppNav, type AppView } from './components/AppNav';
 
 export default function App() {
-  const [currentView, setCurrentView] = useState<View>('forge');
+  const [currentView, setCurrentView] = useState<AppView>('forge');
   const [notesOpen, setNotesOpen] = useState(false);
   const [arenaKey, setArenaKey] = useState(0);
 
+  const handleViewChange = (view: AppView) => {
+    if (view === 'arena') {
+      setArenaKey((prev) => prev + 1);
+    }
+    setCurrentView(view);
+  };
+
   return (
-    <div className="min-h-screen bg-gray-950">
-      {/* Header Navigation */}
-      <header className="bg-gradient-to-r from-purple-900 via-pink-900 to-purple-900 border-b border-purple-700">
-        <div className="container mx-auto px-4">
-          <div className="flex items-center justify-between py-4">
-            <div className="flex items-center gap-3">
-              <div className="text-3xl">⚔️</div>
-              <div>
-                <h1 className="text-2xl text-white">Letz Fetz</h1>
-                <p className="text-sm text-purple-300">Prototype Engine</p>
-              </div>
-            </div>
-            
-            <nav className="flex gap-2">
-              <button
-                onClick={() => setCurrentView('play')}
-                className={`flex items-center gap-2 px-6 py-3 rounded-lg transition-all ${
-                  currentView === 'play'
-                    ? 'bg-white text-purple-900 shadow-lg'
-                    : 'bg-purple-800/50 text-white hover:bg-purple-800'
-                }`}
-              >
-                <Gamepad2 className="w-5 h-5" />
-                Spielen
-              </button>
-              <button
-                onClick={() => setCurrentView('forge')}
-                className={`flex items-center gap-2 px-6 py-3 rounded-lg transition-all ${
-                  currentView === 'forge'
-                    ? 'bg-white text-purple-900 shadow-lg'
-                    : 'bg-purple-800/50 text-white hover:bg-purple-800'
-                }`}
-              >
-                <Hammer className="w-5 h-5" />
-                Bearbeiten
-              </button>
-              <button
-                onClick={() => {
-                  setCurrentView('arena');
-                  setArenaKey(prev => prev + 1);
-                }}
-                className={`flex items-center gap-2 px-6 py-3 rounded-lg transition-all ${
-                  currentView === 'arena'
-                    ? 'bg-white text-purple-900 shadow-lg'
-                    : 'bg-purple-800/50 text-white hover:bg-purple-800'
-                }`}
-              >
-                <Swords className="w-5 h-5" />
-                Sandbox
-              </button>
-              <button
-                onClick={() => setNotesOpen(true)}
-                className="flex items-center gap-2 px-6 py-3 rounded-lg transition-all bg-amber-600/80 text-white hover:bg-amber-600"
-              >
-                <StickyNote className="w-5 h-5" />
-                Notizen
-              </button>
-            </nav>
-          </div>
+    <div className="flex min-h-screen flex-col bg-gray-950">
+      <header
+        data-testid="app-header"
+        className="flex-none border-b border-stone-800 bg-stone-950/95 backdrop-blur-md"
+      >
+        <div className="mx-auto flex max-w-[1280px] flex-col gap-3 px-4 py-3 sm:flex-row sm:items-center sm:justify-between">
+          <AppBrand />
+          <AppNav
+            currentView={currentView}
+            onViewChange={handleViewChange}
+            onOpenNotes={() => setNotesOpen(true)}
+          />
         </div>
       </header>
 
-      {/* Main Content */}
-      <main className="h-[calc(100vh-88px)]">
+      <main className="min-h-0 flex-1 overflow-hidden">
         {currentView === 'forge' && <CardForge />}
         {currentView === 'arena' && <Arena key={arenaKey} />}
         {currentView === 'play' && <GameView />}
       </main>
 
-      {/* Notes Modal */}
       <Notes isOpen={notesOpen} onClose={() => setNotesOpen(false)} />
     </div>
   );
