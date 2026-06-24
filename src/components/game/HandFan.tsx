@@ -4,6 +4,7 @@
  */
 import React from 'react';
 import { BoardCard } from './BoardCard';
+import { DraggableHandCard } from './DndPlaymat';
 import type { HandCardView } from './buildGameViewModel';
 import type { PendingIntent } from './gameActionHelpers';
 
@@ -96,7 +97,7 @@ export function HandFan({
           card.interaction === 'activate-discard' ||
           card.isActivateDiscardOption;
 
-        return (
+        const cardEl = (
           <BoardCard
             key={card.instanceId}
             def={card.def ?? undefined}
@@ -110,6 +111,15 @@ export function HandFan({
             dataInteraction={card.interaction ?? undefined}
           />
         );
+
+        if (card.interaction === 'bind' && clickable) {
+          return (
+            <DraggableHandCard key={card.instanceId} card={card}>
+              {cardEl}
+            </DraggableHandCard>
+          );
+        }
+        return cardEl;
       })}
       </div>
     </div>

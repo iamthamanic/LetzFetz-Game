@@ -24,6 +24,7 @@ import { ArenaPlaymatBadge } from './ArenaPlaymatBadge';
 import { getPlaymatLayoutForArena, playmatZonePercentStyle } from './playmat';
 import { Panel } from '../ui/Panel';
 import { Button } from '../ui/Button';
+import { DndPlaymat } from './DndPlaymat';
 
 interface PlaymatBoardProps {
   state: GameState;
@@ -174,6 +175,7 @@ export function PlaymatBoard({
     (botHeldBackId ? state.players[botId].hand.length - 1 : undefined);
 
   return (
+    <DndPlaymat state={state} pack={pack} view={view} humanId={humanId} onDispatch={onDispatch}>
     <div className="flex min-h-0 flex-1 flex-col overflow-hidden">
       {(pendingHint || actionError) && (
         <div className="relative z-30 flex-none border-b border-stone-700 bg-stone-900/90 px-4 py-2">
@@ -354,5 +356,6 @@ export function PlaymatBoard({
         </div>
       </div>
     </div>
+    </DndPlaymat>
   );
 }
