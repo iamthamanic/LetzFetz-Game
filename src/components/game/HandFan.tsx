@@ -12,6 +12,8 @@ interface HandFanProps {
   pending: PendingIntent | null;
   /** When set, only the first N cards are shown (opening deal reveal). */
   visibleCount?: number;
+  /** Instance ids hidden until draw animation completes. */
+  hiddenInstanceIds?: string[];
   onSelectAttack: (instanceId: string) => void;
   onPlayBoost: (instanceId: string) => void;
   onBindDirect: (instanceId: string) => void;
@@ -25,6 +27,7 @@ export function HandFan({
   cards,
   pending,
   visibleCount,
+  hiddenInstanceIds,
   onSelectAttack,
   onPlayBoost,
   onBindDirect,
@@ -33,7 +36,9 @@ export function HandFan({
   onDiscardDraw,
   onActivateDiscard,
 }: HandFanProps) {
-  const shown = visibleCount !== undefined ? cards.slice(0, visibleCount) : cards;
+  const shown = (visibleCount !== undefined ? cards.slice(0, visibleCount) : cards).filter(
+    (card) => !hiddenInstanceIds?.includes(card.instanceId),
+  );
 
   if (shown.length === 0) {
     return (

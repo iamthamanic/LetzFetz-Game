@@ -8,7 +8,7 @@ import { findElementDef } from '../../game';
 import type { GameViewModel } from './buildGameViewModel';
 import type { PendingIntent } from './gameActionHelpers';
 import type { PresentationStep } from './presentation/types';
-import { OpeningDealFly } from './presentation';
+import { PlaymatCardFly } from './presentation';
 import {
   findActivateAction,
   findBindReplaceAction,
@@ -39,6 +39,7 @@ interface PlaymatBoardProps {
   openingDealActive?: boolean;
   openingDealFinished?: boolean;
   dealReveal?: Record<PlayerId, number>;
+  heldBackHandCards?: Partial<Record<PlayerId, string>>;
   activePresentationStep?: PresentationStep | null;
   humanPlayerId?: PlayerId;
   onDispatch: (action: GameAction) => void;
@@ -60,6 +61,7 @@ export function PlaymatBoard({
   openingDealActive = false,
   openingDealFinished = false,
   dealReveal,
+  heldBackHandCards,
   activePresentationStep = null,
   humanPlayerId = 'p1',
   onDispatch,
@@ -169,6 +171,12 @@ export function PlaymatBoard({
   const topDiscardDef = topDiscard ? findElementDef(pack, topDiscard.defId) : undefined;
   const humanHandVisible = openingDealActive && dealReveal ? dealReveal[humanId] : undefined;
   const botHandVisible = openingDealActive && dealReveal ? dealReveal[botId] : undefined;
+  const humanHeldBackId = heldBackHandCards?.[humanId];
+  const botHeldBackId = heldBackHandCards?.[botId];
+  const humanHandHidden = humanHeldBackId ? [humanHeldBackId] : undefined;
+  const botHandCount =
+    botHandVisible ??
+    (botHeldBackId ? state.players[botId].hand.length - 1 : undefined);
 
   return (
     <div className="flex min-h-0 flex-1 flex-col overflow-hidden">
@@ -225,7 +233,7 @@ export function PlaymatBoard({
             pack={pack}
             playerId={botId}
             side="bot"
-            handVisibleCount={botHandVisible}
+            handVisibleCount={botHandCount}
             style={playmatZonePercentStyle(opponentCharZone, playmatLayout.viewBox)}
           />
         )}
@@ -240,7 +248,7 @@ export function PlaymatBoard({
           />
         )}
 
-        <OpeningDealFly
+        <PlaymatCardFly
           activeStep={activePresentationStep}
           humanPlayerId={humanPlayerId}
         />
@@ -326,6 +334,7 @@ export function PlaymatBoard({
               cards={view.handCards}
               pending={pending}
               visibleCount={humanHandVisible}
+              hiddenInstanceIds={humanHandHidden}
               onSelectAttack={handleSelectAttack}
               onPlayAttackDirect={onPlayAttack}
               onPlayBoost={(id) => onDispatch({ type: 'PLAY_BOOST', cardInstanceId: id })}

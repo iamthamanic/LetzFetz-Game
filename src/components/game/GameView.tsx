@@ -33,6 +33,9 @@ import {
   buildOpeningDealSteps,
   fullDealRevealCounts,
   isOpeningDealStep,
+  buildDrawCardStep,
+  isDrawCardStep,
+  findNewlyDrawnCard,
 } from './presentation';
 
 const HUMAN: PlayerId = 'p1';
@@ -51,25 +54,52 @@ export function GameView() {
   const botRunning = useRef(false);
   const botPausedRef = useRef(false);
   const openingDealRunRef = useRef(false);
+  const openingDealCompleteRef = useRef(false);
+  const prevStateRef = useRef<GameState | null>(null);
   const stateRef = useRef<GameState | null>(null);
   const [dealReveal, setDealReveal] = useState<Record<PlayerId, number>>({ p1: 0, p2: 0 });
+  const [heldBackHandCards, setHeldBackHandCards] = useState<Partial<Record<PlayerId, string>>>({});
   const [openingDealStarted, setOpeningDealStarted] = useState(false);
   const [openingDealFinished, setOpeningDealFinished] = useState(false);
 
   const presentation = usePresentationQueue({
     onStepComplete: (step) => {
-      if (!isOpeningDealStep(step)) return;
-      const playerId = step.payload?.playerId as PlayerId | undefined;
-      if (!playerId) return;
-      setDealReveal((prev) => ({ ...prev, [playerId]: prev[playerId] + 1 }));
+      if (isOpeningDealStep(step)) {
+        const playerId = step.payload?.playerId as PlayerId | undefined;
+        if (!playerId) return;
+        setDealReveal((prev) => ({ ...prev, [playerId]: prev[playerId] + 1 }));
+        return;
+      }
+      if (isDrawCardStep(step)) {
+        const playerId = step.payload?.playerId as PlayerId | undefined;
+        const cardInstanceId = step.payload?.cardInstanceId as string | undefined;
+        if (!playerId || !cardInstanceId) return;
+        setHeldBackHandCards((prev) => {
+          if (prev[playerId] !== cardInstanceId) return prev;
+          const next = { ...prev };
+          delete next[playerId];
+          return next;
+        });
+      }
     },
     onQueueIdle: () => {
-      if (!openingDealRunRef.current) return;
-      const current = stateRef.current;
-      if (current) setDealReveal(fullDealRevealCounts(current));
-      setOpeningDealFinished(true);
+      if (openingDealRunRef.current && !openingDealCompleteRef.current) {
+        openingDealCompleteRef.current = true;
+        const current = stateRef.current;
+        if (current) setDealReveal(fullDealRevealCounts(current));
+        setOpeningDealFinished(true);
+      }
+      setHeldBackHandCards({});
     },
   });
+
+  const scheduleDrawPresentation = useCallback(
+    (playerId: PlayerId, cardInstanceId: string, locksInput: boolean) => {
+      setHeldBackHandCards((prev) => ({ ...prev, [playerId]: cardInstanceId }));
+      presentation.enqueue(buildDrawCardStep(playerId, cardInstanceId, { locksInput }));
+    },
+    [presentation.enqueue],
+  );
 
   useEffect(() => {
     stateRef.current = state;
@@ -86,6 +116,7 @@ export function GameView() {
     setOpeningDealStarted(true);
     const steps = buildOpeningDealSteps(state);
     if (steps.length === 0) {
+      openingDealCompleteRef.current = true;
       setDealReveal(fullDealRevealCounts(state));
       setOpeningDealFinished(true);
       return;
@@ -99,6 +130,22 @@ export function GameView() {
   useEffect(() => {
     if (state?.winner) presentation.flush();
   }, [state?.winner, presentation.flush]);
+
+  useEffect(() => {
+    if (!state || !openingDealFinished) {
+      prevStateRef.current = state;
+      return;
+    }
+
+    const prev = prevStateRef.current;
+    prevStateRef.current = state;
+    if (!prev) return;
+
+    const botDrawnId = findNewlyDrawnCard(prev, state, BOT);
+    if (botDrawnId) {
+      scheduleDrawPresentation(BOT, botDrawnId, false);
+    }
+  }, [state, openingDealFinished, scheduleDrawPresentation]);
 
   const dispatch = useCallback((action: GameAction, playerId: PlayerId = HUMAN) => {
     setState((prev) => {
@@ -208,9 +255,34 @@ export function GameView() {
   const handleDispatch = useCallback(
     (action: GameAction) => {
       if (presentation.isInputLocked) return;
-      dispatch(action, HUMAN);
+
+      setState((prev) => {
+        if (!prev) return prev;
+        try {
+          const isHumanDrawPhase =
+            action.type === 'ADVANCE_PHASE' &&
+            prev.phase === 'draw' &&
+            prev.activePlayer === HUMAN;
+
+          const next = applyAction(prev, action, HUMAN, { pack, playerId: HUMAN });
+
+          if (isHumanDrawPhase) {
+            const drawnId = findNewlyDrawnCard(prev, next, HUMAN);
+            if (drawnId) {
+              queueMicrotask(() => scheduleDrawPresentation(HUMAN, drawnId, true));
+            }
+          }
+
+          setActionError(null);
+          return next;
+        } catch (e) {
+          const message = e instanceof Error ? e.message : 'Aktion fehlgeschlagen.';
+          setActionError(message);
+          return prev;
+        }
+      });
     },
-    [dispatch, presentation.isInputLocked],
+    [presentation.isInputLocked, scheduleDrawPresentation],
   );
 
   const handleApplyPlaytestState = useCallback((next: GameState) => {
@@ -246,9 +318,12 @@ export function GameView() {
             setPendingIntent(null);
             setActionError(null);
             openingDealRunRef.current = false;
+            openingDealCompleteRef.current = false;
             setOpeningDealStarted(false);
             setOpeningDealFinished(false);
             setDealReveal({ p1: 0, p2: 0 });
+            setHeldBackHandCards({});
+            prevStateRef.current = null;
             const seed = Date.now();
             const rng = createSeededRng(seed);
             const botCharacterId = pickOpponentCharacter(pack, humanCharacterId, rng);
@@ -302,6 +377,7 @@ export function GameView() {
           openingDealActive={openingDealActive}
           openingDealFinished={openingDealFinished}
           dealReveal={dealReveal}
+          heldBackHandCards={heldBackHandCards}
           activePresentationStep={presentation.activeStep}
           humanPlayerId={HUMAN}
           onDispatch={handleDispatch}
@@ -312,9 +388,12 @@ export function GameView() {
           onNewGame={() => {
             presentation.flush();
             openingDealRunRef.current = false;
+            openingDealCompleteRef.current = false;
             setOpeningDealStarted(false);
             setOpeningDealFinished(false);
             setDealReveal({ p1: 0, p2: 0 });
+            setHeldBackHandCards({});
+            prevStateRef.current = null;
             setPendingIntent(null);
             setActionError(null);
             setIntroOpen(false);
