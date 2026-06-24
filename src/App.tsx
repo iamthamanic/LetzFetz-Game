@@ -3,13 +3,19 @@ import { CardForge } from './components/CardForge';
 import { Arena } from './components/Arena';
 import { Notes } from './components/Notes';
 import { GameView } from './components/game/GameView';
+import { PlaymatZonePreview } from './components/game/PlaymatZonePreview';
 import { AppBrand } from './components/AppBrand';
 import { AppNav, type AppView } from './components/AppNav';
+import { isPlaymatPreview } from './services/playtest/isPlaymatPreview';
 
 export default function App() {
   const [currentView, setCurrentView] = useState<AppView>('forge');
   const [notesOpen, setNotesOpen] = useState(false);
   const [arenaKey, setArenaKey] = useState(0);
+
+  if (isPlaymatPreview()) {
+    return <PlaymatZonePreview />;
+  }
 
   const handleViewChange = (view: AppView) => {
     if (view === 'arena') {
