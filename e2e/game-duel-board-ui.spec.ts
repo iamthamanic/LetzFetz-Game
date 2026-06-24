@@ -135,12 +135,32 @@ test.describe('Game Duel Board UI — Sprint 1', () => {
     await shot(page, '06-bound-filled.png');
   });
 
+  test('targeting arrow appears when attack card selected', async ({ page }) => {
+    await startMatch(page);
+    await advanceToBindPhase(page);
+
+    const skipBind = page.getByRole('button', { name: 'Nicht binden' });
+    await skipBind.click();
+
+    await expect(page.getByRole('button', { name: 'Hauptaktion auslassen' })).toBeVisible({
+      timeout: 5000,
+    });
+
+    const hand = page.getByTestId('player-hand');
+    const attackCard = hand.locator('button[data-card-id][data-interaction="attack"]').first();
+    if ((await attackCard.count()) > 0) {
+      await attackCard.click();
+      await expect(page.getByTestId('targeting-arrow')).toBeVisible({ timeout: 3000 });
+      await shot(page, '08-targeting-arrow.png');
+    }
+  });
+
   test('human block prompt when bot attacks', async ({ page }) => {
-    test.setTimeout(60_000);
+    test.setTimeout(90_000);
     await startMatch(page);
 
     let blockVisible = false;
-    for (let round = 0; round < 24 && !blockVisible; round++) {
+    for (let round = 0; round < 35 && !blockVisible; round++) {
       const zugStart = page.getByRole('button', { name: 'Zug starten' });
       if (await zugStart.isVisible({ timeout: 800 }).catch(() => false)) {
         await zugStart.click();

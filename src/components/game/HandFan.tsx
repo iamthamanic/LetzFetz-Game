@@ -107,6 +107,7 @@ export function HandFan({
             dimmed={!clickable && !selected}
             disabled={!clickable}
             onClick={handleClick}
+            dataInteraction={card.interaction ?? undefined}
           />
         );
       })}
