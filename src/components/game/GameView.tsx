@@ -12,8 +12,11 @@ import {
   type GameState,
   type GameAction,
   type PlayerId,
+  pickOpponentCharacter,
+  createSeededRng,
 } from '../../game';
 import { GameSetup } from './GameSetup';
+import { GrungeAppShell } from '../ui/GrungeAppShell';
 import { PhaseBar } from './PhaseBar';
 import { GameBoard } from './GameBoard';
 import { MatchIntro } from './MatchIntro';
@@ -22,19 +25,28 @@ import type { PendingIntent } from './gameActionHelpers';
 import { Button } from '../ui/Button';
 import { Badge } from '../ui/Badge';
 import { ScrollText } from 'lucide-react';
+import { isPlaytestMode } from '../../services/playtest/isPlaytestMode';
+import { PlaytestCheatbox } from './PlaytestCheatbox';
 
 const HUMAN: PlayerId = 'p1';
 const BOT: PlayerId = 'p2';
 const pack = BASE_PACK;
 
 export function GameView() {
+  const playtestMode = isPlaytestMode();
   const [state, setState] = useState<GameState | null>(null);
   const [lastRoll, setLastRoll] = useState<number | null>(null);
   const [logOpen, setLogOpen] = useState(false);
   const [pendingIntent, setPendingIntent] = useState<PendingIntent | null>(null);
   const [actionError, setActionError] = useState<string | null>(null);
   const [introOpen, setIntroOpen] = useState(false);
+  const [botPaused, setBotPaused] = useState(false);
   const botRunning = useRef(false);
+  const botPausedRef = useRef(false);
+
+  useEffect(() => {
+    botPausedRef.current = botPaused;
+  }, [botPaused]);
 
   const dispatch = useCallback((action: GameAction, playerId: PlayerId = HUMAN) => {
     setState((prev) => {
@@ -60,6 +72,7 @@ export function GameView() {
 
   useEffect(() => {
     if (!state || state.winner || botRunning.current) return;
+    if (playtestMode && botPausedRef.current) return;
 
     const needsBot =
       (state.activePlayer === BOT && !state.combat) ||
@@ -87,7 +100,7 @@ export function GameView() {
       clearTimeout(timer);
       botRunning.current = false;
     };
-  }, [state]);
+  }, [state, playtestMode]);
 
   useEffect(() => {
     setPendingIntent(null);
@@ -143,34 +156,48 @@ export function GameView() {
     [dispatch],
   );
 
+  const handleApplyPlaytestState = useCallback((next: GameState) => {
+    if (playtestMode) setBotPaused(true);
+    setPendingIntent(null);
+    setActionError(null);
+    setState(next);
+  }, [playtestMode]);
+
   if (!state || !view) {
     return (
-      <GameSetup
-        onStart={(characterId) => {
-          setPendingIntent(null);
-          setActionError(null);
-          setState(
-            createGame({
-              pack,
-              p1CharacterId: characterId,
-              p2CharacterId: 'schluckspecht',
-              startingPlayer: HUMAN,
-              seed: Date.now(),
-            }),
-          );
-          setIntroOpen(true);
-        }}
-      />
+      <GrungeAppShell>
+        <GameSetup
+          onStart={({ humanCharacterId }) => {
+            setPendingIntent(null);
+            setActionError(null);
+            const seed = Date.now();
+            const rng = createSeededRng(seed);
+            const botCharacterId = pickOpponentCharacter(pack, humanCharacterId, rng);
+            setState(
+              createGame({
+                pack,
+                p1CharacterId: humanCharacterId,
+                p2CharacterId: botCharacterId,
+                startingPlayer: HUMAN,
+                seed,
+              }),
+            );
+            setIntroOpen(true);
+          }}
+        />
+      </GrungeAppShell>
     );
   }
 
+  const botWouldAct =
+    (state.activePlayer === BOT && !state.winner) || state.combat?.defenderId === BOT;
   const botThinking =
     botRunning.current ||
-    (state.activePlayer === BOT && !state.winner) ||
-    state.combat?.defenderId === BOT;
+    (botWouldAct && !(playtestMode && botPaused));
 
   return (
-    <div className="flex h-full flex-col overflow-hidden bg-stone-950 text-stone-100">
+    <GrungeAppShell>
+      <div className="flex h-full flex-col overflow-hidden bg-stone-950 text-stone-100">
       <header className="flex-none border-b border-stone-700 bg-stone-900/90 px-4 py-2">
         <div className="mx-auto flex max-w-6xl items-center justify-between gap-4">
           <div className="flex flex-wrap items-center gap-3">
@@ -245,7 +272,19 @@ export function GameView() {
             </div>
           </aside>
         )}
+
+        {playtestMode && (
+          <PlaytestCheatbox
+            pack={pack}
+            state={state}
+            botPaused={botPaused}
+            onBotPausedChange={setBotPaused}
+            onApplyState={handleApplyPlaytestState}
+            onError={setActionError}
+          />
+        )}
       </div>
-    </div>
+      </div>
+    </GrungeAppShell>
   );
 }
