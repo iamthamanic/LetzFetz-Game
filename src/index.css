@@ -1,5 +1,60 @@
 @import "tailwindcss";
 
+@font-face {
+  font-family: "Frazzle";
+  src: url("/fonts/FRAZZLE_.ttf") format("truetype");
+  font-weight: 400;
+  font-style: normal;
+  font-display: swap;
+}
+
+@font-face {
+  font-family: "BadSuabiaSwing";
+  src:
+    url("/fonts/BadSuabiaSwing-Regular.woff2") format("woff2"),
+    url("/fonts/BadSuabiaSwing-Regular.otf") format("opentype");
+  font-weight: 400;
+  font-style: normal;
+  font-display: swap;
+}
+
+@font-face {
+  font-family: "LetzFetzDisplay";
+  src:
+    url("/fonts/LetzFetzDisplay.woff2") format("woff2"),
+    url("/fonts/LetzFetzDisplay.ttf") format("truetype");
+  font-weight: 400;
+  font-style: normal;
+  font-display: swap;
+}
+
+@theme {
+  --font-brand: "BadSuabiaSwing", "Frazzle", Impact, sans-serif;
+  --font-logo: "LetzFetzDisplay", "BadSuabiaSwing", "Frazzle", Impact, sans-serif;
+  /* Logo parchment / cream — primary brand text on dark UI */
+  --color-brand-cream: #f2e8dc;
+  --color-brand-cream-muted: #d9c9b8;
+  --color-brand-ink: #1f1812;
+  --color-brand-outline: #0a0806;
+  --color-brand-parchment: #2a2218;
+  --color-brand-blood: #701010;
+  --color-brand-blood-deep: #5a0c0c;
+  /** Bad Suabia labels on beige parchment bars — logo blood brown (not cream, not black ink) */
+  --color-brand-parchment-type: #5a0705;
+  --color-brand-burst: #d42020;
+  --color-brand-scratch: #e8dcc8;
+  /* Logo parchment (dirty beige from PNG — not bright cream) */
+  --color-brand-beige-light: #e2d9cc;
+  --color-brand-beige: #d9d1c1;
+  --color-brand-beige-deep: #a89888;
+  --color-brand-beige-shadow: #b8a99a;
+  /* Logo glitch accents — use at low opacity only */
+  --color-glitch-magenta: #ff00ff;
+  --color-glitch-cyan: #00ffff;
+  --color-glitch-lime: #00ff00;
+  --color-glitch-purple: #8800ff;
+}
+
 @source "../index.html";
 @source "./**/*.{ts,tsx}";
 
@@ -108,11 +163,11 @@ html {
   }
 
   85% {
-    transform: translateX(7rem) rotate(4deg) scale(1.06);
+    transform: translateX(8.5rem) rotate(5deg) scale(1.1);
   }
 
   100% {
-    transform: translateX(7rem) scale(0.94);
+    transform: translateX(8.5rem) scale(0.92);
   }
 }
 
@@ -122,11 +177,11 @@ html {
   }
 
   85% {
-    transform: translateX(-7rem) rotate(-4deg) scale(1.06);
+    transform: translateX(-8.5rem) rotate(-5deg) scale(1.1);
   }
 
   100% {
-    transform: translateX(-7rem) scale(0.94);
+    transform: translateX(-8.5rem) scale(0.92);
   }
 }
 
@@ -134,6 +189,15 @@ html {
   0%,
   100% {
     transform: translateX(0);
+  }
+
+  48%,
+  52% {
+    transform: translateX(-3px);
+  }
+
+  50% {
+    transform: translateX(4px) scale(1.01);
   }
 
   20% {
@@ -150,6 +214,683 @@ html {
 
   80% {
     transform: translateX(4px);
+  }
+}
+
+/* Brand display type — Bad Suabia + logo cream (always pair; never for body/log) */
+.font-brand {
+  color: var(--color-brand-cream);
+}
+
+/* Header wordmark legacy — text-only fallback if logo image missing */
+.logo-wordmark {
+  color: var(--color-brand-cream);
+  transform: skewX(-4deg);
+  paint-order: stroke fill;
+  -webkit-text-stroke: 1px rgba(55, 28, 14, 0.65);
+  text-shadow:
+    2px 2px 0 rgba(140, 32, 18, 0.35),
+    0 0 14px rgba(160, 45, 25, 0.12);
+}
+
+/* Live logo-style text (headings, character names) — not raster images */
+.brand-logo-text {
+  color: var(--color-brand-beige);
+  transform: skewX(-3deg);
+  paint-order: stroke fill;
+  -webkit-text-stroke: 1.2px var(--color-brand-outline);
+  text-shadow:
+    2px 2px 0 rgba(112, 16, 16, 0.48),
+    0 0 12px rgba(112, 16, 16, 0.15);
+}
+
+.brand-logo-text-inner {
+  display: inline-block;
+}
+
+.brand-logo-glitch {
+  position: absolute;
+  top: 50%;
+  width: 12px;
+  height: 2px;
+  pointer-events: none;
+  opacity: 0.2;
+  animation: glitch-pulse 6s ease-in-out infinite;
+}
+
+.brand-logo-glitch--left {
+  left: -4px;
+  background: var(--color-glitch-magenta);
+}
+
+.brand-logo-glitch--right {
+  right: -4px;
+  background: var(--color-glitch-cyan);
+}
+
+.grunge-app-shell {
+  background-image:
+    radial-gradient(rgba(112, 16, 16, 0.06) 0.5px, transparent 0.5px),
+    linear-gradient(180deg, rgba(10, 8, 6, 0.12), transparent 40%, rgba(10, 8, 6, 0.18));
+  background-size: 3px 3px, 100% 100%;
+  box-shadow: inset 0 0 80px rgba(0, 0, 0, 0.35);
+  opacity: 0.55;
+}
+
+.game-panel-grunge {
+  border-color: color-mix(in srgb, var(--color-brand-blood) 28%, var(--color-brand-outline));
+  background-color: rgba(12, 10, 8, 0.92);
+  box-shadow: inset 0 0 12px rgba(0, 0, 0, 0.4);
+}
+
+@keyframes element-icon-brand-pulse {
+  0%,
+  100% {
+    transform: scale(1);
+  }
+
+  50% {
+    transform: scale(1.06);
+  }
+}
+
+.element-icon-brand-pulse {
+  animation: element-icon-brand-pulse 2.8s ease-in-out infinite;
+}
+
+/* Character portrait card — logo palette + distressed frame */
+.character-card-frame {
+  border: 2px solid var(--color-brand-outline);
+  box-shadow:
+    inset 0 0 0 1px color-mix(in srgb, var(--color-brand-blood) 32%, transparent),
+    inset 4px 4px 12px rgba(0, 0, 0, 0.55),
+    inset -2px -2px 8px color-mix(in srgb, var(--color-brand-blood-deep) 18%, transparent);
+  background-color: #0f0d0b;
+  background-image: linear-gradient(315deg, rgba(112, 16, 16, 0.14) 0%, transparent 38%);
+}
+
+.parchment-bar-header {
+  clip-path: polygon(0 0, 100% 0, 96% 100%, 4% 82%, 0 100%);
+  background: linear-gradient(
+    180deg,
+    var(--color-brand-beige-shadow) 0%,
+    var(--color-brand-beige) 55%,
+    var(--color-brand-beige-deep) 100%
+  );
+}
+
+.parchment-bar-footer {
+  clip-path: polygon(0 10%, 4% 0, 96% 0, 100% 10%, 100% 100%, 0 100%);
+  background:
+    radial-gradient(ellipse 80% 55% at 10% 100%, rgba(112, 16, 16, 0.32), transparent 58%),
+    radial-gradient(ellipse 60% 45% at 92% 98%, rgba(112, 16, 16, 0.22), transparent 52%),
+    radial-gradient(ellipse 50% 35% at 48% 100%, rgba(90, 12, 12, 0.18), transparent 55%),
+    linear-gradient(
+      180deg,
+      var(--color-brand-beige-deep) 0%,
+      var(--color-brand-beige) 45%,
+      var(--color-brand-beige-shadow) 100%
+    );
+}
+
+.parchment-bar-beige {
+  border-color: color-mix(in srgb, var(--color-brand-blood) 42%, var(--color-brand-beige-deep));
+}
+
+.parchment-bar-body {
+  background: linear-gradient(
+    180deg,
+    var(--color-brand-beige-shadow) 0%,
+    var(--color-brand-beige) 48%,
+    var(--color-brand-beige-deep) 100%
+  );
+}
+
+.parchment-bar-drips {
+  pointer-events: none;
+  position: absolute;
+  inset: 0;
+  z-index: 0;
+}
+
+.parchment-bar-drips::before,
+.parchment-bar-drips::after {
+  content: '';
+  position: absolute;
+  bottom: 0;
+  width: 2px;
+  background: linear-gradient(to bottom, transparent, rgba(112, 16, 16, 0.55));
+}
+
+.parchment-bar-drips::before {
+  left: 14%;
+  height: 14px;
+}
+
+.parchment-bar-drips::after {
+  right: 22%;
+  height: 10px;
+  opacity: 0.7;
+}
+
+.parchment-bar-noise::before {
+  content: '';
+  position: absolute;
+  inset: 0;
+  pointer-events: none;
+  opacity: 0.55;
+  mix-blend-mode: multiply;
+  background-image:
+    repeating-linear-gradient(
+      45deg,
+      rgba(58, 42, 32, 0.18) 0,
+      rgba(58, 42, 32, 0.18) 1px,
+      transparent 1px,
+      transparent 2px
+    ),
+    repeating-linear-gradient(
+      -35deg,
+      rgba(112, 16, 16, 0.1) 0,
+      rgba(112, 16, 16, 0.1) 1px,
+      transparent 1px,
+      transparent 4px
+    );
+}
+
+.parchment-bar-noise::after {
+  content: '';
+  position: absolute;
+  inset: 0;
+  pointer-events: none;
+  opacity: 0.5;
+  mix-blend-mode: multiply;
+  background-image: radial-gradient(rgba(10, 8, 6, 0.28) 0.5px, transparent 0.5px);
+  background-size: 2px 2px;
+}
+
+.parchment-bar-stain {
+  pointer-events: none;
+  position: absolute;
+  inset: 0;
+  opacity: 0.4;
+  mix-blend-mode: multiply;
+  background-image:
+    radial-gradient(circle at 18% 88%, rgba(112, 16, 16, 0.38) 0%, transparent 42%),
+    radial-gradient(circle at 78% 92%, rgba(112, 16, 16, 0.26) 0%, transparent 38%),
+    radial-gradient(circle at 55% 70%, rgba(10, 8, 6, 0.14) 0%, transparent 50%);
+}
+
+.card-divider-grunge {
+  height: 5px;
+  border-radius: 1px;
+  background: linear-gradient(
+    90deg,
+    transparent 0%,
+    rgba(112, 16, 16, 0.7) 8%,
+    #b8924a 50%,
+    rgba(112, 16, 16, 0.7) 92%,
+    transparent 100%
+  );
+  box-shadow: 0 1px 3px rgba(10, 8, 6, 0.4);
+}
+
+.card-divider-grunge-line {
+  margin-top: 2px;
+  height: 1px;
+  background: linear-gradient(
+    90deg,
+    transparent,
+    rgba(10, 8, 6, 0.6) 15%,
+    rgba(112, 16, 16, 0.55) 50%,
+    rgba(10, 8, 6, 0.6) 85%,
+    transparent
+  );
+}
+
+.character-card-name-logo {
+  font-family: var(--font-brand);
+  text-transform: uppercase;
+  color: var(--color-brand-beige);
+  letter-spacing: 0.04em;
+  paint-order: stroke fill;
+  -webkit-text-stroke: 1px color-mix(in srgb, var(--color-brand-blood) 72%, var(--color-brand-outline));
+  text-shadow:
+    2px 2px 0 rgba(112, 16, 16, 0.5),
+    0 0 1px rgba(90, 12, 12, 0.35);
+}
+
+.character-card-name-logo.font-brand {
+  color: var(--color-brand-beige);
+}
+
+/* Procedural SVG card name plate */
+.lf-card-nameplate {
+  position: relative;
+  display: flex;
+  justify-content: center;
+  width: 100%;
+  max-width: 100%;
+  margin-inline: 0;
+  overflow: visible;
+  pointer-events: none;
+  user-select: none;
+}
+
+.lf-card-nameplate--sm {
+  width: 100%;
+  margin-inline: 0;
+}
+
+.lf-card-nameplate--md {
+  width: 100%;
+  margin-inline: 0;
+}
+
+.lf-card-nameplate--lg {
+  width: 100%;
+  margin-inline: 0;
+}
+
+.lf-card-nameplate__svg {
+  display: block;
+  width: 100%;
+  height: auto;
+  overflow: visible;
+}
+
+.lf-card-nameplate__raster {
+  display: block;
+  width: auto;
+  height: auto;
+  max-width: 92%;
+  object-fit: contain;
+  object-position: center;
+  margin-inline: auto;
+}
+
+.lf-card-nameplate--sm .lf-card-nameplate__raster {
+  max-height: 1.375rem;
+}
+
+.lf-card-nameplate--md .lf-card-nameplate__raster {
+  max-height: 1.75rem;
+}
+
+.lf-card-nameplate--lg .lf-card-nameplate__raster {
+  max-height: 2.5rem;
+}
+
+@media (min-width: 768px) {
+  .lf-card-nameplate--lg .lf-card-nameplate__raster {
+    max-height: 2.75rem;
+  }
+}
+
+.lf-card-nameplate__starburst {
+  fill: var(--color-brand-burst);
+  opacity: 0.96;
+}
+
+.lf-card-nameplate__starburst--ghost-cyan {
+  fill: var(--color-glitch-cyan);
+  opacity: 0.28;
+  mix-blend-mode: screen;
+}
+
+.lf-card-nameplate__starburst--ghost-magenta {
+  fill: var(--color-glitch-magenta);
+  opacity: 0.24;
+  mix-blend-mode: screen;
+}
+
+.lf-card-nameplate__red-glitch {
+  transform-origin: 600px 152px;
+  animation: lf-nameplate-red-jitter 4.2s steps(2, end) infinite;
+}
+
+@keyframes lf-nameplate-red-jitter {
+  0%,
+  88%,
+  100% {
+    transform: translate(0, 0);
+  }
+  90% {
+    transform: translate(3px, -1px);
+  }
+  92% {
+    transform: translate(-4px, 2px);
+  }
+  94% {
+    transform: translate(2px, 1px);
+  }
+}
+
+.lf-card-nameplate__drip {
+  fill: var(--color-brand-burst);
+  opacity: 0.92;
+}
+
+.lf-card-nameplate__splatter {
+  fill: var(--color-brand-burst);
+  opacity: 0.72;
+}
+
+.lf-card-nameplate__splatter circle:nth-child(3n) {
+  fill: var(--color-brand-blood);
+}
+
+.lf-card-nameplate__splatter circle:nth-child(5n) {
+  opacity: 0.42;
+}
+
+.lf-card-nameplate__outer-outline {
+  fill: none;
+  stroke: var(--color-brand-scratch);
+  stroke-width: 5;
+  stroke-linejoin: miter;
+  stroke-linecap: square;
+  paint-order: stroke fill;
+}
+
+.lf-card-nameplate__outer {
+  fill: var(--color-brand-outline);
+  stroke: var(--color-brand-outline);
+  stroke-width: 10;
+  stroke-linejoin: miter;
+  stroke-linecap: square;
+}
+
+.lf-card-nameplate__text {
+  font-family: var(--font-brand);
+  font-weight: 900;
+  letter-spacing: 0.04em;
+  fill: var(--color-brand-beige);
+  paint-order: stroke fill;
+  stroke: color-mix(in srgb, var(--color-brand-blood) 72%, var(--color-brand-outline));
+  stroke-width: 2;
+}
+
+.lf-card-nameplate__text-rim {
+  font-family: var(--font-brand);
+  font-weight: 900;
+  letter-spacing: 0.04em;
+  fill: none;
+  stroke: color-mix(in srgb, var(--color-brand-blood) 58%, var(--color-brand-beige-deep));
+  stroke-width: 5;
+  paint-order: stroke fill;
+  opacity: 0.92;
+}
+
+.lf-card-nameplate__glitch--burst {
+  pointer-events: none;
+}
+
+.lf-card-nameplate__glitch--burst rect {
+  opacity: 0.65;
+}
+
+.lf-card-nameplate__glitch rect {
+  opacity: 0.78;
+  mix-blend-mode: screen;
+}
+
+.lf-card-nameplate__glitch rect:nth-child(1) {
+  fill: var(--color-glitch-cyan);
+}
+
+.lf-card-nameplate__glitch rect:nth-child(2) {
+  fill: var(--color-glitch-magenta);
+}
+
+.lf-card-nameplate__glitch rect:nth-child(3) {
+  fill: var(--color-glitch-lime);
+}
+
+.lf-card-nameplate__glitch rect:nth-child(4) {
+  fill: var(--color-glitch-purple);
+  opacity: 0.62;
+}
+
+.lf-card-nameplate__glitch--left {
+  transform: skewX(-10deg);
+}
+
+.lf-card-nameplate__glitch--right {
+  transform: skewX(10deg);
+}
+
+/* Name on parchment footer — brown frame + brand font + glitch */
+.card-name-on-parchment {
+  position: relative;
+  z-index: 1;
+  display: flex;
+  justify-content: center;
+  width: 100%;
+}
+
+.card-name-parchment-frame {
+  display: inline-block;
+  max-width: 100%;
+  border: 2px solid color-mix(in srgb, var(--color-brand-blood) 58%, var(--color-brand-beige-deep));
+  background: color-mix(in srgb, var(--color-brand-beige-light) 22%, transparent);
+  padding: 0.2rem 0.55rem;
+  box-shadow:
+    inset 0 0 8px rgba(112, 16, 16, 0.12),
+    0 1px 0 rgba(255, 255, 255, 0.08);
+}
+
+.card-name-on-parchment--lg .card-name-parchment-frame {
+  padding: 0.25rem 0.7rem;
+}
+
+.card-name-on-parchment--md .card-name-parchment-frame {
+  padding: 0.15rem 0.45rem;
+  border-width: 1.5px;
+}
+
+.card-name-on-parchment--sm .card-name-parchment-frame {
+  padding: 0.08rem 0.3rem;
+  border-width: 1px;
+}
+
+.character-card-role-on-beige {
+  color: var(--color-brand-parchment);
+}
+
+/* Readable body/titles on logo-beige parchment bars (not logo-letter fill) */
+.text-on-parchment {
+  color: var(--color-brand-ink);
+}
+
+.text-on-parchment-muted {
+  color: var(--color-brand-parchment);
+}
+
+.text-brand-parchment-type {
+  color: var(--color-brand-parchment-type);
+}
+
+/* Brand display on dark UI — Bad Suabia + cream (never parchment red on stone) */
+.font-brand-on-dark {
+  font-family: var(--font-brand);
+  color: var(--color-brand-cream);
+}
+
+/* Brand display on beige parchment — font-brand without forced cream */
+.font-brand-on-parchment {
+  font-family: var(--font-brand);
+  color: var(--color-brand-parchment-type);
+}
+
+.font-brand-on-parchment-muted {
+  font-family: var(--font-brand);
+  color: var(--color-brand-parchment-type);
+}
+
+/* Primary game CTA — parchment blood brown + looping light sweep (Stroer pattern) */
+.btn-brand-shimmer {
+  position: relative;
+  overflow: hidden;
+  background-color: var(--color-brand-parchment-type);
+  color: var(--color-brand-beige-light);
+}
+
+.btn-brand-shimmer:hover:not(:disabled) {
+  background-color: #6d0a07;
+}
+
+.btn-brand-shimmer:focus-visible {
+  --tw-ring-color: rgb(138 21 16 / 0.55);
+}
+
+.btn-brand-shimmer__shine {
+  position: absolute;
+  inset: 0;
+  z-index: 1;
+  overflow: hidden;
+  pointer-events: none;
+  opacity: 1;
+}
+
+.btn-brand-shimmer__shine::before {
+  content: '';
+  position: absolute;
+  top: -10%;
+  left: -160%;
+  width: 160%;
+  height: 120%;
+  background: linear-gradient(
+    105deg,
+    transparent 28%,
+    rgba(255, 255, 255, 0.45) 44%,
+    rgba(255, 255, 255, 1) 50%,
+    rgba(255, 255, 255, 0.45) 56%,
+    transparent 72%
+  );
+  mix-blend-mode: screen;
+  animation: brandCtaShimmerSweep 4s ease-in-out 0.35s infinite;
+}
+
+@keyframes brandCtaShimmerSweep {
+  0%,
+  8% {
+    left: -160%;
+  }
+
+  32% {
+    left: 160%;
+  }
+
+  100% {
+    left: 160%;
+  }
+}
+
+.character-card-role-on-dark {
+  color: var(--color-brand-beige-shadow);
+}
+
+.parchment-bar-stats {
+  clip-path: polygon(0 0, 100% 0, 98% 100%, 2% 92%, 0 100%);
+  background: linear-gradient(
+    180deg,
+    var(--color-brand-beige-shadow) 0%,
+    var(--color-brand-beige) 52%,
+    var(--color-brand-beige-deep) 100%
+  );
+}
+
+.grunge-card-kind-label {
+  color: color-mix(in srgb, var(--color-brand-blood) 88%, #3a2a20);
+  font-weight: 700;
+}
+
+.grunge-card-stat-label {
+  color: #7a6a58;
+  font-weight: 700;
+}
+
+.grunge-card-stat-value {
+  color: var(--color-brand-outline);
+  font-weight: 900;
+}
+
+.grunge-card-rule-label {
+  color: color-mix(in srgb, var(--color-brand-blood) 75%, #5a4a3a);
+  font-weight: 700;
+}
+
+.grunge-card-rule-text {
+  color: #5c4e42;
+}
+
+.character-card-frame-highlighted {
+  border-color: color-mix(in srgb, var(--color-brand-blood) 58%, var(--color-brand-beige) 22%);
+  box-shadow:
+    inset 0 0 0 1px color-mix(in srgb, var(--color-brand-beige) 35%, transparent),
+    inset 4px 4px 14px rgba(0, 0, 0, 0.58),
+    0 0 22px rgba(112, 16, 16, 0.38),
+    0 0 16px color-mix(in srgb, var(--color-brand-beige) 18%, transparent);
+  --tw-ring-color: color-mix(in srgb, var(--color-brand-blood) 40%, transparent);
+}
+
+.character-card-glitch {
+  position: absolute;
+  top: 48%;
+  z-index: 50;
+  display: flex;
+  flex-direction: column;
+  gap: 3px;
+  pointer-events: none;
+}
+
+.character-card-glitch--left {
+  left: 1px;
+}
+
+.character-card-glitch--right {
+  right: 1px;
+  align-items: flex-end;
+}
+
+.character-card-glitch-bar {
+  height: 2px;
+  border-radius: 1px;
+  animation: glitch-pulse 6s ease-in-out infinite;
+}
+
+.character-card-glitch-bar--magenta {
+  width: 14px;
+  background: var(--color-glitch-magenta);
+  opacity: 0.22;
+}
+
+.character-card-glitch-bar--cyan {
+  width: 10px;
+  background: var(--color-glitch-cyan);
+  opacity: 0.18;
+}
+
+.character-card-glitch-bar--lime {
+  width: 7px;
+  background: var(--color-glitch-lime);
+  opacity: 0.14;
+}
+
+.character-card-glitch-bar--purple {
+  width: 11px;
+  background: var(--color-glitch-purple);
+  opacity: 0.16;
+}
+
+@keyframes glitch-pulse {
+  0%,
+  100% {
+    opacity: 0.12;
+  }
+
+  50% {
+    opacity: 0.28;
   }
 }
 
@@ -188,4 +929,162 @@ html {
 
 .intro-crash-flash {
   animation: introCrashFlash 800ms ease-out forwards;
+}
+
+@keyframes elementIconFloat {
+  0%,
+  100% {
+    transform: translateY(0) scale(1);
+    filter: drop-shadow(0 0 2px currentColor);
+  }
+
+  50% {
+    transform: translateY(-2px) scale(1.08);
+    filter: drop-shadow(0 0 6px currentColor);
+  }
+}
+
+@keyframes elementIconFlicker {
+  0%,
+  100% {
+    opacity: 1;
+    transform: scale(1);
+  }
+
+  40% {
+    opacity: 0.85;
+    transform: scale(1.05);
+  }
+
+  70% {
+    opacity: 1;
+    transform: scale(1.1);
+  }
+}
+
+.element-icon-fire {
+  animation: elementIconFlicker 2.2s ease-in-out infinite;
+}
+
+.element-icon-water {
+  animation: elementIconFloat 2.8s ease-in-out infinite;
+}
+
+.element-icon-earth {
+  animation: elementIconFloat 3.2s ease-in-out infinite;
+}
+
+.element-icon-air {
+  animation: elementIconFloat 2.4s ease-in-out infinite;
+}
+
+.element-icon-shadow {
+  animation: elementIconFlicker 3s ease-in-out infinite;
+}
+
+.element-icon-light {
+  animation: elementIconFlicker 2.6s ease-in-out infinite;
+}
+
+/* Lucide icons in logo-grunge rings (cards) */
+.element-icon-grunge-ring {
+  position: relative;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  border-radius: 9999px;
+  border-width: 2px;
+  border-style: solid;
+  background: linear-gradient(
+    165deg,
+    var(--color-brand-beige-light) 0%,
+    var(--color-brand-beige) 42%,
+    var(--color-brand-beige-deep) 100%
+  );
+  box-shadow:
+    inset 0 0 10px rgba(10, 8, 6, 0.42),
+    inset 0 1px 0 rgba(255, 255, 255, 0.12),
+    0 2px 4px rgba(112, 16, 16, 0.28);
+}
+
+.element-icon-grunge-ring-noise {
+  pointer-events: none;
+  position: absolute;
+  inset: 0;
+  border-radius: inherit;
+  opacity: 0.5;
+  mix-blend-mode: multiply;
+  background-image:
+    repeating-linear-gradient(
+      42deg,
+      rgba(58, 42, 32, 0.14) 0,
+      rgba(58, 42, 32, 0.14) 1px,
+      transparent 1px,
+      transparent 3px
+    ),
+    radial-gradient(rgba(10, 8, 6, 0.22) 0.5px, transparent 0.5px);
+  background-size: auto, 2px 2px;
+}
+
+.element-icon-grunge-mystery {
+  font-family: var(--font-logo);
+  font-weight: 700;
+  line-height: 1;
+  letter-spacing: -0.06em;
+  paint-order: stroke fill;
+  -webkit-text-stroke: 0.5px var(--color-brand-outline);
+}
+
+/* HF element PNGs (transparent, cropped to glyph) */
+.element-icon-grunge-raster {
+  display: block;
+  object-fit: contain;
+  object-position: center;
+  background: transparent;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .element-icon-fire,
+  .element-icon-water,
+  .element-icon-earth,
+  .element-icon-air,
+  .element-icon-shadow,
+  .element-icon-light {
+    animation: none;
+  }
+
+  .character-card-glitch-bar {
+    animation: none;
+    opacity: 0.18;
+  }
+
+  .brand-logo-glitch {
+    animation: none;
+    opacity: 0.16;
+  }
+
+  .btn-brand-shimmer__shine,
+  .btn-brand-shimmer__shine::before {
+    animation: none;
+    opacity: 0;
+  }
+
+  .element-icon-brand-pulse {
+    animation: none;
+  }
+
+  .lf-card-nameplate__red-glitch {
+    animation: none;
+  }
+
+  .lf-card-nameplate__starburst,
+  .lf-card-nameplate__outer,
+  .lf-card-nameplate__outer-outline,
+  .lf-card-nameplate__drip {
+    filter: none;
+  }
+
+  .lf-card-nameplate__text {
+    filter: none;
+  }
 }

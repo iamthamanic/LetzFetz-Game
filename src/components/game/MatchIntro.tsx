@@ -4,14 +4,17 @@
  */
 import React, { useState, useEffect, useRef, useCallback } from 'react';
 import type { ContentPack } from '../../game';
+import { CharacterSelectCard } from './CharacterSelectCard';
 import { GameCharacterCard } from './GameCharacterCard';
-import { characterDefToForgeProps, arenaDefToForgeProps } from '../cards/characterCardProps';
+import { arenaDefToForgeProps } from '../cards/characterCardProps';
 import { resolveCardArtPath, resolveCardVideoPath } from '../../services/cardArt/manifest';
-import { Button } from '../ui/button';
+import { Button } from '../ui/Button';
 
 type IntroPhase = 'vs' | 'crash' | 'arena';
 
 const CRASH_MS = 800;
+/** Sound fires at visual impact (~50 % of crash — flash peak ~70 %, cards meet ~85 %). */
+const CLASH_SOUND_DELAY_MS = Math.round(CRASH_MS * 0.5);
 const CLASH_SOUND = '/sounds/card-clash.mp3';
 
 interface MatchIntroProps {
@@ -45,6 +48,7 @@ export function MatchIntro({
   const [reduceMotion, setReduceMotion] = useState(false);
   const [videoFailed, setVideoFailed] = useState(false);
   const videoRef = useRef<HTMLVideoElement>(null);
+  const clashSoundPlayedRef = useRef(false);
 
   const humanChar = pack.characters.find((c) => c.id === humanCharacterId);
   const botChar = pack.characters.find((c) => c.id === botCharacterId);
@@ -63,8 +67,23 @@ export function MatchIntro({
       return;
     }
     setPhase('crash');
-    playClashSound();
   }, [reduceMotion, goToArena]);
+
+  useEffect(() => {
+    if (phase !== 'crash' || reduceMotion) return;
+
+    clashSoundPlayedRef.current = false;
+    const soundTimer = window.setTimeout(() => {
+      if (clashSoundPlayedRef.current) return;
+      clashSoundPlayedRef.current = true;
+      playClashSound();
+      if (typeof navigator !== 'undefined' && navigator.vibrate) {
+        navigator.vibrate(12);
+      }
+    }, CLASH_SOUND_DELAY_MS);
+
+    return () => window.clearTimeout(soundTimer);
+  }, [phase, reduceMotion]);
 
   useEffect(() => {
     const mq = window.matchMedia('(prefers-reduced-motion: reduce)');
@@ -97,7 +116,7 @@ export function MatchIntro({
 
   return (
     <div
-      className="absolute inset-0 z-50 flex items-center justify-center bg-stone-950/95 p-4 backdrop-blur-sm"
+      className="absolute inset-0 z-50 flex items-start justify-center overflow-y-auto bg-stone-950/95 px-4 pb-8 pt-6 backdrop-blur-sm sm:pt-10"
       data-testid="match-intro"
       role="dialog"
       aria-labelledby="match-intro-title"
@@ -109,35 +128,29 @@ export function MatchIntro({
             data-testid={isCrash ? 'match-intro-crash' : 'match-intro-vs'}
             className={isCrash ? 'intro-screen-shake' : undefined}
           >
-            <p className="mb-2 text-xs font-semibold uppercase tracking-[0.3em] text-purple-400">
+            <p className="mb-1 text-xs font-semibold uppercase tracking-[0.3em] text-purple-400">
               Duell beginnt
             </p>
-            <h2 id="match-intro-title" className="mb-6 text-2xl font-black text-stone-100 sm:text-3xl">
+            <h2 id="match-intro-title" className="mb-4 text-xl font-black text-stone-100 sm:text-2xl">
               ⚔️ Bereit für die Arena?
             </h2>
 
-            <div className="relative mb-6 flex flex-col items-center justify-center gap-6 sm:flex-row sm:gap-10">
+            <div className="relative mb-5 flex flex-col items-center justify-center gap-4 sm:flex-row sm:gap-8">
               {humanChar && (
-                <div
-                  className={`flex flex-col items-center gap-2 ${isCrash ? 'intro-crash-left' : ''}`}
-                >
-                  <GameCharacterCard {...characterDefToForgeProps(humanChar)} size="lg" />
-                  <span className="text-sm font-semibold text-emerald-300">Du — {humanChar.name}</span>
+                <div className={`flex flex-col items-center ${isCrash ? 'intro-crash-left' : ''}`}>
+                  <CharacterSelectCard character={humanChar} isCenter interactive={false} selected />
                 </div>
               )}
 
               <div
-                className={`text-4xl font-black text-purple-500 transition-opacity sm:text-5xl ${isCrash ? 'opacity-0' : 'opacity-100'}`}
+                className={`text-3xl font-black text-purple-500 transition-opacity sm:text-4xl ${isCrash ? 'opacity-0' : 'opacity-100'}`}
               >
                 VS
               </div>
 
               {botChar && (
-                <div
-                  className={`flex flex-col items-center gap-2 ${isCrash ? 'intro-crash-right' : ''}`}
-                >
-                  <GameCharacterCard {...characterDefToForgeProps(botChar)} size="lg" />
-                  <span className="text-sm font-semibold text-red-300">Bot — {botChar.name}</span>
+                <div className={`flex flex-col items-center ${isCrash ? 'intro-crash-right' : ''}`}>
+                  <CharacterSelectCard character={botChar} isCenter interactive={false} />
                 </div>
               )}
 
