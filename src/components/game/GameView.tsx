@@ -28,6 +28,7 @@ import { Badge } from '../ui/Badge';
 import { ScrollText } from 'lucide-react';
 import { isPlaytestMode } from '../../services/playtest/isPlaytestMode';
 import { PlaytestCheatbox } from './PlaytestCheatbox';
+import { playStinger, playStingerSequence, unlockAudio } from '../../services/audio/combatStingers';
 import { usePresentationQueue } from './presentation';
 import {
   buildOpeningDealSteps,
@@ -231,6 +232,32 @@ export function GameView() {
     setPendingIntent(null);
   }, [state?.phase, state?.activePlayer, state?.combat?.attackValue]);
 
+  // Combat SFX stingers — fire on combat state transitions.
+  const prevCombatRef = useRef<GameState['combat']>(null);
+  const prevEventRef = useRef<string | null>(null);
+  useEffect(() => {
+    if (!state) return;
+
+    const prevCombat = prevCombatRef.current;
+    const combatStarted = !prevCombat && state.combat;
+    if (combatStarted) {
+      playStinger('play');
+    }
+    prevCombatRef.current = state.combat;
+
+    const prevEvent = prevEventRef.current;
+    if (state.lastEvent && state.lastEvent !== prevEvent) {
+      if (state.lastEvent.includes('Block')) {
+        if (state.lastEvent.includes('Schaden') || state.lastEvent.includes('zerstört')) {
+          playStingerSequence(['block', 'damage'], 60);
+        } else {
+          playStinger('block');
+        }
+      }
+    }
+    prevEventRef.current = state.lastEvent;
+  }, [state]);
+
   const view = useMemo(
     () => (state ? buildGameViewModel(state, pack, HUMAN, pendingIntent) : null),
     [state, pendingIntent],
@@ -340,6 +367,7 @@ export function GameView() {
       <GrungeAppShell>
         <GameSetup
           onStart={({ humanCharacterId }) => {
+            unlockAudio();
             setPendingIntent(null);
             setActionError(null);
             openingDealRunRef.current = false;
