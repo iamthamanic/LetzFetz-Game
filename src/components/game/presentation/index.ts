@@ -47,4 +47,11 @@ export {
   fullDealRevealCounts,
   OPENING_DEAL_CARD_MS,
 } from './buildOpeningDealSteps';
+export {
+  buildDrawCardStep,
+  isDrawCardStep,
+  findNewlyDrawnCard,
+  DRAW_CARD_MS,
+} from './buildDrawCardStep';
 export { OpeningDealFly } from './OpeningDealFly';
+export { PlaymatCardFly } from './PlaymatCardFly';

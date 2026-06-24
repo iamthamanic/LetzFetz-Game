@@ -11,6 +11,10 @@ export const IDLE_PRESENTATION_QUEUE: PresentationQueueSnapshot = {
   skipped: false,
 };
 
+function stepLocksInput(step: PresentationStep): boolean {
+  return step.locksInput !== false;
+}
+
 function startNext(snapshot: PresentationQueueSnapshot): PresentationQueueSnapshot {
   if (snapshot.pending.length === 0) {
     return {
@@ -25,7 +29,7 @@ function startNext(snapshot: PresentationQueueSnapshot): PresentationQueueSnapsh
     ...snapshot,
     pending: rest,
     active: next,
-    inputLocked: true,
+    inputLocked: stepLocksInput(next),
   };
 }
 
@@ -43,7 +47,10 @@ export function enqueuePresentationSteps(
   };
 
   if (withPending.active) {
-    return { ...withPending, inputLocked: true };
+    return {
+      ...withPending,
+      inputLocked: stepLocksInput(withPending.active),
+    };
   }
 
   return startNext(withPending);

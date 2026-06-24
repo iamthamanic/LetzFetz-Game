@@ -236,3 +236,41 @@ html {
 .opening-deal-fly--bot {
   animation: openingDealFlyBot 80ms ease-out forwards;
 }
+
+@keyframes drawCardFlyHuman {
+  0% {
+    left: 8%;
+    top: 42%;
+    opacity: 0.3;
+    transform: scale(0.9);
+  }
+  100% {
+    left: 28%;
+    top: 72%;
+    opacity: 1;
+    transform: scale(1);
+  }
+}
+
+@keyframes drawCardFlyBot {
+  0% {
+    left: 8%;
+    top: 42%;
+    opacity: 0.3;
+    transform: scale(0.9);
+  }
+  100% {
+    left: 72%;
+    top: 12%;
+    opacity: 1;
+    transform: scale(1);
+  }
+}
+
+.draw-card-fly--human {
+  animation: drawCardFlyHuman 280ms ease-out forwards;
+}
+
+.draw-card-fly--bot {
+  animation: drawCardFlyBot 280ms ease-out forwards;
+}

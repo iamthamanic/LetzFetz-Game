@@ -90,4 +90,12 @@ describe('presentationQueue', () => {
     const state = enqueuePresentationSteps(IDLE_PRESENTATION_QUEUE, []);
     expect(state).toEqual(IDLE_PRESENTATION_QUEUE);
   });
+
+  it('non-locking active step keeps input unlocked', () => {
+    const botDraw = { ...step('bot-draw'), locksInput: false };
+    const state = enqueuePresentationSteps(IDLE_PRESENTATION_QUEUE, [botDraw]);
+
+    expect(state.active?.id).toBe('bot-draw');
+    expect(state.inputLocked).toBe(false);
+  });
 });

@@ -14,6 +14,7 @@ function shot(page: import('@playwright/test').Page, name: string) {
 }
 
 import { dismissMatchIntroSkip } from './helpers/matchIntro';
+import { waitForDrawAnimation } from './helpers/drawAnimation';
 import { selectBotMode, startBotMatchFromSetup } from './helpers/gameSetup';
 
 async function startMatch(page: import('@playwright/test').Page) {
@@ -24,6 +25,7 @@ async function startMatch(page: import('@playwright/test').Page) {
 async function advanceToBindPhase(page: import('@playwright/test').Page) {
   await page.getByRole('button', { name: 'Zug starten' }).click();
   await page.getByRole('button', { name: 'Karte ziehen' }).click();
+  await waitForDrawAnimation(page);
   await expect(page.getByRole('button', { name: 'Nicht binden' })).toBeVisible();
 }
 
@@ -100,6 +102,16 @@ test.describe('Game Duel Board UI — Sprint 1', () => {
     await expect(page.getByTestId('game-mode-select')).toBeVisible();
   });
 
+  test('draw phase animates card from deck to hand', async ({ page }) => {
+    await startMatch(page);
+    await page.getByRole('button', { name: 'Zug starten' }).click();
+    await page.getByRole('button', { name: 'Karte ziehen' }).click();
+    await expect(page.getByTestId('draw-card-fly')).toBeVisible({ timeout: 1500 });
+    await expect(page.getByTestId('player-hand').locator('button[data-card-id]').first()).toBeVisible({
+      timeout: 3000,
+    });
+  });
+
   test('bind card fills engine slot', async ({ page }) => {
     await startMatch(page);
     await advanceToBindPhase(page);
@@ -136,6 +148,7 @@ test.describe('Game Duel Board UI — Sprint 1', () => {
       const ziehen = page.getByRole('button', { name: 'Karte ziehen' });
       if (await ziehen.isVisible({ timeout: 800 }).catch(() => false)) {
         await ziehen.click();
+        await waitForDrawAnimation(page);
       }
 
       const skipBind = page.getByRole('button', { name: 'Nicht binden' });

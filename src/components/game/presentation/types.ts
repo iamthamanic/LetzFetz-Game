@@ -13,6 +13,8 @@ export type PresentationStep = {
   kind: string;
   /** Auto-advance after N ms; `0` waits for manual `completeStep()`. */
   durationMs: number;
+  /** When false, step animates without blocking human input (e.g. bot draw). */
+  locksInput?: boolean;
   /** Optional opaque payload for zone components (card ids, player side, …). */
   payload?: Record<string, unknown>;
 };
