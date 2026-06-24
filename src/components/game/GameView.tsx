@@ -36,6 +36,10 @@ import {
   buildDrawCardStep,
   isDrawCardStep,
   findNewlyDrawnCard,
+  buildBindSnapStep,
+  isBindSnapStep,
+  findNewlyBoundCardIds,
+  BIND_SNAP_MS,
 } from './presentation';
 
 const HUMAN: PlayerId = 'p1';
@@ -59,6 +63,7 @@ export function GameView() {
   const stateRef = useRef<GameState | null>(null);
   const [dealReveal, setDealReveal] = useState<Record<PlayerId, number>>({ p1: 0, p2: 0 });
   const [heldBackHandCards, setHeldBackHandCards] = useState<Partial<Record<PlayerId, string>>>({});
+  const [snapBoundCardIds, setSnapBoundCardIds] = useState<string[]>([]);
   const [openingDealStarted, setOpeningDealStarted] = useState(false);
   const [openingDealFinished, setOpeningDealFinished] = useState(false);
 
@@ -80,6 +85,15 @@ export function GameView() {
           delete next[playerId];
           return next;
         });
+      }
+      if (isBindSnapStep(step)) {
+        const cardInstanceId = step.payload?.cardInstanceId as string | undefined;
+        if (cardInstanceId) {
+          const idToRemove = cardInstanceId;
+          window.setTimeout(() => {
+            setSnapBoundCardIds((prev) => prev.filter((id) => id !== idToRemove));
+          }, BIND_SNAP_MS);
+        }
       }
     },
     onQueueIdle: () => {
@@ -144,6 +158,17 @@ export function GameView() {
     const botDrawnId = findNewlyDrawnCard(prev, state, BOT);
     if (botDrawnId) {
       scheduleDrawPresentation(BOT, botDrawnId, false);
+    }
+
+    const humanBoundIds = findNewlyBoundCardIds(prev, state, HUMAN);
+    const botBoundIds = findNewlyBoundCardIds(prev, state, BOT);
+    const snapSteps = [
+      ...humanBoundIds.map((id) => buildBindSnapStep(HUMAN, id)),
+      ...botBoundIds.map((id) => buildBindSnapStep(BOT, id)),
+    ];
+    if (snapSteps.length > 0) {
+      setSnapBoundCardIds([...humanBoundIds, ...botBoundIds]);
+      presentation.enqueue(snapSteps);
     }
   }, [state, openingDealFinished, scheduleDrawPresentation]);
 
@@ -378,6 +403,7 @@ export function GameView() {
           openingDealFinished={openingDealFinished}
           dealReveal={dealReveal}
           heldBackHandCards={heldBackHandCards}
+          snapBoundCardIds={snapBoundCardIds}
           activePresentationStep={presentation.activeStep}
           humanPlayerId={HUMAN}
           onDispatch={handleDispatch}

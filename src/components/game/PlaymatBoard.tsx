@@ -37,6 +37,7 @@ interface PlaymatBoardProps {
   openingDealFinished?: boolean;
   dealReveal?: Record<PlayerId, number>;
   heldBackHandCards?: Partial<Record<PlayerId, string>>;
+  snapBoundCardIds?: string[];
   activePresentationStep?: PresentationStep | null;
   humanPlayerId?: PlayerId;
   onDispatch: (action: GameAction) => void;
@@ -59,6 +60,7 @@ export function PlaymatBoard({
   openingDealFinished = false,
   dealReveal,
   heldBackHandCards,
+  snapBoundCardIds = [],
   activePresentationStep = null,
   humanPlayerId = 'p1',
   onDispatch,
@@ -278,6 +280,7 @@ export function PlaymatBoard({
               label="Gegner-Engine"
               slots={view.botBoundSlots}
               cardSize="opponentBound"
+              snapBoundCardIds={snapBoundCardIds}
               onSlotClick={handleOpponentSlotClick}
             />
           </section>
@@ -306,6 +309,7 @@ export function PlaymatBoard({
               label="Deine Engine"
               slots={view.humanBoundSlots}
               cardSize="bound"
+              snapBoundCardIds={snapBoundCardIds}
               onActivateBound={handleStartActivate}
               onSlotClick={handleHumanSlotClick}
             />

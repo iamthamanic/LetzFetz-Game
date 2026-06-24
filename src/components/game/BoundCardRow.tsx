@@ -11,6 +11,7 @@ interface BoundCardRowProps {
   label: string;
   slots: BoundSlotView[];
   cardSize: BoardCardSize;
+  snapBoundCardIds?: string[];
   onActivateBound?: (boundInstanceId: string) => void;
   onSlotClick?: (slot: BoundSlotView) => void;
 }
@@ -19,6 +20,7 @@ export function BoundCardRow({
   label,
   slots,
   cardSize,
+  snapBoundCardIds,
   onActivateBound,
   onSlotClick,
 }: BoundCardRowProps) {
@@ -33,6 +35,7 @@ export function BoundCardRow({
             key={slot.slotIndex}
             slot={slot}
             cardSize={cardSize}
+            snap={slot.instanceId ? snapBoundCardIds?.includes(slot.instanceId) ?? false : false}
             onActivate={onActivateBound}
             onSlotClick={onSlotClick ? () => onSlotClick(slot) : undefined}
           />
