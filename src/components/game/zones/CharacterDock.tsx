@@ -15,6 +15,7 @@ interface CharacterDockProps {
   playerId: PlayerId;
   side: 'human' | 'bot';
   style?: CSSProperties;
+  handVisibleCount?: number;
 }
 
 function characterName(pack: ContentPack, id: string): string {
@@ -27,8 +28,10 @@ export function CharacterDock({
   playerId,
   side,
   style,
+  handVisibleCount,
 }: CharacterDockProps) {
   const player = state.players[playerId];
+  const handCount = handVisibleCount ?? player.hand.length;
   const isHuman = side === 'human';
   const isActive = state.activePlayer === playerId && !state.winner;
   const name = characterName(pack, player.characterId);
@@ -74,7 +77,7 @@ export function CharacterDock({
           </p>
           <p className="flex items-center gap-1 text-[10px] text-stone-300">
             <Layers className="h-3 w-3 shrink-0" />
-            Hand {player.hand.length}
+            Hand {handCount}
             {!isHuman && ' (verdeckt)'}
           </p>
         </div>

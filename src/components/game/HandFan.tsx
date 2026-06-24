@@ -10,6 +10,8 @@ import type { PendingIntent } from './gameActionHelpers';
 interface HandFanProps {
   cards: HandCardView[];
   pending: PendingIntent | null;
+  /** When set, only the first N cards are shown (opening deal reveal). */
+  visibleCount?: number;
   onSelectAttack: (instanceId: string) => void;
   onPlayBoost: (instanceId: string) => void;
   onBindDirect: (instanceId: string) => void;
@@ -22,6 +24,7 @@ interface HandFanProps {
 export function HandFan({
   cards,
   pending,
+  visibleCount,
   onSelectAttack,
   onPlayBoost,
   onBindDirect,
@@ -30,9 +33,13 @@ export function HandFan({
   onDiscardDraw,
   onActivateDiscard,
 }: HandFanProps) {
-  if (cards.length === 0) {
+  const shown = visibleCount !== undefined ? cards.slice(0, visibleCount) : cards;
+
+  if (shown.length === 0) {
     return (
-      <p className="py-2 text-center text-sm text-stone-500">Keine Karten auf der Hand.</p>
+      <p className="py-2 text-center text-sm text-stone-500" data-testid="player-hand-empty">
+        {visibleCount === 0 ? 'Karten werden verteilt…' : 'Keine Karten auf der Hand.'}
+      </p>
     );
   }
 
@@ -42,7 +49,7 @@ export function HandFan({
       className="rounded-xl border border-stone-600/50 bg-stone-900/50 px-3 py-2 shadow-inner"
     >
       <div className="flex items-end gap-3 overflow-x-auto pb-1 pt-1">
-      {cards.map((card) => {
+      {shown.map((card) => {
         const selected =
           (pending?.type === 'attack' && pending.attackInstanceId === card.instanceId) ||
           (pending?.type === 'bind' && pending.handInstanceId === card.instanceId);
