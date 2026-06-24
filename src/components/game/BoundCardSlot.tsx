@@ -45,7 +45,8 @@ export function BoundCardSlot({ slot, cardSize, snap = false, onActivate, onSlot
     <div className="flex flex-col items-center gap-1">
       <div
         data-snap={snap ? 'true' : undefined}
-        className={`relative rounded-xl p-0.5 ${snap ? 'card-bind-snap' : ''} ${highlight ? 'ring-2 ring-amber-400/80 shadow-[0_0_14px_rgba(251,191,36,0.25)]' : 'ring-1 ring-stone-700/60'}`}
+        data-snap-glow={snap ? 'true' : undefined}
+        className={`relative rounded-xl p-0.5 ${snap ? 'card-bind-snap slot-bind-glow' : ''} ${highlight ? 'ring-2 ring-amber-400/80 shadow-[0_0_14px_rgba(251,191,36,0.25)]' : 'ring-1 ring-stone-700/60'}`}
       >
         <BoardCard
           def={slot.def}
