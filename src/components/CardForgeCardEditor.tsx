@@ -80,6 +80,14 @@ export function CardForgeCardEditor({
               <h2 className="text-lg font-bold text-stone-100">
                 {isCreating ? 'Neue Custom-Karte' : selectedCard.name || 'Unbenannte Karte'}
               </h2>
+              <Button
+                variant="secondary"
+                size="sm"
+                icon={<StickyNote className="h-4 w-4" />}
+                onClick={onNotesModalOpen}
+              >
+                Notizen {selectedCard.notes?.trim() ? '📝' : ''}
+              </Button>
             </div>
             <Button variant="ghost" size="sm" icon={<X className="h-5 w-5" />} onClick={onClose} />
           </div>
@@ -95,15 +103,15 @@ export function CardForgeCardEditor({
         )}
 
         <div className="flex-1 overflow-y-auto p-6">
-          <div className="mx-auto grid max-w-6xl grid-cols-1 gap-8 lg:grid-cols-[1fr_320px]">
-            <Panel className="space-y-5">
+          <div className="mx-auto grid max-w-6xl grid-cols-1 gap-6 min-[880px]:grid-cols-[minmax(0,1fr)_240px] min-[880px]:items-start min-[880px]:gap-8">
+            <Panel className="order-2 min-w-0 space-y-5 min-[880px]:order-1">
+              <Input
+                label="Name"
+                value={selectedCard.name}
+                disabled={readOnly}
+                onChange={(e) => onFieldChange('name', e.target.value)}
+              />
               <div className="grid grid-cols-1 gap-5 sm:grid-cols-2">
-                <Input
-                  label="Name"
-                  value={selectedCard.name}
-                  disabled={readOnly}
-                  onChange={(e) => onFieldChange('name', e.target.value)}
-                />
                 <Select
                   label="Kartenart"
                   options={kindOptions}
@@ -111,9 +119,6 @@ export function CardForgeCardEditor({
                   disabled={readOnly}
                   onChange={(e) => onFieldChange('type', e.target.value)}
                 />
-              </div>
-
-              <div className="grid grid-cols-1 gap-5 sm:grid-cols-2">
                 <Select
                   label="Element"
                   options={elementOptions}
@@ -121,16 +126,6 @@ export function CardForgeCardEditor({
                   disabled={readOnly}
                   onChange={(e) => onFieldChange('element', e.target.value)}
                 />
-                {selectedCard.type === 'Character' && (
-                  <Input
-                    label="Startleben"
-                    type="number"
-                    min={1}
-                    value={selectedCard.stats_json?.hp ?? 20}
-                    disabled={readOnly}
-                    onChange={(e) => onStatsChange('hp', parseInt(e.target.value) || 20)}
-                  />
-                )}
               </div>
 
               {selectedCard.type === 'Element' && (
@@ -169,8 +164,41 @@ export function CardForgeCardEditor({
                     </Button>
                   )}
                 </div>
+
+                {selectedCard.type === 'Character' && (
+                  <div className="grid grid-cols-1 gap-5 sm:grid-cols-2 sm:items-end">
+                    <Input
+                      label="Startleben"
+                      type="number"
+                      min={1}
+                      value={selectedCard.stats_json?.hp ?? 20}
+                      disabled={readOnly}
+                      onChange={(e) => onStatsChange('hp', parseInt(e.target.value) || 20)}
+                    />
+                    {(selectedCard.effects || []).length > 0 && (
+                      <div className="min-w-0">
+                        {readOnly ? (
+                          <div className="rounded-lg border border-stone-800 bg-stone-900/50 px-3 py-2 text-sm text-stone-300">
+                            {selectedCard.effects![0]}
+                          </div>
+                        ) : (
+                          <input
+                            type="text"
+                            value={selectedCard.effects![0]}
+                            onChange={(e) => onEffectChange(0, e.target.value)}
+                            className="w-full min-w-0 rounded-lg border border-stone-700 bg-stone-900 px-3 py-2 text-sm text-stone-100 outline-none transition-colors focus:border-purple-500"
+                          />
+                        )}
+                      </div>
+                    )}
+                  </div>
+                )}
+
                 <div className="space-y-2">
-                  {(selectedCard.effects || []).map((effect, index) => (
+                  {(selectedCard.effects || [])
+                    .map((effect, index) => ({ effect, index }))
+                    .filter(({ index }) => selectedCard.type !== 'Character' || index > 0)
+                    .map(({ effect, index }) => (
                     <div key={index} className="flex gap-2">
                       {readOnly ? (
                         <div className="flex-1 rounded-lg border border-stone-800 bg-stone-900/50 px-3 py-2 text-sm text-stone-300">
@@ -200,51 +228,6 @@ export function CardForgeCardEditor({
                 </div>
               </div>
 
-              <Input
-                label="Kartenbild URL"
-                value={selectedCard.image_asset}
-                onChange={(e) => onFieldChange('image_asset', e.target.value)}
-                placeholder="https://…"
-              />
-
-              <div className="flex items-center gap-3">
-                <input
-                  type="file"
-                  id="image-upload"
-                  accept="image/jpeg,image/jpg,image/png,image/webp,image/gif"
-                  onChange={(e) => {
-                    const file = e.target.files?.[0];
-                    if (file) onImageSelect(file);
-                    e.target.value = '';
-                  }}
-                  className="hidden"
-                  disabled={uploading}
-                />
-                <label htmlFor="image-upload" className="contents">
-                  <span
-                    className={`inline-flex cursor-pointer items-center justify-center gap-2 rounded-lg border px-4 py-2 text-sm font-medium transition-colors ${
-                      uploading
-                        ? 'border-stone-700 bg-stone-800 text-stone-500'
-                        : 'border-stone-700 bg-stone-900 text-stone-300 hover:border-purple-500 hover:text-stone-100'
-                    }`}
-                  >
-                    {uploading ? <Loader2 className="h-4 w-4 animate-spin" /> : <Upload className="h-4 w-4" />}
-                    {uploading ? 'Upload läuft…' : 'Bild hochladen'}
-                  </span>
-                </label>
-                {uploadProgress && <span className="text-xs text-emerald-400">{uploadProgress}</span>}
-              </div>
-
-              <Button
-                variant="secondary"
-                size="sm"
-                icon={<StickyNote className="h-4 w-4" />}
-                onClick={onNotesModalOpen}
-                className="w-full"
-              >
-                Notizen {selectedCard.notes?.trim() ? '📝' : ''}
-              </Button>
-
               <div className="flex gap-3 pt-2">
                 <Button
                   variant={isPackCard ? 'success' : 'success'}
@@ -269,8 +252,52 @@ export function CardForgeCardEditor({
               </div>
             </Panel>
 
-            <div className="flex flex-col items-center">
-              <span className="mb-3 text-xs font-semibold uppercase tracking-wider text-stone-500">Vorschau</span>
+            <div
+              className="order-1 flex w-full flex-col items-center min-[880px]:sticky min-[880px]:top-6 min-[880px]:order-2"
+              data-testid="card-forge-preview"
+            >
+              <span className="mb-3 text-xs font-semibold uppercase tracking-wider text-stone-500">
+                Vorschau
+              </span>
+
+              <div className="mb-4 w-full max-w-[13rem] space-y-3">
+                <Input
+                  label="Kartenbild URL"
+                  value={selectedCard.image_asset}
+                  onChange={(e) => onFieldChange('image_asset', e.target.value)}
+                  placeholder="https://…"
+                />
+                <div className="flex flex-col gap-2">
+                  <input
+                    type="file"
+                    id="image-upload"
+                    accept="image/jpeg,image/jpg,image/png,image/webp,image/gif"
+                    onChange={(e) => {
+                      const file = e.target.files?.[0];
+                      if (file) onImageSelect(file);
+                      e.target.value = '';
+                    }}
+                    className="hidden"
+                    disabled={uploading}
+                  />
+                  <label htmlFor="image-upload" className="contents">
+                    <span
+                      className={`inline-flex w-full cursor-pointer items-center justify-center gap-2 rounded-lg border px-4 py-2 text-sm font-medium transition-colors ${
+                        uploading
+                          ? 'border-stone-700 bg-stone-800 text-stone-500'
+                          : 'border-stone-700 bg-stone-900 text-stone-300 hover:border-purple-500 hover:text-stone-100'
+                      }`}
+                    >
+                      {uploading ? <Loader2 className="h-4 w-4 animate-spin" /> : <Upload className="h-4 w-4" />}
+                      {uploading ? 'Upload läuft…' : 'Bild hochladen'}
+                    </span>
+                  </label>
+                  {uploadProgress && (
+                    <span className="text-center text-xs text-emerald-400">{uploadProgress}</span>
+                  )}
+                </div>
+              </div>
+
               <Card
                 id={selectedCard.id}
                 name={selectedCard.name}

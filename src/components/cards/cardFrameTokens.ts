@@ -2,8 +2,28 @@
  * Visual tokens for Letz Fetz grunge TCG card frames.
  * Location: src/components/cards/cardFrameTokens.ts
  */
+import type { Element } from '../../game/types';
 import type { ForgeCardKind } from '../../services/cardForge/categories';
 import type { ForgeElement } from '../../services/cardForge/types';
+
+/** Dual-element side stripe — character portrait cards */
+export const CHARACTER_ELEMENT_STRIPE_FROM: Record<Element, string> = {
+  fire: 'from-red-600/90',
+  water: 'from-cyan-600/90',
+  earth: 'from-lime-600/90',
+  air: 'from-sky-400/90',
+  shadow: 'from-purple-600/90',
+  light: 'from-amber-300/90',
+};
+
+export const CHARACTER_ELEMENT_STRIPE_TO: Record<Element, string> = {
+  fire: 'to-red-900/80',
+  water: 'to-cyan-900/80',
+  earth: 'to-lime-900/80',
+  air: 'to-sky-800/80',
+  shadow: 'to-purple-900/80',
+  light: 'to-amber-700/80',
+};
 
 export const KIND_LABELS: Record<ForgeCardKind, string> = {
   Character: 'CHARACTER',

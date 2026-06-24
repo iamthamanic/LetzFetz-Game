@@ -71,4 +71,21 @@ describe('PLAY_ULTIMATE', () => {
     state = applyAction(state, { type: 'PLAY_ULTIMATE' }, 'p1', ctx);
     expect(state.players.p1.doubleNextAttack).toBe(true);
   });
+
+  it('mysterium echo vs mysterium does not recurse', () => {
+    let state = advanceToAction(
+      createGame({
+        pack: BASE_PACK,
+        p1CharacterId: 'mysterium',
+        p2CharacterId: 'mysterium',
+        startingPlayer: 'p1',
+        seed: 1,
+      }),
+    );
+    const handBefore = state.players.p1.hand.length;
+    state = applyAction(state, { type: 'PLAY_ULTIMATE' }, 'p1', ctx);
+    expect(state.players.p1.ultimateAvailable).toBe(false);
+    expect(state.players.p1.hand.length).toBeGreaterThanOrEqual(handBefore);
+    expect(state.lastEvent).toContain('Echo');
+  });
 });

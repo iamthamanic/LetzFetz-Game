@@ -13,6 +13,8 @@ import {
 } from './prompts/elements';
 import { ARENA_PROMPTS } from './prompts/arenas';
 import { GLITCH_PROMPTS } from './prompts/glitches';
+import { cardVideoKindForId } from './prompts/cardVideos';
+import { isCharacterIdleVideoId } from './prompts/characterIdleVideos';
 
 export type IllustrationKind = 'character' | 'ultimate' | 'element' | 'arena' | 'glitch';
 
@@ -89,6 +91,19 @@ export function resolveCardArtPath(cardId: string): string {
   const def = manifestByKey.get(key);
   if (!def) return '';
   return illustrationPublicPath(key, def.kind);
+}
+
+/** Public URL path for a card-play video, or empty string if unsupported / not generated yet. */
+export function resolveCardVideoPath(cardId: string): string {
+  const kind = cardVideoKindForId(cardId);
+  if (!kind) return '';
+  return `/videos/${kind}/${cardId}.mp4`;
+}
+
+/** Character idle loop (setup + forge preview), or empty if not generated. */
+export function resolveCharacterIdleVideoPath(characterId: string): string {
+  if (!isCharacterIdleVideoId(characterId)) return '';
+  return `/videos/character/${characterId}.mp4`;
 }
 
 export function getIllustrationDef(key: string): IllustrationDef | undefined {

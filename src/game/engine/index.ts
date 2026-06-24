@@ -8,3 +8,5 @@ export * from './effects';
 export * from './lookup';
 export * from './ultimate';
 export * from './bot';
+export * from './pickBotCharacter';
+export * from './invariants';

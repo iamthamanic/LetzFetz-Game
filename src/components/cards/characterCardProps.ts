@@ -12,6 +12,18 @@ import {
 import type { ForgeCardKind } from '../../services/cardForge/categories';
 import type { ForgeElement } from '../../services/cardForge/types';
 import type { LetzFetzCardProps } from './LetzFetzCard';
+import type { CharacterCardDef, Element } from '../../game/types';
+import { BASE_PACK } from '../../game/packs/base-pack';
+import type { ForgeCardData, ForgeElement } from '../../services/cardForge/types';
+
+const FORGE_ELEMENT_TO_GAME: Partial<Record<ForgeElement, Element>> = {
+  Fire: 'fire',
+  Water: 'water',
+  Earth: 'earth',
+  Air: 'air',
+  Light: 'light',
+  Shadow: 'shadow',
+};
 
 function forgeElementFromGame(element: string): ForgeElement {
   const map: Record<string, ForgeElement> = {
@@ -73,5 +85,46 @@ export function glitchDefToForgeProps(def: GlitchCardDef): Partial<LetzFetzCardP
     element: 'Neutral',
     effects: [`Timing: ${def.timing}`, def.effectText],
     image_asset: resolveCardArtPath(def.id),
+  };
+}
+
+function forgeElementsToGame(elements?: [ForgeElement, ForgeElement]): [Element, Element] {
+  if (elements?.length === 2) {
+    return [
+      FORGE_ELEMENT_TO_GAME[elements[0]] ?? 'earth',
+      FORGE_ELEMENT_TO_GAME[elements[1]] ?? 'fire',
+    ];
+  }
+  return ['earth', 'fire'];
+}
+
+function effectField(effects: string[] | undefined, prefix: string): string {
+  const line = effects?.find((e) => e.startsWith(prefix));
+  return line ? line.slice(prefix.length).trim() : '';
+}
+
+/** Map Card Forge character row → game CharacterCardDef for CharacterSelectCard preview. */
+export function forgeCharacterDefFromCard(
+  card: Pick<
+    ForgeCardData,
+    'id' | 'name' | 'type' | 'elements' | 'effects'
+  >,
+): CharacterCardDef | null {
+  if (card.type !== 'Character') return null;
+
+  const fromPack = BASE_PACK.characters.find((c) => c.id === card.id);
+  if (fromPack) {
+    return { ...fromPack, name: card.name || fromPack.name };
+  }
+
+  return {
+    id: card.id,
+    name: card.name || 'Unbenannt',
+    kind: 'character',
+    elements: forgeElementsToGame(card.elements),
+    role: effectField(card.effects, 'Rolle: ') || '—',
+    passiveText: effectField(card.effects, 'Passiv: ') || card.effects?.[0] || '',
+    ultimateId: '',
+    strategyHint: effectField(card.effects, 'Strategie: '),
   };
 }
