@@ -54,6 +54,8 @@ test.describe('Game Duel Board UI — Sprint 1', () => {
     await expect(page.getByTestId('arena-playmat-badge')).toBeVisible();
     await expect(page.getByTestId('arena-playmat-badge').getByRole('heading', { level: 2 })).toContainText('🏟️');
     await expect(page.getByTestId('arena-playmat')).toBeVisible();
+    await expect(page.getByTestId('deck-pile')).toBeVisible();
+    await expect(page.getByTestId('discard-pile')).toBeVisible();
     await expect(page.getByTestId('human-plate')).toBeVisible();
     await expect(page.getByTestId('opponent-plate')).toBeVisible();
 

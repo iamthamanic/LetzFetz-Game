@@ -4,6 +4,7 @@ import {
   resolvePlaymatLayout,
   scalePlaymatHandPath,
   scalePlaymatRect,
+  playmatZonePercentStyle,
 } from './playmatLayout';
 
 describe('playmatLayout', () => {
@@ -45,5 +46,14 @@ describe('playmatLayout', () => {
     expect(layout.arenaId).toBe('arena-vulkan');
     expect(layout.zones.length).toBeGreaterThan(0);
     expect(layout.assets.fallback).toBeTruthy();
+  });
+
+  it('maps zone rect to percentage positioning', () => {
+    const style = playmatZonePercentStyle(
+      { x: 48, y: 420, width: 120, height: 168 },
+      { width: 1448, height: 1086 },
+    );
+    expect(parseFloat(String(style.left))).toBeCloseTo(3.315, 2);
+    expect(parseFloat(String(style.width))).toBeCloseTo(8.287, 2);
   });
 });

@@ -2,7 +2,7 @@
  * Duel board on full-bleed playmat — replaces vertical tableau + arena sidebar.
  * Location: src/components/game/PlaymatBoard.tsx
  */
-import React from 'react';
+import React, { useMemo } from 'react';
 import type { ContentPack, GameAction, GameState } from '../../game';
 import { findElementDef } from '../../game';
 import type { GameViewModel } from './buildGameViewModel';
@@ -20,6 +20,8 @@ import { HandFan } from './HandFan';
 import { ActionBar } from './ActionBar';
 import { ArenaPlaymat } from './ArenaPlaymat';
 import { ArenaPlaymatBadge } from './ArenaPlaymatBadge';
+import { getPlaymatLayoutForArena, playmatZonePercentStyle } from './playmat';
+import { DeckPile, DiscardPile } from './zones';
 import { BoardCard } from './BoardCard';
 import { Panel } from '../ui/Panel';
 import { Button } from '../ui/Button';
@@ -144,6 +146,15 @@ export function PlaymatBoard({
     ? view.legalActions.filter((a) => a.type === 'PLAY_BLOCK')
     : [];
 
+  const playmatLayout = useMemo(
+    () => getPlaymatLayoutForArena(view.arena?.id ?? 'arena-spaeti'),
+    [view.arena?.id],
+  );
+  const deckZone = playmatLayout.zones.find((z) => z.id === 'deck');
+  const discardZone = playmatLayout.zones.find((z) => z.id === 'discard');
+  const topDiscard = state.piles.discard[state.piles.discard.length - 1];
+  const topDiscardDef = topDiscard ? findElementDef(pack, topDiscard.defId) : undefined;
+
   return (
     <div className="flex min-h-0 flex-1 flex-col overflow-hidden">
       {(pendingHint || actionError) && (
@@ -168,6 +179,20 @@ export function PlaymatBoard({
           <ArenaPlaymatBadge arena={view.arena} arenaState={state.arena} />
         )}
 
+        {deckZone && (
+          <DeckPile
+            count={state.piles.deck.length}
+            style={playmatZonePercentStyle(deckZone, playmatLayout.viewBox)}
+          />
+        )}
+        {discardZone && (
+          <DiscardPile
+            count={state.piles.discard.length}
+            topCard={topDiscardDef}
+            style={playmatZonePercentStyle(discardZone, playmatLayout.viewBox)}
+          />
+        )}
+
         <div
           data-testid="duel-tableau"
           className="relative z-10 mx-auto flex min-h-0 w-full max-w-5xl flex-1 flex-col gap-3 overflow-y-auto px-4 py-3"
@@ -179,6 +204,7 @@ export function PlaymatBoard({
               playerId={botId}
               side="bot"
               deckCount={state.piles.deck.length}
+              showPileCounts={false}
             />
             <BoundCardRow
               label="Gegner-Engine"
@@ -259,6 +285,7 @@ export function PlaymatBoard({
               side="human"
               deckCount={state.piles.deck.length}
               discardCount={state.piles.discard.length}
+              showPileCounts={false}
             />
 
             <HandFan

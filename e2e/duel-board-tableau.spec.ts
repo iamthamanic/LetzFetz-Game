@@ -36,6 +36,15 @@ test.describe('Duel board playmat', () => {
     await expect(page.getByTestId('opponent-plate')).toBeVisible();
     await expect(page.getByTestId('human-engine')).toBeVisible();
     await expect(page.getByTestId('opponent-engine')).toBeVisible();
-    await shot(page, '03-character-plates.png');
+
+    const deckPile = page.getByTestId('deck-pile');
+    const discardPile = page.getByTestId('discard-pile');
+    await expect(deckPile).toBeVisible();
+    await expect(discardPile).toBeVisible();
+    await expect(page.getByTestId('discard-pile-empty')).toBeVisible();
+    const deckCount = await deckPile.getAttribute('data-pile-count');
+    expect(Number(deckCount)).toBeGreaterThan(0);
+    await expect(deckPile.getByTestId('card-back').first()).toBeVisible();
+    await shot(page, '04-deck-discard-piles.png');
   });
 });

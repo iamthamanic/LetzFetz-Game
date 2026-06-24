@@ -12,6 +12,7 @@ export {
   scalePlaymatPoint,
   scalePlaymatHandPath,
   playmatThemeStyle,
+  playmatZonePercentStyle,
 } from './playmatLayout';
 export {
   getPlaymatLayoutForArena,
