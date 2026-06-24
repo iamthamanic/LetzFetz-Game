@@ -93,6 +93,13 @@ export function resolveCardArtPath(cardId: string): string {
   return illustrationPublicPath(key, def.kind);
 }
 
+/** Public URL path for the shared Letz Fetz card back (face-down). */
+export const CARD_BACK_PUBLIC_PATH = '/cards/card-back.svg';
+
+export function resolveCardBackPath(): string {
+  return CARD_BACK_PUBLIC_PATH;
+}
+
 /** Public URL path for a card-play video, or empty string if unsupported / not generated yet. */
 export function resolveCardVideoPath(cardId: string): string {
   const kind = cardVideoKindForId(cardId);

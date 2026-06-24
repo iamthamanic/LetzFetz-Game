@@ -4,6 +4,7 @@
  */
 import React from 'react';
 import { ImageWithFallback } from '../figma/ImageWithFallback';
+import { resolveCardBackPath } from '../../services/cardArt/manifest';
 import type { ForgeCardKind } from '../../services/cardForge/categories';
 import type { ForgeElement } from '../../services/cardForge/types';
 import { buildCardDisplayModel } from './cardDisplayModel';
@@ -80,10 +81,20 @@ export function LetzFetzCard({
   if (faceDown) {
     return (
       <div
-        className={`${SIZE_CLASSES[size]} relative rounded-sm border-2 border-stone-700 bg-gradient-to-br from-stone-900 via-stone-950 to-black shadow-lg ${className}`}
+        data-card-id={id}
+        data-testid="card-back"
+        className={`${SIZE_CLASSES[size]} relative overflow-hidden rounded-sm border-2 border-stone-700 bg-stone-950 shadow-lg ${className}`}
+        aria-label="Verdeckte Karte"
       >
         <GrungeOverlay />
-        <div className="absolute inset-0 flex items-center justify-center text-2xl opacity-60">🂠</div>
+        <img
+          src={resolveCardBackPath()}
+          alt=""
+          aria-hidden
+          className="absolute inset-0 h-full w-full object-cover"
+          loading="lazy"
+          decoding="async"
+        />
       </div>
     );
   }
