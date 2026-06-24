@@ -14,14 +14,13 @@ import {
   findDiscardDrawAction,
   hasChallengeForAttack,
 } from './gameActionHelpers';
-import { CharacterPlate } from './CharacterPlate';
+import { CharacterDock, DeckPile, DiscardPile } from './zones';
 import { BoundCardRow } from './BoundCardRow';
 import { HandFan } from './HandFan';
 import { ActionBar } from './ActionBar';
 import { ArenaPlaymat } from './ArenaPlaymat';
 import { ArenaPlaymatBadge } from './ArenaPlaymatBadge';
 import { getPlaymatLayoutForArena, playmatZonePercentStyle } from './playmat';
-import { DeckPile, DiscardPile } from './zones';
 import { BoardCard } from './BoardCard';
 import { Panel } from '../ui/Panel';
 import { Button } from '../ui/Button';
@@ -152,6 +151,8 @@ export function PlaymatBoard({
   );
   const deckZone = playmatLayout.zones.find((z) => z.id === 'deck');
   const discardZone = playmatLayout.zones.find((z) => z.id === 'discard');
+  const playerCharZone = playmatLayout.zones.find((z) => z.id === 'player-character');
+  const opponentCharZone = playmatLayout.zones.find((z) => z.id === 'opponent-character');
   const topDiscard = state.piles.discard[state.piles.discard.length - 1];
   const topDiscardDef = topDiscard ? findElementDef(pack, topDiscard.defId) : undefined;
 
@@ -193,19 +194,30 @@ export function PlaymatBoard({
           />
         )}
 
+        {opponentCharZone && (
+          <CharacterDock
+            state={state}
+            pack={pack}
+            playerId={botId}
+            side="bot"
+            style={playmatZonePercentStyle(opponentCharZone, playmatLayout.viewBox)}
+          />
+        )}
+        {playerCharZone && (
+          <CharacterDock
+            state={state}
+            pack={pack}
+            playerId={humanId}
+            side="human"
+            style={playmatZonePercentStyle(playerCharZone, playmatLayout.viewBox)}
+          />
+        )}
+
         <div
           data-testid="duel-tableau"
           className="relative z-10 mx-auto flex min-h-0 w-full max-w-5xl flex-1 flex-col gap-3 overflow-y-auto px-4 py-3"
         >
           <section className="flex flex-none flex-col gap-2">
-            <CharacterPlate
-              state={state}
-              pack={pack}
-              playerId={botId}
-              side="bot"
-              deckCount={state.piles.deck.length}
-              showPileCounts={false}
-            />
             <BoundCardRow
               label="Gegner-Engine"
               slots={view.botBoundSlots}
@@ -276,16 +288,6 @@ export function PlaymatBoard({
               cardSize="bound"
               onActivateBound={handleStartActivate}
               onSlotClick={handleHumanSlotClick}
-            />
-
-            <CharacterPlate
-              state={state}
-              pack={pack}
-              playerId={humanId}
-              side="human"
-              deckCount={state.piles.deck.length}
-              discardCount={state.piles.discard.length}
-              showPileCounts={false}
             />
 
             <HandFan

@@ -34,6 +34,8 @@ test.describe('Duel board playmat', () => {
 
     await expect(page.getByTestId('human-plate')).toBeVisible();
     await expect(page.getByTestId('opponent-plate')).toBeVisible();
+    await expect(page.getByTestId('human-plate').getByText(/\d+ LP/)).toBeVisible();
+    await expect(page.locator('[data-testid^="character-dock-idle-"]').first()).toBeVisible();
     await expect(page.getByTestId('human-engine')).toBeVisible();
     await expect(page.getByTestId('opponent-engine')).toBeVisible();
 
