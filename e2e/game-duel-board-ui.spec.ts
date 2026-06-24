@@ -49,6 +49,9 @@ test.describe('Game Duel Board UI — Sprint 1', () => {
       page.locator('.rounded-full.border-purple-500').filter({ hasText: 'Startphase' }),
     ).toBeVisible();
 
+    await expect(page.getByTestId('phase-coach-banner')).toBeVisible();
+    await expect(page.getByTestId('phase-coach-hint')).toContainText('Starte deinen Zug');
+
     await expect(page.getByText('LP').first()).toBeVisible();
     await expect(page.getByText(/Hand \d+/).first()).toBeVisible();
     await expect(page.getByTestId('arena-playmat-badge')).toBeVisible();
@@ -69,6 +72,7 @@ test.describe('Game Duel Board UI — Sprint 1', () => {
 
     await advanceToBindPhase(page);
     await shot(page, '05-bind-phase.png');
+    await expect(page.getByTestId('phase-coach-hint')).toContainText('Binde eine Karte');
     await expect(page.getByText(/Hand \d+ \(verdeckt\)/)).toBeVisible();
 
     await page.getByRole('button', { name: 'Nicht binden' }).click();
