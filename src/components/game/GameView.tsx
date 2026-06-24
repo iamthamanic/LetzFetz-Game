@@ -17,7 +17,8 @@ import {
 } from '../../game';
 import { GameSetup } from './GameSetup';
 import { GrungeAppShell } from '../ui/GrungeAppShell';
-import { PhaseBar } from './PhaseBar';
+import { PhaseCoachBanner } from './PhaseCoachBanner';
+import { buildPhaseCoachHint } from './phaseCoachHint';
 import { PlaymatBoard } from './PlaymatBoard';
 import { MatchIntro } from './MatchIntro';
 import { buildGameViewModel } from './buildGameViewModel';
@@ -171,6 +172,22 @@ export function GameView() {
     setState(next);
   }, [playtestMode]);
 
+  const botWouldAct = state
+    ? (state.activePlayer === BOT && !state.winner) || state.combat?.defenderId === BOT
+    : false;
+  const botThinking =
+    botRunning.current || (botWouldAct && !(playtestMode && botPaused));
+
+  const coachHint = useMemo(() => {
+    if (!state || !view) return '';
+    return buildPhaseCoachHint({
+      state,
+      view,
+      pending: pendingIntent,
+      botThinking,
+    });
+  }, [state, view, pendingIntent, botThinking]);
+
   if (!state || !view) {
     return (
       <GrungeAppShell>
@@ -197,22 +214,17 @@ export function GameView() {
     );
   }
 
-  const botWouldAct =
-    (state.activePlayer === BOT && !state.winner) || state.combat?.defenderId === BOT;
-  const botThinking =
-    botRunning.current ||
-    (botWouldAct && !(playtestMode && botPaused));
-
   return (
     <GrungeAppShell>
       <div className="flex h-full flex-col overflow-hidden bg-stone-950 text-stone-100">
       <header className="flex-none border-b border-stone-700 bg-stone-900/90 px-4 py-2">
         <div className="mx-auto flex max-w-6xl items-center justify-between gap-4">
-          <div className="flex flex-wrap items-center gap-3">
-            <PhaseBar current={state.phase} />
-            <Badge variant="accent">Runde {state.turnNumber}</Badge>
-            <span className="hidden text-xs text-stone-400 sm:inline">{view.phaseLabel}</span>
-          </div>
+          <PhaseCoachBanner
+            currentPhase={state.phase}
+            phaseLabel={view.phaseLabel}
+            hint={coachHint}
+            turnNumber={state.turnNumber}
+          />
           <Button
             variant="secondary"
             size="sm"
