@@ -15,22 +15,22 @@ function shot(page: import('@playwright/test').Page, name: string) {
   return page.screenshot({ path: join(EVIDENCE, name), fullPage: true });
 }
 
-test.describe('Duel board tableau', () => {
-  test('arena card sidebar, character plates, themed backdrop', async ({ page }) => {
+test.describe('Duel board playmat', () => {
+  test('playmat background, arena badge, character plates', async ({ page }) => {
     await startBotMatchFromSetup(page);
     await dismissMatchIntroSkip(page);
 
-    const tableau = page.getByTestId('duel-tableau');
-    await expect(tableau).toBeVisible();
-    await shot(page, '01-tableau-overview.png');
+    const board = page.getByTestId('playmat-board');
+    await expect(board).toBeVisible();
+    await shot(page, '01-playmat-overview.png');
 
-    const arena = page.getByTestId('arena-center');
-    await expect(arena).toBeVisible();
-    await expect(page.getByTestId('arena-backdrop')).toBeVisible();
-    const arenaBox = await arena.boundingBox();
-    expect(arenaBox?.width).toBeGreaterThanOrEqual(200);
-    await expect(arena.getByRole('heading', { level: 2 })).toContainText('🏟️');
-    await shot(page, '02-arena-sidebar.png');
+    const badge = page.getByTestId('arena-playmat-badge');
+    await expect(badge).toBeVisible();
+    await expect(page.getByTestId('arena-playmat')).toBeVisible();
+    const badgeBox = await badge.boundingBox();
+    expect(badgeBox?.width).toBeGreaterThanOrEqual(120);
+    await expect(badge.getByRole('heading', { level: 2 })).toContainText('🏟️');
+    await shot(page, '02-arena-badge.png');
 
     await expect(page.getByTestId('human-plate')).toBeVisible();
     await expect(page.getByTestId('opponent-plate')).toBeVisible();

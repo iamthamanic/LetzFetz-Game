@@ -16,7 +16,7 @@ function shot(page: import('@playwright/test').Page, name: string) {
 }
 
 test.describe('Card frame polish 2.5', () => {
-  test('hand buttons in startphase, arena sidebar card, md grunge', async ({ page }) => {
+  test('hand buttons in startphase, arena playmat badge, md grunge', async ({ page }) => {
     await startBotMatchFromSetup(page);
     await dismissMatchIntroSkip(page);
 
@@ -25,12 +25,12 @@ test.describe('Card frame polish 2.5', () => {
     await expect(handCard).toBeDisabled();
     await shot(page, '01-hand-buttons-startphase.png');
 
-    const arena = page.getByTestId('arena-center');
-    await expect(arena).toBeVisible();
-    const arenaBox = await arena.boundingBox();
-    expect(arenaBox?.width).toBeGreaterThanOrEqual(200);
-    await expect(arena.getByRole('heading', { level: 2 })).toContainText('🏟️');
-    await shot(page, '02-arena-sidebar.png');
+    const badge = page.getByTestId('arena-playmat-badge');
+    await expect(badge).toBeVisible();
+    const badgeBox = await badge.boundingBox();
+    expect(badgeBox?.width).toBeGreaterThanOrEqual(120);
+    await expect(badge.getByRole('heading', { level: 2 })).toContainText('🏟️');
+    await shot(page, '02-arena-badge.png');
 
     await expect(handCard).toHaveClass(/w-36/);
     await shot(page, '03-hand-grunge-md.png');
