@@ -14,9 +14,8 @@ import {
   findBindReplaceAction,
   findDirectBindAction,
   findDiscardDrawAction,
-  hasChallengeForAttack,
 } from './gameActionHelpers';
-import { CharacterDock, CombatStage, DeckPile, DiscardPile } from './zones';
+import { CharacterDock, CombatStage, DeckPile, DiscardPile, TargetingArrow } from './zones';
 import { BoundCardRow } from './BoundCardRow';
 import { HandFan } from './HandFan';
 import { ActionBar } from './ActionBar';
@@ -75,12 +74,7 @@ export function PlaymatBoard({
   const clearPending = () => onPendingChange(null);
 
   const handleSelectAttack = (instanceId: string) => {
-    if (hasChallengeForAttack(view.legalActions, instanceId)) {
-      onPendingChange({ type: 'attack', attackInstanceId: instanceId });
-    } else {
-      onPlayAttack(instanceId);
-      clearPending();
-    }
+    onPendingChange({ type: 'attack', attackInstanceId: instanceId });
   };
 
   const handleBindDirect = (handInstanceId: string) => {
@@ -251,6 +245,14 @@ export function PlaymatBoard({
           activeStep={activePresentationStep}
           humanPlayerId={humanPlayerId}
         />
+
+        {pending?.type === 'attack' && !state.winner && (
+          <TargetingArrow
+            layout={playmatLayout}
+            hasChallengeTargets={view.botBoundSlots.some((s) => s.isTargetable)}
+            opponentSlots={view.botBoundSlots}
+          />
+        )}
 
         {combatZone && view.combat && !state.winner && (
           <CombatStage
