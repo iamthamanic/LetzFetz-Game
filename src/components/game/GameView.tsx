@@ -18,7 +18,7 @@ import {
 import { GameSetup } from './GameSetup';
 import { GrungeAppShell } from '../ui/GrungeAppShell';
 import { PhaseBar } from './PhaseBar';
-import { GameBoard } from './GameBoard';
+import { PlaymatBoard } from './PlaymatBoard';
 import { MatchIntro } from './MatchIntro';
 import { buildGameViewModel } from './buildGameViewModel';
 import type { PendingIntent } from './gameActionHelpers';
@@ -225,7 +225,7 @@ export function GameView() {
       </header>
 
       <div className="relative flex min-h-0 flex-1 overflow-hidden">
-        <GameBoard
+        <PlaymatBoard
           state={state}
           pack={pack}
           view={view}
