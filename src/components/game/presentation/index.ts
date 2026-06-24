@@ -59,5 +59,11 @@ export {
   findNewlyBoundCardIds,
   BIND_SNAP_MS,
 } from './buildBindSnapStep';
+export {
+  buildActivateDiscardStep,
+  isActivateDiscardStep,
+  findActivatedDiscardCardId,
+  ACTIVATE_DISCARD_MS,
+} from './buildActivateDiscardStep';
 export { OpeningDealFly } from './OpeningDealFly';
 export { PlaymatCardFly } from './PlaymatCardFly';
