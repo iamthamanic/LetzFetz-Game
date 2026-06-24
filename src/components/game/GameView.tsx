@@ -27,6 +27,7 @@ import { Badge } from '../ui/Badge';
 import { ScrollText } from 'lucide-react';
 import { isPlaytestMode } from '../../services/playtest/isPlaytestMode';
 import { PlaytestCheatbox } from './PlaytestCheatbox';
+import { usePresentationQueue } from './presentation';
 
 const HUMAN: PlayerId = 'p1';
 const BOT: PlayerId = 'p2';
@@ -43,10 +44,15 @@ export function GameView() {
   const [botPaused, setBotPaused] = useState(false);
   const botRunning = useRef(false);
   const botPausedRef = useRef(false);
+  const presentation = usePresentationQueue();
 
   useEffect(() => {
     botPausedRef.current = botPaused;
   }, [botPaused]);
+
+  useEffect(() => {
+    if (state?.winner) presentation.flush();
+  }, [state?.winner, presentation.flush]);
 
   const dispatch = useCallback((action: GameAction, playerId: PlayerId = HUMAN) => {
     setState((prev) => {
@@ -72,6 +78,7 @@ export function GameView() {
 
   useEffect(() => {
     if (!state || state.winner || botRunning.current) return;
+    if (presentation.isInputLocked) return;
     if (playtestMode && botPausedRef.current) return;
 
     const needsBot =
@@ -100,7 +107,7 @@ export function GameView() {
       clearTimeout(timer);
       botRunning.current = false;
     };
-  }, [state, playtestMode]);
+  }, [state, playtestMode, presentation.isInputLocked]);
 
   useEffect(() => {
     setPendingIntent(null);
@@ -151,9 +158,10 @@ export function GameView() {
 
   const handleDispatch = useCallback(
     (action: GameAction) => {
+      if (presentation.isInputLocked) return;
       dispatch(action, HUMAN);
     },
-    [dispatch],
+    [dispatch, presentation.isInputLocked],
   );
 
   const handleApplyPlaytestState = useCallback((next: GameState) => {
@@ -231,6 +239,7 @@ export function GameView() {
           onPlayBlock={playBlock}
           onPendingChange={setPendingIntent}
           onNewGame={() => {
+            presentation.flush();
             setPendingIntent(null);
             setActionError(null);
             setIntroOpen(false);
