@@ -9,6 +9,8 @@ import {
   illustrationKeyForCardId,
   illustrationPublicPath,
   resolveCardArtPath,
+  resolveCardBackPath,
+  resolveCharacterIdleVideoPath,
 } from './manifest';
 
 function allPackCardIds(): string[] {
@@ -64,5 +66,14 @@ describe('card art manifest', () => {
     expect(illustrationPublicPath('knuspergnom', 'character')).toBe(
       '/cards/character/knuspergnom.png',
     );
+  });
+
+  it('resolves character idle video paths', () => {
+    expect(resolveCharacterIdleVideoPath('knuspergnom')).toBe('/videos/character/knuspergnom.mp4');
+    expect(resolveCharacterIdleVideoPath('unknown')).toBe('');
+  });
+
+  it('resolves shared card back path', () => {
+    expect(resolveCardBackPath()).toBe('/cards/card-back.svg');
   });
 });
