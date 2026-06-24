@@ -27,6 +27,10 @@ test.describe('Duel board playmat', () => {
     const badge = page.getByTestId('arena-playmat-badge');
     await expect(badge).toBeVisible();
     await expect(page.getByTestId('arena-playmat')).toBeVisible();
+    const playmat = page.getByTestId('arena-playmat');
+    const source = await playmat.getAttribute('data-playmat-source');
+    expect(source === 'topdown' || source === 'fallback').toBe(true);
+    await expect(playmat).toHaveAttribute('data-arena-id', /^arena-/);
     const badgeBox = await badge.boundingBox();
     expect(badgeBox?.width).toBeGreaterThanOrEqual(120);
     await expect(badge.getByRole('heading', { level: 2 })).toContainText('🏟️');
