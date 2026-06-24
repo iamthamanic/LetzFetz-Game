@@ -9,7 +9,7 @@ import { findElementDef } from '../../../game';
 import type { PendingCombat } from '../../../game/types';
 import { BoardCard } from '../BoardCard';
 import { Button } from '../../ui/Button';
-import { Badge } from '../../ui/Badge';
+import { CombatDiceRoll } from '../CombatDiceRoll';
 import {
   buildCombatStageSubtitle,
   buildCombatStageTitle,
@@ -21,7 +21,6 @@ interface CombatStageProps {
   state: GameState;
   pack: ContentPack;
   humanId: PlayerId;
-  lastRoll: number | null;
   isHumanDefender: boolean;
   botThinking: boolean;
   blockActions: GameAction[];
@@ -35,7 +34,6 @@ export function CombatStage({
   state,
   pack,
   humanId,
-  lastRoll,
   isHumanDefender,
   botThinking,
   blockActions,
@@ -56,7 +54,6 @@ export function CombatStage({
   const title = buildCombatStageTitle(combat, isHumanDefender);
   const subtitle = buildCombatStageSubtitle(isHumanDefender, botThinking);
   const valueLabel = combatValueLabel(combat);
-  const showDice = lastRoll !== null && lastRoll === combat.attackRoll;
 
   return (
     <div
@@ -105,11 +102,7 @@ export function CombatStage({
           >
             {combat.attackValue}
           </span>
-          {showDice && (
-            <Badge variant="info" className="mt-0.5 text-[9px]">
-              W6 = {lastRoll}
-            </Badge>
-          )}
+          <CombatDiceRoll roll={combat.attackRoll} />
         </div>
       </div>
 

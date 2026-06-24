@@ -258,7 +258,6 @@ export function PlaymatBoard({
             state={state}
             pack={pack}
             humanId={humanId}
-            lastRoll={lastRoll}
             isHumanDefender={view.isHumanDefender}
             botThinking={botThinking}
             blockActions={blockCards}

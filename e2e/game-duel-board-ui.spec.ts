@@ -174,6 +174,8 @@ test.describe('Game Duel Board UI — Sprint 1', () => {
         blockVisible = true;
         await expect(page.getByRole('button', { name: 'Nicht blocken' })).toBeVisible();
         await expect(page.getByTestId('combat-stage-attack-value')).toBeVisible();
+        await expect(page.getByTestId('combat-dice-roll')).toBeVisible();
+        await expect(page.getByTestId('combat-dice-bonus')).toBeVisible({ timeout: 2000 });
         await expect(page.locator('[data-card-id]').first()).toBeVisible();
         await shot(page, '07-block-prompt.png');
       }
