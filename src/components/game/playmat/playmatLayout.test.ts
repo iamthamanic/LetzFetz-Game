@@ -45,7 +45,22 @@ describe('playmatLayout', () => {
     const layout = getPlaymatLayoutForArena('arena-vulkan');
     expect(layout.arenaId).toBe('arena-vulkan');
     expect(layout.zones.length).toBeGreaterThan(0);
-    expect(layout.assets.fallback).toBeTruthy();
+    expect(layout.assets.fallback).toBe('/cards/arena/arena-vulkan.png');
+    expect(layout.assets.topdown).toBeUndefined();
+  });
+
+  it('registers all six base-pack arenas', () => {
+    const ids = [
+      'arena-spaeti',
+      'arena-kristall',
+      'arena-vulkan',
+      'arena-sumpf',
+      'arena-club',
+      'arena-schattenbasar',
+    ];
+    for (const id of ids) {
+      expect(getPlaymatLayoutForArena(id).arenaId).toBe(id);
+    }
   });
 
   it('maps zone rect to percentage positioning', () => {

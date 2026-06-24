@@ -3,25 +3,30 @@
  * Location: src/components/game/ArenaPlaymat.tsx
  */
 import React, { useMemo, useState } from 'react';
-import { getPlaymatLayoutForArena } from './playmat';
 import { getArenaTheme } from './arenaTheme';
+import {
+  resolvePlaymatBackground,
+  type PlaymatBackgroundSource,
+} from './playmat/playmatAssets';
 
 interface ArenaPlaymatProps {
   arenaId: string;
 }
 
 export function ArenaPlaymat({ arenaId }: ArenaPlaymatProps) {
-  const layout = useMemo(() => getPlaymatLayoutForArena(arenaId), [arenaId]);
   const theme = getArenaTheme(arenaId);
-  const [bgFailed, setBgFailed] = useState(false);
+  const background = useMemo(() => resolvePlaymatBackground(arenaId), [arenaId]);
+  const [source, setSource] = useState<PlaymatBackgroundSource>(
+    background.hasShippedTopdown ? 'topdown' : 'fallback',
+  );
 
-  const src = bgFailed
-    ? layout.assets.fallback
-    : layout.assets.topdown ?? layout.assets.fallback;
+  const src = source === 'topdown' ? background.topdown : background.fallback;
 
   return (
     <div
       data-testid="arena-playmat"
+      data-arena-id={arenaId}
+      data-playmat-source={source}
       className="pointer-events-none absolute inset-0 z-0 overflow-hidden"
       aria-hidden
     >
@@ -29,7 +34,11 @@ export function ArenaPlaymat({ arenaId }: ArenaPlaymatProps) {
         src={src}
         alt=""
         className="absolute inset-0 h-full w-full object-cover"
-        onError={() => setBgFailed(true)}
+        onError={() => {
+          if (source === 'topdown') {
+            setSource('fallback');
+          }
+        }}
       />
       <div className={`absolute inset-0 bg-gradient-to-b ${theme.gradient} opacity-80`} />
       <div className={`absolute inset-0 ${theme.tint}`} />
