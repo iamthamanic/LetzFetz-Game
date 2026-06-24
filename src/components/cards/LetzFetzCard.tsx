@@ -38,6 +38,8 @@ export interface LetzFetzCardProps {
   disabled?: boolean;
   footerNote?: string;
   className?: string;
+  'data-interaction'?: string;
+  'data-card-id'?: string;
 }
 
 const SIZE_CLASSES: Record<LetzFetzCardSize, string> = {
@@ -67,6 +69,7 @@ export function LetzFetzCard({
   disabled = false,
   footerNote,
   className = '',
+  'data-interaction': dataInteraction,
 }: LetzFetzCardProps) {
   const accent = ELEMENT_ACCENTS[element] ?? ELEMENT_ACCENTS.Neutral;
   const display = buildCardDisplayModel({
@@ -109,6 +112,7 @@ export function LetzFetzCard({
         aria-disabled={smDisabled}
         aria-label={name || KIND_LABELS[type]}
         data-card-id={id}
+        data-interaction={dataInteraction}
         className={`${SIZE_CLASSES.sm} relative overflow-hidden rounded-sm border-2 border-stone-700 bg-[#12100e] text-left shadow-lg transition-all ${selected ? 'ring-2 ring-amber-400 scale-105' : ''} ${exhausted ? 'opacity-50 rotate-90' : ''} ${!smDisabled ? 'cursor-pointer hover:scale-105' : 'cursor-not-allowed'} ${className}`}
       >
         <div className={`absolute left-0 top-0 bottom-0 w-1 ${accent.stripe}`} />
@@ -226,7 +230,7 @@ export function LetzFetzCard({
 
   if (!usesButton) {
     return (
-      <div data-card-id={id} draggable={draggable} className={frameClass} aria-label={name || KIND_LABELS[type]}>
+      <div data-card-id={id} data-interaction={dataInteraction} draggable={draggable} className={frameClass} aria-label={name || KIND_LABELS[type]}>
         {cardBody}
       </div>
     );
@@ -240,6 +244,7 @@ export function LetzFetzCard({
       aria-disabled={isDisabled}
       aria-label={name || KIND_LABELS[type]}
       data-card-id={id}
+      data-interaction={dataInteraction}
       draggable={draggable}
       className={frameClass}
     >

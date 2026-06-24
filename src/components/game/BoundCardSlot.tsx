@@ -17,11 +17,12 @@ const SLOT_DIM: Record<BoardCardSize, string> = {
 interface BoundCardSlotProps {
   slot: BoundSlotView;
   cardSize: BoardCardSize;
+  snap?: boolean;
   onActivate?: (boundInstanceId: string) => void;
   onSlotClick?: () => void;
 }
 
-export function BoundCardSlot({ slot, cardSize, onActivate, onSlotClick }: BoundCardSlotProps) {
+export function BoundCardSlot({ slot, cardSize, snap = false, onActivate, onSlotClick }: BoundCardSlotProps) {
   const dim = SLOT_DIM[cardSize];
 
   if (!slot.def || !slot.instanceId) {
@@ -43,7 +44,8 @@ export function BoundCardSlot({ slot, cardSize, onActivate, onSlotClick }: Bound
   return (
     <div className="flex flex-col items-center gap-1">
       <div
-        className={`relative rounded-xl p-0.5 ${highlight ? 'ring-2 ring-amber-400/80 shadow-[0_0_14px_rgba(251,191,36,0.25)]' : 'ring-1 ring-stone-700/60'}`}
+        data-snap={snap ? 'true' : undefined}
+        className={`relative rounded-xl p-0.5 ${snap ? 'card-bind-snap' : ''} ${highlight ? 'ring-2 ring-amber-400/80 shadow-[0_0_14px_rgba(251,191,36,0.25)]' : 'ring-1 ring-stone-700/60'}`}
       >
         <BoardCard
           def={slot.def}

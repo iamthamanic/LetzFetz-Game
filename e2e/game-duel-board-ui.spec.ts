@@ -23,6 +23,7 @@ async function startMatch(page: import('@playwright/test').Page) {
 }
 
 async function advanceToBindPhase(page: import('@playwright/test').Page) {
+  await expect(page.getByTestId('opening-deal-done')).toBeVisible({ timeout: 5000 });
   await page.getByRole('button', { name: 'Zug starten' }).click();
   await page.getByRole('button', { name: 'Karte ziehen' }).click();
   await waitForDrawAnimation(page);
@@ -117,13 +118,9 @@ test.describe('Game Duel Board UI — Sprint 1', () => {
     await advanceToBindPhase(page);
 
     const hand = page.getByTestId('player-hand');
-    const bindable = hand.locator('button[data-card-id][class*="ring-emerald"]').first();
-    const fallback = hand.locator('button[data-card-id]').first();
-    if ((await bindable.count()) > 0) {
-      await bindable.click();
-    } else {
-      await fallback.click();
-    }
+    const bindCard = hand.locator('button[data-card-id][data-interaction="bind"]').first();
+    await expect(bindCard).toBeVisible({ timeout: 5000 });
+    await bindCard.click();
 
     await expect(page.getByRole('button', { name: 'Hauptaktion auslassen' })).toBeVisible({
       timeout: 5000,

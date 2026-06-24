@@ -53,5 +53,11 @@ export {
   findNewlyDrawnCard,
   DRAW_CARD_MS,
 } from './buildDrawCardStep';
+export {
+  buildBindSnapStep,
+  isBindSnapStep,
+  findNewlyBoundCardIds,
+  BIND_SNAP_MS,
+} from './buildBindSnapStep';
 export { OpeningDealFly } from './OpeningDealFly';
 export { PlaymatCardFly } from './PlaymatCardFly';

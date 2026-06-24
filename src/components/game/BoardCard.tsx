@@ -56,6 +56,7 @@ export interface BoardCardProps {
   exhausted?: boolean;
   targetable?: boolean;
   disabled?: boolean;
+  dataInteraction?: string;
   onClick?: () => void;
 }
 
@@ -70,6 +71,7 @@ export function BoardCard({
   exhausted = false,
   targetable = false,
   disabled = false,
+  dataInteraction,
   onClick,
 }: BoardCardProps) {
   const letzSize = LETZ_SIZE[size];
@@ -99,6 +101,7 @@ export function BoardCard({
         element="Neutral"
         size={letzSize}
         effects={[name ?? 'Unbekannter Glitch']}
+        data-interaction={dataInteraction}
         className={`flex-none ${sizeOverride} ${ringClass(selected, targetable, playable, size)} ${handMotionClass(size, playable, dimmed)} ${dimmed ? 'opacity-55 saturate-75' : ''}`}
         onClick={onClick}
         disabled={cardDisabled}
@@ -120,6 +123,7 @@ export function BoardCard({
       exhausted={exhausted}
       onClick={onClick}
       disabled={cardDisabled}
+      data-interaction={dataInteraction}
       className={`flex-none ${sizeOverride} ${ringClass(selected, targetable, playable || targetable, size)} ${handMotionClass(size, playable || targetable, dimmed && !playable)} ${dimmed && !playable ? 'opacity-55 saturate-75' : ''}`}
     />
   );
