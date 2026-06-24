@@ -16,6 +16,8 @@ interface CharacterPlateProps {
   side: 'human' | 'bot';
   deckCount: number;
   discardCount?: number;
+  /** When false, deck/discard counts are shown only on playmat pile widgets. */
+  showPileCounts?: boolean;
 }
 
 function characterName(pack: ContentPack, id: string): string {
@@ -29,6 +31,7 @@ export function CharacterPlate({
   side,
   deckCount,
   discardCount = 0,
+  showPileCounts = true,
 }: CharacterPlateProps) {
   const player = state.players[playerId];
   const isActive = state.activePlayer === playerId && !state.winner;
@@ -71,8 +74,8 @@ export function CharacterPlate({
             Hand {player.hand.length}
             {!isHuman && ' (verdeckt)'}
           </span>
-          <span>Deck {deckCount}</span>
-          {isHuman && (
+          {showPileCounts && <span>Deck {deckCount}</span>}
+          {showPileCounts && isHuman && (
             <span className="inline-flex items-center gap-1">
               <Archive className="h-3.5 w-3.5" />
               Ablage {discardCount}

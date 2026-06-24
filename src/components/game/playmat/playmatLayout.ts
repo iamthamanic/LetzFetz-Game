@@ -170,3 +170,17 @@ export function playmatThemeStyle(theme: PlaymatTheme): CSSProperties {
     '--playmat-neutral-fill': theme.neutralFill,
   } as CSSProperties;
 }
+
+/** Absolute positioning helper — maps scaled zone rect to % of playmat viewBox. */
+export function playmatZonePercentStyle(
+  rect: PlaymatRect,
+  viewBox: PlaymatSize,
+): CSSProperties {
+  return {
+    position: 'absolute',
+    left: `${(rect.x / viewBox.width) * 100}%`,
+    top: `${(rect.y / viewBox.height) * 100}%`,
+    width: `${(rect.width / viewBox.width) * 100}%`,
+    height: `${(rect.height / viewBox.height) * 100}%`,
+  };
+}
