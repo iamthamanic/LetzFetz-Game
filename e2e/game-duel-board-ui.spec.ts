@@ -136,10 +136,11 @@ test.describe('Game Duel Board UI — Sprint 1', () => {
   });
 
   test('human block prompt when bot attacks', async ({ page }) => {
+    test.setTimeout(60_000);
     await startMatch(page);
 
     let blockVisible = false;
-    for (let round = 0; round < 30 && !blockVisible; round++) {
+    for (let round = 0; round < 24 && !blockVisible; round++) {
       const zugStart = page.getByRole('button', { name: 'Zug starten' });
       if (await zugStart.isVisible({ timeout: 800 }).catch(() => false)) {
         await zugStart.click();
@@ -166,12 +167,13 @@ test.describe('Game Duel Board UI — Sprint 1', () => {
         await zugEnd.click();
       }
 
-      await page.waitForTimeout(1200);
+      await page.waitForTimeout(900);
 
-      const blockPanel = page.getByText(/Angriff blocken|Herausforderung blocken/i);
-      if (await blockPanel.isVisible({ timeout: 600 }).catch(() => false)) {
+      const blockPanel = page.getByTestId('combat-stage');
+      if (await blockPanel.isVisible({ timeout: 800 }).catch(() => false)) {
         blockVisible = true;
         await expect(page.getByRole('button', { name: 'Nicht blocken' })).toBeVisible();
+        await expect(page.getByTestId('combat-stage-attack-value')).toBeVisible();
         await expect(page.locator('[data-card-id]').first()).toBeVisible();
         await shot(page, '07-block-prompt.png');
       }

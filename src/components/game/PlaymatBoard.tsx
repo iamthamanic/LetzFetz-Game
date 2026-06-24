@@ -16,17 +16,15 @@ import {
   findDiscardDrawAction,
   hasChallengeForAttack,
 } from './gameActionHelpers';
-import { CharacterDock, DeckPile, DiscardPile } from './zones';
+import { CharacterDock, CombatStage, DeckPile, DiscardPile } from './zones';
 import { BoundCardRow } from './BoundCardRow';
 import { HandFan } from './HandFan';
 import { ActionBar } from './ActionBar';
 import { ArenaPlaymat } from './ArenaPlaymat';
 import { ArenaPlaymatBadge } from './ArenaPlaymatBadge';
 import { getPlaymatLayoutForArena, playmatZonePercentStyle } from './playmat';
-import { BoardCard } from './BoardCard';
 import { Panel } from '../ui/Panel';
 import { Button } from '../ui/Button';
-import { Badge } from '../ui/Badge';
 
 interface PlaymatBoardProps {
   state: GameState;
@@ -167,6 +165,7 @@ export function PlaymatBoard({
   const discardZone = playmatLayout.zones.find((z) => z.id === 'discard');
   const playerCharZone = playmatLayout.zones.find((z) => z.id === 'player-character');
   const opponentCharZone = playmatLayout.zones.find((z) => z.id === 'opponent-character');
+  const combatZone = playmatLayout.zones.find((z) => z.id === 'combat');
   const topDiscard = state.piles.discard[state.piles.discard.length - 1];
   const topDiscardDef = topDiscard ? findElementDef(pack, topDiscard.defId) : undefined;
   const humanHandVisible = openingDealActive && dealReveal ? dealReveal[humanId] : undefined;
@@ -253,6 +252,22 @@ export function PlaymatBoard({
           humanPlayerId={humanPlayerId}
         />
 
+        {combatZone && view.combat && !state.winner && (
+          <CombatStage
+            combat={view.combat}
+            state={state}
+            pack={pack}
+            humanId={humanId}
+            lastRoll={lastRoll}
+            isHumanDefender={view.isHumanDefender}
+            botThinking={botThinking}
+            blockActions={blockCards}
+            style={playmatZonePercentStyle(combatZone, playmatLayout.viewBox)}
+            onPlayBlock={onPlayBlock}
+            onPassBlock={() => onDispatch({ type: 'PASS_BLOCK' })}
+          />
+        )}
+
         <div
           data-testid="duel-tableau"
           className="relative z-10 mx-auto flex min-h-0 w-full max-w-5xl flex-1 flex-col gap-3 overflow-y-auto px-4 py-3"
@@ -278,46 +293,10 @@ export function PlaymatBoard({
                   Neue Partie
                 </Button>
               </Panel>
-            ) : view.isHumanDefender && view.combat ? (
-              <Panel
-                title={
-                  view.combat.mode === 'challenge'
-                    ? '🛡️ Herausforderung blocken'
-                    : '🛡️ Angriff blocken'
-                }
-                className="w-full max-w-xl"
-              >
-                <p className="mb-3 text-sm text-stone-300">
-                  {view.combat.mode === 'challenge' ? 'Herausforderungswert' : 'Angriffswert'}:{' '}
-                  <span className="text-lg font-black text-red-300">{view.combat.attackValue}</span>
-                  {lastRoll !== null && (
-                    <Badge variant="info" className="ml-2">
-                      W6 = {lastRoll}
-                    </Badge>
-                  )}
-                </p>
-                <div className="mb-3 flex flex-wrap justify-center gap-2">
-                  {blockCards.map((a) => {
-                    if (a.type !== 'PLAY_BLOCK') return null;
-                    const card = state.players[humanId].hand.find(
-                      (c) => c.instanceId === a.cardInstanceId,
-                    );
-                    const def = card ? findElementDef(pack, card.defId) : undefined;
-                    return def ? (
-                      <BoardCard
-                        key={a.cardInstanceId}
-                        def={def}
-                        size="combat"
-                        playable
-                        onClick={() => onPlayBlock(a.cardInstanceId)}
-                      />
-                    ) : null;
-                  })}
-                </div>
-                <Button variant="secondary" onClick={() => onDispatch({ type: 'PASS_BLOCK' })}>
-                  Nicht blocken
-                </Button>
-              </Panel>
+            ) : view.combat ? (
+              <p className="sr-only" aria-live="polite">
+                Kampf aktiv — siehe Kampfzone auf dem Playmat
+              </p>
             ) : null}
           </section>
 
