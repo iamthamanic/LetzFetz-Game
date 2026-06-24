@@ -3,10 +3,12 @@
  * Location: src/components/game/PlaymatBoard.tsx
  */
 import React, { useMemo } from 'react';
-import type { ContentPack, GameAction, GameState } from '../../game';
+import type { ContentPack, GameAction, GameState, PlayerId } from '../../game';
 import { findElementDef } from '../../game';
 import type { GameViewModel } from './buildGameViewModel';
 import type { PendingIntent } from './gameActionHelpers';
+import type { PresentationStep } from './presentation/types';
+import { OpeningDealFly } from './presentation';
 import {
   findActivateAction,
   findBindReplaceAction,
@@ -34,6 +36,11 @@ interface PlaymatBoardProps {
   actionError: string | null;
   lastRoll: number | null;
   botThinking: boolean;
+  openingDealActive?: boolean;
+  openingDealFinished?: boolean;
+  dealReveal?: Record<PlayerId, number>;
+  activePresentationStep?: PresentationStep | null;
+  humanPlayerId?: PlayerId;
   onDispatch: (action: GameAction) => void;
   onPlayAttack: (instanceId: string) => void;
   onPlayChallenge: (attackInstanceId: string, targetBoundInstanceId: string) => void;
@@ -50,6 +57,11 @@ export function PlaymatBoard({
   actionError,
   lastRoll,
   botThinking,
+  openingDealActive = false,
+  openingDealFinished = false,
+  dealReveal,
+  activePresentationStep = null,
+  humanPlayerId = 'p1',
   onDispatch,
   onPlayAttack,
   onPlayChallenge,
@@ -155,6 +167,8 @@ export function PlaymatBoard({
   const opponentCharZone = playmatLayout.zones.find((z) => z.id === 'opponent-character');
   const topDiscard = state.piles.discard[state.piles.discard.length - 1];
   const topDiscardDef = topDiscard ? findElementDef(pack, topDiscard.defId) : undefined;
+  const humanHandVisible = openingDealActive && dealReveal ? dealReveal[humanId] : undefined;
+  const botHandVisible = openingDealActive && dealReveal ? dealReveal[botId] : undefined;
 
   return (
     <div className="flex min-h-0 flex-1 flex-col overflow-hidden">
@@ -175,6 +189,17 @@ export function PlaymatBoard({
         data-testid="playmat-board"
         className="relative flex min-h-0 flex-1 overflow-hidden"
       >
+        {openingDealActive && (
+          <div data-testid="opening-deal-in-progress" className="sr-only" aria-live="polite">
+            Eröffnungskarten werden verteilt
+          </div>
+        )}
+        {openingDealFinished && (
+          <div data-testid="opening-deal-done" className="sr-only" aria-hidden>
+            Eröffnungsdeal abgeschlossen
+          </div>
+        )}
+
         {view.arena && !state.winner && <ArenaPlaymat arenaId={view.arena.id} />}
         {view.arena && !state.winner && (
           <ArenaPlaymatBadge arena={view.arena} arenaState={state.arena} />
@@ -200,6 +225,7 @@ export function PlaymatBoard({
             pack={pack}
             playerId={botId}
             side="bot"
+            handVisibleCount={botHandVisible}
             style={playmatZonePercentStyle(opponentCharZone, playmatLayout.viewBox)}
           />
         )}
@@ -209,9 +235,15 @@ export function PlaymatBoard({
             pack={pack}
             playerId={humanId}
             side="human"
+            handVisibleCount={humanHandVisible}
             style={playmatZonePercentStyle(playerCharZone, playmatLayout.viewBox)}
           />
         )}
+
+        <OpeningDealFly
+          activeStep={activePresentationStep}
+          humanPlayerId={humanPlayerId}
+        />
 
         <div
           data-testid="duel-tableau"
@@ -293,6 +325,7 @@ export function PlaymatBoard({
             <HandFan
               cards={view.handCards}
               pending={pending}
+              visibleCount={humanHandVisible}
               onSelectAttack={handleSelectAttack}
               onPlayAttackDirect={onPlayAttack}
               onPlayBoost={(id) => onDispatch({ type: 'PLAY_BOOST', cardInstanceId: id })}

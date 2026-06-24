@@ -41,3 +41,10 @@ export {
 export { prefersReducedMotion } from './prefersReducedMotion';
 export { usePresentationQueue } from './usePresentationQueue';
 export type { UsePresentationQueueOptions } from './usePresentationQueue';
+export {
+  buildOpeningDealSteps,
+  isOpeningDealStep,
+  fullDealRevealCounts,
+  OPENING_DEAL_CARD_MS,
+} from './buildOpeningDealSteps';
+export { OpeningDealFly } from './OpeningDealFly';

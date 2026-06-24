@@ -12,7 +12,7 @@ export async function dismissMatchIntroFull(page: Page) {
   await page.getByRole('button', { name: 'Letz Fetz' }).click();
   await expect(page.getByTestId('match-intro-arena')).toBeVisible({ timeout: 3000 });
   await page.getByTestId('match-intro-arena').getByRole('button', { name: 'Überspringen' }).click();
-  await page.waitForTimeout(400);
+  await expect(page.getByTestId('opening-deal-done')).toBeVisible({ timeout: 3000 });
 }
 
 /** Fast path: Letz Fetz crash then skip arena video. */
@@ -22,5 +22,5 @@ export async function dismissMatchIntroSkip(page: Page) {
   await page.waitForTimeout(CRASH_MS);
   await expect(page.getByTestId('match-intro-arena')).toBeVisible({ timeout: 3000 });
   await page.getByTestId('match-intro-arena').getByRole('button', { name: 'Überspringen' }).click();
-  await page.waitForTimeout(400);
+  await expect(page.getByTestId('opening-deal-done')).toBeVisible({ timeout: 3000 });
 }

@@ -29,6 +29,11 @@ import { ScrollText } from 'lucide-react';
 import { isPlaytestMode } from '../../services/playtest/isPlaytestMode';
 import { PlaytestCheatbox } from './PlaytestCheatbox';
 import { usePresentationQueue } from './presentation';
+import {
+  buildOpeningDealSteps,
+  fullDealRevealCounts,
+  isOpeningDealStep,
+} from './presentation';
 
 const HUMAN: PlayerId = 'p1';
 const BOT: PlayerId = 'p2';
@@ -45,11 +50,51 @@ export function GameView() {
   const [botPaused, setBotPaused] = useState(false);
   const botRunning = useRef(false);
   const botPausedRef = useRef(false);
-  const presentation = usePresentationQueue();
+  const openingDealRunRef = useRef(false);
+  const stateRef = useRef<GameState | null>(null);
+  const [dealReveal, setDealReveal] = useState<Record<PlayerId, number>>({ p1: 0, p2: 0 });
+  const [openingDealStarted, setOpeningDealStarted] = useState(false);
+  const [openingDealFinished, setOpeningDealFinished] = useState(false);
+
+  const presentation = usePresentationQueue({
+    onStepComplete: (step) => {
+      if (!isOpeningDealStep(step)) return;
+      const playerId = step.payload?.playerId as PlayerId | undefined;
+      if (!playerId) return;
+      setDealReveal((prev) => ({ ...prev, [playerId]: prev[playerId] + 1 }));
+    },
+    onQueueIdle: () => {
+      if (!openingDealRunRef.current) return;
+      const current = stateRef.current;
+      if (current) setDealReveal(fullDealRevealCounts(current));
+      setOpeningDealFinished(true);
+    },
+  });
+
+  useEffect(() => {
+    stateRef.current = state;
+  }, [state]);
 
   useEffect(() => {
     botPausedRef.current = botPaused;
   }, [botPaused]);
+
+  useEffect(() => {
+    if (introOpen || !state || openingDealRunRef.current) return;
+
+    openingDealRunRef.current = true;
+    setOpeningDealStarted(true);
+    const steps = buildOpeningDealSteps(state);
+    if (steps.length === 0) {
+      setDealReveal(fullDealRevealCounts(state));
+      setOpeningDealFinished(true);
+      return;
+    }
+
+    setDealReveal({ p1: 0, p2: 0 });
+    setOpeningDealFinished(false);
+    presentation.enqueue(steps);
+  }, [introOpen, state, presentation.enqueue]);
 
   useEffect(() => {
     if (state?.winner) presentation.flush();
@@ -121,16 +166,18 @@ export function GameView() {
 
   const playAttack = useCallback(
     (instanceId: string) => {
+      if (presentation.isInputLocked) return;
       const roll = rollD6();
       setLastRoll(roll);
       dispatch({ type: 'PLAY_ATTACK', cardInstanceId: instanceId, diceRoll: roll }, HUMAN);
       setPendingIntent(null);
     },
-    [dispatch],
+    [dispatch, presentation.isInputLocked],
   );
 
   const playChallenge = useCallback(
     (attackInstanceId: string, targetBoundInstanceId: string) => {
+      if (presentation.isInputLocked) return;
       const roll = rollD6();
       setLastRoll(roll);
       dispatch(
@@ -144,17 +191,18 @@ export function GameView() {
       );
       setPendingIntent(null);
     },
-    [dispatch],
+    [dispatch, presentation.isInputLocked],
   );
 
   const playBlock = useCallback(
     (instanceId: string) => {
+      if (presentation.isInputLocked) return;
       const roll = rollD6();
       setLastRoll(roll);
       dispatch({ type: 'PLAY_BLOCK', cardInstanceId: instanceId, diceRoll: roll }, HUMAN);
       setPendingIntent(null);
     },
-    [dispatch],
+    [dispatch, presentation.isInputLocked],
   );
 
   const handleDispatch = useCallback(
@@ -178,6 +226,8 @@ export function GameView() {
   const botThinking =
     botRunning.current || (botWouldAct && !(playtestMode && botPaused));
 
+  const openingDealActive = openingDealStarted && !openingDealFinished;
+
   const coachHint = useMemo(() => {
     if (!state || !view) return '';
     return buildPhaseCoachHint({
@@ -195,6 +245,10 @@ export function GameView() {
           onStart={({ humanCharacterId }) => {
             setPendingIntent(null);
             setActionError(null);
+            openingDealRunRef.current = false;
+            setOpeningDealStarted(false);
+            setOpeningDealFinished(false);
+            setDealReveal({ p1: 0, p2: 0 });
             const seed = Date.now();
             const rng = createSeededRng(seed);
             const botCharacterId = pickOpponentCharacter(pack, humanCharacterId, rng);
@@ -245,6 +299,11 @@ export function GameView() {
           actionError={actionError}
           lastRoll={lastRoll}
           botThinking={botThinking}
+          openingDealActive={openingDealActive}
+          openingDealFinished={openingDealFinished}
+          dealReveal={dealReveal}
+          activePresentationStep={presentation.activeStep}
+          humanPlayerId={HUMAN}
           onDispatch={handleDispatch}
           onPlayAttack={playAttack}
           onPlayChallenge={playChallenge}
@@ -252,6 +311,10 @@ export function GameView() {
           onPendingChange={setPendingIntent}
           onNewGame={() => {
             presentation.flush();
+            openingDealRunRef.current = false;
+            setOpeningDealStarted(false);
+            setOpeningDealFinished(false);
+            setDealReveal({ p1: 0, p2: 0 });
             setPendingIntent(null);
             setActionError(null);
             setIntroOpen(false);
