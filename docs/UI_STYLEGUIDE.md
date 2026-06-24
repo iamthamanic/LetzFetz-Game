@@ -41,6 +41,9 @@ Nutze diese Tailwind-Klassen. Keine neuen Farben ohne Grund.
 | `brand-accent` | `purple-500`, `purple-600`, `purple-900` | Fokus, Auswahl, Borders |
 | `brand-accent-soft` | `purple-900/30`, `border-purple-500/50` | Hervorhebungen |
 | `brand-text-muted` | `text-purple-300`, `text-purple-400` | Sekundärtext |
+| **brand-cream** | `#f2e8dc`, `text-brand-cream` | Logo-Pergament, alle `font-brand` Texte |
+| **brand-cream-muted** | `#d9c9b8`, `text-brand-cream-muted` | Sekundär unter Brand-Namen |
+| **brand-ink / parchment** | `#1f1812`, `#2a2218`, **`#5a0705`** | Brand auf **beige**: `.font-brand-on-parchment`; auf **dunkel**: `.font-brand-on-dark` → cream |
 
 ### Semantische Farben
 
@@ -54,26 +57,14 @@ Nutze diese Tailwind-Klassen. Keine neuen Farben ohne Grund.
 ### Element-Farben (Spielkarten)
 
 Akzent-Streifen und Badges in `src/components/cards/cardFrameTokens.ts` (`ELEMENT_ACCENTS`).
-Grunge-Frame: `LetzFetzCard.tsx` — Illustration Mitte, Regeltext unten auf Pergament.
-
-| Element | Akzent (Stripe) |
-|---------|-----------------|
-| Feuer | `bg-red-600` |
-| Wasser | `bg-cyan-600` |
-| Erde | `bg-lime-700` |
-| Luft | `bg-sky-400` |
-| Licht | `bg-amber-300` |
-| Schatten | `bg-purple-700` |
-| Neutral | `bg-stone-500` |
-
-**Karten-Labels:** Englisch (`TYPE`, `INSTANT`, `BOUND`, `PASSIVE`, …) — **Effekttext:** Deutsch aus `base-pack.ts`.
-
-Legacy-Gradient-Referenz (Editor-Hintergründe): `Card.tsx` wrapper nutzt jetzt `LetzFetzCard`.
+Grunge-Frame: `LetzFetzCard.tsx` — Default **`layout="portrait"`** (wie Charakterauswahl): große Illustration, Header nur Element-Icons, Footer Name (`font-brand-on-parchment`) + Subtitle. Volle Regeln → Card Forge Editor / `CardEffectsModal`. API: `buildCardPortraitPresentation` / `useCardPortraitPresentation`. Legacy: `layout="tcg"`.
 
 ### Typografie
 
 | Rolle | Klassen |
 |-------|---------|
+| **Brand display** | `font-brand uppercase tracking-wide` — Cream auto; siehe [DESIGN.md](../DESIGN.md) §2–4 |
+| **Brand muted** | `text-brand-cream-muted` — Rollentext unter Brand-Namen |
 | Seitentitel | `text-2xl text-white` |
 | Untertitel | `text-sm text-purple-300` |
 | Panel-Titel | `text-lg text-white` |
@@ -81,7 +72,7 @@ Legacy-Gradient-Referenz (Editor-Hintergründe): `Card.tsx` wrapper nutzt jetzt 
 | Klein / Meta | `text-xs text-gray-400` / `text-[10px]` |
 | Label | `text-sm text-gray-400` oder `text-white mb-2` |
 
-Keine custom Font-Family — System-Font über Tailwind-Default.
+Keine custom Font-Family für Body — **Brand:** `font-brand` (Bad Suabia Swing), siehe DESIGN.md.
 
 ### Abstände & Formen
 
@@ -317,7 +308,7 @@ Neue Screens (ab `components/game/`) **sofort** styleguide-konform bauen.
 
 Priorität Migration:
 
-1. `components/ui/*` Primitives anlegen
-2. `App.tsx` Header-Nav
-3. Neue Game-UI
-4. Card Forge (inkrementell)
+1. `components/ui/*` Primitives anlegen — ✅
+2. `App.tsx` Header-Nav — ✅ (`AppNav`, `AppBrand`; siehe [DESIGN.md](../DESIGN.md))
+3. Neue Game-UI — ✅ (`components/game/`)
+4. Card Forge (inkrementell) — ⏳

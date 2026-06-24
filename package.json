@@ -70,6 +70,10 @@
             "test:e2e:ui": "playwright test --ui",
             "generate:card-art": "npx tsx scripts/generate-base-pack-art.ts",
             "generate:higgsfield-chars": "npx tsx scripts/generate-higgsfield-characters.ts",
-            "generate:higgsfield-all": "npx tsx scripts/generate-higgsfield-all.ts"
+            "generate:higgsfield-name-plates": "npx tsx scripts/generate-higgsfield-name-plates.ts",
+            "generate:higgsfield-all": "npx tsx scripts/generate-higgsfield-all.ts",
+            "font:generate": "bash scripts/font-authoring/generate-sheets.sh",
+            "font:split": "bash scripts/font-authoring/split-sheets.sh",
+            "font:build": "bash scripts/font-authoring/build-font.sh"
       }
 }

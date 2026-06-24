@@ -31,3 +31,7 @@ supabase/backups/*.sql
 /playwright-report/
 /blob-report/
 /playwright/.cache/
+
+# Local Higgsfield CLI (large binary)
+tools/bin/hf
+tools/hf.tar.gz

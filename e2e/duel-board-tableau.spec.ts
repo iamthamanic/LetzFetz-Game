@@ -6,6 +6,7 @@ import { test, expect } from '@playwright/test';
 import { mkdirSync } from 'node:fs';
 import { join } from 'node:path';
 import { dismissMatchIntroSkip } from './helpers/matchIntro';
+import { startBotMatchFromSetup } from './helpers/gameSetup';
 
 const EVIDENCE = join(__dirname, '../../.qa/evidence/duel-board-tableau');
 
@@ -16,9 +17,7 @@ function shot(page: import('@playwright/test').Page, name: string) {
 
 test.describe('Duel board tableau', () => {
   test('arena card sidebar, character plates, themed backdrop', async ({ page }) => {
-    await page.goto('/');
-    await page.getByRole('button', { name: 'Spielen' }).click();
-    await page.getByRole('button', { name: 'Partie starten' }).click();
+    await startBotMatchFromSetup(page);
     await dismissMatchIntroSkip(page);
 
     const tableau = page.getByTestId('duel-tableau');

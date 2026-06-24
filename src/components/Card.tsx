@@ -4,6 +4,7 @@
  */
 import React, { useState } from 'react';
 import { LetzFetzCard } from './cards/LetzFetzCard';
+import { forgeCharacterDefFromCard } from './cards/characterCardProps';
 import { CardNotes } from './CardNotes';
 import { CardEffectsModal } from './CardEffectsModal';
 import type { ForgeCardKind } from '../services/cardForge/categories';
@@ -35,6 +36,7 @@ export function Card({
   name,
   type,
   element,
+  elements,
   elementDisplay,
   stats_json,
   effects,
@@ -51,6 +53,16 @@ export function Card({
   const [notesModalOpen, setNotesModalOpen] = useState(false);
   const [effectsModalOpen, setEffectsModalOpen] = useState(false);
   const effectsList = effects && effects.length > 0 ? effects : effects_text ? [effects_text] : [];
+  const characterDef =
+    type === 'Character'
+      ? forgeCharacterDefFromCard({
+          id,
+          name,
+          type,
+          elements,
+          effects: effectsList,
+        })
+      : null;
 
   return (
     <div
@@ -74,7 +86,11 @@ export function Card({
         effects={effects}
         effects_text={effects_text}
         image_asset={image_asset}
+        gameElements={characterDef?.elements}
+        role={characterDef?.role}
         size="lg"
+        layout="portrait"
+        animateIllustration={type === 'Character'}
         interactive={!preview}
         draggable={!preview}
         onEffectsClick={() => setEffectsModalOpen(true)}

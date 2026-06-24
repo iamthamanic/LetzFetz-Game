@@ -27,6 +27,7 @@ function activeClasses(tone: TabTone): string {
     case 'sandbox':
       return 'bg-stone-800 text-amber-100 ring-1 ring-amber-500/50 shadow-sm';
     case 'editor':
+      return 'bg-purple-900/90 text-purple-100 shadow-[0_0_14px_rgba(168,85,247,0.35)] ring-2 ring-purple-500/70';
     default:
       return 'bg-stone-800 text-stone-100 shadow-sm';
   }
@@ -39,6 +40,7 @@ function inactiveClasses(tone: TabTone): string {
     case 'sandbox':
       return 'text-stone-400 hover:bg-stone-800 hover:text-amber-200/90';
     case 'editor':
+      return 'text-stone-400 hover:bg-stone-800 hover:text-purple-200/90';
     default:
       return 'text-stone-400 hover:bg-stone-800 hover:text-stone-200';
   }
@@ -60,12 +62,14 @@ export function Tabs({ items, active, onChange, ariaLabel = 'Tabs' }: TabsProps)
             onClick={() => onChange(item.id)}
             aria-current={isActive ? 'page' : undefined}
             data-testid={`nav-tab-${item.id}`}
-            className={`flex shrink-0 items-center gap-2 rounded-lg px-3 py-2 text-sm font-medium transition-all focus:outline-none focus-visible:ring-2 focus-visible:ring-purple-500 focus-visible:ring-offset-2 focus-visible:ring-offset-stone-950 sm:px-4 ${
+            className={`flex shrink-0 items-center gap-2 rounded-lg px-3 py-2 text-sm transition-all focus:outline-none focus-visible:ring-2 focus-visible:ring-purple-500 focus-visible:ring-offset-2 focus-visible:ring-offset-stone-950 sm:px-4 ${
               isActive ? activeClasses(tone) : inactiveClasses(tone)
             }`}
           >
             {item.icon}
-            <span className="whitespace-nowrap">{item.label}</span>
+            <span className="font-brand whitespace-nowrap text-xs uppercase leading-none tracking-wide sm:text-sm">
+              {item.label}
+            </span>
           </button>
         );
       })}

@@ -1,14 +1,24 @@
 /**
- * Center-focused character card carousel for solo match setup.
+ * Scriptony-style center-focus carousel — character cards only.
  * Location: src/components/game/CharacterCarousel.tsx
  */
 import React, { useCallback, useEffect, useState } from 'react';
 import useEmblaCarousel from 'embla-carousel-react';
 import { ChevronLeft, ChevronRight } from 'lucide-react';
 import type { CharacterCardDef } from '../../game';
-import { LetzFetzCard } from '../cards/LetzFetzCard';
-import { characterDefToForgeProps } from '../cards/characterCardProps';
-import { Button } from '../ui/button';
+import { getUltimateForCharacter } from '../../game/packs/characterSetup';
+import { Button } from '../ui/Button';
+import { Tabs } from '../ui/Tabs';
+import { CharacterSelectCard } from './CharacterSelectCard';
+import { CharacterDetailPanel, type CharacterDetailTab } from './CharacterDetailPanel';
+
+type DetailTab = 'character' | CharacterDetailTab;
+
+const DETAIL_TABS = [
+  { id: 'character', label: 'Charakter', tone: 'play' as const },
+  { id: 'info', label: 'Info', tone: 'play' as const },
+  { id: 'ulti', label: 'Ulti', tone: 'play' as const },
+];
 
 interface CharacterCarouselProps {
   characters: CharacterCardDef[];
@@ -28,9 +38,11 @@ export function CharacterCarousel({ characters, selectedId, onSelect }: Characte
     skipSnaps: false,
     containScroll: 'trimSnaps',
     startIndex: initialIndex,
+    duration: 25,
   });
 
   const [centerIndex, setCenterIndex] = useState(initialIndex);
+  const [detailTab, setDetailTab] = useState<DetailTab>('character');
 
   const syncSelection = useCallback(() => {
     if (!emblaApi) return;
@@ -51,6 +63,17 @@ export function CharacterCarousel({ characters, selectedId, onSelect }: Characte
     };
   }, [emblaApi, syncSelection]);
 
+  useEffect(() => {
+    const idx = characters.findIndex((c) => c.id === selectedId);
+    if (idx >= 0 && emblaApi && idx !== emblaApi.selectedScrollSnap()) {
+      emblaApi.scrollTo(idx);
+    }
+  }, [selectedId, characters, emblaApi]);
+
+  useEffect(() => {
+    setDetailTab('character');
+  }, [centerIndex]);
+
   const scrollPrev = () => emblaApi?.scrollPrev();
   const scrollNext = () => emblaApi?.scrollNext();
 
@@ -65,23 +88,25 @@ export function CharacterCarousel({ characters, selectedId, onSelect }: Characte
   }
 
   return (
-    <div className="relative w-full" data-testid="character-carousel">
+    <div className="relative px-0 pb-10 pt-0 md:pb-8" data-testid="character-carousel">
       <style>{`
         .character-carousel-slide {
-          transition: transform 0.35s cubic-bezier(0.4, 0, 0.2, 1),
-            opacity 0.35s cubic-bezier(0.4, 0, 0.2, 1),
-            filter 0.35s cubic-bezier(0.4, 0, 0.2, 1);
+          transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
         }
         .character-carousel-slide:not(.is-center) {
-          opacity: 0.45;
+          opacity: 0.5;
           filter: blur(2px);
-          transform: scale(0.88);
+        }
+        .character-carousel-slide:not(.is-center) > div {
+          transform: scale(0.92);
         }
         .character-carousel-slide.is-center {
           opacity: 1;
           filter: blur(0);
-          transform: scale(1);
           z-index: 10;
+        }
+        .character-carousel-slide.is-center > div {
+          transform: scale(1);
         }
         @media (prefers-reduced-motion: reduce) {
           .character-carousel-slide {
@@ -91,35 +116,57 @@ export function CharacterCarousel({ characters, selectedId, onSelect }: Characte
             filter: none;
           }
         }
+        .character-carousel-nav {
+          position: absolute;
+          top: 0;
+          left: 0;
+          right: 0;
+          bottom: 0;
+          pointer-events: none;
+          z-index: 20;
+        }
+        .character-carousel-nav-btn {
+          pointer-events: auto;
+          position: absolute;
+        }
       `}</style>
 
-      <div className="overflow-hidden px-2 py-4" ref={emblaRef}>
-        <div className="flex touch-pan-y">
+      <div className="overflow-hidden" ref={emblaRef}>
+        <div className={`flex ${characters.length === 1 ? '' : '-ml-4 md:ml-0'}`}>
           {characters.map((character, index) => {
-            const props = characterDefToForgeProps(character);
             const isCenter = index === centerIndex;
 
             return (
               <div
                 key={character.id}
-                className={`character-carousel-slide min-w-0 flex-[0_0_78%] sm:flex-[0_0_62%] md:flex-[0_0_48%] ${
-                  isCenter ? 'is-center' : ''
-                }`}
+                className={`character-carousel-slide min-w-0 flex-[0_0_85%] sm:flex-[0_0_70%] md:flex-[0_0_38%] lg:flex-[0_0_36%] ${
+                  characters.length === 1 ? '' : 'pl-4 md:pl-0'
+                } ${isCenter ? 'is-center' : ''}`}
                 data-testid={`character-slide-${character.id}`}
               >
-                <div className="flex justify-center px-3">
-                  <LetzFetzCard
-                    {...props}
-                    id={props.id ?? character.id}
-                    name={props.name ?? character.name}
-                    type="Character"
-                    element="Neutral"
-                    size="lg"
-                    interactive
-                    selected={isCenter}
-                    onClick={() => handleCardClick(index)}
-                    className={isCenter ? 'shadow-2xl shadow-purple-900/40' : ''}
-                  />
+                <div className="flex flex-col items-center gap-2 transition-all duration-300">
+                  {isCenter && (
+                    <Tabs
+                      items={DETAIL_TABS}
+                      active={detailTab}
+                      onChange={(id) => setDetailTab(id as DetailTab)}
+                      ariaLabel="Charakterdetails"
+                    />
+                  )}
+                  {isCenter && detailTab !== 'character' ? (
+                    <CharacterDetailPanel
+                      character={character}
+                      tab={detailTab}
+                      ultimate={getUltimateForCharacter(character)}
+                    />
+                  ) : (
+                    <CharacterSelectCard
+                      character={character}
+                      selected={isCenter}
+                      isCenter={isCenter}
+                      onClick={() => handleCardClick(index)}
+                    />
+                  )}
                 </div>
               </div>
             );
@@ -129,26 +176,28 @@ export function CharacterCarousel({ characters, selectedId, onSelect }: Characte
 
       {characters.length > 1 && (
         <>
-          <Button
-            type="button"
-            variant="secondary"
-            size="sm"
-            icon={<ChevronLeft className="h-5 w-5" />}
-            className="absolute left-0 top-1/2 z-20 -translate-y-1/2 rounded-full border-stone-600 bg-stone-900/95 shadow-lg"
-            onClick={scrollPrev}
-            aria-label="Vorheriger Charakter"
-          />
-          <Button
-            type="button"
-            variant="secondary"
-            size="sm"
-            icon={<ChevronRight className="h-5 w-5" />}
-            className="absolute right-0 top-1/2 z-20 -translate-y-1/2 rounded-full border-stone-600 bg-stone-900/95 shadow-lg"
-            onClick={scrollNext}
-            aria-label="Nächster Charakter"
-          />
+          <div className="character-carousel-nav">
+            <Button
+              type="button"
+              variant="secondary"
+              size="sm"
+              icon={<ChevronLeft className="h-5 w-5 md:h-6 md:w-6" />}
+              className="character-carousel-nav-btn left-1 top-[38%] h-10 w-10 rounded-full border-2 border-stone-600 bg-stone-900/95 shadow-xl md:left-4 md:top-[35%] md:h-12 md:w-12"
+              onClick={scrollPrev}
+              aria-label="Vorheriger Charakter"
+            />
+            <Button
+              type="button"
+              variant="secondary"
+              size="sm"
+              icon={<ChevronRight className="h-5 w-5 md:h-6 md:w-6" />}
+              className="character-carousel-nav-btn right-1 top-[38%] h-10 w-10 rounded-full border-2 border-stone-600 bg-stone-900/95 shadow-xl md:right-4 md:top-[35%] md:h-12 md:w-12"
+              onClick={scrollNext}
+              aria-label="Nächster Charakter"
+            />
+          </div>
 
-          <div className="mt-2 flex justify-center gap-2" role="tablist" aria-label="Charakterauswahl">
+          <div className="mt-4 flex justify-center gap-2" role="tablist" aria-label="Charakterauswahl">
             {characters.map((character, index) => (
               <button
                 key={character.id}
@@ -157,21 +206,13 @@ export function CharacterCarousel({ characters, selectedId, onSelect }: Characte
                 aria-selected={index === centerIndex}
                 aria-label={character.name}
                 className={`h-2 w-2 rounded-full transition-opacity ${
-                  index === centerIndex ? 'bg-purple-400 opacity-100' : 'bg-stone-600 opacity-40'
+                  index === centerIndex ? 'bg-amber-400 opacity-100' : 'bg-stone-600 opacity-40'
                 }`}
                 onClick={() => emblaApi?.scrollTo(index)}
               />
             ))}
           </div>
         </>
-      )}
-
-      {characters[centerIndex] && (
-        <p className="mt-4 text-center text-sm text-stone-300">
-          <span className="font-semibold text-stone-100">{characters[centerIndex].name}</span>
-          {' — '}
-          {characters[centerIndex].role}
-        </p>
       )}
     </div>
   );

@@ -19,7 +19,8 @@ test.describe('App nav overhaul', () => {
 
     const header = page.getByTestId('app-header');
     await expect(header).toBeVisible();
-    await expect(page.getByTestId('app-brand')).toContainText('Letz Fetz');
+    await expect(page.getByTestId('app-brand')).toBeVisible();
+    await expect(page.getByRole('img', { name: 'Letz Fetz' })).toBeVisible();
     await expect(page.getByTestId('app-nav')).toBeVisible();
 
     await shot(page, '01-header-forge.png');
@@ -33,8 +34,8 @@ test.describe('App nav overhaul', () => {
     await expect(page.getByRole('button', { name: 'Notizen öffnen' })).toBeVisible();
 
     await page.setViewportSize({ width: 390, height: 844 });
-    await expect(page.getByRole('button', { name: 'Spielen' })).toBeVisible();
-    await expect(page.getByRole('button', { name: 'Bearbeiten' })).toBeVisible();
+    await expect(page.getByRole('button', { name: 'Play' })).toBeVisible();
+    await expect(page.getByRole('button', { name: 'Edit' })).toBeVisible();
     await shot(page, '03-header-mobile.png');
   });
 });

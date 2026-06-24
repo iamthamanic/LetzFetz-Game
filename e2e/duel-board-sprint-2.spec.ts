@@ -6,6 +6,7 @@ import { test, expect } from '@playwright/test';
 import { mkdirSync } from 'node:fs';
 import { join } from 'node:path';
 import { dismissMatchIntroFull } from './helpers/matchIntro';
+import { startBotMatchFromSetup } from './helpers/gameSetup';
 
 const EVIDENCE = join(__dirname, '../../.qa/evidence/duel-board-sprint-2');
 
@@ -16,9 +17,7 @@ function shot(page: import('@playwright/test').Page, name: string) {
 
 test.describe('Duel board sprint 2', () => {
   test('match intro, decluttered board, grunge hand cards', async ({ page }) => {
-    await page.goto('/');
-    await page.getByRole('button', { name: 'Spielen' }).click();
-    await page.getByRole('button', { name: 'Partie starten' }).click();
+    await startBotMatchFromSetup(page);
 
     await expect(page.getByTestId('match-intro-vs')).toBeVisible();
     await expect(page.getByText('VS')).toBeVisible();

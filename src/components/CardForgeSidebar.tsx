@@ -45,7 +45,7 @@ export function CardForgeSidebar({
   onCreateNew,
 }: CardForgeSidebarProps) {
   return (
-    <div className="flex w-80 flex-col border-r border-stone-800 bg-stone-900">
+    <div className="flex h-full min-h-0 w-80 flex-col border-r border-stone-800 bg-stone-900">
       <div className="flex-none space-y-3 p-4 border-b border-stone-800">
         <div className="space-y-1">
           <h2 className="text-sm font-bold text-stone-100">Base Pack V1</h2>
@@ -59,7 +59,13 @@ export function CardForgeSidebar({
           className="w-full"
         />
 
-        <Button variant="accent" size="sm" icon={<Plus className="w-4 h-4" />} onClick={onCreateNew} className="w-full">
+        <Button
+          variant="accent"
+          size="sm"
+          icon={<Plus className="w-4 h-4" />}
+          onClick={onCreateNew}
+          className="font-brand w-full uppercase leading-none tracking-wide"
+        >
           Neue Karte
         </Button>
 
@@ -71,7 +77,7 @@ export function CardForgeSidebar({
               <button
                 key={category.id}
                 onClick={() => onActiveTabChange(category.id)}
-                className={`flex w-full items-center justify-between rounded-lg px-3 py-2 text-left text-sm transition-colors ${
+                className={`flex w-full items-center justify-between rounded-lg px-3 py-2 text-left transition-colors ${
                   isActive
                     ? 'bg-purple-900/40 text-purple-100 ring-1 ring-purple-700'
                     : 'text-stone-400 hover:bg-stone-800 hover:text-stone-200'
@@ -79,7 +85,9 @@ export function CardForgeSidebar({
               >
                 <span className="flex items-center gap-2">
                   <span className="opacity-80">{category.icon}</span>
-                  {category.label}
+                  <span className="font-brand text-xs uppercase leading-none tracking-wide sm:text-sm">
+                    {category.label}
+                  </span>
                 </span>
                 <Badge variant={isActive ? 'accent' : 'default'}>{typeCards.length}</Badge>
               </button>
@@ -88,7 +96,7 @@ export function CardForgeSidebar({
         </div>
       </div>
 
-      <div className="flex-1 overflow-y-auto p-3 space-y-2">
+      <div className="min-h-0 flex-1 overflow-y-auto p-3 space-y-2">
         {loading ? (
           <div className="flex flex-col items-center justify-center py-10 text-stone-500">
             <Loader2 className="mb-2 h-5 w-5 animate-spin" />
@@ -124,7 +132,9 @@ export function CardForgeSidebar({
                   </div>
                 )}
                 <div className="min-w-0 flex-1">
-                  <p className="truncate text-sm font-medium text-stone-100">{card.name || 'Unbenannt'}</p>
+                  <p className="truncate font-brand-on-dark text-sm uppercase leading-none tracking-wide">
+                    {card.name || 'Unbenannt'}
+                  </p>
                   <div className="mt-1 flex flex-wrap items-center gap-1">
                     {card.elementDisplay && (
                       <Badge variant="default">{card.elementDisplay}</Badge>

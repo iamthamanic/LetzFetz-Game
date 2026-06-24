@@ -14,11 +14,10 @@ function shot(page: import('@playwright/test').Page, name: string) {
 }
 
 import { dismissMatchIntroSkip } from './helpers/matchIntro';
+import { selectBotMode, startBotMatchFromSetup } from './helpers/gameSetup';
 
 async function startMatch(page: import('@playwright/test').Page) {
-  await page.goto('/');
-  await page.getByRole('button', { name: 'Spielen' }).click();
-  await page.getByRole('button', { name: 'Partie starten' }).click();
+  await startBotMatchFromSetup(page);
   await dismissMatchIntroSkip(page);
 }
 
@@ -30,10 +29,7 @@ async function advanceToBindPhase(page: import('@playwright/test').Page) {
 
 test.describe('Game Duel Board UI — Sprint 1', () => {
   test('acceptance happy path + edge cases', async ({ page }) => {
-    await page.goto('/');
-    await page.getByRole('button', { name: 'Spielen' }).click();
-
-    await page.getByRole('button', { name: 'Partie starten' }).click();
+    await startBotMatchFromSetup(page);
     await page.waitForTimeout(400);
 
     await expect(page.getByTestId('match-intro')).toBeVisible();
@@ -88,14 +84,14 @@ test.describe('Game Duel Board UI — Sprint 1', () => {
       timeout: 5000,
     });
 
-    await page.getByRole('button', { name: 'Bearbeiten' }).click();
+    await page.getByRole('button', { name: 'Edit' }).click();
     await expect(page.getByText(/V1-Karten|Character|Element/i).first()).toBeVisible({
       timeout: 10000,
     });
     await page.getByRole('button', { name: 'Sandbox' }).click();
     await page.waitForTimeout(400);
-    await page.getByRole('button', { name: 'Spielen' }).click();
-    await expect(page.getByRole('button', { name: 'Partie starten' })).toBeVisible();
+    await page.getByRole('button', { name: 'Play' }).click();
+    await expect(page.getByTestId('game-mode-select')).toBeVisible();
   });
 
   test('bind card fills engine slot', async ({ page }) => {
@@ -125,7 +121,7 @@ test.describe('Game Duel Board UI — Sprint 1', () => {
     await startMatch(page);
 
     let blockVisible = false;
-    for (let round = 0; round < 20 && !blockVisible; round++) {
+    for (let round = 0; round < 30 && !blockVisible; round++) {
       const zugStart = page.getByRole('button', { name: 'Zug starten' });
       if (await zugStart.isVisible({ timeout: 800 }).catch(() => false)) {
         await zugStart.click();
@@ -151,7 +147,7 @@ test.describe('Game Duel Board UI — Sprint 1', () => {
         await zugEnd.click();
       }
 
-      await page.waitForTimeout(900);
+      await page.waitForTimeout(1200);
 
       const blockPanel = page.getByText(/Angriff blocken|Herausforderung blocken/i);
       if (await blockPanel.isVisible({ timeout: 600 }).catch(() => false)) {

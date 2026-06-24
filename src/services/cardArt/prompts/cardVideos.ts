@@ -194,3 +194,12 @@ export function cardVideoKindForId(cardId: string): CardVideoKind | null {
   if (cardId.startsWith('glitch-')) return 'glitch';
   return null;
 }
+
+/** Skip leading dead frames when looping card videos in UI (seconds). */
+export const CARD_VIDEO_PLAYBACK_OFFSET_SEC: Partial<Record<string, number>> = {
+  'ulti-knuspergnom': 1,
+};
+
+export function cardVideoPlaybackOffsetSec(cardId: string): number {
+  return CARD_VIDEO_PLAYBACK_OFFSET_SEC[cardId] ?? 0;
+}

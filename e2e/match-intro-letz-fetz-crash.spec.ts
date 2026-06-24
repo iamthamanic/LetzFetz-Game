@@ -6,6 +6,7 @@ import { test, expect } from '@playwright/test';
 import { mkdirSync } from 'node:fs';
 import { join } from 'node:path';
 import { dismissMatchIntroSkip } from './helpers/matchIntro';
+import { startBotMatchFromSetup } from './helpers/gameSetup';
 
 const EVIDENCE = join(__dirname, '../../.qa/evidence/match-intro-letz-fetz-crash');
 
@@ -16,9 +17,7 @@ function shot(page: import('@playwright/test').Page, name: string) {
 
 test.describe('MatchIntro Letz Fetz crash', () => {
   test('Letz Fetz crash, arena video with skip, board entry', async ({ page }) => {
-    await page.goto('/');
-    await page.getByRole('button', { name: 'Spielen' }).click();
-    await page.getByRole('button', { name: 'Partie starten' }).click();
+    await startBotMatchFromSetup(page);
 
     await expect(page.getByTestId('match-intro-vs')).toBeVisible();
     await expect(page.getByRole('button', { name: 'Letz Fetz' })).toBeVisible();
@@ -43,9 +42,7 @@ test.describe('MatchIntro Letz Fetz crash', () => {
   });
 
   test('dismissMatchIntroSkip helper reaches board', async ({ page }) => {
-    await page.goto('/');
-    await page.getByRole('button', { name: 'Spielen' }).click();
-    await page.getByRole('button', { name: 'Partie starten' }).click();
+    await startBotMatchFromSetup(page);
     await dismissMatchIntroSkip(page);
     await expect(page.getByText('Deine Engine')).toBeVisible();
   });
@@ -55,9 +52,7 @@ test.describe('MatchIntro Letz Fetz crash — reduced motion', () => {
   test.use({ reducedMotion: 'reduce' });
 
   test('Letz Fetz skips crash beat', async ({ page }) => {
-    await page.goto('/');
-    await page.getByRole('button', { name: 'Spielen' }).click();
-    await page.getByRole('button', { name: 'Partie starten' }).click();
+    await startBotMatchFromSetup(page);
     await page.getByRole('button', { name: 'Letz Fetz' }).click();
     await expect(page.getByTestId('match-intro-crash')).toHaveCount(0);
     await expect(page.getByTestId('match-intro-arena')).toBeVisible({ timeout: 2000 });

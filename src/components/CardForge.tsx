@@ -20,6 +20,14 @@ const emptyCard = (type: ForgeCardKind): ForgeCardData => ({
   fromPack: false,
 });
 
+function prepareCardForEdit(card: ForgeCardData): ForgeCardData {
+  return { ...card, effects: card.effects?.length ? card.effects : [''] };
+}
+
+function getFirstCardInCategory(cards: ForgeCardData[], kind: ForgeCardKind): ForgeCardData | null {
+  return cards.find((c) => c.type === kind) ?? null;
+}
+
 export function CardForge() {
   const [cards, setCards] = useState<ForgeCardData[]>([]);
   const [selectedCard, setSelectedCard] = useState<ForgeCardData | null>(null);
@@ -72,6 +80,47 @@ export function CardForge() {
   useEffect(() => {
     loadCards();
   }, [loadCards]);
+
+  useEffect(() => {
+    if (loading || isCreating) return;
+
+    const categoryCards = cards.filter((c) => c.type === activeTab);
+    const firstCard = categoryCards[0];
+    if (!firstCard) {
+      if (selectedCard) setSelectedCard(null);
+      return;
+    }
+
+    const selectionStillValid =
+      selectedCard?.type === activeTab && categoryCards.some((c) => c.id === selectedCard.id);
+    if (selectionStillValid) return;
+
+    setSelectedCard(prepareCardForEdit(firstCard));
+    setIsCreating(false);
+  }, [loading, cards, activeTab, isCreating, selectedCard?.id, selectedCard?.type]);
+
+  const handleActiveTabChange = (tab: ForgeCardKind) => {
+    setActiveTab(tab);
+    setSearchTerm('');
+
+    if (isCreating) {
+      setSelectedCard(emptyCard(tab));
+      return;
+    }
+
+    const firstCard = getFirstCardInCategory(cards, tab);
+    if (firstCard) {
+      setSelectedCard(prepareCardForEdit(firstCard));
+      setIsCreating(false);
+    } else {
+      setSelectedCard(null);
+    }
+  };
+
+  const handleSelectCard = (card: ForgeCardData) => {
+    setSelectedCard(prepareCardForEdit(card));
+    setIsCreating(false);
+  };
 
   const handleSave = async () => {
     if (!selectedCard) return;
@@ -232,7 +281,7 @@ export function CardForge() {
     );
 
   return (
-    <div className="flex h-full bg-stone-950 text-stone-100">
+    <div className="flex min-h-0 flex-1 bg-stone-950 text-stone-100">
       <CardForgeSidebar
         cards={cards}
         filteredCards={filteredCards}
@@ -241,11 +290,8 @@ export function CardForge() {
         activeTab={activeTab}
         selectedCard={selectedCard}
         onSearchChange={setSearchTerm}
-        onActiveTabChange={(tab) => setActiveTab(tab as ForgeCardKind)}
-        onSelectCard={(card) => {
-          setSelectedCard({ ...card, effects: card.effects?.length ? card.effects : [''] });
-          setIsCreating(false);
-        }}
+        onActiveTabChange={(tab) => handleActiveTabChange(tab as ForgeCardKind)}
+        onSelectCard={handleSelectCard}
         onCreateNew={handleCreateNew}
       />
 
