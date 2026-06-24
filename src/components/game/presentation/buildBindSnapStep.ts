@@ -5,7 +5,7 @@
 import type { GameState, PlayerId } from '../../../game/types';
 import type { PresentationStep } from './types';
 
-export const BIND_SNAP_MS = 360;
+export const BIND_SNAP_MS = 600;
 
 export function buildBindSnapStep(
   playerId: PlayerId,
