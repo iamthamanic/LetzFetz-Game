@@ -374,3 +374,28 @@ html {
     animation: none;
   }
 }
+
+@keyframes activateDiscardFly {
+  0% {
+    transform: translate(var(--from-x, 0), var(--from-y, 0)) scale(1) rotate(0deg);
+    opacity: 1;
+  }
+  60% {
+    transform: translate(calc(var(--to-x, 0) * 0.5), calc(var(--to-y, 0) * 0.3)) scale(0.8) rotate(8deg);
+    opacity: 0.9;
+  }
+  100% {
+    transform: translate(var(--to-x, 0), var(--to-y, 0)) scale(0.5) rotate(15deg);
+    opacity: 0;
+  }
+}
+
+.activate-discard-fly {
+  animation: activateDiscardFly 420ms cubic-bezier(0.4, 0, 0.6, 1) forwards;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .activate-discard-fly {
+    animation: none;
+  }
+}

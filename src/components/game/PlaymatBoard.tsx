@@ -39,6 +39,7 @@ interface PlaymatBoardProps {
   dealReveal?: Record<PlayerId, number>;
   heldBackHandCards?: Partial<Record<PlayerId, string>>;
   snapBoundCardIds?: string[];
+  activateDiscardId?: string | null;
   activePresentationStep?: PresentationStep | null;
   humanPlayerId?: PlayerId;
   onDispatch: (action: GameAction) => void;
@@ -62,6 +63,7 @@ export function PlaymatBoard({
   dealReveal,
   heldBackHandCards,
   snapBoundCardIds = [],
+  activateDiscardId = null,
   activePresentationStep = null,
   humanPlayerId = 'p1',
   onDispatch,
@@ -249,6 +251,21 @@ export function PlaymatBoard({
           activeStep={activePresentationStep}
           humanPlayerId={humanPlayerId}
         />
+
+        {activateDiscardId && !state.winner && (
+          <div
+            data-testid="activate-discard-fly"
+            className="pointer-events-none absolute z-40 activate-discard-fly"
+            style={{
+              left: '50%',
+              bottom: '15%',
+              '--to-x': '0px',
+              '--to-y': '-60vh',
+            } as React.CSSProperties}
+          >
+            <div className="w-20 h-28 rounded-lg border-2 border-stone-600 bg-stone-900/80 shadow-2xl opacity-80" />
+          </div>
+        )}
 
         {pending?.type === 'attack' && !state.winner && (
           <TargetingArrow

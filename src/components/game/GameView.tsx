@@ -41,6 +41,10 @@ import {
   isBindSnapStep,
   findNewlyBoundCardIds,
   BIND_SNAP_MS,
+  buildActivateDiscardStep,
+  isActivateDiscardStep,
+  findActivatedDiscardCardId,
+  ACTIVATE_DISCARD_MS,
 } from './presentation';
 
 const HUMAN: PlayerId = 'p1';
@@ -65,6 +69,7 @@ export function GameView() {
   const [dealReveal, setDealReveal] = useState<Record<PlayerId, number>>({ p1: 0, p2: 0 });
   const [heldBackHandCards, setHeldBackHandCards] = useState<Partial<Record<PlayerId, string>>>({});
   const [snapBoundCardIds, setSnapBoundCardIds] = useState<string[]>([]);
+  const [activateDiscardId, setActivateDiscardId] = useState<string | null>(null);
   const [openingDealStarted, setOpeningDealStarted] = useState(false);
   const [openingDealFinished, setOpeningDealFinished] = useState(false);
 
@@ -95,6 +100,17 @@ export function GameView() {
             setSnapBoundCardIds((prev) => prev.filter((id) => id !== idToRemove));
           }, BIND_SNAP_MS);
         }
+      }
+      if (isActivateDiscardStep(step)) {
+        const cardInstanceId = step.payload?.cardInstanceId as string | undefined;
+        if (cardInstanceId) {
+          window.setTimeout(() => {
+            setActivateDiscardId((prev) => (prev === cardInstanceId ? null : prev));
+          }, ACTIVATE_DISCARD_MS);
+        }
+      }
+      if (isActivateDiscardStep(step)) {
+        setActivateDiscardId(null);
       }
     },
     onQueueIdle: () => {
@@ -170,6 +186,12 @@ export function GameView() {
     if (snapSteps.length > 0) {
       setSnapBoundCardIds([...humanBoundIds, ...botBoundIds]);
       presentation.enqueue(snapSteps);
+    }
+
+    const humanDiscardId = findActivatedDiscardCardId(prev, state, HUMAN);
+    if (humanDiscardId) {
+      setActivateDiscardId(humanDiscardId);
+      presentation.enqueue(buildActivateDiscardStep(HUMAN, humanDiscardId));
     }
   }, [state, openingDealFinished, scheduleDrawPresentation]);
 
@@ -432,6 +454,7 @@ export function GameView() {
           dealReveal={dealReveal}
           heldBackHandCards={heldBackHandCards}
           snapBoundCardIds={snapBoundCardIds}
+          activateDiscardId={activateDiscardId}
           activePresentationStep={presentation.activeStep}
           humanPlayerId={HUMAN}
           onDispatch={handleDispatch}
