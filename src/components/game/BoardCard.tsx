@@ -17,8 +17,8 @@ const LETZ_SIZE: Record<BoardCardSize, LetzFetzCardSize> = {
 };
 
 const SIZE_OVERRIDES: Partial<Record<BoardCardSize, string>> = {
-  bound: 'w-28 h-40',
-  opponentBound: 'w-24 h-36',
+  bound: 'w-24 h-36 sm:w-28 sm:h-40',
+  opponentBound: 'w-20 h-28 sm:w-24 sm:h-36',
 };
 
 function ringClass(

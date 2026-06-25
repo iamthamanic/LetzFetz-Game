@@ -8,9 +8,9 @@ import type { BoundSlotView } from './buildGameViewModel';
 import { Button } from '../ui/Button';
 
 const SLOT_DIM: Record<BoardCardSize, string> = {
-  hand: 'w-28 h-40',
-  bound: 'w-28 h-40',
-  opponentBound: 'w-24 h-36',
+  hand: 'w-24 h-36 sm:w-28 sm:h-40',
+  bound: 'w-24 h-36 sm:w-28 sm:h-40',
+  opponentBound: 'w-20 h-28 sm:w-24 sm:h-36',
   combat: 'w-64 h-96',
 };
 

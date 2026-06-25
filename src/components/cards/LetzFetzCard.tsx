@@ -44,7 +44,7 @@ export interface LetzFetzCardProps {
 
 const SIZE_CLASSES: Record<LetzFetzCardSize, string> = {
   lg: 'w-64 h-96',
-  md: 'w-36 h-52',
+  md: 'w-28 h-40 sm:w-36 sm:h-52',
   sm: 'w-24 h-32',
 };
 

@@ -52,9 +52,9 @@ export function HandFan({
   return (
     <div
       data-testid="player-hand"
-      className="rounded-xl border border-stone-600/50 bg-stone-900/50 px-3 py-2 shadow-inner"
+      className="rounded-xl border border-stone-600/50 bg-stone-900/50 px-2 py-2 shadow-inner sm:px-3"
     >
-      <div className="flex items-end gap-3 overflow-x-auto pb-1 pt-1">
+      <div className="flex items-end gap-2 overflow-x-auto pb-1 pt-1 sm:gap-3">
       {shown.map((card) => {
         const selected =
           (pending?.type === 'attack' && pending.attackInstanceId === card.instanceId) ||

@@ -180,7 +180,7 @@ export function PlaymatBoard({
     <DndPlaymat state={state} pack={pack} view={view} humanId={humanId} onDispatch={onDispatch}>
     <div className="flex min-h-0 flex-1 flex-col overflow-hidden">
       {(pendingHint || actionError) && (
-        <div className="relative z-30 flex-none border-b border-stone-700 bg-stone-900/90 px-4 py-2">
+        <div className="relative z-30 flex-none border-b border-stone-700 bg-stone-900/90 px-3 py-2 sm:px-4">
           <div className="mx-auto flex max-w-5xl flex-wrap items-center justify-between gap-2">
             {pendingHint && <p className="text-sm text-amber-200/90">{pendingHint}</p>}
             {actionError && (
@@ -292,7 +292,7 @@ export function PlaymatBoard({
 
         <div
           data-testid="duel-tableau"
-          className="relative z-10 mx-auto flex min-h-0 w-full max-w-5xl flex-1 flex-col gap-3 overflow-y-auto px-4 py-3"
+          className="relative z-10 mx-auto flex min-h-0 w-full max-w-5xl flex-1 flex-col gap-3 overflow-y-auto overflow-x-hidden px-2 py-2 sm:px-4 sm:py-3"
         >
           <section className="flex flex-none flex-col gap-2">
             <BoundCardRow
