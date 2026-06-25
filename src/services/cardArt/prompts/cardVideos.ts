@@ -7,8 +7,8 @@ const COMIC_STYLE =
   'Comic book graphic novel style, bold black ink outlines, cel shaded, NOT photorealistic. ' +
   'Keep exact characters and art style from start image. Fast dynamic cuts, exaggerated impact effects.';
 
-/** Cards that support animated play videos (arena, ultimate, glitch). */
-export type CardVideoKind = 'arena' | 'ultimate' | 'glitch';
+/** Cards that support animated play videos (arena, ultimate, glitch, element-attack). */
+export type CardVideoKind = 'arena' | 'ultimate' | 'glitch' | 'element-attack';
 
 export const CARD_VIDEO_PROMPTS: Partial<Record<string, string>> = {
   'arena-club':
@@ -192,6 +192,10 @@ export function cardVideoKindForId(cardId: string): CardVideoKind | null {
   if (cardId.startsWith('arena-')) return 'arena';
   if (cardId.startsWith('ulti-')) return 'ultimate';
   if (cardId.startsWith('glitch-')) return 'glitch';
+  // Element attack cards (e.g. fire-attack-4, water-attack-6a)
+  if (/^(fire|water|earth|air|shadow|light)-attack(-\d+[ab]?)?$/.test(cardId)) {
+    return 'element-attack';
+  }
   return null;
 }
 

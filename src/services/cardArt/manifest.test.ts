@@ -11,6 +11,8 @@ import {
   resolveCardArtPath,
   resolveCardBackPath,
   resolveCharacterIdleVideoPath,
+  resolveElementAttackVideoPath,
+  ELEMENT_ATTACK_VIDEO_MANIFEST,
 } from './manifest';
 
 function allPackCardIds(): string[] {
@@ -75,5 +77,17 @@ describe('card art manifest', () => {
 
   it('resolves shared card back path', () => {
     expect(resolveCardBackPath()).toBe('/cards/card-back.svg');
+  });
+
+  it('resolves element attack video paths', () => {
+    expect(resolveElementAttackVideoPath('fire')).toBe('/videos/element-attack/fire-attack.mp4');
+    expect(resolveElementAttackVideoPath('water')).toBe('/videos/element-attack/water-attack.mp4');
+    expect(resolveElementAttackVideoPath('shadow')).toBe('/videos/element-attack/shadow-attack.mp4');
+  });
+
+  it('element attack video manifest has 6 entries', () => {
+    expect(ELEMENT_ATTACK_VIDEO_MANIFEST).toHaveLength(6);
+    expect(ELEMENT_ATTACK_VIDEO_MANIFEST).toContain('fire-attack');
+    expect(ELEMENT_ATTACK_VIDEO_MANIFEST).toContain('light-attack');
   });
 });

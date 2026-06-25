@@ -15,6 +15,7 @@ import { ARENA_PROMPTS } from './prompts/arenas';
 import { GLITCH_PROMPTS } from './prompts/glitches';
 import { cardVideoKindForId } from './prompts/cardVideos';
 import { isCharacterIdleVideoId } from './prompts/characterIdleVideos';
+import { elementAttackVideoKey, ALL_ELEMENTS_WITH_ATTACK_VIDEOS } from './prompts/elementAttackVideos';
 
 export type IllustrationKind = 'character' | 'ultimate' | 'element' | 'arena' | 'glitch';
 
@@ -112,6 +113,17 @@ export function resolveCharacterIdleVideoPath(characterId: string): string {
   if (!isCharacterIdleVideoId(characterId)) return '';
   return `/videos/character/${characterId}.mp4`;
 }
+
+/** Element attack loop video path, or empty string if unsupported. */
+export function resolveElementAttackVideoPath(element: Element): string {
+  const key = elementAttackVideoKey(element);
+  return `/videos/element-attack/${key}.mp4`;
+}
+
+/** All element-attack video manifest keys for batch generation. */
+export const ELEMENT_ATTACK_VIDEO_MANIFEST = ALL_ELEMENTS_WITH_ATTACK_VIDEOS.map(
+  (element) => elementAttackVideoKey(element),
+);
 
 export function getIllustrationDef(key: string): IllustrationDef | undefined {
   return manifestByKey.get(key);
