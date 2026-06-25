@@ -421,8 +421,8 @@ export function GameView() {
   return (
     <GrungeAppShell>
       <div className="flex h-full flex-col overflow-hidden bg-stone-950 text-stone-100">
-      <header className="flex-none border-b border-stone-700 bg-stone-900/90 px-4 py-2">
-        <div className="mx-auto flex max-w-6xl items-center justify-between gap-4">
+      <header className="flex-none border-b border-stone-700 bg-stone-900/90 px-3 py-2 sm:px-4">
+        <div className="mx-auto flex max-w-6xl items-center justify-between gap-2 sm:gap-4">
           <PhaseCoachBanner
             currentPhase={state.phase}
             phaseLabel={view.phaseLabel}

@@ -31,7 +31,7 @@ export function BoundCardRow({
   return (
     <div className="flex flex-col items-center gap-2" data-testid={testId}>
       <span className="text-[10px] font-bold uppercase tracking-[0.25em] text-stone-500">{label}</span>
-      <div className="flex flex-wrap justify-center gap-3">
+      <div className="flex flex-wrap justify-center gap-2 sm:gap-3">
         {slots.map((slot) => {
           const isTarget = side === 'human'
             ? slot.isReplaceTarget || !slot.instanceId
