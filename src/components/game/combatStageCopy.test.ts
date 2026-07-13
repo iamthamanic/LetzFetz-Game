@@ -4,6 +4,8 @@ import {
   buildCombatStageSubtitle,
   buildCombatStageTitle,
   combatValueLabel,
+  defenderValueLabel,
+  defenderPendingValue,
 } from './combatStageCopy';
 
 const attack: PendingCombat = {
@@ -40,5 +42,13 @@ describe('combatStageCopy', () => {
   it('names combat value by mode', () => {
     expect(combatValueLabel(attack)).toBe('Angriffswert');
     expect(combatValueLabel(challenge)).toBe('Herausforderungswert');
+  });
+
+  it('labels defender side by mode and pending state', () => {
+    expect(defenderValueLabel(attack)).toBe('Blockwert');
+    expect(defenderValueLabel(challenge)).toBe('Block vs. Ziel');
+    expect(defenderPendingValue(true, false)).toBe('?');
+    expect(defenderPendingValue(false, true)).toBe('…');
+    expect(defenderPendingValue(false, false)).toBe('—');
   });
 });

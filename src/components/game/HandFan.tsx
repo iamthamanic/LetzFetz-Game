@@ -15,6 +15,7 @@ interface HandFanProps {
   visibleCount?: number;
   /** Instance ids hidden until draw animation completes. */
   hiddenInstanceIds?: string[];
+  hasChallengeTargets?: boolean;
   onSelectAttack: (instanceId: string) => void;
   onPlayBoost: (instanceId: string) => void;
   onBindDirect: (instanceId: string) => void;
@@ -29,6 +30,7 @@ export function HandFan({
   pending,
   visibleCount,
   hiddenInstanceIds,
+  hasChallengeTargets = false,
   onSelectAttack,
   onPlayBoost,
   onBindDirect,
@@ -97,19 +99,31 @@ export function HandFan({
           card.interaction === 'activate-discard' ||
           card.isActivateDiscardOption;
 
+        const attackTitle =
+          card.interaction === 'attack'
+            ? hasChallengeTargets
+              ? 'Angriffskarte — Herausfordern oder Direktangriff'
+              : 'Angriffskarte — nur Direktangriff möglich'
+            : undefined;
+
         const cardEl = (
-          <BoardCard
+          <div
             key={card.instanceId}
-            def={card.def ?? undefined}
-            name={card.glitchName ?? undefined}
-            size="hand"
-            selected={selected}
-            playable={clickable && !selected}
-            dimmed={!clickable && !selected}
-            disabled={!clickable}
-            onClick={handleClick}
-            dataInteraction={card.interaction ?? undefined}
-          />
+            data-selected-attack={selected && card.interaction === 'attack' ? 'true' : undefined}
+            title={attackTitle}
+          >
+            <BoardCard
+              def={card.def ?? undefined}
+              name={card.glitchName ?? undefined}
+              size="hand"
+              selected={selected}
+              playable={clickable && !selected}
+              dimmed={!clickable && !selected}
+              disabled={!clickable}
+              onClick={handleClick}
+              dataInteraction={card.interaction ?? undefined}
+            />
+          </div>
         );
 
         if (card.interaction === 'bind' && clickable) {

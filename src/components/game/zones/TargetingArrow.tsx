@@ -1,36 +1,33 @@
 /**
- * SVG targeting arrow overlay — shows from human hand to opponent zone
- * when the player has selected an attack card and must pick a target.
+ * SVG targeting arrow overlay — shows from the selected hand card to the chosen
+ * target using real DOM coordinates instead of abstract playmat zones.
  * Location: src/components/game/zones/TargetingArrow.tsx
  */
 import React from 'react';
-import type { ResolvedPlaymatLayout } from '../playmat/playmatLayout';
 import type { BoundSlotView } from '../buildGameViewModel';
 
+export interface TargetingArrowCoords {
+  source: { x: number; y: number };
+  target: { x: number; y: number };
+}
+
 interface TargetingArrowProps {
-  layout: ResolvedPlaymatLayout;
+  /** Playmat root client rect used to size the SVG overlay. */
+  rootRect: { width: number; height: number };
+  /** Source and target coordinates relative to the playmat root. */
+  coords: TargetingArrowCoords;
   hasChallengeTargets: boolean;
   opponentSlots: BoundSlotView[];
 }
 
-function zoneCenter(zone: { x: number; y: number; width: number; height: number }) {
-  return { x: zone.x + zone.width / 2, y: zone.y + zone.height / 2 };
-}
-
 export function TargetingArrow({
-  layout,
+  rootRect,
+  coords,
   hasChallengeTargets,
   opponentSlots,
 }: TargetingArrowProps) {
-  const handZone = layout.zones.find((z) => z.id === 'player-hand');
-  const opponentCharZone = layout.zones.find((z) => z.id === 'opponent-character');
-  const combatZone = layout.zones.find((z) => z.id === 'combat');
-
-  const source = zoneCenter(handZone ?? combatZone ?? { x: 0, y: layout.viewBox.height * 0.8, width: 0, height: 0 });
-
-  const target = hasChallengeTargets
-    ? zoneCenter(combatZone ?? { x: 0, y: 0, width: 0, height: 0 })
-    : zoneCenter(opponentCharZone ?? { x: 0, y: 0, width: 0, height: 0 });
+  const { source, target } = coords;
+  const controlY = (source.y + target.y) / 2 - Math.min(rootRect.height * 0.08, 60);
 
   const targetableCount = opponentSlots.filter((s) => s.isTargetable).length;
 
@@ -40,7 +37,7 @@ export function TargetingArrow({
       data-target-type={hasChallengeTargets ? 'challenge' : 'direct'}
       data-targetable-count={targetableCount}
       className="pointer-events-none absolute inset-0 z-20 h-full w-full"
-      viewBox={`0 0 ${layout.viewBox.width} ${layout.viewBox.height}`}
+      viewBox={`0 0 ${rootRect.width} ${rootRect.height}`}
       preserveAspectRatio="none"
       aria-hidden
     >
@@ -65,7 +62,7 @@ export function TargetingArrow({
       </defs>
 
       <path
-        d={`M ${source.x} ${source.y} Q ${(source.x + target.x) / 2} ${(source.y + target.y) / 2 - 60} ${target.x} ${target.y}`}
+        d={`M ${source.x} ${source.y} Q ${(source.x + target.x) / 2} ${controlY} ${target.x} ${target.y}`}
         stroke="#fbbf24"
         strokeWidth="6"
         strokeLinecap="round"

@@ -2,13 +2,13 @@
  * Duel board on full-bleed playmat — replaces vertical tableau + arena sidebar.
  * Location: src/components/game/PlaymatBoard.tsx
  */
-import React, { useMemo } from 'react';
+import React, { useMemo, useRef, useState, useLayoutEffect, useCallback } from 'react';
 import type { ContentPack, GameAction, GameState, PlayerId } from '../../game';
 import { findElementDef } from '../../game';
 import type { GameViewModel } from './buildGameViewModel';
 import type { PendingIntent } from './gameActionHelpers';
 import type { PresentationStep } from './presentation/types';
-import { PlaymatCardFly } from './presentation';
+import { PlaymatCardFly, AttackCardFly } from './presentation';
 import {
   findActivateAction,
   findBindReplaceAction,
@@ -16,6 +16,7 @@ import {
   findDiscardDrawAction,
 } from './gameActionHelpers';
 import { CharacterDock, CombatStage, DeckPile, DiscardPile, TargetingArrow } from './zones';
+import type { TargetingArrowCoords } from './zones/TargetingArrow';
 import { BoundCardRow } from './BoundCardRow';
 import { HandFan } from './HandFan';
 import { ActionBar } from './ActionBar';
@@ -40,6 +41,7 @@ interface PlaymatBoardProps {
   heldBackHandCards?: Partial<Record<PlayerId, string>>;
   snapBoundCardIds?: string[];
   activateDiscardId?: string | null;
+  hiddenAttackCardId?: string | null;
   activePresentationStep?: PresentationStep | null;
   humanPlayerId?: PlayerId;
   onDispatch: (action: GameAction) => void;
@@ -64,6 +66,7 @@ export function PlaymatBoard({
   heldBackHandCards,
   snapBoundCardIds = [],
   activateDiscardId = null,
+  hiddenAttackCardId = null,
   activePresentationStep = null,
   humanPlayerId = 'p1',
   onDispatch,
@@ -75,6 +78,65 @@ export function PlaymatBoard({
 }: PlaymatBoardProps) {
   const humanId = view.human;
   const botId = view.bot;
+
+  const playmatRef = useRef<HTMLDivElement>(null);
+  const [rootRect, setRootRect] = useState<{ width: number; height: number }>({ width: 0, height: 0 });
+  const [arrowCoords, setArrowCoords] = useState<TargetingArrowCoords | null>(null);
+
+  const updateMeasurements = useCallback(() => {
+    const root = playmatRef.current;
+    if (!root) return;
+    const rect = root.getBoundingClientRect();
+    setRootRect({ width: rect.width, height: rect.height });
+
+    if (pending?.type !== 'attack') {
+      setArrowCoords(null);
+      return;
+    }
+
+    const selectedCard = root.querySelector('[data-selected-attack="true"]') as HTMLElement | null;
+    if (!selectedCard) {
+      setArrowCoords(null);
+      return;
+    }
+    const sourceRect = selectedCard.getBoundingClientRect();
+    const source = {
+      x: sourceRect.left + sourceRect.width / 2 - rect.left,
+      y: sourceRect.bottom - rect.top,
+    };
+
+    const targetableSlot = root.querySelector('[data-targetable="true"]') as HTMLElement | null;
+    let target: { x: number; y: number } | null = null;
+    if (targetableSlot) {
+      const targetRect = targetableSlot.getBoundingClientRect();
+      target = {
+        x: targetRect.left + targetRect.width / 2 - rect.left,
+        y: targetRect.top + targetRect.height / 2 - rect.top,
+      };
+    } else {
+      const dock = root.querySelector('[data-character-dock="bot"]') as HTMLElement | null;
+      if (dock) {
+        const dockRect = dock.getBoundingClientRect();
+        target = {
+          x: dockRect.left + dockRect.width / 2 - rect.left,
+          y: dockRect.top + dockRect.height / 2 - rect.top,
+        };
+      }
+    }
+
+    setArrowCoords(target ? { source, target } : null);
+  }, [pending?.type]);
+
+  useLayoutEffect(() => {
+    updateMeasurements();
+    const onResize = () => updateMeasurements();
+    window.addEventListener('resize', onResize);
+    return () => window.removeEventListener('resize', onResize);
+  }, [updateMeasurements]);
+
+  useLayoutEffect(() => {
+    updateMeasurements();
+  }, [pending, updateMeasurements]);
 
   const clearPending = () => onPendingChange(null);
 
@@ -105,7 +167,15 @@ export function PlaymatBoard({
   };
 
   const handleHumanSlotClick = (slot: (typeof view.humanBoundSlots)[0]) => {
-    if (pending?.type !== 'bind' || !slot.instanceId) return;
+    if (pending?.type !== 'bind') return;
+    if (!slot.instanceId) {
+      const action = findDirectBindAction(view.legalActions, pending.handInstanceId);
+      if (action) {
+        onDispatch(action);
+        clearPending();
+      }
+      return;
+    }
     const action = findBindReplaceAction(
       view.legalActions,
       pending.handInstanceId,
@@ -138,13 +208,22 @@ export function PlaymatBoard({
     }
   };
 
+  const hasChallengeTargets = view.botBoundSlots.some((s) => s.isTargetable);
+  const bindHasFreeSlot = view.humanBoundSlots.some((s) => !s.instanceId);
+
   const pendingHint = (() => {
     if (!pending) return null;
     switch (pending.type) {
       case 'attack':
-        return 'Wähle eine gegnerische Engine-Karte zum Herausfordern — oder „Direkt angreifen“.';
-      case 'bind':
-        return 'Wähle eine deiner Engine-Karten, die ersetzt werden soll.';
+        return hasChallengeTargets
+          ? 'Wähle eine gegnerische Engine-Karte zum Herausfordern — oder „Direkt angreifen“.'
+          : 'Kein Herausforderungsziel — nutze „Direkt angreifen“.';
+      case 'bind': {
+        const hasFreeSlot = view.humanBoundSlots.some((s) => !s.instanceId);
+        return hasFreeSlot
+          ? 'Klicke auf einen freien Engine-Slot, um die Karte zu binden.'
+          : 'Wähle eine gebundene Karte, die durch die neue Karte ersetzt werden soll.';
+      }
       case 'activate':
         return 'Wähle eine Handkarte zum Abwerfen für die Aktivierung.';
       default:
@@ -167,11 +246,16 @@ export function PlaymatBoard({
   const combatZone = playmatLayout.zones.find((z) => z.id === 'combat');
   const topDiscard = state.piles.discard[state.piles.discard.length - 1];
   const topDiscardDef = topDiscard ? findElementDef(pack, topDiscard.defId) : undefined;
+
   const humanHandVisible = openingDealActive && dealReveal ? dealReveal[humanId] : undefined;
   const botHandVisible = openingDealActive && dealReveal ? dealReveal[botId] : undefined;
   const humanHeldBackId = heldBackHandCards?.[humanId];
   const botHeldBackId = heldBackHandCards?.[botId];
-  const humanHandHidden = humanHeldBackId ? [humanHeldBackId] : undefined;
+  const humanHandHidden = [
+    ...(humanHeldBackId ? [humanHeldBackId] : []),
+    ...(hiddenAttackCardId ? [hiddenAttackCardId] : []),
+  ];
+  const humanHandHiddenIds = humanHandHidden.length > 0 ? humanHandHidden : undefined;
   const botHandCount =
     botHandVisible ??
     (botHeldBackId ? state.players[botId].hand.length - 1 : undefined);
@@ -179,6 +263,27 @@ export function PlaymatBoard({
   return (
     <DndPlaymat state={state} pack={pack} view={view} humanId={humanId} onDispatch={onDispatch}>
     <div className="flex min-h-0 flex-1 flex-col overflow-hidden">
+      {/* Mobile character badges — outside absolute playmat layer to avoid overlap */}
+      <div className="flex flex-none items-stretch gap-2 border-b border-stone-800/80 bg-stone-950/90 px-2 py-1.5 sm:hidden">
+        <CharacterDock
+          state={state}
+          pack={pack}
+          playerId={botId}
+          side="bot"
+          variant="compact"
+          handVisibleCount={botHandCount}
+          className="min-w-0 flex-1"
+        />
+        <CharacterDock
+          state={state}
+          pack={pack}
+          playerId={humanId}
+          side="human"
+          variant="compact"
+          handVisibleCount={humanHandVisible}
+          className="min-w-0 flex-1"
+        />
+      </div>
       {(pendingHint || actionError) && (
         <div className="relative z-30 flex-none border-b border-stone-700 bg-stone-900/90 px-3 py-2 sm:px-4">
           <div className="mx-auto flex max-w-5xl flex-wrap items-center justify-between gap-2">
@@ -193,6 +298,7 @@ export function PlaymatBoard({
       )}
 
       <div
+        ref={playmatRef}
         data-testid="playmat-board"
         className="relative flex min-h-0 flex-1 overflow-hidden"
       >
@@ -232,8 +338,10 @@ export function PlaymatBoard({
             pack={pack}
             playerId={botId}
             side="bot"
+            variant="full"
             handVisibleCount={botHandCount}
             style={playmatZonePercentStyle(opponentCharZone, playmatLayout.viewBox)}
+            className="hidden sm:flex"
           />
         )}
         {playerCharZone && (
@@ -242,12 +350,18 @@ export function PlaymatBoard({
             pack={pack}
             playerId={humanId}
             side="human"
+            variant="full"
             handVisibleCount={humanHandVisible}
             style={playmatZonePercentStyle(playerCharZone, playmatLayout.viewBox)}
+            className="hidden sm:flex"
           />
         )}
 
         <PlaymatCardFly
+          activeStep={activePresentationStep}
+          humanPlayerId={humanPlayerId}
+        />
+        <AttackCardFly
           activeStep={activePresentationStep}
           humanPlayerId={humanPlayerId}
         />
@@ -267,9 +381,10 @@ export function PlaymatBoard({
           </div>
         )}
 
-        {pending?.type === 'attack' && !state.winner && (
+        {pending?.type === 'attack' && !state.winner && arrowCoords && rootRect.width > 0 && (
           <TargetingArrow
-            layout={playmatLayout}
+            rootRect={rootRect}
+            coords={arrowCoords}
             hasChallengeTargets={view.botBoundSlots.some((s) => s.isTargetable)}
             opponentSlots={view.botBoundSlots}
           />
@@ -329,17 +444,28 @@ export function PlaymatBoard({
               slots={view.humanBoundSlots}
               cardSize="bound"
               snapBoundCardIds={snapBoundCardIds}
+              bindPending={pending?.type === 'bind'}
+              bindHasFreeSlot={bindHasFreeSlot}
               onActivateBound={handleStartActivate}
               onSlotClick={handleHumanSlotClick}
             />
+
+            {pending?.type === 'bind' && (
+              <div
+                data-testid="bind-target-pill"
+                className="mx-auto w-fit rounded-full border border-purple-400/50 bg-purple-950/60 px-3 py-1 text-xs font-semibold text-purple-200 shadow-[0_0_12px_rgba(168,85,247,0.2)]"
+              >
+                {bindHasFreeSlot ? 'Zielslot wählen — freier Slot' : 'Zielslot wählen — Karte ersetzen'}
+              </div>
+            )}
 
             <HandFan
               cards={view.handCards}
               pending={pending}
               visibleCount={humanHandVisible}
-              hiddenInstanceIds={humanHandHidden}
+              hiddenInstanceIds={humanHandHiddenIds}
+              hasChallengeTargets={hasChallengeTargets}
               onSelectAttack={handleSelectAttack}
-              onPlayAttackDirect={onPlayAttack}
               onPlayBoost={(id) => onDispatch({ type: 'PLAY_BOOST', cardInstanceId: id })}
               onBindDirect={handleBindDirect}
               onStartBindReplace={handleStartBindReplace}
@@ -358,15 +484,28 @@ export function PlaymatBoard({
             />
 
             {pending && (
-              <div className="flex flex-wrap items-center gap-2">
+              <div className="flex flex-col gap-2">
                 {pending.type === 'attack' && (
-                  <Button variant="primary" onClick={() => onPlayAttack(pending.attackInstanceId)}>
-                    Direkt angreifen
-                  </Button>
+                  <p className="text-center text-[11px] text-stone-400 sm:text-xs">
+                    {hasChallengeTargets
+                      ? 'Herausfordern: Gegner-Engine-Slot anklicken. Direktangriff trifft die LP des Gegners.'
+                      : 'Kein Herausforderungsziel — nur Direktangriff möglich.'}
+                  </p>
                 )}
-                <Button variant="secondary" onClick={clearPending}>
-                  Auswahl abbrechen
-                </Button>
+                <div className="flex flex-wrap items-center gap-2">
+                  {pending.type === 'attack' && (
+                    <Button
+                      variant="primary"
+                      title="Greift die Lebenspunkte des Gegners direkt an"
+                      onClick={() => onPlayAttack(pending.attackInstanceId)}
+                    >
+                      Direkt angreifen
+                    </Button>
+                  )}
+                  <Button variant="secondary" onClick={clearPending}>
+                    Auswahl abbrechen
+                  </Button>
+                </div>
               </div>
             )}
           </section>

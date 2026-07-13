@@ -14,7 +14,9 @@ interface CharacterDockProps {
   pack: ContentPack;
   playerId: PlayerId;
   side: 'human' | 'bot';
+  variant?: 'full' | 'compact';
   style?: CSSProperties;
+  className?: string;
   handVisibleCount?: number;
 }
 
@@ -27,7 +29,9 @@ export function CharacterDock({
   pack,
   playerId,
   side,
+  variant = 'full',
   style,
+  className = '',
   handVisibleCount,
 }: CharacterDockProps) {
   const player = state.players[playerId];
@@ -39,11 +43,45 @@ export function CharacterDock({
   const borderTone = isHuman ? 'border-emerald-500/50' : 'border-red-500/40';
   const hpTone = isHuman ? 'text-emerald-400' : 'text-red-400';
 
+  if (variant === 'compact') {
+    return (
+      <div
+        data-testid={testId}
+        data-character-dock={side}
+        data-dock-variant="compact"
+        className={`pointer-events-none flex items-center gap-2 rounded-lg border bg-stone-950/90 px-2 py-1.5 shadow-md backdrop-blur-sm ${borderTone} ${className}`}
+        aria-label={`${isHuman ? 'Du' : 'Gegner'} — ${name}`}
+      >
+        <div className="min-w-0 flex-1">
+          <div className="flex flex-wrap items-center gap-1">
+            <span className="truncate text-[11px] font-bold text-stone-50">
+              {isHuman ? 'Du' : '🤖'} — {name}
+            </span>
+            {isActive && (
+              <Badge variant={isHuman ? 'success' : 'warning'} className="text-[8px]">
+                Am Zug
+              </Badge>
+            )}
+          </div>
+          <p className={`inline-flex items-center gap-1 text-xs font-black tabular-nums ${hpTone}`}>
+            <Heart className="h-3 w-3 shrink-0" />
+            {player.hp} LP
+          </p>
+        </div>
+        <p className="flex shrink-0 items-center gap-1 text-[10px] text-stone-400">
+          <Layers className="h-3 w-3" />
+          {handCount}
+        </p>
+      </div>
+    );
+  }
+
   return (
     <div
       data-testid={testId}
       data-character-dock={side}
-      className={`pointer-events-none z-20 flex min-h-0 flex-col overflow-hidden rounded-xl border-2 bg-stone-950/80 shadow-xl backdrop-blur-sm ${borderTone}`}
+      data-dock-variant="full"
+      className={`pointer-events-none z-20 flex min-h-0 flex-col overflow-hidden rounded-xl border-2 bg-stone-950/80 shadow-xl backdrop-blur-sm ${borderTone} ${className}`}
       style={style}
       aria-label={`${isHuman ? 'Du' : 'Gegner'} — ${name}`}
     >

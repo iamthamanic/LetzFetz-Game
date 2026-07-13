@@ -7,7 +7,7 @@ import {
   BASE_PACK,
   createGame,
   applyAction,
-  runBotTurn,
+  chooseBotAction,
   rollD6,
   type GameState,
   type GameAction,
@@ -45,6 +45,10 @@ import {
   isActivateDiscardStep,
   findActivatedDiscardCardId,
   ACTIVATE_DISCARD_MS,
+  buildAttackCardFlyStep,
+  isAttackCardFlyStep,
+  findRemovedAttackCard,
+  ATTACK_CARD_FLY_MS,
 } from './presentation';
 
 const HUMAN: PlayerId = 'p1';
@@ -70,6 +74,7 @@ export function GameView() {
   const [heldBackHandCards, setHeldBackHandCards] = useState<Partial<Record<PlayerId, string>>>({});
   const [snapBoundCardIds, setSnapBoundCardIds] = useState<string[]>([]);
   const [activateDiscardId, setActivateDiscardId] = useState<string | null>(null);
+  const [hiddenAttackCardId, setHiddenAttackCardId] = useState<string | null>(null);
   const [openingDealStarted, setOpeningDealStarted] = useState(false);
   const [openingDealFinished, setOpeningDealFinished] = useState(false);
 
@@ -109,8 +114,13 @@ export function GameView() {
           }, ACTIVATE_DISCARD_MS);
         }
       }
-      if (isActivateDiscardStep(step)) {
-        setActivateDiscardId(null);
+      if (isAttackCardFlyStep(step)) {
+        const cardInstanceId = step.payload?.cardInstanceId as string | undefined;
+        if (cardInstanceId) {
+          window.setTimeout(() => {
+            setHiddenAttackCardId((prev) => (prev === cardInstanceId ? null : prev));
+          }, ATTACK_CARD_FLY_MS);
+        }
       }
     },
     onQueueIdle: () => {
@@ -193,6 +203,29 @@ export function GameView() {
       setActivateDiscardId(humanDiscardId);
       presentation.enqueue(buildActivateDiscardStep(HUMAN, humanDiscardId));
     }
+
+    if (!prev.combat && state.combat) {
+      const removed = findRemovedAttackCard(prev, state);
+      if (removed) {
+        const { instanceId, defId, attackerId } = removed;
+        let targetSlotIndex: number | undefined;
+        if (state.combat.mode === 'challenge' && state.combat.targetBoundInstanceId) {
+          targetSlotIndex = state.players[state.combat.defenderId].bound.findIndex(
+            (b) => b.instanceId === state.combat!.targetBoundInstanceId,
+          );
+        }
+        setHiddenAttackCardId(instanceId);
+        presentation.enqueue(
+          buildAttackCardFlyStep(
+            attackerId,
+            instanceId,
+            defId,
+            state.combat.mode === 'challenge' ? 'challenge' : 'direct',
+            targetSlotIndex >= 0 ? targetSlotIndex : undefined,
+          ),
+        );
+      }
+    }
   }, [state, openingDealFinished, scheduleDrawPresentation]);
 
   const dispatch = useCallback((action: GameAction, playerId: PlayerId = HUMAN) => {
@@ -231,15 +264,23 @@ export function GameView() {
     botRunning.current = true;
     const timer = setTimeout(() => {
       setState((prev) => {
-        if (!prev) return prev;
-        let next = prev;
-        if (prev.combat?.defenderId === BOT) {
-          next = runBotTurn(prev, pack, 1);
-        } else if (prev.activePlayer === BOT) {
-          next = runBotTurn(prev, pack);
+        if (!prev) {
+          botRunning.current = false;
+          return prev;
         }
-        botRunning.current = false;
-        return next;
+        const action = chooseBotAction(prev, pack);
+        if (!action) {
+          botRunning.current = false;
+          return prev;
+        }
+        try {
+          const next = applyAction(prev, action, BOT, { pack, playerId: BOT });
+          botRunning.current = false;
+          return next;
+        } catch {
+          botRunning.current = false;
+          return prev;
+        }
       });
       setPendingIntent(null);
     }, 600);
@@ -248,7 +289,7 @@ export function GameView() {
       clearTimeout(timer);
       botRunning.current = false;
     };
-  }, [state, playtestMode, presentation.isInputLocked]);
+  }, [state, playtestMode, presentation.isInputLocked, presentation.activeStep]);
 
   useEffect(() => {
     setPendingIntent(null);
@@ -455,6 +496,7 @@ export function GameView() {
           heldBackHandCards={heldBackHandCards}
           snapBoundCardIds={snapBoundCardIds}
           activateDiscardId={activateDiscardId}
+          hiddenAttackCardId={hiddenAttackCardId}
           activePresentationStep={presentation.activeStep}
           humanPlayerId={HUMAN}
           onDispatch={handleDispatch}

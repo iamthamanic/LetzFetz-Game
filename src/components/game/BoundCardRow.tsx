@@ -13,6 +13,8 @@ interface BoundCardRowProps {
   slots: BoundSlotView[];
   cardSize: BoardCardSize;
   snapBoundCardIds?: string[];
+  bindPending?: boolean;
+  bindHasFreeSlot?: boolean;
   onActivateBound?: (boundInstanceId: string) => void;
   onSlotClick?: (slot: BoundSlotView) => void;
 }
@@ -22,6 +24,8 @@ export function BoundCardRow({
   slots,
   cardSize,
   snapBoundCardIds,
+  bindPending = false,
+  bindHasFreeSlot = false,
   onActivateBound,
   onSlotClick,
 }: BoundCardRowProps) {
@@ -48,6 +52,8 @@ export function BoundCardRow({
                 slot={slot}
                 cardSize={cardSize}
                 snap={slot.instanceId ? snapBoundCardIds?.includes(slot.instanceId) ?? false : false}
+                bindPending={side === 'human' ? bindPending : false}
+                bindHasFreeSlot={side === 'human' ? bindHasFreeSlot : false}
                 onActivate={onActivateBound}
                 onSlotClick={onSlotClick ? () => onSlotClick(slot) : undefined}
               />

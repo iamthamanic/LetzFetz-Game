@@ -18,35 +18,69 @@ interface BoundCardSlotProps {
   slot: BoundSlotView;
   cardSize: BoardCardSize;
   snap?: boolean;
+  bindPending?: boolean;
+  bindHasFreeSlot?: boolean;
   onActivate?: (boundInstanceId: string) => void;
   onSlotClick?: () => void;
 }
 
-export function BoundCardSlot({ slot, cardSize, snap = false, onActivate, onSlotClick }: BoundCardSlotProps) {
+export function BoundCardSlot({
+  slot,
+  cardSize,
+  snap = false,
+  bindPending = false,
+  bindHasFreeSlot = false,
+  onActivate,
+  onSlotClick,
+}: BoundCardSlotProps) {
   const dim = SLOT_DIM[cardSize];
+  const showBindPulse = bindPending && bindHasFreeSlot && !slot.instanceId;
+  const showReplacePulse = bindPending && slot.isReplaceTarget;
 
   if (!slot.def || !slot.instanceId) {
     return (
       <div
-        className={`${dim} relative flex flex-col items-center justify-end overflow-hidden rounded-xl border border-stone-700/80 bg-black/45 shadow-[inset_0_2px_12px_rgba(0,0,0,0.65)]`}
+        data-testid={showBindPulse ? 'bind-empty-slot' : undefined}
+        title={showBindPulse ? 'Freien Engine-Slot zum Binden wählen' : undefined}
+        onClick={showBindPulse ? onSlotClick : undefined}
+        className={`${dim} relative flex flex-col items-center justify-end overflow-hidden rounded-xl border bg-black/45 shadow-[inset_0_2px_12px_rgba(0,0,0,0.65)] ${
+          showBindPulse
+            ? 'bind-slot-pulse cursor-pointer border-purple-400/70 ring-2 ring-purple-400/50'
+            : 'border-stone-700/80'
+        }`}
       >
         <div className="pointer-events-none absolute inset-0 bg-[radial-gradient(ellipse_at_center,rgba(180,120,60,0.07)_0%,transparent_65%)]" />
         <span className="absolute left-1.5 top-1 rounded bg-stone-950/80 px-1 py-px text-[7px] font-bold uppercase tracking-[0.2em] text-amber-700/70">
           Slot {slot.slotIndex + 1}
         </span>
-        <span className="mb-3 text-[9px] uppercase tracking-wider text-stone-600/80">leer</span>
+        {showBindPulse ? (
+          <span className="mb-3 animate-pulse text-[10px] font-bold uppercase tracking-wider text-purple-300">
+            Binden
+          </span>
+        ) : (
+          <span className="mb-3 text-[9px] uppercase tracking-wider text-stone-600/80">leer</span>
+        )}
       </div>
     );
   }
 
-  const highlight = slot.isTargetable || slot.isReplaceTarget;
+  const highlight = slot.isTargetable || slot.isReplaceTarget || showReplacePulse;
 
   return (
     <div className="flex flex-col items-center gap-1">
       <div
+        data-targetable={slot.isTargetable ? 'true' : undefined}
+        data-slot-index={slot.slotIndex}
         data-snap={snap ? 'true' : undefined}
         data-snap-glow={snap ? 'true' : undefined}
-        className={`relative rounded-xl p-0.5 ${snap ? 'card-bind-snap slot-bind-glow' : ''} ${highlight ? 'ring-2 ring-amber-400/80 shadow-[0_0_14px_rgba(251,191,36,0.25)]' : 'ring-1 ring-stone-700/60'}`}
+        title={
+          slot.isTargetable
+            ? 'Herausforderung: Diese Engine-Karte als Ziel wählen'
+            : showReplacePulse
+              ? 'Diese Karte durch die gewählte Handkarte ersetzen'
+              : undefined
+        }
+        className={`relative rounded-xl p-0.5 ${snap ? 'card-bind-snap slot-bind-glow' : ''} ${highlight ? 'ring-2 ring-amber-400/80 shadow-[0_0_14px_rgba(251,191,36,0.25)]' : 'ring-1 ring-stone-700/60'} ${showReplacePulse ? 'bind-slot-pulse ring-purple-400/70' : ''}`}
       >
         <BoardCard
           def={slot.def}
