@@ -6,7 +6,7 @@ import type { ContentPack, EnginePartCardDef } from '../types';
 import { createGame } from './createGame';
 import { applyAction, getLegalActions } from './actions';
 import { calculateCombatValue, challengeSucceeded } from './combat';
-import { countPassiveBonus, challengeTargetResistance } from './phraseBonuses';
+import { countPassiveBonus, challengeTargetResistance, isMonoPhrase, monoAttackBonus, monoBlockBonus } from './phraseBonuses';
 import { BASE_PACK } from '../packs/base-pack';
 import { V2_P100_PACK } from '../packs/v2';
 
@@ -42,6 +42,26 @@ const TEST_PARTS: EnginePartCardDef[] = [
     resistance: 4,
     passiveArchetype: 'p_draw',
     activateArchetype: 'a_heal',
+  },
+  {
+    id: 'test-part-fire-mode',
+    name: 'Test Feuer Modus',
+    kind: 'enginePart',
+    element: 'fire',
+    preferredTag: 'mode',
+    resistance: 3,
+    passiveArchetype: 'p_atk',
+    activateArchetype: 'a_dmg',
+  },
+  {
+    id: 'test-part-fire-tool',
+    name: 'Test Feuer Werkzeug',
+    kind: 'enginePart',
+    element: 'fire',
+    preferredTag: 'tool',
+    resistance: 2,
+    passiveArchetype: 'p_block',
+    activateArchetype: 'a_exhaust',
   },
 ];
 
@@ -104,6 +124,106 @@ describe('phraseBonuses helpers', () => {
     ];
     expect(countPassiveBonus(TEST_V2_PACK, bound, 'p_atk')).toBe(1);
     expect(countPassiveBonus(TEST_V2_PACK, bound, 'p_block')).toBe(1);
+  });
+
+  it('detects mono phrase when core, mode, and tool share one element', () => {
+    const monoBound = [
+      {
+        instanceId: 'b1',
+        defId: 'test-part-atk',
+        exhausted: false,
+        resistanceBonus: 0,
+        phraseSlot: 'core' as const,
+      },
+      {
+        instanceId: 'b2',
+        defId: 'test-part-fire-mode',
+        exhausted: false,
+        resistanceBonus: 0,
+        phraseSlot: 'mode' as const,
+      },
+      {
+        instanceId: 'b3',
+        defId: 'test-part-fire-tool',
+        exhausted: false,
+        resistanceBonus: 0,
+        phraseSlot: 'tool' as const,
+      },
+      {
+        instanceId: 'c1',
+        defId: 'v2-fire-boost-1',
+        exhausted: false,
+        resistanceBonus: 0,
+        phraseSlot: 'charge' as const,
+      },
+    ];
+    expect(isMonoPhrase(TEST_V2_PACK, monoBound)).toBe(true);
+    expect(isMonoPhrase(TEST_V2_PACK, monoBound.slice(0, 2))).toBe(false);
+    expect(
+      isMonoPhrase(TEST_V2_PACK, [
+        monoBound[0]!,
+        { ...monoBound[1]!, defId: 'test-part-heal' },
+        monoBound[2]!,
+      ]),
+    ).toBe(false);
+  });
+
+  it('applies MB1 mono +1 attack and +1 block when phrase is mono', () => {
+    const state = actionState();
+    const monoBound = [
+      {
+        instanceId: 'b1',
+        defId: 'test-part-atk',
+        exhausted: false,
+        resistanceBonus: 0,
+        phraseSlot: 'core' as const,
+      },
+      {
+        instanceId: 'b2',
+        defId: 'test-part-fire-mode',
+        exhausted: false,
+        resistanceBonus: 0,
+        phraseSlot: 'mode' as const,
+      },
+      {
+        instanceId: 'b3',
+        defId: 'test-part-fire-tool',
+        exhausted: false,
+        resistanceBonus: 0,
+        phraseSlot: 'tool' as const,
+      },
+    ];
+    expect(monoAttackBonus(state, TEST_V2_PACK, monoBound)).toBe(1);
+    expect(monoBlockBonus(state, TEST_V2_PACK, monoBound)).toBe(1);
+    expect(monoAttackBonus(state, TEST_V2_PACK, monoBound.slice(0, 2))).toBe(0);
+  });
+
+  it('defaults mono bonus mode to MB1 when playtest unset', () => {
+    const state = { ...actionState(), playtest: undefined };
+    const monoBound = [
+      {
+        instanceId: 'b1',
+        defId: 'test-part-atk',
+        exhausted: false,
+        resistanceBonus: 0,
+        phraseSlot: 'core' as const,
+      },
+      {
+        instanceId: 'b2',
+        defId: 'test-part-fire-mode',
+        exhausted: false,
+        resistanceBonus: 0,
+        phraseSlot: 'mode' as const,
+      },
+      {
+        instanceId: 'b3',
+        defId: 'test-part-fire-tool',
+        exhausted: false,
+        resistanceBonus: 0,
+        phraseSlot: 'tool' as const,
+      },
+    ];
+    expect(monoAttackBonus(state, TEST_V2_PACK, monoBound)).toBe(1);
   });
 });
 

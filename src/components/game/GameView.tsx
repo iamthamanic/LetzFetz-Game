@@ -5,6 +5,8 @@
 import React, { useState, useEffect, useRef, useCallback, useMemo } from 'react';
 import {
   BASE_PACK,
+  V2_P100_PACK,
+  P100_RULESET,
   createGame,
   applyAction,
   runBotTurn,
@@ -13,6 +15,7 @@ import {
   type GameState,
   type GameAction,
   type PlayerId,
+  type ContentPack,
   pickOpponentCharacter,
   createSeededRng,
 } from '../../game';
@@ -50,10 +53,10 @@ import {
 
 const HUMAN: PlayerId = 'p1';
 const BOT: PlayerId = 'p2';
-const pack = BASE_PACK;
 
 export function GameView() {
   const playtestMode = isPlaytestMode();
+  const [matchPack, setMatchPack] = useState<ContentPack>(BASE_PACK);
   const [state, setState] = useState<GameState | null>(null);
   const [lastRoll, setLastRoll] = useState<number | null>(null);
   const [logOpen, setLogOpen] = useState(false);
@@ -201,7 +204,7 @@ export function GameView() {
       if (!prev) return prev;
       try {
         const next = applyAction(prev, action, playerId, {
-          pack,
+          pack: matchPack,
           playerId,
           ruleset: rulesetFromState(prev),
         });
@@ -220,7 +223,7 @@ export function GameView() {
         return prev;
       }
     });
-  }, []);
+  }, [matchPack]);
 
   useEffect(() => {
     if (!state || state.winner || botRunning.current) return;
@@ -239,9 +242,9 @@ export function GameView() {
         if (!prev) return prev;
         let next = prev;
         if (prev.combat?.defenderId === BOT) {
-          next = runBotTurn(prev, pack, 1);
+          next = runBotTurn(prev, matchPack, 1);
         } else if (prev.activePlayer === BOT) {
-          next = runBotTurn(prev, pack);
+          next = runBotTurn(prev, matchPack);
         }
         botRunning.current = false;
         return next;
@@ -253,7 +256,7 @@ export function GameView() {
       clearTimeout(timer);
       botRunning.current = false;
     };
-  }, [state, playtestMode, presentation.isInputLocked]);
+  }, [state, playtestMode, presentation.isInputLocked, matchPack]);
 
   useEffect(() => {
     setPendingIntent(null);
@@ -286,8 +289,8 @@ export function GameView() {
   }, [state]);
 
   const view = useMemo(
-    () => (state ? buildGameViewModel(state, pack, HUMAN, pendingIntent) : null),
-    [state, pendingIntent],
+    () => (state ? buildGameViewModel(state, matchPack, HUMAN, pendingIntent) : null),
+    [state, pendingIntent, matchPack],
   );
 
   const playAttack = useCallback(
@@ -344,7 +347,7 @@ export function GameView() {
             prev.activePlayer === HUMAN;
 
           const next = applyAction(prev, action, HUMAN, {
-            pack,
+            pack: matchPack,
             playerId: HUMAN,
             ruleset: rulesetFromState(prev),
           });
@@ -397,7 +400,7 @@ export function GameView() {
     return (
       <GrungeAppShell>
         <GameSetup
-          onStart={({ humanCharacterId }) => {
+          onStart={({ humanCharacterId, packChoice }) => {
             unlockAudio();
             setPendingIntent(null);
             setActionError(null);
@@ -408,15 +411,18 @@ export function GameView() {
             setDealReveal({ p1: 0, p2: 0 });
             setHeldBackHandCards({});
             prevStateRef.current = null;
+            const selectedPack = packChoice === 'p100' ? V2_P100_PACK : BASE_PACK;
+            setMatchPack(selectedPack);
             const seed = Date.now();
             const rng = createSeededRng(seed);
-            const botCharacterId = pickOpponentCharacter(pack, humanCharacterId, rng);
+            const botCharacterId = pickOpponentCharacter(selectedPack, humanCharacterId, rng);
             setState(
               createGame({
-                pack,
+                pack: selectedPack,
                 p1CharacterId: humanCharacterId,
                 p2CharacterId: botCharacterId,
                 startingPlayer: HUMAN,
+                ruleset: packChoice === 'p100' ? P100_RULESET : undefined,
                 seed,
               }),
             );
@@ -452,7 +458,7 @@ export function GameView() {
       <div className="relative flex min-h-0 flex-1 overflow-hidden">
         <PlaymatBoard
           state={state}
-          pack={pack}
+          pack={matchPack}
           view={view}
           pending={pendingIntent}
           actionError={actionError}
@@ -489,7 +495,7 @@ export function GameView() {
 
         {introOpen && (
           <MatchIntro
-            pack={pack}
+            pack={matchPack}
             humanCharacterId={state.players[HUMAN].characterId}
             botCharacterId={state.players[BOT].characterId}
             arenaId={state.arena.arenaId}
@@ -524,7 +530,7 @@ export function GameView() {
 
         {playtestMode && (
           <PlaytestCheatbox
-            pack={pack}
+            pack={matchPack}
             state={state}
             botPaused={botPaused}
             onBotPausedChange={setBotPaused}
