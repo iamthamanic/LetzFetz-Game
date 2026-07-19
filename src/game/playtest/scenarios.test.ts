@@ -75,4 +75,30 @@ describe('playtest patches', () => {
     expect(result.ok).toBe(false);
     expect(result.error).toContain('P1 HP');
   });
+
+  it('O11: sets playtest HP cap 30 and both players to 30', () => {
+    const base = buildPlaytestScenario(BASE_PACK, 'fresh-action');
+    const result = applyAndValidatePlaytestPatch(base, {
+      playtestHpCap: 30,
+      p1Hp: 30,
+      p2Hp: 30,
+    });
+    expect(result.ok, result.error).toBe(true);
+    expect(result.state?.playtest?.hpCap).toBe(30);
+    expect(result.state?.players.p1.hp).toBe(30);
+    expect(result.state?.players.p2.hp).toBe(30);
+  });
+
+  it('O11: rejects HP above current cap without raising cap', () => {
+    const base = buildPlaytestScenario(BASE_PACK, 'fresh-action');
+    const result = applyAndValidatePlaytestPatch(base, { p1Hp: 25 });
+    expect(result.ok).toBe(false);
+  });
+
+  it('O11: stores mono bonus mode', () => {
+    const base = buildPlaytestScenario(BASE_PACK, 'fresh-action');
+    const result = applyAndValidatePlaytestPatch(base, { monoBonusMode: 'mb3' });
+    expect(result.ok, result.error).toBe(true);
+    expect(result.state?.playtest?.monoBonusMode).toBe('mb3');
+  });
 });

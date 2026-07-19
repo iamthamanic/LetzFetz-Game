@@ -1,6 +1,17 @@
 import type { BoundCardInstance, CardInstance } from './cards';
 import type { PlayerId, TurnPhase } from './ruleset';
 
+/** Playtest LP caps (D35 / O11). Cap = start; heals clamp here. */
+export type PlaytestHpCap = 20 | 25 | 30;
+
+/** Playtest mono bonus modes (D32 / D35). Engine applies after V2 release. */
+export type MonoBonusMode = 'mb1' | 'mb2' | 'mb3' | 'mb4';
+
+export interface PlaytestSettings {
+  hpCap?: PlaytestHpCap;
+  monoBonusMode?: MonoBonusMode;
+}
+
 export interface PlayerState {
   characterId: string;
   hp: number;
@@ -47,4 +58,6 @@ export interface GameState {
   combat: PendingCombat | null;
   /** Last combat log line for UI. */
   lastEvent: string | null;
+  /** Optional playtest overrides (O11); default match omits this. */
+  playtest?: PlaytestSettings;
 }

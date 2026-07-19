@@ -1,5 +1,6 @@
 import type { ContentPack, ElementCardDef, GameAction, GameState, PlayerId } from '../types';
 import { getLegalActions, findElementDef, applyAction, type PackContext } from './actions';
+import { rulesetFromState } from './rulesetFromState';
 import { diceBonusFromRoll, rollD6 } from './dice';
 import { DEFAULT_RULESET } from '../types';
 import { calculateCombatValue, resolveDamage, challengeSucceeded } from './combat';
@@ -295,17 +296,23 @@ export function runBotTurn(
   maxSteps = 24,
 ): GameState {
   let current = state;
-  const ctx: PackContext = { pack, playerId: BOT_ID };
+  const ctx: PackContext = { pack, playerId: BOT_ID, ruleset: rulesetFromState(state) };
 
   for (let i = 0; i < maxSteps; i++) {
     if (current.winner || current.activePlayer !== BOT_ID) break;
     const action = chooseBotAction(current, pack);
     if (!action) break;
-    current = applyAction(current, action, BOT_ID, ctx);
+    current = applyAction(current, action, BOT_ID, {
+      ...ctx,
+      ruleset: rulesetFromState(current),
+    });
     if (current.combat && current.combat.defenderId === BOT_ID) {
       const blockAction = chooseBotAction(current, pack);
       if (blockAction) {
-        current = applyAction(current, blockAction, BOT_ID, ctx);
+        current = applyAction(current, blockAction, BOT_ID, {
+          ...ctx,
+          ruleset: rulesetFromState(current),
+        });
       }
     }
   }
