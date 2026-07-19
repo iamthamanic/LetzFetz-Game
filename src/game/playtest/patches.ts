@@ -1,5 +1,6 @@
-import type { GameState, PlayerId, TurnPhase } from '../types';
+import type { GameState, MonoBonusMode, PlayerId, PlaytestHpCap, TurnPhase } from '../types';
 import { collectInvariantViolations } from '../engine/invariants';
+import { rulesetFromState } from '../engine/rulesetFromState';
 import { cloneState } from '../engine/helpers';
 
 export interface PlaytestPatch {
@@ -9,6 +10,10 @@ export interface PlaytestPatch {
   p2Hp?: number;
   winner?: PlayerId | null;
   clearCombat?: boolean;
+  /** O11: set both HP + heal/damage cap. */
+  playtestHpCap?: PlaytestHpCap;
+  /** O11: mono bonus mode (stored; V2 combat later). */
+  monoBonusMode?: MonoBonusMode;
 }
 
 export interface PlaytestValidationResult {
@@ -23,6 +28,12 @@ export function applyPlaytestPatch(state: GameState, patch: PlaytestPatch): Game
 
   if (patch.phase !== undefined) next.phase = patch.phase;
   if (patch.activePlayer !== undefined) next.activePlayer = patch.activePlayer;
+  if (patch.playtestHpCap !== undefined) {
+    next.playtest = { ...next.playtest, hpCap: patch.playtestHpCap };
+  }
+  if (patch.monoBonusMode !== undefined) {
+    next.playtest = { ...next.playtest, monoBonusMode: patch.monoBonusMode };
+  }
   if (patch.p1Hp !== undefined) next.players.p1.hp = patch.p1Hp;
   if (patch.p2Hp !== undefined) next.players.p2.hp = patch.p2Hp;
   if (patch.winner !== undefined) next.winner = patch.winner;
@@ -33,7 +44,9 @@ export function applyPlaytestPatch(state: GameState, patch: PlaytestPatch): Game
 
 /** Validate playtest state via engine invariants; returns error message for UI. */
 export function validatePlaytestState(state: GameState): PlaytestValidationResult {
-  const violations = collectInvariantViolations(state);
+  const violations = collectInvariantViolations(state, {
+    ruleset: rulesetFromState(state),
+  });
   if (violations.length > 0) {
     return {
       ok: false,

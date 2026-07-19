@@ -425,12 +425,23 @@ export function buildBasePack(): ContentPack {
 export const BASE_PACK = buildBasePack();
 
 /** Lookup map for all card definitions by id. */
-export function buildCardIndex(pack: ContentPack): Map<string, ContentPack['characters'][0] | ElementCardDef | UltimateCardDef | ArenaCardDef | GlitchCardDef> {
+export function buildCardIndex(
+  pack: ContentPack,
+): Map<
+  string,
+  | ContentPack['characters'][0]
+  | ElementCardDef
+  | UltimateCardDef
+  | ArenaCardDef
+  | GlitchCardDef
+  | NonNullable<ContentPack['engineParts']>[number]
+> {
   const map = new Map();
   for (const c of pack.characters) map.set(c.id, c);
   for (const u of pack.ultimates) map.set(u.id, u);
   for (const a of pack.arenas) map.set(a.id, a);
   for (const e of pack.elementCards) map.set(e.id, e);
   for (const g of pack.glitches) map.set(g.id, g);
+  for (const p of pack.engineParts ?? []) map.set(p.id, p);
   return map;
 }

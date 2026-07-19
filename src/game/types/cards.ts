@@ -49,12 +49,32 @@ export interface GlitchCardDef extends CardBase {
   effectText: string;
 }
 
+/** Phrase tag roles (V2 T3) — preferred tag on Engine-Teil. */
+export type PhraseTag = 'core' | 'mode' | 'tool';
+
+/** Light passive while built (V2 E3 start set). */
+export type PassiveArchetype = 'p_atk' | 'p_block' | 'p_draw';
+
+/** Activation effect (V2 E3 start set); costs always A1. */
+export type ActivateArchetype = 'a_dmg' | 'a_heal' | 'a_exhaust';
+
+/** V2 Engine-Teil — phrase part only; not playable as attack/block. */
+export interface EnginePartCardDef extends CardBase {
+  kind: 'enginePart';
+  element: Element;
+  preferredTag: PhraseTag;
+  resistance: number;
+  passiveArchetype: PassiveArchetype;
+  activateArchetype: ActivateArchetype;
+}
+
 export type CardDef =
   | ElementCardDef
   | CharacterCardDef
   | UltimateCardDef
   | ArenaCardDef
-  | GlitchCardDef;
+  | GlitchCardDef
+  | EnginePartCardDef;
 
 /** Runtime card instance in a match (deck/hand/bound). */
 export interface CardInstance {
@@ -79,4 +99,6 @@ export interface ContentPack {
   arenas: ArenaCardDef[];
   elementCards: ElementCardDef[];
   glitches: GlitchCardDef[];
+  /** V2 phrase parts — optional; included in main deck when present. */
+  engineParts?: EnginePartCardDef[];
 }

@@ -9,6 +9,7 @@ import {
   applyAction,
   runBotTurn,
   rollD6,
+  rulesetFromState,
   type GameState,
   type GameAction,
   type PlayerId,
@@ -199,7 +200,11 @@ export function GameView() {
     setState((prev) => {
       if (!prev) return prev;
       try {
-        const next = applyAction(prev, action, playerId, { pack, playerId });
+        const next = applyAction(prev, action, playerId, {
+          pack,
+          playerId,
+          ruleset: rulesetFromState(prev),
+        });
         if (
           action.type === 'PLAY_ATTACK' ||
           action.type === 'PLAY_BLOCK' ||
@@ -338,7 +343,11 @@ export function GameView() {
             prev.phase === 'draw' &&
             prev.activePlayer === HUMAN;
 
-          const next = applyAction(prev, action, HUMAN, { pack, playerId: HUMAN });
+          const next = applyAction(prev, action, HUMAN, {
+            pack,
+            playerId: HUMAN,
+            ruleset: rulesetFromState(prev),
+          });
 
           if (isHumanDrawPhase) {
             const drawnId = findNewlyDrawnCard(prev, next, HUMAN);
