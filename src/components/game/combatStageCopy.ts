@@ -19,10 +19,10 @@ export function buildCombatStageSubtitle(
   botThinking: boolean,
 ): string {
   if (isHumanDefender) {
-    return 'Wähle eine Block-Karte oder lass den Angriff durch.';
+    return 'Spiele eine Block-Karte oder passe — gewürfelt wird erst danach.';
   }
-  if (botThinking) return '🤖 Gegner blockt…';
-  return 'Warte auf Gegenwehr…';
+  if (botThinking) return 'Gegner entscheidet über Block…';
+  return 'Warte auf die Verteidigungsentscheidung…';
 }
 
 export function combatValueLabel(combat: PendingCombat): string {

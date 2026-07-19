@@ -1,16 +1,16 @@
+import { defineConfig } from 'vitest/config';
+import react from '@vitejs/plugin-react-swc';
+import tailwindcss from '@tailwindcss/vite';
+import path from 'path';
+import { loadEnv } from 'vite';
+import { llmBotApiPlugin } from './vite-plugins/llmBotApi';
 
-  import { defineConfig } from 'vitest/config';
-  import react from '@vitejs/plugin-react-swc';
-  import tailwindcss from '@tailwindcss/vite';
-  import path from 'path';
-  import { loadEnv } from 'vite';
+export default defineConfig(({ mode }) => {
+  const env = loadEnv(mode, process.cwd(), '');
+  const devPort = Number(env.VITE_DEV_PORT) || 4789;
 
-  export default defineConfig(({ mode }) => {
-    const env = loadEnv(mode, process.cwd(), '');
-    const devPort = Number(env.VITE_DEV_PORT) || 4789;
-
-    return {
-    plugins: [react(), tailwindcss()],
+  return {
+    plugins: [react(), tailwindcss(), llmBotApiPlugin(env)],
     test: {
       globals: false,
       environment: 'node',
@@ -72,4 +72,4 @@
       open: true,
     },
   };
-  });
+});

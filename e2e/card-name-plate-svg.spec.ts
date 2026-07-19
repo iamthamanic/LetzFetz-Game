@@ -47,8 +47,9 @@ test.describe('Card name plate SVG', () => {
     await pillendoktora.scrollIntoViewIfNeeded();
     await shot(page, '01-pillendoktora-svg-badge.png');
 
-    await page.getByRole('button', { name: 'Edit' }).click();
-    await expect(page.getByText('Base Pack V1')).toBeVisible({ timeout: 10000 });
+    await page.getByRole('button', { name: 'Cards' }).click();
+    await expect(page.getByTestId('card-library')).toBeVisible({ timeout: 10000 });
+    await page.getByRole('tab', { name: /Charakter/i }).click();
     await page.getByRole('button', { name: /Knuspergnom/i }).first().click();
     await expect(page.getByText(/Vorschau/i)).toBeVisible({ timeout: 10000 });
 

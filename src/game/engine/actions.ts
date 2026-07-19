@@ -4,6 +4,7 @@ import type {
   ElementCardDef,
   GameAction,
   GameState,
+  PendingChoice,
   PlayerId,
   RulesetConfig,
 } from '../types';
@@ -16,12 +17,28 @@ import {
   discardFromHand,
   drawForPlayer,
   enforceHandLimit,
+  ensureMeta,
   getCharacterElements,
   clampHp,
 } from './helpers';
 import { applyElementEffect, applyBoundActivation, finishMainAction, applyInstantGlitch } from './effects';
 import { findElementDef, findGlitchDef } from './lookup';
 import { applyUltimateEffect } from './ultimate';
+import {
+  getChallengeMargin,
+  applyVulkanAttackRoll,
+  applySumpfBlockRoll,
+  markAttackOrChallenge,
+  onStartPhaseArena,
+  onEndTurnArena,
+  afterHighAttackValue,
+  afterBoundDestroyed,
+  isSpaeti,
+  isKristall,
+  isClub,
+  isSumpf,
+} from './arena';
+import { listOwnTurnGlitchActions, applyPlayableGlitch } from './playableGlitches';
 
 export { findElementDef } from './lookup';
 
@@ -40,18 +57,14 @@ function rngOf(ctx: PackContext): () => number {
   return ctx.rng ?? Math.random;
 }
 
-function getChallengeMargin(state: GameState): number {
-  return state.arena.arenaId === 'arena-sumpf' ? 2 : 1;
-}
-
-function runStartPhase(state: GameState, playerId: PlayerId): GameState {
-  const next = cloneState(state);
-  next.players[playerId].bound = next.players[playerId].bound.map((b) => ({
-    ...b,
-    exhausted: false,
-  }));
+function runStartPhase(
+  state: GameState,
+  playerId: PlayerId,
+  rng: () => number,
+  ruleset: RulesetConfig,
+): GameState {
+  const next = onStartPhaseArena(state, playerId, rng, ruleset);
   next.phase = 'draw';
-  next.lastEvent = 'Erschöpfte Karten aufgestellt.';
   return next;
 }
 
@@ -65,7 +78,7 @@ function runDrawPhase(
   let next = drawForPlayer(state, playerId, 1, rng, ruleset);
   const drawn = next.players[playerId].hand[next.players[playerId].hand.length - 1];
   if (!drawn) {
-    next.phase = 'bind';
+    next.phase = 'build';
     return next;
   }
 
@@ -73,11 +86,11 @@ function runDrawPhase(
   if (glitch?.glitchType === 'instant') {
     next.players[playerId].hand.pop();
     next.piles.discard.push(drawn);
-    next = applyInstantGlitch(next, pack, playerId, glitch, rng, ruleset);
+    next = applyInstantGlitch(next, pack, playerId, glitch, rng, ruleset, drawn.instanceId);
     if (next.winner) return next;
   }
 
-  next.phase = 'bind';
+  next.phase = 'build';
   next.lastEvent = next.lastEvent ?? '1 Karte gezogen.';
   return next;
 }
@@ -137,22 +150,121 @@ function computeChallengeAttackValue(
   return base + counterBonus(attackDef.element, targetElement);
 }
 
-function resolveCombat(
+function defenderHasRueckkopplung(state: GameState): boolean {
+  const defenderId = state.combat?.defenderId;
+  if (!defenderId) return false;
+  return state.players[defenderId].hand.some((c) => c.defId === 'glitch-rueckkopplung');
+}
+
+function opponentHasNeinBruder(state: GameState, boosterId: PlayerId): boolean {
+  const opp = opponentOf(boosterId);
+  return state.players[opp].hand.some((c) => c.defId === 'glitch-nein');
+}
+
+/** Arena Späti/Sumpf: draw 1 then must discard 1 — not skippable. */
+function applyMandatoryArenaDrawDiscard(
   state: GameState,
-  blockValue: number,
+  playerId: PlayerId,
+  source: 'spaeti' | 'sumpf-full-block',
+  pack: ContentPack,
+  rng: () => number,
   ruleset: RulesetConfig,
 ): GameState {
-  if (!state.combat) return state;
-  const next = cloneState(state);
-  const { attackerId, defenderId, attackValue } = state.combat;
-  let damage = resolveDamage(attackValue, blockValue);
-
-  if (state.combat.mode === 'player' && next.players[attackerId].doubleNextAttack) {
-    damage *= 2;
-    next.players[attackerId].doubleNextAttack = false;
-    next.players[attackerId].hp = clampHp(next.players[attackerId].hp - 1, ruleset);
+  let next = drawForPlayer(state, playerId, 1, rng, ruleset, { allowExtra: true });
+  const drawn = next.players[playerId].hand[next.players[playerId].hand.length - 1];
+  if (drawn) {
+    const glitch = findGlitchDef(pack, drawn.defId);
+    if (glitch?.glitchType === 'instant') {
+      next.players[playerId].hand.pop();
+      next.piles.discard.push(drawn);
+      next = applyInstantGlitch(next, pack, playerId, glitch, rng, ruleset, drawn.instanceId);
+      if (next.winner) return next;
+    }
   }
+  if (source === 'spaeti') {
+    next.meta = {
+      ...next.meta,
+      spaetiFilterUsed: { ...next.meta.spaetiFilterUsed, [playerId]: true },
+    };
+  }
+  const revealNote =
+    next.instantReveals.length > 0
+      ? ` Sofort-Glitch: ${next.instantReveals.map((r) => r.resolution).join(' ')}`
+      : '';
+  if (next.players[playerId].hand.length === 0) {
+    next.pendingChoice = null;
+    next.lastEvent = `Arena: gezogen.${revealNote} — nichts abzuwerfen.`.trim();
+    return checkWinner(next);
+  }
+  next.pendingChoice = { type: 'must-discard', playerId, source };
+  next.lastEvent = `Arena: 1 gezogen.${revealNote} — jetzt 1 Karte abwerfen.`.trim();
+  return checkWinner(next);
+}
 
+function queuePostBoostPending(
+  state: GameState,
+  boosterId: PlayerId,
+  pack: ContentPack,
+  rng: () => number,
+  ruleset: RulesetConfig,
+): GameState {
+  if (isSpaeti(state) && !state.meta.spaetiFilterUsed[boosterId]) {
+    return applyMandatoryArenaDrawDiscard(state, boosterId, 'spaeti', pack, rng, ruleset);
+  }
+  if (isSpaeti(state) && state.meta.boostsPlayed[boosterId] === 3) {
+    const next = cloneState(state);
+    next.pendingChoice = { type: 'spaeti-extra-build', playerId: boosterId };
+    next.lastEvent = `${next.lastEvent ?? ''} Extra-Bau (3. Boost).`.trim();
+    return next;
+  }
+  return state;
+}
+
+function incrementBoostsPlayed(state: GameState, boosterId: PlayerId): GameState {
+  const next = cloneState(state);
+  next.meta = {
+    ...next.meta,
+    boostsPlayed: {
+      ...next.meta.boostsPlayed,
+      [boosterId]: next.meta.boostsPlayed[boosterId] + 1,
+    },
+  };
+  return next;
+}
+
+function resolveBoostAfterInterrupt(
+  state: GameState,
+  pack: ContentPack,
+  pending: Extract<PendingChoice, { type: 'boost-interrupt' }>,
+  rng: () => number,
+  ruleset: RulesetConfig,
+): GameState {
+  const boostDef = findElementDef(pack, pending.boostDefId);
+  if (!boostDef) throw new Error('Boost card definition missing');
+  let next = cloneState(state);
+  next.pendingChoice = null;
+  next = applyElementEffect(next, pending.boosterId, boostDef.element, rng, ruleset, { pack });
+  next = incrementBoostsPlayed(next, pending.boosterId);
+  if (next.pendingChoice?.type === 'must-discard' && next.pendingChoice.source === 'air') {
+    next.meta = { ...next.meta, awaitingPostBoostArena: true };
+    return finishMainAction(next);
+  }
+  next = queuePostBoostPending(next, pending.boosterId, pack, rng, ruleset);
+  return finishMainAction(next);
+}
+
+function applyPlayerAttackDamage(
+  state: GameState,
+  attackerId: PlayerId,
+  defenderId: PlayerId,
+  damage: number,
+  attackValue: number,
+  blockValue: number,
+  ruleset: RulesetConfig,
+  pack: ContentPack,
+  rng: () => number,
+): GameState {
+  let next = cloneState(state);
   next.players[defenderId].hp = clampHp(next.players[defenderId].hp - damage, ruleset);
   next.combat = null;
   next.phase = 'end';
@@ -160,7 +272,64 @@ function resolveCombat(
     damage > 0
       ? `${damage} Schaden (${attackValue} vs ${blockValue} Block).`
       : `Komplett geblockt (${attackValue} vs ${blockValue}).`;
+  if (isSumpf(next) && damage === 0) {
+    next = applyMandatoryArenaDrawDiscard(next, defenderId, 'sumpf-full-block', pack, rng, ruleset);
+  }
+  next = afterHighAttackValue(next, attackerId, attackValue, ruleset);
   return checkWinner(next);
+}
+
+function resolveCombat(
+  state: GameState,
+  blockValue: number,
+  ruleset: RulesetConfig,
+  pack: ContentPack,
+  rng: () => number,
+): GameState {
+  if (!state.combat) return state;
+  const { attackerId, defenderId, attackValue } = state.combat;
+  let damage = resolveDamage(attackValue, blockValue);
+  let doubleAttackApplied = false;
+
+  if (state.combat.mode === 'player') {
+    const working = cloneState(state);
+    if (working.players[attackerId].doubleNextAttack) {
+      damage *= 2;
+      doubleAttackApplied = true;
+      working.players[attackerId].doubleNextAttack = false;
+      working.players[attackerId].hp = clampHp(working.players[attackerId].hp - 1, ruleset);
+      state = working;
+    }
+  }
+
+  if (damage > 0 && defenderHasRueckkopplung(state)) {
+    const next = cloneState(state);
+    next.pendingChoice = {
+      type: 'damage-reduce',
+      defenderId,
+      attackerId,
+      damage,
+      attackValue,
+      blockValue,
+      mode: 'player',
+      doubleAttackApplied,
+    };
+    next.combat = null;
+    next.lastEvent = `Schaden ${damage} — Rückkopplung möglich.`;
+    return next;
+  }
+
+  return applyPlayerAttackDamage(
+    state,
+    attackerId,
+    defenderId,
+    damage,
+    attackValue,
+    blockValue,
+    ruleset,
+    pack,
+    rng,
+  );
 }
 
 function resolveChallengeCombat(
@@ -171,7 +340,7 @@ function resolveChallengeCombat(
 ): GameState {
   if (!state.combat || state.combat.mode !== 'challenge') return state;
   const next = cloneState(state);
-  const { defenderId, attackValue, targetBoundInstanceId } = state.combat;
+  const { attackerId, defenderId, attackValue, targetBoundInstanceId } = state.combat;
 
   const boundIdx = next.players[defenderId].bound.findIndex(
     (b) => b.instanceId === targetBoundInstanceId,
@@ -190,13 +359,136 @@ function resolveChallengeCombat(
     const [removed] = next.players[defenderId].bound.splice(boundIdx, 1);
     next.piles.discard.push(removed);
     next.lastEvent = `Herausforderung erfolgreich — ${boundDef.name} zerstört (${attackValue} vs ${targetResistance + blockValue}).`;
-  } else {
-    next.lastEvent = `Herausforderung fehlgeschlagen (${attackValue} vs ${targetResistance + blockValue}).`;
+    let afterDestroy = afterBoundDestroyed(next, attackerId, ruleset);
+    afterDestroy.combat = null;
+    afterDestroy.phase = 'end';
+    return checkWinner(afterDestroy);
   }
 
+  if (isClub(next) && next.arena.d6Variant === 2) {
+    next.players[defenderId].bound[boundIdx].exhausted = true;
+  }
+  next.lastEvent = `Herausforderung fehlgeschlagen (${attackValue} vs ${targetResistance + blockValue}).`;
   next.combat = null;
   next.phase = 'end';
   return checkWinner(next);
+}
+
+function pendingChoicePlayer(pending: PendingChoice): PlayerId {
+  switch (pending.type) {
+    case 'boost-interrupt':
+      return opponentOf(pending.boosterId);
+    case 'damage-reduce':
+      return pending.defenderId;
+    case 'optional-draw-discard':
+    case 'must-discard':
+    case 'spaeti-extra-build':
+      return pending.playerId;
+  }
+}
+
+function listBuildActionsForPlayer(
+  state: GameState,
+  pack: ContentPack,
+  playerId: PlayerId,
+  ruleset: RulesetConfig,
+): GameAction[] {
+  const actions: GameAction[] = [];
+  const hand = state.players[playerId].hand;
+  const boundCount = state.players[playerId].bound.length;
+  for (const card of hand) {
+    if (!findElementDef(pack, card.defId)) continue;
+    if (boundCount < ruleset.maxBoundCards) {
+      actions.push({ type: 'BUILD_CARD', cardInstanceId: card.instanceId });
+    } else {
+      for (const b of state.players[playerId].bound) {
+        actions.push({
+          type: 'BUILD_CARD',
+          cardInstanceId: card.instanceId,
+          discardBoundId: b.instanceId,
+        });
+      }
+    }
+  }
+  return actions;
+}
+
+function listClubSwapActions(state: GameState, pack: ContentPack, playerId: PlayerId): GameAction[] {
+  const actions: GameAction[] = [];
+  const hand = state.players[playerId].hand;
+  const bound = state.players[playerId].bound;
+  for (const ret of bound) {
+    for (const card of hand) {
+      if (!findElementDef(pack, card.defId)) continue;
+      actions.push({
+        type: 'CLUB_SWAP',
+        returnBoundInstanceId: ret.instanceId,
+        buildHandInstanceId: card.instanceId,
+      });
+    }
+  }
+  return actions;
+}
+
+function listBasarExhaustActions(state: GameState, playerId: PlayerId): GameAction[] {
+  const actions: GameAction[] = [];
+  const opp = opponentOf(playerId);
+  const oppBound = state.players[opp].bound;
+  if (oppBound.length === 0) return actions;
+  for (const handCard of state.players[playerId].hand) {
+    for (const target of oppBound) {
+      actions.push({
+        type: 'BASAR_EXHAUST',
+        discardHandInstanceId: handCard.instanceId,
+        targetBoundInstanceId: target.instanceId,
+      });
+    }
+  }
+  return actions;
+}
+
+function getPendingLegalActions(state: GameState, ctx: PackContext): GameAction[] {
+  const pending = state.pendingChoice;
+  if (!pending) return [];
+  const eligible = pendingChoicePlayer(pending);
+  if (ctx.playerId !== eligible) return [];
+
+  const actions: GameAction[] = [];
+  // Arena draw/discard and Späti extra-build are mandatory — no PASS.
+  if (pending.type === 'boost-interrupt' || pending.type === 'damage-reduce') {
+    actions.push({ type: 'PASS_PENDING' });
+  }
+
+  switch (pending.type) {
+    case 'boost-interrupt':
+      for (const card of state.players[eligible].hand) {
+        if (card.defId === 'glitch-nein') {
+          actions.push({ type: 'PLAY_GLITCH', glitchInstanceId: card.instanceId });
+        }
+      }
+      break;
+    case 'damage-reduce':
+      for (const card of state.players[eligible].hand) {
+        if (card.defId === 'glitch-rueckkopplung') {
+          actions.push({ type: 'PLAY_GLITCH', glitchInstanceId: card.instanceId });
+        }
+      }
+      break;
+    case 'optional-draw-discard':
+      // Legacy pending type — draw is mandatory (no skip).
+      actions.push({ type: 'TAKE_OPTIONAL_DRAW' });
+      break;
+    case 'must-discard':
+      for (const card of state.players[eligible].hand) {
+        actions.push({ type: 'RESOLVE_DRAW_DISCARD', discardInstanceId: card.instanceId });
+      }
+      break;
+    case 'spaeti-extra-build':
+      actions.push(...listBuildActionsForPlayer(state, ctx.pack, eligible, rulesetOf(ctx)));
+      break;
+  }
+
+  return actions;
 }
 
 /** Legal actions for the current phase — expanded in Phase 1. */
@@ -204,6 +496,10 @@ export function getLegalActions(state: GameState, ctx: PackContext): GameAction[
   if (state.winner) return [];
 
   const ruleset = rulesetOf(ctx);
+
+  if (state.pendingChoice) {
+    return getPendingLegalActions(state, ctx);
+  }
 
   if (state.combat) {
     const { defenderId } = state.combat;
@@ -231,24 +527,9 @@ export function getLegalActions(state: GameState, ctx: PackContext): GameAction[
     actions.push({ type: 'ADVANCE_PHASE' });
   }
 
-  if (state.phase === 'bind') {
-    actions.push({ type: 'SKIP_BIND' });
-    const boundCount = state.players[ctx.playerId].bound.length;
-    for (const card of hand) {
-      if (findElementDef(ctx.pack, card.defId)) {
-        if (boundCount < ruleset.maxBoundCards) {
-          actions.push({ type: 'BIND_CARD', cardInstanceId: card.instanceId });
-        } else {
-          for (const b of state.players[ctx.playerId].bound) {
-            actions.push({
-              type: 'BIND_CARD',
-              cardInstanceId: card.instanceId,
-              discardBoundId: b.instanceId,
-            });
-          }
-        }
-      }
-    }
+  if (state.phase === 'build') {
+    actions.push({ type: 'SKIP_BUILD' });
+    actions.push(...listBuildActionsForPlayer(state, ctx.pack, ctx.playerId, ruleset));
   }
 
   if (state.phase === 'action') {
@@ -280,16 +561,23 @@ export function getLegalActions(state: GameState, ctx: PackContext): GameAction[
       }
     }
     const player = state.players[ctx.playerId];
+    const lockedId = state.meta.activationLockedBoundId;
     for (const bound of player.bound) {
-      if (!bound.exhausted) {
-        for (const handCard of hand) {
-          actions.push({
-            type: 'ACTIVATE_BOUND',
-            boundInstanceId: bound.instanceId,
-            discardHandInstanceId: handCard.instanceId,
-          });
-        }
+      if (bound.exhausted || bound.instanceId === lockedId) continue;
+      for (const handCard of hand) {
+        actions.push({
+          type: 'ACTIVATE_BOUND',
+          boundInstanceId: bound.instanceId,
+          discardHandInstanceId: handCard.instanceId,
+        });
       }
+    }
+    actions.push(...listOwnTurnGlitchActions(state, ctx.playerId));
+    if (state.meta.clubSwapAvailable) {
+      actions.push(...listClubSwapActions(state, ctx.pack, ctx.playerId));
+    }
+    if (state.meta.basarExhaustAvailable) {
+      actions.push(...listBasarExhaustActions(state, ctx.playerId));
     }
     actions.push({ type: 'END_TURN' });
   }
@@ -306,6 +594,190 @@ export function advancePhase(phase: TurnPhase): TurnPhase {
   return TURN_PHASES[Math.min(idx + 1, TURN_PHASES.length - 1)];
 }
 
+function applyBuildCard(
+  state: GameState,
+  pack: ContentPack,
+  playerId: PlayerId,
+  action: Extract<GameAction, { type: 'BUILD_CARD' }>,
+  ruleset: RulesetConfig,
+  phaseAfter: TurnPhase,
+): GameState {
+  let next = cloneState(state);
+  const handIdx = next.players[playerId].hand.findIndex((c) => c.instanceId === action.cardInstanceId);
+  if (handIdx === -1) throw new Error('Card not in hand');
+  const def = findElementDef(pack, next.players[playerId].hand[handIdx].defId);
+  if (!def) throw new Error('Only element cards can be built');
+
+  if (next.players[playerId].bound.length >= ruleset.maxBoundCards) {
+    if (!action.discardBoundId) throw new Error('Must discard a built card first');
+    const bIdx = next.players[playerId].bound.findIndex((b) => b.instanceId === action.discardBoundId);
+    if (bIdx === -1) throw new Error('Bound card not found');
+    const [old] = next.players[playerId].bound.splice(bIdx, 1);
+    next.piles.discard.push(old);
+  }
+
+  const [card] = next.players[playerId].hand.splice(handIdx, 1);
+  const bound: BoundCardInstance = {
+    ...card,
+    exhausted: false,
+    resistanceBonus: 0,
+  };
+  next.players[playerId].bound.push(bound);
+  next.phase = phaseAfter;
+  next.lastEvent = `${def.name} gebaut.`;
+  return next;
+}
+
+function applyPendingChoiceAction(
+  state: GameState,
+  action: GameAction,
+  playerId: PlayerId,
+  ctx: PackContext,
+): GameState {
+  const pending = state.pendingChoice;
+  if (!pending) throw new Error('No pending choice');
+  if (playerId !== pendingChoicePlayer(pending)) {
+    throw new Error('Not eligible for pending choice');
+  }
+
+  const pack = ctx.pack;
+  const ruleset = rulesetOf(ctx);
+  const rng = rngOf(ctx);
+
+  switch (action.type) {
+    case 'PASS_PENDING': {
+      switch (pending.type) {
+        case 'boost-interrupt':
+          return resolveBoostAfterInterrupt(state, pack, pending, rng, ruleset);
+        case 'damage-reduce': {
+          let next = cloneState(state);
+          next.pendingChoice = null;
+          next = applyPlayerAttackDamage(
+            next,
+            pending.attackerId,
+            pending.defenderId,
+            pending.damage,
+            pending.attackValue,
+            pending.blockValue,
+            ruleset,
+            pack,
+            rng,
+          );
+          return next;
+        }
+        case 'optional-draw-discard':
+        case 'must-discard':
+        case 'spaeti-extra-build':
+          throw new Error('Arena effect cannot be skipped');
+      }
+      break;
+    }
+    case 'TAKE_OPTIONAL_DRAW': {
+      if (pending.type !== 'optional-draw-discard') throw new Error('Wrong pending type');
+      let next = drawForPlayer(state, pending.playerId, 1, rng, ruleset, {
+        allowExtra: true,
+      });
+      const drawn = next.players[pending.playerId].hand[next.players[pending.playerId].hand.length - 1];
+      if (drawn) {
+        const glitch = findGlitchDef(pack, drawn.defId);
+        if (glitch?.glitchType === 'instant') {
+          next.players[pending.playerId].hand.pop();
+          next.piles.discard.push(drawn);
+          next = applyInstantGlitch(next, pack, pending.playerId, glitch, rng, ruleset, drawn.instanceId);
+          if (next.winner) return next;
+        }
+      }
+      if (pending.source === 'spaeti') {
+        next.meta = {
+          ...next.meta,
+          spaetiFilterUsed: { ...next.meta.spaetiFilterUsed, [pending.playerId]: true },
+        };
+      }
+      next.pendingChoice = {
+        type: 'must-discard',
+        playerId: pending.playerId,
+        source: pending.source,
+      };
+      next.lastEvent = 'Arena: 1 gezogen — jetzt 1 Karte abwerfen.';
+      return checkWinner(next);
+    }
+    case 'RESOLVE_DRAW_DISCARD': {
+      if (pending.type !== 'must-discard' && pending.type !== 'optional-draw-discard') {
+        throw new Error('Wrong pending type');
+      }
+      // Legacy one-shot path: optional-draw-discard + discard id still works
+      let next = state;
+      if (pending.type === 'optional-draw-discard') {
+        next = drawForPlayer(state, pending.playerId, 1, rng, ruleset, { allowExtra: true });
+        const drawn = next.players[pending.playerId].hand[next.players[pending.playerId].hand.length - 1];
+        if (drawn) {
+          const glitch = findGlitchDef(pack, drawn.defId);
+          if (glitch?.glitchType === 'instant') {
+            next.players[pending.playerId].hand.pop();
+            next.piles.discard.push(drawn);
+            next = applyInstantGlitch(next, pack, pending.playerId, glitch, rng, ruleset, drawn.instanceId);
+            if (next.winner) return next;
+          }
+        }
+        if (pending.source === 'spaeti') {
+          next.meta = {
+            ...next.meta,
+            spaetiFilterUsed: { ...next.meta.spaetiFilterUsed, [pending.playerId]: true },
+          };
+        }
+      } else {
+        next = cloneState(state);
+      }
+      const hand = next.players[pending.playerId].hand;
+      const discardId = hand.some((c) => c.instanceId === action.discardInstanceId)
+        ? action.discardInstanceId
+        : hand[hand.length - 1]?.instanceId;
+      if (discardId) {
+        next = discardFromHand(next, pending.playerId, discardId);
+      }
+      const airFollowUp =
+        pending.type === 'must-discard' &&
+        pending.source === 'air' &&
+        next.meta.awaitingPostBoostArena;
+      next.pendingChoice = null;
+      if (airFollowUp) {
+        next.meta = { ...next.meta, awaitingPostBoostArena: false };
+        next = queuePostBoostPending(next, pending.playerId, pack, rng, ruleset);
+        next.lastEvent = 'Luft: 1 abgeworfen.';
+        return finishMainAction(checkWinner(next));
+      }
+      if (
+        pending.type === 'must-discard' &&
+        pending.source === 'spaeti' &&
+        isSpaeti(next) &&
+        next.meta.boostsPlayed[pending.playerId] === 3
+      ) {
+        next.pendingChoice = { type: 'spaeti-extra-build', playerId: pending.playerId };
+        next.lastEvent = '1 gezogen, 1 abgeworfen — Extra-Bau (3. Boost).';
+        return checkWinner(next);
+      }
+      next.phase = 'end';
+      next.lastEvent =
+        pending.type === 'must-discard' && pending.source === 'air'
+          ? 'Luft: 1 abgeworfen.'
+          : '1 gezogen, 1 abgeworfen.';
+      return checkWinner(next);
+    }
+    case 'PLAY_GLITCH':
+      return applyPlayableGlitch(state, pack, playerId, action, rng, ruleset);
+    case 'BUILD_CARD': {
+      if (pending.type !== 'spaeti-extra-build') throw new Error('BUILD not pending here');
+      let next = applyBuildCard(state, pack, playerId, action, ruleset, 'end');
+      next.pendingChoice = null;
+      return next;
+    }
+    default:
+      throw new Error('Invalid action during pending choice');
+  }
+
+  throw new Error('Unhandled pending action');
+}
+
 /** Apply a validated action. */
 export function applyAction(
   state: GameState,
@@ -313,10 +785,17 @@ export function applyAction(
   playerId: PlayerId,
   ctx: PackContext,
 ): GameState {
+  state = ensureMeta(state);
+  // Fresh reveal list for this action — UI/chat must show any Sofort-Glitches.
+  state = { ...state, instantReveals: [] };
   if (state.winner) return state;
   const pack = ctx.pack;
   const ruleset = rulesetOf(ctx);
   const rng = rngOf(ctx);
+
+  if (state.pendingChoice) {
+    return applyPendingChoiceAction(state, action, playerId, ctx);
+  }
 
   if (state.combat) {
     return applyCombatResponse(state, action, playerId, ctx);
@@ -330,47 +809,20 @@ export function applyAction(
 
   switch (action.type) {
     case 'ADVANCE_PHASE': {
-      if (state.phase === 'start') return runStartPhase(state, playerId);
+      if (state.phase === 'start') return runStartPhase(state, playerId, rng, ruleset);
       if (state.phase === 'draw') return runDrawPhase(state, pack, playerId, rng, ruleset);
       throw new Error(`ADVANCE_PHASE not valid in phase ${state.phase}`);
     }
-    case 'SKIP_BIND': {
-      if (state.phase !== 'bind') throw new Error('Not in bind phase');
+    case 'SKIP_BUILD': {
+      if (state.phase !== 'build') throw new Error('Not in build phase');
       next = cloneState(state);
       next.phase = 'action';
-      next.lastEvent = 'Keine Karte gebunden.';
+      next.lastEvent = 'Keine Karte gebaut.';
       return next;
     }
-    case 'BIND_CARD': {
-      if (state.phase !== 'bind') throw new Error('Not in bind phase');
-      next = cloneState(state);
-      const handIdx = next.players[playerId].hand.findIndex(
-        (c) => c.instanceId === action.cardInstanceId,
-      );
-      if (handIdx === -1) throw new Error('Card not in hand');
-      const def = findElementDef(pack, next.players[playerId].hand[handIdx].defId);
-      if (!def) throw new Error('Only element cards can be bound');
-
-      if (next.players[playerId].bound.length >= ruleset.maxBoundCards) {
-        if (!action.discardBoundId) throw new Error('Must discard a bound card first');
-        const bIdx = next.players[playerId].bound.findIndex(
-          (b) => b.instanceId === action.discardBoundId,
-        );
-        if (bIdx === -1) throw new Error('Bound card not found');
-        const [old] = next.players[playerId].bound.splice(bIdx, 1);
-        next.piles.discard.push(old);
-      }
-
-      const [card] = next.players[playerId].hand.splice(handIdx, 1);
-      const bound: BoundCardInstance = {
-        ...card,
-        exhausted: false,
-        resistanceBonus: 0,
-      };
-      next.players[playerId].bound.push(bound);
-      next.phase = 'action';
-      next.lastEvent = `${def.name} gebunden.`;
-      return next;
+    case 'BUILD_CARD': {
+      if (state.phase !== 'build') throw new Error('Not in build phase');
+      return applyBuildCard(state, pack, playerId, action, ruleset, 'action');
     }
     case 'PLAY_ATTACK': {
       if (state.phase !== 'action') throw new Error('Not in action phase');
@@ -380,10 +832,14 @@ export function applyAction(
       );
       if (!def || def.cardType !== 'attack') throw new Error('Not an attack card');
 
-      const diceRoll = action.diceRoll ?? rollD6(rng);
-      const attackValue = computeAttackValueForPlayer(pack, state, playerId, def, diceRoll, ruleset);
+      let diceRoll = action.diceRoll ?? rollD6(rng);
+      const vulkan = applyVulkanAttackRoll(state, playerId, diceRoll);
+      let working = vulkan.state;
+      diceRoll = vulkan.roll;
+      const attackValue = computeAttackValueForPlayer(pack, working, playerId, def, diceRoll, ruleset);
 
-      next = discardFromHand(state, playerId, action.cardInstanceId);
+      next = discardFromHand(working, playerId, action.cardInstanceId);
+      next = markAttackOrChallenge(next);
       const defenderId = opponentOf(playerId);
       next.combat = {
         attackerId: playerId,
@@ -410,10 +866,13 @@ export function applyAction(
       const def = handCard ? findElementDef(pack, handCard.defId) : undefined;
       if (!def || def.cardType !== 'attack') throw new Error('Not an attack card');
 
-      const diceRoll = action.diceRoll ?? rollD6(rng);
+      let diceRoll = action.diceRoll ?? rollD6(rng);
+      const vulkan = applyVulkanAttackRoll(state, playerId, diceRoll);
+      let working = vulkan.state;
+      diceRoll = vulkan.roll;
       const attackValue = computeChallengeAttackValue(
         pack,
-        state,
+        working,
         playerId,
         def,
         target.defId,
@@ -421,7 +880,8 @@ export function applyAction(
         ruleset,
       );
 
-      next = discardFromHand(state, playerId, action.attackCardInstanceId);
+      next = discardFromHand(working, playerId, action.attackCardInstanceId);
+      next = markAttackOrChallenge(next);
       next.combat = {
         attackerId: playerId,
         defenderId,
@@ -443,18 +903,46 @@ export function applyAction(
 
       next = applyUltimateEffect(state, pack, playerId, character.ultimateId, rng, ruleset);
       next.players[playerId].ultimateAvailable = false;
+      if (isKristall(next)) {
+        next = drawForPlayer(next, playerId, 1, rng, ruleset, { allowExtra: true });
+        const drawn = next.players[playerId].hand[next.players[playerId].hand.length - 1];
+        if (drawn) {
+          const glitch = findGlitchDef(pack, drawn.defId);
+          if (glitch?.glitchType === 'instant') {
+            next.players[playerId].hand.pop();
+            next.piles.discard.push(drawn);
+            next = applyInstantGlitch(next, pack, playerId, glitch, rng, ruleset, drawn.instanceId);
+          }
+        }
+      }
       return finishMainAction(next);
     }
     case 'PLAY_BOOST': {
       if (state.phase !== 'action') throw new Error('Not in action phase');
-      const def = findElementDef(
-        pack,
-        state.players[playerId].hand.find((c) => c.instanceId === action.cardInstanceId)?.defId ?? '',
-      );
+      const handCard = state.players[playerId].hand.find((c) => c.instanceId === action.cardInstanceId);
+      const def = handCard ? findElementDef(pack, handCard.defId) : undefined;
       if (!def || def.cardType !== 'boost') throw new Error('Not a boost card');
 
       next = discardFromHand(state, playerId, action.cardInstanceId);
-      next = applyElementEffect(next, playerId, def.element, rng, ruleset);
+      const opp = opponentOf(playerId);
+      if (opponentHasNeinBruder(next, playerId)) {
+        next.pendingChoice = {
+          type: 'boost-interrupt',
+          boosterId: playerId,
+          boostInstanceId: handCard!.instanceId,
+          boostDefId: def.id,
+        };
+        next.lastEvent = `${def.name} gespielt — Nein, Bruder?`;
+        return next;
+      }
+
+      next = applyElementEffect(next, playerId, def.element, rng, ruleset, { pack });
+      next = incrementBoostsPlayed(next, playerId);
+      if (next.pendingChoice?.type === 'must-discard' && next.pendingChoice.source === 'air') {
+        next.meta = { ...next.meta, awaitingPostBoostArena: true };
+        return finishMainAction(next);
+      }
+      next = queuePostBoostPending(next, playerId, pack, rng, ruleset);
       return finishMainAction(next);
     }
     case 'DISCARD_DRAW': {
@@ -466,10 +954,11 @@ export function applyAction(
     }
     case 'ACTIVATE_BOUND': {
       if (state.phase !== 'action') throw new Error('Not in action phase');
-      const bound = state.players[playerId].bound.find(
-        (b) => b.instanceId === action.boundInstanceId,
-      );
+      const bound = state.players[playerId].bound.find((b) => b.instanceId === action.boundInstanceId);
       if (!bound || bound.exhausted) throw new Error('Cannot activate this bound card');
+      if (state.meta.activationLockedBoundId === bound.instanceId) {
+        throw new Error('Bound activation locked');
+      }
 
       const boundDef = findElementDef(pack, bound.defId);
       if (!boundDef) throw new Error('Invalid bound card');
@@ -482,8 +971,69 @@ export function applyAction(
         boundDef.element,
         rng,
         ruleset,
+        pack,
       );
       return finishMainAction(next);
+    }
+    case 'PLAY_GLITCH':
+      return applyPlayableGlitch(state, pack, playerId, action, rng, ruleset);
+    case 'CLUB_SWAP': {
+      if (state.phase !== 'action' || !state.meta.clubSwapAvailable) {
+        throw new Error('Club swap not available');
+      }
+      next = cloneState(state);
+      const retIdx = next.players[playerId].bound.findIndex(
+        (b) => b.instanceId === action.returnBoundInstanceId,
+      );
+      if (retIdx === -1) throw new Error('Bound card to return not found');
+      const [returned] = next.players[playerId].bound.splice(retIdx, 1);
+      next.players[playerId].hand.push(returned);
+
+      const bindIdx = next.players[playerId].hand.findIndex(
+        (c) => c.instanceId === action.buildHandInstanceId,
+      );
+      if (bindIdx === -1) throw new Error('Bind card not in hand');
+      const bindDef = findElementDef(pack, next.players[playerId].hand[bindIdx].defId);
+      if (!bindDef) throw new Error('Only element cards can be built');
+
+      if (next.players[playerId].bound.length >= ruleset.maxBoundCards) {
+        if (!action.discardBoundId) throw new Error('Must discard a bound card');
+        const dIdx = next.players[playerId].bound.findIndex(
+          (b) => b.instanceId === action.discardBoundId,
+        );
+        if (dIdx === -1) throw new Error('Discard bound not found');
+        const [old] = next.players[playerId].bound.splice(dIdx, 1);
+        next.piles.discard.push(old);
+      }
+
+      const [bindCard] = next.players[playerId].hand.splice(bindIdx, 1);
+      next.players[playerId].bound.push({
+        ...bindCard,
+        exhausted: false,
+        resistanceBonus: 0,
+      });
+      next.meta = { ...next.meta, clubSwapAvailable: false };
+      next.lastEvent = 'Club: Karte getauscht.';
+      return next;
+    }
+    case 'BASAR_EXHAUST': {
+      if (state.phase !== 'action' || !state.meta.basarExhaustAvailable) {
+        throw new Error('Basar exhaust not available');
+      }
+      const opp = opponentOf(playerId);
+      const target = state.players[opp].bound.find(
+        (b) => b.instanceId === action.targetBoundInstanceId,
+      );
+      if (!target) throw new Error('Target bound not found');
+      next = discardFromHand(state, playerId, action.discardHandInstanceId);
+      const tIdx = next.players[opp].bound.findIndex(
+        (b) => b.instanceId === action.targetBoundInstanceId,
+      );
+      if (tIdx === -1) throw new Error('Target bound not found');
+      next.players[opp].bound[tIdx].exhausted = true;
+      next.meta = { ...next.meta, basarExhaustAvailable: false };
+      next.lastEvent = 'Basar: Gegnerische Karte erschöpft.';
+      return next;
     }
     case 'END_TURN': {
       if (state.phase === 'action') {
@@ -495,7 +1045,8 @@ export function applyAction(
       if (state.phase !== 'end') {
         throw new Error('Cannot end turn in this phase');
       }
-      next = enforceHandLimit(state, playerId, ruleset);
+      next = onEndTurnArena(state, playerId, ruleset);
+      next = enforceHandLimit(next, playerId, ruleset);
       const nextPlayer = opponentOf(playerId);
       next = {
         ...next,
@@ -508,7 +1059,9 @@ export function applyAction(
     }
     case 'PLAY_BLOCK':
     case 'PASS_BLOCK':
-      throw new Error('No pending combat');
+    case 'PASS_PENDING':
+    case 'RESOLVE_DRAW_DISCARD':
+      throw new Error('No pending combat or choice');
     default:
       throw new Error('Unknown action');
   }
@@ -534,7 +1087,7 @@ function applyCombatResponse(
     if (state.combat.mode === 'challenge') {
       return resolveChallengeCombat(state, pack, 0, ruleset);
     }
-    return resolveCombat(state, 0, ruleset);
+    return resolveCombat(state, 0, ruleset, pack, rng);
   }
 
   if (action.type === 'PLAY_BLOCK') {
@@ -544,10 +1097,13 @@ function applyCombatResponse(
     );
     if (!def || def.cardType !== 'block') throw new Error('Not a block card');
 
-    const diceRoll = action.diceRoll ?? rollD6(rng);
+    let diceRoll = action.diceRoll ?? rollD6(rng);
+    const sumpf = applySumpfBlockRoll(state, playerId, diceRoll);
+    let working = sumpf.state;
+    diceRoll = sumpf.roll;
     const blockValue = computeBlockValueForPlayer(
       pack,
-      state,
+      working,
       playerId,
       def,
       diceRoll,
@@ -555,11 +1111,11 @@ function applyCombatResponse(
       ruleset,
     );
 
-    let next = discardFromHand(state, playerId, action.cardInstanceId);
+    let next = discardFromHand(working, playerId, action.cardInstanceId);
     if (state.combat.mode === 'challenge') {
       next = resolveChallengeCombat(next, pack, blockValue, ruleset);
     } else {
-      next = resolveCombat(next, blockValue, ruleset);
+      next = resolveCombat(next, blockValue, ruleset, pack, rng);
     }
     if (next.lastEvent) {
       next.lastEvent = `Block ${blockValue} (Würfel ${diceRoll}). ${next.lastEvent}`;

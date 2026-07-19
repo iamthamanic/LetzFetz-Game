@@ -21,9 +21,35 @@ export type GameAction =
       discardHandInstanceId: string;
       targetBoundId?: string;
     }
-  | { type: 'BIND_CARD'; cardInstanceId: string; discardBoundId?: string }
-  | { type: 'SKIP_BIND' }
-  | { type: 'END_TURN' };
+  | { type: 'BUILD_CARD'; cardInstanceId: string; discardBoundId?: string }
+  | { type: 'SKIP_BUILD' }
+  | { type: 'END_TURN' }
+  /** Playable glitch (own turn main action, or reaction when pendingChoice allows). */
+  | {
+      type: 'PLAY_GLITCH';
+      glitchInstanceId: string;
+      /** Kurzschluss / Systemfehler / Illegaler Download / Basar exhaust target. */
+      targetBoundInstanceId?: string;
+      /** Illegaler Download cost. */
+      discardHandInstanceId?: string;
+    }
+  | { type: 'PASS_PENDING' }
+  /** @deprecated Prefer auto must-discard; kept for legacy pending / TAKE_OPTIONAL_DRAW. */
+  | { type: 'TAKE_OPTIONAL_DRAW' }
+  | { type: 'RESOLVE_DRAW_DISCARD'; discardInstanceId: string }
+  /** Club 3–4: take bound to hand then build another (not normal build). */
+  | {
+      type: 'CLUB_SWAP';
+      returnBoundInstanceId: string;
+      buildHandInstanceId: string;
+      discardBoundId?: string;
+    }
+  /** Basar 3–4: discard 1 to exhaust opponent bound (not main action). */
+  | {
+      type: 'BASAR_EXHAUST';
+      discardHandInstanceId: string;
+      targetBoundInstanceId: string;
+    };
 
 export interface ActionContext {
   playerId: PlayerId;

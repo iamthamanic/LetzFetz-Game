@@ -9,7 +9,7 @@ export type PlaytestScenarioId =
   | 'challenge-ready'
   | 'ulti-ready'
   | 'low-hp'
-  | 'bind-phase';
+  | 'build-phase';
 
 export interface PlaytestScenario {
   id: PlaytestScenarioId;
@@ -33,7 +33,7 @@ function advanceToPhase(
     const actions = getLegalActions(current, { pack, playerId });
     const preferred =
       actions.find((a) => a.type === 'ADVANCE_PHASE') ??
-      actions.find((a) => a.type === 'SKIP_BIND') ??
+      actions.find((a) => a.type === 'SKIP_BUILD') ??
       actions[0];
     if (!preferred) break;
     current = applyAction(current, preferred, playerId, { pack, playerId });
@@ -174,8 +174,8 @@ function scenarioLowHp(pack: ContentPack): GameState {
   return state;
 }
 
-function scenarioBindPhase(pack: ContentPack): GameState {
-  const state = advanceToPhase(baseMatch(pack, 'p1'), 'bind', pack);
+function scenarioBuildPhase(pack: ContentPack): GameState {
+  const state = advanceToPhase(baseMatch(pack, 'p1'), 'build', pack);
   state.activePlayer = 'p1';
   state.combat = null;
   state.winner = null;
@@ -188,7 +188,7 @@ export const PLAYTEST_SCENARIOS: PlaytestScenario[] = [
   { id: 'challenge-ready', label: 'Challenge möglich', build: scenarioChallengeReady },
   { id: 'ulti-ready', label: 'Ulti verfügbar', build: scenarioUltiReady },
   { id: 'low-hp', label: 'Beide ≤5 HP', build: scenarioLowHp },
-  { id: 'bind-phase', label: 'Bindephase', build: scenarioBindPhase },
+  { id: 'build-phase', label: 'Bau-Phase', build: scenarioBuildPhase },
 ];
 
 export function buildPlaytestScenario(

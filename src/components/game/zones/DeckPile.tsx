@@ -18,12 +18,12 @@ export function DeckPile({ count, className = '', style }: DeckPileProps) {
     <div
       data-testid="deck-pile"
       data-pile-count={count}
-      className={`pointer-events-none z-20 flex flex-col items-center justify-end gap-1 p-1 ${className}`}
+      className={`z-20 flex flex-col items-center justify-end gap-1 p-1 ${className}`}
       style={style}
       aria-label={`Nachziehstapel, ${count} Karten`}
     >
-      <span className="text-[9px] font-bold uppercase tracking-[0.2em] text-violet-300/90">
-        Stapel
+      <span className="px-0.5 text-center text-[8px] font-bold uppercase leading-tight tracking-[0.12em] text-violet-300/90 sm:text-[9px]">
+        Nachziehstapel
       </span>
       {count > 0 ? (
         <PileCardStack count={count} />

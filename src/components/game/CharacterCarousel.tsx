@@ -6,19 +6,9 @@ import React, { useCallback, useEffect, useState } from 'react';
 import useEmblaCarousel from 'embla-carousel-react';
 import { ChevronLeft, ChevronRight } from 'lucide-react';
 import type { CharacterCardDef } from '../../game';
-import { getUltimateForCharacter } from '../../game/packs/characterSetup';
 import { Button } from '../ui/Button';
-import { Tabs } from '../ui/Tabs';
 import { CharacterSelectCard } from './CharacterSelectCard';
-import { CharacterDetailPanel, type CharacterDetailTab } from './CharacterDetailPanel';
-
-type DetailTab = 'character' | CharacterDetailTab;
-
-const DETAIL_TABS = [
-  { id: 'character', label: 'Charakter', tone: 'play' as const },
-  { id: 'info', label: 'Info', tone: 'play' as const },
-  { id: 'ulti', label: 'Ulti', tone: 'play' as const },
-];
+import { CharacterPreviewWithDetails } from './CharacterPreviewWithDetails';
 
 interface CharacterCarouselProps {
   characters: CharacterCardDef[];
@@ -42,7 +32,6 @@ export function CharacterCarousel({ characters, selectedId, onSelect }: Characte
   });
 
   const [centerIndex, setCenterIndex] = useState(initialIndex);
-  const [detailTab, setDetailTab] = useState<DetailTab>('character');
 
   const syncSelection = useCallback(() => {
     if (!emblaApi) return;
@@ -69,10 +58,6 @@ export function CharacterCarousel({ characters, selectedId, onSelect }: Characte
       emblaApi.scrollTo(idx);
     }
   }, [selectedId, characters, emblaApi]);
-
-  useEffect(() => {
-    setDetailTab('character');
-  }, [centerIndex]);
 
   const scrollPrev = () => emblaApi?.scrollPrev();
   const scrollNext = () => emblaApi?.scrollNext();
@@ -145,25 +130,13 @@ export function CharacterCarousel({ characters, selectedId, onSelect }: Characte
                 data-testid={`character-slide-${character.id}`}
               >
                 <div className="flex flex-col items-center gap-2 transition-all duration-300">
-                  {isCenter && (
-                    <Tabs
-                      items={DETAIL_TABS}
-                      active={detailTab}
-                      onChange={(id) => setDetailTab(id as DetailTab)}
-                      ariaLabel="Charakterdetails"
-                    />
-                  )}
-                  {isCenter && detailTab !== 'character' ? (
-                    <CharacterDetailPanel
-                      character={character}
-                      tab={detailTab}
-                      ultimate={getUltimateForCharacter(character)}
-                    />
+                  {isCenter ? (
+                    <CharacterPreviewWithDetails character={character} selected />
                   ) : (
                     <CharacterSelectCard
                       character={character}
-                      selected={isCenter}
-                      isCenter={isCenter}
+                      selected={false}
+                      isCenter={false}
                       onClick={() => handleCardClick(index)}
                     />
                   )}

@@ -17,6 +17,8 @@ interface CharacterDetailPanelProps {
   character: CharacterCardDef;
   tab: CharacterDetailTab;
   ultimate?: UltimateCardDef;
+  /** Override frame sizing (e.g. library hover fill height). */
+  className?: string;
 }
 
 function DetailRow({ label, children }: { label: string; children: React.ReactNode }) {
@@ -25,7 +27,7 @@ function DetailRow({ label, children }: { label: string; children: React.ReactNo
       <p className="font-brand-on-parchment text-[10px] uppercase leading-none tracking-wide md:text-xs">
         {label}
       </p>
-      <div className="text-brand-parchment-type text-xs leading-relaxed md:text-sm">{children}</div>
+      <div className="text-on-parchment-muted text-xs leading-relaxed md:text-sm">{children}</div>
     </div>
   );
 }
@@ -33,7 +35,7 @@ function DetailRow({ label, children }: { label: string; children: React.ReactNo
 function CharacterElementsRow({ character }: { character: CharacterCardDef }) {
   if (characterUsesMysteryIcon(character.id)) {
     return (
-      <div className="flex flex-wrap items-center gap-1.5">
+      <div className="flex flex-wrap items-center gap-1.5 text-on-parchment">
         <ElementIcon element="mystery" size="sm" variant="grunge" />
         <span>Frei / Frei</span>
       </div>
@@ -42,7 +44,7 @@ function CharacterElementsRow({ character }: { character: CharacterCardDef }) {
 
   const [elA, elB] = character.elements;
   return (
-    <div className="flex flex-wrap items-center gap-x-2 gap-y-1">
+    <div className="flex flex-wrap items-center gap-x-2 gap-y-1 text-on-parchment">
       <span className="inline-flex items-center gap-1">
         <ElementIcon element={elA} size="sm" variant="grunge" />
         {ELEMENT_LABELS_DE[elA]}
@@ -58,8 +60,14 @@ function CharacterElementsRow({ character }: { character: CharacterCardDef }) {
   );
 }
 
-export function CharacterDetailPanel({ character, tab, ultimate }: CharacterDetailPanelProps) {
+export function CharacterDetailPanel({
+  character,
+  tab,
+  ultimate,
+  className = '',
+}: CharacterDetailPanelProps) {
   const frameClass =
+    className ||
     'character-card-frame relative flex aspect-[2/3] w-full max-w-[240px] flex-col overflow-hidden rounded-[2px] text-left shadow-xl ring-1 ring-inset ring-amber-950/25 sm:max-w-[260px] md:max-w-[280px] character-card-frame-highlighted ring-amber-700/30';
 
   if (tab === 'info') {

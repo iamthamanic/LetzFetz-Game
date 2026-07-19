@@ -2,7 +2,7 @@
  * Pre-match setup — mode first, then character carousel (bot) or online notice.
  * Location: src/components/game/GameSetup.tsx
  */
-import React, { useState } from 'react';
+import React from 'react';
 import { ArrowLeft, Bot, Globe, WifiOff } from 'lucide-react';
 import { BASE_PACK } from '../../game';
 import { Button } from '../ui/Button';
@@ -10,6 +10,7 @@ import { BrandLogoText } from '../ui/BrandLogoText';
 import { CharacterCarousel } from './CharacterCarousel';
 import { Badge } from '../ui/Badge';
 import { Panel } from '../ui/Panel';
+import { useAppHistory } from '../../services/history/AppHistoryContext';
 
 export type GameSetupMode = 'bot' | 'online';
 export type GameSetupPhase = 'mode' | 'bot' | 'online';
@@ -20,21 +21,50 @@ export interface BotMatchStart {
 }
 
 interface GameSetupProps {
+  phase: GameSetupPhase;
+  selectedId: string;
+  onPhaseChange: (phase: GameSetupPhase) => void;
+  onSelectCharacter: (id: string) => void;
   onStart: (options: BotMatchStart) => void;
 }
 
-export function GameSetup({ onStart }: GameSetupProps) {
-  const [phase, setPhase] = useState<GameSetupPhase>('mode');
-  const [selected, setSelected] = useState(BASE_PACK.characters[0].id);
+export function GameSetup({
+  phase,
+  selectedId,
+  onPhaseChange,
+  onSelectCharacter,
+  onStart,
+}: GameSetupProps) {
+  const { push } = useAppHistory();
+
+  const goPhase = (next: GameSetupPhase) => {
+    if (next === phase) return;
+    const from = phase;
+    push({
+      undo: () => onPhaseChange(from),
+      redo: () => onPhaseChange(next),
+    });
+    onPhaseChange(next);
+  };
+
+  const selectCharacter = (id: string) => {
+    if (id === selectedId) return;
+    const from = selectedId;
+    push({
+      undo: () => onSelectCharacter(from),
+      redo: () => onSelectCharacter(id),
+    });
+    onSelectCharacter(id);
+  };
 
   if (phase === 'mode') {
     return (
       <div
-        className="flex h-full min-h-0 flex-1 flex-col items-center justify-center bg-stone-950 px-4"
+        className="absolute inset-0 flex items-center justify-center bg-stone-950/95 backdrop-blur-md"
         data-testid="game-setup"
       >
         <div
-          className="mx-auto grid w-full max-w-lg grid-cols-1 gap-3 sm:grid-cols-2"
+          className="grid w-full max-w-2xl grid-cols-1 gap-4 px-6 sm:grid-cols-2 sm:gap-5 sm:px-8"
           data-testid="game-mode-select"
           role="group"
           aria-label="Spielmodus"
@@ -42,14 +72,14 @@ export function GameSetup({ onStart }: GameSetupProps) {
           <button
             type="button"
             data-testid="game-mode-bot"
-            onClick={() => setPhase('bot')}
-            className="flex flex-col items-start gap-2 rounded-xl border border-stone-800 bg-stone-900/60 p-4 text-left transition-all hover:border-stone-600 focus:outline-none focus-visible:ring-2 focus-visible:ring-purple-500"
+            onClick={() => goPhase('bot')}
+            className="flex flex-col items-start gap-2 rounded-xl border border-stone-700/80 bg-stone-900/80 p-5 text-left text-stone-100 transition-all hover:border-emerald-500/50 hover:bg-stone-900 focus:outline-none focus-visible:ring-2 focus-visible:ring-purple-500"
           >
             <div className="flex w-full items-center justify-between gap-2">
               <Bot className="h-6 w-6 text-emerald-400" aria-hidden />
               <Badge variant="success">Solo</Badge>
             </div>
-            <span className="font-brand text-lg uppercase leading-none tracking-wide">
+            <span className="font-brand-on-dark text-lg uppercase leading-none tracking-wide">
               Gegen Bot
             </span>
             <span className="text-xs text-stone-400">
@@ -60,14 +90,16 @@ export function GameSetup({ onStart }: GameSetupProps) {
           <button
             type="button"
             data-testid="game-mode-online"
-            onClick={() => setPhase('online')}
-            className="flex flex-col items-start gap-2 rounded-xl border border-stone-800 bg-stone-900/60 p-4 text-left transition-all hover:border-stone-600 focus:outline-none focus-visible:ring-2 focus-visible:ring-purple-500"
+            onClick={() => goPhase('online')}
+            className="flex flex-col items-start gap-2 rounded-xl border border-stone-700/80 bg-stone-900/80 p-5 text-left text-stone-100 transition-all hover:border-purple-500/50 hover:bg-stone-900 focus:outline-none focus-visible:ring-2 focus-visible:ring-purple-500"
           >
             <div className="flex w-full items-center justify-between gap-2">
               <Globe className="h-6 w-6 text-purple-400" aria-hidden />
-              <Badge variant="accent">Bald</Badge>
+              <Badge variant="accent" className="normal-case tracking-wide">
+                Coming soon
+              </Badge>
             </div>
-            <span className="font-brand text-lg uppercase leading-none tracking-wide">
+            <span className="font-brand-on-dark text-lg uppercase leading-none tracking-wide">
               Online PvP
             </span>
             <span className="text-xs text-stone-400">
@@ -81,7 +113,7 @@ export function GameSetup({ onStart }: GameSetupProps) {
 
   return (
     <div
-      className="flex h-full min-h-0 flex-1 flex-col items-center overflow-y-auto bg-stone-950 px-4 py-6 pt-6 sm:pt-10"
+      className="absolute inset-0 flex flex-col items-center overflow-y-auto bg-stone-950/95 px-4 py-6 pt-6 backdrop-blur-md sm:pt-10"
       data-testid="game-setup"
     >
       <div className="w-full max-w-3xl space-y-4">
@@ -93,7 +125,7 @@ export function GameSetup({ onStart }: GameSetupProps) {
               icon={<ArrowLeft className="h-4 w-4" />}
               className="mx-auto text-stone-400 hover:text-stone-200"
               data-testid="game-setup-back"
-              onClick={() => setPhase('mode')}
+              onClick={() => goPhase('mode')}
             >
               Modus wählen
             </Button>
@@ -104,7 +136,7 @@ export function GameSetup({ onStart }: GameSetupProps) {
                 Remote 1v1 mit verdeckten Händen ist geplant (WebRTC P2P + Host-Authority). Bis dahin:
                 trainiere gegen den Bot.
               </p>
-              <Button variant="secondary" className="mx-auto" onClick={() => setPhase('bot')}>
+              <Button variant="secondary" className="mx-auto" onClick={() => goPhase('bot')}>
                 Zum Bot-Duell
               </Button>
             </Panel>
@@ -120,7 +152,7 @@ export function GameSetup({ onStart }: GameSetupProps) {
                 icon={<ArrowLeft className="h-4 w-4" />}
                 className="absolute left-0 top-0 text-stone-400 hover:text-stone-200"
                 data-testid="game-setup-back"
-                onClick={() => setPhase('mode')}
+                onClick={() => goPhase('mode')}
               >
                 Modus wählen
               </Button>
@@ -133,16 +165,16 @@ export function GameSetup({ onStart }: GameSetupProps) {
 
             <CharacterCarousel
               characters={BASE_PACK.characters}
-              selectedId={selected}
-              onSelect={setSelected}
+              selectedId={selectedId}
+              onSelect={selectCharacter}
             />
 
             <div className="-mt-6 mx-auto w-full max-w-md">
               <Button
-                variant="ghost"
-                className="btn-brand-shimmer w-full text-base"
+                variant="accent"
+                className="btn-brand-shimmer w-full py-2.5 text-base"
                 data-testid="start-bot-match"
-                onClick={() => onStart({ mode: 'bot', humanCharacterId: selected })}
+                onClick={() => onStart({ mode: 'bot', humanCharacterId: selectedId })}
               >
                 <span className="btn-brand-shimmer__shine" aria-hidden="true" />
                 <span className="relative z-10">
@@ -158,3 +190,5 @@ export function GameSetup({ onStart }: GameSetupProps) {
     </div>
   );
 }
+
+export const DEFAULT_SETUP_CHARACTER_ID = BASE_PACK.characters[0].id;

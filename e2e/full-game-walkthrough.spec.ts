@@ -30,10 +30,10 @@ async function logState(page: import('@playwright/test').Page, label: string) {
 test.describe('Full game walkthrough documentation', () => {
   test('document every phase of a match with bot paused', async ({ page }) => {
     await page.goto('/?playtest=1');
-    await expect(page.getByRole('button', { name: 'Play' })).toBeVisible();
+    await expect(page.getByTestId('main-menu')).toBeVisible();
     await shot(page, '01-home.png');
 
-    await page.getByRole('button', { name: 'Play' }).click();
+    await page.getByTestId('main-menu-play').click();
     await expect(page.getByTestId('game-mode-select')).toBeVisible();
     await shot(page, '02-mode-select.png');
 
@@ -53,7 +53,14 @@ test.describe('Full game walkthrough documentation', () => {
     await shot(page, '05-match-intro-arena.png');
 
     await page.getByTestId('match-intro-arena').getByRole('button', { name: 'Überspringen' }).click();
-    await expect(page.getByTestId('opening-deal-done')).toBeVisible({ timeout: 3000 });
+    await expect(page.getByTestId('opening-deal-done')).toBeVisible({ timeout: 12000 });
+    await expect(page.getByTestId('turn-start-announce')).toBeVisible({ timeout: 3000 });
+    await shot(page, '06a-turn-start-announce.png');
+    await expect(page.getByTestId('phase-coach-footer')).toHaveAttribute(
+      'data-footer-reveal',
+      'docked',
+      { timeout: 12000 },
+    );
     await shot(page, '06-board-after-opening-deal.png');
     await logState(page, 'After opening deal');
 
@@ -76,27 +83,32 @@ test.describe('Full game walkthrough documentation', () => {
     await page.getByRole('button', { name: 'Karte ziehen' }).click();
     await page.waitForTimeout(800);
 
-    // Phase: bind
-    await expect(page.getByRole('button', { name: 'Nicht binden' })).toBeVisible({ timeout: 5000 });
-    await logState(page, 'Phase: bind');
-    await shot(page, '10-phase-bind.png');
+    // Phase: build
+    await expect(page.getByRole('button', { name: 'Skip Bau-Phase' })).toBeVisible({ timeout: 5000 });
+    await logState(page, 'Phase: build');
+    await shot(page, '10-phase-build.png');
 
-    // Try to bind first bindable card by clicking it.
-    const bindableCards = page.locator('[data-interaction="bind"]').first();
-    if (await bindableCards.count() > 0) {
-      await bindableCards.click();
+    // Try to build first buildable card by clicking it.
+    const engineBuild = page.getByRole('button', { name: 'Engine bauen' });
+    if (await engineBuild.isEnabled().catch(() => false)) {
+      await engineBuild.click();
+      await page.waitForTimeout(200);
+    }
+    const buildableCards = page.locator('[data-interaction="build"]').first();
+    if (await buildableCards.count() > 0) {
+      await buildableCards.click();
       await page.waitForTimeout(600);
-      await expect(page.getByTestId('bind-target-pill')).toBeVisible();
-      await shot(page, '11-bind-pending.png');
-      // Cancel bind selection.
+      await expect(page.getByTestId('build-target-pill')).toBeVisible();
+      await shot(page, '11-build-pending.png');
+      // Cancel build selection.
       const cancelBtn = page.getByRole('button', { name: 'Auswahl abbrechen' });
       if (await cancelBtn.count() > 0) await cancelBtn.click();
     } else {
-      await shot(page, '11-no-bindable-card.png');
+      await shot(page, '11-no-buildable-card.png');
     }
 
-    // Skip bind.
-    const skipBindBtn = page.getByRole('button', { name: 'Nicht binden' });
+    // Skip build.
+    const skipBindBtn = page.getByRole('button', { name: 'Skip Bau-Phase' });
     if (await skipBindBtn.count() > 0 && (await skipBindBtn.isVisible())) {
       await skipBindBtn.click();
     }
@@ -107,24 +119,19 @@ test.describe('Full game walkthrough documentation', () => {
     await shot(page, '12-phase-action.png');
 
     // Try to play an attack card.
+    const actionPlay = page.getByRole('button', { name: 'Aktion spielen' });
+    if (await actionPlay.isVisible().catch(() => false)) {
+      await actionPlay.click();
+      await page.waitForTimeout(200);
+    }
     const attackCard = page.locator('[data-interaction="attack"]').first();
     if (await attackCard.count() > 0) {
       await attackCard.click();
       await page.waitForTimeout(400);
       await logState(page, 'After selecting attack card');
       await shot(page, '13-attack-selected.png');
-      await expect(page.getByTestId('targeting-arrow')).toBeVisible();
-
-      const directAttackBtn = page.getByRole('button', { name: 'Direkt angreifen' });
-      if (await directAttackBtn.count() > 0) {
-        await directAttackBtn.click();
-        await expect(page.getByTestId('attack-card-fly')).toBeVisible({ timeout: 800 }).catch(() => {});
-        await page.waitForTimeout(1200);
-        await logState(page, 'After direct attack');
-        await shot(page, '14-after-direct-attack.png');
-      } else {
-        await shot(page, '14-no-direct-attack-button.png');
-      }
+      await expect(page.getByRole('button', { name: 'Direkt angreifen' })).toBeVisible();
+      await expect(page.getByTestId('targeting-arrow')).toHaveCount(0);
     } else {
       await shot(page, '13-no-attack-card.png');
     }

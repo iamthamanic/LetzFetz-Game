@@ -48,11 +48,11 @@ test.describe('Game Cheatbox — playtest panel', () => {
     await expect(page.locator('.rounded-full.border-purple-500').filter({ hasText: 'Aktionsphase' })).toBeVisible();
     await expect(page.getByRole('button', { name: 'Hauptaktion auslassen' })).toBeVisible();
 
-    const phaseSelect = page.locator('select').filter({ has: page.locator('option[value="bind"]') }).first();
-    await phaseSelect.selectOption('bind');
+    const phaseSelect = page.locator('select').filter({ has: page.locator('option[value="build"]') }).first();
+    await phaseSelect.selectOption('build');
     await page.getByRole('button', { name: 'Patch anwenden' }).click();
     await expect(
-      page.locator('.rounded-full.border-purple-500').filter({ hasText: 'Bindungsphase' }),
+      page.locator('.rounded-full.border-purple-500').filter({ hasText: 'Bau-Phase' }),
     ).toBeVisible();
 
     const hpInputs = page.locator('input[type="number"]');
@@ -77,7 +77,7 @@ test.describe('Game Cheatbox — playtest panel', () => {
     await page.getByLabel('Bot pausieren').uncheck();
     await page.waitForTimeout(1500);
 
-    await page.getByRole('button', { name: 'Edit' }).click();
+    await page.getByRole('button', { name: 'Cards' }).click();
     await expect(page.getByText(/V1-Karten|Character|Element/i).first()).toBeVisible({
       timeout: 10000,
     });

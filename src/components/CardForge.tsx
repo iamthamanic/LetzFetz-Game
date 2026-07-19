@@ -1,6 +1,10 @@
+/**
+ * Cards tab — library inventory of all cards; editor opens on select.
+ * Location: src/components/CardForge.tsx
+ */
 import React, { useState, useEffect, useCallback } from 'react';
 import { ImageCropModal } from './ImageCropModal';
-import { CardForgeSidebar } from './CardForgeSidebar';
+import { CardLibrary, type CardLibraryFilter } from './CardLibrary';
 import { CardForgeCardEditor } from './CardForgeCardEditor';
 import { projectId, publicAnonKey } from '../utils/supabase/info';
 import { packToForgeCards, mergeForgeOverlays } from '../services/cardForge/packToForge';
@@ -24,8 +28,8 @@ function prepareCardForEdit(card: ForgeCardData): ForgeCardData {
   return { ...card, effects: card.effects?.length ? card.effects : [''] };
 }
 
-function getFirstCardInCategory(cards: ForgeCardData[], kind: ForgeCardKind): ForgeCardData | null {
-  return cards.find((c) => c.type === kind) ?? null;
+function createKindFromFilter(filter: CardLibraryFilter): ForgeCardKind {
+  return filter === 'All' ? 'Element' : filter;
 }
 
 export function CardForge() {
@@ -35,7 +39,7 @@ export function CardForge() {
   const [isCreating, setIsCreating] = useState(false);
   const [loading, setLoading] = useState(true);
   const [saving, setSaving] = useState(false);
-  const [activeTab, setActiveTab] = useState<ForgeCardKind>('Character');
+  const [activeFilter, setActiveFilter] = useState<CardLibraryFilter>('All');
 
   const [uploading, setUploading] = useState(false);
   const [uploadProgress, setUploadProgress] = useState('');
@@ -81,44 +85,18 @@ export function CardForge() {
     loadCards();
   }, [loadCards]);
 
-  useEffect(() => {
-    if (loading || isCreating) return;
-
-    const categoryCards = cards.filter((c) => c.type === activeTab);
-    const firstCard = categoryCards[0];
-    if (!firstCard) {
-      if (selectedCard) setSelectedCard(null);
-      return;
-    }
-
-    const selectionStillValid =
-      selectedCard?.type === activeTab && categoryCards.some((c) => c.id === selectedCard.id);
-    if (selectionStillValid) return;
-
-    setSelectedCard(prepareCardForEdit(firstCard));
-    setIsCreating(false);
-  }, [loading, cards, activeTab, isCreating, selectedCard?.id, selectedCard?.type]);
-
-  const handleActiveTabChange = (tab: ForgeCardKind) => {
-    setActiveTab(tab);
+  const handleFilterChange = (filter: CardLibraryFilter) => {
+    setActiveFilter(filter);
     setSearchTerm('');
-
-    if (isCreating) {
-      setSelectedCard(emptyCard(tab));
-      return;
-    }
-
-    const firstCard = getFirstCardInCategory(cards, tab);
-    if (firstCard) {
-      setSelectedCard(prepareCardForEdit(firstCard));
-      setIsCreating(false);
-    } else {
-      setSelectedCard(null);
-    }
   };
 
   const handleSelectCard = (card: ForgeCardData) => {
     setSelectedCard(prepareCardForEdit(card));
+    setIsCreating(false);
+  };
+
+  const handleCloseEditor = () => {
+    setSelectedCard(null);
     setIsCreating(false);
   };
 
@@ -182,8 +160,7 @@ export function CardForge() {
       );
       if (response.ok) {
         await loadCards();
-        setSelectedCard(null);
-        setIsCreating(false);
+        handleCloseEditor();
       }
     } catch (error) {
       console.error('Error deleting card:', error);
@@ -191,7 +168,7 @@ export function CardForge() {
   };
 
   const handleCreateNew = () => {
-    setSelectedCard(emptyCard(activeTab));
+    setSelectedCard(emptyCard(createKindFromFilter(activeFilter)));
     setIsCreating(true);
   };
 
@@ -271,70 +248,57 @@ export function CardForge() {
   };
 
   const filteredCards = cards
-    .filter((c) => c.type === activeTab)
+    .filter((c) => activeFilter === 'All' || c.type === activeFilter)
     .filter(
       (c) =>
         !searchTerm ||
         c.name.toLowerCase().includes(searchTerm.toLowerCase()) ||
         c.element.toLowerCase().includes(searchTerm.toLowerCase()) ||
+        (c.elementDisplay?.toLowerCase().includes(searchTerm.toLowerCase()) ?? false) ||
         c.effects.some((e) => e.toLowerCase().includes(searchTerm.toLowerCase())),
     );
 
+  const showEditor = selectedCard !== null;
+
   return (
     <div className="flex min-h-0 flex-1 bg-stone-950 text-stone-100">
-      <CardForgeSidebar
-        cards={cards}
-        filteredCards={filteredCards}
-        loading={loading}
-        searchTerm={searchTerm}
-        activeTab={activeTab}
-        selectedCard={selectedCard}
-        onSearchChange={setSearchTerm}
-        onActiveTabChange={(tab) => handleActiveTabChange(tab as ForgeCardKind)}
-        onSelectCard={handleSelectCard}
-        onCreateNew={handleCreateNew}
-      />
-
-      <div className="flex-1 flex flex-col min-w-0">
-        {selectedCard ? (
-          <CardForgeCardEditor
-            selectedCard={selectedCard}
-            isCreating={isCreating}
-            saving={saving}
-            uploading={uploading}
-            uploadProgress={uploadProgress}
-            onFieldChange={updateField}
-            onStatsChange={updateStats}
-            onEffectChange={updateEffect}
-            onAddEffect={addEffect}
-            onRemoveEffect={removeEffect}
-            onSave={handleSave}
-            onDelete={handleDelete}
-            onClose={() => {
-              setSelectedCard(null);
-              setIsCreating(false);
-            }}
-            onImageSelect={handleImageSelect}
-            onNotesModalOpen={() => setNotesModalOpen(true)}
-            notesModalOpen={notesModalOpen}
-            onNotesModalClose={() => setNotesModalOpen(false)}
-            onNotesSave={(notes) => {
-              updateField('notes', notes);
-              if (selectedCard.id) handleSave();
-            }}
-          />
-        ) : (
-          <div className="flex-1 flex items-center justify-center p-8">
-            <div className="text-center space-y-3 max-w-md">
-              <div className="text-5xl opacity-50">🃏</div>
-              <h3 className="text-lg font-semibold text-stone-300">Karte zum Bearbeiten wählen</h3>
-              <p className="text-sm text-stone-500">
-                90 V1-Karten verfügbar. Bilder und Notizen können für Base-Pack-Karten überschrieben werden.
-              </p>
-            </div>
-          </div>
-        )}
-      </div>
+      {showEditor && selectedCard ? (
+        <CardForgeCardEditor
+          selectedCard={selectedCard}
+          isCreating={isCreating}
+          saving={saving}
+          uploading={uploading}
+          uploadProgress={uploadProgress}
+          onFieldChange={updateField}
+          onStatsChange={updateStats}
+          onEffectChange={updateEffect}
+          onAddEffect={addEffect}
+          onRemoveEffect={removeEffect}
+          onSave={handleSave}
+          onDelete={handleDelete}
+          onClose={handleCloseEditor}
+          onImageSelect={handleImageSelect}
+          onNotesModalOpen={() => setNotesModalOpen(true)}
+          notesModalOpen={notesModalOpen}
+          onNotesModalClose={() => setNotesModalOpen(false)}
+          onNotesSave={(notes) => {
+            updateField('notes', notes);
+            if (selectedCard.id) handleSave();
+          }}
+        />
+      ) : (
+        <CardLibrary
+          cards={cards}
+          filteredCards={filteredCards}
+          loading={loading}
+          searchTerm={searchTerm}
+          activeFilter={activeFilter}
+          onSearchChange={setSearchTerm}
+          onFilterChange={handleFilterChange}
+          onSelectCard={handleSelectCard}
+          onCreateNew={handleCreateNew}
+        />
+      )}
 
       {imageToCrop && (
         <ImageCropModal

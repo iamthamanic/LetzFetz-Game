@@ -3,6 +3,23 @@ import { DEFAULT_RULESET } from '../types';
 import type { Rng } from './deck';
 import { opponentOf } from './createGame';
 
+function actingPlayerForStep(state: GameState): PlayerId {
+  if (state.combat) return state.combat.defenderId;
+  if (state.pendingChoice) {
+    switch (state.pendingChoice.type) {
+      case 'boost-interrupt':
+        return opponentOf(state.pendingChoice.boosterId);
+      case 'damage-reduce':
+        return state.pendingChoice.defenderId;
+      case 'optional-draw-discard':
+      case 'must-discard':
+      case 'spaeti-extra-build':
+        return state.pendingChoice.playerId;
+    }
+  }
+  return state.activePlayer;
+}
+
 export interface InvariantViolation {
   code: string;
   message: string;
@@ -172,7 +189,7 @@ export function runSimulation(
   });
 
   while (!state.winner && steps < maxSteps) {
-    const playerId: PlayerId = state.combat?.defenderId ?? state.activePlayer;
+    const playerId: PlayerId = actingPlayerForStep(state);
     const legal = config.getLegalActions(state, playerId);
     if (legal.length === 0) break;
 

@@ -46,4 +46,26 @@ describe('createGame', () => {
     expect(state.arena.arenaId).toBe('arena-spaeti');
     expect(state.arena.d6Variant).toBeNull();
   });
+
+  it('never deals Sofort-Glitches into opening hands', () => {
+    const instantIds = new Set(
+      BASE_PACK.glitches.filter((g) => g.glitchType === 'instant').map((g) => g.id),
+    );
+    expect(instantIds.size).toBeGreaterThan(0);
+
+    for (let seed = 0; seed < 40; seed += 1) {
+      const state = createGame({
+        pack: BASE_PACK,
+        p1CharacterId: 'knuspergnom',
+        p2CharacterId: 'schluckspecht',
+        startingPlayer: seed % 2 === 0 ? 'p1' : 'p2',
+        seed,
+      });
+      const opening = [...state.players.p1.hand, ...state.players.p2.hand];
+      expect(opening.every((c) => !instantIds.has(c.defId))).toBe(true);
+      expect(state.instantReveals).toEqual([]);
+      expect(state.players.p1.hp).toBe(20);
+      expect(state.players.p2.hp).toBe(20);
+    }
+  });
 });

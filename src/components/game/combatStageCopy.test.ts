@@ -36,7 +36,8 @@ describe('combatStageCopy', () => {
 
   it('describes defender prompt vs bot blocking', () => {
     expect(buildCombatStageSubtitle(true, false)).toContain('Block-Karte');
-    expect(buildCombatStageSubtitle(false, true)).toBe('🤖 Gegner blockt…');
+    expect(buildCombatStageSubtitle(true, false)).toContain('danach');
+    expect(buildCombatStageSubtitle(false, true)).toContain('entscheidet');
   });
 
   it('names combat value by mode', () => {

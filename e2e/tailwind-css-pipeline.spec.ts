@@ -32,7 +32,7 @@ test.describe('Tailwind CSS pipeline — readable UI', () => {
     await expect(page.getByText('Deine Engine')).toBeVisible();
     await shot(page, '02-board-readable.png');
 
-    await page.getByRole('button', { name: 'Edit' }).click();
+    await page.getByRole('button', { name: 'Cards' }).click();
     await page.waitForTimeout(400);
     await expect(page.getByText('Charakter')).toBeVisible();
     await expect(page.getByRole('button', { name: 'Neue Karte' })).toBeVisible();

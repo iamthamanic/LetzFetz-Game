@@ -10,14 +10,15 @@ import {
   type ElementCardDef,
   type GameAction,
   type GameState,
+  type GlitchCardDef,
   type PendingCombat,
   type PlayerId,
 } from '../../game';
 import type { ArenaCardDef } from '../../game/types';
 import type { PendingIntent } from './gameActionHelpers';
 import {
-  bindRequiresReplace,
-  isBindReplaceTarget,
+  buildRequiresReplace,
+  isBuildReplaceTarget,
   isChallengeTargetForAttack,
   isActivateDiscardOption,
 } from './gameActionHelpers';
@@ -31,16 +32,20 @@ export interface BoundSlotView {
   exhausted: boolean;
   isActivatable: boolean;
   isTargetable: boolean;
+  /** Challenge target currently selected in the footer flow. */
+  isChallengeSelected: boolean;
   isReplaceTarget: boolean;
 }
 
 export interface HandCardView {
   instanceId: string;
+  defId: string;
   def: ElementCardDef | null;
   glitchName: string | null;
+  glitchDef: GlitchCardDef | null;
   isPlayable: boolean;
-  interaction: 'attack' | 'boost' | 'bind' | 'block' | 'discard-draw' | 'activate-discard' | null;
-  bindNeedsReplace: boolean;
+  interaction: 'attack' | 'boost' | 'build' | 'block' | 'discard-draw' | 'activate-discard' | 'play-glitch' | null;
+  buildNeedsReplace: boolean;
   isActivateDiscardOption: boolean;
 }
 
@@ -103,11 +108,16 @@ function buildBoundSlots(
       options.pending?.type === 'attack' &&
       isChallengeTargetForAttack(legalActions, options.pending.attackInstanceId, card.instanceId);
 
+    const isChallengeSelected =
+      isTargetable &&
+      options.pending?.type === 'attack' &&
+      options.pending.targetBoundInstanceId === card?.instanceId;
+
     const isReplaceTarget =
       options.forHuman &&
       card !== null &&
-      options.pending?.type === 'bind' &&
-      isBindReplaceTarget(legalActions, options.pending.handInstanceId, card.instanceId);
+      options.pending?.type === 'build' &&
+      isBuildReplaceTarget(legalActions, options.pending.handInstanceId, card.instanceId);
 
     slots.push({
       slotIndex: i,
@@ -116,6 +126,7 @@ function buildBoundSlots(
       exhausted: card?.exhausted ?? false,
       isActivatable,
       isTargetable,
+      isChallengeSelected,
       isReplaceTarget,
     });
   }
@@ -133,13 +144,31 @@ function handInteraction(
   if (legalActions.some((a) => a.type === 'PLAY_BOOST' && a.cardInstanceId === instanceId)) {
     return 'boost';
   }
-  if (legalActions.some((a) => a.type === 'BIND_CARD' && a.cardInstanceId === instanceId)) {
-    return 'bind';
+  if (legalActions.some((a) => a.type === 'BUILD_CARD' && a.cardInstanceId === instanceId)) {
+    return 'build';
   }
   if (legalActions.some((a) => a.type === 'PLAY_BLOCK' && a.cardInstanceId === instanceId)) {
     return 'block';
   }
-  if (legalActions.some((a) => a.type === 'DISCARD_DRAW' && a.discardInstanceId === instanceId)) {
+  // Prefer playing a glitch over the generic discard-to-draw free action.
+  if (
+    legalActions.some(
+      (a) =>
+        a.type === 'PLAY_GLITCH' &&
+        a.glitchInstanceId === instanceId &&
+        !a.discardHandInstanceId &&
+        !a.targetBoundInstanceId,
+    )
+  ) {
+    return 'play-glitch';
+  }
+  if (
+    legalActions.some(
+      (a) =>
+        (a.type === 'DISCARD_DRAW' && a.discardInstanceId === instanceId) ||
+        (a.type === 'RESOLVE_DRAW_DISCARD' && a.discardInstanceId === instanceId),
+    )
+  ) {
     return 'discard-draw';
   }
   return null;
@@ -175,36 +204,8 @@ function buildMainActions(
     });
   }
 
-  if (state.phase === 'bind' && legalActions.some((a) => a.type === 'SKIP_BIND')) {
-    actions.push({
-      id: 'skip-bind',
-      label: 'Nicht binden',
-      variant: 'secondary',
-      action: { type: 'SKIP_BIND' },
-      enabled: true,
-    });
-  }
-
-  if (state.phase === 'action') {
-    if (legalActions.some((a) => a.type === 'PLAY_ULTIMATE')) {
-      actions.push({
-        id: 'ultimate',
-        label: 'Ultimativkarte spielen',
-        variant: 'accent',
-        action: { type: 'PLAY_ULTIMATE' },
-        enabled: true,
-      });
-    }
-    if (legalActions.some((a) => a.type === 'END_TURN')) {
-      actions.push({
-        id: 'end-turn',
-        label: 'Hauptaktion auslassen',
-        variant: 'secondary',
-        action: { type: 'END_TURN' },
-        enabled: true,
-      });
-    }
-  }
+  // Build phase → BuildPhaseBar in the footer.
+  // Action-phase attack / ultimate / skip → ActionPhaseBar in the footer.
 
   if (state.phase === 'end' && legalActions.some((a) => a.type === 'END_TURN')) {
     actions.push({
@@ -234,24 +235,41 @@ export function buildGameViewModel(
     const def = findElementDef(pack, card.defId);
     const glitch = def ? null : (pack.glitches.find((g) => g.id === card.defId) ?? null);
     const interaction = handInteraction(card.instanceId, legalActions);
-    const bindNeedsReplace =
-      interaction === 'bind' && bindRequiresReplace(legalActions, card.instanceId);
+    const buildNeedsReplace =
+      interaction === 'build' && buildRequiresReplace(legalActions, card.instanceId);
     const activateDiscard =
       pending?.type === 'activate' &&
       isActivateDiscardOption(legalActions, pending.boundInstanceId, card.instanceId);
 
-    const isPlayable =
-      interaction !== null ||
-      activateDiscard ||
-      (pending?.type === 'activate' && activateDiscard);
+    // Build phase: hand cards only become playable after "Engine bauen".
+    // Action phase: hand action cards only after "Aktion spielen" (action-select / attack).
+    const buildModeOpen = pending?.type === 'build-select' || pending?.type === 'build';
+    const actionModeOpen = pending?.type === 'action-select' || pending?.type === 'attack';
+    const isActionHandPlay =
+      interaction === 'attack' || interaction === 'boost' || interaction === 'play-glitch';
+
+    let isPlayable = false;
+    if (state.phase === 'build' && isHumanTurn) {
+      isPlayable = buildModeOpen && interaction === 'build';
+    } else if (state.phase === 'action' && isHumanTurn && !isHumanDefender) {
+      isPlayable = actionModeOpen && isActionHandPlay;
+    } else {
+      isPlayable = Boolean(
+        interaction !== null ||
+          activateDiscard ||
+          (pending?.type === 'activate' && activateDiscard),
+      );
+    }
 
     return {
       instanceId: card.instanceId,
+      defId: card.defId,
       def,
       glitchName: glitch?.name ?? null,
-      isPlayable: Boolean(isPlayable),
+      glitchDef: glitch,
+      isPlayable,
       interaction: activateDiscard ? 'activate-discard' : interaction,
-      bindNeedsReplace,
+      buildNeedsReplace,
       isActivateDiscardOption: activateDiscard,
     };
   });

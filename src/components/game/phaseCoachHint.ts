@@ -25,24 +25,39 @@ export function buildPhaseCoachHint({
 
   if (view.isHumanDefender && view.combat) {
     if (view.combat.mode === 'challenge') {
-      return 'Blockiere die Herausforderung mit einer Karte oder wähle „Nicht blocken“.';
+      return 'Blockiere die Herausforderung oder „Nicht blocken“ — Würfel erst danach.';
     }
-    return 'Blockiere den Angriff mit einer Karte oder wähle „Nicht blocken“.';
+    return 'Blockiere den Angriff oder „Nicht blocken“ — Würfel erst danach.';
   }
 
+  if (state.pendingChoice?.type === 'must-discard') {
+    return 'Wirf 1 Handkarte ab — tippe die Karte an, die du ablegen willst.';
+  }
+  if (state.pendingChoice?.type === 'optional-draw-discard') {
+    return 'Ziehe zuerst (Arena), danach wirfst du 1 Handkarte ab.';
+  }
+
+  if (pending?.type === 'action-select') {
+    return 'Wähle eine Aktionskarte auf der Hand — Angriff, Boost oder Glitch.';
+  }
   if (pending?.type === 'attack') {
     const hasTargets = view.botBoundSlots.some((s) => s.isTargetable);
     if (hasTargets) {
-      return 'Wähle eine gegnerische Engine-Karte zum Herausfordern — oder „Direkt angreifen“.';
+      return pending.targetBoundInstanceId
+        ? 'Ziel gewählt — unten „Herausfordern“ oder „Direkt angreifen“.'
+        : 'Gegner-Engine antippen als Ziel, dann unten „Herausfordern“ — oder „Direkt angreifen“.';
     }
-    return 'Kein Herausforderungsziel — nutze „Direkt angreifen“ gegen die LP des Gegners.';
+    return 'Kein Herausforderungsziel — unten „Direkt angreifen“ gegen die LP des Gegners.';
   }
-  if (pending?.type === 'bind') {
+  if (pending?.type === 'build-select') {
+    return 'Wähle eine baubare Handkarte — Glitch-Karten sind ausgegraut.';
+  }
+  if (pending?.type === 'build') {
     const hasFreeSlot = view.humanBoundSlots.some((s) => !s.instanceId);
     if (hasFreeSlot) {
-      return 'Klicke auf einen freien Engine-Slot, um die Karte zu binden.';
+      return 'Klicke auf einen freien Engine-Slot, um die Karte zu bauen.';
     }
-    return 'Wähle eine gebundene Karte, die durch die neue Karte ersetzt werden soll.';
+    return 'Wähle eine gebaute Karte, die durch die neue Karte ersetzt werden soll.';
   }
   if (pending?.type === 'activate') {
     return 'Wähle eine Handkarte zum Abwerfen für die Aktivierung.';
@@ -63,28 +78,29 @@ export function buildPhaseCoachHint({
       return legal.some((a) => a.type === 'ADVANCE_PHASE')
         ? 'Ziehe eine Karte vom Nachziehstapel.'
         : 'Ziehphase — keine Karte verfügbar.';
-    case 'bind': {
-      const canBind = legal.some((a) => a.type === 'BIND_CARD');
-      if (canBind) {
-        return 'Binde eine Karte an einen Engine-Slot.';
+    case 'build': {
+      const canBuild = legal.some((a) => a.type === 'BUILD_CARD');
+      if (canBuild) {
+        return 'Tippe „Engine bauen“, um eine Karte in die Engine zu legen — oder „Skip Bau-Phase“.';
       }
-      if (legal.some((a) => a.type === 'SKIP_BIND')) {
-        return 'Du kannst optional binden oder „Nicht binden“ wählen.';
+      if (legal.some((a) => a.type === 'SKIP_BUILD')) {
+        return 'Keine baubaren Karten — nur „Skip Bau-Phase“ möglich.';
       }
-      return 'Bindungsphase.';
+      return 'Bau-Phase.';
     }
     case 'action': {
       const canAttack = legal.some((a) => a.type === 'PLAY_ATTACK');
       const canBoost = legal.some((a) => a.type === 'PLAY_BOOST');
       const canUlti = legal.some((a) => a.type === 'PLAY_ULTIMATE');
-      const parts: string[] = [];
-      if (canAttack) parts.push('spiele eine Angriffskarte');
-      if (canBoost) parts.push('spiele eine Boost-Karte');
-      if (canUlti) parts.push('spiele deine Ultimativkarte');
-      if (parts.length > 0) {
-        return `Aktionsphase — ${parts.join(', ')} oder beende die Hauptaktion.`;
+      const canGlitch = legal.some((a) => a.type === 'PLAY_GLITCH');
+      const canHandAction = canAttack || canBoost || canGlitch;
+      if (canHandAction) {
+        return 'Tippe „Aktion spielen“, um eine Handkarte als Aktion zu wählen — oder lasse die Hauptaktion aus.';
       }
-      return 'Aktionsphase — beende die Hauptaktion oder spiele Karten aus der Hand.';
+      if (canUlti) {
+        return 'Keine Hand-Aktion möglich — spiele die Ultimativkarte oder lasse die Hauptaktion aus.';
+      }
+      return 'Aktionsphase — beende die Hauptaktion.';
     }
     case 'end':
       return legal.some((a) => a.type === 'END_TURN')

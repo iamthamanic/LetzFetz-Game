@@ -1,10 +1,16 @@
 /**
- * Dev-only playtest cheatbox — scenario presets and state patches.
+ * Dev-only playtest cheatbox — scenario presets, O11 LP/Mono, state patches.
  * Location: src/components/game/PlaytestCheatbox.tsx
  */
 import React, { useState, useEffect } from 'react';
 import { Bug, ChevronDown, ChevronUp } from 'lucide-react';
-import type { ContentPack, GameState, PlayerId } from '../../game/types';
+import type {
+  ContentPack,
+  GameState,
+  MonoBonusMode,
+  PlayerId,
+  PlaytestHpCap,
+} from '../../game/types';
 import { TURN_PHASES, type TurnPhase } from '../../game/types';
 import { PHASE_LABELS } from '../../game/engine/helpers';
 import {
@@ -17,6 +23,14 @@ import {
 import { Panel } from '../ui/Panel';
 import { Button } from '../ui/Button';
 import { Input } from '../ui/Input';
+
+const HP_CAPS: PlaytestHpCap[] = [20, 25, 30];
+const MONO_MODES: { id: MonoBonusMode; label: string }[] = [
+  { id: 'mb1', label: 'MB1' },
+  { id: 'mb2', label: 'MB2' },
+  { id: 'mb3', label: 'MB3' },
+  { id: 'mb4', label: 'MB4' },
+];
 
 interface PlaytestCheatboxProps {
   pack: ContentPack;
@@ -40,6 +54,9 @@ export function PlaytestCheatbox({
   const [patchActive, setPatchActive] = useState<PlayerId>(state.activePlayer);
   const [patchP1Hp, setPatchP1Hp] = useState(String(state.players.p1.hp));
   const [patchP2Hp, setPatchP2Hp] = useState(String(state.players.p2.hp));
+
+  const hpCap = state.meta.playtestHpCap ?? 20;
+  const monoMode = state.meta.monoBonusMode ?? 'mb1';
 
   useEffect(() => {
     setPatchPhase(state.phase);
@@ -71,6 +88,30 @@ export function PlaytestCheatbox({
     const result = applyAndValidatePlaytestPatch(state, patch);
     if (!result.ok || !result.state) {
       onError(result.error ?? 'Patch ungültig.');
+      return;
+    }
+    onError(null);
+    onApplyState(result.state);
+  };
+
+  const applyHpCap = (cap: PlaytestHpCap) => {
+    const result = applyAndValidatePlaytestPatch(state, {
+      playtestHpCap: cap,
+      p1Hp: cap,
+      p2Hp: cap,
+    });
+    if (!result.ok || !result.state) {
+      onError(result.error ?? 'LP-Cap ungültig.');
+      return;
+    }
+    onError(null);
+    onApplyState(result.state);
+  };
+
+  const applyMono = (mode: MonoBonusMode) => {
+    const result = applyAndValidatePlaytestPatch(state, { monoBonusMode: mode });
+    if (!result.ok || !result.state) {
+      onError(result.error ?? 'Mono-Modus ungültig.');
       return;
     }
     onError(null);
@@ -118,6 +159,42 @@ export function PlaytestCheatbox({
             </div>
 
             <div className="space-y-2 border-t border-stone-800 pt-2">
+              <p className="mb-1 text-[10px] font-semibold uppercase tracking-wider text-stone-500">
+                LP-Cap (O11) · aktuell {hpCap}
+              </p>
+              <div className="flex flex-wrap gap-1.5">
+                {HP_CAPS.map((cap) => (
+                  <Button
+                    key={cap}
+                    variant={hpCap === cap ? 'accent' : 'secondary'}
+                    size="sm"
+                    onClick={() => applyHpCap(cap)}
+                  >
+                    {cap}
+                  </Button>
+                ))}
+              </div>
+              <p className="mb-1 pt-1 text-[10px] font-semibold uppercase tracking-wider text-stone-500">
+                Mono (O11) · {monoMode.toUpperCase()}
+              </p>
+              <div className="flex flex-wrap gap-1.5">
+                {MONO_MODES.map((mode) => (
+                  <Button
+                    key={mode.id}
+                    variant={monoMode === mode.id ? 'accent' : 'secondary'}
+                    size="sm"
+                    onClick={() => applyMono(mode.id)}
+                  >
+                    {mode.label}
+                  </Button>
+                ))}
+              </div>
+              <p className="text-[10px] text-stone-500">
+                Mono wirkt erst mit V2-Engine; Modus wird gespeichert.
+              </p>
+            </div>
+
+            <div className="space-y-2 border-t border-stone-800 pt-2">
               <p className="text-[10px] font-semibold uppercase tracking-wider text-stone-500">
                 Patch
               </p>
@@ -151,7 +228,7 @@ export function PlaytestCheatbox({
                   label="P1 HP"
                   type="number"
                   min={0}
-                  max={20}
+                  max={hpCap}
                   value={patchP1Hp}
                   onChange={(e) => setPatchP1Hp(e.target.value)}
                 />
@@ -159,7 +236,7 @@ export function PlaytestCheatbox({
                   label="P2 HP"
                   type="number"
                   min={0}
-                  max={20}
+                  max={hpCap}
                   value={patchP2Hp}
                   onChange={(e) => setPatchP2Hp(e.target.value)}
                 />

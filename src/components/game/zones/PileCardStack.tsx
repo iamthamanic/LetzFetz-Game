@@ -3,7 +3,7 @@
  * Location: src/components/game/zones/PileCardStack.tsx
  */
 import React from 'react';
-import { resolveCardBackPath } from '../../../services/cardArt/manifest';
+import { CardBackFace } from '../../cards/CardBackFace';
 
 export function pileStackDepth(count: number): number {
   if (count <= 0) return 0;
@@ -19,25 +19,20 @@ interface PileCardStackProps {
 
 export function PileCardStack({ count, className = '' }: PileCardStackProps) {
   const layers = pileStackDepth(count);
-  const back = resolveCardBackPath();
 
   return (
     <div className={`relative mx-auto aspect-[5/7] w-full max-w-[5.5rem] ${className}`}>
       {Array.from({ length: layers }, (_, i) => (
-        <img
+        <div
           key={i}
-          src={back}
-          alt=""
-          aria-hidden
-          data-testid="card-back"
-          className="absolute inset-0 h-full w-full rounded-sm border border-stone-700/80 bg-stone-950 object-cover shadow-md"
+          className="absolute inset-0"
           style={{
             transform: `translate(${i * 3}px, ${-i * 3}px)`,
             zIndex: i,
           }}
-          loading="lazy"
-          decoding="async"
-        />
+        >
+          <CardBackFace className="h-full w-full" />
+        </div>
       ))}
     </div>
   );

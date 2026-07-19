@@ -6,10 +6,10 @@
 /** Stable id for deduping or logging; callers supply unique ids per step. */
 export type PresentationStepId = string;
 
-/** One sequenced UI animation beat (deal card, draw, bind snap, etc.). */
+/** One sequenced UI animation beat (deal card, draw, build snap, etc.). */
 export type PresentationStep = {
   id: PresentationStepId;
-  /** Semantic kind for renderers, e.g. `deal-card`, `draw-card`, `bind-snap`. */
+  /** Semantic kind for renderers, e.g. `deal-card`, `draw-card`, `build-snap`. */
   kind: string;
   /** Auto-advance after N ms; `0` waits for manual `completeStep()`. */
   durationMs: number;

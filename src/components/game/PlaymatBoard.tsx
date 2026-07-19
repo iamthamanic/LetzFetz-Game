@@ -2,27 +2,25 @@
  * Duel board on full-bleed playmat — replaces vertical tableau + arena sidebar.
  * Location: src/components/game/PlaymatBoard.tsx
  */
-import React, { useMemo, useRef, useState, useLayoutEffect, useCallback } from 'react';
+import React from 'react';
 import type { ContentPack, GameAction, GameState, PlayerId } from '../../game';
 import { findElementDef } from '../../game';
 import type { GameViewModel } from './buildGameViewModel';
 import type { PendingIntent } from './gameActionHelpers';
 import type { PresentationStep } from './presentation/types';
-import { PlaymatCardFly, AttackCardFly } from './presentation';
+import { PlaymatCardFly, AttackCardFly, BuildCardFly, InstantGlitchReveal, DamageHitReveal, CombatResolveShow, DrawCardReveal, OpeningDealFly, isDamageHitStep } from './presentation';
 import {
   findActivateAction,
-  findBindReplaceAction,
-  findDirectBindAction,
+  findBuildReplaceAction,
+  findDirectBuildAction,
   findDiscardDrawAction,
+  findPlayGlitchAction,
 } from './gameActionHelpers';
-import { CharacterDock, CombatStage, DeckPile, DiscardPile, TargetingArrow } from './zones';
-import type { TargetingArrowCoords } from './zones/TargetingArrow';
+import { CharacterDock, CombatStage, DeckPile, DiscardPile } from './zones';
 import { BoundCardRow } from './BoundCardRow';
 import { HandFan } from './HandFan';
-import { ActionBar } from './ActionBar';
 import { ArenaPlaymat } from './ArenaPlaymat';
 import { ArenaPlaymatBadge } from './ArenaPlaymatBadge';
-import { getPlaymatLayoutForArena, playmatZonePercentStyle } from './playmat';
 import { Panel } from '../ui/Panel';
 import { Button } from '../ui/Button';
 import { DndPlaymat } from './DndPlaymat';
@@ -40,6 +38,7 @@ interface PlaymatBoardProps {
   dealReveal?: Record<PlayerId, number>;
   heldBackHandCards?: Partial<Record<PlayerId, string>>;
   snapBoundCardIds?: string[];
+  flyingBuildCardIds?: string[];
   activateDiscardId?: string | null;
   hiddenAttackCardId?: string | null;
   activePresentationStep?: PresentationStep | null;
@@ -65,78 +64,31 @@ export function PlaymatBoard({
   dealReveal,
   heldBackHandCards,
   snapBoundCardIds = [],
+  flyingBuildCardIds = [],
   activateDiscardId = null,
   hiddenAttackCardId = null,
   activePresentationStep = null,
   humanPlayerId = 'p1',
   onDispatch,
   onPlayAttack,
-  onPlayChallenge,
+  onPlayChallenge: _onPlayChallenge,
   onPlayBlock,
   onPendingChange,
   onNewGame,
 }: PlaymatBoardProps) {
   const humanId = view.human;
   const botId = view.bot;
-
-  const playmatRef = useRef<HTMLDivElement>(null);
-  const [rootRect, setRootRect] = useState<{ width: number; height: number }>({ width: 0, height: 0 });
-  const [arrowCoords, setArrowCoords] = useState<TargetingArrowCoords | null>(null);
-
-  const updateMeasurements = useCallback(() => {
-    const root = playmatRef.current;
-    if (!root) return;
-    const rect = root.getBoundingClientRect();
-    setRootRect({ width: rect.width, height: rect.height });
-
-    if (pending?.type !== 'attack') {
-      setArrowCoords(null);
-      return;
-    }
-
-    const selectedCard = root.querySelector('[data-selected-attack="true"]') as HTMLElement | null;
-    if (!selectedCard) {
-      setArrowCoords(null);
-      return;
-    }
-    const sourceRect = selectedCard.getBoundingClientRect();
-    const source = {
-      x: sourceRect.left + sourceRect.width / 2 - rect.left,
-      y: sourceRect.bottom - rect.top,
-    };
-
-    const targetableSlot = root.querySelector('[data-targetable="true"]') as HTMLElement | null;
-    let target: { x: number; y: number } | null = null;
-    if (targetableSlot) {
-      const targetRect = targetableSlot.getBoundingClientRect();
-      target = {
-        x: targetRect.left + targetRect.width / 2 - rect.left,
-        y: targetRect.top + targetRect.height / 2 - rect.top,
-      };
-    } else {
-      const dock = root.querySelector('[data-character-dock="bot"]') as HTMLElement | null;
-      if (dock) {
-        const dockRect = dock.getBoundingClientRect();
-        target = {
-          x: dockRect.left + dockRect.width / 2 - rect.left,
-          y: dockRect.top + dockRect.height / 2 - rect.top,
-        };
-      }
-    }
-
-    setArrowCoords(target ? { source, target } : null);
-  }, [pending?.type]);
-
-  useLayoutEffect(() => {
-    updateMeasurements();
-    const onResize = () => updateMeasurements();
-    window.addEventListener('resize', onResize);
-    return () => window.removeEventListener('resize', onResize);
-  }, [updateMeasurements]);
-
-  useLayoutEffect(() => {
-    updateMeasurements();
-  }, [pending, updateMeasurements]);
+  const damageFreezeHp =
+    activePresentationStep && isDamageHitStep(activePresentationStep)
+      ? {
+          playerId: activePresentationStep.payload?.playerId as PlayerId | undefined,
+          fromHp: activePresentationStep.payload?.fromHp as number | undefined,
+        }
+      : null;
+  const dockHp = (playerId: PlayerId) =>
+    damageFreezeHp?.playerId === playerId && damageFreezeHp.fromHp != null
+      ? damageFreezeHp.fromHp
+      : undefined;
 
   const clearPending = () => onPendingChange(null);
 
@@ -144,16 +96,16 @@ export function PlaymatBoard({
     onPendingChange({ type: 'attack', attackInstanceId: instanceId });
   };
 
-  const handleBindDirect = (handInstanceId: string) => {
-    const action = findDirectBindAction(view.legalActions, handInstanceId);
+  const handleBuildDirect = (handInstanceId: string) => {
+    const action = findDirectBuildAction(view.legalActions, handInstanceId);
     if (action) {
       onDispatch(action);
       clearPending();
     }
   };
 
-  const handleStartBindReplace = (handInstanceId: string) => {
-    onPendingChange({ type: 'bind', handInstanceId });
+  const handleStartBuildReplace = (handInstanceId: string) => {
+    onPendingChange({ type: 'build', handInstanceId });
   };
 
   const handleStartActivate = (boundInstanceId: string) => {
@@ -161,22 +113,25 @@ export function PlaymatBoard({
   };
 
   const handleOpponentSlotClick = (slot: (typeof view.botBoundSlots)[0]) => {
-    if (pending?.type !== 'attack' || !slot.instanceId) return;
-    onPlayChallenge(pending.attackInstanceId, slot.instanceId);
-    clearPending();
+    if (pending?.type !== 'attack' || !slot.instanceId || !slot.isTargetable) return;
+    onPendingChange({
+      type: 'attack',
+      attackInstanceId: pending.attackInstanceId,
+      targetBoundInstanceId: slot.instanceId,
+    });
   };
 
   const handleHumanSlotClick = (slot: (typeof view.humanBoundSlots)[0]) => {
-    if (pending?.type !== 'bind') return;
+    if (pending?.type !== 'build') return;
     if (!slot.instanceId) {
-      const action = findDirectBindAction(view.legalActions, pending.handInstanceId);
+      const action = findDirectBuildAction(view.legalActions, pending.handInstanceId);
       if (action) {
         onDispatch(action);
         clearPending();
       }
       return;
     }
-    const action = findBindReplaceAction(
+    const action = findBuildReplaceAction(
       view.legalActions,
       pending.handInstanceId,
       slot.instanceId,
@@ -208,21 +163,31 @@ export function PlaymatBoard({
     }
   };
 
+  const handlePlayGlitch = (handInstanceId: string) => {
+    const action = findPlayGlitchAction(view.legalActions, handInstanceId);
+    if (action) {
+      onDispatch(action);
+      clearPending();
+    }
+  };
+
   const hasChallengeTargets = view.botBoundSlots.some((s) => s.isTargetable);
-  const bindHasFreeSlot = view.humanBoundSlots.some((s) => !s.instanceId);
+  const buildHasFreeSlot = view.humanBoundSlots.some((s) => !s.instanceId);
 
   const pendingHint = (() => {
     if (!pending) return null;
     switch (pending.type) {
       case 'attack':
         return hasChallengeTargets
-          ? 'Wähle eine gegnerische Engine-Karte zum Herausfordern — oder „Direkt angreifen“.'
-          : 'Kein Herausforderungsziel — nutze „Direkt angreifen“.';
-      case 'bind': {
+          ? pending.targetBoundInstanceId
+            ? 'Ziel gewählt — unten „Herausfordern“ oder „Direkt angreifen“.'
+            : 'Gegner-Engine antippen als Ziel, dann unten „Herausfordern“ — oder „Direkt angreifen“.'
+          : 'Kein Herausforderungsziel — unten „Direkt angreifen“.';
+      case 'build': {
         const hasFreeSlot = view.humanBoundSlots.some((s) => !s.instanceId);
         return hasFreeSlot
-          ? 'Klicke auf einen freien Engine-Slot, um die Karte zu binden.'
-          : 'Wähle eine gebundene Karte, die durch die neue Karte ersetzt werden soll.';
+          ? 'Klicke auf einen freien Engine-Slot, um die Karte zu bauen.'
+          : 'Wähle eine gebaute Karte, die durch die neue Karte ersetzt werden soll.';
       }
       case 'activate':
         return 'Wähle eine Handkarte zum Abwerfen für die Aktivierung.';
@@ -235,20 +200,16 @@ export function PlaymatBoard({
     ? view.legalActions.filter((a) => a.type === 'PLAY_BLOCK')
     : [];
 
-  const playmatLayout = useMemo(
-    () => getPlaymatLayoutForArena(view.arena?.id ?? 'arena-spaeti'),
-    [view.arena?.id],
-  );
-  const deckZone = playmatLayout.zones.find((z) => z.id === 'deck');
-  const discardZone = playmatLayout.zones.find((z) => z.id === 'discard');
-  const playerCharZone = playmatLayout.zones.find((z) => z.id === 'player-character');
-  const opponentCharZone = playmatLayout.zones.find((z) => z.id === 'opponent-character');
-  const combatZone = playmatLayout.zones.find((z) => z.id === 'combat');
   const topDiscard = state.piles.discard[state.piles.discard.length - 1];
   const topDiscardDef = topDiscard ? findElementDef(pack, topDiscard.defId) : undefined;
 
-  const humanHandVisible = openingDealActive && dealReveal ? dealReveal[humanId] : undefined;
-  const botHandVisible = openingDealActive && dealReveal ? dealReveal[botId] : undefined;
+  // Hide hands until / during opening deal; only show fully after deal finishes.
+  const humanHandVisible = !openingDealFinished
+    ? (dealReveal?.[humanId] ?? 0)
+    : undefined;
+  const botHandVisible = !openingDealFinished
+    ? (dealReveal?.[botId] ?? 0)
+    : undefined;
   const humanHeldBackId = heldBackHandCards?.[humanId];
   const botHeldBackId = heldBackHandCards?.[botId];
   const humanHandHidden = [
@@ -272,6 +233,7 @@ export function PlaymatBoard({
           side="bot"
           variant="compact"
           handVisibleCount={botHandCount}
+          displayHp={dockHp(botId)}
           className="min-w-0 flex-1"
         />
         <CharacterDock
@@ -281,6 +243,7 @@ export function PlaymatBoard({
           side="human"
           variant="compact"
           handVisibleCount={humanHandVisible}
+          displayHp={dockHp(humanId)}
           className="min-w-0 flex-1"
         />
       </div>
@@ -298,7 +261,6 @@ export function PlaymatBoard({
       )}
 
       <div
-        ref={playmatRef}
         data-testid="playmat-board"
         className="relative flex min-h-0 flex-1 overflow-hidden"
       >
@@ -314,55 +276,40 @@ export function PlaymatBoard({
         )}
 
         {view.arena && !state.winner && <ArenaPlaymat arenaId={view.arena.id} />}
-        {view.arena && !state.winner && (
-          <ArenaPlaymatBadge arena={view.arena} arenaState={state.arena} />
-        )}
 
-        {deckZone && (
-          <DeckPile
-            count={state.piles.deck.length}
-            style={playmatZonePercentStyle(deckZone, playmatLayout.viewBox)}
-          />
-        )}
-        {discardZone && (
-          <DiscardPile
-            count={state.piles.discard.length}
-            topCard={topDiscardDef}
-            style={playmatZonePercentStyle(discardZone, playmatLayout.viewBox)}
-          />
-        )}
-
-        {opponentCharZone && (
-          <CharacterDock
-            state={state}
-            pack={pack}
-            playerId={botId}
-            side="bot"
-            variant="full"
-            handVisibleCount={botHandCount}
-            style={playmatZonePercentStyle(opponentCharZone, playmatLayout.viewBox)}
-            className="hidden sm:flex"
-          />
-        )}
-        {playerCharZone && (
-          <CharacterDock
-            state={state}
-            pack={pack}
-            playerId={humanId}
-            side="human"
-            variant="full"
-            handVisibleCount={humanHandVisible}
-            style={playmatZonePercentStyle(playerCharZone, playmatLayout.viewBox)}
-            className="hidden sm:flex"
-          />
-        )}
-
+        <OpeningDealFly
+          activeStep={activePresentationStep}
+          humanPlayerId={humanPlayerId}
+        />
         <PlaymatCardFly
           activeStep={activePresentationStep}
           humanPlayerId={humanPlayerId}
         />
+        <DrawCardReveal
+          activeStep={activePresentationStep}
+          pack={pack}
+          humanPlayerId={humanPlayerId}
+        />
         <AttackCardFly
           activeStep={activePresentationStep}
+          humanPlayerId={humanPlayerId}
+        />
+        <BuildCardFly
+          activeStep={activePresentationStep}
+          humanPlayerId={humanPlayerId}
+        />
+        <InstantGlitchReveal
+          activeStep={activePresentationStep}
+          humanPlayerId={humanPlayerId}
+        />
+        <DamageHitReveal
+          activeStep={activePresentationStep}
+          pack={pack}
+          humanPlayerId={humanPlayerId}
+        />
+        <CombatResolveShow
+          activeStep={activePresentationStep}
+          pack={pack}
           humanPlayerId={humanPlayerId}
         />
 
@@ -381,16 +328,7 @@ export function PlaymatBoard({
           </div>
         )}
 
-        {pending?.type === 'attack' && !state.winner && arrowCoords && rootRect.width > 0 && (
-          <TargetingArrow
-            rootRect={rootRect}
-            coords={arrowCoords}
-            hasChallengeTargets={view.botBoundSlots.some((s) => s.isTargetable)}
-            opponentSlots={view.botBoundSlots}
-          />
-        )}
-
-        {combatZone && view.combat && !state.winner && (
+        {view.combat && !state.winner && (
           <CombatStage
             combat={view.combat}
             state={state}
@@ -399,22 +337,62 @@ export function PlaymatBoard({
             isHumanDefender={view.isHumanDefender}
             botThinking={botThinking}
             blockActions={blockCards}
-            style={playmatZonePercentStyle(combatZone, playmatLayout.viewBox)}
             onPlayBlock={onPlayBlock}
             onPassBlock={() => onDispatch({ type: 'PASS_BLOCK' })}
           />
         )}
 
-        <div
-          data-testid="duel-tableau"
-          className="relative z-10 mx-auto flex min-h-0 w-full max-w-5xl flex-1 flex-col gap-3 overflow-y-auto overflow-x-hidden px-2 py-2 sm:px-4 sm:py-3"
-        >
+        <div className="relative z-10 flex min-h-0 w-full flex-1">
+          <aside
+            data-testid="human-dock-sidebar"
+            className="z-20 flex w-[4.85rem] shrink-0 flex-col justify-center gap-2 p-1 sm:w-36 sm:justify-end sm:gap-3 sm:p-2 sm:pb-3 md:w-44 lg:w-48"
+          >
+            <div
+              data-testid="pile-column"
+              className="flex w-full flex-col items-stretch gap-2 rounded-xl border border-stone-700/60 bg-stone-950/80 p-1 shadow-lg backdrop-blur-sm sm:p-1.5"
+            >
+              <DeckPile count={state.piles.deck.length} className="w-full" />
+              <div className="border-t border-stone-700/50" aria-hidden />
+              <DiscardPile
+                count={state.piles.discard.length}
+                topCard={topDiscardDef}
+                className="w-full"
+              />
+            </div>
+            <CharacterDock
+              state={state}
+              pack={pack}
+              playerId={humanId}
+              side="human"
+              variant="full"
+              handVisibleCount={humanHandVisible}
+              displayHp={dockHp(humanId)}
+              className="hidden h-44 w-full sm:flex md:h-52"
+            />
+          </aside>
+
+          <div
+            data-testid="duel-tableau"
+            className="relative flex min-h-0 w-full min-w-0 flex-1 flex-col gap-3 overflow-y-auto overflow-x-hidden px-2 py-2 sm:px-3 sm:py-3 md:px-4"
+          >
+          {view.arena && !state.winner && (
+            <ArenaPlaymatBadge
+              arena={view.arena}
+              arenaState={state.arena}
+              placement="inline"
+              className="mb-1 max-w-xs sm:hidden"
+            />
+          )}
+
           <section className="flex flex-none flex-col gap-2">
             <BoundCardRow
               label="Gegner-Engine"
               slots={view.botBoundSlots}
               cardSize="opponentBound"
               snapBoundCardIds={snapBoundCardIds}
+              flyingBuildCardIds={flyingBuildCardIds}
+              align="start"
+              ghostCharacterId={state.players[botId].characterId}
               onSlotClick={handleOpponentSlotClick}
             />
           </section>
@@ -438,24 +416,27 @@ export function PlaymatBoard({
             ) : null}
           </section>
 
-          <section className="flex flex-none flex-col gap-2 border-t border-stone-800/80 pt-3">
+          <section className="flex min-w-0 flex-none flex-col gap-2 border-t border-stone-800/80 pt-3">
             <BoundCardRow
               label="Deine Engine"
               slots={view.humanBoundSlots}
               cardSize="bound"
               snapBoundCardIds={snapBoundCardIds}
-              bindPending={pending?.type === 'bind'}
-              bindHasFreeSlot={bindHasFreeSlot}
+              flyingBuildCardIds={flyingBuildCardIds}
+              buildPending={pending?.type === 'build'}
+              buildHasFreeSlot={buildHasFreeSlot}
+              align="start"
+              ghostCharacterId={state.players[humanId].characterId}
               onActivateBound={handleStartActivate}
               onSlotClick={handleHumanSlotClick}
             />
 
-            {pending?.type === 'bind' && (
+            {pending?.type === 'build' && (
               <div
-                data-testid="bind-target-pill"
+                data-testid="build-target-pill"
                 className="mx-auto w-fit rounded-full border border-purple-400/50 bg-purple-950/60 px-3 py-1 text-xs font-semibold text-purple-200 shadow-[0_0_12px_rgba(168,85,247,0.2)]"
               >
-                {bindHasFreeSlot ? 'Zielslot wählen — freier Slot' : 'Zielslot wählen — Karte ersetzen'}
+                {buildHasFreeSlot ? 'Zielslot wählen — freier Slot' : 'Zielslot wählen — Karte ersetzen'}
               </div>
             )}
 
@@ -463,52 +444,54 @@ export function PlaymatBoard({
               cards={view.handCards}
               pending={pending}
               visibleCount={humanHandVisible}
+              dealRevealActive={!openingDealFinished}
               hiddenInstanceIds={humanHandHiddenIds}
               hasChallengeTargets={hasChallengeTargets}
               onSelectAttack={handleSelectAttack}
-              onPlayBoost={(id) => onDispatch({ type: 'PLAY_BOOST', cardInstanceId: id })}
-              onBindDirect={handleBindDirect}
-              onStartBindReplace={handleStartBindReplace}
+              onPlayBoost={(id) => {
+                onDispatch({ type: 'PLAY_BOOST', cardInstanceId: id });
+                onPendingChange(null);
+              }}
+              onBuildDirect={handleBuildDirect}
+              onStartBuildReplace={handleStartBuildReplace}
               onPlayBlock={onPlayBlock}
               onDiscardDraw={handleDiscardDraw}
               onActivateDiscard={handleActivateDiscard}
+              onPlayGlitch={handlePlayGlitch}
             />
 
-            <ActionBar
-              actions={view.availableMainActions}
-              onAction={(action) => {
-                onDispatch(action);
-                clearPending();
-              }}
-              botThinking={botThinking && !view.isHumanTurn && !view.isHumanDefender}
-            />
-
-            {pending && (
-              <div className="flex flex-col gap-2">
-                {pending.type === 'attack' && (
-                  <p className="text-center text-[11px] text-stone-400 sm:text-xs">
-                    {hasChallengeTargets
-                      ? 'Herausfordern: Gegner-Engine-Slot anklicken. Direktangriff trifft die LP des Gegners.'
-                      : 'Kein Herausforderungsziel — nur Direktangriff möglich.'}
-                  </p>
-                )}
-                <div className="flex flex-wrap items-center gap-2">
-                  {pending.type === 'attack' && (
-                    <Button
-                      variant="primary"
-                      title="Greift die Lebenspunkte des Gegners direkt an"
-                      onClick={() => onPlayAttack(pending.attackInstanceId)}
-                    >
-                      Direkt angreifen
-                    </Button>
-                  )}
-                  <Button variant="secondary" onClick={clearPending}>
-                    Auswahl abbrechen
-                  </Button>
-                </div>
-              </div>
+            {pending?.type === 'attack' && (
+              <p className="text-center text-[11px] text-stone-400 sm:text-xs">
+                {hasChallengeTargets
+                  ? 'Herausfordern: Gegner-Engine-Slot anklicken. Direktangriff trifft die LP des Gegners.'
+                  : 'Kein Herausforderungsziel — nur Direktangriff möglich.'}
+              </p>
             )}
           </section>
+          </div>
+
+          <aside
+            data-testid="bot-dock-sidebar"
+            className="hidden shrink-0 flex-col justify-start gap-2 p-2 pt-3 sm:flex sm:w-36 md:w-44 lg:w-48"
+          >
+            <CharacterDock
+              state={state}
+              pack={pack}
+              playerId={botId}
+              side="bot"
+              variant="full"
+              handVisibleCount={botHandCount}
+              displayHp={dockHp(botId)}
+              className="h-52 w-full md:h-60"
+            />
+            {view.arena && !state.winner && (
+              <ArenaPlaymatBadge
+                arena={view.arena}
+                arenaState={state.arena}
+                placement="sidebar"
+              />
+            )}
+          </aside>
         </div>
       </div>
     </div>

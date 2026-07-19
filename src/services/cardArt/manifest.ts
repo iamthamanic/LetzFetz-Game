@@ -62,9 +62,17 @@ export const ILLUSTRATION_MANIFEST = buildIllustrationManifest();
 
 const manifestByKey = new Map(ILLUSTRATION_MANIFEST.map((item) => [item.key, item]));
 
+/** Join Vite base URL with a public-folder path (always absolute from site root). */
+export function publicAssetUrl(path: string): string {
+  const base = import.meta.env.BASE_URL || '/';
+  const normalizedPath = path.startsWith('/') ? path.slice(1) : path;
+  const normalizedBase = base.endsWith('/') ? base : `${base}/`;
+  return `${normalizedBase}${normalizedPath}`;
+}
+
 /** Public URL path for a generated illustration PNG. */
 export function illustrationPublicPath(key: string, kind: IllustrationKind): string {
-  return `/cards/${kind}/${key}.png`;
+  return publicAssetUrl(`/cards/${kind}/${key}.png`);
 }
 
 /** Resolve illustration key from any base-pack card id. */
@@ -94,8 +102,8 @@ export function resolveCardArtPath(cardId: string): string {
   return illustrationPublicPath(key, def.kind);
 }
 
-/** Public URL path for the shared Letz Fetz card back (face-down). */
-export const CARD_BACK_PUBLIC_PATH = '/cards/card-back.svg';
+/** Public URL for the shared Letz Fetz card back (brand logo). */
+export const CARD_BACK_PUBLIC_PATH = publicAssetUrl('/brand/letz-fetz-logo.png');
 
 export function resolveCardBackPath(): string {
   return CARD_BACK_PUBLIC_PATH;
@@ -105,19 +113,19 @@ export function resolveCardBackPath(): string {
 export function resolveCardVideoPath(cardId: string): string {
   const kind = cardVideoKindForId(cardId);
   if (!kind) return '';
-  return `/videos/${kind}/${cardId}.mp4`;
+  return publicAssetUrl(`/videos/${kind}/${cardId}.mp4`);
 }
 
 /** Character idle loop (setup + forge preview), or empty if not generated. */
 export function resolveCharacterIdleVideoPath(characterId: string): string {
   if (!isCharacterIdleVideoId(characterId)) return '';
-  return `/videos/character/${characterId}.mp4`;
+  return publicAssetUrl(`/videos/character/${characterId}.mp4`);
 }
 
 /** Element attack loop video path, or empty string if unsupported. */
 export function resolveElementAttackVideoPath(element: Element): string {
   const key = elementAttackVideoKey(element);
-  return `/videos/element-attack/${key}.mp4`;
+  return publicAssetUrl(`/videos/element-attack/${key}.mp4`);
 }
 
 /** All element-attack video manifest keys for batch generation. */

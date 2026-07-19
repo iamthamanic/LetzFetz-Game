@@ -112,7 +112,7 @@ export function packToForgeCards(pack: ContentPack = BASE_PACK): ForgeCardData[]
         `Typ: ${CARD_TYPE_DE[e.cardType]}`,
         `Wert: ${e.value}`,
         `Sofort: ${e.instantText}`,
-        `Gebunden: ${e.boundText}`,
+        `Gebaut: ${e.boundText}`,
         `Widerstand: ${e.value}`,
       ],
       image_asset: resolveCardArtPath(e.id),

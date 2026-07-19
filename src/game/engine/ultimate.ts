@@ -9,7 +9,7 @@ function findUltimateId(pack: ContentPack, characterId: string): string | undefi
   return pack.characters.find((c) => c.id === characterId)?.ultimateId;
 }
 
-function bindFromHandAfterUlti(
+function buildFromHandAfterUlti(
   state: GameState,
   pack: ContentPack,
   playerId: PlayerId,
@@ -31,7 +31,7 @@ function bindFromHandAfterUlti(
     resistanceBonus: 0,
   };
   next.players[playerId].bound.push(bound);
-  next.lastEvent = `${next.lastEvent ?? ''} Ulti-Bindung durchgeführt.`;
+  next.lastEvent = `${next.lastEvent ?? ''} Ulti-Bau durchgeführt.`;
   return next;
 }
 
@@ -52,7 +52,7 @@ function drawWithInstantGlitches(
     if (glitch?.glitchType === 'instant') {
       next.players[playerId].hand.pop();
       next.piles.discard.push(drawn);
-      next = applyInstantGlitch(next, pack, playerId, glitch, rng, ruleset);
+      next = applyInstantGlitch(next, pack, playerId, glitch, rng, ruleset, drawn.instanceId);
       if (next.winner) return next;
     }
   }
@@ -78,7 +78,7 @@ export function applyUltimateEffect(
       next.players[opponent].hp = clampHp(next.players[opponent].hp - 5, ruleset);
       next.players[playerId].hp = clampHp(next.players[playerId].hp + 3, ruleset);
       next.lastEvent = 'Mit Alles und Scharf: 5 Schaden, 3 Heilung.';
-      next = bindFromHandAfterUlti(next, pack, playerId, ruleset);
+      next = buildFromHandAfterUlti(next, pack, playerId, ruleset);
       break;
     }
     case 'ulti-schluckspecht': {

@@ -21,7 +21,7 @@ export function DiscardPile({ count, topCard, className = '', style }: DiscardPi
     <div
       data-testid="discard-pile"
       data-pile-count={count}
-      className={`pointer-events-none z-20 flex flex-col items-center justify-end gap-1 p-1 ${className}`}
+      className={`z-20 flex flex-col items-center justify-end gap-1 p-1 ${className}`}
       style={style}
       aria-label={`Ablage, ${count} Karten`}
     >

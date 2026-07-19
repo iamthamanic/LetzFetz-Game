@@ -6,22 +6,41 @@ import { GameView } from './components/game/GameView';
 import { PlaymatZonePreview } from './components/game/PlaymatZonePreview';
 import { AppBrand } from './components/AppBrand';
 import { AppNav, type AppView } from './components/AppNav';
+import { MainMenu } from './components/MainMenu';
+import { SettingsView } from './components/SettingsView';
 import { isPlaymatPreview } from './services/playtest/isPlaymatPreview';
+import { AppHistoryProvider, useAppHistory } from './services/history/AppHistoryContext';
 
-export default function App() {
-  const [currentView, setCurrentView] = useState<AppView>('forge');
+function AppShell() {
+  const [currentView, setCurrentView] = useState<AppView>('menu');
   const [notesOpen, setNotesOpen] = useState(false);
   const [arenaKey, setArenaKey] = useState(0);
-
-  if (isPlaymatPreview()) {
-    return <PlaymatZonePreview />;
-  }
+  const [playSessionKey, setPlaySessionKey] = useState(0);
+  const { push, canGoBack, canGoForward, goBack, goForward } = useAppHistory();
 
   const handleViewChange = (view: AppView) => {
-    if (view === 'arena') {
+    if (view === currentView) return;
+    const from = currentView;
+    const to = view;
+    if (to === 'arena') {
       setArenaKey((prev) => prev + 1);
     }
-    setCurrentView(view);
+    if (to === 'play' && from !== 'play') {
+      setPlaySessionKey((prev) => prev + 1);
+    }
+    push({
+      undo: () => setCurrentView(from),
+      redo: () => setCurrentView(to),
+    });
+    setCurrentView(to);
+  };
+
+  /** Logo home: end any active match and return to the main menu. */
+  const handleBrandHome = () => {
+    setPlaySessionKey((prev) => prev + 1);
+    if (currentView !== 'menu') {
+      handleViewChange('menu');
+    }
   };
 
   return (
@@ -31,22 +50,64 @@ export default function App() {
         className="flex-none border-b border-stone-800 bg-stone-950/95 backdrop-blur-md"
       >
         <div className="mx-auto flex max-w-[1280px] flex-col gap-3 px-4 py-3 sm:flex-row sm:items-center sm:justify-between">
-          <AppBrand />
+          <AppBrand onHome={handleBrandHome} />
           <AppNav
             currentView={currentView}
             onViewChange={handleViewChange}
             onOpenNotes={() => setNotesOpen(true)}
+            canGoBack={canGoBack}
+            canGoForward={canGoForward}
+            onGoBack={goBack}
+            onGoForward={goForward}
           />
         </div>
       </header>
 
-      <main className="min-h-0 flex-1 overflow-hidden">
-        {currentView === 'forge' && <CardForge />}
-        {currentView === 'arena' && <Arena key={arenaKey} />}
-        {currentView === 'play' && <GameView />}
+      <main className="relative flex min-h-0 flex-1 flex-col overflow-hidden">
+        <div
+          className={`flex min-h-0 flex-1 flex-col ${currentView === 'menu' ? '' : 'hidden'}`}
+        >
+          <MainMenu onNavigate={handleViewChange} />
+        </div>
+        <div
+          className={`flex min-h-0 flex-1 flex-col ${currentView === 'settings' ? '' : 'hidden'}`}
+        >
+          <SettingsView
+            onBack={() => handleViewChange('menu')}
+            onOpenNotes={() => setNotesOpen(true)}
+          />
+        </div>
+        {/* Keep feature views mounted so undo across tabs still works */}
+        <div
+          className={`flex min-h-0 flex-1 flex-col ${currentView === 'forge' ? '' : 'hidden'}`}
+        >
+          <CardForge />
+        </div>
+        <div
+          className={`flex min-h-0 flex-1 flex-col ${currentView === 'arena' ? '' : 'hidden'}`}
+        >
+          <Arena key={arenaKey} />
+        </div>
+        <div
+          className={`flex min-h-0 flex-1 flex-col ${currentView === 'play' ? '' : 'hidden'}`}
+        >
+          <GameView key={playSessionKey} />
+        </div>
       </main>
 
       <Notes isOpen={notesOpen} onClose={() => setNotesOpen(false)} />
     </div>
+  );
+}
+
+export default function App() {
+  if (isPlaymatPreview()) {
+    return <PlaymatZonePreview />;
+  }
+
+  return (
+    <AppHistoryProvider>
+      <AppShell />
+    </AppHistoryProvider>
   );
 }

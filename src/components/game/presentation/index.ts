@@ -46,19 +46,26 @@ export {
   isOpeningDealStep,
   fullDealRevealCounts,
   OPENING_DEAL_CARD_MS,
+  openingDealBeats,
 } from './buildOpeningDealSteps';
+export type { OpeningDealBeat } from './buildOpeningDealSteps';
 export {
   buildDrawCardStep,
   isDrawCardStep,
   findNewlyDrawnCard,
   DRAW_CARD_MS,
+  DRAW_CARD_REVEAL_MS,
+  DRAW_CARD_FLY_MS,
+  DRAW_CARD_HIDDEN_MS,
 } from './buildDrawCardStep';
 export {
-  buildBindSnapStep,
-  isBindSnapStep,
-  findNewlyBoundCardIds,
-  BIND_SNAP_MS,
-} from './buildBindSnapStep';
+  buildBuildSnapStep,
+  isBuildSnapStep,
+  findNewlyBuiltCardIds,
+  BUILD_SNAP_MS,
+  BUILD_FLY_MS,
+} from './buildBuildSnapStep';
+export type { BuildSnapPayload } from './buildBuildSnapStep';
 export {
   buildActivateDiscardStep,
   isActivateDiscardStep,
@@ -70,7 +77,32 @@ export {
   isAttackCardFlyStep,
   ATTACK_CARD_FLY_MS,
 } from './buildAttackCardFlyStep';
+export {
+  buildInstantGlitchRevealStep,
+  buildInstantGlitchRevealSteps,
+  isInstantGlitchRevealStep,
+  INSTANT_GLITCH_REVEAL_MS,
+} from './buildInstantGlitchRevealStep';
+export {
+  buildDamageHitStep,
+  buildDamageHitSteps,
+  isDamageHitStep,
+  findHpLosses,
+  DAMAGE_HIT_MS,
+} from './buildDamageHitStep';
+export {
+  buildCombatResolveSnapshot,
+  buildCombatResolveStep,
+  isCombatResolveStep,
+  COMBAT_RESOLVE_MS,
+} from './buildCombatResolveStep';
+export type { CombatResolveSnapshot, CombatResolveOutcome } from './buildCombatResolveStep';
 export { OpeningDealFly } from './OpeningDealFly';
 export { PlaymatCardFly } from './PlaymatCardFly';
+export { DrawCardReveal } from './DrawCardReveal';
 export { AttackCardFly } from './AttackCardFly';
+export { BuildCardFly } from './BuildCardFly';
+export { InstantGlitchReveal } from './InstantGlitchReveal';
+export { DamageHitReveal } from './DamageHitReveal';
+export { CombatResolveShow } from './CombatResolveShow';
 export { findRemovedAttackCard } from './buildAttackCardFlyStep';

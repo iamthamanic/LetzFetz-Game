@@ -16,8 +16,10 @@ function shot(page: import('@playwright/test').Page, name: string) {
 
 async function openForgeWithCharacter(page: import('@playwright/test').Page, name: string) {
   await page.goto('/');
-  await page.getByRole('button', { name: 'Edit' }).click();
-  await expect(page.getByText('Base Pack V1')).toBeVisible({ timeout: 15_000 });
+  await page.getByRole('button', { name: 'Cards' }).click();
+  await expect(page.getByTestId('card-library')).toBeVisible({ timeout: 15_000 });
+  await expect(page.getByText('Base Pack V1')).toBeVisible();
+  await page.getByRole('tab', { name: /Charakter/i }).click();
   await page.getByRole('button', { name: new RegExp(name, 'i') }).first().click();
   await expect(page.getByTestId('card-forge-preview')).toBeVisible();
 }
@@ -89,14 +91,15 @@ test.describe('Card Forge single-column editor', () => {
     await shot(page, '02-forge-mobile-preview-top.png');
   });
 
-  test('element cards: single-column stats + sidebar regression', async ({ page }) => {
+  test('element cards: single-column stats + library regression', async ({ page }) => {
     await page.setViewportSize({ width: 1280, height: 720 });
     await page.goto('/');
-    await page.getByRole('button', { name: 'Edit' }).click();
-    await expect(page.getByText('Base Pack V1')).toBeVisible({ timeout: 15_000 });
+    await page.getByRole('button', { name: 'Cards' }).click();
+    await expect(page.getByTestId('card-library')).toBeVisible({ timeout: 15_000 });
 
-    await page.getByRole('button', { name: 'Element' }).click();
-    await page.getByRole('button', { name: /Feuer|Fire|Angriff/i }).first().click();
+    await page.getByRole('tab', { name: /Element/i }).click();
+    await page.locator('[data-testid^="card-library-item-"]').first().click();
+    await expect(page.getByTestId('card-forge-preview')).toBeVisible();
 
     const stacked = await page.evaluate(() => {
       const wert = Array.from(document.querySelectorAll('label')).find((l) =>

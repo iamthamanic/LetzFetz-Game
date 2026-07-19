@@ -1,10 +1,10 @@
 /**
- * Drag-and-drop wiring for bind and challenge using @dnd-kit.
+ * Drag-and-drop wiring for build and challenge using @dnd-kit.
  * Location: src/components/game/DndPlaymat.tsx
  *
- * Wraps the playmat board in a DndContext. Hand cards with `interaction === 'bind'`
+ * Wraps the playmat board in a DndContext. Hand cards with `interaction === 'build'`
  * become draggable; human engine slots become droppable targets. On drag-end,
- * the appropriate engine action (BIND_CARD or CHALLENGE) is dispatched.
+ * the appropriate engine action (BUILD_CARD or CHALLENGE) is dispatched.
  */
 import React, { useState, useCallback } from 'react';
 import {
@@ -25,8 +25,8 @@ import type { GameViewModel, BoundSlotView } from './buildGameViewModel';
 import type { HandCardView } from './buildGameViewModel';
 import { BoardCard } from './BoardCard';
 import {
-  findDirectBindAction,
-  findBindReplaceAction,
+  findDirectBuildAction,
+  findBuildReplaceAction,
 } from './gameActionHelpers';
 
 interface DndPlaymatProps {
@@ -39,7 +39,7 @@ interface DndPlaymatProps {
 }
 
 interface DragData {
-  type: 'bind';
+  type: 'build';
   cardInstanceId: string;
 }
 
@@ -79,14 +79,14 @@ export function DndPlaymat({
         if (!slot) return;
 
         if (slot.instanceId) {
-          const action = findBindReplaceAction(
+          const action = findBuildReplaceAction(
             view.legalActions,
             dragData.cardInstanceId,
             slot.instanceId,
           );
           if (action) onDispatch(action);
         } else {
-          const action = findDirectBindAction(
+          const action = findDirectBuildAction(
             view.legalActions,
             dragData.cardInstanceId,
           );
@@ -130,7 +130,7 @@ export function DndPlaymat({
   );
 }
 
-/** Draggable wrapper for hand cards that are bindable. */
+/** Draggable wrapper for hand cards that are buildable. */
 export function DraggableHandCard({
   card,
   children,
@@ -140,8 +140,8 @@ export function DraggableHandCard({
 }) {
   const { attributes, listeners, setNodeRef, isDragging } = useDraggable({
     id: `hand-${card.instanceId}`,
-    data: { type: 'bind', cardInstanceId: card.instanceId } as DragData,
-    disabled: !card.isPlayable || card.interaction !== 'bind',
+    data: { type: 'build', cardInstanceId: card.instanceId } as DragData,
+    disabled: !card.isPlayable || card.interaction !== 'build',
   });
 
   return (
@@ -150,7 +150,7 @@ export function DraggableHandCard({
       {...attributes}
       {...listeners}
       style={{ opacity: isDragging ? 0.3 : 1, touchAction: 'none' }}
-      data-draggable={card.interaction === 'bind' && card.isPlayable ? 'true' : undefined}
+      data-draggable={card.interaction === 'build' && card.isPlayable ? 'true' : undefined}
     >
       {children}
     </div>

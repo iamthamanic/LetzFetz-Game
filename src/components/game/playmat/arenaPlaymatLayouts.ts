@@ -49,8 +49,9 @@ const SHARED_LAYOUT = {
   bgSize: { width: 1448, height: 1086 },
   zones: [
     { id: 'opponent-character' as const, label: 'Gegner', x: 1628, y: 48, width: 220, height: 300 },
-    { id: 'deck' as const, label: 'Nachziehstapel', x: 48, y: 420, width: 120, height: 168 },
-    { id: 'discard' as const, label: 'Ablage', x: 1752, y: 420, width: 120, height: 168 },
+    { id: 'deck' as const, label: 'Nachziehstapel', x: 48, y: 300, width: 140, height: 200 },
+    // Directly under the draw pile (left column).
+    { id: 'discard' as const, label: 'Ablage', x: 48, y: 520, width: 140, height: 220 },
     { id: 'combat' as const, label: 'Kampf', x: 760, y: 380, width: 400, height: 280 },
     { id: 'player-character' as const, label: 'Du', x: 72, y: 720, width: 220, height: 300 },
   ],

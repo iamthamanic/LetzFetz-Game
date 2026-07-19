@@ -1,24 +1,39 @@
+/**
+ * Unit tests for draw-card presentation steps.
+ * Location: src/components/game/presentation/buildDrawCardStep.test.ts
+ */
 import { describe, expect, it } from 'vitest';
 import { createGame, BASE_PACK, applyAction } from '../../../game';
 import {
   buildDrawCardStep,
   DRAW_CARD_MS,
+  DRAW_CARD_HIDDEN_MS,
   findNewlyDrawnCard,
   isDrawCardStep,
 } from './buildDrawCardStep';
 
 describe('buildDrawCardStep', () => {
-  it('creates a draw-card step with duration and payload', () => {
-    const step = buildDrawCardStep('p1', 'card-abc');
+  it('creates a face-up human draw with reveal+fly duration', () => {
+    const step = buildDrawCardStep('p1', 'card-abc', {
+      cardDefId: 'fire-attack-4',
+      faceUp: true,
+    });
     expect(step.kind).toBe('draw-card');
     expect(step.durationMs).toBe(DRAW_CARD_MS);
-    expect(step.payload).toEqual({ playerId: 'p1', cardInstanceId: 'card-abc' });
+    expect(step.payload).toMatchObject({
+      playerId: 'p1',
+      cardInstanceId: 'card-abc',
+      cardDefId: 'fire-attack-4',
+      faceUp: true,
+    });
     expect(isDrawCardStep(step)).toBe(true);
   });
 
-  it('defaults locksInput to true and allows opt-out for bot draws', () => {
-    expect(buildDrawCardStep('p2', 'x').locksInput).toBe(true);
-    expect(buildDrawCardStep('p2', 'x', { locksInput: false }).locksInput).toBe(false);
+  it('uses short hidden duration for bot / face-down draws', () => {
+    const step = buildDrawCardStep('p2', 'x', { locksInput: false, faceUp: false });
+    expect(step.durationMs).toBe(DRAW_CARD_HIDDEN_MS);
+    expect(step.locksInput).toBe(false);
+    expect(step.payload?.faceUp).toBe(false);
   });
 
   it('findNewlyDrawnCard detects one card added in draw phase', () => {

@@ -13,6 +13,17 @@
 
   Run `npm run checks` for build + tests.
 
+  ## LLM opponent (Ollama Cloud)
+
+  Dev-only: Vite middleware `/api/llm-bot` keeps the API key off the client.
+
+  1. Copy `.env.example` → `.env`
+  2. Set `OLLAMA_API_KEY` (https://ollama.com/settings/keys)
+  3. Optional: `OLLAMA_BOT_MODEL=glm-5.2:cloud`
+  4. `npm run dev` → in-game toggle **Gegner: LLM (Ollama)**
+
+  The model only sees a FOW view (no human hand). Invalid/failed replies fall back to the heuristic bot.
+
   ## Card art (Ollama Flux)
 
   Requires local `x/flux2-klein:4b` via Ollama.

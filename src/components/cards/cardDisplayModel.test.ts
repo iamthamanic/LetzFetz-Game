@@ -16,7 +16,7 @@ describe('cardDisplayModel', () => {
         'Typ: Angriff',
         'Wert: 4',
         'Sofort: Angriff 4. Würfle 1W6 für Würfelbonus.',
-        'Gebunden: Aktivieren: Füge dem Gegner 2 Schaden zu.',
+        'Gebaut: Aktivieren: Füge dem Gegner 2 Schaden zu.',
         'Widerstand: 4',
       ],
     });

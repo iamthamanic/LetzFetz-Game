@@ -1,23 +1,44 @@
 /**
- * Single draw-phase presentation step (deck → hand).
+ * Single draw-phase presentation step (deck → optional center reveal → hand).
  * Location: src/components/game/presentation/buildDrawCardStep.ts
  */
 import type { GameState, PlayerId } from '../../../game/types';
 import type { PresentationStep } from './types';
 
-export const DRAW_CARD_MS = 280;
+/** Center face-up hold for the human draw. */
+export const DRAW_CARD_REVEAL_MS = 1800;
+/** Flight from center into the hand fan. */
+export const DRAW_CARD_FLY_MS = 520;
+/** Total human draw presentation (reveal + fly). */
+export const DRAW_CARD_MS = DRAW_CARD_REVEAL_MS + DRAW_CARD_FLY_MS;
+/** Bot / hidden draw — face-down fly only. */
+export const DRAW_CARD_HIDDEN_MS = 280;
+
+export type BuildDrawCardStepOptions = {
+  locksInput?: boolean;
+  /** When set with faceUp, UI shows the card face in the center first. */
+  cardDefId?: string;
+  /** Human draws: face-up reveal then fly. Bot: face-down fly. */
+  faceUp?: boolean;
+};
 
 export function buildDrawCardStep(
   playerId: PlayerId,
   cardInstanceId: string,
-  options: { locksInput?: boolean } = {},
+  options: BuildDrawCardStepOptions = {},
 ): PresentationStep {
+  const faceUp = Boolean(options.faceUp && options.cardDefId);
   return {
     id: `draw-card-${cardInstanceId}`,
     kind: 'draw-card',
-    durationMs: DRAW_CARD_MS,
+    durationMs: faceUp ? DRAW_CARD_MS : DRAW_CARD_HIDDEN_MS,
     locksInput: options.locksInput ?? true,
-    payload: { playerId, cardInstanceId },
+    payload: {
+      playerId,
+      cardInstanceId,
+      cardDefId: options.cardDefId,
+      faceUp,
+    },
   };
 }
 
