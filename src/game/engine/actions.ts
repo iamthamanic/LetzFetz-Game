@@ -29,6 +29,14 @@ import {
   phraseSlotCards,
   resolveV2BuildSlot,
 } from './phraseBuild';
+import {
+  applyActivateArchetype,
+  boundDisplayName,
+  canChallengeBoundTarget,
+  challengeTargetElement,
+  challengeTargetResistance,
+  countPassiveBonus,
+} from './phraseBonuses';
 import { applyUltimateEffect } from './ultimate';
 
 export { findElementDef } from './lookup';
@@ -99,12 +107,16 @@ function computeAttackValueForPlayer(
   ruleset: RulesetConfig,
 ): number {
   const bonus = diceBonusFromRoll(diceRoll, ruleset);
+  const passiveBonus = isV2Pack(pack)
+    ? countPassiveBonus(pack, state.players[playerId].bound, 'p_atk')
+    : 0;
   return calculateCombatValue({
     cardValue: def.value,
     diceRoll,
     diceBonus: bonus,
     characterElements: getCharacterElements(pack, state.players[playerId].characterId),
     cardElement: def.element,
+    extraBonus: passiveBonus,
   });
 }
 
@@ -118,6 +130,9 @@ function computeBlockValueForPlayer(
   ruleset: RulesetConfig,
 ): number {
   const bonus = diceBonusFromRoll(diceRoll, ruleset);
+  const passiveBonus = isV2Pack(pack)
+    ? countPassiveBonus(pack, state.players[playerId].bound, 'p_block')
+    : 0;
   return calculateCombatValue({
     cardValue: def.value,
     diceRoll,
@@ -126,6 +141,7 @@ function computeBlockValueForPlayer(
     cardElement: def.element,
     attackElement,
     blockElement: def.element,
+    extraBonus: passiveBonus,
   });
 }
 
@@ -134,14 +150,13 @@ function computeChallengeAttackValue(
   state: GameState,
   playerId: PlayerId,
   attackDef: ElementCardDef,
-  targetBoundDefId: string,
+  targetBound: BoundCardInstance,
   diceRoll: number,
   ruleset: RulesetConfig,
 ): number {
   const base = computeAttackValueForPlayer(pack, state, playerId, attackDef, diceRoll, ruleset);
-  const targetDef = findElementDef(pack, targetBoundDefId);
-  if (!targetDef) return base;
-  const targetElement = targetDef.element;
+  const targetElement = challengeTargetElement(pack, targetBound);
+  if (!targetElement) return base;
   return base + counterBonus(attackDef.element, targetElement);
 }
 
@@ -187,17 +202,15 @@ function resolveChallengeCombat(
   if (boundIdx === -1) throw new Error('Challenge target not found');
 
   const bound = next.players[defenderId].bound[boundIdx];
-  const boundDef = findElementDef(pack, bound.defId);
-  if (!boundDef) throw new Error('Invalid bound card');
-
-  const targetResistance = boundDef.value + bound.resistanceBonus;
+  const targetResistance = challengeTargetResistance(pack, bound);
   const margin = getChallengeMargin(state);
   const succeeded = challengeSucceeded(attackValue, targetResistance, blockValue, margin);
+  const targetName = boundDisplayName(pack, bound);
 
   if (succeeded) {
     const [removed] = next.players[defenderId].bound.splice(boundIdx, 1);
     next.piles.discard.push(removed);
-    next.lastEvent = `Herausforderung erfolgreich — ${boundDef.name} zerstört (${attackValue} vs ${targetResistance + blockValue}).`;
+    next.lastEvent = `Herausforderung erfolgreich — ${targetName} zerstört (${attackValue} vs ${targetResistance + blockValue}).`;
   } else {
     next.lastEvent = `Herausforderung fehlgeschlagen (${attackValue} vs ${targetResistance + blockValue}).`;
   }
@@ -306,6 +319,7 @@ export function getLegalActions(state: GameState, ctx: PackContext): GameAction[
       if (def?.cardType === 'attack') {
         actions.push({ type: 'PLAY_ATTACK', cardInstanceId: card.instanceId });
         for (const bound of oppBound) {
+          if (!canChallengeBoundTarget(ctx.pack, bound)) continue;
           actions.push({
             type: 'CHALLENGE',
             attackCardInstanceId: card.instanceId,
@@ -499,6 +513,7 @@ export function applyAction(
         (b) => b.instanceId === action.targetBoundInstanceId,
       );
       if (!target) throw new Error('Challenge target not found');
+      if (!canChallengeBoundTarget(pack, target)) throw new Error('Challenge target not legal');
 
       const handCard = state.players[playerId].hand.find(
         (c) => c.instanceId === action.attackCardInstanceId,
@@ -512,7 +527,7 @@ export function applyAction(
         state,
         playerId,
         def,
-        target.defId,
+        target,
         diceRoll,
         ruleset,
       );
@@ -567,18 +582,30 @@ export function applyAction(
       );
       if (!bound || bound.exhausted) throw new Error('Cannot activate this bound card');
 
+      const enginePart = findEnginePartDef(pack, bound.defId);
       const boundDef = findElementDef(pack, bound.defId);
-      if (!boundDef) throw new Error('Invalid bound card');
+      if (!enginePart && !boundDef) throw new Error('Invalid bound card');
 
       next = discardFromHand(state, playerId, action.discardHandInstanceId);
-      next = applyBoundActivation(
-        next,
-        playerId,
-        action.boundInstanceId,
-        boundDef.element,
-        rng,
-        ruleset,
-      );
+      if (enginePart) {
+        next = applyActivateArchetype(
+          next,
+          pack,
+          playerId,
+          action.boundInstanceId,
+          enginePart.activateArchetype,
+          ruleset,
+        );
+      } else {
+        next = applyBoundActivation(
+          next,
+          playerId,
+          action.boundInstanceId,
+          boundDef!.element,
+          rng,
+          ruleset,
+        );
+      }
       return finishMainAction(next);
     }
     case 'END_TURN': {
