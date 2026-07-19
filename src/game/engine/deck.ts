@@ -31,7 +31,11 @@ export function resetInstanceIdCounter(): void {
 }
 
 export function buildMainDeckInstances(pack: ContentPack, rng: Rng): CardInstance[] {
-  const defs = [...pack.elementCards, ...pack.glitches];
+  const defs = [
+    ...pack.elementCards,
+    ...(pack.engineParts ?? []),
+    ...pack.glitches,
+  ];
   const instances = defs.map((d) => ({
     instanceId: nextInstanceId(),
     defId: d.id,

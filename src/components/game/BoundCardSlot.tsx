@@ -17,6 +17,7 @@ const SLOT_DIM: Record<BoardCardSize, string> = {
 interface BoundCardSlotProps {
   slot: BoundSlotView;
   cardSize: BoardCardSize;
+  phraseLabel?: string;
   snap?: boolean;
   bindPending?: boolean;
   bindHasFreeSlot?: boolean;
@@ -27,6 +28,7 @@ interface BoundCardSlotProps {
 export function BoundCardSlot({
   slot,
   cardSize,
+  phraseLabel,
   snap = false,
   bindPending = false,
   bindHasFreeSlot = false,
@@ -36,8 +38,9 @@ export function BoundCardSlot({
   const dim = SLOT_DIM[cardSize];
   const showBindPulse = bindPending && bindHasFreeSlot && !slot.instanceId;
   const showReplacePulse = bindPending && slot.isReplaceTarget;
+  const hasCard = Boolean(slot.instanceId && (slot.def || slot.cardName));
 
-  if (!slot.def || !slot.instanceId) {
+  if (!hasCard) {
     return (
       <div
         data-testid={showBindPulse ? 'bind-empty-slot' : undefined}
@@ -50,9 +53,15 @@ export function BoundCardSlot({
         }`}
       >
         <div className="pointer-events-none absolute inset-0 bg-[radial-gradient(ellipse_at_center,rgba(180,120,60,0.07)_0%,transparent_65%)]" />
-        <span className="absolute left-1.5 top-1 rounded bg-stone-950/80 px-1 py-px text-[7px] font-bold uppercase tracking-[0.2em] text-amber-700/70">
-          Slot {slot.slotIndex + 1}
-        </span>
+        {phraseLabel ? (
+          <span className="absolute left-1.5 top-1 max-w-[calc(100%-0.75rem)] truncate rounded bg-stone-950/80 px-1 py-px text-[7px] font-bold uppercase tracking-[0.15em] text-amber-700/80">
+            {phraseLabel}
+          </span>
+        ) : (
+          <span className="absolute left-1.5 top-1 rounded bg-stone-950/80 px-1 py-px text-[7px] font-bold uppercase tracking-[0.2em] text-amber-700/70">
+            Slot {slot.slotIndex + 1}
+          </span>
+        )}
         {showBindPulse ? (
           <span className="mb-3 animate-pulse text-[10px] font-bold uppercase tracking-wider text-purple-300">
             Binden
@@ -83,7 +92,8 @@ export function BoundCardSlot({
         className={`relative rounded-xl p-0.5 ${snap ? 'card-bind-snap slot-bind-glow' : ''} ${highlight ? 'ring-2 ring-amber-400/80 shadow-[0_0_14px_rgba(251,191,36,0.25)]' : 'ring-1 ring-stone-700/60'} ${showReplacePulse ? 'bind-slot-pulse ring-purple-400/70' : ''}`}
       >
         <BoardCard
-          def={slot.def}
+          def={slot.def ?? undefined}
+          name={slot.def ? undefined : slot.cardName ?? undefined}
           size={cardSize}
           exhausted={slot.exhausted}
           targetable={highlight}

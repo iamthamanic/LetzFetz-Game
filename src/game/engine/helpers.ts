@@ -22,6 +22,7 @@ export function cloneState(state: GameState): GameState {
       discard: [...state.piles.discard],
     },
     combat: state.combat ? { ...state.combat } : null,
+    playtest: state.playtest ? { ...state.playtest } : undefined,
   };
 }
 

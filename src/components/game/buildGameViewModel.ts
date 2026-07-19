@@ -4,15 +4,19 @@
  */
 import {
   findElementDef,
+  findEnginePartDef,
   getLegalActions,
+  isV2Pack,
   PHASE_LABELS,
   type ContentPack,
   type ElementCardDef,
   type GameAction,
   type GameState,
   type PendingCombat,
+  type PhraseSlot,
   type PlayerId,
 } from '../../game';
+import { V2_BOUND_SLOT_ORDER } from './phraseSlotLabels';
 import type { ArenaCardDef } from '../../game/types';
 import type { PendingIntent } from './gameActionHelpers';
 import {
@@ -28,6 +32,10 @@ export interface BoundSlotView {
   slotIndex: number;
   instanceId: string | null;
   def: ElementCardDef | null;
+  /** Fallback card title when bound def is an engine part (no ElementCardDef). */
+  cardName: string | null;
+  /** V2 phrase slot role for labeled columns. */
+  phraseSlot?: PhraseSlot;
   exhausted: boolean;
   isActivatable: boolean;
   isTargetable: boolean;
@@ -73,6 +81,75 @@ function arenaDef(pack: ContentPack, arenaId: string): ArenaCardDef | null {
   return pack.arenas.find((a) => a.id === arenaId) ?? null;
 }
 
+function boundCardDisplay(
+  pack: ContentPack,
+  card: GameState['players'][PlayerId]['bound'][number] | null,
+): { def: ElementCardDef | null; cardName: string | null } {
+  if (!card) return { def: null, cardName: null };
+
+  const def = findElementDef(pack, card.defId) ?? null;
+  if (def) return { def, cardName: def.name };
+
+  const part = findEnginePartDef(pack, card.defId);
+  return { def: null, cardName: part?.name ?? null };
+}
+
+function slotInteractionFlags(
+  card: GameState['players'][PlayerId]['bound'][number] | null,
+  legalActions: GameAction[],
+  options: {
+    forHuman: boolean;
+    pending: PendingIntent | null;
+  },
+): Pick<BoundSlotView, 'isActivatable' | 'isTargetable' | 'isReplaceTarget'> {
+  const isActivatable =
+    options.forHuman &&
+    card !== null &&
+    legalActions.some(
+      (a) => a.type === 'ACTIVATE_BOUND' && a.boundInstanceId === card.instanceId,
+    );
+
+  const isTargetable =
+    !options.forHuman &&
+    card !== null &&
+    options.pending?.type === 'attack' &&
+    isChallengeTargetForAttack(legalActions, options.pending.attackInstanceId, card.instanceId);
+
+  const isReplaceTarget =
+    options.forHuman &&
+    card !== null &&
+    options.pending?.type === 'bind' &&
+    isBindReplaceTarget(legalActions, options.pending.handInstanceId, card.instanceId);
+
+  return { isActivatable, isTargetable, isReplaceTarget };
+}
+
+function buildV2BoundSlots(
+  bound: GameState['players'][PlayerId]['bound'],
+  pack: ContentPack,
+  legalActions: GameAction[],
+  options: {
+    forHuman: boolean;
+    pending: PendingIntent | null;
+  },
+): BoundSlotView[] {
+  return V2_BOUND_SLOT_ORDER.map((phraseSlot, slotIndex) => {
+    const card = bound.find((b) => b.phraseSlot === phraseSlot) ?? null;
+    const { def, cardName } = boundCardDisplay(pack, card);
+    const flags = slotInteractionFlags(card, legalActions, options);
+
+    return {
+      slotIndex,
+      phraseSlot,
+      instanceId: card?.instanceId ?? null,
+      def,
+      cardName,
+      exhausted: card?.exhausted ?? false,
+      ...flags,
+    };
+  });
+}
+
 function buildBoundSlots(
   bound: GameState['players'][PlayerId]['bound'],
   pack: ContentPack,
@@ -84,39 +161,24 @@ function buildBoundSlots(
     pending: PendingIntent | null;
   },
 ): BoundSlotView[] {
+  if (isV2Pack(pack)) {
+    return buildV2BoundSlots(bound, pack, legalActions, options);
+  }
+
   const slots: BoundSlotView[] = [];
 
   for (let i = 0; i < MAX_BOUND_SLOTS; i++) {
     const card = bound[i] ?? null;
-    const def = card ? findElementDef(pack, card.defId) : null;
-
-    const isActivatable =
-      options.forHuman &&
-      card !== null &&
-      legalActions.some(
-        (a) => a.type === 'ACTIVATE_BOUND' && a.boundInstanceId === card.instanceId,
-      );
-
-    const isTargetable =
-      !options.forHuman &&
-      card !== null &&
-      options.pending?.type === 'attack' &&
-      isChallengeTargetForAttack(legalActions, options.pending.attackInstanceId, card.instanceId);
-
-    const isReplaceTarget =
-      options.forHuman &&
-      card !== null &&
-      options.pending?.type === 'bind' &&
-      isBindReplaceTarget(legalActions, options.pending.handInstanceId, card.instanceId);
+    const { def, cardName } = boundCardDisplay(pack, card);
+    const flags = slotInteractionFlags(card, legalActions, options);
 
     slots.push({
       slotIndex: i,
       instanceId: card?.instanceId ?? null,
       def,
+      cardName,
       exhausted: card?.exhausted ?? false,
-      isActivatable,
-      isTargetable,
-      isReplaceTarget,
+      ...flags,
     });
   }
 

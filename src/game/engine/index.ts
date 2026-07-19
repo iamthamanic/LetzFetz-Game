@@ -10,3 +10,6 @@ export * from './ultimate';
 export * from './bot';
 export * from './pickBotCharacter';
 export * from './invariants';
+export * from './rulesetFromState';
+export * from './phraseBuild';
+export * from './phraseBonuses';
