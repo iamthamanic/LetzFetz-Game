@@ -34,3 +34,4 @@ Nach Design-Grill D1–D35: spielbare V2-Regelabschnitte ausformulieren, generis
 - V2-Regeln = Draft, nicht Engine-Wahrheit
 - Default-Match weiter `BASE_PACK` + `DEFAULT_RULESET` (20 HP)
 - Mono MB2–MB4: gespeichert für Playtests; Effekt-Skizzen nur in Docs
+- Playtest settings live on `MatchMeta.playtestHpCap` / `monoBonusMode`

@@ -5,6 +5,8 @@
 import React, { useState, useEffect, useRef, useCallback, useMemo } from 'react';
 import {
   BASE_PACK,
+  V2_P100_PACK,
+  P100_RULESET,
   createGame,
   applyAction,
   chooseBotAction,
@@ -14,6 +16,7 @@ import {
   type GameState,
   type GameAction,
   type PlayerId,
+  type ContentPack,
   pickOpponentCharacter,
   createSeededRng,
 } from '../../game';
@@ -80,11 +83,11 @@ function readBotMode(): BotMode {
     return 'heuristic';
   }
 }
-const pack = BASE_PACK;
 
 export function GameView() {
   const playtestMode = isPlaytestMode();
   const { push } = useAppHistory();
+  const [matchPack, setMatchPack] = useState<ContentPack>(BASE_PACK);
   const [state, setState] = useState<GameState | null>(null);
   const [setupPhase, setSetupPhase] = useState<GameSetupPhase>('mode');
   const [setupSelectedId, setSetupSelectedId] = useState(DEFAULT_SETUP_CHARACTER_ID);
@@ -294,7 +297,7 @@ export function GameView() {
       presentation.enqueue(buildInstantGlitchRevealSteps(state.instantReveals));
     }
 
-    const combatResolve = buildCombatResolveSnapshot(prev, state, pack);
+    const combatResolve = buildCombatResolveSnapshot(prev, state, matchPack);
     if (combatResolve) {
       presentation.enqueue(buildCombatResolveStep(combatResolve));
     }
@@ -363,7 +366,7 @@ export function GameView() {
         if (!prev) return prev;
         try {
           const next = applyAction(prev, action, playerId, {
-            pack,
+            pack: matchPack,
             playerId,
             ruleset: rulesetFromState(prev),
           });
@@ -388,8 +391,8 @@ export function GameView() {
         }
       });
     },
-    [commitHumanState],
-  )
+    [commitHumanState, matchPack],
+  );
 
   useEffect(() => {
     if (!state || state.winner || botRunning.current) return;
@@ -412,9 +415,9 @@ export function GameView() {
         try {
           const decision =
             botModeRef.current === 'llm'
-              ? await chooseLlmBotAction(snapshot, pack)
+              ? await chooseLlmBotAction(snapshot, matchPack)
               : {
-                  action: chooseBotAction(snapshot, pack),
+                  action: chooseBotAction(snapshot, matchPack),
                   reason: 'Heuristik',
                   source: 'heuristic' as const,
                 };
@@ -435,7 +438,7 @@ export function GameView() {
             }
             try {
               const next = applyAction(prev, decision.action!, BOT, {
-                pack,
+                pack: matchPack,
                 playerId: BOT,
                 ruleset: rulesetFromState(prev),
               });
@@ -465,7 +468,7 @@ export function GameView() {
     playtestMode,
     presentation.isInputLocked,
     presentation.activeStep,
-    pack,
+    matchPack,
   ]);
 
   useEffect(() => {
@@ -499,8 +502,8 @@ export function GameView() {
   }, [state]);
 
   const view = useMemo(
-    () => (state ? buildGameViewModel(state, pack, HUMAN, pendingIntent) : null),
-    [state, pendingIntent],
+    () => (state ? buildGameViewModel(state, matchPack, HUMAN, pendingIntent) : null),
+    [state, pendingIntent, matchPack],
   );
 
   const playAttack = useCallback(
@@ -557,7 +560,7 @@ export function GameView() {
             prev.activePlayer === HUMAN;
 
           const next = applyAction(prev, action, HUMAN, {
-            pack,
+            pack: matchPack,
             playerId: HUMAN,
             ruleset: rulesetFromState(prev),
           });
@@ -586,7 +589,7 @@ export function GameView() {
         }
       });
     },
-    [presentation.isInputLocked, scheduleDrawPresentation, commitHumanState],
+    [presentation.isInputLocked, scheduleDrawPresentation, commitHumanState, matchPack],
   );
 
   const handleApplyPlaytestState = useCallback((next: GameState) => {
@@ -620,7 +623,7 @@ export function GameView() {
           selectedId={setupSelectedId}
           onPhaseChange={setSetupPhase}
           onSelectCharacter={setSetupSelectedId}
-          onStart={({ humanCharacterId }) => {
+          onStart={({ humanCharacterId, packChoice }) => {
             unlockAudio();
             setPendingIntent(null);
             setActionError(null);
@@ -632,17 +635,23 @@ export function GameView() {
             setDealReveal({ p1: 0, p2: 0 });
             setHeldBackHandCards({});
             prevStateRef.current = null;
+            const selectedPack = packChoice === 'p100' ? V2_P100_PACK : BASE_PACK;
+            setMatchPack(selectedPack);
             const seed = Date.now();
             matchSeedRef.current = seed;
             const rng = createSeededRng(seed);
-            const botCharacterId = pickOpponentCharacter(pack, humanCharacterId, rng);
+            const botCharacterId = pickOpponentCharacter(selectedPack, humanCharacterId, rng);
             const next = createGame({
-              pack,
+              pack: selectedPack,
               p1CharacterId: humanCharacterId,
               p2CharacterId: botCharacterId,
               startingPlayer: HUMAN,
+              ruleset: packChoice === 'p100' ? P100_RULESET : undefined,
               seed,
             });
+            if (packChoice === 'p100') {
+              next.meta = { ...next.meta, playtestHpCap: 30 };
+            }
             push({
               undo: () => {
                 botRunning.current = false;
@@ -671,7 +680,7 @@ export function GameView() {
       <div className="relative flex min-h-0 flex-1 overflow-hidden">
         <PlaymatBoard
           state={state}
-          pack={pack}
+          pack={matchPack}
           view={view}
           pending={pendingIntent}
           actionError={actionError}
@@ -726,7 +735,7 @@ export function GameView() {
 
         {introOpen && (
           <MatchIntro
-            pack={pack}
+            pack={matchPack}
             humanCharacterId={state.players[HUMAN].characterId}
             botCharacterId={state.players[BOT].characterId}
             arenaId={state.arena.arenaId}
@@ -745,13 +754,14 @@ export function GameView() {
               const seed = matchSeedRef.current || Date.now();
               setState(
                 createGame({
-                  pack,
+                  pack: matchPack,
                   p1CharacterId: state.players[HUMAN].characterId,
                   p2CharacterId: state.players[BOT].characterId,
                   startingPlayer,
                   seed,
                   arenaId: state.arena.arenaId,
                   d6Variant: state.arena.d6Variant,
+                  ruleset: matchPack.id === 'v2-p100' ? P100_RULESET : undefined,
                 }),
               );
             }}
@@ -790,7 +800,7 @@ export function GameView() {
 
         {playtestMode && (
           <PlaytestCheatbox
-            pack={pack}
+            pack={matchPack}
             state={state}
             botPaused={botPaused}
             onBotPausedChange={setBotPaused}

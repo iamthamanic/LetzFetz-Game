@@ -1,8 +1,10 @@
 import type { ContentPack, ElementCardDef, GameAction, GameState, PlayerId } from '../types';
 import { getLegalActions, findElementDef, applyAction, type PackContext } from './actions';
+import { rulesetFromState } from './rulesetFromState';
 import { diceBonusFromRoll, rollD6 } from './dice';
 import { DEFAULT_RULESET } from '../types';
 import { calculateCombatValue, resolveDamage, challengeSucceeded } from './combat';
+import { challengeTargetResistance } from './phraseBonuses';
 import { getCharacterElements } from './helpers';
 
 const BOT_ID: PlayerId = 'p2';
@@ -188,17 +190,17 @@ function pickBestChallenge(
     const atkDef = handDef(state, BOT_ID, action.attackCardInstanceId, pack);
     if (!atkDef) continue;
     const target = state.players[HUMAN_ID].bound.find((b) => b.instanceId === action.targetBoundInstanceId);
-    const targetDef = target ? findElementDef(pack, target.defId) : undefined;
-    if (!targetDef) continue;
+    if (!target) continue;
 
     let maxAtk = 0;
     for (const roll of DICE_ROLLS) {
       maxAtk = Math.max(maxAtk, attackValue(state, pack, BOT_ID, atkDef, roll));
     }
 
+    const targetResistance = challengeTargetResistance(pack, target);
     const margin = state.arena.arenaId === 'arena-sumpf' ? 2 : 1;
-    const succeeds = challengeSucceeded(maxAtk, targetDef.value, 0, margin);
-    let score = maxAtk + targetDef.value * (succeeds ? 2 : 0.3);
+    const succeeds = challengeSucceeded(maxAtk, targetResistance, 0, margin);
+    let score = maxAtk + targetResistance * (succeeds ? 2 : 0.3);
     if (target.exhausted) score -= 2;
     if (score > bestScore) {
       bestScore = score;
@@ -207,8 +209,9 @@ function pickBestChallenge(
   }
 
   const target = state.players[HUMAN_ID].bound.find((b) => b.instanceId === best.targetBoundInstanceId);
-  const targetDef = target ? findElementDef(pack, target.defId) : undefined;
-  if (!targetDef || targetDef.value < 3) return null;
+  if (!target) return null;
+  const targetResistance = challengeTargetResistance(pack, target);
+  if (targetResistance < 3) return null;
 
   return { ...best, diceRoll: rollD6() };
 }
@@ -310,17 +313,23 @@ export function runBotTurn(
   maxSteps = 24,
 ): GameState {
   let current = state;
-  const ctx: PackContext = { pack, playerId: BOT_ID };
+  const ctx: PackContext = { pack, playerId: BOT_ID, ruleset: rulesetFromState(state) };
 
   for (let i = 0; i < maxSteps; i++) {
     if (current.winner || current.activePlayer !== BOT_ID) break;
     const action = chooseBotAction(current, pack);
     if (!action) break;
-    current = applyAction(current, action, BOT_ID, ctx);
+    current = applyAction(current, action, BOT_ID, {
+      ...ctx,
+      ruleset: rulesetFromState(current),
+    });
     if (current.combat && current.combat.defenderId === BOT_ID) {
       const blockAction = chooseBotAction(current, pack);
       if (blockAction) {
-        current = applyAction(current, blockAction, BOT_ID, ctx);
+        current = applyAction(current, blockAction, BOT_ID, {
+          ...ctx,
+          ruleset: rulesetFromState(current),
+        });
       }
     }
   }

@@ -1,7 +1,9 @@
 import type { GameAction, GameState, PlayerId, RulesetConfig } from '../types';
+import type { ContentPack } from '../types';
 import { DEFAULT_RULESET } from '../types';
 import type { Rng } from './deck';
 import { opponentOf } from './createGame';
+import { isV2Pack } from './phraseBuild';
 
 function actingPlayerForStep(state: GameState): PlayerId {
   if (state.combat) return state.combat.defenderId;
@@ -50,7 +52,7 @@ function allCardInstances(state: GameState) {
 /** Collect rule-engine invariant violations for a game state. */
 export function collectInvariantViolations(
   state: GameState,
-  options: { ruleset?: RulesetConfig; expectedCardCount?: number } = {},
+  options: { ruleset?: RulesetConfig; expectedCardCount?: number; pack?: ContentPack } = {},
 ): InvariantViolation[] {
   const ruleset = options.ruleset ?? DEFAULT_RULESET;
   const violations: InvariantViolation[] = [];
@@ -74,6 +76,27 @@ export function collectInvariantViolations(
         code: 'BOUND_OVERFLOW',
         message: `${playerId} has ${player.bound.length} bound cards (max ${ruleset.maxBoundCards})`,
       });
+    }
+
+    if (options.pack && isV2Pack(options.pack)) {
+      const slotCounts = { core: 0, mode: 0, tool: 0, charge: 0 };
+      for (const bound of player.bound) {
+        if (!bound.phraseSlot) continue;
+        slotCounts[bound.phraseSlot] += 1;
+        if (slotCounts[bound.phraseSlot] > 1) {
+          violations.push({
+            code: 'PHRASE_SLOT_DUPLICATE',
+            message: `${playerId} has duplicate phrase slot ${bound.phraseSlot}`,
+          });
+        }
+      }
+      const phraseCount = slotCounts.core + slotCounts.mode + slotCounts.tool;
+      if (phraseCount > 3) {
+        violations.push({
+          code: 'PHRASE_OVERFLOW',
+          message: `${playerId} has ${phraseCount} phrase cards (max 3)`,
+        });
+      }
     }
   }
 
@@ -132,7 +155,7 @@ export function collectInvariantViolations(
 
 export function assertInvariants(
   state: GameState,
-  options: { ruleset?: RulesetConfig; expectedCardCount?: number } = {},
+  options: { ruleset?: RulesetConfig; expectedCardCount?: number; pack?: ContentPack } = {},
 ): void {
   const violations = collectInvariantViolations(state, options);
   if (violations.length > 0) {
@@ -163,6 +186,7 @@ export interface SimulationConfig {
   maxSteps?: number;
   ruleset?: RulesetConfig;
   expectedCardCount: number;
+  pack?: ContentPack;
   pickAction: (actions: GameAction[], rng: Rng) => GameAction;
   applyStep: (
     state: GameState,
@@ -186,6 +210,7 @@ export function runSimulation(
   assertInvariants(state, {
     ruleset,
     expectedCardCount: config.expectedCardCount,
+    pack: config.pack,
   });
 
   while (!state.winner && steps < maxSteps) {

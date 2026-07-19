@@ -13,3 +13,5 @@ export * from './initiative';
 export * from './pickBotCharacter';
 export * from './invariants';
 export * from './rulesetFromState';
+export * from './phraseBuild';
+export * from './phraseBonuses';

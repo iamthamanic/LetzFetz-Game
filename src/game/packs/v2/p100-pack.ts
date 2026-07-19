@@ -3,7 +3,8 @@
  * Location: src/game/packs/v2/p100-pack.ts
  * Engine still follows V1 until V2 is released; this pack is content + deck size.
  */
-import type { ContentPack, Element, ElementCardDef } from '../../types';
+import type { ContentPack, Element, ElementCardDef, RulesetConfig } from '../../types';
+import { DEFAULT_RULESET } from '../../types';
 import { createSeededRng } from '../../engine/deck';
 import { BASE_PACK } from '../base-pack';
 import { generateEngineParts } from './generateEngineParts';
@@ -27,6 +28,14 @@ export const P100_MIX = {
   enginePart: 30,
   glitch: 10,
 } as const;
+
+/** V2 P100 playtest rules — Lflex default 30 LP, 100-card deck (D34/D35). */
+export const P100_RULESET: RulesetConfig = {
+  ...DEFAULT_RULESET,
+  startingHp: 30,
+  maxHp: 30,
+  mainDeckSize: 100,
+};
 
 const BOOST_VALUES = [1, 3] as const;
 

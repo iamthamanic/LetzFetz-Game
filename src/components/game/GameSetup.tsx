@@ -2,8 +2,8 @@
  * Pre-match setup — mode first, then character carousel (bot) or online notice.
  * Location: src/components/game/GameSetup.tsx
  */
-import React from 'react';
-import { ArrowLeft, Bot, Globe, WifiOff } from 'lucide-react';
+import React, { useState } from 'react';
+import { ArrowLeft, Bot, Globe, Layers, Package, WifiOff } from 'lucide-react';
 import { BASE_PACK } from '../../game';
 import { Button } from '../ui/Button';
 import { BrandLogoText } from '../ui/BrandLogoText';
@@ -14,10 +14,12 @@ import { useAppHistory } from '../../services/history/AppHistoryContext';
 
 export type GameSetupMode = 'bot' | 'online';
 export type GameSetupPhase = 'mode' | 'bot' | 'online';
+export type GamePackChoice = 'base' | 'p100';
 
 export interface BotMatchStart {
   mode: 'bot';
   humanCharacterId: string;
+  packChoice: GamePackChoice;
 }
 
 interface GameSetupProps {
@@ -36,6 +38,7 @@ export function GameSetup({
   onStart,
 }: GameSetupProps) {
   const { push } = useAppHistory();
+  const [packChoice, setPackChoice] = useState<GamePackChoice>('base');
 
   const goPhase = (next: GameSetupPhase) => {
     if (next === phase) return;
@@ -163,6 +166,52 @@ export function GameSetup({
               </h2>
             </div>
 
+            <Panel className="mx-auto max-w-md space-y-3" tone="game" data-testid="game-pack-select">
+              <div className="flex items-center gap-2 text-sm font-medium text-stone-200">
+                <Layers className="h-4 w-4 text-purple-400" aria-hidden />
+                Kartenset
+              </div>
+              <div className="grid grid-cols-1 gap-2 sm:grid-cols-2" role="group" aria-label="Kartenset wählen">
+                <button
+                  type="button"
+                  data-testid="game-pack-base"
+                  aria-pressed={packChoice === 'base'}
+                  onClick={() => setPackChoice('base')}
+                  className={`flex flex-col items-start gap-1 rounded-lg border p-3 text-left transition-all focus:outline-none focus-visible:ring-2 focus-visible:ring-purple-500 ${
+                    packChoice === 'base'
+                      ? 'border-emerald-500/60 bg-emerald-950/30'
+                      : 'border-stone-800 bg-stone-900/40 hover:border-stone-600'
+                  }`}
+                >
+                  <div className="flex w-full items-center justify-between gap-2">
+                    <Package className="h-4 w-4 text-emerald-400" aria-hidden />
+                    {packChoice === 'base' ? <Badge variant="success">Standard</Badge> : null}
+                  </div>
+                  <span className="text-sm font-semibold text-stone-100">Basis-Pack (V1)</span>
+                  <span className="text-xs text-stone-400">70 Karten · 20 Leben</span>
+                </button>
+
+                <button
+                  type="button"
+                  data-testid="game-pack-p100"
+                  aria-pressed={packChoice === 'p100'}
+                  onClick={() => setPackChoice('p100')}
+                  className={`flex flex-col items-start gap-1 rounded-lg border p-3 text-left transition-all focus:outline-none focus-visible:ring-2 focus-visible:ring-purple-500 ${
+                    packChoice === 'p100'
+                      ? 'border-purple-500/60 bg-purple-950/30'
+                      : 'border-stone-800 bg-stone-900/40 hover:border-stone-600'
+                  }`}
+                >
+                  <div className="flex w-full items-center justify-between gap-2">
+                    <Layers className="h-4 w-4 text-purple-400" aria-hidden />
+                    {packChoice === 'p100' ? <Badge variant="accent">Playtest</Badge> : null}
+                  </div>
+                  <span className="text-sm font-semibold text-stone-100">V2 P100 Playtest</span>
+                  <span className="text-xs text-stone-400">100 Karten · 30 Leben · Phrase</span>
+                </button>
+              </div>
+            </Panel>
+
             <CharacterCarousel
               characters={BASE_PACK.characters}
               selectedId={selectedId}
@@ -174,7 +223,9 @@ export function GameSetup({
                 variant="accent"
                 className="btn-brand-shimmer w-full py-2.5 text-base"
                 data-testid="start-bot-match"
-                onClick={() => onStart({ mode: 'bot', humanCharacterId: selectedId })}
+                onClick={() =>
+                  onStart({ mode: 'bot', humanCharacterId: selectedId, packChoice })
+                }
               >
                 <span className="btn-brand-shimmer__shine" aria-hidden="true" />
                 <span className="relative z-10">

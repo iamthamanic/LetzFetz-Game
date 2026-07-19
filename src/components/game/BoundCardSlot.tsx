@@ -19,6 +19,7 @@ const SLOT_DIM: Record<BoardCardSize, string> = {
 interface BoundCardSlotProps {
   slot: BoundSlotView;
   cardSize: BoardCardSize;
+  phraseLabel?: string;
   snap?: boolean;
   /** Hide card face while the fly overlay is in the air. */
   flyingIn?: boolean;
@@ -33,6 +34,7 @@ interface BoundCardSlotProps {
 export function BoundCardSlot({
   slot,
   cardSize,
+  phraseLabel,
   snap = false,
   flyingIn = false,
   buildPending = false,
@@ -45,8 +47,9 @@ export function BoundCardSlot({
   const showBuildPulse = buildPending && buildHasFreeSlot && !slot.instanceId;
   const showReplacePulse = buildPending && slot.isReplaceTarget;
   const ghostSrc = ghostCharacterId ? resolveCardArtPath(ghostCharacterId) : null;
+  const hasCard = Boolean(slot.instanceId && (slot.def || slot.cardName));
 
-  if (!slot.def || !slot.instanceId) {
+  if (!hasCard) {
     return (
       <div
         data-testid={showBuildPulse ? 'build-empty-slot' : undefined}
@@ -69,9 +72,15 @@ export function BoundCardSlot({
         )}
         <div className="pointer-events-none absolute inset-0 bg-gradient-to-t from-black/75 via-black/35 to-black/20" />
         <div className="pointer-events-none absolute inset-0 bg-[radial-gradient(ellipse_at_center,rgba(180,120,60,0.07)_0%,transparent_65%)]" />
-        <span className="absolute left-1.5 top-1 z-[1] rounded bg-stone-950/80 px-1 py-px text-[7px] font-bold uppercase tracking-[0.2em] text-amber-700/70">
-          Slot {slot.slotIndex + 1}
-        </span>
+        {phraseLabel ? (
+          <span className="absolute left-1.5 top-1 z-[1] max-w-[calc(100%-0.75rem)] truncate rounded bg-stone-950/80 px-1 py-px text-[7px] font-bold uppercase tracking-[0.15em] text-amber-700/80">
+            {phraseLabel}
+          </span>
+        ) : (
+          <span className="absolute left-1.5 top-1 z-[1] rounded bg-stone-950/80 px-1 py-px text-[7px] font-bold uppercase tracking-[0.2em] text-amber-700/70">
+            Slot {slot.slotIndex + 1}
+          </span>
+        )}
         {showBuildPulse ? (
           <span className="relative z-[1] mb-3 animate-pulse text-[10px] font-bold uppercase tracking-wider text-purple-300">
             Bauen
@@ -115,7 +124,8 @@ export function BoundCardSlot({
         } ${showReplacePulse ? 'build-slot-pulse ring-purple-400/70' : ''}`}
       >
         <BoardCard
-          def={slot.def}
+          def={slot.def ?? undefined}
+          name={slot.def ? undefined : slot.cardName ?? undefined}
           size={cardSize}
           exhausted={slot.exhausted}
           targetable={highlight}

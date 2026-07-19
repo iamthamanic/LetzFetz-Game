@@ -1,0 +1,20 @@
+{
+  "version": "0.1",
+  "description": "Letz Fetz Display Font character subset (German UI v0)",
+  "sheets": [
+    { "file": "uppercase-ABCDEF.png", "chars": "ABCDEF" },
+    { "file": "uppercase-GHIJKL.png", "chars": "GHIJKL" },
+    { "file": "uppercase-MNOPQR.png", "chars": "MNOPQR" },
+    { "file": "uppercase-STUVWX.png", "chars": "STUVWX" },
+    { "file": "uppercase-YZ.png", "chars": "YZ" },
+    { "file": "uppercase-umlaut.png", "chars": "ÄÖÜ" },
+    { "file": "lowercase-abcdef.png", "chars": "abcdef" },
+    { "file": "lowercase-ghijkl.png", "chars": "ghijkl" },
+    { "file": "lowercase-mnopqr.png", "chars": "mnopqr" },
+    { "file": "lowercase-stuvwx.png", "chars": "stuvwx" },
+    { "file": "lowercase-yz.png", "chars": "yz" },
+    { "file": "lowercase-umlaut.png", "chars": "äöüß" },
+    { "file": "digits.png", "chars": "0123456789" },
+    { "file": "punctuation.png", "chars": ".,!?-:'\"()/" }
+  ]
+}

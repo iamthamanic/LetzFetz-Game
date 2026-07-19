@@ -24,6 +24,13 @@
 
   The model only sees a FOW view (no human hand). Invalid/failed replies fall back to the heuristic bot.
 
+  ## Rules (V1 vs V2 draft)
+
+  - **V1 (engine truth):** [`docs/rules/SPIELANLEITUNG_V1.md`](docs/rules/SPIELANLEITUNG_V1.md)
+  - **V2 playtest draft:** [`docs/rules/SPIELANLEITUNG_V2_DRAFT.md`](docs/rules/SPIELANLEITUNG_V2_DRAFT.md) — not engine truth until released
+  - **V2 redesign WIP:** [`docs/rules/SPIELANLEITUNG_V2_WIP.md`](docs/rules/SPIELANLEITUNG_V2_WIP.md)
+  - V2 P100 test pack: `V2_P100_PACK` in `src/game/packs/v2/` (24/24/12/30/10 mix)
+
   ## Card art (Ollama Flux)
 
   Requires local `x/flux2-klein:4b` via Ollama.
