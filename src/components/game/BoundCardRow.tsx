@@ -14,8 +14,13 @@ interface BoundCardRowProps {
   slots: BoundSlotView[];
   cardSize: BoardCardSize;
   snapBoundCardIds?: string[];
-  bindPending?: boolean;
-  bindHasFreeSlot?: boolean;
+  /** Card currently mid-flight into the engine (hidden in slot until land). */
+  flyingBuildCardIds?: string[];
+  buildPending?: boolean;
+  buildHasFreeSlot?: boolean;
+  align?: 'center' | 'start';
+  /** Character id whose art ghosts through empty engine slots. */
+  ghostCharacterId?: string;
   /** V2 packs: show Kern / Modus / Werkzeug / Ladung column labels. */
   showPhraseLabels?: boolean;
   onActivateBound?: (boundInstanceId: string) => void;
@@ -27,19 +32,24 @@ export function BoundCardRow({
   slots,
   cardSize,
   snapBoundCardIds,
-  bindPending = false,
-  bindHasFreeSlot = false,
+  flyingBuildCardIds,
+  buildPending = false,
+  buildHasFreeSlot = false,
+  align = 'center',
+  ghostCharacterId,
   showPhraseLabels = false,
   onActivateBound,
   onSlotClick,
 }: BoundCardRowProps) {
   const testId = label === 'Deine Engine' ? 'human-engine' : 'opponent-engine';
   const side = label === 'Deine Engine' ? 'human' : 'opponent';
+  const rowAlign = align === 'start' ? 'items-start' : 'items-center';
+  const slotsAlign = align === 'start' ? 'justify-start' : 'justify-center';
 
   return (
-    <div className="flex flex-col items-center gap-2" data-testid={testId}>
+    <div className={`flex flex-col gap-2 ${rowAlign}`} data-testid={testId}>
       <span className="text-[10px] font-bold uppercase tracking-[0.25em] text-stone-500">{label}</span>
-      <div className="flex max-w-full flex-wrap justify-center gap-2 sm:gap-3">
+      <div className={`flex max-w-full flex-wrap gap-2 sm:gap-3 ${slotsAlign}`}>
         {slots.map((slot) => {
           const isTarget = side === 'human'
             ? slot.isReplaceTarget || !slot.instanceId
@@ -61,8 +71,14 @@ export function BoundCardRow({
                 cardSize={cardSize}
                 phraseLabel={phraseLabel}
                 snap={slot.instanceId ? snapBoundCardIds?.includes(slot.instanceId) ?? false : false}
-                bindPending={side === 'human' ? bindPending : false}
-                bindHasFreeSlot={side === 'human' ? bindHasFreeSlot : false}
+                flyingIn={
+                  slot.instanceId
+                    ? flyingBuildCardIds?.includes(slot.instanceId) ?? false
+                    : false
+                }
+                buildPending={side === 'human' ? buildPending : false}
+                buildHasFreeSlot={side === 'human' ? buildHasFreeSlot : false}
+                ghostCharacterId={ghostCharacterId}
                 onActivate={onActivateBound}
                 onSlotClick={onSlotClick ? () => onSlotClick(slot) : undefined}
               />

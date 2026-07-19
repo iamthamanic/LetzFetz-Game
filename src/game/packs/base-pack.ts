@@ -24,16 +24,16 @@ const ELEMENT_LABELS: Record<Element, string> = {
 const BOUND_ACTIVATE: Record<Element, string> = {
   fire: 'Aktivieren: Füge dem Gegner 2 Schaden zu.',
   water: 'Aktivieren: Heile 2 Leben.',
-  earth: 'Aktivieren: Eine deiner gebundenen Karten bekommt bis zu deinem nächsten Zug +2 Widerstand.',
+  earth: 'Aktivieren: Eine deiner gebauten Karten bekommt bis zu deinem nächsten Zug +2 Widerstand.',
   air: 'Aktivieren: Ziehe 2 Karten und wirf danach 1 Karte ab.',
-  shadow: 'Aktivieren: Erschöpfe 1 gegnerische gebundene Karte.',
+  shadow: 'Aktivieren: Erschöpfe 1 gegnerische gebaute Karte.',
   light: 'Aktivieren: Ziehe 1 Karte und heile 1 Leben.',
 };
 
 const BOOST_INSTANT: Record<Element, string> = {
   fire: 'Füge dem Gegner 2 Schaden zu.',
   water: 'Heile 2 Leben.',
-  earth: 'Eine deiner gebundenen Karten bekommt bis zu deinem nächsten Zug +2 Widerstand.',
+  earth: 'Eine deiner gebauten Karten bekommt bis zu deinem nächsten Zug +2 Widerstand.',
   air: 'Ziehe 2 Karten und wirf danach 1 Karte ab.',
   shadow: 'Gegner wirft 1 Karte ab. Gegner wählt.',
   light: 'Ziehe 1 Karte und heile 1 Leben.',
@@ -120,9 +120,9 @@ const CHARACTERS: CharacterCardDef[] = [
     elements: ['earth', 'fire'],
     role: 'Allrounder, Druck + Stabilität',
     passiveText:
-      'Einmal pro Zug, wenn du Feuer oder Erde bindest, darfst du 1 Karte abwerfen und 1 Karte ziehen.',
+      'Einmal pro Zug, wenn du Feuer oder Erde baust, darfst du 1 Karte abwerfen und 1 Karte ziehen.',
     ultimateId: 'ulti-knuspergnom',
-    strategyHint: 'Baue Feuer/Erde auf, halte Druck und nutze Binden für Kartenvorteil.',
+    strategyHint: 'Baue Feuer/Erde auf, halte Druck und nutze Bauen für Kartenvorteil.',
   },
   {
     id: 'schluckspecht',
@@ -153,9 +153,9 @@ const CHARACTERS: CharacterCardDef[] = [
     elements: ['earth', 'light'],
     role: 'Defensive Engine, Heilung, Auslagenschutz',
     passiveText:
-      'Einmal pro Zug, wenn du heilst, bekommt eine deiner gebundenen Karten bis zu deinem nächsten Zug +1 Widerstand.',
+      'Einmal pro Zug, wenn du heilst, bekommt eine deiner gebauten Karten bis zu deinem nächsten Zug +1 Widerstand.',
     ultimateId: 'ulti-kokabell',
-    strategyHint: 'Heile und verstärke deine gebundenen Karten.',
+    strategyHint: 'Heile und verstärke deine gebauten Karten.',
   },
   {
     id: 'pillendoktora',
@@ -175,7 +175,7 @@ const CHARACTERS: CharacterCardDef[] = [
     elements: ['water', 'shadow'],
     role: 'Control, Discard, Erschöpfen',
     passiveText:
-      'Einmal pro Zug, wenn du eine gegnerische gebundene Karte erschöpfst oder zerstörst, ziehe 1 Karte und wirf danach 1 Karte ab.',
+      'Einmal pro Zug, wenn du eine gegnerische gebaute Karte erschöpfst oder zerstörst, ziehe 1 Karte und wirf danach 1 Karte ab.',
     ultimateId: 'ulti-dripministerin',
     strategyHint: 'Sabotiere die Engine des Gegners.',
   },
@@ -186,7 +186,7 @@ const CHARACTERS: CharacterCardDef[] = [
     elements: ['light', 'shadow'],
     role: 'Flexibel, Kopieren, Expertencharakter',
     passiveText:
-      'Einmal pro Zug darfst du eine Karte, die du spielst oder bindest, als beliebiges Element behandeln.',
+      'Einmal pro Zug darfst du eine Karte, die du spielst oder baust, als beliebiges Element behandeln.',
     ultimateId: 'ulti-mysterium',
     strategyHint: 'Flexibel bleiben und gegnerische Strategien spiegeln.',
   },
@@ -198,7 +198,7 @@ const ULTIMATES: UltimateCardDef[] = [
     name: 'Mit Alles und Scharf',
     kind: 'ultimate',
     characterId: 'knuspergnom',
-    effectText: 'Füge 5 Schaden zu, heile 3 Leben und darfst danach 1 Karte aus deiner Hand binden.',
+    effectText: 'Füge 5 Schaden zu, heile 3 Leben und darfst danach 1 Karte aus deiner Hand bauen.',
   },
   {
     id: 'ulti-schluckspecht',
@@ -221,7 +221,7 @@ const ULTIMATES: UltimateCardDef[] = [
     kind: 'ultimate',
     characterId: 'kokabell',
     effectText:
-      'Setze deine Leben auf 12, falls du unter 12 bist. Danach stelle bis zu 2 erschöpfte gebundene Karten wieder aufrecht.',
+      'Setze deine Leben auf 12, falls du unter 12 bist. Danach stelle bis zu 2 erschöpfte gebaute Karten wieder aufrecht.',
   },
   {
     id: 'ulti-pillendoktora',
@@ -235,7 +235,7 @@ const ULTIMATES: UltimateCardDef[] = [
     name: 'Runway ins Schattenreich',
     kind: 'ultimate',
     characterId: 'dripministerin',
-    effectText: 'Gegner wirft 2 Karten ab, verliert 3 Leben und erschöpft 1 gebundene Karte.',
+    effectText: 'Gegner wirft 2 Karten ab, verliert 3 Leben und erschöpft 1 gebaute Karte.',
   },
   {
     id: 'ulti-mysterium',
@@ -254,8 +254,8 @@ const ARENAS: ArenaCardDef[] = [
     kind: 'arena',
     role: 'Boosts, Kartenfilter, flexible Züge',
     baseEffect:
-      'Einmal pro Zug, wenn du einen Boost spielst, darfst du 1 Karte ziehen und danach 1 Karte abwerfen.',
-    trigger: 'Wenn ein Spieler seinen dritten Boost der Partie spielt, darf er sofort 1 Karte binden.',
+      'Einmal pro Zug, wenn du einen Boost spielst, musst du 1 Karte ziehen und danach 1 Karte abwerfen.',
+    trigger: 'Wenn ein Spieler seinen dritten Boost der Partie spielt, muss er sofort 1 Karte bauen.',
     specialRule: 'Boosts, die Schaden machen, verursachen maximal 3 Schaden.',
   },
   {
@@ -275,7 +275,7 @@ const ARENAS: ArenaCardDef[] = [
     baseEffect:
       'Der erste Angriffswurf jedes Spielers pro Zug bekommt +1 auf das Würfelergebnis, maximal 6.',
     trigger:
-      'Wenn ein Spieler in seinem Zug keinen Angriff spielt und keine gegnerische gebundene Karte herausfordert, verliert er am Ende seines Zuges 1 Leben.',
+      'Wenn ein Spieler in seinem Zug keinen Angriff spielt und keine gegnerische gebaute Karte herausfordert, verliert er am Ende seines Zuges 1 Leben.',
     specialRule:
       'Wenn ein einzelner Angriff nach allen Boni einen Angriffswert von 9 oder höher erreicht, verliert der Angreifer nach der Abrechnung 1 Leben.',
   },
@@ -287,7 +287,7 @@ const ARENAS: ArenaCardDef[] = [
     baseEffect:
       'Der erste Blockwurf jedes Spielers pro gegnerischem Zug bekommt +1 auf das Würfelergebnis, maximal 6.',
     trigger:
-      'Wenn ein Angriff komplett geblockt wird, darf der blockende Spieler 1 Karte ziehen und danach 1 Karte abwerfen.',
+      'Wenn ein Angriff komplett geblockt wird, muss der blockende Spieler 1 Karte ziehen und danach 1 Karte abwerfen.',
     specialRule: 'Herausfordern benötigt +1 Angriff, um erfolgreich zu sein.',
   },
   {
@@ -300,7 +300,7 @@ const ARENAS: ArenaCardDef[] = [
     specialRule: 'Siehe Varianten 1–2 / 3–4 / 5–6.',
     d6Variants: [
       'Schlechter Bassdrop: Am Ende des Zuges 1 Karte abwerfen wenn >4 Handkarten.',
-      'Seitenwechsel im Nebel: Einmal pro Zug 1 gebundene Karte auf die Hand nehmen und 1 binden.',
+      'Seitenwechsel im Nebel: Einmal pro Zug 1 gebaute Karte auf die Hand nehmen und 1 bauen.',
       'Alles bewegt sich: Bei Herausfordern wird das Ziel erschöpft, auch wenn es nicht zerstört wird.',
     ],
   },
@@ -313,8 +313,8 @@ const ARENAS: ArenaCardDef[] = [
     trigger: 'Variante abhängig vom W6-Wurf.',
     specialRule: 'Siehe Varianten 1–2 / 3–4 / 5–6.',
     d6Variants: [
-      'Schlechter Deal: Wenn du eine gegnerische gebundene Karte zerstörst, verlierst du 1 Leben.',
-      'Flüsterpreise: Einmal pro Zug 1 Handkarte abwerfen, um 1 gegnerische gebundene Karte zu erschöpfen (keine Hauptaktion).',
+      'Schlechter Deal: Wenn du eine gegnerische gebaute Karte zerstörst, verlierst du 1 Leben.',
+      'Flüsterpreise: Einmal pro Zug 1 Handkarte abwerfen, um 1 gegnerische gebaute Karte zu erschöpfen (keine Hauptaktion).',
       'Alles hat seinen Preis: Ohne Handkarten am Zugstart: 2 Schaden, dann 2 Karten ziehen.',
     ],
   },
@@ -343,7 +343,7 @@ const GLITCHES: GlitchCardDef[] = [
     kind: 'glitch',
     glitchType: 'playable',
     timing: 'In deinem Zug.',
-    effectText: 'Erschöpfe 1 gegnerische gebundene Karte.',
+    effectText: 'Erschöpfe 1 gegnerische gebaute Karte.',
   },
   {
     id: 'glitch-rueckkopplung',
@@ -369,7 +369,7 @@ const GLITCHES: GlitchCardDef[] = [
     glitchType: 'playable',
     timing: 'In deinem Zug.',
     effectText:
-      'Wähle 1 gebundene Karte. Sie verliert bis zum Beginn deines nächsten Zuges ihren Aktivierungseffekt.',
+      'Wähle 1 gebaute Karte. Sie verliert bis zum Beginn deines nächsten Zuges ihren Aktivierungseffekt.',
   },
   {
     id: 'glitch-download',
@@ -378,7 +378,7 @@ const GLITCHES: GlitchCardDef[] = [
     glitchType: 'playable',
     timing: 'In deinem Zug.',
     effectText:
-      'Kopiere den Aktivierungseffekt einer gegnerischen gebundenen Karte. Wirf 1 Handkarte ab.',
+      'Kopiere den Aktivierungseffekt einer gegnerischen gebauten Karte. Wirf 1 Handkarte ab.',
   },
   {
     id: 'glitch-selbstschaden',

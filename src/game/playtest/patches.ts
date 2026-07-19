@@ -29,10 +29,10 @@ export function applyPlaytestPatch(state: GameState, patch: PlaytestPatch): Game
   if (patch.phase !== undefined) next.phase = patch.phase;
   if (patch.activePlayer !== undefined) next.activePlayer = patch.activePlayer;
   if (patch.playtestHpCap !== undefined) {
-    next.playtest = { ...next.playtest, hpCap: patch.playtestHpCap };
+    next.meta = { ...next.meta, playtestHpCap: patch.playtestHpCap };
   }
   if (patch.monoBonusMode !== undefined) {
-    next.playtest = { ...next.playtest, monoBonusMode: patch.monoBonusMode };
+    next.meta = { ...next.meta, monoBonusMode: patch.monoBonusMode };
   }
   if (patch.p1Hp !== undefined) next.players.p1.hp = patch.p1Hp;
   if (patch.p2Hp !== undefined) next.players.p2.hp = patch.p2Hp;

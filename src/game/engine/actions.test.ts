@@ -6,7 +6,7 @@ import { BASE_PACK } from '../packs/base-pack';
 const ctx = { pack: BASE_PACK, playerId: 'p1' as const };
 
 describe('applyAction — turn flow', () => {
-  it('advances start → draw → bind', () => {
+  it('advances start → draw → build', () => {
     let state = createGame({
       pack: BASE_PACK,
       p1CharacterId: 'knuspergnom',
@@ -19,10 +19,10 @@ describe('applyAction — turn flow', () => {
     expect(state.phase).toBe('draw');
 
     state = applyAction(state, { type: 'ADVANCE_PHASE' }, 'p1', ctx);
-    expect(state.phase).toBe('bind');
+    expect(state.phase).toBe('build');
   });
 
-  it('binds a card and moves to action phase', () => {
+  it('builds a card and moves to action phase', () => {
     let state = createGame({
       pack: BASE_PACK,
       p1CharacterId: 'knuspergnom',
@@ -33,10 +33,10 @@ describe('applyAction — turn flow', () => {
     state = applyAction(state, { type: 'ADVANCE_PHASE' }, 'p1', ctx);
     state = applyAction(state, { type: 'ADVANCE_PHASE' }, 'p1', ctx);
 
-    const bindActions = getLegalActions(state, ctx).filter((a) => a.type === 'BIND_CARD');
-    expect(bindActions.length).toBeGreaterThan(0);
+    const buildActions = getLegalActions(state, ctx).filter((a) => a.type === 'BUILD_CARD');
+    expect(buildActions.length).toBeGreaterThan(0);
 
-    state = applyAction(state, bindActions[0], 'p1', ctx);
+    state = applyAction(state, buildActions[0], 'p1', ctx);
     expect(state.phase).toBe('action');
     expect(state.players.p1.bound.length).toBe(1);
   });
@@ -54,7 +54,7 @@ describe('applyAction — combat', () => {
 
     while (state.phase !== 'action' && !state.winner) {
       const actions = getLegalActions(state, { pack: BASE_PACK, playerId: state.activePlayer });
-      const advance = actions.find((a) => a.type === 'ADVANCE_PHASE' || a.type === 'SKIP_BIND');
+      const advance = actions.find((a) => a.type === 'ADVANCE_PHASE' || a.type === 'SKIP_BUILD');
       if (!advance) break;
       state = applyAction(state, advance, state.activePlayer, {
         pack: BASE_PACK,

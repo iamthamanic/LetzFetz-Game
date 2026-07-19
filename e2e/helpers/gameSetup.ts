@@ -6,7 +6,12 @@ import { expect, type Page } from '@playwright/test';
 
 export async function openPlaySetup(page: Page) {
   await page.goto('/');
-  await page.getByRole('button', { name: 'Play' }).click();
+  const mainPlay = page.getByTestId('main-menu-play');
+  if (await mainPlay.isVisible().catch(() => false)) {
+    await mainPlay.click();
+  } else {
+    await page.getByRole('button', { name: 'Play' }).first().click();
+  }
   await expect(page.getByTestId('game-mode-select')).toBeVisible();
 }
 

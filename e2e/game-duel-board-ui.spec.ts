@@ -13,7 +13,7 @@ function shot(page: import('@playwright/test').Page, name: string) {
   return page.screenshot({ path: join(EVIDENCE, name), fullPage: true });
 }
 
-import { dismissMatchIntroSkip } from './helpers/matchIntro';
+import { dismissMatchIntroSkip, waitForPlayUiReady } from './helpers/matchIntro';
 import { waitForDrawAnimation } from './helpers/drawAnimation';
 import { selectBotMode, startBotMatchFromSetup } from './helpers/gameSetup';
 
@@ -22,12 +22,13 @@ async function startMatch(page: import('@playwright/test').Page) {
   await dismissMatchIntroSkip(page);
 }
 
-async function advanceToBindPhase(page: import('@playwright/test').Page) {
-  await expect(page.getByTestId('opening-deal-done')).toBeVisible({ timeout: 5000 });
+async function advanceToBuildPhase(page: import('@playwright/test').Page) {
+  await waitForPlayUiReady(page);
   await page.getByRole('button', { name: 'Zug starten' }).click();
   await page.getByRole('button', { name: 'Karte ziehen' }).click();
   await waitForDrawAnimation(page);
-  await expect(page.getByRole('button', { name: 'Nicht binden' })).toBeVisible();
+  await expect(page.getByRole('button', { name: 'Skip Bau-Phase' })).toBeVisible();
+  await expect(page.getByRole('button', { name: 'Engine bauen' })).toBeVisible();
 }
 
 test.describe('Game Duel Board UI — Sprint 1', () => {
@@ -45,7 +46,7 @@ test.describe('Game Duel Board UI — Sprint 1', () => {
 
     const emptySlots = page.getByText(/^Slot [1-4]$/);
     await expect(emptySlots).toHaveCount(8);
-    await expect(page.getByText('Keine gebundenen Karten')).toHaveCount(0);
+    await expect(page.getByText('Keine gebauten Karten')).toHaveCount(0);
     await shot(page, '03-bound-slots-empty.png');
 
     await expect(
@@ -53,6 +54,8 @@ test.describe('Game Duel Board UI — Sprint 1', () => {
     ).toBeVisible();
 
     await expect(page.getByTestId('phase-coach-banner')).toBeVisible();
+    await page.getByTestId('phase-bar-current').hover();
+    await expect(page.getByTestId('phase-coach-hint')).toBeVisible();
     await expect(page.getByTestId('phase-coach-hint')).toContainText('Starte deinen Zug');
 
     await expect(page.getByText('LP').first()).toBeVisible();
@@ -73,12 +76,15 @@ test.describe('Game Duel Board UI — Sprint 1', () => {
     expect(box?.height).toBeGreaterThanOrEqual(180);
     await shot(page, '04-hand-playable.png');
 
-    await advanceToBindPhase(page);
-    await shot(page, '05-bind-phase.png');
-    await expect(page.getByTestId('phase-coach-hint')).toContainText('Binde eine Karte');
+    await advanceToBuildPhase(page);
+    await shot(page, '05-build-phase.png');
+    await page.getByTestId('phase-bar-current').hover();
+    await expect(page.getByTestId('phase-coach-hint')).toBeVisible();
+    await expect(page.getByTestId('phase-coach-hint')).toContainText('Engine bauen');
     await expect(page.getByText(/Hand \d+ \(verdeckt\)/)).toBeVisible();
 
-    await page.getByRole('button', { name: 'Nicht binden' }).click();
+    await page.getByRole('button', { name: 'Skip Bau-Phase' }).click();
+    await expect(page.getByRole('button', { name: 'Aktion spielen' })).toBeVisible();
     await expect(page.getByRole('button', { name: 'Hauptaktion auslassen' })).toBeVisible();
 
     const overflow = await page.evaluate(
@@ -93,7 +99,7 @@ test.describe('Game Duel Board UI — Sprint 1', () => {
       timeout: 5000,
     });
 
-    await page.getByRole('button', { name: 'Edit' }).click();
+    await page.getByRole('button', { name: 'Cards' }).click();
     await expect(page.getByText(/V1-Karten|Character|Element/i).first()).toBeVisible({
       timeout: 10000,
     });
@@ -107,22 +113,24 @@ test.describe('Game Duel Board UI — Sprint 1', () => {
     await startMatch(page);
     await page.getByRole('button', { name: 'Zug starten' }).click();
     await page.getByRole('button', { name: 'Karte ziehen' }).click();
-    await expect(page.getByTestId('draw-card-fly')).toBeVisible({ timeout: 1500 });
+    await expect(page.getByTestId('draw-card-reveal')).toBeVisible({ timeout: 1500 });
+    await waitForDrawAnimation(page);
     await expect(page.getByTestId('player-hand').locator('button[data-card-id]').first()).toBeVisible({
       timeout: 3000,
     });
   });
 
-  test('bind card fills engine slot', async ({ page }) => {
+  test('build card fills engine slot', async ({ page }) => {
     await startMatch(page);
-    await advanceToBindPhase(page);
+    await advanceToBuildPhase(page);
 
+    await page.getByRole('button', { name: 'Engine bauen' }).click();
     const hand = page.getByTestId('player-hand');
-    const bindCard = hand.locator('button[data-card-id][data-interaction="bind"]').first();
-    await expect(bindCard).toBeVisible({ timeout: 5000 });
-    await bindCard.click();
+    const buildCard = hand.locator('button[data-card-id][data-interaction="build"]').first();
+    await expect(buildCard).toBeVisible({ timeout: 5000 });
+    await buildCard.click();
 
-    await expect(page.getByRole('button', { name: 'Hauptaktion auslassen' })).toBeVisible({
+    await expect(page.getByRole('button', { name: 'Aktion spielen' })).toBeVisible({
       timeout: 5000,
     });
 
@@ -132,23 +140,30 @@ test.describe('Game Duel Board UI — Sprint 1', () => {
     await shot(page, '06-bound-filled.png');
   });
 
-  test('targeting arrow appears when attack card selected', async ({ page }) => {
+  test('action phase bar shows attack options when attack card selected', async ({ page }) => {
     await startMatch(page);
-    await advanceToBindPhase(page);
+    await advanceToBuildPhase(page);
 
-    const skipBind = page.getByRole('button', { name: 'Nicht binden' });
+    const skipBind = page.getByRole('button', { name: 'Skip Bau-Phase' });
     await skipBind.click();
 
-    await expect(page.getByRole('button', { name: 'Hauptaktion auslassen' })).toBeVisible({
+    await expect(page.getByRole('button', { name: 'Aktion spielen' })).toBeVisible({
       timeout: 5000,
     });
+    await expect(page.getByTestId('action-phase-bar')).toBeVisible();
+    await expect(page.getByRole('button', { name: 'Direkt angreifen' })).toHaveCount(0);
+
+    await page.getByRole('button', { name: 'Aktion spielen' }).click();
 
     const hand = page.getByTestId('player-hand');
     const attackCard = hand.locator('button[data-card-id][data-interaction="attack"]').first();
     if ((await attackCard.count()) > 0) {
       await attackCard.click();
-      await expect(page.getByTestId('targeting-arrow')).toBeVisible({ timeout: 3000 });
-      await shot(page, '08-targeting-arrow.png');
+      await expect(page.getByRole('button', { name: 'Direkt angreifen' })).toBeEnabled({
+        timeout: 3000,
+      });
+      await expect(page.getByTestId('targeting-arrow')).toHaveCount(0);
+      await shot(page, '08-action-phase-attack.png');
     }
   });
 
@@ -169,7 +184,7 @@ test.describe('Game Duel Board UI — Sprint 1', () => {
         await waitForDrawAnimation(page);
       }
 
-      const skipBind = page.getByRole('button', { name: 'Nicht binden' });
+      const skipBind = page.getByRole('button', { name: 'Skip Bau-Phase' });
       if (await skipBind.isVisible({ timeout: 800 }).catch(() => false)) {
         await skipBind.click();
       }

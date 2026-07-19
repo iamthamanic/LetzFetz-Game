@@ -5,9 +5,9 @@
 import type { GameState, RulesetConfig } from '../types';
 import { DEFAULT_RULESET } from '../types';
 
-/** Ruleset with playtest HP override when set on GameState.playtest. */
+/** Ruleset with playtest HP override from MatchMeta when set. */
 export function rulesetFromState(state: GameState | null | undefined): RulesetConfig {
-  const cap = state?.playtest?.hpCap;
+  const cap = state?.meta.playtestHpCap;
   if (cap === undefined) return DEFAULT_RULESET;
   return {
     ...DEFAULT_RULESET,

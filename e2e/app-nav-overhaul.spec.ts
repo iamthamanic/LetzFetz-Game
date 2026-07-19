@@ -23,7 +23,7 @@ test.describe('App nav overhaul', () => {
     await expect(page.getByRole('img', { name: 'Letz Fetz' })).toBeVisible();
     await expect(page.getByTestId('app-nav')).toBeVisible();
 
-    await shot(page, '01-header-forge.png');
+    await shot(page, '01-header-menu.png');
 
     const playTab = page.getByTestId('nav-tab-play');
     await playTab.click();
@@ -34,8 +34,8 @@ test.describe('App nav overhaul', () => {
     await expect(page.getByRole('button', { name: 'Notizen öffnen' })).toBeVisible();
 
     await page.setViewportSize({ width: 390, height: 844 });
-    await expect(page.getByRole('button', { name: 'Play' })).toBeVisible();
-    await expect(page.getByRole('button', { name: 'Edit' })).toBeVisible();
+    await expect(page.getByTestId('nav-tab-play')).toBeVisible();
+    await expect(page.getByTestId('nav-tab-forge')).toBeVisible();
     await shot(page, '03-header-mobile.png');
   });
 });

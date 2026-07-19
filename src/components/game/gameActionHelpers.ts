@@ -5,8 +5,12 @@
 import type { GameAction } from '../../game';
 
 export type PendingIntent =
-  | { type: 'attack'; attackInstanceId: string }
-  | { type: 'bind'; handInstanceId: string }
+  | { type: 'attack'; attackInstanceId: string; targetBoundInstanceId?: string }
+  /** Build phase: choosing which hand card to put into the engine. */
+  | { type: 'build-select' }
+  | { type: 'build'; handInstanceId: string }
+  /** Action phase: choosing a hand card to play as the main action. */
+  | { type: 'action-select' }
   | { type: 'activate'; boundInstanceId: string };
 
 export function hasChallengeForAttack(
@@ -18,31 +22,31 @@ export function hasChallengeForAttack(
   );
 }
 
-export function bindRequiresReplace(
+export function buildRequiresReplace(
   legalActions: GameAction[],
   handInstanceId: string,
 ): boolean {
-  const bindActions = legalActions.filter(
-    (a) => a.type === 'BIND_CARD' && a.cardInstanceId === handInstanceId,
+  const buildActions = legalActions.filter(
+    (a) => a.type === 'BUILD_CARD' && a.cardInstanceId === handInstanceId,
   );
-  return bindActions.length > 0 && bindActions.every((a) => a.type === 'BIND_CARD' && Boolean(a.discardBoundId));
+  return buildActions.length > 0 && buildActions.every((a) => a.type === 'BUILD_CARD' && Boolean(a.discardBoundId));
 }
 
-export function findDirectBindAction(
+export function findDirectBuildAction(
   legalActions: GameAction[],
   handInstanceId: string,
 ): GameAction | null {
   return (
     legalActions.find(
       (a) =>
-        a.type === 'BIND_CARD' &&
+        a.type === 'BUILD_CARD' &&
         a.cardInstanceId === handInstanceId &&
         !a.discardBoundId,
     ) ?? null
   );
 }
 
-export function findBindReplaceAction(
+export function findBuildReplaceAction(
   legalActions: GameAction[],
   handInstanceId: string,
   discardBoundId: string,
@@ -50,7 +54,7 @@ export function findBindReplaceAction(
   return (
     legalActions.find(
       (a) =>
-        a.type === 'BIND_CARD' &&
+        a.type === 'BUILD_CARD' &&
         a.cardInstanceId === handInstanceId &&
         a.discardBoundId === discardBoundId,
     ) ?? null
@@ -93,7 +97,24 @@ export function findDiscardDrawAction(
 ): GameAction | null {
   return (
     legalActions.find(
-      (a) => a.type === 'DISCARD_DRAW' && a.discardInstanceId === discardInstanceId,
+      (a) =>
+        (a.type === 'DISCARD_DRAW' && a.discardInstanceId === discardInstanceId) ||
+        (a.type === 'RESOLVE_DRAW_DISCARD' && a.discardInstanceId === discardInstanceId),
+    ) ?? null
+  );
+}
+
+export function findPlayGlitchAction(
+  legalActions: GameAction[],
+  glitchInstanceId: string,
+): GameAction | null {
+  return (
+    legalActions.find(
+      (a) =>
+        a.type === 'PLAY_GLITCH' &&
+        a.glitchInstanceId === glitchInstanceId &&
+        !a.discardHandInstanceId &&
+        !a.targetBoundInstanceId,
     ) ?? null
   );
 }
@@ -114,10 +135,10 @@ export function isActivateDiscardOption(
   return findActivateAction(legalActions, boundInstanceId, handInstanceId) !== null;
 }
 
-export function isBindReplaceTarget(
+export function isBuildReplaceTarget(
   legalActions: GameAction[],
   handInstanceId: string,
   boundInstanceId: string,
 ): boolean {
-  return findBindReplaceAction(legalActions, handInstanceId, boundInstanceId) !== null;
+  return findBuildReplaceAction(legalActions, handInstanceId, boundInstanceId) !== null;
 }

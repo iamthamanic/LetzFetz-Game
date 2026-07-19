@@ -1,5 +1,5 @@
 /**
- * Portrait card chrome — subtitle, header icons, name plate sizing (CharacterSelectCard parity).
+ * Portrait card chrome — subtitle, effect line, element badge, header icons.
  * Location: src/components/cards/cardPortraitPresentation.ts
  */
 import type { Element } from '../../game/types';
@@ -9,24 +9,24 @@ import type { BrandIconKey } from '../../services/icons/elementIcons';
 import {
   characterUsesMysteryIcon,
   elementToBrandIconKey,
-  forgeElementToBrandIconKey,
 } from '../../services/icons/elementIcons';
 import type { CardNamePlateSize } from '../ui/CardNamePlate';
 import { buildCardDisplayModel } from './cardDisplayModel';
-import { CARD_TYPE_EN } from './cardFrameTokens';
 
 export type CardPortraitSize = 'sm' | 'md' | 'lg' | 'fluid';
 
-const CARD_TYPE_DE: Record<string, string> = {
-  attack: 'Angriff',
-  block: 'Block',
-  boost: 'Boost',
-  Angriff: 'Angriff',
-  Block: 'Block',
-  Boost: 'Boost',
-  ATTACK: 'Angriff',
-  BLOCK: 'Block',
-  BOOST: 'Boost',
+/** Prefer Sofort (hand/combat) or Gebaut (engine slots) for the effect line. */
+export type CardEffectFocus = 'instant' | 'bound';
+
+export const FORGE_ELEMENT_DE: Record<ForgeElement, string> = {
+  Fire: 'Feuer',
+  Water: 'Wasser',
+  Earth: 'Erde',
+  Air: 'Luft',
+  Shadow: 'Schatten',
+  Light: 'Licht',
+  Neutral: 'Neutral',
+  Frei: 'Frei',
 };
 
 export interface CardPortraitInput {
@@ -45,10 +45,20 @@ export interface CardPortraitInput {
     resistance?: number;
   };
   size?: CardPortraitSize;
+  effectFocus?: CardEffectFocus;
 }
 
 export interface CardPortraitPresentation {
+  /** e.g. role for characters; null for elements (name already has type). */
   subtitle: string | null;
+  /** Short engine effect text (Sofort or Gebaut). */
+  effectLine: string | null;
+  /** @deprecated Prefer elementBadge — type is in the card name. */
+  typeBadge: string | null;
+  /** Text badge on art, e.g. "Feuer" / "Erde". */
+  elementBadge: string | null;
+  /** When false, portrait skips the top parchment icon bar (more art). */
+  showHeader: boolean;
   headerIcons: BrandIconKey[];
   useMysteryIcon: boolean;
   namePlateSize: CardNamePlateSize;
@@ -77,17 +87,18 @@ function namePlateSizeForCard(size: CardPortraitSize | undefined): CardNamePlate
   return 'lg';
 }
 
-function elementSubtitle(stats?: CardPortraitInput['stats_json']): string | null {
-  const typeKey = stats?.cardType ?? '';
-  const typeDe =
-    CARD_TYPE_DE[typeKey] ??
-    CARD_TYPE_DE[CARD_TYPE_EN[typeKey] ?? ''] ??
-    (typeKey ? typeKey : '');
-  const val = stats?.value;
-  if (typeDe && val != null) return `${typeDe} · Wert ${val}`;
-  if (typeDe) return typeDe;
-  if (val != null) return `Wert ${val}`;
-  return null;
+function elementEffectLine(
+  effects: string[] | undefined,
+  focus: CardEffectFocus,
+  size: CardPortraitSize | undefined,
+): string | null {
+  const instant = effectField(effects, 'Sofort: ');
+  const bound =
+    effectField(effects, 'Gebaut: ') || effectField(effects, 'Gebunden: ');
+  const primary = focus === 'bound' ? bound || instant : instant || bound;
+  if (!primary) return null;
+  const maxLen = size === 'sm' ? 42 : size === 'md' ? 64 : 88;
+  return firstLine(primary, maxLen);
 }
 
 export function buildCardPortraitPresentation(input: CardPortraitInput): CardPortraitPresentation {
@@ -102,6 +113,10 @@ export function buildCardPortraitPresentation(input: CardPortraitInput): CardPor
 
   const namePlateSize = namePlateSizeForCard(input.size);
   let subtitle: string | null = null;
+  let effectLine: string | null = null;
+  let typeBadge: string | null = null;
+  let elementBadge: string | null = null;
+  let showHeader = true;
   let headerIcons: BrandIconKey[] = [];
   const useMysteryIcon =
     input.type === 'Character' ? characterUsesMysteryIcon(input.id) : false;
@@ -123,8 +138,21 @@ export function buildCardPortraitPresentation(input: CardPortraitInput): CardPor
       break;
     }
     case 'Element': {
-      headerIcons = [forgeElementToBrandIconKey(input.element)];
-      subtitle = elementSubtitle(input.stats_json);
+      // Name plate already has type + value; art shows type — no header icons / type badge.
+      showHeader = false;
+      headerIcons = [];
+      typeBadge = null;
+      elementBadge =
+        input.elementDisplay?.trim() ||
+        FORGE_ELEMENT_DE[input.element] ||
+        input.element;
+      if (elementBadge === 'Neutral') elementBadge = null;
+      subtitle = null;
+      effectLine = elementEffectLine(
+        input.effects,
+        input.effectFocus ?? 'instant',
+        input.size,
+      );
       break;
     }
     case 'Ultimate': {
@@ -145,8 +173,11 @@ export function buildCardPortraitPresentation(input: CardPortraitInput): CardPor
       break;
     }
     case 'Glitch': {
-      headerIcons = ['mystery'];
-      subtitle =
+      showHeader = false;
+      headerIcons = [];
+      elementBadge = 'Glitch';
+      subtitle = null;
+      effectLine =
         firstLine(effectField(input.effects, 'Effekt: ')) ??
         firstLine(display.textBlocks[0]?.text) ??
         null;
@@ -156,6 +187,10 @@ export function buildCardPortraitPresentation(input: CardPortraitInput): CardPor
 
   return {
     subtitle: subtitle ? firstLine(subtitle, 120) : null,
+    effectLine,
+    typeBadge,
+    elementBadge,
+    showHeader,
     headerIcons,
     useMysteryIcon,
     namePlateSize,

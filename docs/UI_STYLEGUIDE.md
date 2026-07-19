@@ -193,7 +193,7 @@ Verspielter Ton. Orientierung am physischen Kartentisch.
 
 Zeige aktuelle Zugphase klar:
 
-`Startphase → Ziehen → Binden → Aktion → Ende`
+`Startphase → Ziehen → Bau-Phase → Aktion → Ende`
 
 - Aktive Phase: `border-purple-500 bg-purple-900/30`
 - Erledigte Phase: `opacity-50`
@@ -205,7 +205,7 @@ Zeige aktuelle Zugphase klar:
 - Nur eigene Hand sichtbar (Gegner: Rückseite oder Anzahl)
 - Handlimit 6: Warnung bei 5+, rot bei Überschreitung in Endphase
 
-### Gebundene Karten
+### Gebaute Karten
 
 - Max 4 Slots, sichtbar vor Spieler
 - Erschöpft: Karte gedreht / `opacity-60 rotate-90`

@@ -2,7 +2,7 @@
  * Human hand row with playable / dimmed card states and multi-step intents.
  * Location: src/components/game/HandFan.tsx
  */
-import React from 'react';
+import React, { useEffect, useRef } from 'react';
 import { BoardCard } from './BoardCard';
 import { DraggableHandCard } from './DndPlaymat';
 import type { HandCardView } from './buildGameViewModel';
@@ -13,40 +13,54 @@ interface HandFanProps {
   pending: PendingIntent | null;
   /** When set, only the first N cards are shown (opening deal reveal). */
   visibleCount?: number;
+  /** Opening deal: keep tray + landing slot mounted for fly-in. */
+  dealRevealActive?: boolean;
   /** Instance ids hidden until draw animation completes. */
   hiddenInstanceIds?: string[];
   hasChallengeTargets?: boolean;
   onSelectAttack: (instanceId: string) => void;
   onPlayBoost: (instanceId: string) => void;
-  onBindDirect: (instanceId: string) => void;
-  onStartBindReplace: (instanceId: string) => void;
+  onBuildDirect: (instanceId: string) => void;
+  onStartBuildReplace: (instanceId: string) => void;
   onPlayBlock: (instanceId: string) => void;
   onDiscardDraw: (instanceId: string) => void;
   onActivateDiscard: (instanceId: string) => void;
+  onPlayGlitch: (instanceId: string) => void;
 }
 
 export function HandFan({
   cards,
   pending,
   visibleCount,
+  dealRevealActive = false,
   hiddenInstanceIds,
   hasChallengeTargets = false,
   onSelectAttack,
   onPlayBoost,
-  onBindDirect,
-  onStartBindReplace,
+  onBuildDirect,
+  onStartBuildReplace,
   onPlayBlock,
   onDiscardDraw,
   onActivateDiscard,
+  onPlayGlitch,
 }: HandFanProps) {
+  const scrollRef = useRef<HTMLDivElement>(null);
   const shown = (visibleCount !== undefined ? cards.slice(0, visibleCount) : cards).filter(
     (card) => !hiddenInstanceIds?.includes(card.instanceId),
   );
+  const reserveEndSlot = Boolean(hiddenInstanceIds?.length) || dealRevealActive;
 
-  if (shown.length === 0) {
+  // Keep the newest (rightmost) cards in view when the hand overflows.
+  useEffect(() => {
+    const el = scrollRef.current;
+    if (!el) return;
+    el.scrollLeft = el.scrollWidth;
+  }, [shown.length, reserveEndSlot, dealRevealActive]);
+
+  if (shown.length === 0 && !reserveEndSlot) {
     return (
       <p className="py-2 text-center text-sm text-stone-500" data-testid="player-hand-empty">
-        {visibleCount === 0 ? 'Karten werden verteilt…' : 'Keine Karten auf der Hand.'}
+        Keine Karten auf der Hand.
       </p>
     );
   }
@@ -54,87 +68,115 @@ export function HandFan({
   return (
     <div
       data-testid="player-hand"
-      className="rounded-xl border border-stone-600/50 bg-stone-900/50 px-2 py-2 shadow-inner sm:px-3"
+      className="min-w-0 max-w-full rounded-xl border border-stone-600/50 bg-stone-900/50 px-2 py-2 shadow-inner sm:px-3"
     >
-      <div className="flex items-end gap-2 overflow-x-auto pb-1 pt-1 sm:gap-3">
-      {shown.map((card) => {
-        const selected =
-          (pending?.type === 'attack' && pending.attackInstanceId === card.instanceId) ||
-          (pending?.type === 'bind' && pending.handInstanceId === card.instanceId);
+      {shown.length === 0 && dealRevealActive && (
+        <p className="mb-1 text-center text-xs font-medium uppercase tracking-wider text-stone-500">
+          Karten werden verteilt…
+        </p>
+      )}
+      <div
+        ref={scrollRef}
+        data-testid="hand-fan-row"
+        className="hand-fan-row min-w-0 max-w-full overflow-x-auto overscroll-x-contain pb-1 pt-1"
+      >
+        <div className="flex w-max min-w-full items-end justify-end gap-2 sm:gap-3">
+          {shown.map((card, index) => {
+            const selected =
+              (pending?.type === 'attack' && pending.attackInstanceId === card.instanceId) ||
+              (pending?.type === 'build' && pending.handInstanceId === card.instanceId);
 
-        const handleClick = () => {
-          if (card.interaction === 'activate-discard') {
-            onActivateDiscard(card.instanceId);
-            return;
-          }
-          if (!card.isPlayable && !card.isActivateDiscardOption) return;
-
-          switch (card.interaction) {
-            case 'attack':
-              onSelectAttack(card.instanceId);
-              break;
-            case 'boost':
-              onPlayBoost(card.instanceId);
-              break;
-            case 'bind':
-              if (card.bindNeedsReplace) {
-                onStartBindReplace(card.instanceId);
-              } else {
-                onBindDirect(card.instanceId);
+            const handleClick = () => {
+              if (card.interaction === 'activate-discard') {
+                onActivateDiscard(card.instanceId);
+                return;
               }
-              break;
-            case 'block':
-              onPlayBlock(card.instanceId);
-              break;
-            case 'discard-draw':
-              onDiscardDraw(card.instanceId);
-              break;
-            default:
-              break;
-          }
-        };
+              if (!card.isPlayable && !card.isActivateDiscardOption) return;
 
-        const clickable =
-          card.isPlayable ||
-          card.interaction === 'activate-discard' ||
-          card.isActivateDiscardOption;
+              switch (card.interaction) {
+                case 'attack':
+                  onSelectAttack(card.instanceId);
+                  break;
+                case 'boost':
+                  onPlayBoost(card.instanceId);
+                  break;
+                case 'build':
+                  if (card.buildNeedsReplace) {
+                    onStartBuildReplace(card.instanceId);
+                  } else {
+                    onBuildDirect(card.instanceId);
+                  }
+                  break;
+                case 'block':
+                  onPlayBlock(card.instanceId);
+                  break;
+                case 'discard-draw':
+                  onDiscardDraw(card.instanceId);
+                  break;
+                case 'play-glitch':
+                  onPlayGlitch(card.instanceId);
+                  break;
+                default:
+                  break;
+              }
+            };
 
-        const attackTitle =
-          card.interaction === 'attack'
-            ? hasChallengeTargets
-              ? 'Angriffskarte — Herausfordern oder Direktangriff'
-              : 'Angriffskarte — nur Direktangriff möglich'
-            : undefined;
+            const clickable =
+              card.isPlayable ||
+              card.interaction === 'activate-discard' ||
+              card.isActivateDiscardOption;
 
-        const cardEl = (
-          <div
-            key={card.instanceId}
-            data-selected-attack={selected && card.interaction === 'attack' ? 'true' : undefined}
-            title={attackTitle}
-          >
-            <BoardCard
-              def={card.def ?? undefined}
-              name={card.glitchName ?? undefined}
-              size="hand"
-              selected={selected}
-              playable={clickable && !selected}
-              dimmed={!clickable && !selected}
-              disabled={!clickable}
-              onClick={handleClick}
-              dataInteraction={card.interaction ?? undefined}
+            const attackTitle =
+              card.interaction === 'attack'
+                ? hasChallengeTargets
+                  ? 'Angriffskarte — Herausfordern oder Direktangriff'
+                  : 'Angriffskarte — nur Direktangriff möglich'
+                : undefined;
+
+            const isNewestDeal =
+              dealRevealActive && visibleCount !== undefined && index === shown.length - 1;
+
+            const board = (
+              <BoardCard
+                def={card.def ?? undefined}
+                glitchDef={card.glitchDef}
+                defId={card.defId}
+                name={card.glitchName ?? undefined}
+                size="hand"
+                selected={selected}
+                playable={clickable && !selected}
+                dimmed={!clickable && !selected}
+                disabled={!clickable}
+                onClick={handleClick}
+                dataInteraction={card.interaction ?? undefined}
+                tooltipHint={attackTitle}
+              />
+            );
+
+            return (
+              <div
+                key={card.instanceId}
+                data-hand-card-id={card.instanceId}
+                data-selected-attack={selected && card.interaction === 'attack' ? 'true' : undefined}
+                className={`hand-fan-card shrink-0 ${isNewestDeal ? 'hand-deal-enter' : ''}`}
+              >
+                {card.interaction === 'build' && clickable ? (
+                  <DraggableHandCard card={card}>{board}</DraggableHandCard>
+                ) : (
+                  board
+                )}
+              </div>
+            );
+          })}
+
+          {reserveEndSlot && (
+            <div
+              data-testid="hand-draw-slot"
+              className="hand-draw-slot shrink-0"
+              aria-hidden
             />
-          </div>
-        );
-
-        if (card.interaction === 'bind' && clickable) {
-          return (
-            <DraggableHandCard key={card.instanceId} card={card}>
-              {cardEl}
-            </DraggableHandCard>
-          );
-        }
-        return cardEl;
-      })}
+          )}
+        </div>
       </div>
     </div>
   );

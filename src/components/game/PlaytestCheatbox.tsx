@@ -55,8 +55,8 @@ export function PlaytestCheatbox({
   const [patchP1Hp, setPatchP1Hp] = useState(String(state.players.p1.hp));
   const [patchP2Hp, setPatchP2Hp] = useState(String(state.players.p2.hp));
 
-  const hpCap = state.playtest?.hpCap ?? 20;
-  const monoMode = state.playtest?.monoBonusMode ?? 'mb1';
+  const hpCap = state.meta.playtestHpCap ?? 20;
+  const monoMode = state.meta.monoBonusMode ?? 'mb1';
 
   useEffect(() => {
     setPatchPhase(state.phase);

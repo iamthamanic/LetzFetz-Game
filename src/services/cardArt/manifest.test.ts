@@ -76,7 +76,7 @@ describe('card art manifest', () => {
   });
 
   it('resolves shared card back path', () => {
-    expect(resolveCardBackPath()).toBe('/cards/card-back.svg');
+    expect(resolveCardBackPath()).toBe('/brand/letz-fetz-logo.png');
   });
 
   it('resolves element attack video paths', () => {

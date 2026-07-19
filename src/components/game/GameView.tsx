@@ -1,5 +1,5 @@
 /**
- * Main playable game view — solo vs heuristic bot (orchestration only).
+ * Main playable game view — solo vs heuristic or LLM bot (orchestration only).
  * Location: src/components/game/GameView.tsx
  */
 import React, { useState, useEffect, useRef, useCallback, useMemo } from 'react';
@@ -9,7 +9,8 @@ import {
   P100_RULESET,
   createGame,
   applyAction,
-  runBotTurn,
+  chooseBotAction,
+  botNeedsToAct,
   rollD6,
   rulesetFromState,
   type GameState,
@@ -19,10 +20,17 @@ import {
   pickOpponentCharacter,
   createSeededRng,
 } from '../../game';
-import { GameSetup } from './GameSetup';
+import { chooseLlmBotAction } from '../../services/bot/chooseLlmBotAction';
+import type { BotDecisionSource } from '../../services/bot/chooseLlmBotAction';
+import { GameSetup, DEFAULT_SETUP_CHARACTER_ID, type GameSetupPhase } from './GameSetup';
 import { GrungeAppShell } from '../ui/GrungeAppShell';
 import { PhaseCoachBanner } from './PhaseCoachBanner';
+import { PhaseCoachFooter, FOOTER_REVEAL_TOTAL_MS } from './PhaseCoachFooter';
+import { TurnStartAnnounce } from './TurnStartAnnounce';
 import { buildPhaseCoachHint } from './phaseCoachHint';
+import { ActionBar } from './ActionBar';
+import { ActionPhaseBar, actionPhaseLegalFlags } from './ActionPhaseBar';
+import { BuildPhaseBar } from './BuildPhaseBar';
 import { PlaymatBoard } from './PlaymatBoard';
 import { MatchIntro } from './MatchIntro';
 import { buildGameViewModel } from './buildGameViewModel';
@@ -38,13 +46,15 @@ import {
   buildOpeningDealSteps,
   fullDealRevealCounts,
   isOpeningDealStep,
+  openingDealBeats,
   buildDrawCardStep,
   isDrawCardStep,
   findNewlyDrawnCard,
-  buildBindSnapStep,
-  isBindSnapStep,
-  findNewlyBoundCardIds,
-  BIND_SNAP_MS,
+  buildBuildSnapStep,
+  isBuildSnapStep,
+  findNewlyBuiltCardIds,
+  BUILD_SNAP_MS,
+  BUILD_FLY_MS,
   buildActivateDiscardStep,
   isActivateDiscardStep,
   findActivatedDiscardCardId,
@@ -53,23 +63,47 @@ import {
   isAttackCardFlyStep,
   findRemovedAttackCard,
   ATTACK_CARD_FLY_MS,
+  buildInstantGlitchRevealSteps,
+  buildDamageHitSteps,
+  buildCombatResolveSnapshot,
+  buildCombatResolveStep,
 } from './presentation';
+import { useAppHistory } from '../../services/history/AppHistoryContext';
 
 const HUMAN: PlayerId = 'p1';
 const BOT: PlayerId = 'p2';
+const BOT_MODE_KEY = 'letzfetz-bot-mode';
+
+type BotMode = 'heuristic' | 'llm';
+
+function readBotMode(): BotMode {
+  try {
+    return localStorage.getItem(BOT_MODE_KEY) === 'llm' ? 'llm' : 'heuristic';
+  } catch {
+    return 'heuristic';
+  }
+}
 
 export function GameView() {
   const playtestMode = isPlaytestMode();
+  const { push } = useAppHistory();
   const [matchPack, setMatchPack] = useState<ContentPack>(BASE_PACK);
   const [state, setState] = useState<GameState | null>(null);
+  const [setupPhase, setSetupPhase] = useState<GameSetupPhase>('mode');
+  const [setupSelectedId, setSetupSelectedId] = useState(DEFAULT_SETUP_CHARACTER_ID);
   const [lastRoll, setLastRoll] = useState<number | null>(null);
   const [logOpen, setLogOpen] = useState(false);
   const [pendingIntent, setPendingIntent] = useState<PendingIntent | null>(null);
   const [actionError, setActionError] = useState<string | null>(null);
   const [introOpen, setIntroOpen] = useState(false);
   const [botPaused, setBotPaused] = useState(false);
+  const [botMode, setBotMode] = useState<BotMode>(readBotMode);
+  const [botReason, setBotReason] = useState<string | null>(null);
+  const [botSource, setBotSource] = useState<BotDecisionSource | null>(null);
   const botRunning = useRef(false);
   const botPausedRef = useRef(false);
+  const botModeRef = useRef<BotMode>(botMode);
+  const matchSeedRef = useRef(0);
   const openingDealRunRef = useRef(false);
   const openingDealCompleteRef = useRef(false);
   const prevStateRef = useRef<GameState | null>(null);
@@ -77,17 +111,28 @@ export function GameView() {
   const [dealReveal, setDealReveal] = useState<Record<PlayerId, number>>({ p1: 0, p2: 0 });
   const [heldBackHandCards, setHeldBackHandCards] = useState<Partial<Record<PlayerId, string>>>({});
   const [snapBoundCardIds, setSnapBoundCardIds] = useState<string[]>([]);
+  /** Bound cards still mid-flight (hidden in slot until impact). */
+  const [flyingBuildCardIds, setFlyingBuildCardIds] = useState<string[]>([]);
   const [activateDiscardId, setActivateDiscardId] = useState<string | null>(null);
   const [hiddenAttackCardId, setHiddenAttackCardId] = useState<string | null>(null);
   const [openingDealStarted, setOpeningDealStarted] = useState(false);
   const [openingDealFinished, setOpeningDealFinished] = useState(false);
+  /** After deal: show "Du beginnst" / "Gegner beginnt", then materialize footer. */
+  const [turnStartAnnounceDone, setTurnStartAnnounceDone] = useState(false);
+  const coachFooterReveal = turnStartAnnounceDone;
 
   const presentation = usePresentationQueue({
     onStepComplete: (step) => {
       if (isOpeningDealStep(step)) {
-        const playerId = step.payload?.playerId as PlayerId | undefined;
-        if (!playerId) return;
-        setDealReveal((prev) => ({ ...prev, [playerId]: prev[playerId] + 1 }));
+        const beats = openingDealBeats(step);
+        if (beats.length === 0) return;
+        setDealReveal((prev) => {
+          const next = { ...prev };
+          for (const beat of beats) {
+            next[beat.playerId] = (next[beat.playerId] ?? 0) + 1;
+          }
+          return next;
+        });
         return;
       }
       if (isDrawCardStep(step)) {
@@ -101,13 +146,16 @@ export function GameView() {
           return next;
         });
       }
-      if (isBindSnapStep(step)) {
+      if (isBuildSnapStep(step)) {
         const cardInstanceId = step.payload?.cardInstanceId as string | undefined;
         if (cardInstanceId) {
           const idToRemove = cardInstanceId;
           window.setTimeout(() => {
+            setFlyingBuildCardIds((prev) => prev.filter((id) => id !== idToRemove));
+          }, BUILD_FLY_MS);
+          window.setTimeout(() => {
             setSnapBoundCardIds((prev) => prev.filter((id) => id !== idToRemove));
-          }, BIND_SNAP_MS);
+          }, BUILD_SNAP_MS);
         }
       }
       if (isActivateDiscardStep(step)) {
@@ -139,9 +187,27 @@ export function GameView() {
   });
 
   const scheduleDrawPresentation = useCallback(
-    (playerId: PlayerId, cardInstanceId: string, locksInput: boolean) => {
+    (
+      playerId: PlayerId,
+      cardInstanceId: string,
+      locksInput: boolean,
+      cardDefId?: string,
+    ) => {
+      const current = stateRef.current;
+      const drawn =
+        cardDefId != null
+          ? undefined
+          : current?.players[playerId].hand.find((c) => c.instanceId === cardInstanceId);
+      const resolvedDefId = cardDefId ?? drawn?.defId;
+      const faceUp = locksInput && playerId === HUMAN && Boolean(resolvedDefId);
       setHeldBackHandCards((prev) => ({ ...prev, [playerId]: cardInstanceId }));
-      presentation.enqueue(buildDrawCardStep(playerId, cardInstanceId, { locksInput }));
+      presentation.enqueue(
+        buildDrawCardStep(playerId, cardInstanceId, {
+          locksInput,
+          cardDefId: resolvedDefId,
+          faceUp,
+        }),
+      );
     },
     [presentation.enqueue],
   );
@@ -155,6 +221,15 @@ export function GameView() {
   }, [botPaused]);
 
   useEffect(() => {
+    botModeRef.current = botMode;
+    try {
+      localStorage.setItem(BOT_MODE_KEY, botMode);
+    } catch {
+      /* ignore */
+    }
+  }, [botMode]);
+
+  useEffect(() => {
     if (introOpen || !state || openingDealRunRef.current) return;
 
     openingDealRunRef.current = true;
@@ -164,11 +239,13 @@ export function GameView() {
       openingDealCompleteRef.current = true;
       setDealReveal(fullDealRevealCounts(state));
       setOpeningDealFinished(true);
+      setTurnStartAnnounceDone(false);
       return;
     }
 
     setDealReveal({ p1: 0, p2: 0 });
     setOpeningDealFinished(false);
+    setTurnStartAnnounceDone(false);
     presentation.enqueue(steps);
   }, [introOpen, state, presentation.enqueue]);
 
@@ -191,14 +268,22 @@ export function GameView() {
       scheduleDrawPresentation(BOT, botDrawnId, false);
     }
 
-    const humanBoundIds = findNewlyBoundCardIds(prev, state, HUMAN);
-    const botBoundIds = findNewlyBoundCardIds(prev, state, BOT);
+    const humanBoundIds = findNewlyBuiltCardIds(prev, state, HUMAN);
+    const botBoundIds = findNewlyBuiltCardIds(prev, state, BOT);
+    const toSnapStep = (playerId: PlayerId, id: string) => {
+      const bound = state.players[playerId].bound;
+      const slotIndex = bound.findIndex((b) => b.instanceId === id);
+      const card = bound[slotIndex];
+      return buildBuildSnapStep(playerId, id, card?.defId ?? '', Math.max(0, slotIndex));
+    };
     const snapSteps = [
-      ...humanBoundIds.map((id) => buildBindSnapStep(HUMAN, id)),
-      ...botBoundIds.map((id) => buildBindSnapStep(BOT, id)),
+      ...humanBoundIds.map((id) => toSnapStep(HUMAN, id)),
+      ...botBoundIds.map((id) => toSnapStep(BOT, id)),
     ];
     if (snapSteps.length > 0) {
-      setSnapBoundCardIds([...humanBoundIds, ...botBoundIds]);
+      const allIds = [...humanBoundIds, ...botBoundIds];
+      setSnapBoundCardIds(allIds);
+      setFlyingBuildCardIds(allIds);
       presentation.enqueue(snapSteps);
     }
 
@@ -206,6 +291,20 @@ export function GameView() {
     if (humanDiscardId) {
       setActivateDiscardId(humanDiscardId);
       presentation.enqueue(buildActivateDiscardStep(HUMAN, humanDiscardId));
+    }
+
+    if (state.instantReveals.length > 0) {
+      presentation.enqueue(buildInstantGlitchRevealSteps(state.instantReveals));
+    }
+
+    const combatResolve = buildCombatResolveSnapshot(prev, state, matchPack);
+    if (combatResolve) {
+      presentation.enqueue(buildCombatResolveStep(combatResolve));
+    }
+
+    const damageSteps = buildDamageHitSteps(prev, state);
+    if (damageSteps.length > 0) {
+      presentation.enqueue(damageSteps);
     }
 
     if (!prev.combat && state.combat) {
@@ -232,64 +331,145 @@ export function GameView() {
     }
   }, [state, openingDealFinished, scheduleDrawPresentation]);
 
-  const dispatch = useCallback((action: GameAction, playerId: PlayerId = HUMAN) => {
-    setState((prev) => {
-      if (!prev) return prev;
-      try {
-        const next = applyAction(prev, action, playerId, {
-          pack: matchPack,
-          playerId,
-          ruleset: rulesetFromState(prev),
-        });
-        if (
-          action.type === 'PLAY_ATTACK' ||
-          action.type === 'PLAY_BLOCK' ||
-          action.type === 'CHALLENGE'
-        ) {
-          setLastRoll(action.diceRoll ?? null);
+  const resetPresentationVisuals = useCallback(() => {
+    presentation.flush();
+    setPendingIntent(null);
+    setActionError(null);
+    setHeldBackHandCards({});
+    setSnapBoundCardIds([]);
+    setFlyingBuildCardIds([]);
+    setActivateDiscardId(null);
+    setHiddenAttackCardId(null);
+  }, [presentation]);
+
+  const commitHumanState = useCallback(
+    (before: GameState, after: GameState) => {
+      push({
+        undo: () => {
+          botRunning.current = false;
+          resetPresentationVisuals();
+          setState(before);
+        },
+        redo: () => {
+          botRunning.current = false;
+          resetPresentationVisuals();
+          setState(after);
+        },
+      });
+    },
+    [push, resetPresentationVisuals],
+  );
+
+  const dispatch = useCallback(
+    (action: GameAction, playerId: PlayerId = HUMAN) => {
+      setState((prev) => {
+        if (!prev) return prev;
+        try {
+          const next = applyAction(prev, action, playerId, {
+            pack: matchPack,
+            playerId,
+            ruleset: rulesetFromState(prev),
+          });
+          if (
+            action.type === 'PLAY_ATTACK' ||
+            action.type === 'PLAY_BLOCK' ||
+            action.type === 'CHALLENGE'
+          ) {
+            setLastRoll(action.diceRoll ?? null);
+          }
+          setActionError(null);
+          if (playerId === HUMAN) {
+            const before = prev;
+            const after = next;
+            queueMicrotask(() => commitHumanState(before, after));
+          }
+          return next;
+        } catch (e) {
+          const message = e instanceof Error ? e.message : 'Aktion fehlgeschlagen.';
+          setActionError(message);
+          return prev;
         }
-        setActionError(null);
-        return next;
-      } catch (e) {
-        const message = e instanceof Error ? e.message : 'Aktion fehlgeschlagen.';
-        setActionError(message);
-        return prev;
-      }
-    });
-  }, [matchPack]);
+      });
+    },
+    [commitHumanState, matchPack],
+  );
 
   useEffect(() => {
     if (!state || state.winner || botRunning.current) return;
+    // Wait for match intro + deal + start announce + footer spectacle before the bot moves.
+    if (introOpen || !coachFooterReveal) return;
     if (presentation.isInputLocked) return;
     if (playtestMode && botPausedRef.current) return;
-
-    const needsBot =
-      (state.activePlayer === BOT && !state.combat) ||
-      state.combat?.defenderId === BOT;
-
-    if (!needsBot) return;
+    if (!botNeedsToAct(state, BOT)) return;
 
     botRunning.current = true;
+    let cancelled = false;
+
     const timer = setTimeout(() => {
-      setState((prev) => {
-        if (!prev) return prev;
-        let next = prev;
-        if (prev.combat?.defenderId === BOT) {
-          next = runBotTurn(prev, matchPack, 1);
-        } else if (prev.activePlayer === BOT) {
-          next = runBotTurn(prev, matchPack);
+      void (async () => {
+        const snapshot = stateRef.current;
+        if (!snapshot || cancelled) {
+          botRunning.current = false;
+          return;
         }
-        botRunning.current = false;
-        return next;
-      });
-      setPendingIntent(null);
-    }, 600);
+        try {
+          const decision =
+            botModeRef.current === 'llm'
+              ? await chooseLlmBotAction(snapshot, matchPack)
+              : {
+                  action: chooseBotAction(snapshot, matchPack),
+                  reason: 'Heuristik',
+                  source: 'heuristic' as const,
+                };
+          if (cancelled) {
+            botRunning.current = false;
+            return;
+          }
+          if (!decision.action) {
+            botRunning.current = false;
+            return;
+          }
+          setBotReason(decision.reason);
+          setBotSource(decision.source);
+          setState((prev) => {
+            if (!prev) {
+              botRunning.current = false;
+              return prev;
+            }
+            try {
+              const next = applyAction(prev, decision.action!, BOT, {
+                pack: matchPack,
+                playerId: BOT,
+                ruleset: rulesetFromState(prev),
+              });
+              botRunning.current = false;
+              return next;
+            } catch {
+              botRunning.current = false;
+              return prev;
+            }
+          });
+          setPendingIntent(null);
+        } catch {
+          botRunning.current = false;
+        }
+      })();
+    }, botModeRef.current === 'llm' ? 200 : Math.max(600, FOOTER_REVEAL_TOTAL_MS + 120));
 
     return () => {
+      cancelled = true;
       clearTimeout(timer);
       botRunning.current = false;
     };
-  }, [state, playtestMode, presentation.isInputLocked, presentation.activeStep, matchPack]);
+  }, [
+    state,
+    introOpen,
+    coachFooterReveal,
+    playtestMode,
+    presentation.isInputLocked,
+    presentation.activeStep,
+    matchPack,
+  ]);
 
   useEffect(() => {
     setPendingIntent(null);
@@ -384,15 +564,23 @@ export function GameView() {
             playerId: HUMAN,
             ruleset: rulesetFromState(prev),
           });
+          // Keep ref in sync before microtasks — effects run only after paint.
+          stateRef.current = next;
 
           if (isHumanDrawPhase) {
             const drawnId = findNewlyDrawnCard(prev, next, HUMAN);
             if (drawnId) {
-              queueMicrotask(() => scheduleDrawPresentation(HUMAN, drawnId, true));
+              const defId = next.players[HUMAN].hand.find((c) => c.instanceId === drawnId)?.defId;
+              queueMicrotask(() =>
+                scheduleDrawPresentation(HUMAN, drawnId, true, defId),
+              );
             }
           }
 
           setActionError(null);
+          const before = prev;
+          const after = next;
+          queueMicrotask(() => commitHumanState(before, after));
           return next;
         } catch (e) {
           const message = e instanceof Error ? e.message : 'Aktion fehlgeschlagen.';
@@ -401,7 +589,7 @@ export function GameView() {
         }
       });
     },
-    [presentation.isInputLocked, scheduleDrawPresentation],
+    [presentation.isInputLocked, scheduleDrawPresentation, commitHumanState, matchPack],
   );
 
   const handleApplyPlaytestState = useCallback((next: GameState) => {
@@ -411,9 +599,7 @@ export function GameView() {
     setState(next);
   }, [playtestMode]);
 
-  const botWouldAct = state
-    ? (state.activePlayer === BOT && !state.winner) || state.combat?.defenderId === BOT
-    : false;
+  const botWouldAct = state ? botNeedsToAct(state, BOT) : false;
   const botThinking =
     botRunning.current || (botWouldAct && !(playtestMode && botPaused));
 
@@ -433,6 +619,10 @@ export function GameView() {
     return (
       <GrungeAppShell>
         <GameSetup
+          phase={setupPhase}
+          selectedId={setupSelectedId}
+          onPhaseChange={setSetupPhase}
+          onSelectCharacter={setSetupSelectedId}
           onStart={({ humanCharacterId, packChoice }) => {
             unlockAudio();
             setPendingIntent(null);
@@ -441,24 +631,42 @@ export function GameView() {
             openingDealCompleteRef.current = false;
             setOpeningDealStarted(false);
             setOpeningDealFinished(false);
+            setTurnStartAnnounceDone(false);
             setDealReveal({ p1: 0, p2: 0 });
             setHeldBackHandCards({});
             prevStateRef.current = null;
             const selectedPack = packChoice === 'p100' ? V2_P100_PACK : BASE_PACK;
             setMatchPack(selectedPack);
             const seed = Date.now();
+            matchSeedRef.current = seed;
             const rng = createSeededRng(seed);
             const botCharacterId = pickOpponentCharacter(selectedPack, humanCharacterId, rng);
-            setState(
-              createGame({
-                pack: selectedPack,
-                p1CharacterId: humanCharacterId,
-                p2CharacterId: botCharacterId,
-                startingPlayer: HUMAN,
-                ruleset: packChoice === 'p100' ? P100_RULESET : undefined,
-                seed,
-              }),
-            );
+            const next = createGame({
+              pack: selectedPack,
+              p1CharacterId: humanCharacterId,
+              p2CharacterId: botCharacterId,
+              startingPlayer: HUMAN,
+              ruleset: packChoice === 'p100' ? P100_RULESET : undefined,
+              seed,
+            });
+            if (packChoice === 'p100') {
+              next.meta = { ...next.meta, playtestHpCap: 30 };
+            }
+            push({
+              undo: () => {
+                botRunning.current = false;
+                resetPresentationVisuals();
+                setIntroOpen(false);
+                setState(null);
+              },
+              redo: () => {
+                botRunning.current = false;
+                resetPresentationVisuals();
+                setState(next);
+                setIntroOpen(true);
+              },
+            });
+            setState(next);
             setIntroOpen(true);
           }}
         />
@@ -469,25 +677,6 @@ export function GameView() {
   return (
     <GrungeAppShell>
       <div className="flex h-full flex-col overflow-hidden bg-stone-950 text-stone-100">
-      <header className="flex-none border-b border-stone-700 bg-stone-900/90 px-3 py-2 sm:px-4">
-        <div className="mx-auto flex max-w-6xl items-center justify-between gap-2 sm:gap-4">
-          <PhaseCoachBanner
-            currentPhase={state.phase}
-            phaseLabel={view.phaseLabel}
-            hint={coachHint}
-            turnNumber={state.turnNumber}
-          />
-          <Button
-            variant="secondary"
-            size="sm"
-            icon={<ScrollText className="h-4 w-4" />}
-            onClick={() => setLogOpen(!logOpen)}
-          >
-            {logOpen ? 'Log aus' : 'Log'}
-          </Button>
-        </div>
-      </header>
-
       <div className="relative flex min-h-0 flex-1 overflow-hidden">
         <PlaymatBoard
           state={state}
@@ -502,6 +691,7 @@ export function GameView() {
           dealReveal={dealReveal}
           heldBackHandCards={heldBackHandCards}
           snapBoundCardIds={snapBoundCardIds}
+          flyingBuildCardIds={flyingBuildCardIds}
           activateDiscardId={activateDiscardId}
           hiddenAttackCardId={hiddenAttackCardId}
           activePresentationStep={presentation.activeStep}
@@ -512,11 +702,14 @@ export function GameView() {
           onPlayBlock={playBlock}
           onPendingChange={setPendingIntent}
           onNewGame={() => {
+            const prev = state;
+            const wasIntro = introOpen;
             presentation.flush();
             openingDealRunRef.current = false;
             openingDealCompleteRef.current = false;
             setOpeningDealStarted(false);
             setOpeningDealFinished(false);
+            setTurnStartAnnounceDone(false);
             setDealReveal({ p1: 0, p2: 0 });
             setHeldBackHandCards({});
             prevStateRef.current = null;
@@ -524,6 +717,19 @@ export function GameView() {
             setActionError(null);
             setIntroOpen(false);
             setState(null);
+            push({
+              undo: () => {
+                botRunning.current = false;
+                setState(prev);
+                setIntroOpen(wasIntro);
+              },
+              redo: () => {
+                botRunning.current = false;
+                resetPresentationVisuals();
+                setIntroOpen(false);
+                setState(null);
+              },
+            });
           }}
         />
 
@@ -535,7 +741,37 @@ export function GameView() {
             arenaId={state.arena.arenaId}
             arenaName={view.arena?.name}
             d6Variant={state.arena.d6Variant}
-            onContinue={() => setIntroOpen(false)}
+            onInitiativeResolved={(startingPlayer) => {
+              // Rebuild match with decided starter before deal (intro still open).
+              openingDealRunRef.current = false;
+              openingDealCompleteRef.current = false;
+              setOpeningDealStarted(false);
+              setOpeningDealFinished(false);
+              setTurnStartAnnounceDone(false);
+              setDealReveal({ p1: 0, p2: 0 });
+              setHeldBackHandCards({});
+              prevStateRef.current = null;
+              const seed = matchSeedRef.current || Date.now();
+              setState(
+                createGame({
+                  pack: matchPack,
+                  p1CharacterId: state.players[HUMAN].characterId,
+                  p2CharacterId: state.players[BOT].characterId,
+                  startingPlayer,
+                  seed,
+                  arenaId: state.arena.arenaId,
+                  d6Variant: state.arena.d6Variant,
+                  ruleset: matchPack.id === 'v2-p100' ? P100_RULESET : undefined,
+                }),
+              );
+            }}
+            onContinue={() => {
+              push({
+                undo: () => setIntroOpen(true),
+                redo: () => setIntroOpen(false),
+              });
+              setIntroOpen(false);
+            }}
           />
         )}
 
@@ -572,7 +808,130 @@ export function GameView() {
             onError={setActionError}
           />
         )}
+
+        <TurnStartAnnounce
+          active={openingDealFinished && !turnStartAnnounceDone}
+          humanStarts={state.activePlayer === HUMAN}
+          onComplete={() => setTurnStartAnnounceDone(true)}
+        />
       </div>
+      <PhaseCoachFooter
+        reveal={coachFooterReveal}
+        phases={
+          <PhaseCoachBanner
+            currentPhase={state.phase}
+            phaseLabel={view.phaseLabel}
+            hint={coachHint}
+            turnNumber={state.turnNumber}
+            activePlayerId={state.activePlayer}
+            humanPlayerId={HUMAN}
+          />
+        }
+        actions={
+          state.phase === 'action' && view.isHumanTurn && !view.isHumanDefender ? (
+            <ActionPhaseBar
+              phase={state.phase}
+              pending={pendingIntent}
+              challengeTargetCount={view.botBoundSlots.filter((s) => s.isTargetable).length}
+              {...actionPhaseLegalFlags(view.legalActions)}
+              inputLocked={presentation.isInputLocked || !coachFooterReveal}
+              onStartAction={() => setPendingIntent({ type: 'action-select' })}
+              onDirectAttack={() => {
+                if (pendingIntent?.type !== 'attack') return;
+                playAttack(pendingIntent.attackInstanceId);
+              }}
+              onChallenge={() => {
+                if (pendingIntent?.type !== 'attack') return;
+                const selected = pendingIntent.targetBoundInstanceId;
+                const onlyTarget = view.botBoundSlots.filter((s) => s.isTargetable);
+                const targetId =
+                  selected ??
+                  (onlyTarget.length === 1 ? onlyTarget[0]?.instanceId : undefined);
+                if (!targetId) return;
+                playChallenge(pendingIntent.attackInstanceId, targetId);
+              }}
+              onCancel={() => setPendingIntent(null)}
+              onUltimate={() => {
+                handleDispatch({ type: 'PLAY_ULTIMATE' });
+                setPendingIntent(null);
+              }}
+              onSkipMain={() => {
+                handleDispatch({ type: 'END_TURN' });
+                setPendingIntent(null);
+              }}
+            />
+          ) : state.phase === 'build' && view.isHumanTurn ? (
+            <BuildPhaseBar
+              canBuild={view.legalActions.some((a) => a.type === 'BUILD_CARD')}
+              buildModeActive={
+                pendingIntent?.type === 'build-select' || pendingIntent?.type === 'build'
+              }
+              inputLocked={presentation.isInputLocked || !coachFooterReveal}
+              onStartBuild={() => setPendingIntent({ type: 'build-select' })}
+              onSkip={() => {
+                handleDispatch({ type: 'SKIP_BUILD' });
+                setPendingIntent(null);
+              }}
+              onCancel={() => setPendingIntent(null)}
+            />
+          ) : (
+            <>
+              {pendingIntent && (
+                <Button
+                  variant="secondary"
+                  size="sm"
+                  disabled={presentation.isInputLocked || !coachFooterReveal}
+                  onClick={() => setPendingIntent(null)}
+                >
+                  Auswahl abbrechen
+                </Button>
+              )}
+              <ActionBar
+                actions={view.availableMainActions}
+                botThinking={botThinking && !view.isHumanTurn && !view.isHumanDefender}
+                onAction={(action) => {
+                  handleDispatch(action);
+                  setPendingIntent(null);
+                }}
+              />
+            </>
+          )
+        }
+        tools={
+          <>
+            <label className="flex items-center gap-2 text-xs text-stone-400">
+              <span className="hidden sm:inline">Gegner</span>
+              <select
+                className="rounded-md border border-stone-600 bg-stone-900 px-2.5 py-1.5 text-stone-100"
+                value={botMode}
+                onChange={(e) => setBotMode(e.target.value === 'llm' ? 'llm' : 'heuristic')}
+                aria-label="Gegner-Bot Modus"
+              >
+                <option value="heuristic">Heuristik</option>
+                <option value="llm">LLM (Ollama)</option>
+              </select>
+            </label>
+            <Button
+              variant="secondary"
+              size="sm"
+              icon={<ScrollText className="h-4 w-4" />}
+              onClick={() => setLogOpen(!logOpen)}
+            >
+              {logOpen ? 'Log aus' : 'Log'}
+            </Button>
+          </>
+        }
+        status={
+          botReason ? (
+            <>
+              <span className="font-semibold text-stone-300">
+                Bot{botSource === 'llm' ? ' (LLM)' : botSource === 'heuristic' ? ' (Heuristik)' : ''}:
+              </span>{' '}
+              {botReason}
+            </>
+          ) : undefined
+        }
+      />
       </div>
     </GrungeAppShell>
   );

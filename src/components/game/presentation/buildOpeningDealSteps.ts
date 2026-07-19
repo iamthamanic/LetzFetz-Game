@@ -1,52 +1,50 @@
 /**
- * Builds presentation steps for the opening deal (5 + 6 cards, staggered).
+ * Builds presentation steps for the opening deal — human + opponent in parallel beats.
  * Location: src/components/game/presentation/buildOpeningDealSteps.ts
  */
-import { opponentOf } from '../../../game/engine/createGame';
 import { DEFAULT_RULESET } from '../../../game/types/ruleset';
 import type { GameState, PlayerId, RulesetConfig } from '../../../game/types';
 import type { PresentationStep } from './types';
 
-export const OPENING_DEAL_CARD_MS = 80;
+/** Per parallel deal beat (one card each side when available). */
+export const OPENING_DEAL_CARD_MS = 300;
+
+export type OpeningDealBeat = {
+  playerId: PlayerId;
+  cardInstanceId: string;
+};
 
 export function buildOpeningDealSteps(
   state: GameState,
-  ruleset: RulesetConfig = DEFAULT_RULESET,
+  _ruleset: RulesetConfig = DEFAULT_RULESET,
 ): PresentationStep[] {
-  const startingPlayer = state.activePlayer;
-  const secondPlayer = opponentOf(startingPlayer);
+  // Only animate the true opening deal at match start.
+  if (state.turnNumber !== 1 || state.phase !== 'start') return [];
 
-  const startingHand = state.players[startingPlayer].hand;
-  const secondHand = state.players[secondPlayer].hand;
+  // Always deal both seats in parallel (p1 = human, p2 = bot in solo).
+  const humanHand = state.players.p1.hand;
+  const botHand = state.players.p2.hand;
 
-  if (
-    startingHand.length !== ruleset.p1StartingHand ||
-    secondHand.length !== ruleset.p2SecondHand
-  ) {
-    return [];
-  }
+  if (humanHand.length === 0 && botHand.length === 0) return [];
 
   const steps: PresentationStep[] = [];
-  let index = 0;
+  const beats = Math.max(humanHand.length, botHand.length);
 
-  for (const card of startingHand) {
+  for (let i = 0; i < beats; i += 1) {
+    const deals: OpeningDealBeat[] = [];
+    if (i < humanHand.length) {
+      deals.push({ playerId: 'p1', cardInstanceId: humanHand[i].instanceId });
+    }
+    if (i < botHand.length) {
+      deals.push({ playerId: 'p2', cardInstanceId: botHand[i].instanceId });
+    }
     steps.push({
-      id: `opening-deal-${index}`,
+      id: `opening-deal-${i}`,
       kind: 'deal-card',
       durationMs: OPENING_DEAL_CARD_MS,
-      payload: { playerId: startingPlayer, cardInstanceId: card.instanceId },
+      locksInput: true,
+      payload: { deals },
     });
-    index += 1;
-  }
-
-  for (const card of secondHand) {
-    steps.push({
-      id: `opening-deal-${index}`,
-      kind: 'deal-card',
-      durationMs: OPENING_DEAL_CARD_MS,
-      payload: { playerId: secondPlayer, cardInstanceId: card.instanceId },
-    });
-    index += 1;
   }
 
   return steps;
@@ -54,6 +52,17 @@ export function buildOpeningDealSteps(
 
 export function isOpeningDealStep(step: PresentationStep): boolean {
   return step.kind === 'deal-card' && step.id.startsWith('opening-deal-');
+}
+
+/** Normalize deal payload (parallel `deals` or legacy single card). */
+export function openingDealBeats(step: PresentationStep): OpeningDealBeat[] {
+  const deals = step.payload?.deals as OpeningDealBeat[] | undefined;
+  if (Array.isArray(deals) && deals.length > 0) return deals;
+
+  const playerId = step.payload?.playerId as PlayerId | undefined;
+  const cardInstanceId = step.payload?.cardInstanceId as string | undefined;
+  if (playerId && cardInstanceId) return [{ playerId, cardInstanceId }];
+  return [];
 }
 
 export function fullDealRevealCounts(state: GameState): Record<PlayerId, number> {

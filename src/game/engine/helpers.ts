@@ -1,28 +1,56 @@
+/**
+ * Shared draw/discard helpers with V1 draw-ban awareness.
+ * Location: src/game/engine/helpers.ts
+ */
 import type { ContentPack, Element, GameState, PlayerId, RulesetConfig } from '../types';
-import { DEFAULT_RULESET } from '../types';
+import { DEFAULT_RULESET, createEmptyMeta } from '../types';
 import { drawCards, type Rng } from './deck';
 
-export function cloneState(state: GameState): GameState {
+export function ensureMeta(state: GameState): GameState {
+  if (state.meta && state.pendingChoice !== undefined && state.instantReveals) return state;
   return {
     ...state,
+    meta: state.meta ?? createEmptyMeta(),
+    pendingChoice: state.pendingChoice ?? null,
+    instantReveals: state.instantReveals ?? [],
+  };
+}
+
+export function cloneState(state: GameState): GameState {
+  const src = ensureMeta(state);
+  const meta = src.meta;
+  return {
+    ...src,
     players: {
       p1: {
-        ...state.players.p1,
-        hand: [...state.players.p1.hand],
-        bound: state.players.p1.bound.map((b) => ({ ...b })),
+        ...src.players.p1,
+        hand: [...src.players.p1.hand],
+        bound: src.players.p1.bound.map((b) => ({ ...b })),
       },
       p2: {
-        ...state.players.p2,
-        hand: [...state.players.p2.hand],
-        bound: state.players.p2.bound.map((b) => ({ ...b })),
+        ...src.players.p2,
+        hand: [...src.players.p2.hand],
+        bound: src.players.p2.bound.map((b) => ({ ...b })),
       },
     },
     piles: {
-      deck: [...state.piles.deck],
-      discard: [...state.piles.discard],
+      deck: [...src.piles.deck],
+      discard: [...src.piles.discard],
     },
-    combat: state.combat ? { ...state.combat } : null,
-    playtest: state.playtest ? { ...state.playtest } : undefined,
+    combat: src.combat ? { ...src.combat } : null,
+    pendingChoice: src.pendingChoice ? { ...src.pendingChoice } : null,
+    instantReveals: src.instantReveals.map((r) => ({ ...r })),
+    meta: {
+      ...meta,
+      boostsPlayed: { ...meta.boostsPlayed },
+      spaetiFilterUsed: { ...meta.spaetiFilterUsed },
+      kristallHealUsed: { ...(meta.kristallHealUsed ?? { p1: false, p2: false }) },
+      vulkanAttackBonusUsed: { ...meta.vulkanAttackBonusUsed },
+      sumpfBlockBonusUsed: { ...meta.sumpfBlockBonusUsed },
+      drawBan: meta.drawBan ? { ...meta.drawBan } : null,
+      awaitingPostBoostArena: meta.awaitingPostBoostArena ?? false,
+    },
+    arena: { ...src.arena },
   };
 }
 
@@ -35,22 +63,38 @@ export function clampHp(hp: number, ruleset: RulesetConfig = DEFAULT_RULESET): n
   return Math.max(0, Math.min(ruleset.maxHp, hp));
 }
 
+export interface DrawOptions {
+  /** Bypass Schlechter Empfang (draw phase / forced draws). */
+  allowExtra?: boolean;
+}
+
 export function drawForPlayer(
   state: GameState,
   playerId: PlayerId,
   count: number,
   rng: Rng,
   ruleset: RulesetConfig = DEFAULT_RULESET,
+  options: DrawOptions = {},
 ): GameState {
   const next = cloneState(state);
+
+  const banned =
+    next.meta.drawBan?.playerId === playerId &&
+    !options.allowExtra &&
+    next.phase !== 'draw';
+  if (banned) {
+    next.lastEvent = 'Schlechter Empfang: Kein Ziehen außerhalb der Ziehphase.';
+    return next;
+  }
+
   const result = drawCards(next.piles.deck, next.piles.discard, count, rng);
   next.piles.deck = result.deck;
   next.piles.discard = result.discard;
   next.players[playerId].hand.push(...result.drawn);
   if (result.deckEmptyHits > 0) {
-    next.players[playerId].hp = clampHp(
-      next.players[playerId].hp - result.deckEmptyHits,
-      ruleset,
+    next.players[playerId].hp = Math.max(
+      0,
+      Math.min(ruleset.maxHp, next.players[playerId].hp - result.deckEmptyHits),
     );
     next.lastEvent = `${playerId} verliert ${result.deckEmptyHits} Leben (Deck leer).`;
   }
@@ -85,10 +129,14 @@ export function enforceHandLimit(
   return next;
 }
 
+export function handHasGlitch(state: GameState, playerId: PlayerId, glitchId: string): boolean {
+  return state.players[playerId].hand.some((c) => c.defId === glitchId);
+}
+
 export const PHASE_LABELS: Record<string, string> = {
   start: 'Startphase',
   draw: 'Ziehphase',
-  bind: 'Bindungsphase',
+  build: 'Bau-Phase',
   action: 'Aktionsphase',
   end: 'Endphase',
 };

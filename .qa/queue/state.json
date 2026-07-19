@@ -1,0 +1,17 @@
+{
+  "runMode": "loop",
+  "paused": false,
+  "activeIssue": null,
+  "phase": null,
+  "completedIssues": [44, 45, 46, 47, 48],
+  "mergedIssues": [44, 45, 46, 47, 48],
+  "prUrls": {
+    "44": "https://github.com/iamthamanic/Letzfetzprototype/pull/49",
+    "45": "https://github.com/iamthamanic/Letzfetzprototype/pull/50",
+    "46": "https://github.com/iamthamanic/Letzfetzprototype/pull/51",
+    "47": "https://github.com/iamthamanic/Letzfetzprototype/pull/52",
+    "48": "https://github.com/iamthamanic/Letzfetzprototype/pull/53"
+  },
+  "retries": {},
+  "lastError": null
+}

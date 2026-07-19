@@ -65,7 +65,7 @@ function parseEffectsToModel(
       textBlocks.push({ label: 'INSTANT', text: instant });
       continue;
     }
-    const bound = stripPrefix(line, 'Gebunden:');
+    const bound = stripPrefix(line, 'Gebaut:') || stripPrefix(line, 'Gebunden:');
     if (bound) {
       textBlocks.push({ label: 'BOUND', text: bound });
       continue;
@@ -170,7 +170,7 @@ export function elementDefToForgeProps(def: ElementCardDef) {
     },
     effects: [
       `Sofort: ${def.instantText}`,
-      `Gebunden: ${def.boundText}`,
+      `Gebaut: ${def.boundText}`,
     ],
     image_asset: resolveCardArtPath(def.id),
   };

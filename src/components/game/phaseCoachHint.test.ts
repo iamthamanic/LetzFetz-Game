@@ -34,12 +34,14 @@ describe('buildPhaseCoachHint', () => {
     expect(hint).toBe('Starte deinen Zug.');
   });
 
-  it('hints bind phase when bind is legal', () => {
+  it('hints build phase when build is legal', () => {
     const { state, view, pending, botThinking } = ctx({
-      patch: (s) => ({ ...s, phase: 'bind' }),
+      patch: (s) => ({ ...s, phase: 'build' }),
     });
     const hint = buildPhaseCoachHint({ state, view, pending, botThinking });
-    expect(hint).toBe('Binde eine Karte an einen Engine-Slot.');
+    expect(hint).toBe(
+      'Tippe „Engine bauen“, um eine Karte in die Engine zu legen — oder „Skip Bau-Phase“.',
+    );
   });
 
   it('hints bot thinking when not human turn', () => {
@@ -64,12 +66,26 @@ describe('buildPhaseCoachHint', () => {
           attackerId: 'p2',
           defenderId: 'p1',
           attackValue: 5,
-          mode: 'attack' as const,
-          attackCardInstanceId: 'x',
+          mode: 'player' as const,
+          attackCardDefId: 'fire-attack-4',
+          attackRoll: 3,
         },
       }),
     });
     const hint = buildPhaseCoachHint({ state, view, pending, botThinking });
     expect(hint).toContain('Blockiere den Angriff');
+    expect(hint).toContain('Würfel erst danach');
+  });
+
+  it('hints mandatory hand discard during must-discard pending', () => {
+    const { state, view, pending, botThinking } = ctx({
+      patch: (s) => ({
+        ...s,
+        pendingChoice: { type: 'must-discard', playerId: 'p1', source: 'spaeti' },
+      }),
+    });
+    const hint = buildPhaseCoachHint({ state, view, pending, botThinking });
+    expect(hint).toContain('Wirf 1 Handkarte ab');
+    expect(view.handCards.some((c) => c.interaction === 'discard-draw' && c.isPlayable)).toBe(true);
   });
 });

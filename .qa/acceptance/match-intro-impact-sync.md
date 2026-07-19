@@ -27,5 +27,8 @@ Letz-Fetz-Clash fühlt sich synchron an: Sound und stärkster visueller Impact t
 | 1 | `01-happy-path.png` |
 
 ## Implementation Notes
-- `MatchIntro.tsx`: `CLASH_SOUND_DELAY_MS` = 50 % von `CRASH_MS`; Sound per `useEffect` beim Crash-Beat
-- `index.css`: stärkerer Karten-Overlap (`8.5rem`, `scale(1.1)`), Shake-Peak bei 50 %
+- Gong SFX: `public/sounds/card-clash.mp3` (metallische Partials + Strike-Transient)
+- `CLASH_IMPACT_FRACTION = 0.85` + **linear** CSS — Keyframe-% = Wanduhr
+- Web Audio `playClashSoundAt(delay)` sample-genau (kein `setTimeout`-Jitter)
+- `CLASH_GONG_ATTACK_LEAD_SEC` — Gong startet leicht vor dem Hit, Peak trifft Kollision
+- Preload+Decode vor Crash-Start auf dem „Letz Fetz“-Klick

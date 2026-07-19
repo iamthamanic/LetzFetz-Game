@@ -1,0 +1,476 @@
+{
+  "seed": 20260717,
+  "rngSalt": 101,
+  "state": {
+    "players": {
+      "p1": {
+        "characterId": "kokabell",
+        "hp": 16,
+        "hand": [
+          {
+            "instanceId": "inst-26",
+            "defId": "earth-block-6"
+          },
+          {
+            "instanceId": "inst-6",
+            "defId": "fire-block-6"
+          },
+          {
+            "instanceId": "inst-30",
+            "defId": "earth-boost-5b"
+          },
+          {
+            "instanceId": "inst-50",
+            "defId": "shadow-boost-5b"
+          }
+        ],
+        "bound": [
+          {
+            "instanceId": "inst-7",
+            "defId": "fire-boost-1",
+            "exhausted": false,
+            "resistanceBonus": 0
+          },
+          {
+            "instanceId": "inst-5",
+            "defId": "fire-attack-6",
+            "exhausted": false,
+            "resistanceBonus": 0
+          }
+        ],
+        "ultimateAvailable": true,
+        "doubleNextAttack": false,
+        "notes": ""
+      },
+      "p2": {
+        "characterId": "pillendoktora",
+        "hp": 17,
+        "hand": [
+          {
+            "instanceId": "inst-57",
+            "defId": "light-boost-1"
+          },
+          {
+            "instanceId": "inst-15",
+            "defId": "water-attack-6"
+          }
+        ],
+        "bound": [
+          {
+            "instanceId": "inst-36",
+            "defId": "air-block-6",
+            "exhausted": true,
+            "resistanceBonus": 0
+          },
+          {
+            "instanceId": "inst-56",
+            "defId": "light-block-6",
+            "exhausted": false,
+            "resistanceBonus": 0
+          },
+          {
+            "instanceId": "inst-55",
+            "defId": "light-attack-6",
+            "exhausted": false,
+            "resistanceBonus": 0
+          },
+          {
+            "instanceId": "inst-51",
+            "defId": "light-attack-2",
+            "exhausted": false,
+            "resistanceBonus": 0
+          }
+        ],
+        "ultimateAvailable": false,
+        "doubleNextAttack": false,
+        "notes": ""
+      }
+    },
+    "piles": {
+      "deck": [
+        {
+          "instanceId": "inst-17",
+          "defId": "water-boost-1"
+        },
+        {
+          "instanceId": "inst-1",
+          "defId": "fire-attack-2"
+        },
+        {
+          "instanceId": "inst-33",
+          "defId": "air-attack-4"
+        },
+        {
+          "instanceId": "inst-28",
+          "defId": "earth-boost-3"
+        },
+        {
+          "instanceId": "inst-47",
+          "defId": "shadow-boost-1"
+        },
+        {
+          "instanceId": "inst-67",
+          "defId": "glitch-download"
+        },
+        {
+          "instanceId": "inst-14",
+          "defId": "water-block-4"
+        },
+        {
+          "instanceId": "inst-22",
+          "defId": "earth-block-2"
+        },
+        {
+          "instanceId": "inst-41",
+          "defId": "shadow-attack-2"
+        },
+        {
+          "instanceId": "inst-19",
+          "defId": "water-boost-5a"
+        },
+        {
+          "instanceId": "inst-46",
+          "defId": "shadow-block-6"
+        },
+        {
+          "instanceId": "inst-16",
+          "defId": "water-block-6"
+        },
+        {
+          "instanceId": "inst-54",
+          "defId": "light-block-4"
+        },
+        {
+          "instanceId": "inst-34",
+          "defId": "air-block-4"
+        },
+        {
+          "instanceId": "inst-43",
+          "defId": "shadow-attack-4"
+        },
+        {
+          "instanceId": "inst-59",
+          "defId": "light-boost-5a"
+        },
+        {
+          "instanceId": "inst-69",
+          "defId": "glitch-datenleck"
+        },
+        {
+          "instanceId": "inst-53",
+          "defId": "light-attack-4"
+        },
+        {
+          "instanceId": "inst-25",
+          "defId": "earth-attack-6"
+        },
+        {
+          "instanceId": "inst-42",
+          "defId": "shadow-block-2"
+        },
+        {
+          "instanceId": "inst-23",
+          "defId": "earth-attack-4"
+        }
+      ],
+      "discard": [
+        {
+          "instanceId": "inst-68",
+          "defId": "glitch-selbstschaden"
+        },
+        {
+          "instanceId": "inst-48",
+          "defId": "shadow-boost-3"
+        },
+        {
+          "instanceId": "inst-20",
+          "defId": "water-boost-5b"
+        },
+        {
+          "instanceId": "inst-2",
+          "defId": "fire-block-2"
+        },
+        {
+          "instanceId": "inst-62",
+          "defId": "glitch-nein"
+        },
+        {
+          "instanceId": "inst-3",
+          "defId": "fire-attack-4"
+        },
+        {
+          "instanceId": "inst-4",
+          "defId": "fire-block-4"
+        },
+        {
+          "instanceId": "inst-8",
+          "defId": "fire-boost-3"
+        },
+        {
+          "instanceId": "inst-35",
+          "defId": "air-attack-6"
+        },
+        {
+          "instanceId": "inst-40",
+          "defId": "air-boost-5b"
+        },
+        {
+          "instanceId": "inst-63",
+          "defId": "glitch-kurzschluss"
+        },
+        {
+          "instanceId": "inst-32",
+          "defId": "air-block-2"
+        },
+        {
+          "instanceId": "inst-65",
+          "defId": "glitch-empfang"
+        },
+        {
+          "instanceId": "inst-21",
+          "defId": "earth-attack-2"
+        },
+        {
+          "instanceId": "inst-45",
+          "defId": "shadow-attack-6"
+        },
+        {
+          "instanceId": "inst-44",
+          "defId": "shadow-block-4"
+        },
+        {
+          "instanceId": "inst-11",
+          "defId": "water-attack-2"
+        },
+        {
+          "instanceId": "inst-49",
+          "defId": "shadow-boost-5a"
+        },
+        {
+          "instanceId": "inst-18",
+          "defId": "water-boost-3"
+        },
+        {
+          "instanceId": "inst-12",
+          "defId": "water-block-2"
+        },
+        {
+          "instanceId": "inst-9",
+          "defId": "fire-boost-5a",
+          "exhausted": false,
+          "resistanceBonus": 0
+        },
+        {
+          "instanceId": "inst-64",
+          "defId": "glitch-rueckkopplung"
+        },
+        {
+          "instanceId": "inst-66",
+          "defId": "glitch-systemfehler"
+        },
+        {
+          "instanceId": "inst-61",
+          "defId": "glitch-riss"
+        },
+        {
+          "instanceId": "inst-13",
+          "defId": "water-attack-4",
+          "exhausted": false,
+          "resistanceBonus": 0
+        },
+        {
+          "instanceId": "inst-52",
+          "defId": "light-block-2"
+        },
+        {
+          "instanceId": "inst-38",
+          "defId": "air-boost-3"
+        },
+        {
+          "instanceId": "inst-39",
+          "defId": "air-boost-5a"
+        },
+        {
+          "instanceId": "inst-70",
+          "defId": "glitch-absturz"
+        },
+        {
+          "instanceId": "inst-37",
+          "defId": "air-boost-1"
+        },
+        {
+          "instanceId": "inst-24",
+          "defId": "earth-block-4"
+        },
+        {
+          "instanceId": "inst-60",
+          "defId": "light-boost-5b",
+          "exhausted": false,
+          "resistanceBonus": 0
+        },
+        {
+          "instanceId": "inst-10",
+          "defId": "fire-boost-5b"
+        },
+        {
+          "instanceId": "inst-31",
+          "defId": "air-attack-2"
+        },
+        {
+          "instanceId": "inst-29",
+          "defId": "earth-boost-5a",
+          "exhausted": false,
+          "resistanceBonus": 0
+        },
+        {
+          "instanceId": "inst-27",
+          "defId": "earth-boost-1"
+        },
+        {
+          "instanceId": "inst-58",
+          "defId": "light-boost-3"
+        }
+      ]
+    },
+    "arena": {
+      "arenaId": "arena-kristall",
+      "d6Variant": null
+    },
+    "activePlayer": "p1",
+    "phase": "bind",
+    "turnNumber": 9,
+    "winner": null,
+    "combat": null,
+    "pendingChoice": null,
+    "meta": {
+      "boostsPlayed": {
+        "p1": 4,
+        "p2": 1
+      },
+      "spaetiFilterUsed": {
+        "p1": false,
+        "p2": false
+      },
+      "kristallHealUsed": {
+        "p1": false,
+        "p2": false
+      },
+      "vulkanAttackBonusUsed": {
+        "p1": false,
+        "p2": false
+      },
+      "sumpfBlockBonusUsed": {
+        "p1": false,
+        "p2": false
+      },
+      "didAttackOrChallengeThisTurn": false,
+      "drawBan": null,
+      "activationLockedBoundId": null,
+      "activationLockOwner": null,
+      "clubSwapAvailable": false,
+      "basarExhaustAvailable": false,
+      "awaitingPostBoostArena": false
+    },
+    "lastEvent": "Erschöpfte Karten aufgestellt.",
+    "instantReveals": []
+  },
+  "log": [
+    "new seed=20260717",
+    "p1: {\"type\":\"ADVANCE_PHASE\"} => Erschöpfte Karten aufgestellt.",
+    "p1: {\"type\":\"ADVANCE_PHASE\"} => Erschöpfte Karten aufgestellt.",
+    "p1: {\"type\":\"BIND_CARD\",\"cardInstanceId\":\"inst-7\"} => Feuer 1 Boost gebunden.",
+    "p1: {\"type\":\"PLAY_BOOST\",\"cardInstanceId\":\"inst-48\"} => Schatten: Gegner wirft 1 Karte ab.",
+    "p1: {\"type\":\"TAKE_OPTIONAL_DRAW\"} => Optional gezogen — jetzt 1 Karte abwerfen.",
+    "p1: {\"type\":\"RESOLVE_DRAW_DISCARD\",\"discardInstanceId\":\"inst-2\"} => 1 gezogen, 1 abgeworfen.",
+    "p1: {\"type\":\"END_TURN\"} => Zug beendet.",
+    "p2: {\"type\":\"ADVANCE_PHASE\"} => Erschöpfte Karten aufgestellt.",
+    "p2: {\"type\":\"ADVANCE_PHASE\"} => Erschöpfte Karten aufgestellt.",
+    "p2: {\"type\":\"BIND_CARD\",\"cardInstanceId\":\"inst-36\"} => Luft 6 Block gebunden.",
+    "p2: {\"type\":\"PLAY_ULTIMATE\"} => 3 Tage wach ausgeführt.",
+    "p2: {\"type\":\"END_TURN\"} => Zug beendet.",
+    "p1: {\"type\":\"ADVANCE_PHASE\"} => Erschöpfte Karten aufgestellt.",
+    "p1: {\"type\":\"ADVANCE_PHASE\"} => Erschöpfte Karten aufgestellt.",
+    "p1: {\"type\":\"SKIP_BIND\"} => Keine Karte gebunden.",
+    "p1: {\"type\":\"PLAY_ATTACK\",\"cardInstanceId\":\"inst-3\"} => Angriff 4 (Würfel 2). Gegner darf blocken.",
+    "p2: {\"type\":\"PLAY_BLOCK\",\"cardInstanceId\":\"inst-4\",\"diceRoll\":1} => Block 5 (Würfel 1). Komplett geblockt (4 vs 5).",
+    "p1: {\"type\":\"END_TURN\"} => Zug beendet.",
+    "p2: {\"type\":\"ADVANCE_PHASE\"} => Erschöpfte Karten aufgestellt.",
+    "p2: {\"type\":\"ADVANCE_PHASE\"} => Erschöpfte Karten aufgestellt.",
+    "p2: {\"type\":\"BIND_CARD\",\"cardInstanceId\":\"inst-9\"} => Feuer 5 Boost gebunden.",
+    "p2: {\"type\":\"ACTIVATE_BOUND\",\"boundInstanceId\":\"inst-36\",\"discardHandInstanceId\":\"inst-8\"} => Luft: 2 Karten gezogen, 1 abgeworfen.",
+    "p2: {\"type\":\"END_TURN\"} => Zug beendet.",
+    "p1: {\"type\":\"ADVANCE_PHASE\"} => Erschöpfte Karten aufgestellt.",
+    "p1: {\"type\":\"ADVANCE_PHASE\"} => Erschöpfte Karten aufgestellt.",
+    "p1: {\"type\":\"SKIP_BIND\"} => Keine Karte gebunden.",
+    "p1: {\"type\":\"PLAY_BOOST\",\"cardInstanceId\":\"inst-40\"} => Luft: 2 Karten gezogen, 1 abgeworfen.",
+    "p1: {\"type\":\"TAKE_OPTIONAL_DRAW\"} => Optional gezogen — jetzt 1 Karte abwerfen.",
+    "fix: rewind to air must-discard before Späti",
+    "p1: {\"type\":\"RESOLVE_DRAW_DISCARD\",\"discardInstanceId\":\"inst-63\"} => Luft: 1 abgeworfen.",
+    "p1: {\"type\":\"TAKE_OPTIONAL_DRAW\"} => Optional gezogen — jetzt 1 Karte abwerfen.",
+    "p1: {\"type\":\"RESOLVE_DRAW_DISCARD\",\"discardInstanceId\":\"inst-32\"} => 1 gezogen, 1 abgeworfen.",
+    "p1: {\"type\":\"END_TURN\"} => Zug beendet.",
+    "p2: {\"type\":\"ADVANCE_PHASE\"} => Erschöpfte Karten aufgestellt.",
+    "p2: {\"type\":\"ADVANCE_PHASE\"} => Erschöpfte Karten aufgestellt.",
+    "p2: {\"type\":\"BIND_CARD\",\"cardInstanceId\":\"inst-60\"} => Licht 5 Boost gebunden.",
+    "p2: {\"type\":\"ACTIVATE_BOUND\",\"boundInstanceId\":\"inst-36\",\"discardHandInstanceId\":\"inst-65\"} => Luft: 2 Karten gezogen — wähle 1 zum Abwerfen.",
+    "p2: {\"type\":\"RESOLVE_DRAW_DISCARD\",\"discardInstanceId\":\"inst-21\"} => Luft: 1 abgeworfen.",
+    "p2: {\"type\":\"END_TURN\"} => Zug beendet.",
+    "p1: {\"type\":\"ADVANCE_PHASE\"} => Erschöpfte Karten aufgestellt.",
+    "p1: {\"type\":\"ADVANCE_PHASE\"} => Erschöpfte Karten aufgestellt.",
+    "p1: {\"type\":\"SKIP_BIND\"} => Keine Karte gebunden.",
+    "p1: {\"type\":\"PLAY_ATTACK\",\"cardInstanceId\":\"inst-45\"} => Angriff 7 (Würfel 4). Gegner darf blocken.",
+    "p2: {\"type\":\"PLAY_BLOCK\",\"cardInstanceId\":\"inst-44\",\"diceRoll\":5} => Block 6 (Würfel 5). Schaden 1 — Rückkopplung möglich.",
+    "p2: {\"type\":\"PASS_PENDING\"} => 1 Schaden (7 vs 6 Block).",
+    "p1: {\"type\":\"END_TURN\"} => Zug beendet.",
+    "p2: {\"type\":\"ADVANCE_PHASE\"} => Erschöpfte Karten aufgestellt.",
+    "p2: {\"type\":\"ADVANCE_PHASE\"} => Erschöpfte Karten aufgestellt.",
+    "p2: {\"type\":\"BIND_CARD\",\"cardInstanceId\":\"inst-56\"} => Licht 6 Block gebunden.",
+    "p2: {\"type\":\"ACTIVATE_BOUND\",\"boundInstanceId\":\"inst-36\",\"discardHandInstanceId\":\"inst-11\"} => Luft: 2 Karten gezogen — wähle 1 zum Abwerfen.",
+    "p2: {\"type\":\"RESOLVE_DRAW_DISCARD\",\"discardInstanceId\":\"inst-49\"} => Luft: 1 abgeworfen.",
+    "p2: {\"type\":\"END_TURN\"} => Zug beendet.",
+    "p1: ADVANCE_PHASE => Erschöpfte Karten aufgestellt.",
+    "p1: ADVANCE_PHASE => Erschöpfte Karten aufgestellt.",
+    "p1: {\"type\":\"SKIP_BIND\"} => Keine Karte gebunden.",
+    "p1: {\"type\":\"PLAY_BOOST\",\"cardInstanceId\":\"inst-18\"} => Wasser: geheilt.",
+    "p1: {\"type\":\"TAKE_OPTIONAL_DRAW\"} => Optional gezogen — jetzt 1 Karte abwerfen.",
+    "p1: {\"type\":\"RESOLVE_DRAW_DISCARD\",\"discardInstanceId\":\"inst-12\"} => 1 gezogen, 1 abgeworfen — Extra-Bind (3. Boost).",
+    "p1: {\"type\":\"BIND_CARD\",\"cardInstanceId\":\"inst-5\"} => Feuer 6 Angriff gebunden.",
+    "p1: {\"type\":\"END_TURN\"} => Zug beendet.",
+    "p2: {\"type\":\"ADVANCE_PHASE\"} => Erschöpfte Karten aufgestellt.",
+    "p2: {\"type\":\"ADVANCE_PHASE\"} => Erschöpfte Karten aufgestellt.",
+    "p2: {\"type\":\"BIND_CARD\",\"cardInstanceId\":\"inst-13\",\"discardBoundId\":\"inst-9\"} => Wasser 4 Angriff gebunden.",
+    "p2: {\"type\":\"ACTIVATE_BOUND\",\"boundInstanceId\":\"inst-36\",\"discardHandInstanceId\":\"inst-64\"} => Luft: 2 Karten gezogen — wähle 1 zum Abwerfen.",
+    "p2: {\"type\":\"RESOLVE_DRAW_DISCARD\",\"discardInstanceId\":\"inst-66\"} => Luft: 1 abgeworfen.",
+    "p2: {\"type\":\"END_TURN\"} => Zug beendet.",
+    "p1: ADVANCE_PHASE => Erschöpfte Karten aufgestellt.",
+    "p1: ADVANCE_PHASE => Erschöpfte Karten aufgestellt.",
+    "p1: {\"type\":\"SKIP_BIND\"} => Keine Karte gebunden.",
+    "p1: {\"type\":\"PLAY_GLITCH\",\"glitchInstanceId\":\"inst-61\"} => Arena gewechselt: arena-kristall.",
+    "p1: {\"type\":\"END_TURN\"} => Zug beendet.",
+    "p2: {\"type\":\"ADVANCE_PHASE\"} => Erschöpfte Karten aufgestellt.",
+    "p2: {\"type\":\"ADVANCE_PHASE\"} => Erschöpfte Karten aufgestellt.",
+    "p2: {\"type\":\"BIND_CARD\",\"cardInstanceId\":\"inst-29\",\"discardBoundId\":\"inst-13\"} => Erde 5 Boost gebunden.",
+    "p2: {\"type\":\"ACTIVATE_BOUND\",\"boundInstanceId\":\"inst-36\",\"discardHandInstanceId\":\"inst-52\"} => Luft: 2 Karten gezogen — wähle 1 zum Abwerfen.",
+    "p2: {\"type\":\"RESOLVE_DRAW_DISCARD\",\"discardInstanceId\":\"inst-38\"} => Luft: 1 abgeworfen.",
+    "p2: {\"type\":\"END_TURN\"} => Zug beendet.",
+    "p1: {\"type\":\"SKIP_BIND\"} => Keine Karte gebunden.",
+    "p1: {\"type\":\"PLAY_BOOST\",\"cardInstanceId\":\"inst-39\"} => Luft: 2 Karten gezogen — wähle 1 zum Abwerfen.",
+    "p1: {\"type\":\"RESOLVE_DRAW_DISCARD\",\"discardInstanceId\":\"inst-24\"} => Luft: 1 abgeworfen.",
+    "p1: {\"type\":\"END_TURN\"} => Zug beendet.",
+    "p2: {\"type\":\"ADVANCE_PHASE\"} => Erschöpfte Karten aufgestellt.",
+    "p2: {\"type\":\"ADVANCE_PHASE\"} => Erschöpfte Karten aufgestellt.",
+    "p2: {\"type\":\"BIND_CARD\",\"cardInstanceId\":\"inst-55\",\"discardBoundId\":\"inst-60\"} => Licht 6 Angriff gebunden.",
+    "p2: {\"type\":\"PLAY_BOOST\",\"cardInstanceId\":\"inst-10\"} => Feuer: 2 Schaden.",
+    "p2: {\"type\":\"END_TURN\"} => Zug beendet.",
+    "p1: {\"type\":\"SKIP_BIND\"} => Keine Karte gebunden.",
+    "p1: {\"type\":\"PLAY_ATTACK\",\"cardInstanceId\":\"inst-31\"} => Angriff 2 (Würfel 1). Gegner darf blocken.",
+    "p2: {\"type\":\"PASS_BLOCK\"} => 2 Schaden (2 vs 0 Block).",
+    "p1: {\"type\":\"END_TURN\"} => Zug beendet.",
+    "p2: {\"type\":\"ADVANCE_PHASE\"} => Erschöpfte Karten aufgestellt.",
+    "p2: {\"type\":\"ADVANCE_PHASE\"} => Erschöpfte Karten aufgestellt.",
+    "p2: {\"type\":\"BIND_CARD\",\"cardInstanceId\":\"inst-51\",\"discardBoundId\":\"inst-29\"} => Licht 2 Angriff gebunden.",
+    "p2: {\"type\":\"ACTIVATE_BOUND\",\"boundInstanceId\":\"inst-36\",\"discardHandInstanceId\":\"inst-27\"} => Luft: 2 Karten gezogen. — wähle 1 zum Abwerfen.",
+    "p2: {\"type\":\"RESOLVE_DRAW_DISCARD\",\"discardInstanceId\":\"inst-58\"} => Luft: 1 abgeworfen.",
+    "p2: {\"type\":\"END_TURN\"} => Zug beendet."
+  ]
+}

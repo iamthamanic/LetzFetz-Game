@@ -1,16 +1,33 @@
 /**
- * Deterministic grunge TCG card frame — illustration + labeled rule text.
+ * Grunge card frame — portrait layout (default) or legacy tcg density.
  * Location: src/components/cards/LetzFetzCard.tsx
  */
 import React from 'react';
+import type { Element } from '../../game/types';
 import { ImageWithFallback } from '../figma/ImageWithFallback';
-import { resolveCardBackPath } from '../../services/cardArt/manifest';
+import { CardGrungeOverlay } from '../ui/CardGrungeOverlay';
+import { CardNamePlate } from '../ui/CardNamePlate';
+import { CharacterCardGlitch } from '../ui/CharacterCardGlitch';
+import { ElementIcon } from '../ui/ElementIcon';
 import type { ForgeCardKind } from '../../services/cardForge/categories';
 import type { ForgeElement } from '../../services/cardForge/types';
+import { forgeElementToBrandIconKey } from '../../services/icons/elementIcons';
 import { buildCardDisplayModel } from './cardDisplayModel';
-import { ELEMENT_ACCENTS, KIND_LABELS } from './cardFrameTokens';
+import {
+  buildCardPortraitPresentation,
+  type CardEffectFocus,
+} from './cardPortraitPresentation';
+import {
+  CHARACTER_ELEMENT_STRIPE_FROM,
+  CHARACTER_ELEMENT_STRIPE_TO,
+  ELEMENT_ACCENTS,
+  KIND_LABELS,
+} from './cardFrameTokens';
+import { CardDividerBar, CardFrameCorners } from './grungeCardParts';
+import { CardBackFace } from './CardBackFace';
 
-export type LetzFetzCardSize = 'sm' | 'md' | 'lg';
+export type LetzFetzCardSize = 'sm' | 'md' | 'lg' | 'fluid';
+export type LetzFetzCardLayout = 'portrait' | 'tcg';
 
 export interface LetzFetzCardProps {
   id: string;
@@ -18,6 +35,8 @@ export interface LetzFetzCardProps {
   type: ForgeCardKind;
   element: ForgeElement;
   elementDisplay?: string;
+  gameElements?: [Element, Element];
+  role?: string;
   stats_json?: {
     hp?: number;
     value?: number;
@@ -28,6 +47,7 @@ export interface LetzFetzCardProps {
   effects_text?: string;
   image_asset?: string;
   size?: LetzFetzCardSize;
+  layout?: LetzFetzCardLayout;
   interactive?: boolean;
   selected?: boolean;
   exhausted?: boolean;
@@ -37,220 +57,24 @@ export interface LetzFetzCardProps {
   onEffectsClick?: () => void;
   disabled?: boolean;
   footerNote?: string;
+  /** Which engine text to emphasize on Element cards. */
+  effectFocus?: CardEffectFocus;
+  /** Skip top parchment icon bar (library grid — more art). */
+  hideHeader?: boolean;
   className?: string;
-  'data-interaction'?: string;
-  'data-card-id'?: string;
+  imageFit?: 'cover' | 'contain';
+  'data-testid'?: string;
 }
 
 const SIZE_CLASSES: Record<LetzFetzCardSize, string> = {
   lg: 'w-64 h-96',
-  md: 'w-28 h-40 sm:w-36 sm:h-52',
+  md: 'w-36 h-52',
   sm: 'w-24 h-32',
+  fluid: 'aspect-[2/3] w-full max-w-[280px]',
 };
 
-export function LetzFetzCard({
-  id,
-  name,
-  type,
-  element,
-  elementDisplay,
-  stats_json,
-  effects,
-  effects_text,
-  image_asset,
-  size = 'lg',
-  interactive = false,
-  selected = false,
-  exhausted = false,
-  faceDown = false,
-  draggable = false,
-  onClick,
-  onEffectsClick,
-  disabled = false,
-  footerNote,
-  className = '',
-  'data-interaction': dataInteraction,
-}: LetzFetzCardProps) {
-  const accent = ELEMENT_ACCENTS[element] ?? ELEMENT_ACCENTS.Neutral;
-  const display = buildCardDisplayModel({
-    type,
-    element,
-    elementDisplay,
-    effects,
-    effects_text,
-    stats_json,
-  });
-
-  if (faceDown) {
-    return (
-      <div
-        data-card-id={id}
-        data-testid="card-back"
-        className={`${SIZE_CLASSES[size]} relative overflow-hidden rounded-sm border-2 border-stone-700 bg-stone-950 shadow-lg ${className}`}
-        aria-label="Verdeckte Karte"
-      >
-        <GrungeOverlay />
-        <img
-          src={resolveCardBackPath()}
-          alt=""
-          aria-hidden
-          className="absolute inset-0 h-full w-full object-cover"
-          loading="lazy"
-          decoding="async"
-        />
-      </div>
-    );
-  }
-
-  if (size === 'sm') {
-    const smDisabled = disabled || !onClick;
-    return (
-      <button
-        type="button"
-        onClick={smDisabled ? undefined : onClick}
-        disabled={smDisabled}
-        aria-disabled={smDisabled}
-        aria-label={name || KIND_LABELS[type]}
-        data-card-id={id}
-        data-interaction={dataInteraction}
-        className={`${SIZE_CLASSES.sm} relative overflow-hidden rounded-sm border-2 border-stone-700 bg-[#12100e] text-left shadow-lg transition-all ${selected ? 'ring-2 ring-amber-400 scale-105' : ''} ${exhausted ? 'opacity-50 rotate-90' : ''} ${!smDisabled ? 'cursor-pointer hover:scale-105' : 'cursor-not-allowed'} ${className}`}
-      >
-        <div className={`absolute left-0 top-0 bottom-0 w-1 ${accent.stripe}`} />
-        <GrungeOverlay />
-        {image_asset ? (
-          <ImageWithFallback
-            src={image_asset}
-            alt={name}
-            className="absolute inset-x-0 top-0 h-[55%] w-full object-cover opacity-90"
-            loading="lazy"
-          />
-        ) : (
-          <div className={`absolute inset-x-0 top-0 h-[55%] bg-gradient-to-b ${accent.glow}`} />
-        )}
-        <div className="absolute inset-x-0 top-[52%] h-px bg-amber-900/50" />
-        <div className="absolute inset-x-0 bottom-0 top-[54%] bg-[#1c1712]/95 p-1">
-          <p className="truncate text-[8px] font-bold uppercase tracking-wide text-amber-100/90">{name}</p>
-          {stats_json?.value != null && (
-            <p className="text-lg font-black leading-none text-white">{stats_json.value}</p>
-          )}
-          <p className="text-[7px] uppercase text-stone-400">{display.statCells[0]?.value ?? type.slice(0, 3)}</p>
-        </div>
-      </button>
-    );
-  }
-
-  const compact = size === 'md';
-  const usesButton = onClick !== undefined || disabled;
-  const isDisabled = disabled || !onClick;
-
-  const frameClass = [
-    SIZE_CLASSES[size],
-    'relative overflow-hidden rounded-sm border-2 border-stone-700/90 bg-[#0f0d0b] shadow-2xl',
-    'ring-1 ring-inset ring-amber-950/30',
-    interactive ? 'cursor-grab active:cursor-grabbing hover:scale-[1.02] transition-transform' : '',
-    usesButton && !isDisabled && !interactive ? 'cursor-pointer hover:scale-[1.02] transition-transform' : '',
-    usesButton && isDisabled ? 'cursor-not-allowed' : '',
-    selected ? 'ring-2 ring-amber-400 ring-offset-1 ring-offset-stone-950' : '',
-    exhausted ? 'opacity-60 rotate-2' : '',
-    className,
-  ]
-    .filter(Boolean)
-    .join(' ');
-
-  const cardBody = (
-    <>
-      <div className={`absolute left-0 top-0 bottom-0 ${compact ? 'w-1' : 'w-1.5'} ${accent.stripe} z-20`} />
-      <GrungeOverlay />
-
-      <div
-        className={`relative z-10 border-b border-amber-900/50 bg-[#2a2218] ${compact ? 'px-2 pb-1 pt-1' : 'px-3 pb-2 pt-2'}`}
-        style={{ clipPath: 'polygon(0 0, 100% 0, 98% 100%, 2% 92%, 0 100%)' }}
-      >
-        <div className="flex items-start justify-between gap-1">
-          <span className={`font-bold uppercase tracking-[0.18em] text-amber-500/90 ${compact ? 'text-[8px]' : 'text-[9px]'}`}>
-            {KIND_LABELS[type]}
-          </span>
-          {display.elementLabel && (
-            <span className={`rounded border font-semibold uppercase tracking-wide ${accent.badge} ${compact ? 'px-1 text-[7px]' : 'px-1.5 py-0.5 text-[9px]'}`}>
-              {display.elementLabel}
-            </span>
-          )}
-        </div>
-        <h3 className={`mt-0.5 truncate font-serif font-bold uppercase tracking-wide text-amber-50 ${compact ? 'text-[11px]' : 'text-sm'}`}>
-          {name || 'Unnamed Card'}
-        </h3>
-      </div>
-
-      <div className={`relative w-full overflow-hidden bg-[#090807] ${compact ? 'h-[48%]' : 'h-[58%]'}`}>
-        {image_asset ? (
-          <ImageWithFallback src={image_asset} alt={name} className="h-full w-full object-cover object-center" loading="lazy" />
-        ) : (
-          <div className={`flex h-full w-full items-center justify-center bg-gradient-to-b ${accent.glow}`}>
-            <span className={`opacity-30 ${compact ? 'text-3xl' : 'text-5xl'}`}>{typeIcon(type)}</span>
-          </div>
-        )}
-        <div className="pointer-events-none absolute inset-0 bg-gradient-to-t from-[#0f0d0b] via-transparent to-[#0f0d0b]/30" />
-        {exhausted && (
-          <div className="absolute inset-0 z-20 flex items-center justify-center bg-black/55">
-            <span className={`rotate-[-12deg] rounded border border-stone-600 bg-stone-900/90 font-bold uppercase tracking-wider text-stone-400 ${compact ? 'px-1 text-[8px]' : 'px-1.5 py-0.5 text-[9px]'}`}>
-              Erschöpft
-            </span>
-          </div>
-        )}
-      </div>
-
-      {display.statCells.length > 0 && (
-        <div className="relative z-10 flex border-y border-stone-800 bg-[#15110d]">
-          {display.statCells.map((cell) => (
-            <div key={cell.label} className={`flex-1 border-r border-stone-800/80 last:border-r-0 ${compact ? 'px-1 py-0.5' : 'px-2 py-1.5'}`}>
-              <div className={`font-bold uppercase tracking-widest text-stone-500 ${compact ? 'text-[7px]' : 'text-[8px]'}`}>{cell.label}</div>
-              <div className={`font-black text-amber-50 ${compact ? 'text-[11px]' : 'text-sm'}`}>{cell.value}</div>
-            </div>
-          ))}
-        </div>
-      )}
-
-      <div className={`relative z-10 overflow-hidden bg-[#1f1812] ${compact ? 'px-1.5 py-1 max-h-[24%]' : 'px-2.5 py-2 max-h-[26%]'}`}>
-        <div className="relative space-y-0.5">
-          {display.textBlocks.slice(0, compact ? 2 : 2).map((block, index) => (
-            <div key={`${block.label}-${index}`}>
-              <div className={`font-bold uppercase tracking-widest text-amber-600/90 ${compact ? 'text-[7px]' : 'text-[8px]'}`}>{block.label}</div>
-              <p className={`leading-snug text-amber-100/90 line-clamp-2 ${compact ? 'text-[9px]' : 'text-[10px]'}`}>{block.text}</p>
-            </div>
-          ))}
-        </div>
-        {footerNote && (
-          <p className={`mt-1 border-t border-amber-900/40 pt-1 font-semibold text-amber-400/90 ${compact ? 'text-[8px]' : 'text-[10px]'}`}>
-            {footerNote}
-          </p>
-        )}
-      </div>
-    </>
-  );
-
-  if (!usesButton) {
-    return (
-      <div data-card-id={id} data-interaction={dataInteraction} draggable={draggable} className={frameClass} aria-label={name || KIND_LABELS[type]}>
-        {cardBody}
-      </div>
-    );
-  }
-
-  return (
-    <button
-      type="button"
-      onClick={isDisabled ? undefined : onClick}
-      disabled={isDisabled}
-      aria-disabled={isDisabled}
-      aria-label={name || KIND_LABELS[type]}
-      data-card-id={id}
-      data-interaction={dataInteraction}
-      draggable={draggable}
-      className={frameClass}
-    >
-      {cardBody}
-    </button>
-  );
+function noiseFilterId(id: string): string {
+  return `lfz-noise-${id.replace(/[^a-zA-Z0-9_-]/g, '')}`;
 }
 
 function typeIcon(type: ForgeCardKind): string {
@@ -264,22 +88,336 @@ function typeIcon(type: ForgeCardKind): string {
   return icons[type];
 }
 
-function GrungeOverlay() {
-  return (
-    <>
+export function LetzFetzCard({
+  id,
+  name,
+  type,
+  element,
+  elementDisplay,
+  gameElements,
+  role,
+  stats_json,
+  effects,
+  effects_text,
+  image_asset,
+  size = 'lg',
+  layout = 'portrait',
+  interactive = false,
+  selected = false,
+  exhausted = false,
+  faceDown = false,
+  draggable = false,
+  onClick,
+  disabled = false,
+  footerNote,
+  effectFocus,
+  hideHeader = false,
+  className = '',
+  imageFit = 'cover',
+  'data-testid': dataTestId,
+}: LetzFetzCardProps) {
+  const accent = ELEMENT_ACCENTS[element] ?? ELEMENT_ACCENTS.Neutral;
+  const filterId = noiseFilterId(id);
+  const brandIcon = forgeElementToBrandIconKey(element);
+  const compact = size === 'md' || size === 'sm';
+  const portrait = layout === 'portrait';
+  const display = buildCardDisplayModel({
+    type,
+    element,
+    elementDisplay,
+    effects,
+    effects_text,
+    stats_json,
+  });
+  const presentation = portrait
+    ? buildCardPortraitPresentation({
+        id,
+        type,
+        element,
+        elementDisplay,
+        gameElements,
+        role,
+        effects,
+        effects_text,
+        stats_json,
+        size,
+        effectFocus,
+      })
+    : null;
+
+  if (faceDown) {
+    return (
       <div
-        className="pointer-events-none absolute inset-0 z-30 opacity-[0.08] mix-blend-overlay"
-        style={{
-          backgroundImage:
-            'repeating-linear-gradient(45deg, rgba(255,255,255,0.05) 0, rgba(255,255,255,0.05) 1px, transparent 1px, transparent 4px)',
-        }}
+        className={`${SIZE_CLASSES[size]} character-card-frame relative overflow-hidden rounded-[2px] shadow-xl ${className}`}
+      >
+        <CharacterCardGlitch />
+        <CardFrameCorners />
+        <CardBackFace flush className="absolute inset-0 h-full w-full" />
+      </div>
+    );
+  }
+
+  const usesButton = onClick !== undefined || disabled;
+  const isDisabled = disabled || !onClick;
+  const stripeWidth = size === 'sm' ? 'w-1' : compact ? 'w-1' : 'w-1.5';
+
+  const frameClass = [
+    SIZE_CLASSES[size],
+    'character-card-frame relative flex flex-col overflow-hidden rounded-[2px] text-center shadow-xl ring-1 ring-inset ring-amber-950/25',
+    selected ? 'character-card-frame-highlighted ring-amber-700/30 ring-2 ring-amber-400' : '',
+    interactive ? 'cursor-grab active:cursor-grabbing hover:scale-[1.02] transition-transform' : '',
+    usesButton && !isDisabled && !interactive ? 'cursor-pointer hover:scale-[1.02] transition-transform' : '',
+    usesButton && isDisabled ? 'cursor-not-allowed' : '',
+    size === 'sm' && usesButton && !isDisabled ? 'hover:scale-105' : '',
+    size === 'sm' && selected ? 'scale-105' : '',
+    exhausted ? (size === 'sm' ? 'opacity-50 rotate-90' : 'opacity-60 rotate-2') : '',
+    className,
+  ]
+    .filter(Boolean)
+    .join(' ');
+
+  const stripe =
+    portrait &&
+    type === 'Character' &&
+    gameElements &&
+    !presentation?.useMysteryIcon ? (
+      <div
+        className={`pointer-events-none absolute bottom-0 left-0 top-0 z-20 ${stripeWidth} bg-gradient-to-b ${CHARACTER_ELEMENT_STRIPE_FROM[gameElements[0]]} via-stone-800/90 ${CHARACTER_ELEMENT_STRIPE_TO[gameElements[1]]}`}
+        aria-hidden
       />
-      <div className="pointer-events-none absolute inset-0 z-30 opacity-20 [background-image:radial-gradient(rgba(255,255,255,0.08)_0.5px,transparent_0.5px)] [background-size:3px_3px]" />
-      <div className="pointer-events-none absolute inset-0 z-40 shadow-[inset_0_0_12px_rgba(0,0,0,0.45)]" />
-      <div className="pointer-events-none absolute left-0 top-0 z-40 h-2 w-2 border-l border-t border-amber-700/40" />
-      <div className="pointer-events-none absolute right-0 top-0 z-40 h-2 w-2 border-r border-t border-amber-700/40" />
-      <div className="pointer-events-none absolute bottom-0 left-0 z-40 h-2 w-2 border-b border-l border-amber-900/50" />
-      <div className="pointer-events-none absolute bottom-0 right-0 z-40 h-2 w-2 border-b border-r border-amber-900/50" />
+    ) : (
+      <div
+        className={`pointer-events-none absolute bottom-0 left-0 top-0 z-20 ${stripeWidth} ${accent.stripe}`}
+        aria-hidden
+      />
+    );
+
+  const showPortraitHeader =
+    !hideHeader &&
+    portrait &&
+    presentation?.showHeader === true &&
+    presentation.headerIcons.length > 0;
+
+  const portraitHeader =
+    showPortraitHeader && presentation ? (
+      <div
+        className={`parchment-bar-header parchment-bar-beige parchment-bar-noise relative z-10 shrink-0 border-b ${
+          size === 'sm' ? 'px-1 pb-0.5 pt-0.5' : compact ? 'px-1.5 pb-1 pt-1' : 'px-2 pb-2 pt-2'
+        }`}
+      >
+        <div className="parchment-bar-stain" aria-hidden />
+        <div className="relative z-[1] flex items-center justify-center gap-1">
+          {presentation.useMysteryIcon ? (
+            <ElementIcon element="mystery" size="sm" variant="grunge" />
+          ) : (
+            presentation.headerIcons.map((icon) => (
+              <ElementIcon key={icon} element={icon} size="sm" variant="grunge" />
+            ))
+          )}
+        </div>
+        {size !== 'sm' && <CardDividerBar className={`relative z-[1] ${compact ? 'mt-1' : 'mt-2'}`} />}
+      </div>
+    ) : null;
+
+  const tcgHeader = !portrait ? (
+    <div
+      className={`parchment-bar-header parchment-bar-beige parchment-bar-noise relative z-10 shrink-0 border-b ${compact ? 'px-1.5 pb-1 pt-1' : 'px-2.5 pb-1.5 pt-1.5'}`}
+    >
+      <div className="parchment-bar-stain" aria-hidden />
+      <div className="relative z-[1] flex items-center justify-between gap-1">
+        <span
+          className={`grunge-card-kind-label uppercase tracking-[0.14em] ${compact ? 'text-[7px]' : 'text-[8px]'}`}
+        >
+          {KIND_LABELS[type]}
+        </span>
+        <ElementIcon element={brandIcon} size="sm" variant="grunge" />
+      </div>
+      <CardDividerBar className={`relative z-[1] ${compact ? 'mt-1' : 'mt-1.5'}`} />
+    </div>
+  ) : null;
+
+  const fit = portrait && presentation ? presentation.imageFit : imageFit;
+
+  const artPanel = (
+    <div className="relative min-h-0 flex-1 overflow-hidden bg-[#090807]">
+      <CardGrungeOverlay filterId={filterId} mode="art-panel" />
+      {image_asset ? (
+        <ImageWithFallback
+          src={image_asset}
+          alt=""
+          aria-hidden
+          className={`relative z-[1] h-full w-full object-center ${fit === 'contain' ? 'object-contain p-1' : 'object-cover'} ${size === 'sm' ? 'opacity-90' : ''}`}
+          loading="lazy"
+        />
+      ) : (
+        <div
+          className={`relative z-[1] flex h-full w-full items-center justify-center bg-gradient-to-b ${accent.glow}`}
+        >
+          <span className={`opacity-30 ${compact ? 'text-3xl' : 'text-5xl'}`}>{typeIcon(type)}</span>
+        </div>
+      )}
+      <div className="pointer-events-none absolute inset-0 z-[2] bg-gradient-to-t from-[#5a5048]/90 via-transparent to-brand-beige-shadow/15" />
+      {portrait && presentation?.elementBadge && (
+        <div
+          className={`pointer-events-none absolute right-1 top-1 z-[3] rounded border border-amber-950/40 bg-stone-950/80 font-black uppercase tracking-wide text-amber-100 shadow ${
+            size === 'sm' ? 'px-1 py-px text-[7px]' : 'px-1.5 py-0.5 text-[9px]'
+          }`}
+          data-testid="card-element-badge"
+        >
+          {presentation.elementBadge}
+        </div>
+      )}
+      {exhausted && size !== 'sm' && (
+        <div className="absolute inset-0 z-20 flex items-center justify-center bg-black/55">
+          <span
+            className={`rotate-[-12deg] rounded border border-stone-600 bg-stone-900/90 font-bold uppercase tracking-wider text-stone-400 ${compact ? 'px-1 text-[8px]' : 'px-1.5 py-0.5 text-[9px]'}`}
+          >
+            Erschöpft
+          </span>
+        </div>
+      )}
+    </div>
+  );
+
+  const portraitFooter = portrait && presentation ? (
+    <div
+      className={`parchment-bar-footer parchment-bar-beige parchment-bar-noise relative z-10 shrink-0 overflow-visible border-t ${compact ? 'px-1.5 pb-1 pt-1' : 'px-2 pb-1.5 pt-1.5'}`}
+    >
+      <div className="parchment-bar-stain" aria-hidden />
+      <div className="parchment-bar-drips" aria-hidden />
+      <CardDividerBar className={`relative z-[1] ${compact ? 'mb-0.5' : 'mb-1'}`} />
+      <CardNamePlate
+        cardId={id}
+        name={name || KIND_LABELS[type]}
+        size={presentation.namePlateSize}
+      />
+      {presentation.subtitle && (
+        <p
+          className={`character-card-role-on-beige relative z-[1] mx-auto max-w-[95%] text-center font-semibold leading-snug ${
+            size === 'sm' ? 'line-clamp-1 text-[8px]' : 'line-clamp-1 text-[10px] md:text-xs'
+          }`}
+          data-testid="card-portrait-subtitle"
+        >
+          {presentation.subtitle}
+        </p>
+      )}
+      {presentation.effectLine && (
+        <p
+          className={`relative z-[1] mx-auto mt-0.5 max-w-[98%] text-center leading-snug text-stone-800/85 ${
+            size === 'sm' ? 'line-clamp-2 text-[7px]' : 'line-clamp-2 text-[9px] md:text-[10px]'
+          }`}
+          data-testid="card-portrait-effect"
+        >
+          {presentation.effectLine}
+        </p>
+      )}
+      {footerNote && (
+        <p
+          className={`relative z-[1] mt-1 border-t border-brand-blood/25 pt-1 font-semibold text-brand-blood/80 ${compact ? 'text-[7px]' : 'text-[8px]'}`}
+        >
+          {footerNote}
+        </p>
+      )}
+    </div>
+  ) : null;
+
+  const tcgStatBar =
+    !portrait && display.statCells.length > 0 ? (
+      <div
+        className={`parchment-bar-stats parchment-bar-beige parchment-bar-noise relative z-10 flex shrink-0 border-y border-brand-blood/20 ${compact ? 'py-0.5' : 'py-1'}`}
+      >
+        <div className="parchment-bar-stain" aria-hidden />
+        {display.statCells.map((cell) => (
+          <div
+            key={cell.label}
+            className={`relative z-[1] flex-1 border-r border-brand-blood/15 last:border-r-0 ${compact ? 'px-1' : 'px-2'}`}
+          >
+            <div
+              className={`grunge-card-stat-label uppercase tracking-widest ${compact ? 'text-[6px]' : 'text-[7px]'}`}
+            >
+              {cell.label}
+            </div>
+            <div className={`grunge-card-stat-value ${compact ? 'text-[11px]' : 'text-sm'}`}>{cell.value}</div>
+          </div>
+        ))}
+      </div>
+    ) : null;
+
+  const tcgFooter = !portrait ? (
+    <div
+      className={`parchment-bar-footer parchment-bar-beige parchment-bar-noise relative z-10 shrink-0 overflow-hidden border-t ${compact ? 'px-1.5 pb-1 pt-1 max-h-[38%]' : 'px-2.5 pb-2 pt-1.5 max-h-[34%]'}`}
+    >
+      <div className="parchment-bar-stain" aria-hidden />
+      <div className="parchment-bar-drips" aria-hidden />
+      <CardDividerBar className={`relative z-[1] ${compact ? 'mb-1' : 'mb-1.5'}`} />
+      <CardNamePlate cardId={id} name={name || 'Unnamed Card'} size={compact ? 'md' : 'lg'} />
+      <div className={`relative z-[1] mt-1 space-y-0.5 ${display.textBlocks.length === 0 ? 'hidden' : ''}`}>
+        {display.textBlocks.slice(0, 2).map((block, index) => (
+          <div key={`${block.label}-${index}`}>
+            <div
+              className={`grunge-card-rule-label uppercase tracking-widest ${compact ? 'text-[6px]' : 'text-[7px]'}`}
+            >
+              {block.label}
+            </div>
+            <p
+              className={`grunge-card-rule-text line-clamp-2 leading-snug ${compact ? 'text-[8px]' : 'text-[9px]'}`}
+            >
+              {block.text}
+            </p>
+          </div>
+        ))}
+      </div>
+      {footerNote && (
+        <p
+          className={`relative z-[1] mt-1 border-t border-brand-blood/25 pt-1 font-semibold text-brand-blood/80 ${compact ? 'text-[7px]' : 'text-[8px]'}`}
+        >
+          {footerNote}
+        </p>
+      )}
+    </div>
+  ) : null;
+
+  const cardBody = (
+    <>
+      {stripe}
+      <CharacterCardGlitch />
+      <CardFrameCorners />
+      {portraitHeader ?? tcgHeader}
+      {artPanel}
+      {portrait ? null : tcgStatBar}
+      {portraitFooter ?? tcgFooter}
     </>
+  );
+
+  const ariaLabel = name || KIND_LABELS[type];
+
+  if (!usesButton) {
+    return (
+      <div
+        data-card-id={id}
+        data-testid={dataTestId}
+        draggable={draggable}
+        className={frameClass}
+        aria-label={ariaLabel}
+      >
+        {cardBody}
+      </div>
+    );
+  }
+
+  return (
+    <button
+      type="button"
+      onClick={isDisabled ? undefined : onClick}
+      disabled={isDisabled}
+      aria-disabled={isDisabled}
+      aria-label={ariaLabel}
+      data-card-id={id}
+      data-testid={dataTestId}
+      draggable={draggable}
+      className={frameClass}
+    >
+      {cardBody}
+    </button>
   );
 }

@@ -28,7 +28,7 @@ test.describe('Character carousel detail tabs', () => {
     await page.getByTestId('nav-tab-info').click();
     await expect(page.getByTestId('character-detail-info')).toBeVisible();
     await expect(page.getByText('Passiv')).toBeVisible();
-    await expect(page.getByText(/Feuer oder Erde bindest/)).toBeVisible();
+    await expect(page.getByText(/Feuer oder Erde baust/)).toBeVisible();
     await shot(page, '02-tabs-info.png');
 
     await page.getByTestId('nav-tab-ulti').click();

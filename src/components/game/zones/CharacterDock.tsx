@@ -18,6 +18,8 @@ interface CharacterDockProps {
   style?: CSSProperties;
   className?: string;
   handVisibleCount?: number;
+  /** Freeze LP display during damage VFX (countdown happens in overlay). */
+  displayHp?: number;
 }
 
 function characterName(pack: ContentPack, id: string): string {
@@ -33,6 +35,7 @@ export function CharacterDock({
   style,
   className = '',
   handVisibleCount,
+  displayHp,
 }: CharacterDockProps) {
   const player = state.players[playerId];
   const handCount = handVisibleCount ?? player.hand.length;
@@ -42,6 +45,7 @@ export function CharacterDock({
   const testId = isHuman ? 'human-plate' : 'opponent-plate';
   const borderTone = isHuman ? 'border-emerald-500/50' : 'border-red-500/40';
   const hpTone = isHuman ? 'text-emerald-400' : 'text-red-400';
+  const shownHp = displayHp ?? player.hp;
 
   if (variant === 'compact') {
     return (
@@ -65,7 +69,7 @@ export function CharacterDock({
           </div>
           <p className={`inline-flex items-center gap-1 text-xs font-black tabular-nums ${hpTone}`}>
             <Heart className="h-3 w-3 shrink-0" />
-            {player.hp} LP
+            {shownHp} LP
           </p>
         </div>
         <p className="flex shrink-0 items-center gap-1 text-[10px] text-stone-400">
@@ -111,7 +115,7 @@ export function CharacterDock({
           </div>
           <p className={`inline-flex items-center gap-1 text-sm font-black tabular-nums ${hpTone}`}>
             <Heart className="h-3.5 w-3.5 shrink-0" />
-            {player.hp} LP
+            {shownHp} LP
           </p>
           <p className="flex items-center gap-1 text-[10px] text-stone-300">
             <Layers className="h-3 w-3 shrink-0" />

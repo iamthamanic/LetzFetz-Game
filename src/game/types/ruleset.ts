@@ -29,9 +29,9 @@ export const DEFAULT_RULESET: RulesetConfig = {
 
 export type PlayerId = 'p1' | 'p2';
 
-export type TurnPhase = 'start' | 'draw' | 'bind' | 'action' | 'end';
+export type TurnPhase = 'start' | 'draw' | 'build' | 'action' | 'end';
 
-export const TURN_PHASES: TurnPhase[] = ['start', 'draw', 'bind', 'action', 'end'];
+export const TURN_PHASES: TurnPhase[] = ['start', 'draw', 'build', 'action', 'end'];
 
 export interface CharacterElements {
   primary: Element;

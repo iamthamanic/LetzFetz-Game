@@ -9,9 +9,10 @@ import type { GameViewModel } from './buildGameViewModel';
 import type { PendingIntent } from './gameActionHelpers';
 import {
   findActivateAction,
-  findBindReplaceAction,
-  findDirectBindAction,
+  findBuildReplaceAction,
+  findDirectBuildAction,
   findDiscardDrawAction,
+  findPlayGlitchAction,
   hasChallengeForAttack,
 } from './gameActionHelpers';
 import { CharacterPlate } from './CharacterPlate';
@@ -70,16 +71,16 @@ export function GameBoard({
     }
   };
 
-  const handleBindDirect = (handInstanceId: string) => {
-    const action = findDirectBindAction(view.legalActions, handInstanceId);
+  const handleBuildDirect = (handInstanceId: string) => {
+    const action = findDirectBuildAction(view.legalActions, handInstanceId);
     if (action) {
       onDispatch(action);
       clearPending();
     }
   };
 
-  const handleStartBindReplace = (handInstanceId: string) => {
-    onPendingChange({ type: 'bind', handInstanceId });
+  const handleStartBuildReplace = (handInstanceId: string) => {
+    onPendingChange({ type: 'build', handInstanceId });
   };
 
   const handleStartActivate = (boundInstanceId: string) => {
@@ -93,8 +94,8 @@ export function GameBoard({
   };
 
   const handleHumanSlotClick = (slot: (typeof view.humanBoundSlots)[0]) => {
-    if (pending?.type !== 'bind' || !slot.instanceId) return;
-    const action = findBindReplaceAction(
+    if (pending?.type !== 'build' || !slot.instanceId) return;
+    const action = findBuildReplaceAction(
       view.legalActions,
       pending.handInstanceId,
       slot.instanceId,
@@ -126,12 +127,20 @@ export function GameBoard({
     }
   };
 
+  const handlePlayGlitch = (handInstanceId: string) => {
+    const action = findPlayGlitchAction(view.legalActions, handInstanceId);
+    if (action) {
+      onDispatch(action);
+      clearPending();
+    }
+  };
+
   const pendingHint = (() => {
     if (!pending) return null;
     switch (pending.type) {
       case 'attack':
         return 'Wähle eine gegnerische Engine-Karte zum Herausfordern — oder „Direkt angreifen“.';
-      case 'bind':
+      case 'build':
         return 'Wähle eine deiner Engine-Karten, die ersetzt werden soll.';
       case 'activate':
         return 'Wähle eine Handkarte zum Abwerfen für die Aktivierung.';
@@ -180,6 +189,7 @@ export function GameBoard({
             label="Gegner-Engine"
             slots={view.botBoundSlots}
             cardSize="opponentBound"
+            ghostCharacterId={state.players[botId].characterId}
             showPhraseLabels={isV2Pack(pack)}
             onSlotClick={handleOpponentSlotClick}
           />
@@ -208,13 +218,7 @@ export function GameBoard({
               className="w-full max-w-xl"
             >
               <p className="mb-3 text-sm text-stone-300">
-                {view.combat.mode === 'challenge' ? 'Herausforderungswert' : 'Angriffswert'}:{' '}
-                <span className="text-lg font-black text-red-300">{view.combat.attackValue}</span>
-                {lastRoll !== null && (
-                  <Badge variant="info" className="ml-2">
-                    W6 = {lastRoll}
-                  </Badge>
-                )}
+                Angriffskarte gespielt — Würfel erst nach deiner Block-Entscheidung.
               </p>
               <div className="mb-3 flex flex-wrap justify-center gap-2">
                 {blockCards.map((a) => {
@@ -247,6 +251,7 @@ export function GameBoard({
             label="Deine Engine"
             slots={view.humanBoundSlots}
             cardSize="bound"
+            ghostCharacterId={state.players[humanId].characterId}
             showPhraseLabels={isV2Pack(pack)}
             onActivateBound={handleStartActivate}
             onSlotClick={handleHumanSlotClick}
@@ -265,13 +270,13 @@ export function GameBoard({
             cards={view.handCards}
             pending={pending}
             onSelectAttack={handleSelectAttack}
-            onPlayAttackDirect={onPlayAttack}
             onPlayBoost={(id) => onDispatch({ type: 'PLAY_BOOST', cardInstanceId: id })}
-            onBindDirect={handleBindDirect}
-            onStartBindReplace={handleStartBindReplace}
+            onBuildDirect={handleBuildDirect}
+            onStartBuildReplace={handleStartBuildReplace}
             onPlayBlock={onPlayBlock}
             onDiscardDraw={handleDiscardDraw}
             onActivateDiscard={handleActivateDiscard}
+            onPlayGlitch={handlePlayGlitch}
           />
 
           <ActionBar

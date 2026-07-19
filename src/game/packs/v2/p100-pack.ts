@@ -3,7 +3,7 @@
  * Location: src/game/packs/v2/p100-pack.ts
  * Engine still follows V1 until V2 is released; this pack is content + deck size.
  */
-import type { ContentPack, RulesetConfig } from '../../types';
+import type { ContentPack, Element, ElementCardDef, RulesetConfig } from '../../types';
 import { DEFAULT_RULESET } from '../../types';
 import { createSeededRng } from '../../engine/deck';
 import { BASE_PACK } from '../base-pack';

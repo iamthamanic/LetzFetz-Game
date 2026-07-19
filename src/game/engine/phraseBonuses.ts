@@ -91,7 +91,7 @@ export function monoAttackBonus(
   bound: BoundCardInstance[],
 ): number {
   if (!isMonoPhrase(pack, bound)) return 0;
-  const mode = state.playtest?.monoBonusMode ?? 'mb1';
+  const mode = state.meta.monoBonusMode ?? 'mb1';
   return resolveMonoAttackBonus(mode);
 }
 
@@ -101,7 +101,7 @@ export function monoBlockBonus(
   bound: BoundCardInstance[],
 ): number {
   if (!isMonoPhrase(pack, bound)) return 0;
-  const mode = state.playtest?.monoBonusMode ?? 'mb1';
+  const mode = state.meta.monoBonusMode ?? 'mb1';
   return resolveMonoBlockBonus(mode);
 }
 

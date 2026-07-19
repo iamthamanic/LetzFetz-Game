@@ -12,7 +12,7 @@ Nach Design-Grill D1–D35: spielbare V2-Regelabschnitte ausformulieren, generis
 - [x] `V2_P100_PACK` hat Mix 24 Angriff / 24 Block / 12 Ladung / 30 Engine-Teil / 10 Glitch
 - [x] Unit-Tests decken Generator-Counts und Cbias-Abweichung ab
 - [x] Cheatbox: Buttons LP 20 / 25 / 30 setzen beide Spieler-HP und Cap
-- [x] Cheatbox: Buttons MB1–MB4 setzen Mono-Playtest-Modus in `GameState.playtest`
+- [x] Cheatbox: Buttons MB1–MB4 setzen Mono-Playtest-Modus in Match-Meta
 - [x] Mit LP 30: Heilen/Schaden clampen an Cap 30 (nicht 20)
 - [x] `npm run checks` grün
 
@@ -21,7 +21,7 @@ Nach Design-Grill D1–D35: spielbare V2-Regelabschnitte ausformulieren, generis
 - [x] V1 Base Pack unverändert (kein `engineParts` / Deckgröße 70)
 - [x] Engine-Teile im P100-Pack sind im Index; V1-`applyAction` bleibt Default-Match-Pack
 - [x] HP-Patch über Cap hinaus → Invariant-Fehler
-- [x] Mono-Modus ohne V2-Engine: nur `playtest`/`UI`, kein Kampf-Bonus noch
+- [x] Mono-Modus ohne V2-Engine: nur Meta/UI, kein Kampf-Bonus noch
 
 ## Regression
 
@@ -34,4 +34,4 @@ Nach Design-Grill D1–D35: spielbare V2-Regelabschnitte ausformulieren, generis
 - V2-Regeln = Draft, nicht Engine-Wahrheit
 - Default-Match weiter `BASE_PACK` + `DEFAULT_RULESET` (20 HP)
 - Mono MB2–MB4: gespeichert für Playtests; Effekt-Skizzen nur in Docs
-- Playtest settings live on optional `GameState.playtest` (no MatchMeta on main)
+- Playtest settings live on `MatchMeta.playtestHpCap` / `monoBonusMode`

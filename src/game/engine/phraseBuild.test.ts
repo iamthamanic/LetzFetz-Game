@@ -78,7 +78,7 @@ describe('V2 phrase build — applyAction', () => {
 
     state = applyAction(
       state,
-      { type: 'BIND_CARD', cardInstanceId: partCard!.instanceId },
+      { type: 'BUILD_CARD', cardInstanceId: partCard!.instanceId },
       'p1',
       V2_CTX,
     );
@@ -117,7 +117,7 @@ describe('V2 phrase build — applyAction', () => {
 
     state = applyAction(
       state,
-      { type: 'BIND_CARD', cardInstanceId: 'test-boost' },
+      { type: 'BUILD_CARD', cardInstanceId: 'test-boost' },
       'p1',
       V2_CTX,
     );
@@ -137,9 +137,9 @@ describe('V2 phrase build — applyAction', () => {
       }),
     );
 
-    const bindActions = getLegalActions(state, V2_CTX).filter((a) => a.type === 'BIND_CARD');
-    for (const action of bindActions) {
-      if (action.type !== 'BIND_CARD') continue;
+    const buildActions = getLegalActions(state, V2_CTX).filter((a) => a.type === 'BUILD_CARD');
+    for (const action of buildActions) {
+      if (action.type !== 'BUILD_CARD') continue;
       const card = state.players.p1.hand.find((c) => c.instanceId === action.cardInstanceId);
       expect(card).toBeTruthy();
       const element = findElementDef(V2_P100_PACK, card!.defId);
@@ -197,10 +197,10 @@ describe('V2 phrase build — applyAction', () => {
       },
     };
 
-    const bindActions = getLegalActions(fullPhraseState, V2_CTX).filter(
-      (a) => a.type === 'BIND_CARD',
+    const buildActions = getLegalActions(fullPhraseState, V2_CTX).filter(
+      (a) => a.type === 'BUILD_CARD',
     );
-    const freshPartBuilds = bindActions.filter((a) => {
+    const freshPartBuilds = buildActions.filter((a) => {
       const card = fullPhraseState.players.p1.hand.find(
         (c) => c.instanceId === a.cardInstanceId,
       );
@@ -227,7 +227,7 @@ describe('V2 phrase build — invariants', () => {
     );
     state = applyAction(
       state,
-      { type: 'BIND_CARD', cardInstanceId: partCard!.instanceId },
+      { type: 'BUILD_CARD', cardInstanceId: partCard!.instanceId },
       'p1',
       V2_CTX,
     );
@@ -248,10 +248,10 @@ describe('V1 bind regression', () => {
     state = applyAction(state, { type: 'ADVANCE_PHASE' }, 'p1', V1_CTX);
     state = applyAction(state, { type: 'ADVANCE_PHASE' }, 'p1', V1_CTX);
 
-    const bindActions = getLegalActions(state, V1_CTX).filter((a) => a.type === 'BIND_CARD');
-    expect(bindActions.length).toBeGreaterThan(0);
+    const buildActions = getLegalActions(state, V1_CTX).filter((a) => a.type === 'BUILD_CARD');
+    expect(buildActions.length).toBeGreaterThan(0);
 
-    state = applyAction(state, bindActions[0], 'p1', V1_CTX);
+    state = applyAction(state, buildActions[0], 'p1', V1_CTX);
     expect(state.players.p1.bound[0]?.phraseSlot).toBeUndefined();
     expect(collectInvariantViolations(state, { pack: BASE_PACK })).toEqual([]);
   });

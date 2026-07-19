@@ -16,7 +16,7 @@ describe('PLAY_BOOST', () => {
 
     while (state.phase !== 'action' && !state.winner) {
       const pid = state.activePlayer;
-      const act = state.phase === 'bind' ? { type: 'SKIP_BIND' as const } : { type: 'ADVANCE_PHASE' as const };
+      const act = state.phase === 'build' ? { type: 'SKIP_BUILD' as const } : { type: 'ADVANCE_PHASE' as const };
       state = applyAction(state, act, pid, { pack: BASE_PACK, playerId: pid });
     }
 
@@ -46,7 +46,7 @@ describe('DISCARD_DRAW', () => {
 
     while (state.phase !== 'action' && !state.winner) {
       const pid = state.activePlayer;
-      const act = state.phase === 'bind' ? { type: 'SKIP_BIND' as const } : { type: 'ADVANCE_PHASE' as const };
+      const act = state.phase === 'build' ? { type: 'SKIP_BUILD' as const } : { type: 'ADVANCE_PHASE' as const };
       state = applyAction(state, act, pid, { pack: BASE_PACK, playerId: pid });
     }
 
@@ -60,5 +60,47 @@ describe('DISCARD_DRAW', () => {
     );
     expect(state.players.p1.hand.length).toBe(handBefore - 1 + 2);
     expect(state.phase).toBe('end');
+  });
+});
+
+describe('instant reveals', () => {
+  it('records Sofort-Glitch when drawn in draw phase', () => {
+    let state = createGame({
+      pack: BASE_PACK,
+      p1CharacterId: 'knuspergnom',
+      p2CharacterId: 'schluckspecht',
+      startingPlayer: 'p1',
+      seed: 501,
+      arenaId: 'arena-kristall',
+    });
+    while (state.phase !== 'draw' && !state.winner) {
+      state = applyAction(state, { type: 'ADVANCE_PHASE' }, 'p1', {
+        pack: BASE_PACK,
+        playerId: 'p1',
+      });
+    }
+    state = {
+      ...state,
+      piles: {
+        ...state.piles,
+        deck: [{ instanceId: 'force-absturz', defId: 'glitch-absturz' }, ...state.piles.deck],
+      },
+      players: {
+        ...state.players,
+        p1: {
+          ...state.players.p1,
+          hand: [{ instanceId: 'keep-me', defId: 'fire-block-2' }],
+        },
+      },
+    };
+    state = applyAction(state, { type: 'ADVANCE_PHASE' }, 'p1', {
+      pack: BASE_PACK,
+      playerId: 'p1',
+    });
+    expect(state.instantReveals.length).toBe(1);
+    expect(state.instantReveals[0].defId).toBe('glitch-absturz');
+    expect(state.instantReveals[0].resolution).toContain('Absturz');
+    expect(state.lastEvent).toContain('Absturz');
+    expect(state.players.p1.hand.some((c) => c.defId === 'glitch-absturz')).toBe(false);
   });
 });

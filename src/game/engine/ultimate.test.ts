@@ -12,7 +12,7 @@ function advanceToAction(state: ReturnType<typeof createGame>) {
       pack: BASE_PACK,
       playerId: current.activePlayer,
     });
-    const next = actions.find((a) => a.type === 'ADVANCE_PHASE' || a.type === 'SKIP_BIND');
+    const next = actions.find((a) => a.type === 'ADVANCE_PHASE' || a.type === 'SKIP_BUILD');
     if (!next) break;
     current = applyAction(current, next, current.activePlayer, {
       pack: BASE_PACK,

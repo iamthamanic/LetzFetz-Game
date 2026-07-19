@@ -102,14 +102,14 @@ function bestBlockAction(
   return best;
 }
 
-function pickBestBind(state: GameState, pack: ContentPack, actions: GameAction[]): GameAction {
-  const binds = actions.filter((a): a is Extract<GameAction, { type: 'BIND_CARD' }> => a.type === 'BIND_CARD');
-  if (binds.length === 0) return { type: 'SKIP_BIND' };
+function pickBestBuild(state: GameState, pack: ContentPack, actions: GameAction[]): GameAction {
+  const builds = actions.filter((a): a is Extract<GameAction, { type: 'BUILD_CARD' }> => a.type === 'BUILD_CARD');
+  if (builds.length === 0) return { type: 'SKIP_BUILD' };
 
-  let best = binds[0];
+  let best = builds[0];
   let bestScore = -Infinity;
 
-  for (const action of binds) {
+  for (const action of builds) {
     const def = handDef(state, BOT_ID, action.cardInstanceId, pack);
     if (!def) continue;
     let score = def.value + elementSynergyBonus(pack, state, def.element);
@@ -216,10 +216,25 @@ function pickBestChallenge(
   return { ...best, diceRoll: rollD6() };
 }
 
-/** Heuristic bot for solo playtests — improved bind, combat, and pressure. */
+/** Heuristic bot for solo playtests — improved build, combat, and pressure. */
 export function chooseBotAction(state: GameState, pack: ContentPack): GameAction | null {
   const actions = getLegalActions(state, { pack, playerId: BOT_ID });
-  if (actions.length === 0) return null;
+  if (actions.length === 0) {
+    // Pending choice may belong to human — bot has nothing
+    const asHuman = getLegalActions(state, { pack, playerId: HUMAN_ID });
+    if (state.pendingChoice && asHuman.length > 0) return null;
+    return null;
+  }
+
+  if (state.pendingChoice) {
+    return (
+      actions.find((a) => a.type === 'TAKE_OPTIONAL_DRAW') ??
+      actions.find((a) => a.type === 'RESOLVE_DRAW_DISCARD') ??
+      actions.find((a) => a.type === 'BUILD_CARD') ??
+      actions.find((a) => a.type === 'PASS_PENDING') ??
+      actions[0]
+    );
+  }
 
   if (state.combat) {
     return bestBlockAction(state, pack, actions);
@@ -229,8 +244,8 @@ export function chooseBotAction(state: GameState, pack: ContentPack): GameAction
     return { type: 'ADVANCE_PHASE' };
   }
 
-  if (state.phase === 'bind') {
-    return pickBestBind(state, pack, actions);
+  if (state.phase === 'build') {
+    return pickBestBuild(state, pack, actions);
   }
 
   if (state.phase === 'action') {
