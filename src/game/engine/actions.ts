@@ -20,7 +20,15 @@ import {
   clampHp,
 } from './helpers';
 import { applyElementEffect, applyBoundActivation, finishMainAction, applyInstantGlitch } from './effects';
-import { findElementDef, findGlitchDef } from './lookup';
+import { findElementDef, findEnginePartDef, findGlitchDef } from './lookup';
+import {
+  canBuildBoost,
+  canBuildEnginePart,
+  hasChargeCard,
+  isV2Pack,
+  phraseSlotCards,
+  resolveV2BuildSlot,
+} from './phraseBuild';
 import { applyUltimateEffect } from './ultimate';
 
 export { findElementDef } from './lookup';
@@ -233,18 +241,56 @@ export function getLegalActions(state: GameState, ctx: PackContext): GameAction[
 
   if (state.phase === 'bind') {
     actions.push({ type: 'SKIP_BIND' });
-    const boundCount = state.players[ctx.playerId].bound.length;
-    for (const card of hand) {
-      if (findElementDef(ctx.pack, card.defId)) {
-        if (boundCount < ruleset.maxBoundCards) {
-          actions.push({ type: 'BIND_CARD', cardInstanceId: card.instanceId });
-        } else {
-          for (const b of state.players[ctx.playerId].bound) {
-            actions.push({
-              type: 'BIND_CARD',
-              cardInstanceId: card.instanceId,
-              discardBoundId: b.instanceId,
-            });
+    const bound = state.players[ctx.playerId].bound;
+
+    if (isV2Pack(ctx.pack)) {
+      for (const card of hand) {
+        const part = findEnginePartDef(ctx.pack, card.defId);
+        if (part) {
+          if (canBuildEnginePart(bound)) {
+            actions.push({ type: 'BIND_CARD', cardInstanceId: card.instanceId });
+          } else {
+            for (const phraseCard of phraseSlotCards(bound)) {
+              actions.push({
+                type: 'BIND_CARD',
+                cardInstanceId: card.instanceId,
+                discardBoundId: phraseCard.instanceId,
+              });
+            }
+          }
+          continue;
+        }
+
+        const element = findElementDef(ctx.pack, card.defId);
+        if (element?.cardType === 'boost') {
+          if (canBuildBoost(bound)) {
+            actions.push({ type: 'BIND_CARD', cardInstanceId: card.instanceId });
+          } else {
+            const chargeCard = bound.find((b) => b.phraseSlot === 'charge');
+            if (chargeCard) {
+              actions.push({
+                type: 'BIND_CARD',
+                cardInstanceId: card.instanceId,
+                discardBoundId: chargeCard.instanceId,
+              });
+            }
+          }
+        }
+      }
+    } else {
+      const boundCount = bound.length;
+      for (const card of hand) {
+        if (findElementDef(ctx.pack, card.defId)) {
+          if (boundCount < ruleset.maxBoundCards) {
+            actions.push({ type: 'BIND_CARD', cardInstanceId: card.instanceId });
+          } else {
+            for (const b of bound) {
+              actions.push({
+                type: 'BIND_CARD',
+                cardInstanceId: card.instanceId,
+                discardBoundId: b.instanceId,
+              });
+            }
           }
         }
       }
@@ -348,7 +394,57 @@ export function applyAction(
         (c) => c.instanceId === action.cardInstanceId,
       );
       if (handIdx === -1) throw new Error('Card not in hand');
-      const def = findElementDef(pack, next.players[playerId].hand[handIdx].defId);
+      const handCard = next.players[playerId].hand[handIdx];
+      const defId = handCard.defId;
+
+      if (isV2Pack(pack)) {
+        const part = findEnginePartDef(pack, defId);
+        const element = findElementDef(pack, defId);
+
+        if (!part && element?.cardType !== 'boost') {
+          throw new Error('Cannot build this card in V2');
+        }
+
+        if (action.discardBoundId) {
+          const discardIdx = next.players[playerId].bound.findIndex(
+            (b) => b.instanceId === action.discardBoundId,
+          );
+          if (discardIdx === -1) throw new Error('Bound card not found');
+          const discarded = next.players[playerId].bound[discardIdx];
+          if (part) {
+            if (!discarded?.phraseSlot || discarded.phraseSlot === 'charge') {
+              throw new Error('Must discard a phrase card first');
+            }
+          } else if (element?.cardType === 'boost') {
+            if (discarded?.phraseSlot !== 'charge') {
+              throw new Error('Must discard charge card first');
+            }
+          }
+          const [old] = next.players[playerId].bound.splice(discardIdx, 1);
+          next.piles.discard.push(old);
+        }
+
+        const phraseSlot = resolveV2BuildSlot(
+          pack,
+          defId,
+          next.players[playerId].bound,
+        );
+        const [card] = next.players[playerId].hand.splice(handIdx, 1);
+        const builtName =
+          part?.name ?? findElementDef(pack, defId)?.name ?? 'Karte';
+        const bound: BoundCardInstance = {
+          ...card,
+          exhausted: false,
+          resistanceBonus: 0,
+          phraseSlot,
+        };
+        next.players[playerId].bound.push(bound);
+        next.phase = 'action';
+        next.lastEvent = `${builtName} gebaut (${phraseSlot}).`;
+        return next;
+      }
+
+      const def = findElementDef(pack, defId);
       if (!def) throw new Error('Only element cards can be bound');
 
       if (next.players[playerId].bound.length >= ruleset.maxBoundCards) {

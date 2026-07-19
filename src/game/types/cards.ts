@@ -52,6 +52,9 @@ export interface GlitchCardDef extends CardBase {
 /** Phrase tag roles (V2 T3) — preferred tag on Engine-Teil. */
 export type PhraseTag = 'core' | 'mode' | 'tool';
 
+/** Built slot on the phrase board (V2). */
+export type PhraseSlot = PhraseTag | 'charge';
+
 /** Light passive while built (V2 E3 start set). */
 export type PassiveArchetype = 'p_atk' | 'p_block' | 'p_draw';
 
@@ -88,6 +91,8 @@ export interface BoundCardInstance extends CardInstance {
   resistanceBonus: number;
   /** Mysterium: treat as this element for synergies this binding. */
   treatedElement?: Element;
+  /** V2 phrase board slot when built from a V2 pack. */
+  phraseSlot?: PhraseSlot;
 }
 
 export interface ContentPack {
