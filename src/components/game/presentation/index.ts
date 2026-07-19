@@ -65,5 +65,12 @@ export {
   findActivatedDiscardCardId,
   ACTIVATE_DISCARD_MS,
 } from './buildActivateDiscardStep';
+export {
+  buildAttackCardFlyStep,
+  isAttackCardFlyStep,
+  ATTACK_CARD_FLY_MS,
+} from './buildAttackCardFlyStep';
 export { OpeningDealFly } from './OpeningDealFly';
 export { PlaymatCardFly } from './PlaymatCardFly';
+export { AttackCardFly } from './AttackCardFly';
+export { findRemovedAttackCard } from './buildAttackCardFlyStep';

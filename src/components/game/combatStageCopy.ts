@@ -28,3 +28,13 @@ export function buildCombatStageSubtitle(
 export function combatValueLabel(combat: PendingCombat): string {
   return combat.mode === 'challenge' ? 'Herausforderungswert' : 'Angriffswert';
 }
+
+export function defenderValueLabel(combat: PendingCombat): string {
+  return combat.mode === 'challenge' ? 'Block vs. Ziel' : 'Blockwert';
+}
+
+export function defenderPendingValue(isHumanDefender: boolean, botThinking: boolean): string {
+  if (isHumanDefender) return '?';
+  if (botThinking) return '…';
+  return '—';
+}

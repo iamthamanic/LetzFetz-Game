@@ -14,6 +14,8 @@ import {
   buildCombatStageSubtitle,
   buildCombatStageTitle,
   combatValueLabel,
+  defenderPendingValue,
+  defenderValueLabel,
 } from '../combatStageCopy';
 
 interface CombatStageProps {
@@ -53,7 +55,9 @@ export function CombatStage({
 
   const title = buildCombatStageTitle(combat, isHumanDefender);
   const subtitle = buildCombatStageSubtitle(isHumanDefender, botThinking);
-  const valueLabel = combatValueLabel(combat);
+  const attackLabel = combatValueLabel(combat);
+  const blockLabel = defenderValueLabel(combat);
+  const pendingBlock = defenderPendingValue(isHumanDefender, botThinking);
 
   return (
     <div
@@ -70,47 +74,76 @@ export function CombatStage({
         <p className="text-[10px] text-stone-400 sm:text-xs">{subtitle}</p>
       </div>
 
-      <div className="flex min-h-0 flex-1 items-center justify-center gap-1.5 py-1 sm:gap-2">
-        {attackDef && (
-          <div className="flex shrink-0 flex-col items-center gap-0.5">
-            <BoardCard def={attackDef} size="opponentBound" />
-            <span className="text-[9px] font-semibold uppercase tracking-wide text-red-300/90">
-              Angriff
-            </span>
-          </div>
-        )}
-
-        {targetDef && (
-          <>
-            <span className="text-lg font-black text-amber-400/80" aria-hidden>
-              →
-            </span>
+      <div className="flex min-h-0 flex-1 items-stretch justify-center gap-1 py-1 sm:gap-2">
+        {/* Attacker column */}
+        <div className="flex min-w-0 flex-1 flex-col items-center justify-center gap-1">
+          {attackDef && (
             <div className="flex shrink-0 flex-col items-center gap-0.5">
+              <BoardCard def={attackDef} size="opponentBound" />
+              <span className="text-[9px] font-semibold uppercase tracking-wide text-red-300/90">
+                Angriff
+              </span>
+            </div>
+          )}
+          <div className="flex shrink-0 flex-col items-center justify-center rounded-lg border border-red-500/40 bg-red-950/40 px-2 py-1">
+            <span className="text-[9px] uppercase tracking-wide text-red-200/80">{attackLabel}</span>
+            <span
+              data-testid="combat-stage-attack-value"
+              className="text-xl font-black tabular-nums text-red-300 sm:text-2xl"
+            >
+              {combat.attackValue}
+            </span>
+            <CombatDiceRoll roll={combat.attackRoll} />
+          </div>
+        </div>
+
+        {/* VS + challenge target */}
+        <div className="flex shrink-0 flex-col items-center justify-center gap-1 px-0.5">
+          <span
+            data-testid="combat-stage-vs"
+            className="text-base font-black text-amber-400/90 sm:text-lg"
+            aria-hidden
+          >
+            VS
+          </span>
+          {targetDef && (
+            <div className="flex flex-col items-center gap-0.5">
               <BoardCard def={targetDef} size="opponentBound" exhausted={targetBound?.exhausted} />
-              <span className="text-[9px] font-semibold uppercase tracking-wide text-stone-400">
+              <span className="text-[8px] font-semibold uppercase tracking-wide text-stone-400">
                 Ziel
               </span>
             </div>
-          </>
-        )}
+          )}
+        </div>
 
-        <div className="flex shrink-0 flex-col items-center justify-center rounded-lg border border-red-500/40 bg-red-950/40 px-2 py-1">
-          <span className="text-[9px] uppercase tracking-wide text-red-200/80">{valueLabel}</span>
-          <span
-            data-testid="combat-stage-attack-value"
-            className="text-xl font-black tabular-nums text-red-300 sm:text-2xl"
+        {/* Defender column */}
+        <div className="flex min-w-0 flex-1 flex-col items-center justify-center gap-1">
+          <div
+            data-testid="combat-stage-defender-value"
+            className="flex shrink-0 flex-col items-center justify-center rounded-lg border border-cyan-500/40 bg-cyan-950/35 px-2 py-1"
           >
-            {combat.attackValue}
+            <span className="text-[9px] uppercase tracking-wide text-cyan-200/80">{blockLabel}</span>
+            <span className="text-xl font-black tabular-nums text-cyan-300 sm:text-2xl">
+              {pendingBlock}
+            </span>
+            {botThinking && !isHumanDefender && (
+              <span className="text-[9px] text-cyan-200/70">Würfel…</span>
+            )}
+          </div>
+          <span className="text-[9px] font-semibold uppercase tracking-wide text-cyan-300/80">
+            Verteidigung
           </span>
-          <CombatDiceRoll roll={combat.attackRoll} />
         </div>
       </div>
 
       {isHumanDefender && (
         <div className="flex-none space-y-1.5 border-t border-stone-700/80 pt-1.5">
+          <p className="text-center text-[10px] font-medium text-cyan-200/80">
+            Block-Karten — höchster Wert zählt
+          </p>
           <div
             data-testid="combat-stage-block-hand"
-            className="flex flex-wrap items-end justify-center gap-1"
+            className="flex flex-wrap items-end justify-center gap-1.5 sm:gap-2"
           >
             {blockActions.map((action) => {
               if (action.type !== 'PLAY_BLOCK') return null;
@@ -122,7 +155,7 @@ export function CombatStage({
                 <BoardCard
                   key={action.cardInstanceId}
                   def={def}
-                  size="opponentBound"
+                  size="bound"
                   playable
                   onClick={() => onPlayBlock(action.cardInstanceId)}
                 />

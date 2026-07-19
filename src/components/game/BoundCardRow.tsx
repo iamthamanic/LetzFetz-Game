@@ -14,6 +14,8 @@ interface BoundCardRowProps {
   slots: BoundSlotView[];
   cardSize: BoardCardSize;
   snapBoundCardIds?: string[];
+  bindPending?: boolean;
+  bindHasFreeSlot?: boolean;
   /** V2 packs: show Kern / Modus / Werkzeug / Ladung column labels. */
   showPhraseLabels?: boolean;
   onActivateBound?: (boundInstanceId: string) => void;
@@ -25,6 +27,8 @@ export function BoundCardRow({
   slots,
   cardSize,
   snapBoundCardIds,
+  bindPending = false,
+  bindHasFreeSlot = false,
   showPhraseLabels = false,
   onActivateBound,
   onSlotClick,
@@ -57,6 +61,8 @@ export function BoundCardRow({
                 cardSize={cardSize}
                 phraseLabel={phraseLabel}
                 snap={slot.instanceId ? snapBoundCardIds?.includes(slot.instanceId) ?? false : false}
+                bindPending={side === 'human' ? bindPending : false}
+                bindHasFreeSlot={side === 'human' ? bindHasFreeSlot : false}
                 onActivate={onActivateBound}
                 onSlotClick={onSlotClick ? () => onSlotClick(slot) : undefined}
               />

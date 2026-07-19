@@ -31,10 +31,18 @@ export function buildPhaseCoachHint({
   }
 
   if (pending?.type === 'attack') {
-    return 'Wähle eine gegnerische Engine-Karte zum Herausfordern — oder „Direkt angreifen“.';
+    const hasTargets = view.botBoundSlots.some((s) => s.isTargetable);
+    if (hasTargets) {
+      return 'Wähle eine gegnerische Engine-Karte zum Herausfordern — oder „Direkt angreifen“.';
+    }
+    return 'Kein Herausforderungsziel — nutze „Direkt angreifen“ gegen die LP des Gegners.';
   }
   if (pending?.type === 'bind') {
-    return 'Wähle eine deiner Engine-Karten, die ersetzt werden soll.';
+    const hasFreeSlot = view.humanBoundSlots.some((s) => !s.instanceId);
+    if (hasFreeSlot) {
+      return 'Klicke auf einen freien Engine-Slot, um die Karte zu binden.';
+    }
+    return 'Wähle eine gebundene Karte, die durch die neue Karte ersetzt werden soll.';
   }
   if (pending?.type === 'activate') {
     return 'Wähle eine Handkarte zum Abwerfen für die Aktivierung.';
