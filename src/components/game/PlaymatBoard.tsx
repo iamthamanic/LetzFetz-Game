@@ -4,7 +4,7 @@
  */
 import React, { useMemo } from 'react';
 import type { ContentPack, GameAction, GameState, PlayerId } from '../../game';
-import { findElementDef } from '../../game';
+import { findElementDef, isV2Pack } from '../../game';
 import type { GameViewModel } from './buildGameViewModel';
 import type { PendingIntent } from './gameActionHelpers';
 import type { PresentationStep } from './presentation/types';
@@ -300,6 +300,7 @@ export function PlaymatBoard({
               slots={view.botBoundSlots}
               cardSize="opponentBound"
               snapBoundCardIds={snapBoundCardIds}
+              showPhraseLabels={isV2Pack(pack)}
               onSlotClick={handleOpponentSlotClick}
             />
           </section>
@@ -329,6 +330,7 @@ export function PlaymatBoard({
               slots={view.humanBoundSlots}
               cardSize="bound"
               snapBoundCardIds={snapBoundCardIds}
+              showPhraseLabels={isV2Pack(pack)}
               onActivateBound={handleStartActivate}
               onSlotClick={handleHumanSlotClick}
             />

@@ -4,7 +4,7 @@
  */
 import React from 'react';
 import type { ContentPack, GameAction, GameState } from '../../game';
-import { findElementDef } from '../../game';
+import { findElementDef, isV2Pack } from '../../game';
 import type { GameViewModel } from './buildGameViewModel';
 import type { PendingIntent } from './gameActionHelpers';
 import {
@@ -180,6 +180,7 @@ export function GameBoard({
             label="Gegner-Engine"
             slots={view.botBoundSlots}
             cardSize="opponentBound"
+            showPhraseLabels={isV2Pack(pack)}
             onSlotClick={handleOpponentSlotClick}
           />
         </section>
@@ -246,6 +247,7 @@ export function GameBoard({
             label="Deine Engine"
             slots={view.humanBoundSlots}
             cardSize="bound"
+            showPhraseLabels={isV2Pack(pack)}
             onActivateBound={handleStartActivate}
             onSlotClick={handleHumanSlotClick}
           />
