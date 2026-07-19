@@ -1,0 +1,1335 @@
+{
+  "schema_version": 1,
+  "changes": [
+    {
+      "status": "recorded",
+      "user_impact": {
+        "de": [
+          "Produktchronik und Status-Docs sind reviewbar verfügbar."
+        ],
+        "en": [
+          "Product chronicle and status docs are available for review."
+        ]
+      },
+      "developer_impact": {
+        "de": [
+          "@memory-live-doc incremental ab jetzt; history_coverage=complete."
+        ],
+        "en": [
+          "@memory-live-doc incremental from now; history_coverage=complete."
+        ]
+      },
+      "operational_impact": {
+        "de": [
+          "Viewer unter docs/memory-live-doc/viewer/; Pages optional."
+        ],
+        "en": [
+          "Viewer under docs/memory-live-doc/viewer/; Pages optional."
+        ]
+      },
+      "packages": [],
+      "affected_features": [],
+      "affected_components": [
+        ".project-memory/",
+        "docs/PROJECT-STATUS.md",
+        "docs/memory-live-doc/"
+      ],
+      "breaking_changes": [],
+      "migration_required": false,
+      "security_relevant": false,
+      "evidence": [
+        {
+          "kind": "commit",
+          "path": "7f31a6f5fddca3e1dc41f779e0de7c6b79a24f25",
+          "sha": "7f31a6f5fddca3e1dc41f779e0de7c6b79a24f25",
+          "url": "https://github.com/iamthamanic/LetzFetz-Game/commit/7f31a6f5fddca3e1dc41f779e0de7c6b79a24f25"
+        },
+        {
+          "kind": "file",
+          "path": ".project-memory/",
+          "url": "https://github.com/iamthamanic/LetzFetz-Game/tree/7f31a6f5fddca3e1dc41f779e0de7c6b79a24f25/.project-memory"
+        },
+        {
+          "kind": "file",
+          "path": "docs/PROJECT-STATUS.md",
+          "url": "https://github.com/iamthamanic/LetzFetz-Game/blob/7f31a6f5fddca3e1dc41f779e0de7c6b79a24f25/docs/PROJECT-STATUS.md"
+        },
+        {
+          "kind": "file",
+          "path": "docs/memory-live-doc/",
+          "url": "https://github.com/iamthamanic/LetzFetz-Game/tree/7f31a6f5fddca3e1dc41f779e0de7c6b79a24f25/docs/memory-live-doc"
+        },
+        {
+          "kind": "commit",
+          "path": "7f31a6f5fddca3e1dc41f779e0de7c6b79a24f25",
+          "sha": "7f31a6f5fddca3e1dc41f779e0de7c6b79a24f25",
+          "url": "https://github.com/iamthamanic/Letzfetzprototype/commit/7f31a6f5fddca3e1dc41f779e0de7c6b79a24f25"
+        },
+        {
+          "kind": "file",
+          "path": ".project-memory/",
+          "url": "https://github.com/iamthamanic/Letzfetzprototype/tree/7f31a6f5fddca3e1dc41f779e0de7c6b79a24f25/.project-memory"
+        },
+        {
+          "kind": "file",
+          "path": "docs/PROJECT-STATUS.md",
+          "url": "https://github.com/iamthamanic/Letzfetzprototype/blob/7f31a6f5fddca3e1dc41f779e0de7c6b79a24f25/docs/PROJECT-STATUS.md"
+        },
+        {
+          "kind": "file",
+          "path": "docs/memory-live-doc/",
+          "url": "https://github.com/iamthamanic/Letzfetzprototype/tree/7f31a6f5fddca3e1dc41f779e0de7c6b79a24f25/docs/memory-live-doc"
+        }
+      ],
+      "screenshots": [],
+      "confidence": 0.9,
+      "review_status": "needs-review",
+      "id": "2026-07-19-memory-bootstrap",
+      "date": "2026-07-19",
+      "type": "bootstrap",
+      "title": {
+        "de": "Living Project Memory initialisiert",
+        "en": "Living project memory initialized"
+      },
+      "summary": {
+        "de": "Deep-Bootstrap + History-Backfill: .project-memory/, DE/EN-Docs, Viewer-Snapshot, 12 Meilensteine seit 2025-11.",
+        "en": "Deep bootstrap + history backfill: .project-memory/, DE/EN docs, viewer snapshot, 12 milestones since 2025-11."
+      },
+      "git": {
+        "base": "7f31a6f5fddca3e1dc41f779e0de7c6b79a24f25",
+        "head": "7f31a6f5fddca3e1dc41f779e0de7c6b79a24f25",
+        "branch": "feat/wip-ui-engine-overhaul",
+        "pull_request": null
+      }
+    },
+    {
+      "status": "recorded",
+      "user_impact": {
+        "de": [
+          "Playtester können V2-Pack und Szenarien opt-in testen."
+        ],
+        "en": [
+          "Playtesters can opt into V2 pack and scenarios."
+        ]
+      },
+      "developer_impact": {
+        "de": [
+          "Pack unter src/game/packs/v2/; Docs unter docs/rules/."
+        ],
+        "en": [
+          "Pack under src/game/packs/v2/; docs under docs/rules/."
+        ]
+      },
+      "operational_impact": {
+        "de": [],
+        "en": []
+      },
+      "packages": [],
+      "affected_features": [
+        "v2-phrase-playtest",
+        "playtest-cheatbox",
+        "rules-engine-v1"
+      ],
+      "affected_components": [
+        "src/game/packs/v2/",
+        "docs/rules/SPIELANLEITUNG_V2_DRAFT.md",
+        "docs/rules/SPIELANLEITUNG_V2_WIP.md"
+      ],
+      "breaking_changes": [],
+      "migration_required": false,
+      "security_relevant": false,
+      "evidence": [
+        {
+          "kind": "compare",
+          "path": "569ee562306a23b1eda9b35dd0b3f5723faa9e04...37f96bc02ad51b95b11045b88d0697f5c0bf732e",
+          "url": "https://github.com/iamthamanic/LetzFetz-Game/compare/569ee562306a23b1eda9b35dd0b3f5723faa9e04...37f96bc02ad51b95b11045b88d0697f5c0bf732e"
+        },
+        {
+          "kind": "commit",
+          "path": "37f96bc02ad51b95b11045b88d0697f5c0bf732e",
+          "sha": "37f96bc02ad51b95b11045b88d0697f5c0bf732e",
+          "url": "https://github.com/iamthamanic/LetzFetz-Game/commit/37f96bc02ad51b95b11045b88d0697f5c0bf732e"
+        },
+        {
+          "kind": "pr",
+          "path": "https://github.com/iamthamanic/Letzfetzprototype/pull/49",
+          "url": "https://github.com/iamthamanic/Letzfetzprototype/pull/49"
+        },
+        {
+          "kind": "file",
+          "path": "src/game/packs/v2/",
+          "url": "https://github.com/iamthamanic/LetzFetz-Game/tree/37f96bc02ad51b95b11045b88d0697f5c0bf732e/src/game/packs/v2"
+        },
+        {
+          "kind": "file",
+          "path": "docs/rules/SPIELANLEITUNG_V2_DRAFT.md",
+          "url": "https://github.com/iamthamanic/LetzFetz-Game/blob/37f96bc02ad51b95b11045b88d0697f5c0bf732e/docs/rules/SPIELANLEITUNG_V2_DRAFT.md"
+        },
+        {
+          "kind": "file",
+          "path": "docs/rules/SPIELANLEITUNG_V2_WIP.md",
+          "url": "https://github.com/iamthamanic/LetzFetz-Game/blob/37f96bc02ad51b95b11045b88d0697f5c0bf732e/docs/rules/SPIELANLEITUNG_V2_WIP.md"
+        },
+        {
+          "kind": "compare",
+          "path": "569ee562306a23b1eda9b35dd0b3f5723faa9e04...37f96bc02ad51b95b11045b88d0697f5c0bf732e",
+          "url": "https://github.com/iamthamanic/Letzfetzprototype/compare/569ee562306a23b1eda9b35dd0b3f5723faa9e04...37f96bc02ad51b95b11045b88d0697f5c0bf732e"
+        },
+        {
+          "kind": "commit",
+          "path": "37f96bc02ad51b95b11045b88d0697f5c0bf732e",
+          "sha": "37f96bc02ad51b95b11045b88d0697f5c0bf732e",
+          "url": "https://github.com/iamthamanic/Letzfetzprototype/commit/37f96bc02ad51b95b11045b88d0697f5c0bf732e"
+        },
+        {
+          "kind": "file",
+          "path": "src/game/packs/v2/",
+          "url": "https://github.com/iamthamanic/Letzfetzprototype/tree/37f96bc02ad51b95b11045b88d0697f5c0bf732e/src/game/packs/v2"
+        },
+        {
+          "kind": "file",
+          "path": "docs/rules/SPIELANLEITUNG_V2_DRAFT.md",
+          "url": "https://github.com/iamthamanic/Letzfetzprototype/blob/37f96bc02ad51b95b11045b88d0697f5c0bf732e/docs/rules/SPIELANLEITUNG_V2_DRAFT.md"
+        },
+        {
+          "kind": "file",
+          "path": "docs/rules/SPIELANLEITUNG_V2_WIP.md",
+          "url": "https://github.com/iamthamanic/Letzfetzprototype/blob/37f96bc02ad51b95b11045b88d0697f5c0bf732e/docs/rules/SPIELANLEITUNG_V2_WIP.md"
+        }
+      ],
+      "screenshots": [],
+      "confidence": 0.8,
+      "review_status": "needs-review",
+      "id": "2026-07-19-v2-foundation",
+      "date": "2026-07-19",
+      "type": "feature",
+      "title": {
+        "de": "V2-Playtest-Grundlage: P100 und Regel-Drafts",
+        "en": "V2 playtest foundation: P100 and rules drafts"
+      },
+      "summary": {
+        "de": "V2 P100 Pack, SPIELANLEITUNG_V2_DRAFT/WIP, Cheatbox O11 — noch nicht Engine-Wahrheit.",
+        "en": "V2 P100 pack, SPIELANLEITUNG_V2_DRAFT/WIP, cheatbox O11 — not engine truth yet."
+      },
+      "git": {
+        "base": "569ee562306a23b1eda9b35dd0b3f5723faa9e04",
+        "head": "37f96bc02ad51b95b11045b88d0697f5c0bf732e",
+        "branch": "main",
+        "pull_request": "https://github.com/iamthamanic/Letzfetzprototype/pull/49"
+      }
+    },
+    {
+      "status": "recorded",
+      "user_impact": {
+        "de": [
+          "Gebundene Karten zeigen Slot-Rollen; neue Build-/Challenge-Regeln im Playtest."
+        ],
+        "en": [
+          "Bound cards show slot roles; new build/challenge rules in playtest."
+        ]
+      },
+      "developer_impact": {
+        "de": [
+          "phraseBuild/phraseBonuses + Setup-Opt-in; Issues #45–#48."
+        ],
+        "en": [
+          "phraseBuild/phraseBonuses + setup opt-in; issues #45–#48."
+        ]
+      },
+      "operational_impact": {
+        "de": [],
+        "en": []
+      },
+      "packages": [],
+      "affected_features": [
+        "v2-phrase-playtest",
+        "solo-duel-ui"
+      ],
+      "affected_components": [
+        "src/game/engine/phraseBuild.ts",
+        "src/game/engine/phraseBonuses.ts",
+        "src/components/game/BoundCardRow.tsx",
+        "src/components/game/GameSetup.tsx"
+      ],
+      "breaking_changes": [],
+      "migration_required": false,
+      "security_relevant": false,
+      "evidence": [
+        {
+          "kind": "compare",
+          "path": "37f96bc02ad51b95b11045b88d0697f5c0bf732e...d88b350b1cde2978d3b68730b4648b92b48b3032",
+          "url": "https://github.com/iamthamanic/LetzFetz-Game/compare/37f96bc02ad51b95b11045b88d0697f5c0bf732e...d88b350b1cde2978d3b68730b4648b92b48b3032"
+        },
+        {
+          "kind": "commit",
+          "path": "d88b350b1cde2978d3b68730b4648b92b48b3032",
+          "sha": "d88b350b1cde2978d3b68730b4648b92b48b3032",
+          "url": "https://github.com/iamthamanic/LetzFetz-Game/commit/d88b350b1cde2978d3b68730b4648b92b48b3032"
+        },
+        {
+          "kind": "pr",
+          "path": "https://github.com/iamthamanic/Letzfetzprototype/pull/53",
+          "url": "https://github.com/iamthamanic/Letzfetzprototype/pull/53"
+        },
+        {
+          "kind": "file",
+          "path": "src/game/engine/phraseBuild.ts",
+          "url": "https://github.com/iamthamanic/LetzFetz-Game/blob/d88b350b1cde2978d3b68730b4648b92b48b3032/src/game/engine/phraseBuild.ts"
+        },
+        {
+          "kind": "file",
+          "path": "src/game/engine/phraseBonuses.ts",
+          "url": "https://github.com/iamthamanic/LetzFetz-Game/blob/d88b350b1cde2978d3b68730b4648b92b48b3032/src/game/engine/phraseBonuses.ts"
+        },
+        {
+          "kind": "file",
+          "path": "src/components/game/BoundCardRow.tsx",
+          "url": "https://github.com/iamthamanic/LetzFetz-Game/blob/d88b350b1cde2978d3b68730b4648b92b48b3032/src/components/game/BoundCardRow.tsx"
+        },
+        {
+          "kind": "file",
+          "path": "src/components/game/GameSetup.tsx",
+          "url": "https://github.com/iamthamanic/LetzFetz-Game/blob/d88b350b1cde2978d3b68730b4648b92b48b3032/src/components/game/GameSetup.tsx"
+        },
+        {
+          "kind": "compare",
+          "path": "37f96bc02ad51b95b11045b88d0697f5c0bf732e...d88b350b1cde2978d3b68730b4648b92b48b3032",
+          "url": "https://github.com/iamthamanic/Letzfetzprototype/compare/37f96bc02ad51b95b11045b88d0697f5c0bf732e...d88b350b1cde2978d3b68730b4648b92b48b3032"
+        },
+        {
+          "kind": "commit",
+          "path": "d88b350b1cde2978d3b68730b4648b92b48b3032",
+          "sha": "d88b350b1cde2978d3b68730b4648b92b48b3032",
+          "url": "https://github.com/iamthamanic/Letzfetzprototype/commit/d88b350b1cde2978d3b68730b4648b92b48b3032"
+        },
+        {
+          "kind": "file",
+          "path": "src/game/engine/phraseBuild.ts",
+          "url": "https://github.com/iamthamanic/Letzfetzprototype/blob/d88b350b1cde2978d3b68730b4648b92b48b3032/src/game/engine/phraseBuild.ts"
+        },
+        {
+          "kind": "file",
+          "path": "src/game/engine/phraseBonuses.ts",
+          "url": "https://github.com/iamthamanic/Letzfetzprototype/blob/d88b350b1cde2978d3b68730b4648b92b48b3032/src/game/engine/phraseBonuses.ts"
+        },
+        {
+          "kind": "file",
+          "path": "src/components/game/BoundCardRow.tsx",
+          "url": "https://github.com/iamthamanic/Letzfetzprototype/blob/d88b350b1cde2978d3b68730b4648b92b48b3032/src/components/game/BoundCardRow.tsx"
+        },
+        {
+          "kind": "file",
+          "path": "src/components/game/GameSetup.tsx",
+          "url": "https://github.com/iamthamanic/Letzfetzprototype/blob/d88b350b1cde2978d3b68730b4648b92b48b3032/src/components/game/GameSetup.tsx"
+        }
+      ],
+      "screenshots": [
+        {
+          "id": "v2-bound-labels",
+          "path": "docs/memory-live-doc/assets/2026-07-19-v2-phrase-playtest/bound-labels.png",
+          "status": "missing",
+          "caption": {
+            "de": "V2 Bound-Row Labels",
+            "en": "V2 bound row labels"
+          }
+        }
+      ],
+      "confidence": 0.8,
+      "review_status": "needs-review",
+      "id": "2026-07-19-v2-phrase-playtest",
+      "date": "2026-07-19",
+      "type": "feature",
+      "title": {
+        "de": "V2 Phrase-Slots, Challenge und Mono-Pack",
+        "en": "V2 phrase slots, challenge, and mono pack"
+      },
+      "summary": {
+        "de": "Phrase-Build (Kern/Modus/Werkzeug/Ladung), Challenge-Resistance, Activate/Passives, Mono MB1, UI-Labels auf Bound-Row.",
+        "en": "Phrase build (core/mode/tool/charge), challenge resistance, activate/passives, mono MB1, UI labels on bound row."
+      },
+      "git": {
+        "base": "37f96bc02ad51b95b11045b88d0697f5c0bf732e",
+        "head": "d88b350b1cde2978d3b68730b4648b92b48b3032",
+        "branch": "main",
+        "pull_request": "https://github.com/iamthamanic/Letzfetzprototype/pull/53"
+      }
+    },
+    {
+      "status": "recorded",
+      "user_impact": {
+        "de": [
+          "Aktive WIP-Erfahrung auf dem Feature-Branch (noch nicht main)."
+        ],
+        "en": [
+          "Active WIP experience on the feature branch (not yet main)."
+        ]
+      },
+      "developer_impact": {
+        "de": [
+          "Merge main→WIP ohne Phrase/MatchMeta zu verlieren."
+        ],
+        "en": [
+          "Merge main→WIP without losing phrase/MatchMeta."
+        ]
+      },
+      "operational_impact": {
+        "de": [],
+        "en": []
+      },
+      "packages": [],
+      "affected_features": [
+        "solo-duel-ui",
+        "v2-phrase-playtest",
+        "presentation-vfx",
+        "rules-engine-v1"
+      ],
+      "affected_components": [
+        "src/components/",
+        "src/game/engine/",
+        "src/game/types/matchMeta.ts"
+      ],
+      "breaking_changes": [],
+      "migration_required": false,
+      "security_relevant": false,
+      "evidence": [
+        {
+          "kind": "compare",
+          "path": "d88b350b1cde2978d3b68730b4648b92b48b3032...7f31a6f5fddca3e1dc41f779e0de7c6b79a24f25",
+          "url": "https://github.com/iamthamanic/LetzFetz-Game/compare/d88b350b1cde2978d3b68730b4648b92b48b3032...7f31a6f5fddca3e1dc41f779e0de7c6b79a24f25"
+        },
+        {
+          "kind": "commit",
+          "path": "7f31a6f5fddca3e1dc41f779e0de7c6b79a24f25",
+          "sha": "7f31a6f5fddca3e1dc41f779e0de7c6b79a24f25",
+          "url": "https://github.com/iamthamanic/LetzFetz-Game/commit/7f31a6f5fddca3e1dc41f779e0de7c6b79a24f25"
+        },
+        {
+          "kind": "file",
+          "path": "src/components/",
+          "url": "https://github.com/iamthamanic/LetzFetz-Game/tree/7f31a6f5fddca3e1dc41f779e0de7c6b79a24f25/src/components"
+        },
+        {
+          "kind": "file",
+          "path": "src/game/engine/",
+          "url": "https://github.com/iamthamanic/LetzFetz-Game/tree/7f31a6f5fddca3e1dc41f779e0de7c6b79a24f25/src/game/engine"
+        },
+        {
+          "kind": "file",
+          "path": "src/game/types/matchMeta.ts",
+          "url": "https://github.com/iamthamanic/LetzFetz-Game/blob/7f31a6f5fddca3e1dc41f779e0de7c6b79a24f25/src/game/types/matchMeta.ts"
+        },
+        {
+          "kind": "compare",
+          "path": "d88b350b1cde2978d3b68730b4648b92b48b3032...7f31a6f5fddca3e1dc41f779e0de7c6b79a24f25",
+          "url": "https://github.com/iamthamanic/Letzfetzprototype/compare/d88b350b1cde2978d3b68730b4648b92b48b3032...7f31a6f5fddca3e1dc41f779e0de7c6b79a24f25"
+        },
+        {
+          "kind": "commit",
+          "path": "7f31a6f5fddca3e1dc41f779e0de7c6b79a24f25",
+          "sha": "7f31a6f5fddca3e1dc41f779e0de7c6b79a24f25",
+          "url": "https://github.com/iamthamanic/Letzfetzprototype/commit/7f31a6f5fddca3e1dc41f779e0de7c6b79a24f25"
+        },
+        {
+          "kind": "file",
+          "path": "src/components/",
+          "url": "https://github.com/iamthamanic/Letzfetzprototype/tree/7f31a6f5fddca3e1dc41f779e0de7c6b79a24f25/src/components"
+        },
+        {
+          "kind": "file",
+          "path": "src/game/engine/",
+          "url": "https://github.com/iamthamanic/Letzfetzprototype/tree/7f31a6f5fddca3e1dc41f779e0de7c6b79a24f25/src/game/engine"
+        },
+        {
+          "kind": "file",
+          "path": "src/game/types/matchMeta.ts",
+          "url": "https://github.com/iamthamanic/Letzfetzprototype/blob/7f31a6f5fddca3e1dc41f779e0de7c6b79a24f25/src/game/types/matchMeta.ts"
+        }
+      ],
+      "screenshots": [],
+      "confidence": 0.7,
+      "review_status": "needs-review",
+      "id": "2026-07-19-wip-ui-engine-overhaul",
+      "date": "2026-07-19",
+      "type": "feature",
+      "title": {
+        "de": "WIP: Nav-/Arena-Glitch-Engine und UI-Overhaul",
+        "en": "WIP: nav/arena-glitch engine and UI overhaul"
+      },
+      "summary": {
+        "de": "Branch feat/wip-ui-engine-overhaul: Nav-Overhaul, Arena/Glitch-Engine, Presentation/Playtest-UI; Merge hält MatchMeta und V2 Phrase.",
+        "en": "Branch feat/wip-ui-engine-overhaul: nav overhaul, arena/glitch engine, presentation/playtest UI; merge keeps MatchMeta and V2 phrase."
+      },
+      "git": {
+        "base": "d88b350b1cde2978d3b68730b4648b92b48b3032",
+        "head": "7f31a6f5fddca3e1dc41f779e0de7c6b79a24f25",
+        "branch": "feat/wip-ui-engine-overhaul",
+        "pull_request": null
+      }
+    },
+    {
+      "status": "recorded",
+      "user_impact": {
+        "de": [
+          "Deutlich produktnäheres Solo-Erlebnis inkl. Mobile."
+        ],
+        "en": [
+          "Much more product-like solo experience including mobile."
+        ]
+      },
+      "developer_impact": {
+        "de": [
+          "Viele kleine Issue-PRs gemerged; Presentation- und Audio-Services ausgebaut."
+        ],
+        "en": [
+          "Many small issue PRs merged; presentation and audio services expanded."
+        ]
+      },
+      "operational_impact": {
+        "de": [],
+        "en": []
+      },
+      "packages": [],
+      "affected_features": [
+        "solo-duel-ui",
+        "presentation-vfx",
+        "llm-bot-ollama"
+      ],
+      "affected_components": [
+        "src/components/game/",
+        "src/services/audio/"
+      ],
+      "breaking_changes": [],
+      "migration_required": false,
+      "security_relevant": false,
+      "evidence": [
+        {
+          "kind": "compare",
+          "path": "840699fd4acc98b28bd2077a4696bc374b331804...569ee562306a23b1eda9b35dd0b3f5723faa9e04",
+          "url": "https://github.com/iamthamanic/LetzFetz-Game/compare/840699fd4acc98b28bd2077a4696bc374b331804...569ee562306a23b1eda9b35dd0b3f5723faa9e04"
+        },
+        {
+          "kind": "commit",
+          "path": "569ee562306a23b1eda9b35dd0b3f5723faa9e04",
+          "sha": "569ee562306a23b1eda9b35dd0b3f5723faa9e04",
+          "url": "https://github.com/iamthamanic/LetzFetz-Game/commit/569ee562306a23b1eda9b35dd0b3f5723faa9e04"
+        },
+        {
+          "kind": "pr",
+          "path": "https://github.com/iamthamanic/Letzfetzprototype/pull/43",
+          "url": "https://github.com/iamthamanic/Letzfetzprototype/pull/43"
+        },
+        {
+          "kind": "file",
+          "path": "src/components/game/",
+          "url": "https://github.com/iamthamanic/LetzFetz-Game/tree/569ee562306a23b1eda9b35dd0b3f5723faa9e04/src/components/game"
+        },
+        {
+          "kind": "file",
+          "path": "src/services/audio/",
+          "url": "https://github.com/iamthamanic/LetzFetz-Game/tree/569ee562306a23b1eda9b35dd0b3f5723faa9e04/src/services/audio"
+        },
+        {
+          "kind": "compare",
+          "path": "840699fd4acc98b28bd2077a4696bc374b331804...569ee562306a23b1eda9b35dd0b3f5723faa9e04",
+          "url": "https://github.com/iamthamanic/Letzfetzprototype/compare/840699fd4acc98b28bd2077a4696bc374b331804...569ee562306a23b1eda9b35dd0b3f5723faa9e04"
+        },
+        {
+          "kind": "commit",
+          "path": "569ee562306a23b1eda9b35dd0b3f5723faa9e04",
+          "sha": "569ee562306a23b1eda9b35dd0b3f5723faa9e04",
+          "url": "https://github.com/iamthamanic/Letzfetzprototype/commit/569ee562306a23b1eda9b35dd0b3f5723faa9e04"
+        },
+        {
+          "kind": "file",
+          "path": "src/components/game/",
+          "url": "https://github.com/iamthamanic/Letzfetzprototype/tree/569ee562306a23b1eda9b35dd0b3f5723faa9e04/src/components/game"
+        },
+        {
+          "kind": "file",
+          "path": "src/services/audio/",
+          "url": "https://github.com/iamthamanic/Letzfetzprototype/tree/569ee562306a23b1eda9b35dd0b3f5723faa9e04/src/services/audio"
+        }
+      ],
+      "screenshots": [
+        {
+          "id": "playmat-desktop",
+          "path": "docs/memory-live-doc/assets/2026-07-13-ui-feel-wave/playmat-desktop.png",
+          "status": "missing",
+          "caption": {
+            "de": "Playmat Desktop",
+            "en": "Playmat desktop"
+          }
+        },
+        {
+          "id": "playmat-mobile",
+          "path": "docs/memory-live-doc/assets/2026-07-13-ui-feel-wave/playmat-mobile.png",
+          "status": "missing",
+          "caption": {
+            "de": "Playmat Mobile 390",
+            "en": "Playmat mobile 390"
+          }
+        }
+      ],
+      "confidence": 0.8,
+      "review_status": "needs-review",
+      "id": "2026-07-13-ui-feel-wave",
+      "date": "2026-07-13",
+      "type": "feature",
+      "title": {
+        "de": "UI-Feel-Welle: Combat, DnD, VFX, Mobile",
+        "en": "UI-feel wave: combat, DnD, VFX, mobile"
+      },
+      "summary": {
+        "de": "CombatStage, W6-Würfel, Targeting, Bind/Discard-VFX, SFX, dnd-kit, responsive Playmat und Mobile-Docks (Issues #11–#21, PR #43).",
+        "en": "CombatStage, W6 die, targeting, bind/discard VFX, SFX, dnd-kit, responsive playmat and mobile docks (issues #11–#21, PR #43)."
+      },
+      "git": {
+        "base": "840699fd4acc98b28bd2077a4696bc374b331804",
+        "head": "569ee562306a23b1eda9b35dd0b3f5723faa9e04",
+        "branch": "main",
+        "pull_request": "https://github.com/iamthamanic/Letzfetzprototype/pull/43"
+      }
+    },
+    {
+      "status": "recorded",
+      "user_impact": {
+        "de": [
+          "Schnellere Playtests; klarere Intro- und Face-down-Karten."
+        ],
+        "en": [
+          "Faster playtests; clearer intro and face-down cards."
+        ]
+      },
+      "developer_impact": {
+        "de": [
+          "Cheatbox nur Dev; Assets für Card-Back und Intro."
+        ],
+        "en": [
+          "Cheatbox is dev-only; assets for card back and intro."
+        ]
+      },
+      "operational_impact": {
+        "de": [],
+        "en": []
+      },
+      "packages": [],
+      "affected_features": [
+        "playtest-cheatbox",
+        "solo-duel-ui"
+      ],
+      "affected_components": [
+        "src/components/game/PlaytestCheatbox.tsx",
+        "src/components/cards/"
+      ],
+      "breaking_changes": [],
+      "migration_required": false,
+      "security_relevant": false,
+      "evidence": [
+        {
+          "kind": "compare",
+          "path": "f262898c7e8b4ac3ea5ce5147ccf2d9e208dedcc...94c8830a484e857cf1ea6e0347946d2d70847466",
+          "url": "https://github.com/iamthamanic/LetzFetz-Game/compare/f262898c7e8b4ac3ea5ce5147ccf2d9e208dedcc...94c8830a484e857cf1ea6e0347946d2d70847466"
+        },
+        {
+          "kind": "commit",
+          "path": "94c8830a484e857cf1ea6e0347946d2d70847466",
+          "sha": "94c8830a484e857cf1ea6e0347946d2d70847466",
+          "url": "https://github.com/iamthamanic/LetzFetz-Game/commit/94c8830a484e857cf1ea6e0347946d2d70847466"
+        },
+        {
+          "kind": "file",
+          "path": "src/components/game/PlaytestCheatbox.tsx",
+          "url": "https://github.com/iamthamanic/LetzFetz-Game/blob/94c8830a484e857cf1ea6e0347946d2d70847466/src/components/game/PlaytestCheatbox.tsx"
+        },
+        {
+          "kind": "file",
+          "path": "src/components/cards/",
+          "url": "https://github.com/iamthamanic/LetzFetz-Game/tree/94c8830a484e857cf1ea6e0347946d2d70847466/src/components/cards"
+        },
+        {
+          "kind": "compare",
+          "path": "f262898c7e8b4ac3ea5ce5147ccf2d9e208dedcc...94c8830a484e857cf1ea6e0347946d2d70847466",
+          "url": "https://github.com/iamthamanic/Letzfetzprototype/compare/f262898c7e8b4ac3ea5ce5147ccf2d9e208dedcc...94c8830a484e857cf1ea6e0347946d2d70847466"
+        },
+        {
+          "kind": "commit",
+          "path": "94c8830a484e857cf1ea6e0347946d2d70847466",
+          "sha": "94c8830a484e857cf1ea6e0347946d2d70847466",
+          "url": "https://github.com/iamthamanic/Letzfetzprototype/commit/94c8830a484e857cf1ea6e0347946d2d70847466"
+        },
+        {
+          "kind": "file",
+          "path": "src/components/game/PlaytestCheatbox.tsx",
+          "url": "https://github.com/iamthamanic/Letzfetzprototype/blob/94c8830a484e857cf1ea6e0347946d2d70847466/src/components/game/PlaytestCheatbox.tsx"
+        },
+        {
+          "kind": "file",
+          "path": "src/components/cards/",
+          "url": "https://github.com/iamthamanic/Letzfetzprototype/tree/94c8830a484e857cf1ea6e0347946d2d70847466/src/components/cards"
+        }
+      ],
+      "screenshots": [
+        {
+          "id": "cheatbox",
+          "path": "docs/memory-live-doc/assets/2026-06-24-cheatbox-intro/cheatbox.png",
+          "status": "missing",
+          "caption": {
+            "de": "Playtest-Cheatbox",
+            "en": "Playtest cheatbox"
+          }
+        }
+      ],
+      "confidence": 0.75,
+      "review_status": "needs-review",
+      "id": "2026-06-24-cheatbox-intro",
+      "date": "2026-06-24",
+      "type": "feature",
+      "title": {
+        "de": "Playtest-Cheatbox und Intro-/Card-Back-Polish",
+        "en": "Playtest cheatbox and intro/card-back polish"
+      },
+      "summary": {
+        "de": "Dev-Cheatbox für State-Jumps; MatchIntro-SFX-Sync; Letz-Fetz-Kartenrückseite.",
+        "en": "Dev cheatbox for state jumps; MatchIntro SFX sync; Letz Fetz card back."
+      },
+      "git": {
+        "base": "f262898c7e8b4ac3ea5ce5147ccf2d9e208dedcc",
+        "head": "94c8830a484e857cf1ea6e0347946d2d70847466",
+        "branch": "main",
+        "pull_request": null
+      }
+    },
+    {
+      "status": "recorded",
+      "user_impact": {
+        "de": [
+          "Züge und Kampf wirken geordneter und lesbarer."
+        ],
+        "en": [
+          "Turns and combat feel more ordered and readable."
+        ]
+      },
+      "developer_impact": {
+        "de": [
+          "Presentation-Schicht zwischen Engine-Events und React."
+        ],
+        "en": [
+          "Presentation layer between engine events and React."
+        ]
+      },
+      "operational_impact": {
+        "de": [],
+        "en": []
+      },
+      "packages": [],
+      "affected_features": [
+        "presentation-vfx",
+        "solo-duel-ui"
+      ],
+      "affected_components": [
+        "src/components/game/presentation/",
+        "src/components/game/PlaymatBoard.tsx"
+      ],
+      "breaking_changes": [],
+      "migration_required": false,
+      "security_relevant": false,
+      "evidence": [
+        {
+          "kind": "compare",
+          "path": "94c8830a484e857cf1ea6e0347946d2d70847466...840699fd4acc98b28bd2077a4696bc374b331804",
+          "url": "https://github.com/iamthamanic/LetzFetz-Game/compare/94c8830a484e857cf1ea6e0347946d2d70847466...840699fd4acc98b28bd2077a4696bc374b331804"
+        },
+        {
+          "kind": "commit",
+          "path": "840699fd4acc98b28bd2077a4696bc374b331804",
+          "sha": "840699fd4acc98b28bd2077a4696bc374b331804",
+          "url": "https://github.com/iamthamanic/LetzFetz-Game/commit/840699fd4acc98b28bd2077a4696bc374b331804"
+        },
+        {
+          "kind": "file",
+          "path": "src/components/game/presentation/",
+          "url": "https://github.com/iamthamanic/LetzFetz-Game/tree/840699fd4acc98b28bd2077a4696bc374b331804/src/components/game/presentation"
+        },
+        {
+          "kind": "file",
+          "path": "src/components/game/PlaymatBoard.tsx",
+          "url": "https://github.com/iamthamanic/LetzFetz-Game/blob/840699fd4acc98b28bd2077a4696bc374b331804/src/components/game/PlaymatBoard.tsx"
+        },
+        {
+          "kind": "compare",
+          "path": "94c8830a484e857cf1ea6e0347946d2d70847466...840699fd4acc98b28bd2077a4696bc374b331804",
+          "url": "https://github.com/iamthamanic/Letzfetzprototype/compare/94c8830a484e857cf1ea6e0347946d2d70847466...840699fd4acc98b28bd2077a4696bc374b331804"
+        },
+        {
+          "kind": "commit",
+          "path": "840699fd4acc98b28bd2077a4696bc374b331804",
+          "sha": "840699fd4acc98b28bd2077a4696bc374b331804",
+          "url": "https://github.com/iamthamanic/Letzfetzprototype/commit/840699fd4acc98b28bd2077a4696bc374b331804"
+        },
+        {
+          "kind": "file",
+          "path": "src/components/game/presentation/",
+          "url": "https://github.com/iamthamanic/Letzfetzprototype/tree/840699fd4acc98b28bd2077a4696bc374b331804/src/components/game/presentation"
+        },
+        {
+          "kind": "file",
+          "path": "src/components/game/PlaymatBoard.tsx",
+          "url": "https://github.com/iamthamanic/Letzfetzprototype/blob/840699fd4acc98b28bd2077a4696bc374b331804/src/components/game/PlaymatBoard.tsx"
+        }
+      ],
+      "screenshots": [],
+      "confidence": 0.8,
+      "review_status": "needs-review",
+      "id": "2026-06-24-presentation-playmat",
+      "date": "2026-06-24",
+      "type": "feature",
+      "title": {
+        "de": "Presentation-Queue und Playmat-Zonen",
+        "en": "Presentation queue and playmat zones"
+      },
+      "summary": {
+        "de": "GamePresentationQueue sequenziert UI-Animationen; generalisierte Playmat-Zonen vom Späti-Preview.",
+        "en": "GamePresentationQueue sequences UI animations; generalized playmat zones from Späti preview."
+      },
+      "git": {
+        "base": "94c8830a484e857cf1ea6e0347946d2d70847466",
+        "head": "840699fd4acc98b28bd2077a4696bc374b331804",
+        "branch": "main",
+        "pull_request": null
+      }
+    },
+    {
+      "status": "recorded",
+      "user_impact": {
+        "de": [
+          "Erste richtige Partie-UI mit Intro-Flow und neuer Nav."
+        ],
+        "en": [
+          "First real match UI with intro flow and new nav."
+        ]
+      },
+      "developer_impact": {
+        "de": [
+          "GameView/Playmat-Grundlage; AppNav Tone-aware."
+        ],
+        "en": [
+          "GameView/playmat foundation; tone-aware AppNav."
+        ]
+      },
+      "operational_impact": {
+        "de": [],
+        "en": []
+      },
+      "packages": [],
+      "affected_features": [
+        "solo-duel-ui",
+        "card-library"
+      ],
+      "affected_components": [
+        "src/components/game/",
+        "src/components/AppNav.tsx",
+        "src/components/MainMenu.tsx"
+      ],
+      "breaking_changes": [],
+      "migration_required": false,
+      "security_relevant": false,
+      "evidence": [
+        {
+          "kind": "compare",
+          "path": "495fa6c6b207eb56e5ff06eb2c32ed0f9e376ba8...f262898c7e8b4ac3ea5ce5147ccf2d9e208dedcc",
+          "url": "https://github.com/iamthamanic/LetzFetz-Game/compare/495fa6c6b207eb56e5ff06eb2c32ed0f9e376ba8...f262898c7e8b4ac3ea5ce5147ccf2d9e208dedcc"
+        },
+        {
+          "kind": "commit",
+          "path": "f262898c7e8b4ac3ea5ce5147ccf2d9e208dedcc",
+          "sha": "f262898c7e8b4ac3ea5ce5147ccf2d9e208dedcc",
+          "url": "https://github.com/iamthamanic/LetzFetz-Game/commit/f262898c7e8b4ac3ea5ce5147ccf2d9e208dedcc"
+        },
+        {
+          "kind": "file",
+          "path": "src/components/game/",
+          "url": "https://github.com/iamthamanic/LetzFetz-Game/tree/f262898c7e8b4ac3ea5ce5147ccf2d9e208dedcc/src/components/game"
+        },
+        {
+          "kind": "file",
+          "path": "src/components/AppNav.tsx",
+          "url": "https://github.com/iamthamanic/LetzFetz-Game/blob/f262898c7e8b4ac3ea5ce5147ccf2d9e208dedcc/src/components/AppNav.tsx"
+        },
+        {
+          "kind": "file",
+          "path": "src/components/MainMenu.tsx",
+          "url": "https://github.com/iamthamanic/LetzFetz-Game/blob/f262898c7e8b4ac3ea5ce5147ccf2d9e208dedcc/src/components/MainMenu.tsx"
+        },
+        {
+          "kind": "compare",
+          "path": "495fa6c6b207eb56e5ff06eb2c32ed0f9e376ba8...f262898c7e8b4ac3ea5ce5147ccf2d9e208dedcc",
+          "url": "https://github.com/iamthamanic/Letzfetzprototype/compare/495fa6c6b207eb56e5ff06eb2c32ed0f9e376ba8...f262898c7e8b4ac3ea5ce5147ccf2d9e208dedcc"
+        },
+        {
+          "kind": "commit",
+          "path": "f262898c7e8b4ac3ea5ce5147ccf2d9e208dedcc",
+          "sha": "f262898c7e8b4ac3ea5ce5147ccf2d9e208dedcc",
+          "url": "https://github.com/iamthamanic/Letzfetzprototype/commit/f262898c7e8b4ac3ea5ce5147ccf2d9e208dedcc"
+        },
+        {
+          "kind": "file",
+          "path": "src/components/game/",
+          "url": "https://github.com/iamthamanic/Letzfetzprototype/tree/f262898c7e8b4ac3ea5ce5147ccf2d9e208dedcc/src/components/game"
+        },
+        {
+          "kind": "file",
+          "path": "src/components/AppNav.tsx",
+          "url": "https://github.com/iamthamanic/Letzfetzprototype/blob/f262898c7e8b4ac3ea5ce5147ccf2d9e208dedcc/src/components/AppNav.tsx"
+        },
+        {
+          "kind": "file",
+          "path": "src/components/MainMenu.tsx",
+          "url": "https://github.com/iamthamanic/Letzfetzprototype/blob/f262898c7e8b4ac3ea5ce5147ccf2d9e208dedcc/src/components/MainMenu.tsx"
+        }
+      ],
+      "screenshots": [
+        {
+          "id": "solo-duel-shell",
+          "path": "docs/memory-live-doc/assets/2026-06-20-solo-duel-shell/playmat.png",
+          "status": "missing",
+          "caption": {
+            "de": "Solo-Duel Playmat",
+            "en": "Solo duel playmat"
+          }
+        },
+        {
+          "id": "main-nav",
+          "path": "docs/memory-live-doc/assets/2026-06-20-solo-duel-shell/nav.png",
+          "status": "missing",
+          "caption": {
+            "de": "Hauptnavigation",
+            "en": "Main navigation"
+          }
+        }
+      ],
+      "confidence": 0.8,
+      "review_status": "needs-review",
+      "id": "2026-06-20-solo-duel-shell",
+      "date": "2026-06-20",
+      "type": "feature",
+      "title": {
+        "de": "Solo-Duel-Board und Stone-Shell-Navigation",
+        "en": "Solo duel board and stone shell navigation"
+      },
+      "summary": {
+        "de": "Duel-Board mit MatchIntro-Crash; Header von Purple auf Stone-Shell mit Tone-Tabs.",
+        "en": "Duel board with MatchIntro crash; header from purple to stone shell with tone tabs."
+      },
+      "git": {
+        "base": "495fa6c6b207eb56e5ff06eb2c32ed0f9e376ba8",
+        "head": "f262898c7e8b4ac3ea5ce5147ccf2d9e208dedcc",
+        "branch": "main",
+        "pull_request": null
+      }
+    },
+    {
+      "status": "recorded",
+      "user_impact": {
+        "de": [
+          "Regeln digital testbar; Karten können authored und bebildert werden."
+        ],
+        "en": [
+          "Rules digitally testable; cards can be authored and illustrated."
+        ]
+      },
+      "developer_impact": {
+        "de": [
+          "Schichtentrennung: Engine ohne React; Vitest für src/game/."
+        ],
+        "en": [
+          "Layering: engine without React; Vitest for src/game/."
+        ]
+      },
+      "operational_impact": {
+        "de": [],
+        "en": []
+      },
+      "packages": [],
+      "affected_features": [
+        "rules-engine-v1",
+        "card-forge",
+        "card-art-pipeline"
+      ],
+      "affected_components": [
+        "src/game/",
+        "src/components/CardForge.tsx",
+        "src/services/cardArt/"
+      ],
+      "breaking_changes": [],
+      "migration_required": false,
+      "security_relevant": false,
+      "evidence": [
+        {
+          "kind": "compare",
+          "path": "7a97f6db5594bc0ebd7e13cf0223fd5fd5c65e5d...098fb4f1574239e109222d573ce027d84590f154",
+          "url": "https://github.com/iamthamanic/LetzFetz-Game/compare/7a97f6db5594bc0ebd7e13cf0223fd5fd5c65e5d...098fb4f1574239e109222d573ce027d84590f154"
+        },
+        {
+          "kind": "commit",
+          "path": "098fb4f1574239e109222d573ce027d84590f154",
+          "sha": "098fb4f1574239e109222d573ce027d84590f154",
+          "url": "https://github.com/iamthamanic/LetzFetz-Game/commit/098fb4f1574239e109222d573ce027d84590f154"
+        },
+        {
+          "kind": "file",
+          "path": "src/game/",
+          "url": "https://github.com/iamthamanic/LetzFetz-Game/tree/098fb4f1574239e109222d573ce027d84590f154/src/game"
+        },
+        {
+          "kind": "file",
+          "path": "src/components/CardForge.tsx",
+          "url": "https://github.com/iamthamanic/LetzFetz-Game/blob/098fb4f1574239e109222d573ce027d84590f154/src/components/CardForge.tsx"
+        },
+        {
+          "kind": "file",
+          "path": "src/services/cardArt/",
+          "url": "https://github.com/iamthamanic/LetzFetz-Game/tree/098fb4f1574239e109222d573ce027d84590f154/src/services/cardArt"
+        },
+        {
+          "kind": "compare",
+          "path": "7a97f6db5594bc0ebd7e13cf0223fd5fd5c65e5d...098fb4f1574239e109222d573ce027d84590f154",
+          "url": "https://github.com/iamthamanic/Letzfetzprototype/compare/7a97f6db5594bc0ebd7e13cf0223fd5fd5c65e5d...098fb4f1574239e109222d573ce027d84590f154"
+        },
+        {
+          "kind": "commit",
+          "path": "098fb4f1574239e109222d573ce027d84590f154",
+          "sha": "098fb4f1574239e109222d573ce027d84590f154",
+          "url": "https://github.com/iamthamanic/Letzfetzprototype/commit/098fb4f1574239e109222d573ce027d84590f154"
+        },
+        {
+          "kind": "file",
+          "path": "src/game/",
+          "url": "https://github.com/iamthamanic/Letzfetzprototype/tree/098fb4f1574239e109222d573ce027d84590f154/src/game"
+        },
+        {
+          "kind": "file",
+          "path": "src/components/CardForge.tsx",
+          "url": "https://github.com/iamthamanic/Letzfetzprototype/blob/098fb4f1574239e109222d573ce027d84590f154/src/components/CardForge.tsx"
+        },
+        {
+          "kind": "file",
+          "path": "src/services/cardArt/",
+          "url": "https://github.com/iamthamanic/Letzfetzprototype/tree/098fb4f1574239e109222d573ce027d84590f154/src/services/cardArt"
+        }
+      ],
+      "screenshots": [],
+      "confidence": 0.85,
+      "review_status": "needs-review",
+      "id": "2026-06-18-rules-engine-forge",
+      "date": "2026-06-18",
+      "type": "feature",
+      "title": {
+        "de": "Rules Engine, Card Forge und Kartenkunst",
+        "en": "Rules engine, Card Forge, and card art"
+      },
+      "summary": {
+        "de": "src/game/ mit Base Pack und Tests; Forge-Workflow; Higgsfield/Card-Art-Pipeline.",
+        "en": "src/game/ with base pack and tests; Forge workflow; Higgsfield/card-art pipeline."
+      },
+      "git": {
+        "base": "7a97f6db5594bc0ebd7e13cf0223fd5fd5c65e5d",
+        "head": "098fb4f1574239e109222d573ce027d84590f154",
+        "branch": "main",
+        "pull_request": null
+      }
+    },
+    {
+      "status": "recorded",
+      "user_impact": {
+        "de": [
+          "Einheitlicheres Look & Feel über Menü, Forge und Spiel."
+        ],
+        "en": [
+          "More consistent look and feel across menu, forge, and play."
+        ]
+      },
+      "developer_impact": {
+        "de": [
+          "components/ui/ als Styleguide-Basis."
+        ],
+        "en": [
+          "components/ui/ as styleguide foundation."
+        ]
+      },
+      "operational_impact": {
+        "de": [],
+        "en": []
+      },
+      "packages": [],
+      "affected_features": [],
+      "affected_components": [
+        "src/components/ui/"
+      ],
+      "breaking_changes": [],
+      "migration_required": false,
+      "security_relevant": false,
+      "evidence": [
+        {
+          "kind": "compare",
+          "path": "098fb4f1574239e109222d573ce027d84590f154...495fa6c6b207eb56e5ff06eb2c32ed0f9e376ba8",
+          "url": "https://github.com/iamthamanic/LetzFetz-Game/compare/098fb4f1574239e109222d573ce027d84590f154...495fa6c6b207eb56e5ff06eb2c32ed0f9e376ba8"
+        },
+        {
+          "kind": "commit",
+          "path": "495fa6c6b207eb56e5ff06eb2c32ed0f9e376ba8",
+          "sha": "495fa6c6b207eb56e5ff06eb2c32ed0f9e376ba8",
+          "url": "https://github.com/iamthamanic/LetzFetz-Game/commit/495fa6c6b207eb56e5ff06eb2c32ed0f9e376ba8"
+        },
+        {
+          "kind": "file",
+          "path": "src/components/ui/",
+          "url": "https://github.com/iamthamanic/LetzFetz-Game/tree/495fa6c6b207eb56e5ff06eb2c32ed0f9e376ba8/src/components/ui"
+        },
+        {
+          "kind": "compare",
+          "path": "098fb4f1574239e109222d573ce027d84590f154...495fa6c6b207eb56e5ff06eb2c32ed0f9e376ba8",
+          "url": "https://github.com/iamthamanic/Letzfetzprototype/compare/098fb4f1574239e109222d573ce027d84590f154...495fa6c6b207eb56e5ff06eb2c32ed0f9e376ba8"
+        },
+        {
+          "kind": "commit",
+          "path": "495fa6c6b207eb56e5ff06eb2c32ed0f9e376ba8",
+          "sha": "495fa6c6b207eb56e5ff06eb2c32ed0f9e376ba8",
+          "url": "https://github.com/iamthamanic/Letzfetzprototype/commit/495fa6c6b207eb56e5ff06eb2c32ed0f9e376ba8"
+        },
+        {
+          "kind": "file",
+          "path": "src/components/ui/",
+          "url": "https://github.com/iamthamanic/Letzfetzprototype/tree/495fa6c6b207eb56e5ff06eb2c32ed0f9e376ba8/src/components/ui"
+        }
+      ],
+      "screenshots": [],
+      "confidence": 0.75,
+      "review_status": "needs-review",
+      "id": "2026-06-18-ui-primitives",
+      "date": "2026-06-18",
+      "type": "architecture",
+      "title": {
+        "de": "UI-Primitives und Layout vereinheitlicht",
+        "en": "UI primitives and layout unified"
+      },
+      "summary": {
+        "de": "Gemeinsame Primitives und konsistentes App-Layout statt Ad-hoc-Styles.",
+        "en": "Shared primitives and consistent app layout instead of ad-hoc styles."
+      },
+      "git": {
+        "base": "098fb4f1574239e109222d573ce027d84590f154",
+        "head": "495fa6c6b207eb56e5ff06eb2c32ed0f9e376ba8",
+        "branch": "main",
+        "pull_request": null
+      }
+    },
+    {
+      "status": "recorded",
+      "user_impact": {
+        "de": [
+          "Forge-Sync bleibt an Legacy-Supabase gebunden (bis Migration)."
+        ],
+        "en": [
+          "Forge sync remains on legacy Supabase until migration."
+        ]
+      },
+      "developer_impact": {
+        "de": [
+          "supabase/ ist versioniert; kein Game-State-Server."
+        ],
+        "en": [
+          "supabase/ is versioned; not a game-state server."
+        ]
+      },
+      "operational_impact": {
+        "de": [],
+        "en": []
+      },
+      "packages": [],
+      "affected_features": [
+        "card-forge"
+      ],
+      "affected_components": [
+        "supabase/"
+      ],
+      "breaking_changes": [],
+      "migration_required": false,
+      "security_relevant": true,
+      "evidence": [
+        {
+          "kind": "compare",
+          "path": "93c1b925207c030e3d409c1878dbce88749a2c30...7a97f6db5594bc0ebd7e13cf0223fd5fd5c65e5d",
+          "url": "https://github.com/iamthamanic/LetzFetz-Game/compare/93c1b925207c030e3d409c1878dbce88749a2c30...7a97f6db5594bc0ebd7e13cf0223fd5fd5c65e5d"
+        },
+        {
+          "kind": "commit",
+          "path": "7a97f6db5594bc0ebd7e13cf0223fd5fd5c65e5d",
+          "sha": "7a97f6db5594bc0ebd7e13cf0223fd5fd5c65e5d",
+          "url": "https://github.com/iamthamanic/LetzFetz-Game/commit/7a97f6db5594bc0ebd7e13cf0223fd5fd5c65e5d"
+        },
+        {
+          "kind": "file",
+          "path": "supabase/",
+          "url": "https://github.com/iamthamanic/LetzFetz-Game/tree/7a97f6db5594bc0ebd7e13cf0223fd5fd5c65e5d/supabase"
+        },
+        {
+          "kind": "compare",
+          "path": "93c1b925207c030e3d409c1878dbce88749a2c30...7a97f6db5594bc0ebd7e13cf0223fd5fd5c65e5d",
+          "url": "https://github.com/iamthamanic/Letzfetzprototype/compare/93c1b925207c030e3d409c1878dbce88749a2c30...7a97f6db5594bc0ebd7e13cf0223fd5fd5c65e5d"
+        },
+        {
+          "kind": "commit",
+          "path": "7a97f6db5594bc0ebd7e13cf0223fd5fd5c65e5d",
+          "sha": "7a97f6db5594bc0ebd7e13cf0223fd5fd5c65e5d",
+          "url": "https://github.com/iamthamanic/Letzfetzprototype/commit/7a97f6db5594bc0ebd7e13cf0223fd5fd5c65e5d"
+        },
+        {
+          "kind": "file",
+          "path": "supabase/",
+          "url": "https://github.com/iamthamanic/Letzfetzprototype/tree/7a97f6db5594bc0ebd7e13cf0223fd5fd5c65e5d/supabase"
+        }
+      ],
+      "screenshots": [],
+      "confidence": 0.75,
+      "review_status": "needs-review",
+      "id": "2026-02-02-supabase-in-repo",
+      "date": "2026-02-02",
+      "type": "architecture",
+      "title": {
+        "de": "Supabase-Projekt ins Repo gesichert",
+        "en": "Supabase project checked into the repo"
+      },
+      "summary": {
+        "de": "Migrationen, Edge Functions, Backup und Doku für Card-Forge-Backend ins Repository.",
+        "en": "Migrations, edge functions, backup, and docs for Card Forge backend into the repository."
+      },
+      "git": {
+        "base": "93c1b925207c030e3d409c1878dbce88749a2c30",
+        "head": "7a97f6db5594bc0ebd7e13cf0223fd5fd5c65e5d",
+        "branch": "main",
+        "pull_request": null
+      }
+    },
+    {
+      "status": "recorded",
+      "user_impact": {
+        "de": [
+          "Erste klickbare Prototype-Oberfläche vorhanden."
+        ],
+        "en": [
+          "First clickable prototype UI available."
+        ]
+      },
+      "developer_impact": {
+        "de": [
+          "Vite + React + Tailwind Stack gesetzt."
+        ],
+        "en": [
+          "Vite + React + Tailwind stack established."
+        ]
+      },
+      "operational_impact": {
+        "de": [],
+        "en": []
+      },
+      "packages": [],
+      "affected_features": [
+        "sandbox-arena",
+        "card-forge"
+      ],
+      "affected_components": [
+        "src/App.tsx",
+        "src/components/Arena.tsx",
+        "src/components/CardForge.tsx",
+        "package.json"
+      ],
+      "breaking_changes": [],
+      "migration_required": false,
+      "security_relevant": false,
+      "evidence": [
+        {
+          "kind": "compare",
+          "path": "9ea82a3c65e1891641f9592df94148cba29cfd16...303be9d8d7df0074494093ca2bd4d90ab39000b9",
+          "url": "https://github.com/iamthamanic/LetzFetz-Game/compare/9ea82a3c65e1891641f9592df94148cba29cfd16...303be9d8d7df0074494093ca2bd4d90ab39000b9"
+        },
+        {
+          "kind": "commit",
+          "path": "303be9d8d7df0074494093ca2bd4d90ab39000b9",
+          "sha": "303be9d8d7df0074494093ca2bd4d90ab39000b9",
+          "url": "https://github.com/iamthamanic/LetzFetz-Game/commit/303be9d8d7df0074494093ca2bd4d90ab39000b9"
+        },
+        {
+          "kind": "file",
+          "path": "src/App.tsx",
+          "url": "https://github.com/iamthamanic/LetzFetz-Game/blob/303be9d8d7df0074494093ca2bd4d90ab39000b9/src/App.tsx"
+        },
+        {
+          "kind": "file",
+          "path": "src/components/Arena.tsx",
+          "url": "https://github.com/iamthamanic/LetzFetz-Game/blob/303be9d8d7df0074494093ca2bd4d90ab39000b9/src/components/Arena.tsx"
+        },
+        {
+          "kind": "file",
+          "path": "src/components/CardForge.tsx",
+          "url": "https://github.com/iamthamanic/LetzFetz-Game/blob/303be9d8d7df0074494093ca2bd4d90ab39000b9/src/components/CardForge.tsx"
+        },
+        {
+          "kind": "file",
+          "path": "package.json",
+          "url": "https://github.com/iamthamanic/LetzFetz-Game/blob/303be9d8d7df0074494093ca2bd4d90ab39000b9/package.json"
+        },
+        {
+          "kind": "compare",
+          "path": "9ea82a3c65e1891641f9592df94148cba29cfd16...303be9d8d7df0074494093ca2bd4d90ab39000b9",
+          "url": "https://github.com/iamthamanic/Letzfetzprototype/compare/9ea82a3c65e1891641f9592df94148cba29cfd16...303be9d8d7df0074494093ca2bd4d90ab39000b9"
+        },
+        {
+          "kind": "commit",
+          "path": "303be9d8d7df0074494093ca2bd4d90ab39000b9",
+          "sha": "303be9d8d7df0074494093ca2bd4d90ab39000b9",
+          "url": "https://github.com/iamthamanic/Letzfetzprototype/commit/303be9d8d7df0074494093ca2bd4d90ab39000b9"
+        },
+        {
+          "kind": "file",
+          "path": "src/App.tsx",
+          "url": "https://github.com/iamthamanic/Letzfetzprototype/blob/303be9d8d7df0074494093ca2bd4d90ab39000b9/src/App.tsx"
+        },
+        {
+          "kind": "file",
+          "path": "src/components/Arena.tsx",
+          "url": "https://github.com/iamthamanic/Letzfetzprototype/blob/303be9d8d7df0074494093ca2bd4d90ab39000b9/src/components/Arena.tsx"
+        },
+        {
+          "kind": "file",
+          "path": "src/components/CardForge.tsx",
+          "url": "https://github.com/iamthamanic/Letzfetzprototype/blob/303be9d8d7df0074494093ca2bd4d90ab39000b9/src/components/CardForge.tsx"
+        },
+        {
+          "kind": "file",
+          "path": "package.json",
+          "url": "https://github.com/iamthamanic/Letzfetzprototype/blob/303be9d8d7df0074494093ca2bd4d90ab39000b9/package.json"
+        }
+      ],
+      "screenshots": [],
+      "confidence": 0.8,
+      "review_status": "needs-review",
+      "id": "2025-11-29-figma-make-seed",
+      "date": "2025-11-29",
+      "type": "bootstrap",
+      "title": {
+        "de": "Figma-Make-Seed: Vite/React Prototyp",
+        "en": "Figma Make seed: Vite/React prototype"
+      },
+      "summary": {
+        "de": "Initiales Bundle aus Figma Make mit Arena, Card, Card Forge Shell und Basis-App.",
+        "en": "Initial Figma Make bundle with Arena, Card, Card Forge shell, and base app."
+      },
+      "git": {
+        "base": "9ea82a3c65e1891641f9592df94148cba29cfd16",
+        "head": "303be9d8d7df0074494093ca2bd4d90ab39000b9",
+        "branch": "main",
+        "pull_request": null
+      }
+    }
+  ]
+}

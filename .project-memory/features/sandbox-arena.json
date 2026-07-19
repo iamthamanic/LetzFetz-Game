@@ -1,0 +1,27 @@
+{
+  "packages": [],
+  "paths": [
+    "src/components/Arena.tsx",
+    "src/components/ArenaTable.tsx"
+  ],
+  "user_impact": {
+    "de": [],
+    "en": []
+  },
+  "related_changes": [
+    "2025-11-29-figma-make-seed"
+  ],
+  "review_status": "needs-review",
+  "confidence": 0.7,
+  "locked": false,
+  "id": "sandbox-arena",
+  "title": {
+    "de": "Sandbox-Arena",
+    "en": "Sandbox arena"
+  },
+  "summary": {
+    "de": "Freies Platzieren von Karten — nicht die authoritative Spielansicht.",
+    "en": "Free card placement — not the authoritative match view."
+  },
+  "status": "active"
+}

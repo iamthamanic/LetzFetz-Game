@@ -1,0 +1,109 @@
+{
+  "status": "recorded",
+  "user_impact": {
+    "de": [
+      "Schnellere Playtests; klarere Intro- und Face-down-Karten."
+    ],
+    "en": [
+      "Faster playtests; clearer intro and face-down cards."
+    ]
+  },
+  "developer_impact": {
+    "de": [
+      "Cheatbox nur Dev; Assets für Card-Back und Intro."
+    ],
+    "en": [
+      "Cheatbox is dev-only; assets for card back and intro."
+    ]
+  },
+  "operational_impact": {
+    "de": [],
+    "en": []
+  },
+  "packages": [],
+  "affected_features": [
+    "playtest-cheatbox",
+    "solo-duel-ui"
+  ],
+  "affected_components": [
+    "src/components/game/PlaytestCheatbox.tsx",
+    "src/components/cards/"
+  ],
+  "breaking_changes": [],
+  "migration_required": false,
+  "security_relevant": false,
+  "evidence": [
+    {
+      "kind": "compare",
+      "path": "f262898c7e8b4ac3ea5ce5147ccf2d9e208dedcc...94c8830a484e857cf1ea6e0347946d2d70847466",
+      "url": "https://github.com/iamthamanic/LetzFetz-Game/compare/f262898c7e8b4ac3ea5ce5147ccf2d9e208dedcc...94c8830a484e857cf1ea6e0347946d2d70847466"
+    },
+    {
+      "kind": "commit",
+      "path": "94c8830a484e857cf1ea6e0347946d2d70847466",
+      "sha": "94c8830a484e857cf1ea6e0347946d2d70847466",
+      "url": "https://github.com/iamthamanic/LetzFetz-Game/commit/94c8830a484e857cf1ea6e0347946d2d70847466"
+    },
+    {
+      "kind": "file",
+      "path": "src/components/game/PlaytestCheatbox.tsx",
+      "url": "https://github.com/iamthamanic/LetzFetz-Game/blob/94c8830a484e857cf1ea6e0347946d2d70847466/src/components/game/PlaytestCheatbox.tsx"
+    },
+    {
+      "kind": "file",
+      "path": "src/components/cards/",
+      "url": "https://github.com/iamthamanic/LetzFetz-Game/tree/94c8830a484e857cf1ea6e0347946d2d70847466/src/components/cards"
+    },
+    {
+      "kind": "compare",
+      "path": "f262898c7e8b4ac3ea5ce5147ccf2d9e208dedcc...94c8830a484e857cf1ea6e0347946d2d70847466",
+      "url": "https://github.com/iamthamanic/Letzfetzprototype/compare/f262898c7e8b4ac3ea5ce5147ccf2d9e208dedcc...94c8830a484e857cf1ea6e0347946d2d70847466"
+    },
+    {
+      "kind": "commit",
+      "path": "94c8830a484e857cf1ea6e0347946d2d70847466",
+      "sha": "94c8830a484e857cf1ea6e0347946d2d70847466",
+      "url": "https://github.com/iamthamanic/Letzfetzprototype/commit/94c8830a484e857cf1ea6e0347946d2d70847466"
+    },
+    {
+      "kind": "file",
+      "path": "src/components/game/PlaytestCheatbox.tsx",
+      "url": "https://github.com/iamthamanic/Letzfetzprototype/blob/94c8830a484e857cf1ea6e0347946d2d70847466/src/components/game/PlaytestCheatbox.tsx"
+    },
+    {
+      "kind": "file",
+      "path": "src/components/cards/",
+      "url": "https://github.com/iamthamanic/Letzfetzprototype/tree/94c8830a484e857cf1ea6e0347946d2d70847466/src/components/cards"
+    }
+  ],
+  "screenshots": [
+    {
+      "id": "cheatbox",
+      "path": "docs/memory-live-doc/assets/2026-06-24-cheatbox-intro/cheatbox.png",
+      "status": "missing",
+      "caption": {
+        "de": "Playtest-Cheatbox",
+        "en": "Playtest cheatbox"
+      }
+    }
+  ],
+  "confidence": 0.75,
+  "review_status": "needs-review",
+  "id": "2026-06-24-cheatbox-intro",
+  "date": "2026-06-24",
+  "type": "feature",
+  "title": {
+    "de": "Playtest-Cheatbox und Intro-/Card-Back-Polish",
+    "en": "Playtest cheatbox and intro/card-back polish"
+  },
+  "summary": {
+    "de": "Dev-Cheatbox für State-Jumps; MatchIntro-SFX-Sync; Letz-Fetz-Kartenrückseite.",
+    "en": "Dev cheatbox for state jumps; MatchIntro SFX sync; Letz Fetz card back."
+  },
+  "git": {
+    "base": "f262898c7e8b4ac3ea5ce5147ccf2d9e208dedcc",
+    "head": "94c8830a484e857cf1ea6e0347946d2d70847466",
+    "branch": "main",
+    "pull_request": null
+  }
+}

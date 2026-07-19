@@ -1,0 +1,85 @@
+{
+  "status": "recorded",
+  "user_impact": {
+    "de": [
+      "Einheitlicheres Look & Feel über Menü, Forge und Spiel."
+    ],
+    "en": [
+      "More consistent look and feel across menu, forge, and play."
+    ]
+  },
+  "developer_impact": {
+    "de": [
+      "components/ui/ als Styleguide-Basis."
+    ],
+    "en": [
+      "components/ui/ as styleguide foundation."
+    ]
+  },
+  "operational_impact": {
+    "de": [],
+    "en": []
+  },
+  "packages": [],
+  "affected_features": [],
+  "affected_components": [
+    "src/components/ui/"
+  ],
+  "breaking_changes": [],
+  "migration_required": false,
+  "security_relevant": false,
+  "evidence": [
+    {
+      "kind": "compare",
+      "path": "098fb4f1574239e109222d573ce027d84590f154...495fa6c6b207eb56e5ff06eb2c32ed0f9e376ba8",
+      "url": "https://github.com/iamthamanic/LetzFetz-Game/compare/098fb4f1574239e109222d573ce027d84590f154...495fa6c6b207eb56e5ff06eb2c32ed0f9e376ba8"
+    },
+    {
+      "kind": "commit",
+      "path": "495fa6c6b207eb56e5ff06eb2c32ed0f9e376ba8",
+      "sha": "495fa6c6b207eb56e5ff06eb2c32ed0f9e376ba8",
+      "url": "https://github.com/iamthamanic/LetzFetz-Game/commit/495fa6c6b207eb56e5ff06eb2c32ed0f9e376ba8"
+    },
+    {
+      "kind": "file",
+      "path": "src/components/ui/",
+      "url": "https://github.com/iamthamanic/LetzFetz-Game/tree/495fa6c6b207eb56e5ff06eb2c32ed0f9e376ba8/src/components/ui"
+    },
+    {
+      "kind": "compare",
+      "path": "098fb4f1574239e109222d573ce027d84590f154...495fa6c6b207eb56e5ff06eb2c32ed0f9e376ba8",
+      "url": "https://github.com/iamthamanic/Letzfetzprototype/compare/098fb4f1574239e109222d573ce027d84590f154...495fa6c6b207eb56e5ff06eb2c32ed0f9e376ba8"
+    },
+    {
+      "kind": "commit",
+      "path": "495fa6c6b207eb56e5ff06eb2c32ed0f9e376ba8",
+      "sha": "495fa6c6b207eb56e5ff06eb2c32ed0f9e376ba8",
+      "url": "https://github.com/iamthamanic/Letzfetzprototype/commit/495fa6c6b207eb56e5ff06eb2c32ed0f9e376ba8"
+    },
+    {
+      "kind": "file",
+      "path": "src/components/ui/",
+      "url": "https://github.com/iamthamanic/Letzfetzprototype/tree/495fa6c6b207eb56e5ff06eb2c32ed0f9e376ba8/src/components/ui"
+    }
+  ],
+  "screenshots": [],
+  "confidence": 0.75,
+  "review_status": "needs-review",
+  "id": "2026-06-18-ui-primitives",
+  "date": "2026-06-18",
+  "type": "architecture",
+  "title": {
+    "de": "UI-Primitives und Layout vereinheitlicht",
+    "en": "UI primitives and layout unified"
+  },
+  "summary": {
+    "de": "Gemeinsame Primitives und konsistentes App-Layout statt Ad-hoc-Styles.",
+    "en": "Shared primitives and consistent app layout instead of ad-hoc styles."
+  },
+  "git": {
+    "base": "098fb4f1574239e109222d573ce027d84590f154",
+    "head": "495fa6c6b207eb56e5ff06eb2c32ed0f9e376ba8",
+    "branch": "main",
+    "pull_request": null
+  }
+}

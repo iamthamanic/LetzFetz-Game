@@ -1,0 +1,20 @@
+{
+  "schema_version": 1,
+  "id": "2026-07-13-presentation",
+  "date": "2026-07-13",
+  "title": {
+    "de": "Presentation-Schicht + Playmat",
+    "en": "Presentation layer + playmat"
+  },
+  "summary": {
+    "de": "GamePresentationQueue und Combat/VFX zwischen Engine und DOM.",
+    "en": "GamePresentationQueue and combat/VFX between engine and DOM."
+  },
+  "commit": "569ee562306a23b1eda9b35dd0b3f5723faa9e04",
+  "mermaid": "flowchart TB\n  GameUI --> Presentation\n  Presentation --> Engine\n  Presentation --> Audio\n",
+  "change_ids": [
+    "2026-06-24-presentation-playmat",
+    "2026-07-13-ui-feel-wave"
+  ],
+  "review_status": "needs-review"
+}

@@ -1,0 +1,27 @@
+{
+  "packages": [],
+  "paths": [
+    "src/services/cardArt/",
+    "scripts/"
+  ],
+  "user_impact": {
+    "de": [],
+    "en": []
+  },
+  "related_changes": [
+    "2026-06-18-rules-engine-forge"
+  ],
+  "review_status": "needs-review",
+  "confidence": 0.7,
+  "locked": false,
+  "id": "card-art-pipeline",
+  "title": {
+    "de": "Kartenkunst-Pipeline",
+    "en": "Card art pipeline"
+  },
+  "summary": {
+    "de": "Flux/Ollama und Higgsfield-Skripte → public/cards/.",
+    "en": "Flux/Ollama and Higgsfield scripts → public/cards/."
+  },
+  "status": "active"
+}

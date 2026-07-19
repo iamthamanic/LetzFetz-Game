@@ -1,0 +1,44 @@
+{
+  "schema_version": 1,
+  "languages": {
+    "json": [
+      "de",
+      "en"
+    ],
+    "markdown_primary": "de",
+    "markdown_en_dir": "docs/en"
+  },
+  "viewer_path": "docs/memory-live-doc/viewer",
+  "storage_root": ".project-memory",
+  "history_coverage": {
+    "status": "complete",
+    "method": "git-milestone-synthesis",
+    "first_commit_date": "2025-11-29",
+    "commit_count_at_backfill": 71,
+    "change_events_from_backfill": 12,
+    "architecture_versions": 5,
+    "completed_at": "2026-07-19T12:16:48Z"
+  },
+  "pages": {
+    "schema_version": 1,
+    "kind": "memory-live-doc-pages",
+    "status": "memory_viewer_active",
+    "reason": "Pages /docs is active and local docs/memory-live-doc/viewer exists. After push, viewer URL should work. No Pages config change needed.",
+    "repo": "iamthamanic/LetzFetz-Game",
+    "default_branch": "main",
+    "has_pages": true,
+    "build_type": "legacy",
+    "source": {
+      "branch": "main",
+      "path": "/docs"
+    },
+    "html_url": "https://iamthamanic.github.io/LetzFetz-Game/",
+    "github_pages_status": "building",
+    "viewer_url": "https://iamthamanic.github.io/LetzFetz-Game/memory-live-doc/viewer/",
+    "local_viewer_present": true,
+    "can_enable": false,
+    "can_change_pages": false,
+    "action_taken": "none",
+    "private_note": null
+  }
+}

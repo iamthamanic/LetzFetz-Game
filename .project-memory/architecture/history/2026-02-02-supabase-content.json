@@ -1,0 +1,19 @@
+{
+  "schema_version": 1,
+  "id": "2026-02-02-supabase-content",
+  "date": "2026-02-02",
+  "title": {
+    "de": "Content-Backend Supabase",
+    "en": "Supabase content backend"
+  },
+  "summary": {
+    "de": "Forge-Content über Supabase; Spielzustand bleibt lokal.",
+    "en": "Forge content via Supabase; game state stays local."
+  },
+  "commit": "7a97f6db5594bc0ebd7e13cf0223fd5fd5c65e5d",
+  "mermaid": "flowchart LR\n  Forge --> Supabase\n  App --> Arena\n",
+  "change_ids": [
+    "2026-02-02-supabase-in-repo"
+  ],
+  "review_status": "needs-review"
+}

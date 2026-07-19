@@ -1,0 +1,11 @@
+{
+  "schema_version": 1,
+  "repository_url": "https://github.com/iamthamanic/LetzFetz-Game",
+  "default_branch": "main",
+  "head": "7f31a6f5fddca3e1dc41f779e0de7c6b79a24f25",
+  "branch": "feat/wip-ui-engine-overhaul",
+  "commit_count": 71,
+  "first_commit": "9ea82a3c65e1891641f9592df94148cba29cfd16",
+  "first_commit_date": "2025-11-29",
+  "analyzed_at": "2026-07-19T12:16:48Z"
+}

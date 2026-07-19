@@ -1,0 +1,34 @@
+{
+  "packages": [],
+  "paths": [
+    "src/game/packs/v2/",
+    "src/game/engine/phraseBuild.ts",
+    "docs/rules/SPIELANLEITUNG_V2_DRAFT.md"
+  ],
+  "user_impact": {
+    "de": [],
+    "en": []
+  },
+  "related_changes": [
+    "2026-07-19-v2-foundation",
+    "2026-07-19-v2-phrase-playtest",
+    "2026-07-19-wip-ui-engine-overhaul"
+  ],
+  "review_status": "needs-review",
+  "confidence": 0.75,
+  "locked": false,
+  "id": "v2-phrase-playtest",
+  "title": {
+    "de": "V2 Phrase-Playtest",
+    "en": "V2 phrase playtest"
+  },
+  "summary": {
+    "de": "P100 Pack, Phrase-Slots (Kern/Modus/Werkzeug/Ladung), Challenge — Draft, nicht V1-Wahrheit.",
+    "en": "P100 pack, phrase slots (core/mode/tool/charge), challenge — draft, not V1 truth."
+  },
+  "plain_language": {
+    "de": "Experimentelle neue Bindungsregeln zum Testen — noch nicht das offizielle Regelbuch.",
+    "en": "Experimental new binding rules for testing — not the official rulebook yet."
+  },
+  "status": "incomplete"
+}

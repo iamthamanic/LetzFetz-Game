@@ -1,0 +1,101 @@
+{
+  "status": "recorded",
+  "user_impact": {
+    "de": [
+      "Produktchronik und Status-Docs sind reviewbar verfügbar."
+    ],
+    "en": [
+      "Product chronicle and status docs are available for review."
+    ]
+  },
+  "developer_impact": {
+    "de": [
+      "@memory-live-doc incremental ab jetzt; history_coverage=complete."
+    ],
+    "en": [
+      "@memory-live-doc incremental from now; history_coverage=complete."
+    ]
+  },
+  "operational_impact": {
+    "de": [
+      "Viewer unter docs/memory-live-doc/viewer/; Pages optional."
+    ],
+    "en": [
+      "Viewer under docs/memory-live-doc/viewer/; Pages optional."
+    ]
+  },
+  "packages": [],
+  "affected_features": [],
+  "affected_components": [
+    ".project-memory/",
+    "docs/PROJECT-STATUS.md",
+    "docs/memory-live-doc/"
+  ],
+  "breaking_changes": [],
+  "migration_required": false,
+  "security_relevant": false,
+  "evidence": [
+    {
+      "kind": "commit",
+      "path": "7f31a6f5fddca3e1dc41f779e0de7c6b79a24f25",
+      "sha": "7f31a6f5fddca3e1dc41f779e0de7c6b79a24f25",
+      "url": "https://github.com/iamthamanic/LetzFetz-Game/commit/7f31a6f5fddca3e1dc41f779e0de7c6b79a24f25"
+    },
+    {
+      "kind": "file",
+      "path": ".project-memory/",
+      "url": "https://github.com/iamthamanic/LetzFetz-Game/tree/7f31a6f5fddca3e1dc41f779e0de7c6b79a24f25/.project-memory"
+    },
+    {
+      "kind": "file",
+      "path": "docs/PROJECT-STATUS.md",
+      "url": "https://github.com/iamthamanic/LetzFetz-Game/blob/7f31a6f5fddca3e1dc41f779e0de7c6b79a24f25/docs/PROJECT-STATUS.md"
+    },
+    {
+      "kind": "file",
+      "path": "docs/memory-live-doc/",
+      "url": "https://github.com/iamthamanic/LetzFetz-Game/tree/7f31a6f5fddca3e1dc41f779e0de7c6b79a24f25/docs/memory-live-doc"
+    },
+    {
+      "kind": "commit",
+      "path": "7f31a6f5fddca3e1dc41f779e0de7c6b79a24f25",
+      "sha": "7f31a6f5fddca3e1dc41f779e0de7c6b79a24f25",
+      "url": "https://github.com/iamthamanic/Letzfetzprototype/commit/7f31a6f5fddca3e1dc41f779e0de7c6b79a24f25"
+    },
+    {
+      "kind": "file",
+      "path": ".project-memory/",
+      "url": "https://github.com/iamthamanic/Letzfetzprototype/tree/7f31a6f5fddca3e1dc41f779e0de7c6b79a24f25/.project-memory"
+    },
+    {
+      "kind": "file",
+      "path": "docs/PROJECT-STATUS.md",
+      "url": "https://github.com/iamthamanic/Letzfetzprototype/blob/7f31a6f5fddca3e1dc41f779e0de7c6b79a24f25/docs/PROJECT-STATUS.md"
+    },
+    {
+      "kind": "file",
+      "path": "docs/memory-live-doc/",
+      "url": "https://github.com/iamthamanic/Letzfetzprototype/tree/7f31a6f5fddca3e1dc41f779e0de7c6b79a24f25/docs/memory-live-doc"
+    }
+  ],
+  "screenshots": [],
+  "confidence": 0.9,
+  "review_status": "needs-review",
+  "id": "2026-07-19-memory-bootstrap",
+  "date": "2026-07-19",
+  "type": "bootstrap",
+  "title": {
+    "de": "Living Project Memory initialisiert",
+    "en": "Living project memory initialized"
+  },
+  "summary": {
+    "de": "Deep-Bootstrap + History-Backfill: .project-memory/, DE/EN-Docs, Viewer-Snapshot, 12 Meilensteine seit 2025-11.",
+    "en": "Deep bootstrap + history backfill: .project-memory/, DE/EN docs, viewer snapshot, 12 milestones since 2025-11."
+  },
+  "git": {
+    "base": "7f31a6f5fddca3e1dc41f779e0de7c6b79a24f25",
+    "head": "7f31a6f5fddca3e1dc41f779e0de7c6b79a24f25",
+    "branch": "feat/wip-ui-engine-overhaul",
+    "pull_request": null
+  }
+}

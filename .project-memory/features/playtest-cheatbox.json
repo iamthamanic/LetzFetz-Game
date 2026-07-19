@@ -1,0 +1,28 @@
+{
+  "packages": [],
+  "paths": [
+    "src/components/game/PlaytestCheatbox.tsx",
+    "src/game/playtest/"
+  ],
+  "user_impact": {
+    "de": [],
+    "en": []
+  },
+  "related_changes": [
+    "2026-06-24-cheatbox-intro",
+    "2026-07-19-v2-foundation"
+  ],
+  "review_status": "needs-review",
+  "confidence": 0.8,
+  "locked": false,
+  "id": "playtest-cheatbox",
+  "title": {
+    "de": "Playtest-Cheatbox",
+    "en": "Playtest cheatbox"
+  },
+  "summary": {
+    "de": "Dev-only Sprünge in Spielzustände und V2-Szenarien (O11).",
+    "en": "Dev-only jumps into game states and V2 scenarios (O11)."
+  },
+  "status": "active"
+}

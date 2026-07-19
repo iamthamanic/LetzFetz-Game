@@ -1,0 +1,15 @@
+{
+  "id": "v1-rules-truth",
+  "date": "2026-06-18",
+  "title": {
+    "de": "SPIELANLEITUNG_V1 ist Engine-Wahrheit; V2 nur Draft/WIP",
+    "en": "SPIELANLEITUNG_V1 is engine truth; V2 is draft/WIP only"
+  },
+  "summary": {
+    "de": "src/game/ implementiert V1. V2_DRAFT/V2_WIP und P100/Phrase sind Playtest bis explizite Freigabe.",
+    "en": "src/game/ implements V1. V2_DRAFT/V2_WIP and P100/phrase are playtest until explicit release."
+  },
+  "status": "accepted",
+  "review_status": "needs-review",
+  "confidence": 0.9
+}

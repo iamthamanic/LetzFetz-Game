@@ -1,0 +1,109 @@
+{
+  "schema_version": 1,
+  "versions": [
+    {
+      "schema_version": 1,
+      "id": "2026-07-19-v2-wip",
+      "date": "2026-07-19",
+      "title": {
+        "de": "V2 Phrase-Playtest + WIP Overhaul",
+        "en": "V2 phrase playtest + WIP overhaul"
+      },
+      "summary": {
+        "de": "Optional V2 Pack/Phrase parallel zu V1; WIP-Branch für Nav/Arena-Glitch.",
+        "en": "Optional V2 pack/phrase alongside V1; WIP branch for nav/arena-glitch."
+      },
+      "commit": "7f31a6f5fddca3e1dc41f779e0de7c6b79a24f25",
+      "mermaid": "flowchart TB\n  subgraph ui [UI React]\n    Menu[MainMenu / AppNav]\n    Forge[CardForge]\n    Arena[Sandbox Arena]\n    Game[GameView / Playmat]\n  end\n  subgraph engine [Rules Engine pure TS]\n    Actions[applyAction]\n    Packs[Base Pack / V2 P100]\n    Bot[Heuristic / LLM FOW]\n  end\n  subgraph services [Services]\n    Storage[localStorage / Supabase legacy]\n    Audio[SFX]\n    Transport[local transport]\n  end\n  Menu --> Game\n  Menu --> Forge\n  Menu --> Arena\n  Game -->|dispatch| Actions\n  Actions --> Packs\n  Game --> Bot\n  Bot -->|FOW view| Actions\n  Forge --> Storage\n  Game --> Audio\n  Game --> Transport\n",
+      "change_ids": [
+        "2026-07-19-v2-foundation",
+        "2026-07-19-v2-phrase-playtest",
+        "2026-07-19-wip-ui-engine-overhaul"
+      ],
+      "review_status": "needs-review",
+      "is_current": false
+    },
+    {
+      "schema_version": 1,
+      "id": "2026-07-13-presentation",
+      "date": "2026-07-13",
+      "title": {
+        "de": "Presentation-Schicht + Playmat",
+        "en": "Presentation layer + playmat"
+      },
+      "summary": {
+        "de": "GamePresentationQueue und Combat/VFX zwischen Engine und DOM.",
+        "en": "GamePresentationQueue and combat/VFX between engine and DOM."
+      },
+      "commit": "569ee562306a23b1eda9b35dd0b3f5723faa9e04",
+      "mermaid": "flowchart TB\n  GameUI --> Presentation\n  Presentation --> Engine\n  Presentation --> Audio\n",
+      "change_ids": [
+        "2026-06-24-presentation-playmat",
+        "2026-07-13-ui-feel-wave"
+      ],
+      "review_status": "needs-review",
+      "is_current": false
+    },
+    {
+      "schema_version": 1,
+      "id": "2026-06-18-engine-split",
+      "date": "2026-06-18",
+      "title": {
+        "de": "Engine/UI-Trennung",
+        "en": "Engine/UI split"
+      },
+      "summary": {
+        "de": "src/game/ als authoritative Layer; UI dispatcht Actions.",
+        "en": "src/game/ as authoritative layer; UI dispatches actions."
+      },
+      "commit": "098fb4f1574239e109222d573ce027d84590f154",
+      "mermaid": "flowchart TB\n  UI -->|dispatch| Engine\n  Engine --> Packs\n  Forge --> Supabase\n",
+      "change_ids": [
+        "2026-06-18-rules-engine-forge",
+        "2026-06-18-ui-primitives"
+      ],
+      "review_status": "needs-review",
+      "is_current": false
+    },
+    {
+      "schema_version": 1,
+      "id": "2026-02-02-supabase-content",
+      "date": "2026-02-02",
+      "title": {
+        "de": "Content-Backend Supabase",
+        "en": "Supabase content backend"
+      },
+      "summary": {
+        "de": "Forge-Content über Supabase; Spielzustand bleibt lokal.",
+        "en": "Forge content via Supabase; game state stays local."
+      },
+      "commit": "7a97f6db5594bc0ebd7e13cf0223fd5fd5c65e5d",
+      "mermaid": "flowchart LR\n  Forge --> Supabase\n  App --> Arena\n",
+      "change_ids": [
+        "2026-02-02-supabase-in-repo"
+      ],
+      "review_status": "needs-review",
+      "is_current": false
+    },
+    {
+      "schema_version": 1,
+      "id": "2025-11-29-figma-seed",
+      "date": "2025-11-29",
+      "title": {
+        "de": "Figma-Make Monolith-UI",
+        "en": "Figma Make monolith UI"
+      },
+      "summary": {
+        "de": "Einzelne Vite-App: Arena/Card/Forge ohne getrennte Rules Engine.",
+        "en": "Single Vite app: Arena/Card/Forge without a separate rules engine."
+      },
+      "commit": "303be9d8d7df0074494093ca2bd4d90ab39000b9",
+      "mermaid": "flowchart LR\n  App --> Arena\n  App --> Card\n  App --> Forge\n",
+      "change_ids": [
+        "2025-11-29-figma-make-seed"
+      ],
+      "review_status": "needs-review",
+      "is_current": false
+    }
+  ]
+}

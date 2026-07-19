@@ -1,0 +1,136 @@
+{
+  "status": "recorded",
+  "user_impact": {
+    "de": [
+      "Gebundene Karten zeigen Slot-Rollen; neue Build-/Challenge-Regeln im Playtest."
+    ],
+    "en": [
+      "Bound cards show slot roles; new build/challenge rules in playtest."
+    ]
+  },
+  "developer_impact": {
+    "de": [
+      "phraseBuild/phraseBonuses + Setup-Opt-in; Issues #45–#48."
+    ],
+    "en": [
+      "phraseBuild/phraseBonuses + setup opt-in; issues #45–#48."
+    ]
+  },
+  "operational_impact": {
+    "de": [],
+    "en": []
+  },
+  "packages": [],
+  "affected_features": [
+    "v2-phrase-playtest",
+    "solo-duel-ui"
+  ],
+  "affected_components": [
+    "src/game/engine/phraseBuild.ts",
+    "src/game/engine/phraseBonuses.ts",
+    "src/components/game/BoundCardRow.tsx",
+    "src/components/game/GameSetup.tsx"
+  ],
+  "breaking_changes": [],
+  "migration_required": false,
+  "security_relevant": false,
+  "evidence": [
+    {
+      "kind": "compare",
+      "path": "37f96bc02ad51b95b11045b88d0697f5c0bf732e...d88b350b1cde2978d3b68730b4648b92b48b3032",
+      "url": "https://github.com/iamthamanic/LetzFetz-Game/compare/37f96bc02ad51b95b11045b88d0697f5c0bf732e...d88b350b1cde2978d3b68730b4648b92b48b3032"
+    },
+    {
+      "kind": "commit",
+      "path": "d88b350b1cde2978d3b68730b4648b92b48b3032",
+      "sha": "d88b350b1cde2978d3b68730b4648b92b48b3032",
+      "url": "https://github.com/iamthamanic/LetzFetz-Game/commit/d88b350b1cde2978d3b68730b4648b92b48b3032"
+    },
+    {
+      "kind": "pr",
+      "path": "https://github.com/iamthamanic/Letzfetzprototype/pull/53",
+      "url": "https://github.com/iamthamanic/Letzfetzprototype/pull/53"
+    },
+    {
+      "kind": "file",
+      "path": "src/game/engine/phraseBuild.ts",
+      "url": "https://github.com/iamthamanic/LetzFetz-Game/blob/d88b350b1cde2978d3b68730b4648b92b48b3032/src/game/engine/phraseBuild.ts"
+    },
+    {
+      "kind": "file",
+      "path": "src/game/engine/phraseBonuses.ts",
+      "url": "https://github.com/iamthamanic/LetzFetz-Game/blob/d88b350b1cde2978d3b68730b4648b92b48b3032/src/game/engine/phraseBonuses.ts"
+    },
+    {
+      "kind": "file",
+      "path": "src/components/game/BoundCardRow.tsx",
+      "url": "https://github.com/iamthamanic/LetzFetz-Game/blob/d88b350b1cde2978d3b68730b4648b92b48b3032/src/components/game/BoundCardRow.tsx"
+    },
+    {
+      "kind": "file",
+      "path": "src/components/game/GameSetup.tsx",
+      "url": "https://github.com/iamthamanic/LetzFetz-Game/blob/d88b350b1cde2978d3b68730b4648b92b48b3032/src/components/game/GameSetup.tsx"
+    },
+    {
+      "kind": "compare",
+      "path": "37f96bc02ad51b95b11045b88d0697f5c0bf732e...d88b350b1cde2978d3b68730b4648b92b48b3032",
+      "url": "https://github.com/iamthamanic/Letzfetzprototype/compare/37f96bc02ad51b95b11045b88d0697f5c0bf732e...d88b350b1cde2978d3b68730b4648b92b48b3032"
+    },
+    {
+      "kind": "commit",
+      "path": "d88b350b1cde2978d3b68730b4648b92b48b3032",
+      "sha": "d88b350b1cde2978d3b68730b4648b92b48b3032",
+      "url": "https://github.com/iamthamanic/Letzfetzprototype/commit/d88b350b1cde2978d3b68730b4648b92b48b3032"
+    },
+    {
+      "kind": "file",
+      "path": "src/game/engine/phraseBuild.ts",
+      "url": "https://github.com/iamthamanic/Letzfetzprototype/blob/d88b350b1cde2978d3b68730b4648b92b48b3032/src/game/engine/phraseBuild.ts"
+    },
+    {
+      "kind": "file",
+      "path": "src/game/engine/phraseBonuses.ts",
+      "url": "https://github.com/iamthamanic/Letzfetzprototype/blob/d88b350b1cde2978d3b68730b4648b92b48b3032/src/game/engine/phraseBonuses.ts"
+    },
+    {
+      "kind": "file",
+      "path": "src/components/game/BoundCardRow.tsx",
+      "url": "https://github.com/iamthamanic/Letzfetzprototype/blob/d88b350b1cde2978d3b68730b4648b92b48b3032/src/components/game/BoundCardRow.tsx"
+    },
+    {
+      "kind": "file",
+      "path": "src/components/game/GameSetup.tsx",
+      "url": "https://github.com/iamthamanic/Letzfetzprototype/blob/d88b350b1cde2978d3b68730b4648b92b48b3032/src/components/game/GameSetup.tsx"
+    }
+  ],
+  "screenshots": [
+    {
+      "id": "v2-bound-labels",
+      "path": "docs/memory-live-doc/assets/2026-07-19-v2-phrase-playtest/bound-labels.png",
+      "status": "missing",
+      "caption": {
+        "de": "V2 Bound-Row Labels",
+        "en": "V2 bound row labels"
+      }
+    }
+  ],
+  "confidence": 0.8,
+  "review_status": "needs-review",
+  "id": "2026-07-19-v2-phrase-playtest",
+  "date": "2026-07-19",
+  "type": "feature",
+  "title": {
+    "de": "V2 Phrase-Slots, Challenge und Mono-Pack",
+    "en": "V2 phrase slots, challenge, and mono pack"
+  },
+  "summary": {
+    "de": "Phrase-Build (Kern/Modus/Werkzeug/Ladung), Challenge-Resistance, Activate/Passives, Mono MB1, UI-Labels auf Bound-Row.",
+    "en": "Phrase build (core/mode/tool/charge), challenge resistance, activate/passives, mono MB1, UI labels on bound row."
+  },
+  "git": {
+    "base": "37f96bc02ad51b95b11045b88d0697f5c0bf732e",
+    "head": "d88b350b1cde2978d3b68730b4648b92b48b3032",
+    "branch": "main",
+    "pull_request": "https://github.com/iamthamanic/Letzfetzprototype/pull/53"
+  }
+}

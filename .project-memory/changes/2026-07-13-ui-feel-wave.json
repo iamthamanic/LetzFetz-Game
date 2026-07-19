@@ -1,0 +1,124 @@
+{
+  "status": "recorded",
+  "user_impact": {
+    "de": [
+      "Deutlich produktnäheres Solo-Erlebnis inkl. Mobile."
+    ],
+    "en": [
+      "Much more product-like solo experience including mobile."
+    ]
+  },
+  "developer_impact": {
+    "de": [
+      "Viele kleine Issue-PRs gemerged; Presentation- und Audio-Services ausgebaut."
+    ],
+    "en": [
+      "Many small issue PRs merged; presentation and audio services expanded."
+    ]
+  },
+  "operational_impact": {
+    "de": [],
+    "en": []
+  },
+  "packages": [],
+  "affected_features": [
+    "solo-duel-ui",
+    "presentation-vfx",
+    "llm-bot-ollama"
+  ],
+  "affected_components": [
+    "src/components/game/",
+    "src/services/audio/"
+  ],
+  "breaking_changes": [],
+  "migration_required": false,
+  "security_relevant": false,
+  "evidence": [
+    {
+      "kind": "compare",
+      "path": "840699fd4acc98b28bd2077a4696bc374b331804...569ee562306a23b1eda9b35dd0b3f5723faa9e04",
+      "url": "https://github.com/iamthamanic/LetzFetz-Game/compare/840699fd4acc98b28bd2077a4696bc374b331804...569ee562306a23b1eda9b35dd0b3f5723faa9e04"
+    },
+    {
+      "kind": "commit",
+      "path": "569ee562306a23b1eda9b35dd0b3f5723faa9e04",
+      "sha": "569ee562306a23b1eda9b35dd0b3f5723faa9e04",
+      "url": "https://github.com/iamthamanic/LetzFetz-Game/commit/569ee562306a23b1eda9b35dd0b3f5723faa9e04"
+    },
+    {
+      "kind": "pr",
+      "path": "https://github.com/iamthamanic/Letzfetzprototype/pull/43",
+      "url": "https://github.com/iamthamanic/Letzfetzprototype/pull/43"
+    },
+    {
+      "kind": "file",
+      "path": "src/components/game/",
+      "url": "https://github.com/iamthamanic/LetzFetz-Game/tree/569ee562306a23b1eda9b35dd0b3f5723faa9e04/src/components/game"
+    },
+    {
+      "kind": "file",
+      "path": "src/services/audio/",
+      "url": "https://github.com/iamthamanic/LetzFetz-Game/tree/569ee562306a23b1eda9b35dd0b3f5723faa9e04/src/services/audio"
+    },
+    {
+      "kind": "compare",
+      "path": "840699fd4acc98b28bd2077a4696bc374b331804...569ee562306a23b1eda9b35dd0b3f5723faa9e04",
+      "url": "https://github.com/iamthamanic/Letzfetzprototype/compare/840699fd4acc98b28bd2077a4696bc374b331804...569ee562306a23b1eda9b35dd0b3f5723faa9e04"
+    },
+    {
+      "kind": "commit",
+      "path": "569ee562306a23b1eda9b35dd0b3f5723faa9e04",
+      "sha": "569ee562306a23b1eda9b35dd0b3f5723faa9e04",
+      "url": "https://github.com/iamthamanic/Letzfetzprototype/commit/569ee562306a23b1eda9b35dd0b3f5723faa9e04"
+    },
+    {
+      "kind": "file",
+      "path": "src/components/game/",
+      "url": "https://github.com/iamthamanic/Letzfetzprototype/tree/569ee562306a23b1eda9b35dd0b3f5723faa9e04/src/components/game"
+    },
+    {
+      "kind": "file",
+      "path": "src/services/audio/",
+      "url": "https://github.com/iamthamanic/Letzfetzprototype/tree/569ee562306a23b1eda9b35dd0b3f5723faa9e04/src/services/audio"
+    }
+  ],
+  "screenshots": [
+    {
+      "id": "playmat-desktop",
+      "path": "docs/memory-live-doc/assets/2026-07-13-ui-feel-wave/playmat-desktop.png",
+      "status": "missing",
+      "caption": {
+        "de": "Playmat Desktop",
+        "en": "Playmat desktop"
+      }
+    },
+    {
+      "id": "playmat-mobile",
+      "path": "docs/memory-live-doc/assets/2026-07-13-ui-feel-wave/playmat-mobile.png",
+      "status": "missing",
+      "caption": {
+        "de": "Playmat Mobile 390",
+        "en": "Playmat mobile 390"
+      }
+    }
+  ],
+  "confidence": 0.8,
+  "review_status": "needs-review",
+  "id": "2026-07-13-ui-feel-wave",
+  "date": "2026-07-13",
+  "type": "feature",
+  "title": {
+    "de": "UI-Feel-Welle: Combat, DnD, VFX, Mobile",
+    "en": "UI-feel wave: combat, DnD, VFX, mobile"
+  },
+  "summary": {
+    "de": "CombatStage, W6-Würfel, Targeting, Bind/Discard-VFX, SFX, dnd-kit, responsive Playmat und Mobile-Docks (Issues #11–#21, PR #43).",
+    "en": "CombatStage, W6 die, targeting, bind/discard VFX, SFX, dnd-kit, responsive playmat and mobile docks (issues #11–#21, PR #43)."
+  },
+  "git": {
+    "base": "840699fd4acc98b28bd2077a4696bc374b331804",
+    "head": "569ee562306a23b1eda9b35dd0b3f5723faa9e04",
+    "branch": "main",
+    "pull_request": "https://github.com/iamthamanic/Letzfetzprototype/pull/43"
+  }
+}

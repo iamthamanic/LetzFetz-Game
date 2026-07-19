@@ -1,0 +1,43 @@
+{
+  "schema_version": 1,
+  "id": "project-derived",
+  "source": "src/index.css (css:root)",
+  "locked": false,
+  "tokens": {
+    "bg": "#ffffff",
+    "bgElev": "#ffffff",
+    "ink": "#0a0a0a",
+    "muted": "#717182",
+    "line": "#000000",
+    "accent": "#030213",
+    "accent2": "#e9ebef",
+    "danger": "#d4183d",
+    "radius": "0.625rem",
+    "fontDisplay": ">Speichern</Button>\n<Button variant=",
+    "fontBody": ">Speichern</Button>\n<Button variant=",
+    "fontMono": "IBM Plex Mono, ui-monospace, monospace",
+    "tabRadius": "0.625rem",
+    "bgGlow1": "#030213",
+    "bgGlow2": "#ffffff"
+  },
+  "fonts": {
+    "google": "https://fonts.googleapis.com/css2?family=>Speichern</Button>\n<Button+variant=:wght@400;500;600;700&family=IBM+Plex+Mono:wght@400;500&display=swap"
+  },
+  "mermaid": {
+    "theme": "default",
+    "themeVariables": {
+      "primaryColor": "#ffffff",
+      "primaryTextColor": "#e8eaef",
+      "primaryBorderColor": "#030213",
+      "lineColor": "#717182",
+      "secondaryColor": "#ffffff",
+      "tertiaryColor": "#ffffff",
+      "background": "#ffffff",
+      "mainBkg": "#ffffff",
+      "nodeBorder": "#030213",
+      "clusterBkg": "#ffffff",
+      "titleColor": "#e8eaef",
+      "edgeLabelBackground": "#ffffff"
+    }
+  }
+}

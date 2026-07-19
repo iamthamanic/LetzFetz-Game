@@ -1,0 +1,19 @@
+{
+  "schema_version": 1,
+  "id": "letz-fetz-prototype",
+  "title": {
+    "de": "Letz Fetz Prototype",
+    "en": "Letz Fetz Prototype"
+  },
+  "summary": {
+    "de": "Digitale Playtest- und Authoring-Plattform für das physische 1v1-Kartenduell Letz Fetz (Vite + React, local-first Rules Engine).",
+    "en": "Digital playtest and authoring platform for the physical 1v1 card duel Letz Fetz (Vite + React, local-first rules engine)."
+  },
+  "packages": [],
+  "repository": {
+    "url": "https://github.com/iamthamanic/LetzFetz-Game",
+    "default_branch": "main"
+  },
+  "review_status": "needs-review",
+  "confidence": 0.85
+}

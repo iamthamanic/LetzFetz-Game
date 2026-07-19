@@ -1,0 +1,121 @@
+{
+  "status": "recorded",
+  "user_impact": {
+    "de": [
+      "Erste klickbare Prototype-Oberfläche vorhanden."
+    ],
+    "en": [
+      "First clickable prototype UI available."
+    ]
+  },
+  "developer_impact": {
+    "de": [
+      "Vite + React + Tailwind Stack gesetzt."
+    ],
+    "en": [
+      "Vite + React + Tailwind stack established."
+    ]
+  },
+  "operational_impact": {
+    "de": [],
+    "en": []
+  },
+  "packages": [],
+  "affected_features": [
+    "sandbox-arena",
+    "card-forge"
+  ],
+  "affected_components": [
+    "src/App.tsx",
+    "src/components/Arena.tsx",
+    "src/components/CardForge.tsx",
+    "package.json"
+  ],
+  "breaking_changes": [],
+  "migration_required": false,
+  "security_relevant": false,
+  "evidence": [
+    {
+      "kind": "compare",
+      "path": "9ea82a3c65e1891641f9592df94148cba29cfd16...303be9d8d7df0074494093ca2bd4d90ab39000b9",
+      "url": "https://github.com/iamthamanic/LetzFetz-Game/compare/9ea82a3c65e1891641f9592df94148cba29cfd16...303be9d8d7df0074494093ca2bd4d90ab39000b9"
+    },
+    {
+      "kind": "commit",
+      "path": "303be9d8d7df0074494093ca2bd4d90ab39000b9",
+      "sha": "303be9d8d7df0074494093ca2bd4d90ab39000b9",
+      "url": "https://github.com/iamthamanic/LetzFetz-Game/commit/303be9d8d7df0074494093ca2bd4d90ab39000b9"
+    },
+    {
+      "kind": "file",
+      "path": "src/App.tsx",
+      "url": "https://github.com/iamthamanic/LetzFetz-Game/blob/303be9d8d7df0074494093ca2bd4d90ab39000b9/src/App.tsx"
+    },
+    {
+      "kind": "file",
+      "path": "src/components/Arena.tsx",
+      "url": "https://github.com/iamthamanic/LetzFetz-Game/blob/303be9d8d7df0074494093ca2bd4d90ab39000b9/src/components/Arena.tsx"
+    },
+    {
+      "kind": "file",
+      "path": "src/components/CardForge.tsx",
+      "url": "https://github.com/iamthamanic/LetzFetz-Game/blob/303be9d8d7df0074494093ca2bd4d90ab39000b9/src/components/CardForge.tsx"
+    },
+    {
+      "kind": "file",
+      "path": "package.json",
+      "url": "https://github.com/iamthamanic/LetzFetz-Game/blob/303be9d8d7df0074494093ca2bd4d90ab39000b9/package.json"
+    },
+    {
+      "kind": "compare",
+      "path": "9ea82a3c65e1891641f9592df94148cba29cfd16...303be9d8d7df0074494093ca2bd4d90ab39000b9",
+      "url": "https://github.com/iamthamanic/Letzfetzprototype/compare/9ea82a3c65e1891641f9592df94148cba29cfd16...303be9d8d7df0074494093ca2bd4d90ab39000b9"
+    },
+    {
+      "kind": "commit",
+      "path": "303be9d8d7df0074494093ca2bd4d90ab39000b9",
+      "sha": "303be9d8d7df0074494093ca2bd4d90ab39000b9",
+      "url": "https://github.com/iamthamanic/Letzfetzprototype/commit/303be9d8d7df0074494093ca2bd4d90ab39000b9"
+    },
+    {
+      "kind": "file",
+      "path": "src/App.tsx",
+      "url": "https://github.com/iamthamanic/Letzfetzprototype/blob/303be9d8d7df0074494093ca2bd4d90ab39000b9/src/App.tsx"
+    },
+    {
+      "kind": "file",
+      "path": "src/components/Arena.tsx",
+      "url": "https://github.com/iamthamanic/Letzfetzprototype/blob/303be9d8d7df0074494093ca2bd4d90ab39000b9/src/components/Arena.tsx"
+    },
+    {
+      "kind": "file",
+      "path": "src/components/CardForge.tsx",
+      "url": "https://github.com/iamthamanic/Letzfetzprototype/blob/303be9d8d7df0074494093ca2bd4d90ab39000b9/src/components/CardForge.tsx"
+    },
+    {
+      "kind": "file",
+      "path": "package.json",
+      "url": "https://github.com/iamthamanic/Letzfetzprototype/blob/303be9d8d7df0074494093ca2bd4d90ab39000b9/package.json"
+    }
+  ],
+  "screenshots": [],
+  "confidence": 0.8,
+  "review_status": "needs-review",
+  "id": "2025-11-29-figma-make-seed",
+  "date": "2025-11-29",
+  "type": "bootstrap",
+  "title": {
+    "de": "Figma-Make-Seed: Vite/React Prototyp",
+    "en": "Figma Make seed: Vite/React prototype"
+  },
+  "summary": {
+    "de": "Initiales Bundle aus Figma Make mit Arena, Card, Card Forge Shell und Basis-App.",
+    "en": "Initial Figma Make bundle with Arena, Card, Card Forge shell, and base app."
+  },
+  "git": {
+    "base": "9ea82a3c65e1891641f9592df94148cba29cfd16",
+    "head": "303be9d8d7df0074494093ca2bd4d90ab39000b9",
+    "branch": "main",
+    "pull_request": null
+  }
+}

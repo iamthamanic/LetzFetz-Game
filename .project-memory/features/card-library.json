@@ -1,0 +1,26 @@
+{
+  "packages": [],
+  "paths": [
+    "src/components/CardLibrary.tsx"
+  ],
+  "user_impact": {
+    "de": [],
+    "en": []
+  },
+  "related_changes": [
+    "2026-06-20-solo-duel-shell"
+  ],
+  "review_status": "needs-review",
+  "confidence": 0.7,
+  "locked": false,
+  "id": "card-library",
+  "title": {
+    "de": "Kartenbibliothek",
+    "en": "Card library"
+  },
+  "summary": {
+    "de": "Browse und Detailansicht der Pack-Karten inkl. Rückseiten.",
+    "en": "Browse and detail view of pack cards including card backs."
+  },
+  "status": "active"
+}
