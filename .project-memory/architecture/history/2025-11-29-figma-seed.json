@@ -1,0 +1,19 @@
+{
+  "schema_version": 1,
+  "id": "2025-11-29-figma-seed",
+  "date": "2025-11-29",
+  "title": {
+    "de": "Figma-Make Monolith-UI",
+    "en": "Figma Make monolith UI"
+  },
+  "summary": {
+    "de": "Einzelne Vite-App: Arena/Card/Forge ohne getrennte Rules Engine.",
+    "en": "Single Vite app: Arena/Card/Forge without a separate rules engine."
+  },
+  "commit": "303be9d8d7df0074494093ca2bd4d90ab39000b9",
+  "mermaid": "flowchart LR\n  App --> Arena\n  App --> Card\n  App --> Forge\n",
+  "change_ids": [
+    "2025-11-29-figma-make-seed"
+  ],
+  "review_status": "needs-review"
+}

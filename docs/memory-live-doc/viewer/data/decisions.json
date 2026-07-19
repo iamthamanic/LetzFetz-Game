@@ -1,0 +1,57 @@
+{
+  "schema_version": 1,
+  "decisions": [
+    {
+      "id": "local-first-rules-engine",
+      "date": "2026-06-18",
+      "title": {
+        "de": "Local-first Rules Engine ohne Game-State-Server",
+        "en": "Local-first rules engine without game-state server"
+      },
+      "summary": {
+        "de": "Spielzustand und Validierung leben in src/game/ (pure TS). Späteres Online-Spiel: WebRTC P2P mit Host-Authority, nicht Colyseus/Nakama.",
+        "en": "Game state and validation live in src/game/ (pure TS). Later online play: WebRTC P2P with host authority, not Colyseus/Nakama."
+      },
+      "status": "accepted",
+      "review_status": "needs-review",
+      "confidence": 0.9,
+      "evidence": [
+        {
+          "kind": "file",
+          "path": "AGENTS.md",
+          "url": null
+        }
+      ]
+    },
+    {
+      "id": "stack-vite-not-next",
+      "date": "2025-11-29",
+      "title": {
+        "de": "Vite + React 18 + Tailwind; kein Next.js / DaisyUI",
+        "en": "Vite + React 18 + Tailwind; no Next.js / DaisyUI"
+      },
+      "summary": {
+        "de": "Figma-Make-Ursprung und AGENTS.md verbieten Next/DaisyUI; UI-Primitives in components/ui/.",
+        "en": "Figma Make origin and AGENTS.md forbid Next/DaisyUI; UI primitives live in components/ui/."
+      },
+      "status": "accepted",
+      "review_status": "needs-review",
+      "confidence": 0.85
+    },
+    {
+      "id": "v1-rules-truth",
+      "date": "2026-06-18",
+      "title": {
+        "de": "SPIELANLEITUNG_V1 ist Engine-Wahrheit; V2 nur Draft/WIP",
+        "en": "SPIELANLEITUNG_V1 is engine truth; V2 is draft/WIP only"
+      },
+      "summary": {
+        "de": "src/game/ implementiert V1. V2_DRAFT/V2_WIP und P100/Phrase sind Playtest bis explizite Freigabe.",
+        "en": "src/game/ implements V1. V2_DRAFT/V2_WIP and P100/phrase are playtest until explicit release."
+      },
+      "status": "accepted",
+      "review_status": "needs-review",
+      "confidence": 0.9
+    }
+  ]
+}

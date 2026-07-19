@@ -1,0 +1,20 @@
+{
+  "schema_version": 1,
+  "id": "2026-06-18-engine-split",
+  "date": "2026-06-18",
+  "title": {
+    "de": "Engine/UI-Trennung",
+    "en": "Engine/UI split"
+  },
+  "summary": {
+    "de": "src/game/ als authoritative Layer; UI dispatcht Actions.",
+    "en": "src/game/ as authoritative layer; UI dispatches actions."
+  },
+  "commit": "098fb4f1574239e109222d573ce027d84590f154",
+  "mermaid": "flowchart TB\n  UI -->|dispatch| Engine\n  Engine --> Packs\n  Forge --> Supabase\n",
+  "change_ids": [
+    "2026-06-18-rules-engine-forge",
+    "2026-06-18-ui-primitives"
+  ],
+  "review_status": "needs-review"
+}

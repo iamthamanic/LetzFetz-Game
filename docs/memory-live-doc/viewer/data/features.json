@@ -1,0 +1,301 @@
+{
+  "schema_version": 1,
+  "features": [
+    {
+      "packages": [],
+      "paths": [
+        "src/services/cardArt/",
+        "scripts/"
+      ],
+      "user_impact": {
+        "de": [],
+        "en": []
+      },
+      "related_changes": [
+        "2026-06-18-rules-engine-forge"
+      ],
+      "review_status": "needs-review",
+      "confidence": 0.7,
+      "locked": false,
+      "id": "card-art-pipeline",
+      "title": {
+        "de": "Kartenkunst-Pipeline",
+        "en": "Card art pipeline"
+      },
+      "summary": {
+        "de": "Flux/Ollama und Higgsfield-Skripte → public/cards/.",
+        "en": "Flux/Ollama and Higgsfield scripts → public/cards/."
+      },
+      "status": "active"
+    },
+    {
+      "packages": [],
+      "paths": [
+        "src/components/CardForge.tsx",
+        "src/services/cardForge/"
+      ],
+      "user_impact": {
+        "de": [],
+        "en": []
+      },
+      "related_changes": [
+        "2026-06-18-rules-engine-forge",
+        "2026-02-02-supabase-in-repo"
+      ],
+      "review_status": "needs-review",
+      "confidence": 0.75,
+      "locked": false,
+      "id": "card-forge",
+      "title": {
+        "de": "Card Forge",
+        "en": "Card Forge"
+      },
+      "summary": {
+        "de": "Karten/Arenen erstellen und bearbeiten; Legacy-Supabase-Sync.",
+        "en": "Create and edit cards/arenas; legacy Supabase sync."
+      },
+      "status": "active"
+    },
+    {
+      "packages": [],
+      "paths": [
+        "src/components/CardLibrary.tsx"
+      ],
+      "user_impact": {
+        "de": [],
+        "en": []
+      },
+      "related_changes": [
+        "2026-06-20-solo-duel-shell"
+      ],
+      "review_status": "needs-review",
+      "confidence": 0.7,
+      "locked": false,
+      "id": "card-library",
+      "title": {
+        "de": "Kartenbibliothek",
+        "en": "Card library"
+      },
+      "summary": {
+        "de": "Browse und Detailansicht der Pack-Karten inkl. Rückseiten.",
+        "en": "Browse and detail view of pack cards including card backs."
+      },
+      "status": "active"
+    },
+    {
+      "packages": [],
+      "paths": [
+        "src/services/bot/",
+        "vite-plugins/"
+      ],
+      "user_impact": {
+        "de": [],
+        "en": []
+      },
+      "related_changes": [
+        "2026-07-13-ui-feel-wave"
+      ],
+      "review_status": "needs-review",
+      "confidence": 0.65,
+      "locked": false,
+      "id": "llm-bot-ollama",
+      "title": {
+        "de": "LLM-Gegner (Ollama)",
+        "en": "LLM opponent (Ollama)"
+      },
+      "summary": {
+        "de": "Dev-only FOW-Bot via Vite-Middleware; Fallback Heuristik.",
+        "en": "Dev-only FOW bot via Vite middleware; heuristic fallback."
+      },
+      "status": "active",
+      "notes": {
+        "de": "API-Key nur serverseitig in .env — nie in Memory speichern.",
+        "en": "API key server-side in .env only — never store in memory."
+      }
+    },
+    {
+      "packages": [],
+      "paths": [
+        "src/components/game/PlaytestCheatbox.tsx",
+        "src/game/playtest/"
+      ],
+      "user_impact": {
+        "de": [],
+        "en": []
+      },
+      "related_changes": [
+        "2026-06-24-cheatbox-intro",
+        "2026-07-19-v2-foundation"
+      ],
+      "review_status": "needs-review",
+      "confidence": 0.8,
+      "locked": false,
+      "id": "playtest-cheatbox",
+      "title": {
+        "de": "Playtest-Cheatbox",
+        "en": "Playtest cheatbox"
+      },
+      "summary": {
+        "de": "Dev-only Sprünge in Spielzustände und V2-Szenarien (O11).",
+        "en": "Dev-only jumps into game states and V2 scenarios (O11)."
+      },
+      "status": "active"
+    },
+    {
+      "packages": [],
+      "paths": [
+        "src/components/game/presentation/",
+        "src/services/audio/"
+      ],
+      "user_impact": {
+        "de": [],
+        "en": []
+      },
+      "related_changes": [
+        "2026-06-24-presentation-playmat",
+        "2026-07-13-ui-feel-wave"
+      ],
+      "review_status": "needs-review",
+      "confidence": 0.8,
+      "locked": false,
+      "id": "presentation-vfx",
+      "title": {
+        "de": "Presentation & VFX",
+        "en": "Presentation & VFX"
+      },
+      "summary": {
+        "de": "GamePresentationQueue, CombatStage, Draw/Bind/Discard-Animationen, SFX.",
+        "en": "GamePresentationQueue, CombatStage, draw/bind/discard animations, SFX."
+      },
+      "status": "active"
+    },
+    {
+      "packages": [],
+      "paths": [
+        "src/game/"
+      ],
+      "user_impact": {
+        "de": [
+          "Solo-Partien folgen V1-Regeln"
+        ],
+        "en": [
+          "Solo matches follow V1 rules"
+        ]
+      },
+      "related_changes": [
+        "2026-06-18-rules-engine-forge",
+        "2026-07-19-v2-phrase-playtest"
+      ],
+      "review_status": "needs-review",
+      "confidence": 0.85,
+      "locked": false,
+      "id": "rules-engine-v1",
+      "title": {
+        "de": "Rules Engine V1",
+        "en": "Rules Engine V1"
+      },
+      "summary": {
+        "de": "Pure-TS Zuglogik, Kampf, Effekte, Base Pack; Vitest + fast-check.",
+        "en": "Pure-TS turn logic, combat, effects, base pack; Vitest + fast-check."
+      },
+      "plain_language": {
+        "de": "Das digitale Regelbuch: was legal ist, entscheidet der Code — nicht die UI.",
+        "en": "The digital rulebook: legality is decided by code, not the UI."
+      },
+      "status": "active"
+    },
+    {
+      "packages": [],
+      "paths": [
+        "src/components/Arena.tsx",
+        "src/components/ArenaTable.tsx"
+      ],
+      "user_impact": {
+        "de": [],
+        "en": []
+      },
+      "related_changes": [
+        "2025-11-29-figma-make-seed"
+      ],
+      "review_status": "needs-review",
+      "confidence": 0.7,
+      "locked": false,
+      "id": "sandbox-arena",
+      "title": {
+        "de": "Sandbox-Arena",
+        "en": "Sandbox arena"
+      },
+      "summary": {
+        "de": "Freies Platzieren von Karten — nicht die authoritative Spielansicht.",
+        "en": "Free card placement — not the authoritative match view."
+      },
+      "status": "active"
+    },
+    {
+      "packages": [],
+      "paths": [
+        "src/components/game/"
+      ],
+      "user_impact": {
+        "de": [],
+        "en": []
+      },
+      "related_changes": [
+        "2026-06-20-solo-duel-shell",
+        "2026-06-24-presentation-playmat",
+        "2026-07-13-ui-feel-wave"
+      ],
+      "review_status": "needs-review",
+      "confidence": 0.8,
+      "locked": false,
+      "id": "solo-duel-ui",
+      "title": {
+        "de": "Solo-Duel Playmat",
+        "en": "Solo duel playmat"
+      },
+      "summary": {
+        "de": "Spielbare 1v1-Ansicht mit Phasen, Hand, Bound, Kampf und Bot.",
+        "en": "Playable 1v1 view with phases, hand, bound cards, combat, and bot."
+      },
+      "plain_language": {
+        "de": "Hier spielst du eine Partie gegen den Bot am digitalen Tisch.",
+        "en": "This is where you play a match against the bot on the digital table."
+      },
+      "status": "active"
+    },
+    {
+      "packages": [],
+      "paths": [
+        "src/game/packs/v2/",
+        "src/game/engine/phraseBuild.ts",
+        "docs/rules/SPIELANLEITUNG_V2_DRAFT.md"
+      ],
+      "user_impact": {
+        "de": [],
+        "en": []
+      },
+      "related_changes": [
+        "2026-07-19-v2-foundation",
+        "2026-07-19-v2-phrase-playtest",
+        "2026-07-19-wip-ui-engine-overhaul"
+      ],
+      "review_status": "needs-review",
+      "confidence": 0.75,
+      "locked": false,
+      "id": "v2-phrase-playtest",
+      "title": {
+        "de": "V2 Phrase-Playtest",
+        "en": "V2 phrase playtest"
+      },
+      "summary": {
+        "de": "P100 Pack, Phrase-Slots (Kern/Modus/Werkzeug/Ladung), Challenge — Draft, nicht V1-Wahrheit.",
+        "en": "P100 pack, phrase slots (core/mode/tool/charge), challenge — draft, not V1 truth."
+      },
+      "plain_language": {
+        "de": "Experimentelle neue Bindungsregeln zum Testen — noch nicht das offizielle Regelbuch.",
+        "en": "Experimental new binding rules for testing — not the official rulebook yet."
+      },
+      "status": "incomplete"
+    }
+  ]
+}

@@ -1,0 +1,129 @@
+{
+  "status": "recorded",
+  "user_impact": {
+    "de": [
+      "Erste richtige Partie-UI mit Intro-Flow und neuer Nav."
+    ],
+    "en": [
+      "First real match UI with intro flow and new nav."
+    ]
+  },
+  "developer_impact": {
+    "de": [
+      "GameView/Playmat-Grundlage; AppNav Tone-aware."
+    ],
+    "en": [
+      "GameView/playmat foundation; tone-aware AppNav."
+    ]
+  },
+  "operational_impact": {
+    "de": [],
+    "en": []
+  },
+  "packages": [],
+  "affected_features": [
+    "solo-duel-ui",
+    "card-library"
+  ],
+  "affected_components": [
+    "src/components/game/",
+    "src/components/AppNav.tsx",
+    "src/components/MainMenu.tsx"
+  ],
+  "breaking_changes": [],
+  "migration_required": false,
+  "security_relevant": false,
+  "evidence": [
+    {
+      "kind": "compare",
+      "path": "495fa6c6b207eb56e5ff06eb2c32ed0f9e376ba8...f262898c7e8b4ac3ea5ce5147ccf2d9e208dedcc",
+      "url": "https://github.com/iamthamanic/LetzFetz-Game/compare/495fa6c6b207eb56e5ff06eb2c32ed0f9e376ba8...f262898c7e8b4ac3ea5ce5147ccf2d9e208dedcc"
+    },
+    {
+      "kind": "commit",
+      "path": "f262898c7e8b4ac3ea5ce5147ccf2d9e208dedcc",
+      "sha": "f262898c7e8b4ac3ea5ce5147ccf2d9e208dedcc",
+      "url": "https://github.com/iamthamanic/LetzFetz-Game/commit/f262898c7e8b4ac3ea5ce5147ccf2d9e208dedcc"
+    },
+    {
+      "kind": "file",
+      "path": "src/components/game/",
+      "url": "https://github.com/iamthamanic/LetzFetz-Game/tree/f262898c7e8b4ac3ea5ce5147ccf2d9e208dedcc/src/components/game"
+    },
+    {
+      "kind": "file",
+      "path": "src/components/AppNav.tsx",
+      "url": "https://github.com/iamthamanic/LetzFetz-Game/blob/f262898c7e8b4ac3ea5ce5147ccf2d9e208dedcc/src/components/AppNav.tsx"
+    },
+    {
+      "kind": "file",
+      "path": "src/components/MainMenu.tsx",
+      "url": "https://github.com/iamthamanic/LetzFetz-Game/blob/f262898c7e8b4ac3ea5ce5147ccf2d9e208dedcc/src/components/MainMenu.tsx"
+    },
+    {
+      "kind": "compare",
+      "path": "495fa6c6b207eb56e5ff06eb2c32ed0f9e376ba8...f262898c7e8b4ac3ea5ce5147ccf2d9e208dedcc",
+      "url": "https://github.com/iamthamanic/Letzfetzprototype/compare/495fa6c6b207eb56e5ff06eb2c32ed0f9e376ba8...f262898c7e8b4ac3ea5ce5147ccf2d9e208dedcc"
+    },
+    {
+      "kind": "commit",
+      "path": "f262898c7e8b4ac3ea5ce5147ccf2d9e208dedcc",
+      "sha": "f262898c7e8b4ac3ea5ce5147ccf2d9e208dedcc",
+      "url": "https://github.com/iamthamanic/Letzfetzprototype/commit/f262898c7e8b4ac3ea5ce5147ccf2d9e208dedcc"
+    },
+    {
+      "kind": "file",
+      "path": "src/components/game/",
+      "url": "https://github.com/iamthamanic/Letzfetzprototype/tree/f262898c7e8b4ac3ea5ce5147ccf2d9e208dedcc/src/components/game"
+    },
+    {
+      "kind": "file",
+      "path": "src/components/AppNav.tsx",
+      "url": "https://github.com/iamthamanic/Letzfetzprototype/blob/f262898c7e8b4ac3ea5ce5147ccf2d9e208dedcc/src/components/AppNav.tsx"
+    },
+    {
+      "kind": "file",
+      "path": "src/components/MainMenu.tsx",
+      "url": "https://github.com/iamthamanic/Letzfetzprototype/blob/f262898c7e8b4ac3ea5ce5147ccf2d9e208dedcc/src/components/MainMenu.tsx"
+    }
+  ],
+  "screenshots": [
+    {
+      "id": "solo-duel-shell",
+      "path": "docs/memory-live-doc/assets/2026-06-20-solo-duel-shell/playmat.png",
+      "status": "missing",
+      "caption": {
+        "de": "Solo-Duel Playmat",
+        "en": "Solo duel playmat"
+      }
+    },
+    {
+      "id": "main-nav",
+      "path": "docs/memory-live-doc/assets/2026-06-20-solo-duel-shell/nav.png",
+      "status": "missing",
+      "caption": {
+        "de": "Hauptnavigation",
+        "en": "Main navigation"
+      }
+    }
+  ],
+  "confidence": 0.8,
+  "review_status": "needs-review",
+  "id": "2026-06-20-solo-duel-shell",
+  "date": "2026-06-20",
+  "type": "feature",
+  "title": {
+    "de": "Solo-Duel-Board und Stone-Shell-Navigation",
+    "en": "Solo duel board and stone shell navigation"
+  },
+  "summary": {
+    "de": "Duel-Board mit MatchIntro-Crash; Header von Purple auf Stone-Shell mit Tone-Tabs.",
+    "en": "Duel board with MatchIntro crash; header from purple to stone shell with tone tabs."
+  },
+  "git": {
+    "base": "495fa6c6b207eb56e5ff06eb2c32ed0f9e376ba8",
+    "head": "f262898c7e8b4ac3ea5ce5147ccf2d9e208dedcc",
+    "branch": "main",
+    "pull_request": null
+  }
+}

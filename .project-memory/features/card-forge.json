@@ -1,0 +1,28 @@
+{
+  "packages": [],
+  "paths": [
+    "src/components/CardForge.tsx",
+    "src/services/cardForge/"
+  ],
+  "user_impact": {
+    "de": [],
+    "en": []
+  },
+  "related_changes": [
+    "2026-06-18-rules-engine-forge",
+    "2026-02-02-supabase-in-repo"
+  ],
+  "review_status": "needs-review",
+  "confidence": 0.75,
+  "locked": false,
+  "id": "card-forge",
+  "title": {
+    "de": "Card Forge",
+    "en": "Card Forge"
+  },
+  "summary": {
+    "de": "Karten/Arenen erstellen und bearbeiten; Legacy-Supabase-Sync.",
+    "en": "Create and edit cards/arenas; legacy Supabase sync."
+  },
+  "status": "active"
+}

@@ -1,0 +1,10 @@
+{
+  "schema_version": 1,
+  "id": "overview",
+  "title": {
+    "de": "Architektur",
+    "en": "Architecture"
+  },
+  "mermaid": "flowchart TB\n  subgraph ui [UI React]\n    Menu[MainMenu / AppNav]\n    Forge[CardForge]\n    Arena[Sandbox Arena]\n    Game[GameView / Playmat]\n  end\n  subgraph engine [Rules Engine pure TS]\n    Actions[applyAction]\n    Packs[Base Pack / V2 P100]\n    Bot[Heuristic / LLM FOW]\n  end\n  subgraph services [Services]\n    Storage[localStorage / Supabase legacy]\n    Audio[SFX]\n    Transport[local transport]\n  end\n  Menu --> Game\n  Menu --> Forge\n  Menu --> Arena\n  Game -->|dispatch| Actions\n  Actions --> Packs\n  Game --> Bot\n  Bot -->|FOW view| Actions\n  Forge --> Storage\n  Game --> Audio\n  Game --> Transport\n",
+  "source_path": ".project-memory/architecture/overview.mermaid"
+}

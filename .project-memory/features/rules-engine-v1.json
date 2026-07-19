@@ -1,0 +1,35 @@
+{
+  "packages": [],
+  "paths": [
+    "src/game/"
+  ],
+  "user_impact": {
+    "de": [
+      "Solo-Partien folgen V1-Regeln"
+    ],
+    "en": [
+      "Solo matches follow V1 rules"
+    ]
+  },
+  "related_changes": [
+    "2026-06-18-rules-engine-forge",
+    "2026-07-19-v2-phrase-playtest"
+  ],
+  "review_status": "needs-review",
+  "confidence": 0.85,
+  "locked": false,
+  "id": "rules-engine-v1",
+  "title": {
+    "de": "Rules Engine V1",
+    "en": "Rules Engine V1"
+  },
+  "summary": {
+    "de": "Pure-TS Zuglogik, Kampf, Effekte, Base Pack; Vitest + fast-check.",
+    "en": "Pure-TS turn logic, combat, effects, base pack; Vitest + fast-check."
+  },
+  "plain_language": {
+    "de": "Das digitale Regelbuch: was legal ist, entscheidet der Code — nicht die UI.",
+    "en": "The digital rulebook: legality is decided by code, not the UI."
+  },
+  "status": "active"
+}

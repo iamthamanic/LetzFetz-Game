@@ -1,0 +1,87 @@
+{
+  "status": "recorded",
+  "user_impact": {
+    "de": [
+      "Forge-Sync bleibt an Legacy-Supabase gebunden (bis Migration)."
+    ],
+    "en": [
+      "Forge sync remains on legacy Supabase until migration."
+    ]
+  },
+  "developer_impact": {
+    "de": [
+      "supabase/ ist versioniert; kein Game-State-Server."
+    ],
+    "en": [
+      "supabase/ is versioned; not a game-state server."
+    ]
+  },
+  "operational_impact": {
+    "de": [],
+    "en": []
+  },
+  "packages": [],
+  "affected_features": [
+    "card-forge"
+  ],
+  "affected_components": [
+    "supabase/"
+  ],
+  "breaking_changes": [],
+  "migration_required": false,
+  "security_relevant": true,
+  "evidence": [
+    {
+      "kind": "compare",
+      "path": "93c1b925207c030e3d409c1878dbce88749a2c30...7a97f6db5594bc0ebd7e13cf0223fd5fd5c65e5d",
+      "url": "https://github.com/iamthamanic/LetzFetz-Game/compare/93c1b925207c030e3d409c1878dbce88749a2c30...7a97f6db5594bc0ebd7e13cf0223fd5fd5c65e5d"
+    },
+    {
+      "kind": "commit",
+      "path": "7a97f6db5594bc0ebd7e13cf0223fd5fd5c65e5d",
+      "sha": "7a97f6db5594bc0ebd7e13cf0223fd5fd5c65e5d",
+      "url": "https://github.com/iamthamanic/LetzFetz-Game/commit/7a97f6db5594bc0ebd7e13cf0223fd5fd5c65e5d"
+    },
+    {
+      "kind": "file",
+      "path": "supabase/",
+      "url": "https://github.com/iamthamanic/LetzFetz-Game/tree/7a97f6db5594bc0ebd7e13cf0223fd5fd5c65e5d/supabase"
+    },
+    {
+      "kind": "compare",
+      "path": "93c1b925207c030e3d409c1878dbce88749a2c30...7a97f6db5594bc0ebd7e13cf0223fd5fd5c65e5d",
+      "url": "https://github.com/iamthamanic/Letzfetzprototype/compare/93c1b925207c030e3d409c1878dbce88749a2c30...7a97f6db5594bc0ebd7e13cf0223fd5fd5c65e5d"
+    },
+    {
+      "kind": "commit",
+      "path": "7a97f6db5594bc0ebd7e13cf0223fd5fd5c65e5d",
+      "sha": "7a97f6db5594bc0ebd7e13cf0223fd5fd5c65e5d",
+      "url": "https://github.com/iamthamanic/Letzfetzprototype/commit/7a97f6db5594bc0ebd7e13cf0223fd5fd5c65e5d"
+    },
+    {
+      "kind": "file",
+      "path": "supabase/",
+      "url": "https://github.com/iamthamanic/Letzfetzprototype/tree/7a97f6db5594bc0ebd7e13cf0223fd5fd5c65e5d/supabase"
+    }
+  ],
+  "screenshots": [],
+  "confidence": 0.75,
+  "review_status": "needs-review",
+  "id": "2026-02-02-supabase-in-repo",
+  "date": "2026-02-02",
+  "type": "architecture",
+  "title": {
+    "de": "Supabase-Projekt ins Repo gesichert",
+    "en": "Supabase project checked into the repo"
+  },
+  "summary": {
+    "de": "Migrationen, Edge Functions, Backup und Doku für Card-Forge-Backend ins Repository.",
+    "en": "Migrations, edge functions, backup, and docs for Card Forge backend into the repository."
+  },
+  "git": {
+    "base": "93c1b925207c030e3d409c1878dbce88749a2c30",
+    "head": "7a97f6db5594bc0ebd7e13cf0223fd5fd5c65e5d",
+    "branch": "main",
+    "pull_request": null
+  }
+}

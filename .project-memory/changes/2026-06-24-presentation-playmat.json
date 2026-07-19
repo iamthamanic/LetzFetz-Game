@@ -1,0 +1,99 @@
+{
+  "status": "recorded",
+  "user_impact": {
+    "de": [
+      "Züge und Kampf wirken geordneter und lesbarer."
+    ],
+    "en": [
+      "Turns and combat feel more ordered and readable."
+    ]
+  },
+  "developer_impact": {
+    "de": [
+      "Presentation-Schicht zwischen Engine-Events und React."
+    ],
+    "en": [
+      "Presentation layer between engine events and React."
+    ]
+  },
+  "operational_impact": {
+    "de": [],
+    "en": []
+  },
+  "packages": [],
+  "affected_features": [
+    "presentation-vfx",
+    "solo-duel-ui"
+  ],
+  "affected_components": [
+    "src/components/game/presentation/",
+    "src/components/game/PlaymatBoard.tsx"
+  ],
+  "breaking_changes": [],
+  "migration_required": false,
+  "security_relevant": false,
+  "evidence": [
+    {
+      "kind": "compare",
+      "path": "94c8830a484e857cf1ea6e0347946d2d70847466...840699fd4acc98b28bd2077a4696bc374b331804",
+      "url": "https://github.com/iamthamanic/LetzFetz-Game/compare/94c8830a484e857cf1ea6e0347946d2d70847466...840699fd4acc98b28bd2077a4696bc374b331804"
+    },
+    {
+      "kind": "commit",
+      "path": "840699fd4acc98b28bd2077a4696bc374b331804",
+      "sha": "840699fd4acc98b28bd2077a4696bc374b331804",
+      "url": "https://github.com/iamthamanic/LetzFetz-Game/commit/840699fd4acc98b28bd2077a4696bc374b331804"
+    },
+    {
+      "kind": "file",
+      "path": "src/components/game/presentation/",
+      "url": "https://github.com/iamthamanic/LetzFetz-Game/tree/840699fd4acc98b28bd2077a4696bc374b331804/src/components/game/presentation"
+    },
+    {
+      "kind": "file",
+      "path": "src/components/game/PlaymatBoard.tsx",
+      "url": "https://github.com/iamthamanic/LetzFetz-Game/blob/840699fd4acc98b28bd2077a4696bc374b331804/src/components/game/PlaymatBoard.tsx"
+    },
+    {
+      "kind": "compare",
+      "path": "94c8830a484e857cf1ea6e0347946d2d70847466...840699fd4acc98b28bd2077a4696bc374b331804",
+      "url": "https://github.com/iamthamanic/Letzfetzprototype/compare/94c8830a484e857cf1ea6e0347946d2d70847466...840699fd4acc98b28bd2077a4696bc374b331804"
+    },
+    {
+      "kind": "commit",
+      "path": "840699fd4acc98b28bd2077a4696bc374b331804",
+      "sha": "840699fd4acc98b28bd2077a4696bc374b331804",
+      "url": "https://github.com/iamthamanic/Letzfetzprototype/commit/840699fd4acc98b28bd2077a4696bc374b331804"
+    },
+    {
+      "kind": "file",
+      "path": "src/components/game/presentation/",
+      "url": "https://github.com/iamthamanic/Letzfetzprototype/tree/840699fd4acc98b28bd2077a4696bc374b331804/src/components/game/presentation"
+    },
+    {
+      "kind": "file",
+      "path": "src/components/game/PlaymatBoard.tsx",
+      "url": "https://github.com/iamthamanic/Letzfetzprototype/blob/840699fd4acc98b28bd2077a4696bc374b331804/src/components/game/PlaymatBoard.tsx"
+    }
+  ],
+  "screenshots": [],
+  "confidence": 0.8,
+  "review_status": "needs-review",
+  "id": "2026-06-24-presentation-playmat",
+  "date": "2026-06-24",
+  "type": "feature",
+  "title": {
+    "de": "Presentation-Queue und Playmat-Zonen",
+    "en": "Presentation queue and playmat zones"
+  },
+  "summary": {
+    "de": "GamePresentationQueue sequenziert UI-Animationen; generalisierte Playmat-Zonen vom Späti-Preview.",
+    "en": "GamePresentationQueue sequences UI animations; generalized playmat zones from Späti preview."
+  },
+  "git": {
+    "base": "94c8830a484e857cf1ea6e0347946d2d70847466",
+    "head": "840699fd4acc98b28bd2077a4696bc374b331804",
+    "branch": "main",
+    "pull_request": null
+  }
+}

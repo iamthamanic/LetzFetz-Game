@@ -1,0 +1,32 @@
+{
+  "packages": [],
+  "paths": [
+    "src/components/game/"
+  ],
+  "user_impact": {
+    "de": [],
+    "en": []
+  },
+  "related_changes": [
+    "2026-06-20-solo-duel-shell",
+    "2026-06-24-presentation-playmat",
+    "2026-07-13-ui-feel-wave"
+  ],
+  "review_status": "needs-review",
+  "confidence": 0.8,
+  "locked": false,
+  "id": "solo-duel-ui",
+  "title": {
+    "de": "Solo-Duel Playmat",
+    "en": "Solo duel playmat"
+  },
+  "summary": {
+    "de": "Spielbare 1v1-Ansicht mit Phasen, Hand, Bound, Kampf und Bot.",
+    "en": "Playable 1v1 view with phases, hand, bound cards, combat, and bot."
+  },
+  "plain_language": {
+    "de": "Hier spielst du eine Partie gegen den Bot am digitalen Tisch.",
+    "en": "This is where you play a match against the bot on the digital table."
+  },
+  "status": "active"
+}

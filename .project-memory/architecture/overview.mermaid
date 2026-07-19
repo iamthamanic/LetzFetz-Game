@@ -1,0 +1,27 @@
+flowchart TB
+  subgraph ui [UI React]
+    Menu[MainMenu / AppNav]
+    Forge[CardForge]
+    Arena[Sandbox Arena]
+    Game[GameView / Playmat]
+  end
+  subgraph engine [Rules Engine pure TS]
+    Actions[applyAction]
+    Packs[Base Pack / V2 P100]
+    Bot[Heuristic / LLM FOW]
+  end
+  subgraph services [Services]
+    Storage[localStorage / Supabase legacy]
+    Audio[SFX]
+    Transport[local transport]
+  end
+  Menu --> Game
+  Menu --> Forge
+  Menu --> Arena
+  Game -->|dispatch| Actions
+  Actions --> Packs
+  Game --> Bot
+  Bot -->|FOW view| Actions
+  Forge --> Storage
+  Game --> Audio
+  Game --> Transport

@@ -1,0 +1,111 @@
+{
+  "status": "recorded",
+  "user_impact": {
+    "de": [
+      "Regeln digital testbar; Karten können authored und bebildert werden."
+    ],
+    "en": [
+      "Rules digitally testable; cards can be authored and illustrated."
+    ]
+  },
+  "developer_impact": {
+    "de": [
+      "Schichtentrennung: Engine ohne React; Vitest für src/game/."
+    ],
+    "en": [
+      "Layering: engine without React; Vitest for src/game/."
+    ]
+  },
+  "operational_impact": {
+    "de": [],
+    "en": []
+  },
+  "packages": [],
+  "affected_features": [
+    "rules-engine-v1",
+    "card-forge",
+    "card-art-pipeline"
+  ],
+  "affected_components": [
+    "src/game/",
+    "src/components/CardForge.tsx",
+    "src/services/cardArt/"
+  ],
+  "breaking_changes": [],
+  "migration_required": false,
+  "security_relevant": false,
+  "evidence": [
+    {
+      "kind": "compare",
+      "path": "7a97f6db5594bc0ebd7e13cf0223fd5fd5c65e5d...098fb4f1574239e109222d573ce027d84590f154",
+      "url": "https://github.com/iamthamanic/LetzFetz-Game/compare/7a97f6db5594bc0ebd7e13cf0223fd5fd5c65e5d...098fb4f1574239e109222d573ce027d84590f154"
+    },
+    {
+      "kind": "commit",
+      "path": "098fb4f1574239e109222d573ce027d84590f154",
+      "sha": "098fb4f1574239e109222d573ce027d84590f154",
+      "url": "https://github.com/iamthamanic/LetzFetz-Game/commit/098fb4f1574239e109222d573ce027d84590f154"
+    },
+    {
+      "kind": "file",
+      "path": "src/game/",
+      "url": "https://github.com/iamthamanic/LetzFetz-Game/tree/098fb4f1574239e109222d573ce027d84590f154/src/game"
+    },
+    {
+      "kind": "file",
+      "path": "src/components/CardForge.tsx",
+      "url": "https://github.com/iamthamanic/LetzFetz-Game/blob/098fb4f1574239e109222d573ce027d84590f154/src/components/CardForge.tsx"
+    },
+    {
+      "kind": "file",
+      "path": "src/services/cardArt/",
+      "url": "https://github.com/iamthamanic/LetzFetz-Game/tree/098fb4f1574239e109222d573ce027d84590f154/src/services/cardArt"
+    },
+    {
+      "kind": "compare",
+      "path": "7a97f6db5594bc0ebd7e13cf0223fd5fd5c65e5d...098fb4f1574239e109222d573ce027d84590f154",
+      "url": "https://github.com/iamthamanic/Letzfetzprototype/compare/7a97f6db5594bc0ebd7e13cf0223fd5fd5c65e5d...098fb4f1574239e109222d573ce027d84590f154"
+    },
+    {
+      "kind": "commit",
+      "path": "098fb4f1574239e109222d573ce027d84590f154",
+      "sha": "098fb4f1574239e109222d573ce027d84590f154",
+      "url": "https://github.com/iamthamanic/Letzfetzprototype/commit/098fb4f1574239e109222d573ce027d84590f154"
+    },
+    {
+      "kind": "file",
+      "path": "src/game/",
+      "url": "https://github.com/iamthamanic/Letzfetzprototype/tree/098fb4f1574239e109222d573ce027d84590f154/src/game"
+    },
+    {
+      "kind": "file",
+      "path": "src/components/CardForge.tsx",
+      "url": "https://github.com/iamthamanic/Letzfetzprototype/blob/098fb4f1574239e109222d573ce027d84590f154/src/components/CardForge.tsx"
+    },
+    {
+      "kind": "file",
+      "path": "src/services/cardArt/",
+      "url": "https://github.com/iamthamanic/Letzfetzprototype/tree/098fb4f1574239e109222d573ce027d84590f154/src/services/cardArt"
+    }
+  ],
+  "screenshots": [],
+  "confidence": 0.85,
+  "review_status": "needs-review",
+  "id": "2026-06-18-rules-engine-forge",
+  "date": "2026-06-18",
+  "type": "feature",
+  "title": {
+    "de": "Rules Engine, Card Forge und Kartenkunst",
+    "en": "Rules engine, Card Forge, and card art"
+  },
+  "summary": {
+    "de": "src/game/ mit Base Pack und Tests; Forge-Workflow; Higgsfield/Card-Art-Pipeline.",
+    "en": "src/game/ with base pack and tests; Forge workflow; Higgsfield/card-art pipeline."
+  },
+  "git": {
+    "base": "7a97f6db5594bc0ebd7e13cf0223fd5fd5c65e5d",
+    "head": "098fb4f1574239e109222d573ce027d84590f154",
+    "branch": "main",
+    "pull_request": null
+  }
+}

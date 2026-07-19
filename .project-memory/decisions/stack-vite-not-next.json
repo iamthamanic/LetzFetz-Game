@@ -1,0 +1,15 @@
+{
+  "id": "stack-vite-not-next",
+  "date": "2025-11-29",
+  "title": {
+    "de": "Vite + React 18 + Tailwind; kein Next.js / DaisyUI",
+    "en": "Vite + React 18 + Tailwind; no Next.js / DaisyUI"
+  },
+  "summary": {
+    "de": "Figma-Make-Ursprung und AGENTS.md verbieten Next/DaisyUI; UI-Primitives in components/ui/.",
+    "en": "Figma Make origin and AGENTS.md forbid Next/DaisyUI; UI primitives live in components/ui/."
+  },
+  "status": "accepted",
+  "review_status": "needs-review",
+  "confidence": 0.85
+}

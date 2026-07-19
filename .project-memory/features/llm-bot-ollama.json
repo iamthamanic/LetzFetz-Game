@@ -1,0 +1,31 @@
+{
+  "packages": [],
+  "paths": [
+    "src/services/bot/",
+    "vite-plugins/"
+  ],
+  "user_impact": {
+    "de": [],
+    "en": []
+  },
+  "related_changes": [
+    "2026-07-13-ui-feel-wave"
+  ],
+  "review_status": "needs-review",
+  "confidence": 0.65,
+  "locked": false,
+  "id": "llm-bot-ollama",
+  "title": {
+    "de": "LLM-Gegner (Ollama)",
+    "en": "LLM opponent (Ollama)"
+  },
+  "summary": {
+    "de": "Dev-only FOW-Bot via Vite-Middleware; Fallback Heuristik.",
+    "en": "Dev-only FOW bot via Vite middleware; heuristic fallback."
+  },
+  "status": "active",
+  "notes": {
+    "de": "API-Key nur serverseitig in .env — nie in Memory speichern.",
+    "en": "API key server-side in .env only — never store in memory."
+  }
+}

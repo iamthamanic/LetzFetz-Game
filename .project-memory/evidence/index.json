@@ -1,0 +1,24 @@
+{
+  "schema_version": 1,
+  "items": [
+    {
+      "kind": "repo",
+      "url": "https://github.com/iamthamanic/Letzfetzprototype",
+      "note": "canonical github"
+    },
+    {
+      "kind": "commit",
+      "sha": "7f31a6f5fddca3e1dc41f779e0de7c6b79a24f25",
+      "url": "https://github.com/iamthamanic/Letzfetzprototype/commit/7f31a6f5fddca3e1dc41f779e0de7c6b79a24f25"
+    },
+    {
+      "kind": "docs",
+      "path": "docs/rules/SPIELANLEITUNG_V1.md"
+    },
+    {
+      "kind": "roadmap",
+      "path": "../.qa/design/product-roadmap.md",
+      "note": "workspace parent .qa"
+    }
+  ]
+}

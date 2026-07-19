@@ -1,0 +1,28 @@
+{
+  "packages": [],
+  "paths": [
+    "src/components/game/presentation/",
+    "src/services/audio/"
+  ],
+  "user_impact": {
+    "de": [],
+    "en": []
+  },
+  "related_changes": [
+    "2026-06-24-presentation-playmat",
+    "2026-07-13-ui-feel-wave"
+  ],
+  "review_status": "needs-review",
+  "confidence": 0.8,
+  "locked": false,
+  "id": "presentation-vfx",
+  "title": {
+    "de": "Presentation & VFX",
+    "en": "Presentation & VFX"
+  },
+  "summary": {
+    "de": "GamePresentationQueue, CombatStage, Draw/Bind/Discard-Animationen, SFX.",
+    "en": "GamePresentationQueue, CombatStage, draw/bind/discard animations, SFX."
+  },
+  "status": "active"
+}

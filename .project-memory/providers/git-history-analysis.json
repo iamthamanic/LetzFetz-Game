@@ -1,0 +1,122 @@
+{
+  "schema_version": 1,
+  "analyzed_at": "2026-07-19T12:13:26Z",
+  "head": "7f31a6f5fddca3e1dc41f779e0de7c6b79a24f25",
+  "first_commit": {
+    "sha": "7f31a6f5fddca3e1dc41f779e0de7c6b79a24f25",
+    "date": "2026-07-19",
+    "subject": "Merge main into WIP UI/engine overhaul; keep MatchMeta and V2 phrase."
+  },
+  "commit_count": 71,
+  "monthly_counts": {
+    "2025-11": 2,
+    "2025-12": 2,
+    "2026-02": 2,
+    "2026-06": 50,
+    "2026-07": 15
+  },
+  "milestone_candidates": [
+    {
+      "date": "2025-11-29",
+      "kind": "high-churn",
+      "title": "Add files from Figma Make",
+      "sha": "303be9d8d7df0074494093ca2bd4d90ab39000b9",
+      "score": 65,
+      "files_hint": [
+        ".npmrc",
+        "README.md",
+        "index.html",
+        "package.json",
+        "src/App.tsx",
+        "src/Attributions.md",
+        "src/components/Arena.tsx",
+        "src/components/Card.tsx",
+        "src/components/CardForge.tsx",
+        "src/components/CardNotes.tsx",
+        "src/components/DiceRoller.tsx",
+        "src/components/ImageCropModal.tsx"
+      ]
+    },
+    {
+      "date": "2026-02-02",
+      "kind": "keyword",
+      "title": "chore: Supabase-Projekt ins Repo sichern (Migrationen, Edge Functions, Backup, Doku)",
+      "sha": "7a97f6db5594bc0ebd7e13cf0223fd5fd5c65e5d",
+      "score": 55,
+      "files_hint": []
+    },
+    {
+      "date": "2026-06-18",
+      "kind": "feat",
+      "title": "feat: unify UI/UX across app with shared primitives and consistent layout",
+      "sha": "495fa6c6b207eb56e5ff06eb2c32ed0f9e376ba8",
+      "score": 80,
+      "files_hint": []
+    },
+    {
+      "date": "2026-06-18",
+      "kind": "feat",
+      "title": "feat: add rules engine, card forge, and Higgsfield card art",
+      "sha": "098fb4f1574239e109222d573ce027d84590f154",
+      "score": 80,
+      "files_hint": []
+    },
+    {
+      "date": "2026-06-20",
+      "kind": "feat",
+      "title": "feat: replace purple header with stone shell and tone-aware nav tabs",
+      "sha": "f262898c7e8b4ac3ea5ce5147ccf2d9e208dedcc",
+      "score": 80,
+      "files_hint": []
+    },
+    {
+      "date": "2026-06-24",
+      "kind": "feat",
+      "title": "feat: activate-bound discard fly VFX (#19)",
+      "sha": "f8c8ea62ed8ea8da74da699c0d70947649f59545",
+      "score": 80,
+      "files_hint": []
+    },
+    {
+      "date": "2026-07-19",
+      "kind": "bootstrap",
+      "title": "Merge main into WIP UI/engine overhaul; keep MatchMeta and V2 phrase.",
+      "sha": "7f31a6f5fddca3e1dc41f779e0de7c6b79a24f25",
+      "score": 100,
+      "files_hint": []
+    },
+    {
+      "date": "2026-07-13",
+      "kind": "feat",
+      "title": "feat: polish playmat game feel with combat VFX and mobile docks",
+      "sha": "569ee562306a23b1eda9b35dd0b3f5723faa9e04",
+      "score": 80,
+      "files_hint": []
+    },
+    {
+      "date": "2026-07-19",
+      "kind": "merge",
+      "title": "Merge main into WIP UI/engine overhaul; keep MatchMeta and V2 phrase.",
+      "sha": "7f31a6f5fddca3e1dc41f779e0de7c6b79a24f25",
+      "score": 70,
+      "files_hint": []
+    },
+    {
+      "date": "2026-07-19",
+      "kind": "merge",
+      "title": "Merge pull request #43 from iamthamanic/feat/ui-feel-overhaul",
+      "sha": "32aede089703980981493f954663e07a921d8c7c",
+      "score": 70,
+      "files_hint": []
+    }
+  ],
+  "suggested_architecture_dates": [
+    "2025-11-15",
+    "2025-12-15",
+    "2026-02-15",
+    "2026-06-15",
+    "2026-07-01",
+    "2026-07-15"
+  ],
+  "agent_instructions": "Cluster candidates into 8–20 bilingual change events spanning first_commit→HEAD. Do not invent runtime behavior; use commit messages + paths as evidence. Create architecture/history snapshots at major eras. Mark needs-review. Set config.history_coverage.status=complete after apply."
+}

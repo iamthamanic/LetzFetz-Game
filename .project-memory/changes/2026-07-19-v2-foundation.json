@@ -1,0 +1,116 @@
+{
+  "status": "recorded",
+  "user_impact": {
+    "de": [
+      "Playtester können V2-Pack und Szenarien opt-in testen."
+    ],
+    "en": [
+      "Playtesters can opt into V2 pack and scenarios."
+    ]
+  },
+  "developer_impact": {
+    "de": [
+      "Pack unter src/game/packs/v2/; Docs unter docs/rules/."
+    ],
+    "en": [
+      "Pack under src/game/packs/v2/; docs under docs/rules/."
+    ]
+  },
+  "operational_impact": {
+    "de": [],
+    "en": []
+  },
+  "packages": [],
+  "affected_features": [
+    "v2-phrase-playtest",
+    "playtest-cheatbox",
+    "rules-engine-v1"
+  ],
+  "affected_components": [
+    "src/game/packs/v2/",
+    "docs/rules/SPIELANLEITUNG_V2_DRAFT.md",
+    "docs/rules/SPIELANLEITUNG_V2_WIP.md"
+  ],
+  "breaking_changes": [],
+  "migration_required": false,
+  "security_relevant": false,
+  "evidence": [
+    {
+      "kind": "compare",
+      "path": "569ee562306a23b1eda9b35dd0b3f5723faa9e04...37f96bc02ad51b95b11045b88d0697f5c0bf732e",
+      "url": "https://github.com/iamthamanic/LetzFetz-Game/compare/569ee562306a23b1eda9b35dd0b3f5723faa9e04...37f96bc02ad51b95b11045b88d0697f5c0bf732e"
+    },
+    {
+      "kind": "commit",
+      "path": "37f96bc02ad51b95b11045b88d0697f5c0bf732e",
+      "sha": "37f96bc02ad51b95b11045b88d0697f5c0bf732e",
+      "url": "https://github.com/iamthamanic/LetzFetz-Game/commit/37f96bc02ad51b95b11045b88d0697f5c0bf732e"
+    },
+    {
+      "kind": "pr",
+      "path": "https://github.com/iamthamanic/Letzfetzprototype/pull/49",
+      "url": "https://github.com/iamthamanic/Letzfetzprototype/pull/49"
+    },
+    {
+      "kind": "file",
+      "path": "src/game/packs/v2/",
+      "url": "https://github.com/iamthamanic/LetzFetz-Game/tree/37f96bc02ad51b95b11045b88d0697f5c0bf732e/src/game/packs/v2"
+    },
+    {
+      "kind": "file",
+      "path": "docs/rules/SPIELANLEITUNG_V2_DRAFT.md",
+      "url": "https://github.com/iamthamanic/LetzFetz-Game/blob/37f96bc02ad51b95b11045b88d0697f5c0bf732e/docs/rules/SPIELANLEITUNG_V2_DRAFT.md"
+    },
+    {
+      "kind": "file",
+      "path": "docs/rules/SPIELANLEITUNG_V2_WIP.md",
+      "url": "https://github.com/iamthamanic/LetzFetz-Game/blob/37f96bc02ad51b95b11045b88d0697f5c0bf732e/docs/rules/SPIELANLEITUNG_V2_WIP.md"
+    },
+    {
+      "kind": "compare",
+      "path": "569ee562306a23b1eda9b35dd0b3f5723faa9e04...37f96bc02ad51b95b11045b88d0697f5c0bf732e",
+      "url": "https://github.com/iamthamanic/Letzfetzprototype/compare/569ee562306a23b1eda9b35dd0b3f5723faa9e04...37f96bc02ad51b95b11045b88d0697f5c0bf732e"
+    },
+    {
+      "kind": "commit",
+      "path": "37f96bc02ad51b95b11045b88d0697f5c0bf732e",
+      "sha": "37f96bc02ad51b95b11045b88d0697f5c0bf732e",
+      "url": "https://github.com/iamthamanic/Letzfetzprototype/commit/37f96bc02ad51b95b11045b88d0697f5c0bf732e"
+    },
+    {
+      "kind": "file",
+      "path": "src/game/packs/v2/",
+      "url": "https://github.com/iamthamanic/Letzfetzprototype/tree/37f96bc02ad51b95b11045b88d0697f5c0bf732e/src/game/packs/v2"
+    },
+    {
+      "kind": "file",
+      "path": "docs/rules/SPIELANLEITUNG_V2_DRAFT.md",
+      "url": "https://github.com/iamthamanic/Letzfetzprototype/blob/37f96bc02ad51b95b11045b88d0697f5c0bf732e/docs/rules/SPIELANLEITUNG_V2_DRAFT.md"
+    },
+    {
+      "kind": "file",
+      "path": "docs/rules/SPIELANLEITUNG_V2_WIP.md",
+      "url": "https://github.com/iamthamanic/Letzfetzprototype/blob/37f96bc02ad51b95b11045b88d0697f5c0bf732e/docs/rules/SPIELANLEITUNG_V2_WIP.md"
+    }
+  ],
+  "screenshots": [],
+  "confidence": 0.8,
+  "review_status": "needs-review",
+  "id": "2026-07-19-v2-foundation",
+  "date": "2026-07-19",
+  "type": "feature",
+  "title": {
+    "de": "V2-Playtest-Grundlage: P100 und Regel-Drafts",
+    "en": "V2 playtest foundation: P100 and rules drafts"
+  },
+  "summary": {
+    "de": "V2 P100 Pack, SPIELANLEITUNG_V2_DRAFT/WIP, Cheatbox O11 — noch nicht Engine-Wahrheit.",
+    "en": "V2 P100 pack, SPIELANLEITUNG_V2_DRAFT/WIP, cheatbox O11 — not engine truth yet."
+  },
+  "git": {
+    "base": "569ee562306a23b1eda9b35dd0b3f5723faa9e04",
+    "head": "37f96bc02ad51b95b11045b88d0697f5c0bf732e",
+    "branch": "main",
+    "pull_request": "https://github.com/iamthamanic/Letzfetzprototype/pull/49"
+  }
+}

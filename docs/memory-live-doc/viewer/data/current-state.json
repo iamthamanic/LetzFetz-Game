@@ -1,0 +1,47 @@
+{
+  "schema_version": 1,
+  "as_of": "2026-07-19",
+  "headline": {
+    "de": "Solo-Duel spielbar (V1 Engine); V2 Phrase-Playtest und UI/Engine-WIP aktiv; P2P noch nicht.",
+    "en": "Solo duel playable (V1 engine); V2 phrase playtest and UI/engine WIP active; P2P not yet."
+  },
+  "product_stage": {
+    "de": "Phase 1 — Solo vs Bot + Card Forge; Stufe A ~75%, B ~55% (Roadmap-Schätzung).",
+    "en": "Phase 1 — Solo vs bot + Card Forge; stage A ~75%, B ~55% (roadmap estimate)."
+  },
+  "working": {
+    "de": [
+      "Rules Engine V1 mit Unit-/Property-Tests",
+      "Solo-Duel Playmat inkl. Presentation/VFX",
+      "Card Forge, Card Library, Sandbox-Arena",
+      "Playtest-Cheatbox; optional LLM-Bot (Ollama Cloud)",
+      "V2 P100 Pack + Phrase-Slots (Playtest-Draft, nicht V1-Wahrheit)"
+    ],
+    "en": [
+      "V1 rules engine with unit/property tests",
+      "Solo duel playmat including presentation/VFX",
+      "Card Forge, Card Library, sandbox arena",
+      "Playtest cheatbox; optional LLM bot (Ollama Cloud)",
+      "V2 P100 pack + phrase slots (playtest draft, not V1 truth)"
+    ]
+  },
+  "gaps": {
+    "de": [
+      "Vollständige Regelbuch-Edge-Cases (Ultis, Glitches, Deck-Reset)",
+      "Match-Ende / Rematch",
+      "WebRTC P2P + pluggable Signaling",
+      "Appwrite Content-Migration (Supabase Legacy Forge)",
+      "GitHub Pages für Memory-Viewer noch nicht aktiv"
+    ],
+    "en": [
+      "Full rulebook edge cases (ultimates, glitches, deck reset)",
+      "Match end / rematch",
+      "WebRTC P2P + pluggable signaling",
+      "Appwrite content migration (Supabase legacy forge)",
+      "GitHub Pages for memory viewer not enabled yet"
+    ]
+  },
+  "active_branch": "feat/wip-ui-engine-overhaul",
+  "review_status": "needs-review",
+  "confidence": 0.75
+}
