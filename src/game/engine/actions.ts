@@ -36,6 +36,8 @@ import {
   challengeTargetElement,
   challengeTargetResistance,
   countPassiveBonus,
+  monoAttackBonus,
+  monoBlockBonus,
 } from './phraseBonuses';
 import { applyUltimateEffect } from './ultimate';
 
@@ -107,16 +109,16 @@ function computeAttackValueForPlayer(
   ruleset: RulesetConfig,
 ): number {
   const bonus = diceBonusFromRoll(diceRoll, ruleset);
-  const passiveBonus = isV2Pack(pack)
-    ? countPassiveBonus(pack, state.players[playerId].bound, 'p_atk')
-    : 0;
+  const bound = state.players[playerId].bound;
+  const passiveBonus = isV2Pack(pack) ? countPassiveBonus(pack, bound, 'p_atk') : 0;
+  const monoBonus = isV2Pack(pack) ? monoAttackBonus(state, pack, bound) : 0;
   return calculateCombatValue({
     cardValue: def.value,
     diceRoll,
     diceBonus: bonus,
     characterElements: getCharacterElements(pack, state.players[playerId].characterId),
     cardElement: def.element,
-    extraBonus: passiveBonus,
+    extraBonus: passiveBonus + monoBonus,
   });
 }
 
@@ -130,9 +132,9 @@ function computeBlockValueForPlayer(
   ruleset: RulesetConfig,
 ): number {
   const bonus = diceBonusFromRoll(diceRoll, ruleset);
-  const passiveBonus = isV2Pack(pack)
-    ? countPassiveBonus(pack, state.players[playerId].bound, 'p_block')
-    : 0;
+  const bound = state.players[playerId].bound;
+  const passiveBonus = isV2Pack(pack) ? countPassiveBonus(pack, bound, 'p_block') : 0;
+  const monoBonus = isV2Pack(pack) ? monoBlockBonus(state, pack, bound) : 0;
   return calculateCombatValue({
     cardValue: def.value,
     diceRoll,
@@ -141,7 +143,7 @@ function computeBlockValueForPlayer(
     cardElement: def.element,
     attackElement,
     blockElement: def.element,
-    extraBonus: passiveBonus,
+    extraBonus: passiveBonus + monoBonus,
   });
 }
 
