@@ -1,8 +1,8 @@
 {
   "runMode": "loop",
   "paused": false,
-  "activeIssue": 84,
-  "phase": "implement",
+  "activeIssue": 85,
+  "phase": "ecc-check",
   "completedIssues": [
     44,
     45,
@@ -97,15 +97,21 @@
       "verifyUi": 0,
       "review": 0,
       "sameRootCause": 0
+    },
+    "85": {
+      "implement": 0,
+      "verifyTicket": 0,
+      "verifyUi": 0,
+      "review": 0,
+      "sameRootCause": 0
     }
   },
   "lastError": null,
   "repo": "iamthamanic/LetzFetz-Game",
   "queue": [
-    84,
-    86,
-    85
+    85,
+    86
   ],
-  "updatedAt": "2026-07-24T14:21:49.000Z",
+  "updatedAt": "2026-07-24T14:29:21.000Z",
   "milestoneFilter": null
 }
