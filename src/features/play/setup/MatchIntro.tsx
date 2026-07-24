@@ -14,11 +14,8 @@ import { Button } from '../../../components/ui/Button';
 import { BrandLogoText } from '../../../components/ui/BrandLogoText';
 import { W6Die3D, W6_DIE_ROLL_MS } from '../board/W6Die3D';
 import { prefersReducedMotion } from '../presentation/prefersReducedMotion';
-import {
-  CLASH_IMPACT_FRACTION,
-  playClashSoundAt,
-  preloadClashSound,
-} from '../services/audio/clashSound';
+import { audioManager } from '../../../services/audio/audioManager';
+import { CLASH_IMPACT_FRACTION } from '../../../services/audio/clashSound';
 
 type IntroPhase = 'vs' | 'crash' | 'initiative' | 'winner' | 'arena';
 
@@ -143,18 +140,18 @@ export function MatchIntro({
     initiativeDoneRef.current = false;
     setWinnerId(null);
     if (reduceMotion || prefersReducedMotion()) {
-      void preloadClashSound();
+      void audioManager.preloadClash();
       runInitiativeRoll();
       return;
     }
 
     // Decode during this gesture; start crash CSS immediately, then schedule
     // the gong from the first painted crash frame (avoids setState paint lag).
-    void preloadClashSound();
+    void audioManager.preloadClash();
     setPhase('crash');
     requestAnimationFrame(() => {
       requestAnimationFrame(() => {
-        playClashSoundAt(CLASH_SOUND_DELAY_MS / 1000);
+        audioManager.playClashAt(CLASH_SOUND_DELAY_MS / 1000);
         if (typeof navigator !== 'undefined' && navigator.vibrate) {
           window.setTimeout(() => navigator.vibrate?.(12), CLASH_SOUND_DELAY_MS);
         }

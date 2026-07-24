@@ -1,8 +1,8 @@
 {
   "runMode": "loop",
   "paused": false,
-  "activeIssue": 78,
-  "phase": "setup",
+  "activeIssue": 79,
+  "phase": "implement",
   "completedIssues": [
     44,
     45,
@@ -18,7 +18,8 @@
     62,
     63,
     64,
-    65
+    65,
+    78
   ],
   "mergedIssues": [
     44,
@@ -35,17 +36,19 @@
     62,
     63,
     64,
-    65
+    65,
+    78
   ],
   "prUrls": {
     "44": "https://github.com/iamthamanic/Letzfetzprototype/pull/49",
     "45": "https://github.com/iamthamanic/Letzfetzprototype/pull/50",
     "46": "https://github.com/iamthamanic/Letzfetzprototype/pull/51",
     "47": "https://github.com/iamthamanic/Letzfetzprototype/pull/52",
-    "48": "https://github.com/iamthamanic/Letzfetzprototype/pull/53"
+    "48": "https://github.com/iamthamanic/Letzfetzprototype/pull/53",
+    "78": "https://github.com/iamthamanic/LetzFetz-Game/pull/87"
   },
   "retries": {
-    "78": {
+    "79": {
       "implement": 0,
       "verifyTicket": 0,
       "verifyUi": 0,
@@ -56,7 +59,6 @@
   "lastError": null,
   "repo": "iamthamanic/LetzFetz-Game",
   "queue": [
-    78,
     79,
     80,
     81,
@@ -66,6 +68,6 @@
     86,
     85
   ],
-  "updatedAt": "2026-07-24T13:19:50.000Z",
+  "updatedAt": "2026-07-24T13:27:36.000Z",
   "milestoneFilter": null
 }
