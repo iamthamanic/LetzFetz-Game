@@ -63,6 +63,11 @@ describe('audioManager', () => {
     expect(() => audioManager.play('combat.block')).not.toThrow();
   });
 
+  it('playWithCooldown suppresses rapid repeats', () => {
+    expect(audioManager.playWithCooldown('ui.click', 5000)).toBe(true);
+    expect(audioManager.playWithCooldown('ui.click', 5000)).toBe(false);
+  });
+
   it('unlock and unmuted stinger do not throw without AudioContext', () => {
     audioManager.applySettings({
       muted: false,

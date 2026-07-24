@@ -33,11 +33,17 @@ export function usePresentationQueue(options: UsePresentationQueueOptions = {}) 
   optionsRef.current = options;
 
   const wasIdleRef = useRef(true);
+  const lastStartedIdRef = useRef<string | null>(null);
 
   useEffect(() => {
     const idle = isPresentationIdle(snapshot);
-    if (!idle && wasIdleRef.current && snapshot.active) {
-      optionsRef.current.onStepStart?.(snapshot.active);
+    const active = snapshot.active;
+    if (active && active.id !== lastStartedIdRef.current) {
+      lastStartedIdRef.current = active.id;
+      optionsRef.current.onStepStart?.(active);
+    }
+    if (!active) {
+      lastStartedIdRef.current = null;
     }
     if (idle && !wasIdleRef.current) {
       optionsRef.current.onQueueIdle?.();
