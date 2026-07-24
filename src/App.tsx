@@ -11,6 +11,7 @@ import { SettingsView } from './features/settings/SettingsView';
 import { isPlaymatPreview } from './features/play/services/playtest/isPlaymatPreview';
 import { AppHistoryProvider, useAppHistory } from './services/history/AppHistoryContext';
 import { AudioSettingsSync } from './services/audio/AudioSettingsSync';
+import { MusicBedSync } from './services/audio/MusicBedSync';
 import { DisplaySettingsSync } from './services/settings/DisplaySettingsSync';
 import { SettingsProvider } from './services/settings/SettingsProvider';
 
@@ -20,7 +21,7 @@ function AppShell() {
   const [arenaKey, setArenaKey] = useState(0);
   const [playSessionKey, setPlaySessionKey] = useState(0);
   const { push, canGoBack, canGoForward, goBack, goForward } = useAppHistory();
-
+  const musicBed = currentView === 'play' ? 'match' : 'menu';
   const handleViewChange = (view: AppView) => {
     if (view === currentView) return;
     const from = currentView;
@@ -48,6 +49,7 @@ function AppShell() {
 
   return (
     <div className="flex min-h-screen flex-col bg-gray-950">
+      <MusicBedSync bed={musicBed} />
       <header
         data-testid="app-header"
         className="flex-none border-b border-stone-800 bg-stone-950/95 backdrop-blur-md"

@@ -73,13 +73,19 @@ const REGISTRY: readonly SoundRegistryEntry[] = [
     publicUrl: null,
     baseVolume: 1,
   },
-  { id: 'music.menu.main', category: 'music', status: 'planned', publicUrl: null, baseVolume: 1 },
+  {
+    id: 'music.menu.main',
+    category: 'music',
+    status: 'existing',
+    publicUrl: `${AUDIO_PUBLIC_ROOT}/music/pulsefront.mp3`,
+    baseVolume: 0.7,
+  },
   {
     id: 'music.match.default',
     category: 'music',
-    status: 'planned',
-    publicUrl: null,
-    baseVolume: 1,
+    status: 'existing',
+    publicUrl: `${AUDIO_PUBLIC_ROOT}/music/iron-surge.mp3`,
+    baseVolume: 0.7,
   },
 ];
 

@@ -68,6 +68,13 @@ describe('audioManager', () => {
     expect(audioManager.playWithCooldown('ui.click', 5000)).toBe(false);
   });
 
+  it('playMusic same id does not throw and keeps currentMusicId', () => {
+    expect(() => audioManager.playMusic('music.menu.main', 0)).not.toThrow();
+    expect(() => audioManager.playMusic('music.menu.main', 0)).not.toThrow();
+    expect(audioManager.currentMusicId()).toBe('music.menu.main');
+    expect(() => audioManager.stopMusic(0)).not.toThrow();
+  });
+
   it('unlock and unmuted stinger do not throw without AudioContext', () => {
     audioManager.applySettings({
       muted: false,

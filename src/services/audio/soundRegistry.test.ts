@@ -90,6 +90,15 @@ describe('soundRegistry', () => {
     expect(CLASH_SOUND_URL.startsWith('/sounds/')).toBe(false);
   });
 
+  it('resolves music beds under /audio/music/', () => {
+    expect(resolveSoundUrl('music.menu.main')).toBe(
+      '/audio/music/pulsefront.mp3',
+    );
+    expect(resolveSoundUrl('music.match.default')).toBe(
+      '/audio/music/iron-surge.mp3',
+    );
+  });
+
   it('returns null for planned IDs without files', () => {
     expect(resolveSoundUrl('dice.roll')).toBeNull();
     expect(resolveSoundUrl('ui.click')).toBeNull();
@@ -115,5 +124,16 @@ describe('sound-manifest.json', () => {
     const clash = loadManifest().sounds.find((s) => s.id === 'card.clash');
     expect(clash?.status).toBe('existing');
     expect(clash?.publicPath).toBe('sfx/card-clash.mp3');
+  });
+
+  it('marks music beds existing with public paths', () => {
+    const menu = loadManifest().sounds.find((s) => s.id === 'music.menu.main');
+    const match = loadManifest().sounds.find(
+      (s) => s.id === 'music.match.default',
+    );
+    expect(menu?.status).toBe('existing');
+    expect(menu?.publicPath).toBe('music/pulsefront.mp3');
+    expect(match?.status).toBe('existing');
+    expect(match?.publicPath).toBe('music/iron-surge.mp3');
   });
 });
