@@ -295,6 +295,7 @@ Globale Agent-Skills (Pipeline + ECC-Helfer): siehe **Agent-Workflows** oben; in
 | [SPIELANLEITUNG_V2_WIP.md](Letz-Fetz-Game/docs/rules/SPIELANLEITUNG_V2_WIP.md) | Engine-/Fetzen-Redesign Grill-Log |
 | [DESIGN.md](Letz-Fetz-Game/DESIGN.md) | Agent UI Brief — Navigation, Hybrid-Ton, Anti-Patterns |
 | [UI_STYLEGUIDE.md](Letz-Fetz-Game/docs/UI_STYLEGUIDE.md) | Tokens, Komponenten, Spiel- vs Editor-UI |
+| [audio-system.md](Letz-Fetz-Game/docs/audio-system.md) | AudioManager, Settings volumes, Audio Forge CLI |
 | [product-roadmap.md](.qa/design/product-roadmap.md) | Sprint-Backlog, Stufen A/B/C |
 | [README.md](Letz-Fetz-Game/README.md) | Dev-Setup (`npm i`, `npm run dev`) |
 | Figma | https://www.figma.com/design/wRBtVn8juwrMypsLFH740a/Letz-Fetz-Game |

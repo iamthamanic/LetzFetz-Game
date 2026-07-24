@@ -3,7 +3,7 @@
   "policy": "SOUND_POLICY.md",
   "publicRoot": "/audio",
   "notes": {
-    "legacyClash": "Moved from public/sounds/card-clash.mp3 \u2192 public/audio/sfx/card-clash.mp3",
+    "legacyClash": "Moved from public/sounds/card-clash.mp3 → public/audio/sfx/card-clash.mp3",
     "style": "rough, physical, dark, urban, industrial; no voices; no music in SFX prompts"
   },
   "sounds": [
@@ -52,10 +52,11 @@
     {
       "id": "card.clash",
       "category": "sfx",
-      "status": "existing",
+      "status": "approved",
       "publicPath": "sfx/card-clash.mp3",
       "source": "migrated from public/sounds/card-clash.mp3",
-      "prompt": "Metallic clash gong strike for card collision; short dry industrial hit, no voice."
+      "prompt": "Metallic clash gong strike for card collision; short dry industrial hit, no voice.",
+      "approvedNote": "Grandfathered from existing runtime asset; review gate for new assets is status=approved"
     },
     {
       "id": "dice.roll",
@@ -217,20 +218,22 @@
     {
       "id": "music.menu.main",
       "category": "music",
-      "status": "existing",
+      "status": "approved",
       "publicPath": "music/pulsefront.mp3",
-      "prompt": "Menu music bed \u2014 Pulsefront loop; music category only.",
+      "prompt": "Menu music bed — Pulsefront loop; music category only.",
       "source": "assets/Pulsefront.mp3 (Pulsefront menu loop)",
-      "loop": true
+      "loop": true,
+      "approvedNote": "Grandfathered from existing runtime asset; review gate for new assets is status=approved"
     },
     {
       "id": "music.match.default",
       "category": "music",
-      "status": "existing",
+      "status": "approved",
       "publicPath": "music/iron-surge.mp3",
-      "prompt": "Match music bed \u2014 Iron Surge loop; music category only.",
+      "prompt": "Match music bed — Iron Surge loop; music category only.",
       "source": "assets/Iron Surge.mp3 (match/combat loop)",
-      "loop": true
+      "loop": true,
+      "approvedNote": "Grandfathered from existing runtime asset; review gate for new assets is status=approved"
     }
   ]
 }

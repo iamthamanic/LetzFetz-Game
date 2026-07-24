@@ -25,7 +25,7 @@ Offline Audio-Forge contract. Runtime playback goes through typed `SoundId`s and
 effective = master × category × baseVolume
 ```
 
-When `muted` is true, effective volume is **0** (includes file SFX, procedural stingers, and later arena video mute wiring).
+When `muted` is true, effective volume is **0** (includes file SFX, procedural stingers, and arena video mute wiring).
 
 ## Playback rules
 
@@ -34,16 +34,29 @@ When `muted` is true, effective volume is **0** (includes file SFX, procedural s
 - **No hover / UI spam SFX**
 - Missing asset for a `planned` ID → silent skip (no throw)
 - Procedural adapters may stand in until mastered assets are approved
+- **Runtime file URLs are approved-only** (`soundRegistry` + Howler)
 
 ## Manifest statuses
 
 | Status | Meaning |
 |--------|---------|
-| `existing` | File present under `public/audio/` and registered for runtime |
 | `planned` | Listed for forge pipeline; not required at runtime yet |
-| `approved` | (later) Reviewed and allowed in the runtime registry |
+| `approved` | Reviewed; file under `public/audio/` and registered for runtime |
+| `existing` | Legacy alias of approved (still accepted by `audio:verify`) |
+
+## Approval gate
+
+1. Generate + process candidates (`audio:generate` / `audio:process`)
+2. Open static review HTML (`audio:review` → `tools/audio-forge/review/index.html`)
+3. Copy web master into `public/audio/…`, set manifest `status: approved` + `publicPath`
+4. Mirror URL in `soundRegistry.ts`
+5. `audio:verify` must exit 0
 
 ## Legacy
 
 - Old path: `public/sounds/card-clash.mp3` → migrated to `public/audio/sfx/card-clash.mp3`
 - Do not reintroduce `/sounds/` URLs
+
+## Docs
+
+See [`docs/audio-system.md`](../../docs/audio-system.md) for architecture + CLI.

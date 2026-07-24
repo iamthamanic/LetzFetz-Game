@@ -7,13 +7,13 @@
  */
 import type { AudioCategory, SoundId } from './types';
 
-export type SoundRuntimeStatus = 'existing' | 'planned' | 'procedural';
+export type SoundRuntimeStatus = 'approved' | 'planned' | 'procedural';
 
 export interface SoundRegistryEntry {
   id: SoundId;
   category: AudioCategory;
   status: SoundRuntimeStatus;
-  /** Absolute public URL when a file exists; null for planned/procedural. */
+  /** Absolute public URL when approved file exists; null for planned/procedural. */
   publicUrl: string | null;
   baseVolume: number;
 }
@@ -21,9 +21,14 @@ export interface SoundRegistryEntry {
 /** Vite public root for audio assets (manifest publicRoot + relative path). */
 export const AUDIO_PUBLIC_ROOT = '/audio';
 
+/** File-backed runtime playback is approved-only (never planned candidates). */
+export function isApprovedRuntimeEntry(entry: SoundRegistryEntry): boolean {
+  return entry.status === 'approved' && entry.publicUrl !== null;
+}
+
 /**
  * First-wave registry. Keep in sync with tools/audio-forge/sound-manifest.json.
- * Only `existing` rows expose a publicUrl for file playback.
+ * Only `approved` rows expose a publicUrl for file playback.
  */
 const REGISTRY: readonly SoundRegistryEntry[] = [
   { id: 'card.draw', category: 'sfx', status: 'planned', publicUrl: null, baseVolume: 1 },
@@ -35,7 +40,7 @@ const REGISTRY: readonly SoundRegistryEntry[] = [
   {
     id: 'card.clash',
     category: 'sfx',
-    status: 'existing',
+    status: 'approved',
     publicUrl: `${AUDIO_PUBLIC_ROOT}/sfx/card-clash.mp3`,
     baseVolume: 0.85,
   },
@@ -76,14 +81,14 @@ const REGISTRY: readonly SoundRegistryEntry[] = [
   {
     id: 'music.menu.main',
     category: 'music',
-    status: 'existing',
+    status: 'approved',
     publicUrl: `${AUDIO_PUBLIC_ROOT}/music/pulsefront.mp3`,
     baseVolume: 0.7,
   },
   {
     id: 'music.match.default',
     category: 'music',
-    status: 'existing',
+    status: 'approved',
     publicUrl: `${AUDIO_PUBLIC_ROOT}/music/iron-surge.mp3`,
     baseVolume: 0.7,
   },
@@ -101,9 +106,11 @@ export function getSoundEntry(id: SoundId): SoundRegistryEntry | undefined {
   return BY_ID.get(id);
 }
 
-/** Public URL for file-backed IDs; null when planned/procedural/missing. */
+/** Public URL for approved file-backed IDs; null when planned/procedural/missing. */
 export function resolveSoundUrl(id: SoundId): string | null {
-  return BY_ID.get(id)?.publicUrl ?? null;
+  const entry = BY_ID.get(id);
+  if (!entry || !isApprovedRuntimeEntry(entry)) return null;
+  return entry.publicUrl;
 }
 
 /** Reject duplicate IDs — used by tests / future forge verify. */
