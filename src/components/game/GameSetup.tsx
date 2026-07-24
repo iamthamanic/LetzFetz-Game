@@ -11,6 +11,7 @@ import { CharacterCarousel } from './CharacterCarousel';
 import { Badge } from '../ui/Badge';
 import { Panel } from '../ui/Panel';
 import { useAppHistory } from '../../services/history/AppHistoryContext';
+import { MenuGlitchBackdrop } from '../ui/MenuGlitchBackdrop';
 
 export type GameSetupMode = 'bot' | 'online';
 export type GameSetupPhase = 'mode' | 'bot' | 'online';
@@ -66,8 +67,9 @@ export function GameSetup({
         className="absolute inset-0 flex items-center justify-center bg-stone-950/95 backdrop-blur-md"
         data-testid="game-setup"
       >
+        <MenuGlitchBackdrop />
         <div
-          className="grid w-full max-w-2xl grid-cols-1 gap-4 px-6 sm:grid-cols-2 sm:gap-5 sm:px-8"
+          className="relative z-10 grid w-full max-w-2xl grid-cols-1 gap-4 px-6 sm:grid-cols-2 sm:gap-5 sm:px-8"
           data-testid="game-mode-select"
           role="group"
           aria-label="Spielmodus"
@@ -119,7 +121,8 @@ export function GameSetup({
       className="absolute inset-0 flex flex-col items-center overflow-y-auto bg-stone-950/95 px-4 py-6 pt-6 backdrop-blur-md sm:pt-10"
       data-testid="game-setup"
     >
-      <div className="w-full max-w-3xl space-y-4">
+      <MenuGlitchBackdrop />
+      <div className="relative z-10 w-full max-w-3xl space-y-4">
         {phase === 'online' && (
           <>
             <Button

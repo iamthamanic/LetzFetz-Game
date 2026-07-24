@@ -32,7 +32,7 @@ export function BrandLogoText({
   return (
     <Tag className={`${surfaceClass} ${className}`}>
       <span className="brand-logo-text-inner relative z-[2]">{children}</span>
-      {(surface === 'dark' || surface === 'parchment') && (
+      {surface === 'parchment' && (
         <svg
           className="pointer-events-none absolute inset-0 z-[1] h-full w-full opacity-[0.28] mix-blend-multiply"
           aria-hidden
