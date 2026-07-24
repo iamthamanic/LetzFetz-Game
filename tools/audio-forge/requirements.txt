@@ -1,0 +1,3 @@
+# Python deps for Audio Forge (offline tools only — never imported by Vite).
+# Mock provider uses stdlib only; pytest is for CI.
+pytest>=8.0,<9

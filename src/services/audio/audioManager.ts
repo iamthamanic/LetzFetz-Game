@@ -107,6 +107,22 @@ class AudioManager {
     playClashSoundAt(delaySec);
   }
 
+  /**
+   * Looped music bed (one primary instance). Same id → no restart.
+   * Fade/crossfade when switching menu ↔ match.
+   */
+  playMusic(id: SoundId, fadeMs = 700): void {
+    this.howler.playMusic(id, fadeMs);
+  }
+
+  stopMusic(fadeMs = 700): void {
+    this.howler.stopMusic(fadeMs);
+  }
+
+  currentMusicId(): SoundId | null {
+    return this.howler.currentMusicId();
+  }
+
   isMuted(): boolean {
     return this.applied.muted;
   }

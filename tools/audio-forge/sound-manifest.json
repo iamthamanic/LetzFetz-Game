@@ -3,7 +3,7 @@
   "policy": "SOUND_POLICY.md",
   "publicRoot": "/audio",
   "notes": {
-    "legacyClash": "Moved from public/sounds/card-clash.mp3 → public/audio/sfx/card-clash.mp3",
+    "legacyClash": "Moved from public/sounds/card-clash.mp3 \u2192 public/audio/sfx/card-clash.mp3",
     "style": "rough, physical, dark, urban, industrial; no voices; no music in SFX prompts"
   },
   "sounds": [
@@ -217,16 +217,20 @@
     {
       "id": "music.menu.main",
       "category": "music",
-      "status": "planned",
-      "publicPath": null,
-      "prompt": "Menu music bed (deferred generation); dark urban loop — music category only."
+      "status": "existing",
+      "publicPath": "music/pulsefront.mp3",
+      "prompt": "Menu music bed \u2014 Pulsefront loop; music category only.",
+      "source": "assets/Pulsefront.mp3 (Pulsefront menu loop)",
+      "loop": true
     },
     {
       "id": "music.match.default",
       "category": "music",
-      "status": "planned",
-      "publicPath": null,
-      "prompt": "Match music bed (deferred generation); tense industrial loop — music category only."
+      "status": "existing",
+      "publicPath": "music/iron-surge.mp3",
+      "prompt": "Match music bed \u2014 Iron Surge loop; music category only.",
+      "source": "assets/Iron Surge.mp3 (match/combat loop)",
+      "loop": true
     }
   ]
 }

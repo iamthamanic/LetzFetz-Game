@@ -1,6 +1,8 @@
 /**
- * Howler adapter — file-based one-shots (no React imports).
+ * Howler adapter — file-based one-shots + single looped music bed.
  * Location: src/services/audio/howlerAudioAdapter.ts
+ *
+ * One primary music Howl — never restart the same id on re-render.
  */
 import { Howl, Howler } from 'howler';
 import { getSoundEntry } from './soundRegistry';
@@ -30,8 +32,13 @@ interface LoadedHowl {
   baseVolume: number;
 }
 
+const DEFAULT_MUSIC_FADE_MS = 700;
+
 export class HowlerAudioAdapter {
   private sounds = new Map<SoundId, LoadedHowl>();
+  private musicHowl: Howl | null = null;
+  private musicId: SoundId | null = null;
+  private musicBaseVolume = 0.7;
   private settings: AppliedAudioSettings = {
     muted: false,
     master: 1,
@@ -50,11 +57,11 @@ export class HowlerAudioAdapter {
         effectiveVolume(settings, entry.category, entry.baseVolume),
       );
     }
+    this.applyMusicVolume();
   }
 
   unlock(): void {
     if (typeof window === 'undefined') return;
-    // Howler unlocks on first play; touching volume forces context init when available.
     Howler.volume(this.settings.muted ? 0 : this.settings.master);
   }
 
@@ -65,26 +72,169 @@ export class HowlerAudioAdapter {
 
     let entry = this.sounds.get(id);
     if (!entry) {
-      const howl = new Howl({
-        src: meta.src,
-        volume: effectiveVolume(this.settings, meta.category, meta.baseVolume),
-        html5: false,
-        preload: true,
-      });
+      let howl: Howl;
+      try {
+        howl = new Howl({
+          src: meta.src,
+          volume: effectiveVolume(this.settings, meta.category, meta.baseVolume),
+          html5: false,
+          preload: true,
+        });
+      } catch {
+        return;
+      }
       entry = { howl, category: meta.category, baseVolume: meta.baseVolume };
       this.sounds.set(id, entry);
     }
 
-    entry.howl.volume(
-      effectiveVolume(this.settings, entry.category, entry.baseVolume),
+    try {
+      entry.howl.volume(
+        effectiveVolume(this.settings, entry.category, entry.baseVolume),
+      );
+      entry.howl.play();
+    } catch {
+      // Fail soft without a sound card / Web Audio.
+    }
+  }
+
+  /**
+   * Single looped music bed. Same id while already playing → no restart.
+   * Switching ids fades out then fades in.
+   */
+  playMusic(id: SoundId, fadeMs = DEFAULT_MUSIC_FADE_MS): void {
+    const meta = howlerSource(id);
+    if (!meta || meta.category !== 'music') return;
+
+    if (this.musicId === id && this.musicHowl) {
+      this.musicBaseVolume = meta.baseVolume;
+      this.applyMusicVolume();
+      if (!this.musicHowl.playing()) {
+        this.musicHowl.play();
+      }
+      return;
+    }
+
+    const startNext = () => {
+      this.unloadMusic();
+      this.musicId = id;
+      this.musicBaseVolume = meta.baseVolume;
+      const target = effectiveVolume(
+        this.settings,
+        'music',
+        this.musicBaseVolume,
+      );
+      let howl: Howl;
+      try {
+        howl = new Howl({
+          src: meta.src,
+          loop: true,
+          html5: true,
+          preload: true,
+          volume: 0,
+        });
+      } catch {
+        // jsdom / missing audio backend — keep id for settings sync, no playback.
+        this.musicHowl = null;
+        return;
+      }
+      this.musicHowl = howl;
+      try {
+        howl.play();
+        if (this.settings.muted || target <= 0) {
+          howl.volume(0);
+          return;
+        }
+        howl.fade(0, target, Math.max(0, fadeMs));
+      } catch {
+        // Autoplay / decode failures — fail soft.
+      }
+    };
+
+    if (this.musicHowl && this.musicHowl.playing()) {
+      const current = this.musicHowl;
+      const fromVol = current.volume();
+      current.fade(fromVol, 0, Math.max(0, fadeMs));
+      window.setTimeout(() => {
+        if (this.musicHowl === current) {
+          startNext();
+        }
+      }, Math.max(0, fadeMs));
+      return;
+    }
+
+    startNext();
+  }
+
+  stopMusic(fadeMs = DEFAULT_MUSIC_FADE_MS): void {
+    if (!this.musicHowl) {
+      this.musicId = null;
+      return;
+    }
+    const current = this.musicHowl;
+    let fromVol = 0;
+    try {
+      fromVol = current.volume();
+    } catch {
+      this.unloadMusic();
+      return;
+    }
+    if (fadeMs <= 0 || fromVol <= 0) {
+      this.unloadMusic();
+      return;
+    }
+    try {
+      current.fade(fromVol, 0, fadeMs);
+    } catch {
+      this.unloadMusic();
+      return;
+    }
+    window.setTimeout(() => {
+      if (this.musicHowl === current) {
+        this.unloadMusic();
+      }
+    }, fadeMs);
+  }
+
+  currentMusicId(): SoundId | null {
+    return this.musicId;
+  }
+
+  private applyMusicVolume(): void {
+    if (!this.musicHowl) return;
+    const target = effectiveVolume(
+      this.settings,
+      'music',
+      this.musicBaseVolume,
     );
-    entry.howl.play();
+    this.musicHowl.volume(this.settings.muted ? 0 : target);
+  }
+
+  private unloadMusic(): void {
+    if (this.musicHowl) {
+      try {
+        this.musicHowl.stop();
+      } catch {
+        // ignore
+      }
+      try {
+        this.musicHowl.unload();
+      } catch {
+        // jsdom Howler teardown can throw
+      }
+    }
+    this.musicHowl = null;
+    this.musicId = null;
   }
 
   /** Test helper — clear cached Howls. */
   dispose(): void {
+    this.unloadMusic();
     for (const entry of this.sounds.values()) {
-      entry.howl.unload();
+      try {
+        entry.howl.unload();
+      } catch {
+        // ignore
+      }
     }
     this.sounds.clear();
   }
