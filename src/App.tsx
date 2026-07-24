@@ -10,6 +10,7 @@ import { MainMenu } from './features/shell/MainMenu';
 import { SettingsView } from './features/shell/SettingsView';
 import { isPlaymatPreview } from './features/play/services/playtest/isPlaymatPreview';
 import { AppHistoryProvider, useAppHistory } from './services/history/AppHistoryContext';
+import { SettingsProvider } from './services/settings/SettingsProvider';
 
 function AppShell() {
   const [currentView, setCurrentView] = useState<AppView>('menu');
@@ -107,7 +108,9 @@ export default function App() {
 
   return (
     <AppHistoryProvider>
-      <AppShell />
+      <SettingsProvider>
+        <AppShell />
+      </SettingsProvider>
     </AppHistoryProvider>
   );
 }

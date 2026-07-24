@@ -1,0 +1,9 @@
+name: LetzFetz-Game
+stack: vite-react-tailwind
+checks:
+  - npm run checks
+defaultBranch: main
+uiLanguage: de
+commitLanguage: en
+security:
+  checklist: secure-by-default
