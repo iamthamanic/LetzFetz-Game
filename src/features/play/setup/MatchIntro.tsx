@@ -13,7 +13,7 @@ import { resolveCardArtPath, resolveCardVideoPath } from '../../../services/card
 import { Button } from '../../../components/ui/Button';
 import { BrandLogoText } from '../../../components/ui/BrandLogoText';
 import { W6Die3D, W6_DIE_ROLL_MS } from '../../../components/game/W6Die3D';
-import { prefersReducedMotion } from '../../../components/game/presentation/prefersReducedMotion';
+import { prefersReducedMotion } from '../presentation/prefersReducedMotion';
 import {
   CLASH_IMPACT_FRACTION,
   playClashSoundAt,

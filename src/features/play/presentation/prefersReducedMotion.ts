@@ -1,6 +1,6 @@
 /**
  * Reads prefers-reduced-motion for instant presentation paths.
- * Location: src/components/game/presentation/prefersReducedMotion.ts
+ * Location: src/features/play/presentation/prefersReducedMotion.ts
  */
 
 export function prefersReducedMotion(): boolean {

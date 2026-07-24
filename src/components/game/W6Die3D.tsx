@@ -3,7 +3,7 @@
  * Location: src/components/game/W6Die3D.tsx
  */
 import React from 'react';
-import { prefersReducedMotion } from './presentation/prefersReducedMotion';
+import { prefersReducedMotion } from '../../features/play/presentation/prefersReducedMotion';
 
 /** Full tumble + land duration — must match CSS animation + MatchIntro timer. */
 export const W6_DIE_ROLL_MS = 1600;

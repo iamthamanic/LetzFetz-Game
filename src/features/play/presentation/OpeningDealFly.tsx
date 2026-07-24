@@ -1,10 +1,10 @@
 /**
  * Opening deal: card backs fly in parallel to hand and bot dock.
- * Location: src/components/game/presentation/OpeningDealFly.tsx
+ * Location: src/features/play/presentation/OpeningDealFly.tsx
  */
 import React, { useEffect, useState } from 'react';
 import type { PlayerId } from '../../../game/types';
-import { CardBackFace } from '../../cards/CardBackFace';
+import { CardBackFace } from '../../../components/cards/CardBackFace';
 import { prefersReducedMotion } from './prefersReducedMotion';
 import type { PresentationStep } from './types';
 import {

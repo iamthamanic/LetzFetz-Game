@@ -1,6 +1,6 @@
 /**
  * Builds a presentation step for the activate-bound discard fly VFX.
- * Location: src/components/game/presentation/buildActivateDiscardStep.ts
+ * Location: src/features/play/presentation/buildActivateDiscardStep.ts
  *
  * When a bound card is activated, a hand card is discarded. This step animates
  * that hand card flying to the discard pile.

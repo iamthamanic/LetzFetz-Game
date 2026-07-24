@@ -1,12 +1,12 @@
 /**
  * Fullscreen combat resolve: cards → simultaneous dice → receipt → remainder.
- * Location: src/components/game/presentation/CombatResolveShow.tsx
+ * Location: src/features/play/presentation/CombatResolveShow.tsx
  */
 import React, { useEffect, useState } from 'react';
 import type { ContentPack, PlayerId } from '../../../game/types';
 import { findElementDef } from '../../../game/engine/lookup';
-import { BoardCard } from '../BoardCard';
-import { W6Die3D, W6_DIE_ROLL_MS } from '../W6Die3D';
+import { BoardCard } from '../../../components/game/BoardCard';
+import { W6Die3D, W6_DIE_ROLL_MS } from '../../../components/game/W6Die3D';
 import { prefersReducedMotion } from './prefersReducedMotion';
 import type { PresentationStep } from './types';
 import {

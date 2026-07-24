@@ -1,6 +1,6 @@
 /**
  * Presentation step: Sofort-Glitch revealed face-up in the center.
- * Location: src/components/game/presentation/buildInstantGlitchRevealStep.ts
+ * Location: src/features/play/presentation/buildInstantGlitchRevealStep.ts
  */
 import type { InstantReveal } from '../../../game/types';
 import type { PresentationStep } from './types';

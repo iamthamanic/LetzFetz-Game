@@ -4,7 +4,7 @@
  */
 import React, { useEffect, useState } from 'react';
 import { buildDiceRollFeedback, COMBAT_DICE_ROLL_MS } from './diceRollFeedback';
-import { prefersReducedMotion } from './presentation/prefersReducedMotion';
+import { prefersReducedMotion } from '../../features/play/presentation/prefersReducedMotion';
 
 interface CombatDiceRollProps {
   roll: number;

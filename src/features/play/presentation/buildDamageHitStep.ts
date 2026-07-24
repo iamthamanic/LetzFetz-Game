@@ -1,6 +1,6 @@
 /**
  * Presentation step: character hit when life is lost (center VFX + LP countdown).
- * Location: src/components/game/presentation/buildDamageHitStep.ts
+ * Location: src/features/play/presentation/buildDamageHitStep.ts
  */
 import type { GameState, PlayerId } from '../../../game/types';
 import type { PresentationStep } from './types';

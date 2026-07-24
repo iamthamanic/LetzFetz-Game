@@ -7,8 +7,8 @@ import type { ContentPack, GameAction, GameState, PlayerId } from '../../game';
 import { findElementDef, isV2Pack } from '../../game';
 import type { GameViewModel } from './buildGameViewModel';
 import type { PendingIntent } from './gameActionHelpers';
-import type { PresentationStep } from './presentation/types';
-import { PlaymatCardFly, AttackCardFly, BuildCardFly, InstantGlitchReveal, DamageHitReveal, CombatResolveShow, DrawCardReveal, OpeningDealFly, isDamageHitStep } from './presentation';
+import type { PresentationStep } from '../../features/play/presentation/types';
+import { PlaymatCardFly, AttackCardFly, BuildCardFly, InstantGlitchReveal, DamageHitReveal, CombatResolveShow, DrawCardReveal, OpeningDealFly, isDamageHitStep } from '../../features/play/presentation';
 import {
   findActivateAction,
   findBuildReplaceAction,

@@ -1,6 +1,6 @@
 /**
  * UI-only presentation step types — no engine coupling.
- * Location: src/components/game/presentation/types.ts
+ * Location: src/features/play/presentation/types.ts
  */
 
 /** Stable id for deduping or logging; callers supply unique ids per step. */

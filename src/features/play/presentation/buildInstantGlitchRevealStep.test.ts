@@ -1,6 +1,6 @@
 /**
  * Unit tests for Sofort-Glitch presentation steps.
- * Location: src/components/game/presentation/buildInstantGlitchRevealStep.test.ts
+ * Location: src/features/play/presentation/buildInstantGlitchRevealStep.test.ts
  */
 import { describe, it, expect } from 'vitest';
 import {
