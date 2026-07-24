@@ -8,7 +8,7 @@ import { CardLibrary, type CardLibraryFilter } from './CardLibrary';
 import { CardForgeCardEditor } from './CardForgeCardEditor';
 import { projectId, publicAnonKey } from '../utils/supabase/info';
 import { packToForgeCards, mergeForgeOverlays } from '../services/cardForge/packToForge';
-import { loadLocalOverlays, saveLocalOverlay } from '../services/cardForge/localOverlays';
+import { loadCardOverlays, saveCardOverlay } from '../services/storage/cardOverlays';
 import type { ForgeCardData } from '../services/cardForge/types';
 import type { ForgeCardKind } from '../services/cardForge/categories';
 
@@ -50,7 +50,7 @@ export function CardForge() {
   const loadCards = useCallback(async () => {
     setLoading(true);
     const packCards = packToForgeCards();
-    const localOverlays = loadLocalOverlays();
+    const localOverlays = loadCardOverlays();
     try {
       const response = await fetch(
         `https://${projectId}.supabase.co/functions/v1/make-server-c701770f/cards`,
@@ -105,7 +105,7 @@ export function CardForge() {
     setSaving(true);
     try {
       if (selectedCard.fromPack) {
-        saveLocalOverlay(selectedCard.id, {
+        saveCardOverlay(selectedCard.id, {
           image_asset: selectedCard.image_asset,
           notes: selectedCard.notes,
         });

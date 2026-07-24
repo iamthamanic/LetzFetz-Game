@@ -1,0 +1,17 @@
+---
+description: Rules Engine — pure TypeScript, testbar
+globs: Letz-Fetz-Game/src/game/**/*
+alwaysApply: false
+---
+
+# Game Engine
+
+- Kein React, kein DOM, kein fetch in `src/game/`
+- State ist immutable: `applyAction(state, action) → newState`
+- `getLegalActions(state, playerId)` für Bot und UI
+- Würfel: injizierbarer RNG für Tests (`() => number`)
+- Regelquelle: `Letz-Fetz-Game/docs/rules/SPIELANLEITUNG_V1.md` — schlägt Legacy-Prototyp-Code
+- Redesign-Entwurf (nicht implementieren, bis freigegeben): `Letz-Fetz-Game/docs/rules/SPIELANLEITUNG_V2_WIP.md`
+- Neue Logik braucht Unit-Tests (Vitest)
+- Edge Cases aus Spielanleitung V1 §17 abdecken
+- Regeländerungen → Anleitung V1 (oder V2-WIP) **im selben Change** mitziehen

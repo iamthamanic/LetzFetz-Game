@@ -1,0 +1,16 @@
+---
+description: UI Primitives — Button, Input, Modal, Panel
+globs: Letz-Fetz-Game/src/components/ui/**/*
+alwaysApply: false
+---
+
+# UI Primitives
+
+Tokens und Varianten: `Letz-Fetz-Game/docs/UI_STYLEGUIDE.md` §2–3
+
+- `Button`: variant = primary | secondary | ghost | danger | success
+- Inputs: `bg-gray-800 border-gray-700 focus:border-purple-500`
+- Modals: gradient container, `border-purple-500/50`, portal
+- Panels: `backdrop-blur-sm border-2 border-purple-500/50`
+- Props mit TypeScript; `className` optional für Layout-Overrides
+- Keine Business-Logik in Primitives
