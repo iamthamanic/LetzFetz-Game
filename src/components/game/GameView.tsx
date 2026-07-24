@@ -28,17 +28,17 @@ import {
   type GameSetupPhase,
 } from '../../features/play/setup/GameSetup';
 import { GrungeAppShell } from '../ui/GrungeAppShell';
-import { PhaseCoachBanner } from './PhaseCoachBanner';
-import { PhaseCoachFooter, FOOTER_REVEAL_TOTAL_MS } from './PhaseCoachFooter';
-import { TurnStartAnnounce } from './TurnStartAnnounce';
-import { buildPhaseCoachHint } from './phaseCoachHint';
-import { ActionBar } from './ActionBar';
-import { ActionPhaseBar, actionPhaseLegalFlags } from './ActionPhaseBar';
-import { BuildPhaseBar } from './BuildPhaseBar';
-import { PlaymatBoard } from './PlaymatBoard';
+import { PhaseCoachBanner } from '../../features/play/board/PhaseCoachBanner';
+import { PhaseCoachFooter, FOOTER_REVEAL_TOTAL_MS } from '../../features/play/board/PhaseCoachFooter';
+import { TurnStartAnnounce } from '../../features/play/board/TurnStartAnnounce';
+import { buildPhaseCoachHint } from '../../features/play/board/phaseCoachHint';
+import { ActionBar } from '../../features/play/board/ActionBar';
+import { ActionPhaseBar, actionPhaseLegalFlags } from '../../features/play/board/ActionPhaseBar';
+import { BuildPhaseBar } from '../../features/play/board/BuildPhaseBar';
+import { PlaymatBoard } from '../../features/play/board/PlaymatBoard';
 import { MatchIntro } from '../../features/play/setup/MatchIntro';
-import { buildGameViewModel } from './buildGameViewModel';
-import type { PendingIntent } from './gameActionHelpers';
+import { buildGameViewModel } from '../../features/play/board/buildGameViewModel';
+import type { PendingIntent } from '../../features/play/board/gameActionHelpers';
 import { Button } from '../ui/Button';
 import { Badge } from '../ui/Badge';
 import { ScrollText } from 'lucide-react';

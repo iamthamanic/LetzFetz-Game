@@ -4,7 +4,7 @@
  */
 import React from 'react';
 import { resolveCardArtPath } from '../../../services/cardArt/manifest';
-import { getArenaTheme } from '../../../components/game/arenaTheme';
+import { getArenaTheme } from '../board/arenaTheme';
 import { ImageWithFallback } from '../../../components/figma/ImageWithFallback';
 
 interface ArenaBackdropProps {

@@ -6,7 +6,7 @@ import React from 'react';
 import type { ArenaCardDef } from '../../../game/types';
 import type { ArenaState } from '../../../game/types/game';
 import { arenaDefToCardProps } from '../../../components/cards/characterCardProps';
-import { getArenaTheme } from '../../../components/game/arenaTheme';
+import { getArenaTheme } from '../board/arenaTheme';
 import { GameCharacterCard } from './GameCharacterCard';
 
 interface ArenaCenterProps {

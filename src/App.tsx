@@ -3,7 +3,7 @@ import { ForgeView } from './features/forge/ForgeView';
 import { SandboxView } from './features/sandbox/SandboxView';
 import { Notes } from './features/shell/Notes';
 import { GameView } from './components/game/GameView';
-import { PlaymatZonePreview } from './components/game/PlaymatZonePreview';
+import { PlaymatZonePreview } from './features/play/board/PlaymatZonePreview';
 import { AppBrand } from './features/shell/AppBrand';
 import { AppNav, type AppView } from './features/shell/AppNav';
 import { MainMenu } from './features/shell/MainMenu';

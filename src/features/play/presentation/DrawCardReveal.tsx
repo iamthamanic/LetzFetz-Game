@@ -6,7 +6,7 @@
 import React, { useEffect, useRef, useState } from 'react';
 import type { ContentPack, PlayerId } from '../../../game/types';
 import { findElementDef, findGlitchDef } from '../../../game';
-import { BoardCard } from '../../../components/game/BoardCard';
+import { BoardCard } from '../board/BoardCard';
 import { prefersReducedMotion } from './prefersReducedMotion';
 import type { PresentationStep } from './types';
 import { DRAW_CARD_FLY_MS, DRAW_CARD_REVEAL_MS, isDrawCardStep } from './buildDrawCardStep';

@@ -5,8 +5,8 @@
 import React, { useEffect, useState } from 'react';
 import type { ContentPack, PlayerId } from '../../../game/types';
 import { findElementDef } from '../../../game/engine/lookup';
-import { BoardCard } from '../../../components/game/BoardCard';
-import { W6Die3D, W6_DIE_ROLL_MS } from '../../../components/game/W6Die3D';
+import { BoardCard } from '../board/BoardCard';
+import { W6Die3D, W6_DIE_ROLL_MS } from '../board/W6Die3D';
 import { prefersReducedMotion } from './prefersReducedMotion';
 import type { PresentationStep } from './types';
 import {
