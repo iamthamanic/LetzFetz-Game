@@ -1,12 +1,12 @@
 /**
  * Scriptony-style center-focus carousel — character cards only.
- * Location: src/components/game/CharacterCarousel.tsx
+ * Location: src/features/play/setup/CharacterCarousel.tsx
  */
 import React, { useCallback, useEffect, useState } from 'react';
 import useEmblaCarousel from 'embla-carousel-react';
 import { ChevronLeft, ChevronRight } from 'lucide-react';
-import type { CharacterCardDef } from '../../game';
-import { Button } from '../ui/Button';
+import type { CharacterCardDef } from '../../../game';
+import { Button } from '../../../components/ui/Button';
 import { CharacterSelectCard } from './CharacterSelectCard';
 import { CharacterPreviewWithDetails } from './CharacterPreviewWithDetails';
 

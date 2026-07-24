@@ -1,11 +1,11 @@
 /**
  * Character portrait with Charakter / Info / Ulti tabs (setup + match intro).
- * Location: src/components/game/CharacterPreviewWithDetails.tsx
+ * Location: src/features/play/setup/CharacterPreviewWithDetails.tsx
  */
 import React, { useState } from 'react';
-import type { CharacterCardDef } from '../../game';
-import { getUltimateForCharacter } from '../../game/packs/characterSetup';
-import { Tabs } from '../ui/Tabs';
+import type { CharacterCardDef } from '../../../game';
+import { getUltimateForCharacter } from '../../../game/packs/characterSetup';
+import { Tabs } from '../../../components/ui/Tabs';
 import { CharacterSelectCard } from './CharacterSelectCard';
 import { CharacterDetailPanel, type CharacterDetailTab } from './CharacterDetailPanel';
 

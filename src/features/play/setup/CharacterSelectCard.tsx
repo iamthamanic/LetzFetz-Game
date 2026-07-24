@@ -1,11 +1,11 @@
 /**
  * Portrait character card — setup carousel + match intro (delegates to LetzFetzCard).
- * Location: src/components/game/CharacterSelectCard.tsx
+ * Location: src/features/play/setup/CharacterSelectCard.tsx
  */
 import React from 'react';
-import type { CharacterCardDef } from '../../game';
-import { resolveCardArtPath } from '../../services/cardArt/manifest';
-import { LetzFetzCard } from '../cards/LetzFetzCard';
+import type { CharacterCardDef } from '../../../game';
+import { resolveCardArtPath } from '../../../services/cardArt/manifest';
+import { LetzFetzCard } from '../../../components/cards/LetzFetzCard';
 
 interface CharacterSelectCardProps {
   character: CharacterCardDef;

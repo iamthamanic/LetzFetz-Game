@@ -1,11 +1,11 @@
 /**
  * Ambient duel backdrop — blurred arena art + themed gradient overlay.
- * Location: src/components/game/ArenaBackdrop.tsx
+ * Location: src/features/play/setup/ArenaBackdrop.tsx
  */
 import React from 'react';
-import { resolveCardArtPath } from '../../services/cardArt/manifest';
-import { getArenaTheme } from './arenaTheme';
-import { ImageWithFallback } from '../figma/ImageWithFallback';
+import { resolveCardArtPath } from '../../../services/cardArt/manifest';
+import { getArenaTheme } from '../../../components/game/arenaTheme';
+import { ImageWithFallback } from '../../../components/figma/ImageWithFallback';
 
 interface ArenaBackdropProps {
   arenaId: string;

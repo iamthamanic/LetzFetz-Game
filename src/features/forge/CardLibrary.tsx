@@ -15,7 +15,7 @@ import { EmptyState } from '../../components/ui/EmptyState';
 import { LetzFetzCard } from '../../components/cards/LetzFetzCard';
 import { forgeCharacterDefFromCard } from './model/characterFromForgeCard';
 import { CardLibraryDetailBack } from './CardLibraryDetailBack';
-import { CharacterDetailPanel } from '../../components/game/CharacterDetailPanel';
+import { CharacterDetailPanel } from '../play/setup/CharacterDetailPanel';
 import { getUltimateForCharacter } from '../../game/packs/characterSetup';
 import type { ForgeCardData } from './model/types';
 

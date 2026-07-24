@@ -1,17 +1,17 @@
 /**
  * Pre-match setup — mode first, then character carousel (bot) or online notice.
- * Location: src/components/game/GameSetup.tsx
+ * Location: src/features/play/setup/GameSetup.tsx
  */
 import React, { useState } from 'react';
 import { ArrowLeft, Bot, Globe, Layers, Package, WifiOff } from 'lucide-react';
-import { BASE_PACK } from '../../game';
-import { Button } from '../ui/Button';
-import { BrandLogoText } from '../ui/BrandLogoText';
+import { BASE_PACK } from '../../../game';
+import { Button } from '../../../components/ui/Button';
+import { BrandLogoText } from '../../../components/ui/BrandLogoText';
 import { CharacterCarousel } from './CharacterCarousel';
-import { Badge } from '../ui/Badge';
-import { Panel } from '../ui/Panel';
-import { useAppHistory } from '../../services/history/AppHistoryContext';
-import { MenuGlitchBackdrop } from '../ui/MenuGlitchBackdrop';
+import { Badge } from '../../../components/ui/Badge';
+import { Panel } from '../../../components/ui/Panel';
+import { useAppHistory } from '../../../services/history/AppHistoryContext';
+import { MenuGlitchBackdrop } from '../../../components/ui/MenuGlitchBackdrop';
 
 export type GameSetupMode = 'bot' | 'online';
 export type GameSetupPhase = 'mode' | 'bot' | 'online';
