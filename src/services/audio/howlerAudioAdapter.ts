@@ -3,13 +3,26 @@
  * Location: src/services/audio/howlerAudioAdapter.ts
  */
 import { Howl, Howler } from 'howler';
+import { getSoundEntry } from './soundRegistry';
 import type { AppliedAudioSettings, AudioCategory, SoundId } from './types';
 import { effectiveVolume } from './types';
 
-/** Known file paths for Howler-backed IDs (clash stays Web-Audio scheduled). */
-const HOWLER_SOURCES: Partial<Record<SoundId, { src: string[]; category: AudioCategory; baseVolume: number }>> = {
-  // Clash uses procedural/WebAudio scheduler for sample-accurate intro sync.
-};
+/**
+ * Howler plays file-backed registry entries.
+ * `card.clash` stays on the Web Audio scheduler for sample-accurate intro sync.
+ */
+function howlerSource(
+  id: SoundId,
+): { src: string[]; category: AudioCategory; baseVolume: number } | null {
+  if (id === 'card.clash') return null;
+  const entry = getSoundEntry(id);
+  if (!entry?.publicUrl) return null;
+  return {
+    src: [entry.publicUrl],
+    category: entry.category,
+    baseVolume: entry.baseVolume,
+  };
+}
 
 interface LoadedHowl {
   howl: Howl;
@@ -47,7 +60,7 @@ export class HowlerAudioAdapter {
 
   play(id: SoundId): void {
     if (this.settings.muted) return;
-    const meta = HOWLER_SOURCES[id];
+    const meta = howlerSource(id);
     if (!meta) return;
 
     let entry = this.sounds.get(id);
