@@ -14,14 +14,20 @@ import { AudioSettingsSync } from './services/audio/AudioSettingsSync';
 import { MusicBedSync } from './services/audio/MusicBedSync';
 import { DisplaySettingsSync } from './services/settings/DisplaySettingsSync';
 import { SettingsProvider } from './services/settings/SettingsProvider';
+import { Modal } from './components/ui/Modal';
 
 function AppShell() {
   const [currentView, setCurrentView] = useState<AppView>('menu');
   const [notesOpen, setNotesOpen] = useState(false);
+  const [settingsOpen, setSettingsOpen] = useState(false);
   const [arenaKey, setArenaKey] = useState(0);
   const [playSessionKey, setPlaySessionKey] = useState(0);
   const { push, canGoBack, canGoForward, goBack, goForward } = useAppHistory();
   const musicBed = currentView === 'play' ? 'match' : 'menu';
+
+  const openSettings = () => setSettingsOpen(true);
+  const closeSettings = () => setSettingsOpen(false);
+
   const handleViewChange = (view: AppView) => {
     if (view === currentView) return;
     const from = currentView;
@@ -59,6 +65,8 @@ function AppShell() {
           <AppNav
             currentView={currentView}
             onViewChange={handleViewChange}
+            onOpenSettings={openSettings}
+            settingsOpen={settingsOpen}
             onOpenNotes={() => setNotesOpen(true)}
             canGoBack={canGoBack}
             canGoForward={canGoForward}
@@ -72,15 +80,7 @@ function AppShell() {
         <div
           className={`flex min-h-0 flex-1 flex-col ${currentView === 'menu' ? '' : 'hidden'}`}
         >
-          <MainMenu onNavigate={handleViewChange} />
-        </div>
-        <div
-          className={`flex min-h-0 flex-1 flex-col ${currentView === 'settings' ? '' : 'hidden'}`}
-        >
-          <SettingsView
-            onBack={() => handleViewChange('menu')}
-            onOpenNotes={() => setNotesOpen(true)}
-          />
+          <MainMenu onNavigate={handleViewChange} onOpenSettings={openSettings} />
         </div>
         {/* Keep feature views mounted so undo across tabs still works */}
         <div
@@ -99,6 +99,22 @@ function AppShell() {
           <PlayView key={playSessionKey} />
         </div>
       </main>
+
+      <Modal
+        open={settingsOpen}
+        onClose={closeSettings}
+        title="Einstellungen"
+        size="lg"
+        testId="settings-modal"
+      >
+        <SettingsView
+          embedded
+          onOpenNotes={() => {
+            closeSettings();
+            setNotesOpen(true);
+          }}
+        />
+      </Modal>
 
       <Notes isOpen={notesOpen} onClose={() => setNotesOpen(false)} />
     </div>

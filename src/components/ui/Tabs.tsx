@@ -4,7 +4,7 @@
  */
 import React from 'react';
 
-export type TabTone = 'play' | 'editor' | 'sandbox';
+export type TabTone = 'play' | 'editor' | 'sandbox' | 'settings';
 
 export interface TabItem {
   id: string;
@@ -28,6 +28,8 @@ function activeClasses(tone: TabTone): string {
       return 'bg-stone-800 text-amber-100 ring-1 ring-amber-500/50 shadow-sm';
     case 'editor':
       return 'bg-purple-900/90 text-purple-100 shadow-[0_0_14px_rgba(168,85,247,0.35)] ring-2 ring-purple-500/70';
+    case 'settings':
+      return 'bg-stone-800 text-stone-100 ring-1 ring-stone-500/50 shadow-sm';
     default:
       return 'bg-stone-800 text-stone-100 shadow-sm';
   }
@@ -41,6 +43,8 @@ function inactiveClasses(tone: TabTone): string {
       return 'text-stone-400 hover:bg-stone-800 hover:text-amber-200/90';
     case 'editor':
       return 'text-stone-400 hover:bg-stone-800 hover:text-purple-200/90';
+    case 'settings':
+      return 'text-stone-400 hover:bg-stone-800 hover:text-stone-200';
     default:
       return 'text-stone-400 hover:bg-stone-800 hover:text-stone-200';
   }

@@ -12,6 +12,7 @@ import type { TabTone } from '../../components/ui/Tabs';
 
 interface MainMenuProps {
   onNavigate: (view: Exclude<AppView, 'menu'>) => void;
+  onOpenSettings: () => void;
 }
 
 /** Match AppNav / Tabs active tones (play emerald, cards purple, sandbox amber). */
@@ -46,11 +47,19 @@ function itemToneClasses(tone: TabTone): {
         icon: 'text-amber-200',
         label: 'text-amber-100',
       };
+    case 'settings':
+      return {
+        button:
+          'border-stone-700 bg-stone-900/80 text-stone-300 hover:border-stone-500 hover:bg-stone-800 hover:text-stone-100 focus-visible:ring-stone-500',
+        iconWrap: 'border-stone-700 bg-stone-950 text-stone-400',
+        icon: 'text-stone-400',
+        label: 'text-brand-cream',
+      };
   }
 }
 
 const PRIMARY_ITEMS: {
-  id: Exclude<AppView, 'menu' | 'settings'>;
+  id: Exclude<AppView, 'menu'>;
   label: string;
   hint: string;
   icon: React.ReactNode;
@@ -79,7 +88,7 @@ const PRIMARY_ITEMS: {
   },
 ];
 
-export function MainMenu({ onNavigate }: MainMenuProps) {
+export function MainMenu({ onNavigate, onOpenSettings }: MainMenuProps) {
   return (
     <GrungeAppShell>
       <div
@@ -138,7 +147,7 @@ export function MainMenu({ onNavigate }: MainMenuProps) {
             <button
               type="button"
               data-testid="main-menu-settings"
-              onClick={() => onNavigate('settings')}
+              onClick={onOpenSettings}
               className="flex w-full items-center gap-4 rounded-xl border border-stone-700 bg-stone-900/80 px-5 py-3.5 text-left text-stone-300 transition-all hover:border-stone-500 hover:bg-stone-800 hover:text-stone-100 focus:outline-none focus-visible:ring-2 focus-visible:ring-stone-500 focus-visible:ring-offset-2 focus-visible:ring-offset-stone-950"
             >
               <span className="flex h-10 w-10 shrink-0 items-center justify-center rounded-lg border border-stone-700 bg-stone-950 text-stone-400">

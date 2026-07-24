@@ -12,8 +12,11 @@ import { audioManager } from '../../services/audio/audioManager';
 import { useSettings } from '../../services/settings/SettingsProvider';
 
 interface SettingsViewProps {
-  onBack: () => void;
+  /** Full-page back action; omit when embedded in a modal. */
+  onBack?: () => void;
   onOpenNotes: () => void;
+  /** When true, skip page chrome (shell + title) for modal embedding. */
+  embedded?: boolean;
 }
 
 function SliderRow({
@@ -72,8 +75,181 @@ function ToggleRow({
   );
 }
 
-export function SettingsView({ onBack, onOpenNotes }: SettingsViewProps) {
+function SettingsPanels({ onOpenNotes }: { onOpenNotes: () => void }) {
   const { settings, updateSettings, resetSettings } = useSettings();
+
+  return (
+    <div className="space-y-6">
+      <div data-testid="settings-section-audio">
+        <Panel className="space-y-4">
+          <h2 className="text-sm font-semibold text-stone-200">Audio</h2>
+          <ToggleRow
+            label="Stumm"
+            testId="settings-mute"
+            checked={settings.audio.muted}
+            onChange={(muted) => updateSettings({ audio: { muted } })}
+          />
+          <SliderRow
+            label="Master"
+            testId="settings-volume-master"
+            value={settings.audio.master}
+            onChange={(master) => updateSettings({ audio: { master } })}
+          />
+          <SliderRow
+            label="SFX"
+            testId="settings-volume-sfx"
+            value={settings.audio.sfx}
+            onChange={(sfx) => updateSettings({ audio: { sfx } })}
+          />
+          <SliderRow
+            label="UI"
+            testId="settings-volume-ui"
+            value={settings.audio.ui}
+            onChange={(ui) => updateSettings({ audio: { ui } })}
+          />
+          <SliderRow
+            label="Ambiente"
+            testId="settings-volume-ambience"
+            value={settings.audio.ambience}
+            onChange={(ambience) => updateSettings({ audio: { ambience } })}
+          />
+          <SliderRow
+            label="Musik"
+            testId="settings-volume-music"
+            value={settings.audio.music}
+            onChange={(music) => updateSettings({ audio: { music } })}
+          />
+          <Button
+            variant="secondary"
+            size="sm"
+            data-testid="settings-test-sound"
+            onClick={() => {
+              audioManager.unlock();
+              audioManager.playMusic('music.menu.main', 0);
+              audioManager.playStinger('play');
+            }}
+          >
+            Testton abspielen
+          </Button>
+        </Panel>
+      </div>
+
+      <div data-testid="settings-section-display">
+        <Panel className="space-y-4">
+          <h2 className="text-sm font-semibold text-stone-200">Anzeige</h2>
+          <label className="block space-y-1">
+            <span className="flex items-center justify-between text-xs text-stone-300">
+              <span>UI-Skalierung</span>
+              <span className="tabular-nums text-stone-500">
+                {Math.round(settings.display.uiScale * 100)}%
+              </span>
+            </span>
+            <input
+              data-testid="settings-ui-scale"
+              type="range"
+              min={0.75}
+              max={1.5}
+              step={0.05}
+              value={settings.display.uiScale}
+              onChange={(e) =>
+                updateSettings({ display: { uiScale: Number(e.target.value) } })
+              }
+              className="w-full accent-amber-500"
+            />
+          </label>
+          <p className="text-xs text-stone-500">
+            Skalierung über CSS-Variable (--lf-ui-scale), nicht transform:scale.
+          </p>
+          <ToggleRow
+            label="Vollbild bevorzugen"
+            testId="settings-fullscreen"
+            checked={settings.display.preferFullscreen}
+            onChange={(preferFullscreen) =>
+              updateSettings({ display: { preferFullscreen } })
+            }
+          />
+        </Panel>
+      </div>
+
+      <div data-testid="settings-section-gameplay">
+        <Panel className="space-y-4">
+          <h2 className="text-sm font-semibold text-stone-200">Gameplay</h2>
+          <ToggleRow
+            label="Zugende bestätigen"
+            testId="settings-confirm-end-turn"
+            checked={settings.gameplay.confirmEndTurn}
+            onChange={(confirmEndTurn) =>
+              updateSettings({ gameplay: { confirmEndTurn } })
+            }
+          />
+        </Panel>
+      </div>
+
+      <div data-testid="settings-section-a11y">
+        <Panel className="space-y-4">
+          <h2 className="text-sm font-semibold text-stone-200">Barrierefreiheit</h2>
+          <ToggleRow
+            label="Weniger Bewegung"
+            testId="settings-reduced-motion"
+            checked={settings.a11y.reducedMotion}
+            onChange={(reducedMotion) => updateSettings({ a11y: { reducedMotion } })}
+          />
+          <ToggleRow
+            label="Hoher Kontrast"
+            testId="settings-high-contrast"
+            checked={settings.a11y.highContrast}
+            onChange={(highContrast) => updateSettings({ a11y: { highContrast } })}
+          />
+        </Panel>
+      </div>
+
+      <Panel className="space-y-4">
+        <div>
+          <h2 className="text-sm font-semibold text-stone-200">Notizen</h2>
+          <p className="mt-1 text-xs text-stone-400">
+            Spielnotizen und Ideen — lokal im Browser.
+          </p>
+          <Button
+            variant="secondary"
+            size="sm"
+            className="mt-3"
+            onClick={onOpenNotes}
+          >
+            Notizen öffnen
+          </Button>
+        </div>
+        <div className="border-t border-stone-700 pt-4">
+          <h2 className="text-sm font-semibold text-stone-200">Über Letz Fetz</h2>
+          <p className="mt-1 text-xs leading-relaxed text-stone-400">
+            Digitale Playtest-Plattform für das physische 1v1-Kartenduell. Local-first —
+            kein Game-Server nötig.
+          </p>
+        </div>
+        <Button
+          variant="danger"
+          size="sm"
+          data-testid="settings-reset"
+          onClick={() => {
+            if (window.confirm('Einstellungen auf Standard zurücksetzen?')) {
+              resetSettings();
+            }
+          }}
+        >
+          Auf Standard zurücksetzen
+        </Button>
+      </Panel>
+    </div>
+  );
+}
+
+export function SettingsView({ onBack, onOpenNotes, embedded = false }: SettingsViewProps) {
+  if (embedded) {
+    return (
+      <div data-testid="settings-view" className="text-stone-100">
+        <SettingsPanels onOpenNotes={onOpenNotes} />
+      </div>
+    );
+  }
 
   return (
     <GrungeAppShell>
@@ -83,182 +259,22 @@ export function SettingsView({ onBack, onOpenNotes }: SettingsViewProps) {
       >
         <div className="mx-auto w-full max-w-lg space-y-6">
           <div className="flex items-center gap-3">
-            <Button
-              variant="ghost"
-              size="sm"
-              icon={<ArrowLeft className="h-4 w-4" />}
-              onClick={onBack}
-              aria-label="Zurück zum Hauptmenü"
-            >
-              Menü
-            </Button>
+            {onBack && (
+              <Button
+                variant="ghost"
+                size="sm"
+                icon={<ArrowLeft className="h-4 w-4" />}
+                onClick={onBack}
+                aria-label="Zurück zum Hauptmenü"
+              >
+                Menü
+              </Button>
+            )}
             <BrandLogoText as="h1" className="text-2xl leading-none">
               Einstellungen
             </BrandLogoText>
           </div>
-
-          <div data-testid="settings-section-audio">
-          <Panel className="space-y-4">
-            <h2 className="text-sm font-semibold text-stone-200">Audio</h2>
-            <ToggleRow
-              label="Stumm"
-              testId="settings-mute"
-              checked={settings.audio.muted}
-              onChange={(muted) => updateSettings({ audio: { muted } })}
-            />
-            <SliderRow
-              label="Master"
-              testId="settings-volume-master"
-              value={settings.audio.master}
-              onChange={(master) => updateSettings({ audio: { master } })}
-            />
-            <SliderRow
-              label="SFX"
-              testId="settings-volume-sfx"
-              value={settings.audio.sfx}
-              onChange={(sfx) => updateSettings({ audio: { sfx } })}
-            />
-            <SliderRow
-              label="UI"
-              testId="settings-volume-ui"
-              value={settings.audio.ui}
-              onChange={(ui) => updateSettings({ audio: { ui } })}
-            />
-            <SliderRow
-              label="Ambiente"
-              testId="settings-volume-ambience"
-              value={settings.audio.ambience}
-              onChange={(ambience) => updateSettings({ audio: { ambience } })}
-            />
-            <SliderRow
-              label="Musik"
-              testId="settings-volume-music"
-              value={settings.audio.music}
-              onChange={(music) => updateSettings({ audio: { music } })}
-            />
-            <Button
-              variant="secondary"
-              size="sm"
-              data-testid="settings-test-sound"
-              onClick={() => {
-                audioManager.unlock();
-                audioManager.playMusic('music.menu.main', 0);
-                audioManager.playStinger('play');
-              }}
-            >
-              Testton abspielen
-            </Button>
-          </Panel>
-          </div>
-
-          <div data-testid="settings-section-display">
-          <Panel className="space-y-4">
-            <h2 className="text-sm font-semibold text-stone-200">Anzeige</h2>
-            <label className="block space-y-1">
-              <span className="flex items-center justify-between text-xs text-stone-300">
-                <span>UI-Skalierung</span>
-                <span className="tabular-nums text-stone-500">
-                  {Math.round(settings.display.uiScale * 100)}%
-                </span>
-              </span>
-              <input
-                data-testid="settings-ui-scale"
-                type="range"
-                min={0.75}
-                max={1.5}
-                step={0.05}
-                value={settings.display.uiScale}
-                onChange={(e) =>
-                  updateSettings({ display: { uiScale: Number(e.target.value) } })
-                }
-                className="w-full accent-amber-500"
-              />
-            </label>
-            <p className="text-xs text-stone-500">
-              Skalierung über CSS-Variable (--lf-ui-scale), nicht transform:scale.
-            </p>
-            <ToggleRow
-              label="Vollbild bevorzugen"
-              testId="settings-fullscreen"
-              checked={settings.display.preferFullscreen}
-              onChange={(preferFullscreen) =>
-                updateSettings({ display: { preferFullscreen } })
-              }
-            />
-          </Panel>
-          </div>
-
-          <div data-testid="settings-section-gameplay">
-          <Panel className="space-y-4">
-            <h2 className="text-sm font-semibold text-stone-200">Gameplay</h2>
-            <ToggleRow
-              label="Zugende bestätigen"
-              testId="settings-confirm-end-turn"
-              checked={settings.gameplay.confirmEndTurn}
-              onChange={(confirmEndTurn) =>
-                updateSettings({ gameplay: { confirmEndTurn } })
-              }
-            />
-          </Panel>
-          </div>
-
-          <div data-testid="settings-section-a11y">
-          <Panel className="space-y-4">
-            <h2 className="text-sm font-semibold text-stone-200">Barrierefreiheit</h2>
-            <ToggleRow
-              label="Weniger Bewegung"
-              testId="settings-reduced-motion"
-              checked={settings.a11y.reducedMotion}
-              onChange={(reducedMotion) => updateSettings({ a11y: { reducedMotion } })}
-            />
-            <ToggleRow
-              label="Hoher Kontrast"
-              testId="settings-high-contrast"
-              checked={settings.a11y.highContrast}
-              onChange={(highContrast) => updateSettings({ a11y: { highContrast } })}
-            />
-          </Panel>
-          </div>
-
-          <Panel className="space-y-4">
-            <div>
-              <h2 className="text-sm font-semibold text-stone-200">Notizen</h2>
-              <p className="mt-1 text-xs text-stone-400">
-                Spielnotizen und Ideen — lokal im Browser.
-              </p>
-              <Button
-                variant="secondary"
-                size="sm"
-                className="mt-3"
-                onClick={onOpenNotes}
-              >
-                Notizen öffnen
-              </Button>
-            </div>
-            <div className="border-t border-stone-700 pt-4">
-              <h2 className="text-sm font-semibold text-stone-200">Über Letz Fetz</h2>
-              <p className="mt-1 text-xs leading-relaxed text-stone-400">
-                Digitale Playtest-Plattform für das physische 1v1-Kartenduell. Local-first —
-                kein Game-Server nötig.
-              </p>
-            </div>
-            <Button
-              variant="danger"
-              size="sm"
-              data-testid="settings-reset"
-              onClick={() => {
-                if (
-                  window.confirm(
-                    'Einstellungen auf Standard zurücksetzen?',
-                  )
-                ) {
-                  resetSettings();
-                }
-              }}
-            >
-              Auf Standard zurücksetzen
-            </Button>
-          </Panel>
+          <SettingsPanels onOpenNotes={onOpenNotes} />
         </div>
       </div>
     </GrungeAppShell>
