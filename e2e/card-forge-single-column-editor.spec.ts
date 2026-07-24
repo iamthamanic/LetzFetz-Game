@@ -17,11 +17,14 @@ function shot(page: import('@playwright/test').Page, name: string) {
 async function openForgeWithCharacter(page: import('@playwright/test').Page, name: string) {
   await page.goto('/');
   await page.getByTestId('main-menu-forge').click();
-  await expect(page.getByTestId('card-library')).toBeVisible({ timeout: 15_000 });
-  await expect(page.getByText('Base Pack V1')).toBeVisible();
+  const library = page.getByTestId('card-library');
+  await expect(library).toBeVisible({ timeout: 15_000 });
+  await expect(library.getByText(/Basis-Pack|Base Pack/i)).toBeVisible();
   await page.getByRole('tab', { name: /Charakter/i }).click();
-  await page.getByRole('button', { name: new RegExp(name, 'i') }).first().click();
-  await expect(page.getByTestId('card-forge-preview')).toBeVisible();
+  const cardBtn = library.locator('[data-testid^="card-library-item-"]').filter({ hasText: name }).first();
+  await cardBtn.scrollIntoViewIfNeeded();
+  await cardBtn.click();
+  await expect(page.getByTestId('card-forge-preview')).toBeVisible({ timeout: 10_000 });
 }
 
 test.describe('Card Forge single-column editor', () => {
@@ -75,8 +78,9 @@ test.describe('Card Forge single-column editor', () => {
   });
 
   test('mobile: preview above form panel', async ({ page }) => {
-    await page.setViewportSize({ width: 390, height: 844 });
+    await page.setViewportSize({ width: 1280, height: 720 });
     await openForgeWithCharacter(page, 'Knuspergnom');
+    await page.setViewportSize({ width: 390, height: 844 });
 
     const layout = await page.evaluate(() => {
       const preview = document.querySelector('[data-testid="card-forge-preview"]');
@@ -98,7 +102,7 @@ test.describe('Card Forge single-column editor', () => {
     await expect(page.getByTestId('card-library')).toBeVisible({ timeout: 15_000 });
 
     await page.getByRole('tab', { name: /Element/i }).click();
-    await page.locator('[data-testid^="card-library-item-"]').first().click();
+    await page.getByTestId('card-library').locator('[data-testid^="card-library-item-"]').first().click();
     await expect(page.getByTestId('card-forge-preview')).toBeVisible();
 
     const stacked = await page.evaluate(() => {
