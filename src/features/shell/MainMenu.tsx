@@ -6,6 +6,7 @@ import React from 'react';
 import { Gamepad2, Layers, Swords, Settings } from 'lucide-react';
 import { LETZ_FETZ_LOGO_SRC } from '../../components/brand/letzFetzLogo';
 import { GrungeAppShell } from '../../components/ui/GrungeAppShell';
+import { MenuGlitchBackdrop } from '../../components/ui/MenuGlitchBackdrop';
 import type { AppView } from './AppNav';
 import type { TabTone } from '../../components/ui/Tabs';
 
@@ -83,25 +84,25 @@ export function MainMenu({ onNavigate }: MainMenuProps) {
     <GrungeAppShell>
       <div
         data-testid="main-menu"
-        className="flex min-h-0 flex-1 flex-col items-center justify-center overflow-y-auto bg-stone-950 px-4 py-10 text-stone-100"
+        className="relative flex min-h-0 flex-1 flex-col items-center justify-center overflow-y-auto bg-stone-950 px-4 py-10 text-stone-100"
       >
-        <div className="flex w-full max-w-md flex-col items-center gap-10">
-          <div className="flex flex-col items-center gap-3 text-center">
-            <div className="brand-logo-shimmer" data-testid="main-menu-logo">
+        <MenuGlitchBackdrop />
+        <div className="relative z-10 isolate flex w-full max-w-md flex-col items-center gap-10">
+          <div className="relative z-10 flex flex-col items-center gap-3 text-center">
+            <div className="brand-logo-shimmer relative z-10" data-testid="main-menu-logo">
               <img
                 src={LETZ_FETZ_LOGO_SRC}
                 alt="Letz Fetz"
-                className="relative z-0 h-20 w-auto max-w-[240px] object-contain sm:h-24 sm:max-w-[280px]"
+                className="relative z-10 h-20 w-auto max-w-[240px] object-contain sm:h-24 sm:max-w-[280px]"
                 loading="eager"
                 decoding="async"
               />
               <span className="btn-brand-shimmer__shine brand-logo-shimmer__shine" aria-hidden="true" />
             </div>
-            <p className="text-sm text-stone-400">Hauptmenü</p>
           </div>
 
           <nav
-            className="flex w-full flex-col gap-3"
+            className="relative z-10 flex w-full flex-col gap-3"
             aria-label="Hauptmenü"
             data-testid="main-menu-nav"
           >
