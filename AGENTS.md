@@ -61,12 +61,13 @@ Letz-Fetz-Game/src/
 │   └── packs/            # Base Pack JSON (Seed)
 ├── features/             # Feature-Slices (Ziel)
 │   ├── sandbox/          # Freier Arena-Tisch (local-first) — MVP 0.1
-│   ├── shell/            # Nav/Menu/Settings (Migration folgt)
-│   ├── forge/            # Card Forge (Migration folgt)
-│   └── play/             # Solo-Spiel (Migration folgt, kein Big-Bang)
+│   ├── shell/            # Nav/Menu/Settings
+│   ├── forge/            # Card Forge
+│   └── play/             # Solo-Spiel (PlayView entry, board, setup, presentation)
 ├── components/
 │   ├── ui/               # UI Primitives (bleiben shared)
 │   ├── cards/            # Neutrale Karten-Präsentation (cross-feature)
+│   ├── character/        # Shared character detail panels (Forge + Play setup)
 │   └── …                 # Legacy-Pfade bis jeweilige Slice-Issue löscht
 ├── services/
 │   ├── storage/          # localStorage (Overlays, später Tauri FS)
@@ -81,7 +82,7 @@ Letz-Fetz-Game/src/
 ### Schichtenregeln
 
 1. **`src/game/`** importiert weder React, DOM, Feature-, Komponenten- noch Transport-Code.
-2. **`src/features/<feature>/`** darf importieren: `src/game/`, `src/components/ui/`, neutrales `src/components/cards/`, shared `services/history|cardArt|icons|storage`. **Kein** Feature→Feature-Import.
+2. **`src/features/<feature>/`** darf importieren: `src/game/`, `src/components/ui/`, neutrales `src/components/cards/`, shared `src/components/character/`, shared `services/history|cardArt|icons|storage`. **Kein** Feature→Feature-Import.
 3. **`src/components/ui/`** enthält keine Feature- oder Rules-Engine-Businesslogik.
 4. **`src/components/cards/`** bleibt neutral — keine Imports aus `features/`.
 5. **`src/services/`** behält nur echte Cross-Feature-/Platform-Fähigkeiten. Feature-owned Code wandert mit dem jeweiligen Slice.

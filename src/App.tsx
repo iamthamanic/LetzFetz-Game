@@ -2,7 +2,7 @@ import React, { useState } from 'react';
 import { ForgeView } from './features/forge/ForgeView';
 import { SandboxView } from './features/sandbox/SandboxView';
 import { Notes } from './features/shell/Notes';
-import { GameView } from './components/game/GameView';
+import { PlayView } from './features/play/PlayView';
 import { PlaymatZonePreview } from './features/play/board/PlaymatZonePreview';
 import { AppBrand } from './features/shell/AppBrand';
 import { AppNav, type AppView } from './features/shell/AppNav';
@@ -91,7 +91,7 @@ function AppShell() {
         <div
           className={`flex min-h-0 flex-1 flex-col ${currentView === 'play' ? '' : 'hidden'}`}
         >
-          <GameView key={playSessionKey} />
+          <PlayView key={playSessionKey} />
         </div>
       </main>
 

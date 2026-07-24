@@ -13,14 +13,14 @@ Importiere aus `components/ui/` — kein neues Button/Input-Styling inline.
 
 ## Feature-Slices
 - Feature-owned UI lebt unter `src/features/<feature>/` (Shell: `features/shell/` — AppBrand, AppNav, MainMenu, Settings, Notes)
-- Shared bleiben: `components/ui/`, `components/cards/`, `services/history|cardArt|icons`
+- Shared bleiben: `components/ui/`, `components/cards/`, `components/character/`, `services/history|cardArt|icons`
 - Kein Feature→Feature-Import; keine Re-Export-Stubs bei Moves
-- Transition: Shell / Forge / Play folgen nach Sandbox MVP 0.1 (siehe AGENTS.md)
+- Play entry: `features/play/PlayView.tsx` (App composition root import)
 
 ## Neue Komponenten
 - Top-Kommentar: Zweck + Ort im Projekt
 - Max ~250 Zeilen — bei Bedarf splitten
-- `features/play` (bzw. legacy `components/game/`) = verspielt | Card Forge = nüchtern | Sandbox = Stein/Amber-Tool
+- `features/play` = verspielt | Card Forge = nüchtern | Sandbox = Stein/Amber-Tool
 
 ## Modals
 `createPortal` + Overlay/Container aus Styleguide §3

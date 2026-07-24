@@ -1,6 +1,6 @@
 /**
  * Info / Ulti text panels for character setup carousel (center slide).
- * Location: src/components/game/CharacterDetailPanel.tsx
+ * Location: src/components/character/CharacterDetailPanel.tsx
  */
 import React from 'react';
 import type { CharacterCardDef, UltimateCardDef } from '../../game';

@@ -83,7 +83,7 @@ Definiert in `src/index.css` `@theme` — **immer diese Tokens**, keine ad-hoc H
 
 **Brand UI Icons:** Karten nutzen **Lucide** in Grunge-Ringen (`ElementIcon variant="grunge"`). HF-Raster-Icons optional via `scripts/icons/generate-element-icons.sh` (`variant="brand"` — nicht auf Karten).
 
-**Global Play grunge:** `GrungeAppShell` in `GameView`; `Panel tone="game"` für Spiel-Panels.
+**Global Play grunge:** `GrungeAppShell` in `PlayView`; `Panel tone="game"` für Spiel-Panels.
 
 **CSS:** `.brand-logo-text` für Logo-Style live text; `.font-brand` auf dunklem UI = cream.
 
@@ -123,15 +123,15 @@ Wenn du Brand anfasst, diese Dateien prüfen:
 
 | Datei | Was |
 |-------|-----|
-| `src/components/game/GameSetup.tsx` | Charakterauswahl, Modus-Titel, Partie starten |
+| `src/features/play/setup/GameSetup.tsx` | Charakterauswahl, Modus-Titel, Partie starten |
 | `src/components/ui/CardGrungeOverlay.tsx` | Grain — `mode="art-panel"` auf Illustration (alle Karten) |
 | `src/components/ui/CharacterCardGlitch.tsx` | Logo-Glitch-Balken am Kartenrand |
-| `src/components/game/CharacterSelectCard.tsx` | Delegates to LetzFetzCard + idle loop when centered |
+| `src/features/play/setup/CharacterSelectCard.tsx` | Delegates to LetzFetzCard + idle loop when centered |
 | `src/components/ui/CardIllustrationLoop.tsx` | MP4 loop + PNG fallback (`play` / `idle`) |
 | `src/services/cardArt/prompts/characterIdleVideos.ts` | Idle prompts; start frame = `/cards/character/{id}.png` |
 | `scripts/generate-character-idle-video.ts` | Higgsfield **CLI** Seedance 2.0 image-to-video (not MCP) |
-| `src/components/game/CharacterCarousel.tsx` | Dots/Nav — **noch** amber (Spiel-Akzent, kein Brand-Font) |
-| `src/components/game/MatchIntro.tsx` | Headlines — **noch** `font-black` / stone (optional: `font-brand` + cream) |
+| `src/features/play/setup/CharacterCarousel.tsx` | Dots/Nav — **noch** amber (Spiel-Akzent, kein Brand-Font) |
+| `src/features/play/setup/MatchIntro.tsx` | Headlines — **noch** `font-black` / stone (optional: `font-brand` + cream) |
 
 ### Card Forge (Editor)
 
@@ -150,7 +150,7 @@ Wenn du Brand anfasst, diese Dateien prüfen:
 
 | Bereich | Grund |
 |---------|--------|
-| `GameView` Log, PhaseBar | Lesbarkeit, klein |
+| `PlayView` Log, PhaseBar | Lesbarkeit, klein |
 | MatchIntro Arena-Titel | noch Standard-Display |
 | Card-Liste Namen in Sidebar | `.font-brand-on-dark` (Cream auf stone) |
 
@@ -160,7 +160,7 @@ Wenn du Brand anfasst, diese Dateien prüfen:
 
 | Kontext | Ton |
 |---------|-----|
-| **Spiel** (`components/game/`) | Verspielt — Glow, Emojis, Arena-Theming |
+| **Spiel** (`features/play/`) | Verspielt — Glow, Emojis, Arena-Theming |
 | **Editor** (Card Forge) | Nüchtern — stone surfaces; **nur** Nav-artige Labels in Brand-Font/Cream |
 | **App shell** | Logo links, Nav rechts; Brand-Cream auf Display-Labels |
 
