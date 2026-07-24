@@ -1,12 +1,12 @@
 /**
  * Client: ask Vite `/api/llm-bot` for a move, fallback to heuristic.
- * Location: src/services/bot/chooseLlmBotAction.ts
+ * Location: src/features/play/services/bot/chooseLlmBotAction.ts
  */
-import type { ContentPack, GameAction, GameState } from '../../game/types';
-import { getLegalActions } from '../../game/engine/actions';
-import { chooseBotAction } from '../../game/engine/bot';
-import { buildBotPublicView, withBotDiceRoll } from '../../game/engine/botView';
-import { rollD6 } from '../../game/engine/dice';
+import type { ContentPack, GameAction, GameState } from '../../../../game/types';
+import { getLegalActions } from '../../../../game/engine/actions';
+import { chooseBotAction } from '../../../../game/engine/bot';
+import { buildBotPublicView, withBotDiceRoll } from '../../../../game/engine/botView';
+import { rollD6 } from '../../../../game/engine/dice';
 import { parseLlmBotResponse } from './parseLlmBotResponse';
 import { buildLlmBotUserPrompt, LLM_BOT_SYSTEM } from './llmBotPrompt';
 

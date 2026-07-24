@@ -1,6 +1,6 @@
 /**
  * Unit tests for LLM bot response parsing.
- * Location: src/services/bot/parseLlmBotResponse.test.ts
+ * Location: src/features/play/services/bot/parseLlmBotResponse.test.ts
  */
 import { describe, it, expect } from 'vitest';
 import { parseLlmBotResponse } from './parseLlmBotResponse';

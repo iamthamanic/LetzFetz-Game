@@ -1,6 +1,6 @@
 /**
  * Match-intro clash gong — preloaded MP3, Web Audio scheduled to the impact frame.
- * Location: src/services/audio/clashSound.ts
+ * Location: src/features/play/services/audio/clashSound.ts
  *
  * Impact peak must stay locked to MatchIntro CSS keyframes (introCardCrash* 85%).
  * Gong attack peak sits slightly after sample start — compensated in schedule.

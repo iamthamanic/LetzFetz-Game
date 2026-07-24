@@ -1,6 +1,6 @@
 /**
  * Dev-only playtest gate — never true in production builds.
- * Location: src/services/playtest/isPlaytestMode.ts
+ * Location: src/features/play/services/playtest/isPlaytestMode.ts
  */
 export function isPlaytestMode(): boolean {
   if (!import.meta.env.DEV) return false;

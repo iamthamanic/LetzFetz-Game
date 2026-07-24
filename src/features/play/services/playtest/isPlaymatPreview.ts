@@ -1,6 +1,6 @@
 /**
  * DEV gate for playmat zone layout preview.
- * Location: src/services/playtest/isPlaymatPreview.ts
+ * Location: src/features/play/services/playtest/isPlaymatPreview.ts
  */
 export function isPlaymatPreview(): boolean {
   if (!import.meta.env.DEV) return false;

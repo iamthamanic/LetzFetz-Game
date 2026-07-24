@@ -20,8 +20,8 @@ import {
   pickOpponentCharacter,
   createSeededRng,
 } from '../../game';
-import { chooseLlmBotAction } from '../../services/bot/chooseLlmBotAction';
-import type { BotDecisionSource } from '../../services/bot/chooseLlmBotAction';
+import { chooseLlmBotAction } from '../../features/play/services/bot/chooseLlmBotAction';
+import type { BotDecisionSource } from '../../features/play/services/bot/chooseLlmBotAction';
 import { GameSetup, DEFAULT_SETUP_CHARACTER_ID, type GameSetupPhase } from './GameSetup';
 import { GrungeAppShell } from '../ui/GrungeAppShell';
 import { PhaseCoachBanner } from './PhaseCoachBanner';
@@ -38,9 +38,9 @@ import type { PendingIntent } from './gameActionHelpers';
 import { Button } from '../ui/Button';
 import { Badge } from '../ui/Badge';
 import { ScrollText } from 'lucide-react';
-import { isPlaytestMode } from '../../services/playtest/isPlaytestMode';
+import { isPlaytestMode } from '../../features/play/services/playtest/isPlaytestMode';
 import { PlaytestCheatbox } from './PlaytestCheatbox';
-import { playStinger, playStingerSequence, unlockAudio } from '../../services/audio/combatStingers';
+import { playStinger, playStingerSequence, unlockAudio } from '../../features/play/services/audio/combatStingers';
 import { usePresentationQueue } from './presentation';
 import {
   buildOpeningDealSteps,

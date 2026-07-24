@@ -1,6 +1,6 @@
 /**
  * Combat SFX stinger service — Web Audio, mute-aware, autoplay-policy safe.
- * Location: src/services/audio/combatStingers.ts
+ * Location: src/features/play/services/audio/combatStingers.ts
  *
  * Generates short procedural stingers (play, block, damage) without needing
  * MP3 assets. The AudioContext is created lazily on the first user gesture,

@@ -8,7 +8,7 @@ import { AppBrand } from './features/shell/AppBrand';
 import { AppNav, type AppView } from './features/shell/AppNav';
 import { MainMenu } from './features/shell/MainMenu';
 import { SettingsView } from './features/shell/SettingsView';
-import { isPlaymatPreview } from './services/playtest/isPlaymatPreview';
+import { isPlaymatPreview } from './features/play/services/playtest/isPlaymatPreview';
 import { AppHistoryProvider, useAppHistory } from './services/history/AppHistoryContext';
 
 function AppShell() {

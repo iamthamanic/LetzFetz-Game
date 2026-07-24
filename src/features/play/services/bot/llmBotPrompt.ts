@@ -1,9 +1,9 @@
 /**
  * Prompt + payload helpers for the Ollama Cloud LLM opponent.
- * Location: src/services/bot/llmBotPrompt.ts
+ * Location: src/features/play/services/bot/llmBotPrompt.ts
  */
-import type { GameAction } from '../../game/types';
-import type { BotPublicView } from '../../game/engine/botView';
+import type { GameAction } from '../../../../game/types';
+import type { BotPublicView } from '../../../../game/engine/botView';
 
 export const LLM_BOT_SYSTEM = `Du bist der Gegner in Letz Fetz (1v1 Kartenduell).
 Du siehst NUR Informationen, die Spieler p2 kennen würde — nie die Hand des Gegners.

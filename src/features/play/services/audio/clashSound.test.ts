@@ -1,6 +1,6 @@
 /**
  * Unit tests for clash gong timing helpers.
- * Location: src/services/audio/clashSound.test.ts
+ * Location: src/features/play/services/audio/clashSound.test.ts
  */
 import { describe, expect, it } from 'vitest';
 import { CLASH_GONG_ATTACK_LEAD_SEC, CLASH_IMPACT_FRACTION } from './clashSound';
