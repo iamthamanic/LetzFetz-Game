@@ -90,4 +90,20 @@ describe('audioManager', () => {
       audioManager.playStingerSequence(['block', 'damage'], 10),
     ).not.toThrow();
   });
+
+  it('unlock after playMusic keeps bed id (autoplay retry path)', () => {
+    audioManager.applySettings({
+      muted: false,
+      master: 1,
+      sfx: 1,
+      ui: 1,
+      ambience: 0.6,
+      music: 0.7,
+    });
+    expect(() => audioManager.playMusic('music.menu.main', 0)).not.toThrow();
+    expect(audioManager.currentMusicId()).toBe('music.menu.main');
+    expect(() => audioManager.unlock()).not.toThrow();
+    expect(audioManager.currentMusicId()).toBe('music.menu.main');
+    expect(() => audioManager.playMusic('music.menu.main', 0)).not.toThrow();
+  });
 });

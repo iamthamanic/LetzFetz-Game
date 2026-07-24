@@ -142,6 +142,7 @@ export function SettingsView({ onBack, onOpenNotes }: SettingsViewProps) {
               data-testid="settings-test-sound"
               onClick={() => {
                 audioManager.unlock();
+                audioManager.playMusic('music.menu.main', 0);
                 audioManager.playStinger('play');
               }}
             >

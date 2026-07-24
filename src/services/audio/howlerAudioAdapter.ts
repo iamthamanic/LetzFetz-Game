@@ -58,11 +58,43 @@ export class HowlerAudioAdapter {
       );
     }
     this.applyMusicVolume();
+    // Unmute / volume restore after autoplay block — retry if bed exists but silent.
+    if (!settings.muted) {
+      this.retryMusicPlayback();
+    }
   }
 
+  /**
+   * Resume Web Audio + retry HTML5 music after a user gesture.
+   * playMusic often runs on mount (before gesture) and is blocked by autoplay;
+   * unlock alone used to only set volume and never call play() again.
+   */
   unlock(): void {
     if (typeof window === 'undefined') return;
+    try {
+      const ctx = Howler.ctx;
+      if (ctx && ctx.state === 'suspended') {
+        void ctx.resume();
+      }
+    } catch {
+      // jsdom / missing AudioContext
+    }
+    Howler.mute(this.settings.muted);
     Howler.volume(this.settings.muted ? 0 : this.settings.master);
+    this.retryMusicPlayback();
+  }
+
+  /** Restart looped bed if autoplay (or suspend) left it silent. */
+  private retryMusicPlayback(): void {
+    if (!this.musicHowl || !this.musicId || this.settings.muted) return;
+    try {
+      if (!this.musicHowl.playing()) {
+        this.musicHowl.play();
+      }
+      this.applyMusicVolume();
+    } catch {
+      // Autoplay / decode — fail soft.
+    }
   }
 
   play(id: SoundId): void {

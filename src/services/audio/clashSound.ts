@@ -45,6 +45,11 @@ export function applyClashSettings(next: AppliedAudioSettings): void {
   settings = next;
 }
 
+/** Resume clash AudioContext after a user gesture (separate from Howler/procedural). */
+export function unlockClashAudio(): void {
+  getCtx();
+}
+
 function getCtx(): AudioContext | null {
   if (typeof window === 'undefined') return null;
   if (!audioCtx) {
