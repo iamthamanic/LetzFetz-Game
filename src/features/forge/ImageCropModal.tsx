@@ -1,7 +1,7 @@
 import React, { useState, useCallback } from 'react';
 import Cropper from 'react-easy-crop';
 import { X, Save, ZoomIn, ZoomOut, Crop, Maximize2 } from 'lucide-react';
-import { ImageWithFallback } from './figma/ImageWithFallback';
+import { ImageWithFallback } from '../../components/figma/ImageWithFallback';
 
 // Helper: Load image from URL and wait for it to be ready
 function loadImage(url: string): Promise<HTMLImageElement> {

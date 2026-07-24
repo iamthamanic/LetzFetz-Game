@@ -1,22 +1,22 @@
 /**
  * Card library — inventory grid of all pack/forge cards with category filters.
  * Hover shows front + parchment back side-by-side (Character Info style).
- * Location: src/components/CardLibrary.tsx
+ * Location: src/features/forge/CardLibrary.tsx
  */
 import React, { useEffect, useRef, useState } from 'react';
 import { createPortal } from 'react-dom';
 import { Plus, Loader2 } from 'lucide-react';
-import { CARD_CATEGORIES, type ForgeCardKind } from '../services/cardForge/categories';
-import { Input } from './ui/Input';
-import { Button } from './ui/Button';
-import { Badge } from './ui/Badge';
-import { EmptyState } from './ui/EmptyState';
-import { LetzFetzCard } from './cards/LetzFetzCard';
-import { forgeCharacterDefFromCard } from './cards/characterCardProps';
+import { CARD_CATEGORIES, type ForgeCardKind } from '../../services/cardForge/categories';
+import { Input } from '../../components/ui/Input';
+import { Button } from '../../components/ui/Button';
+import { Badge } from '../../components/ui/Badge';
+import { EmptyState } from '../../components/ui/EmptyState';
+import { LetzFetzCard } from '../../components/cards/LetzFetzCard';
+import { forgeCharacterDefFromCard } from '../../components/cards/characterCardProps';
 import { CardLibraryDetailBack } from './CardLibraryDetailBack';
-import { CharacterDetailPanel } from './game/CharacterDetailPanel';
-import { getUltimateForCharacter } from '../game/packs/characterSetup';
-import type { ForgeCardData } from '../services/cardForge/types';
+import { CharacterDetailPanel } from '../../components/game/CharacterDetailPanel';
+import { getUltimateForCharacter } from '../../game/packs/characterSetup';
+import type { ForgeCardData } from '../../services/cardForge/types';
 
 export type CardLibraryFilter = ForgeCardKind | 'All';
 
