@@ -1,13 +1,13 @@
 import React, { useState } from 'react';
 import { CardForge } from './components/CardForge';
 import { SandboxView } from './features/sandbox/SandboxView';
-import { Notes } from './components/Notes';
+import { Notes } from './features/shell/Notes';
 import { GameView } from './components/game/GameView';
 import { PlaymatZonePreview } from './components/game/PlaymatZonePreview';
-import { AppBrand } from './components/AppBrand';
-import { AppNav, type AppView } from './components/AppNav';
-import { MainMenu } from './components/MainMenu';
-import { SettingsView } from './components/SettingsView';
+import { AppBrand } from './features/shell/AppBrand';
+import { AppNav, type AppView } from './features/shell/AppNav';
+import { MainMenu } from './features/shell/MainMenu';
+import { SettingsView } from './features/shell/SettingsView';
 import { isPlaymatPreview } from './services/playtest/isPlaymatPreview';
 import { AppHistoryProvider, useAppHistory } from './services/history/AppHistoryContext';
 

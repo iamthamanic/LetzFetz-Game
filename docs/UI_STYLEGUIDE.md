@@ -309,6 +309,6 @@ Neue Screens (ab `components/game/`) **sofort** styleguide-konform bauen.
 Priorität Migration:
 
 1. `components/ui/*` Primitives anlegen — ✅
-2. `App.tsx` Header-Nav — ✅ (`AppNav`, `AppBrand`; siehe [DESIGN.md](../DESIGN.md))
+2. `App.tsx` Header-Nav — ✅ (`features/shell` (`AppNav`, `AppBrand`); siehe [DESIGN.md](../DESIGN.md))
 3. Neue Game-UI — ✅ (`components/game/`)
 4. Card Forge (inkrementell) — ⏳

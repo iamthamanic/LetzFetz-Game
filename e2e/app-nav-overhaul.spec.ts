@@ -20,7 +20,7 @@ test.describe('App nav overhaul', () => {
     const header = page.getByTestId('app-header');
     await expect(header).toBeVisible();
     await expect(page.getByTestId('app-brand')).toBeVisible();
-    await expect(page.getByRole('img', { name: 'Letz Fetz' })).toBeVisible();
+    await expect(page.getByTestId('app-brand').getByRole('img', { name: 'Letz Fetz' })).toBeVisible();
     await expect(page.getByTestId('app-nav')).toBeVisible();
 
     await shot(page, '01-header-menu.png');
