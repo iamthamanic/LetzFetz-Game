@@ -11,9 +11,8 @@ from audio_forge.audit_plan import cmd_audit, cmd_plan
 from audio_forge.manifest import ManifestError, find_sound, load_manifest
 from audio_forge.process import ProcessError, process_file, require_ffmpeg, resolve_candidate
 from audio_forge.providers import ProviderError, ProviderInstallError, get_provider
-
-
-STUB_COMMANDS = ("review", "verify")
+from audio_forge.review import cmd_review
+from audio_forge.verify import cmd_verify
 
 
 def _print_python_hint() -> None:
@@ -137,14 +136,6 @@ def cmd_process(args: argparse.Namespace) -> int:
     return 0
 
 
-def cmd_stub(name: str) -> int:
-    print(
-        f"audio:{name} is scaffolded but not implemented yet "
-        f"(see later epic issues)."
-    )
-    return 0
-
-
 def build_parser() -> argparse.ArgumentParser:
     parser = argparse.ArgumentParser(
         prog="audio_forge",
@@ -204,8 +195,25 @@ def build_parser() -> argparse.ArgumentParser:
         help="Print planned additions without writing the manifest",
     )
 
-    for name in STUB_COMMANDS:
-        sub.add_parser(name, help=f"Stub — {name} (later issue)")
+    rev = sub.add_parser("review", help="Write static review HTML for candidates")
+    rev.add_argument("--manifest", default=None, help="Override manifest path")
+    rev.add_argument(
+        "--candidates",
+        default="tools/audio-forge/output/candidates",
+        help="Candidates directory",
+    )
+    rev.add_argument(
+        "--out",
+        default="tools/audio-forge/review/index.html",
+        help="Output HTML path",
+    )
+
+    ver = sub.add_parser(
+        "verify",
+        help="Check manifest ↔ public files ↔ registry (approved-only URLs)",
+    )
+    ver.add_argument("--manifest", default=None, help="Override manifest path")
+    ver.add_argument("--repo", default=None, help="Repo root (default: auto)")
 
     sub.add_parser("help", help="Show help")
     return parser
@@ -229,7 +237,9 @@ def main(argv: list[str] | None = None) -> int:
         return cmd_audit(args)
     if args.command == "plan":
         return cmd_plan(args)
-    if args.command in STUB_COMMANDS:
-        return cmd_stub(args.command)
+    if args.command == "review":
+        return cmd_review(args)
+    if args.command == "verify":
+        return cmd_verify(args)
     parser.print_help()
     return 0

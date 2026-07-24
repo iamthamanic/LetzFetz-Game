@@ -120,20 +120,28 @@ describe('sound-manifest.json', () => {
     }
   });
 
-  it('marks card.clash existing with migrated publicPath', () => {
+  it('marks card.clash approved with migrated publicPath', () => {
     const clash = loadManifest().sounds.find((s) => s.id === 'card.clash');
-    expect(clash?.status).toBe('existing');
+    expect(clash?.status).toBe('approved');
     expect(clash?.publicPath).toBe('sfx/card-clash.mp3');
   });
 
-  it('marks music beds existing with public paths', () => {
+  it('marks music beds approved with public paths', () => {
     const menu = loadManifest().sounds.find((s) => s.id === 'music.menu.main');
     const match = loadManifest().sounds.find(
       (s) => s.id === 'music.match.default',
     );
-    expect(menu?.status).toBe('existing');
+    expect(menu?.status).toBe('approved');
     expect(menu?.publicPath).toBe('music/pulsefront.mp3');
-    expect(match?.status).toBe('existing');
+    expect(match?.status).toBe('approved');
     expect(match?.publicPath).toBe('music/iron-surge.mp3');
+  });
+
+  it('exposes publicUrl only for approved registry rows', () => {
+    for (const entry of listSoundRegistry()) {
+      if (entry.publicUrl !== null) {
+        expect(entry.status).toBe('approved');
+      }
+    }
   });
 });

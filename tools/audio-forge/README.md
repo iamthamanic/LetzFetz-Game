@@ -32,6 +32,8 @@ npm run audio:audit
 npm run audio:plan -- --dry-run
 npm run audio:generate -- --provider mock --id card.draw
 npm run audio:process -- --id card.draw
+npm run audio:review
+npm run audio:verify
 npm run audio:test
 ```
 
@@ -78,12 +80,28 @@ npm run audio:process -- --id card.draw
 npm run audio:process -- --id card.draw --input path/to/candidate.wav
 ```
 
+### `audio:review`
+
+Writes static HTML to `tools/audio-forge/review/index.html` (open in a browser; lists prompts + candidate players).
+
+### `audio:verify`
+
+Checks manifest ↔ `public/audio` files ↔ `soundRegistry.ts` (approved-only URLs) and that forge packages are not in `package.json`.
+
+| Code | Meaning |
+|------|---------|
+| 0 | OK (unregistered public files → warnings) |
+| 1 | Integrity failure |
+| 2 | Manifest / CLI error |
+
 Direct:
 
 ```bash
 PYTHONPATH=tools/audio-forge python3 -m audio_forge --help
 PYTHONPATH=tools/audio-forge python3 -m audio_forge generate --provider mock --id card.draw
 PYTHONPATH=tools/audio-forge python3 -m audio_forge process --id card.draw
+PYTHONPATH=tools/audio-forge python3 -m audio_forge review
+PYTHONPATH=tools/audio-forge python3 -m audio_forge verify
 ```
 
 ## Providers
@@ -95,4 +113,6 @@ PYTHONPATH=tools/audio-forge python3 -m audio_forge process --id card.draw
 
 ## Manifest
 
-Do not hardcode `/audio/...` paths in React. Runtime uses typed `SoundId` + `soundRegistry.ts`.
+Do not hardcode `/audio/...` paths in React. Runtime uses typed `SoundId` + `soundRegistry.ts` (**approved** file URLs only).
+
+Full system docs: [`docs/audio-system.md`](../../docs/audio-system.md).

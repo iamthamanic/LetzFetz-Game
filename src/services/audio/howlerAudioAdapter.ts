@@ -5,7 +5,7 @@
  * One primary music Howl — never restart the same id on re-render.
  */
 import { Howl, Howler } from 'howler';
-import { getSoundEntry } from './soundRegistry';
+import { getSoundEntry, resolveSoundUrl } from './soundRegistry';
 import type { AppliedAudioSettings, AudioCategory, SoundId } from './types';
 import { effectiveVolume } from './types';
 
@@ -17,10 +17,11 @@ function howlerSource(
   id: SoundId,
 ): { src: string[]; category: AudioCategory; baseVolume: number } | null {
   if (id === 'card.clash') return null;
+  const url = resolveSoundUrl(id);
   const entry = getSoundEntry(id);
-  if (!entry?.publicUrl) return null;
+  if (!url || !entry) return null;
   return {
-    src: [entry.publicUrl],
+    src: [url],
     category: entry.category,
     baseVolume: entry.baseVolume,
   };

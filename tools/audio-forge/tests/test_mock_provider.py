@@ -38,11 +38,11 @@ def test_mock_generate_deterministic(tmp_path: Path) -> None:
     assert a.output_path.suffix == ".wav"
 
 
-def test_find_music_existing() -> None:
+def test_find_music_approved() -> None:
     manifest = load_manifest(ROOT / "sound-manifest.json")
     menu = find_sound(manifest, "music.menu.main")
     match = find_sound(manifest, "music.match.default")
-    assert menu is not None and menu.get("status") == "existing"
-    assert match is not None and match.get("status") == "existing"
+    assert menu is not None and menu.get("status") == "approved"
+    assert match is not None and match.get("status") == "approved"
     assert menu.get("publicPath") == "music/pulsefront.mp3"
     assert match.get("publicPath") == "music/iron-surge.mp3"
