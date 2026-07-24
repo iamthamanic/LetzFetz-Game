@@ -3,15 +3,17 @@
  * Location: src/features/shell/AppNav.tsx
  */
 import React from 'react';
-import { ChevronLeft, ChevronRight, Gamepad2, Layers, Swords, StickyNote } from 'lucide-react';
+import { ChevronLeft, ChevronRight, Gamepad2, Layers, Settings, Swords, StickyNote } from 'lucide-react';
 import { Tabs, type TabItem } from '../../components/ui/Tabs';
 import { Button } from '../../components/ui/Button';
 
-export type AppView = 'menu' | 'forge' | 'arena' | 'play' | 'settings';
+export type AppView = 'menu' | 'forge' | 'arena' | 'play';
 
 interface AppNavProps {
   currentView: AppView;
   onViewChange: (view: AppView) => void;
+  onOpenSettings: () => void;
+  settingsOpen: boolean;
   onOpenNotes: () => void;
   canGoBack: boolean;
   canGoForward: boolean;
@@ -23,11 +25,19 @@ const NAV_ITEMS: TabItem[] = [
   { id: 'play', label: 'Play', icon: <Gamepad2 className="h-4 w-4 shrink-0" />, tone: 'play' },
   { id: 'forge', label: 'Cards', icon: <Layers className="h-4 w-4 shrink-0" />, tone: 'editor' },
   { id: 'arena', label: 'Sandbox', icon: <Swords className="h-4 w-4 shrink-0" />, tone: 'sandbox' },
+  {
+    id: 'settings',
+    label: 'Settings',
+    icon: <Settings className="h-4 w-4 shrink-0" />,
+    tone: 'settings',
+  },
 ];
 
 export function AppNav({
   currentView,
   onViewChange,
+  onOpenSettings,
+  settingsOpen,
   onOpenNotes,
   canGoBack,
   canGoForward,
@@ -35,9 +45,11 @@ export function AppNav({
   onGoForward,
 }: AppNavProps) {
   const tabActive =
-    currentView === 'play' || currentView === 'forge' || currentView === 'arena'
-      ? currentView
-      : '';
+    settingsOpen
+      ? 'settings'
+      : currentView === 'play' || currentView === 'forge' || currentView === 'arena'
+        ? currentView
+        : '';
 
   return (
     <div
@@ -72,7 +84,13 @@ export function AppNav({
         <Tabs
           items={NAV_ITEMS}
           active={tabActive}
-          onChange={(id) => onViewChange(id as AppView)}
+          onChange={(id) => {
+            if (id === 'settings') {
+              onOpenSettings();
+              return;
+            }
+            onViewChange(id as AppView);
+          }}
           ariaLabel="Hauptnavigation"
         />
       </div>
