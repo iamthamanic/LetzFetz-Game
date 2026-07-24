@@ -44,7 +44,7 @@ import { Badge } from '../../components/ui/Badge';
 import { ScrollText } from 'lucide-react';
 import { isPlaytestMode } from './services/playtest/isPlaytestMode';
 import { PlaytestCheatbox } from './PlaytestCheatbox';
-import { playStinger, playStingerSequence, unlockAudio } from './services/audio/combatStingers';
+import { audioManager } from '../../services/audio/audioManager';
 import { usePresentationQueue } from './presentation';
 import {
   buildOpeningDealSteps,
@@ -488,7 +488,7 @@ export function PlayView() {
     const prevCombat = prevCombatRef.current;
     const combatStarted = !prevCombat && state.combat;
     if (combatStarted) {
-      playStinger('play');
+      audioManager.playStinger('play');
     }
     prevCombatRef.current = state.combat;
 
@@ -496,9 +496,9 @@ export function PlayView() {
     if (state.lastEvent && state.lastEvent !== prevEvent) {
       if (state.lastEvent.includes('Block')) {
         if (state.lastEvent.includes('Schaden') || state.lastEvent.includes('zerstört')) {
-          playStingerSequence(['block', 'damage'], 60);
+          audioManager.playStingerSequence(['block', 'damage'], 60);
         } else {
-          playStinger('block');
+          audioManager.playStinger('block');
         }
       }
     }
@@ -628,7 +628,7 @@ export function PlayView() {
           onPhaseChange={setSetupPhase}
           onSelectCharacter={setSetupSelectedId}
           onStart={({ humanCharacterId, packChoice }) => {
-            unlockAudio();
+            audioManager.unlock();
             setPendingIntent(null);
             setActionError(null);
             openingDealRunRef.current = false;

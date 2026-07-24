@@ -10,6 +10,7 @@ import { MainMenu } from './features/shell/MainMenu';
 import { SettingsView } from './features/shell/SettingsView';
 import { isPlaymatPreview } from './features/play/services/playtest/isPlaymatPreview';
 import { AppHistoryProvider, useAppHistory } from './services/history/AppHistoryContext';
+import { AudioSettingsSync } from './services/audio/AudioSettingsSync';
 import { SettingsProvider } from './services/settings/SettingsProvider';
 
 function AppShell() {
@@ -109,6 +110,7 @@ export default function App() {
   return (
     <AppHistoryProvider>
       <SettingsProvider>
+        <AudioSettingsSync />
         <AppShell />
       </SettingsProvider>
     </AppHistoryProvider>

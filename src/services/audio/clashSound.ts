@@ -1,11 +1,11 @@
 /**
- * Match-intro clash gong — preloaded MP3, Web Audio scheduled to the impact frame.
- * Location: src/features/play/services/audio/clashSound.ts
+ * Match-intro clash gong — sample-accurate Web Audio schedule.
+ * Location: src/services/audio/clashSound.ts
  *
  * Impact peak must stay locked to MatchIntro CSS keyframes (introCardCrash* 85%).
- * Gong attack peak sits slightly after sample start — compensated in schedule.
  */
-import { isMuted } from './combatStingers';
+import type { AppliedAudioSettings } from './types';
+import { effectiveVolume } from './types';
 
 export const CLASH_SOUND_URL = '/sounds/card-clash.mp3';
 
@@ -13,7 +13,7 @@ export const CLASH_SOUND_URL = '/sounds/card-clash.mp3';
 export const CLASH_IMPACT_FRACTION = 0.85;
 
 /**
- * Offset so the gong's perceived strike (not silence/ramp) lands on the visual hit.
+ * Offset so the gong's perceived strike lands on the visual hit.
  * Positive = start sample this many seconds BEFORE the visual impact.
  */
 export const CLASH_GONG_ATTACK_LEAD_SEC = 0.03;
@@ -21,6 +21,18 @@ export const CLASH_GONG_ATTACK_LEAD_SEC = 0.03;
 let audioCtx: AudioContext | null = null;
 let clashBuffer: AudioBuffer | null = null;
 let loadPromise: Promise<AudioBuffer | null> | null = null;
+let settings: AppliedAudioSettings = {
+  muted: false,
+  master: 1,
+  sfx: 1,
+  ui: 1,
+  ambience: 0.6,
+  music: 0.7,
+};
+
+export function applyClashSettings(next: AppliedAudioSettings): void {
+  settings = next;
+}
 
 function getCtx(): AudioContext | null {
   if (typeof window === 'undefined') return null;
@@ -64,10 +76,12 @@ export function preloadClashSound(): Promise<AudioBuffer | null> {
 }
 
 function startGong(ctx: AudioContext, buffer: AudioBuffer, when: number): void {
+  const volume = effectiveVolume(settings, 'sfx', 0.85);
+  if (volume <= 0) return;
   const src = ctx.createBufferSource();
   src.buffer = buffer;
   const gain = ctx.createGain();
-  gain.gain.value = 0.85;
+  gain.gain.value = volume;
   src.connect(gain);
   gain.connect(ctx.destination);
   src.start(Math.max(when, ctx.currentTime));
@@ -78,7 +92,7 @@ function startGong(ctx: AudioContext, buffer: AudioBuffer, when: number): void {
  * @param delaySec Seconds from now until the visual collision frame.
  */
 export function playClashSoundAt(delaySec: number): void {
-  if (isMuted()) return;
+  if (effectiveVolume(settings, 'sfx', 1) <= 0) return;
   const ctx = getCtx();
   if (!ctx) return;
 
@@ -91,13 +105,11 @@ export function playClashSoundAt(delaySec: number): void {
 
   void preloadClashSound().then((buf) => {
     if (!buf) return;
-    // If decode was slow, play ASAP rather than late.
     const lateWhen = Math.max(ctx.currentTime, when);
     startGong(ctx, buf, lateWhen);
   });
 }
 
-/** Immediate play (fallback). Prefer playClashSoundAt for sync. */
 export function playClashSound(): void {
   playClashSoundAt(0);
 }
