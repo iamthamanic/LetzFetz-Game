@@ -12,7 +12,7 @@ import { arenaDefToCardProps } from '../../../components/cards/characterCardProp
 import { resolveCardArtPath, resolveCardVideoPath } from '../../../services/cardArt/manifest';
 import { Button } from '../../../components/ui/Button';
 import { BrandLogoText } from '../../../components/ui/BrandLogoText';
-import { W6Die3D, W6_DIE_ROLL_MS } from '../../../components/game/W6Die3D';
+import { W6Die3D, W6_DIE_ROLL_MS } from '../board/W6Die3D';
 import { prefersReducedMotion } from '../presentation/prefersReducedMotion';
 import {
   CLASH_IMPACT_FRACTION,
