@@ -1,0 +1,232 @@
+{
+  "version": 1,
+  "policy": "SOUND_POLICY.md",
+  "publicRoot": "/audio",
+  "notes": {
+    "legacyClash": "Moved from public/sounds/card-clash.mp3 → public/audio/sfx/card-clash.mp3",
+    "style": "rough, physical, dark, urban, industrial; no voices; no music in SFX prompts"
+  },
+  "sounds": [
+    {
+      "id": "card.draw",
+      "category": "sfx",
+      "status": "planned",
+      "publicPath": null,
+      "prompt": "Short paper scrape of a worn playing card leaving a stack; dry, close mic, no voice."
+    },
+    {
+      "id": "card.play",
+      "category": "sfx",
+      "status": "planned",
+      "publicPath": null,
+      "prompt": "Card slap onto wood table; short dry impact, industrial grit, no voice."
+    },
+    {
+      "id": "card.discard",
+      "category": "sfx",
+      "status": "planned",
+      "publicPath": null,
+      "prompt": "Soft discard of a card into a pile; paper flutter, brief, no voice."
+    },
+    {
+      "id": "card.reveal",
+      "category": "sfx",
+      "status": "planned",
+      "publicPath": null,
+      "prompt": "Card flip reveal on concrete; sharp paper edge, dark tone, no voice."
+    },
+    {
+      "id": "card.destroy",
+      "category": "sfx",
+      "status": "planned",
+      "publicPath": null,
+      "prompt": "Card tear / crumple destroy hit; abrasive paper, short, no voice."
+    },
+    {
+      "id": "card.shuffle",
+      "category": "sfx",
+      "status": "planned",
+      "publicPath": null,
+      "prompt": "Deck shuffle riffle; worn cards, wood table undertone, no voice."
+    },
+    {
+      "id": "card.clash",
+      "category": "sfx",
+      "status": "existing",
+      "publicPath": "sfx/card-clash.mp3",
+      "source": "migrated from public/sounds/card-clash.mp3",
+      "prompt": "Metallic clash gong strike for card collision; short dry industrial hit, no voice."
+    },
+    {
+      "id": "dice.roll",
+      "category": "sfx",
+      "status": "planned",
+      "publicPath": null,
+      "prompt": "Dice tumble on wood/concrete; multiple short clicks, dark room, no voice."
+    },
+    {
+      "id": "dice.settle",
+      "category": "sfx",
+      "status": "planned",
+      "publicPath": null,
+      "prompt": "Dice settle final clack; single dry stop, no voice."
+    },
+    {
+      "id": "combat.attack",
+      "category": "sfx",
+      "status": "planned",
+      "publicPath": null,
+      "adapter": "procedural",
+      "prompt": "Attack impact sting; metal/wood hit, short, no voice."
+    },
+    {
+      "id": "combat.block",
+      "category": "sfx",
+      "status": "planned",
+      "publicPath": null,
+      "adapter": "procedural",
+      "prompt": "Block parry clang; controlled glitch accent, no voice."
+    },
+    {
+      "id": "combat.damage.light",
+      "category": "sfx",
+      "status": "planned",
+      "publicPath": null,
+      "adapter": "procedural",
+      "prompt": "Light damage thud; body/wood, short, no voice."
+    },
+    {
+      "id": "combat.damage.heavy",
+      "category": "sfx",
+      "status": "planned",
+      "publicPath": null,
+      "prompt": "Heavy damage slam; concrete/metal, darker, short, no voice."
+    },
+    {
+      "id": "combat.critical",
+      "category": "sfx",
+      "status": "planned",
+      "publicPath": null,
+      "prompt": "Critical hit accent; sharp industrial spike, controlled glitch, no voice."
+    },
+    {
+      "id": "ability.ready",
+      "category": "sfx",
+      "status": "planned",
+      "publicPath": null,
+      "prompt": "Ability ready click; short UI-adjacent mechanical arm, no voice."
+    },
+    {
+      "id": "ability.activate",
+      "category": "sfx",
+      "status": "planned",
+      "publicPath": null,
+      "prompt": "Ability activate surge; dry electrical glitch burst, no voice."
+    },
+    {
+      "id": "ability.corrupt",
+      "category": "sfx",
+      "status": "planned",
+      "publicPath": null,
+      "prompt": "Corrupt ability warp; dark glitch stutter, short, no voice."
+    },
+    {
+      "id": "round.start",
+      "category": "sfx",
+      "status": "planned",
+      "publicPath": null,
+      "prompt": "Round start cue; short industrial chime hit, no voice, not music."
+    },
+    {
+      "id": "round.end",
+      "category": "sfx",
+      "status": "planned",
+      "publicPath": null,
+      "prompt": "Round end cue; descending dry hit, no voice, not music."
+    },
+    {
+      "id": "match.victory",
+      "category": "sfx",
+      "status": "planned",
+      "publicPath": null,
+      "prompt": "Victory sting; short triumphant industrial hits, no voice, not a music bed."
+    },
+    {
+      "id": "match.defeat",
+      "category": "sfx",
+      "status": "planned",
+      "publicPath": null,
+      "prompt": "Defeat sting; low dull metal fall, short, no voice, not a music bed."
+    },
+    {
+      "id": "ui.click",
+      "category": "ui",
+      "status": "planned",
+      "publicPath": null,
+      "prompt": "UI click; soft mechanical tap, very short, no hover spam, no voice."
+    },
+    {
+      "id": "ui.confirm",
+      "category": "ui",
+      "status": "planned",
+      "publicPath": null,
+      "prompt": "UI confirm; positive short click, dry, no voice."
+    },
+    {
+      "id": "ui.cancel",
+      "category": "ui",
+      "status": "planned",
+      "publicPath": null,
+      "prompt": "UI cancel; soft negative tap, dry, no voice."
+    },
+    {
+      "id": "ui.error",
+      "category": "ui",
+      "status": "planned",
+      "publicPath": null,
+      "prompt": "UI error buzz; short restrained glitch, no voice."
+    },
+    {
+      "id": "ui.invalid",
+      "category": "ui",
+      "status": "planned",
+      "publicPath": null,
+      "prompt": "UI invalid action; muted reject tick, no voice."
+    },
+    {
+      "id": "ui.modal.open",
+      "category": "ui",
+      "status": "planned",
+      "publicPath": null,
+      "prompt": "Modal open whoosh-click; short, dry, no voice."
+    },
+    {
+      "id": "ui.modal.close",
+      "category": "ui",
+      "status": "planned",
+      "publicPath": null,
+      "prompt": "Modal close soft shut; short, dry, no voice."
+    },
+    {
+      "id": "ambience.arena.default",
+      "category": "ambience",
+      "status": "planned",
+      "publicPath": null,
+      "prompt": "Arena ambience bed placeholder; low room tone industrial, loopable, no voice, no music melody."
+    },
+    {
+      "id": "music.menu.main",
+      "category": "music",
+      "status": "planned",
+      "publicPath": null,
+      "prompt": "Menu music bed (deferred generation); dark urban loop — music category only."
+    },
+    {
+      "id": "music.match.default",
+      "category": "music",
+      "status": "planned",
+      "publicPath": null,
+      "prompt": "Match music bed (deferred generation); tense industrial loop — music category only."
+    }
+  ]
+}

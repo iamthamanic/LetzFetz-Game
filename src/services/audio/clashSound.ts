@@ -3,11 +3,22 @@
  * Location: src/services/audio/clashSound.ts
  *
  * Impact peak must stay locked to MatchIntro CSS keyframes (introCardCrash* 85%).
+ * File path comes from the sound registry (typed id `card.clash`) — never hardcode in UI.
  */
+import { resolveSoundUrl } from './soundRegistry';
 import type { AppliedAudioSettings } from './types';
 import { effectiveVolume } from './types';
 
-export const CLASH_SOUND_URL = '/sounds/card-clash.mp3';
+function clashPublicUrl(): string {
+  const url = resolveSoundUrl('card.clash');
+  if (!url) {
+    throw new Error('card.clash missing from sound registry');
+  }
+  return url;
+}
+
+/** Resolved public URL for `card.clash` (migrated under /audio/). */
+export const CLASH_SOUND_URL = clashPublicUrl();
 
 /** Fraction of CRASH_MS when cards collide (matches introCardCrashLeft/Right 85%, linear). */
 export const CLASH_IMPACT_FRACTION = 0.85;

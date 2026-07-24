@@ -1,18 +1,45 @@
 /**
  * Shared audio types — sound IDs and categories.
  * Location: src/services/audio/types.ts
+ *
+ * IDs match tools/audio-forge/sound-manifest.json (first wave).
  */
 
 export type AudioCategory = 'sfx' | 'ui' | 'ambience' | 'music';
 
-/** Typed sound IDs (manifest expands later). */
+/** Typed sound IDs — UI never hardcodes public audio paths. */
 export type SoundId =
+  | 'card.draw'
+  | 'card.play'
+  | 'card.discard'
+  | 'card.reveal'
+  | 'card.destroy'
+  | 'card.shuffle'
   | 'card.clash'
+  | 'dice.roll'
+  | 'dice.settle'
   | 'combat.attack'
   | 'combat.block'
   | 'combat.damage.light'
+  | 'combat.damage.heavy'
+  | 'combat.critical'
+  | 'ability.ready'
+  | 'ability.activate'
+  | 'ability.corrupt'
+  | 'round.start'
+  | 'round.end'
+  | 'match.victory'
+  | 'match.defeat'
   | 'ui.click'
-  | 'ui.error';
+  | 'ui.confirm'
+  | 'ui.cancel'
+  | 'ui.error'
+  | 'ui.invalid'
+  | 'ui.modal.open'
+  | 'ui.modal.close'
+  | 'ambience.arena.default'
+  | 'music.menu.main'
+  | 'music.match.default';
 
 export type StingerKind = 'play' | 'block' | 'damage';
 
