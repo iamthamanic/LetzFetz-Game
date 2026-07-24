@@ -1,16 +1,16 @@
 /**
  * Cards tab — library inventory of all cards; editor opens on select.
- * Location: src/components/CardForge.tsx
+ * Location: src/features/forge/ForgeView.tsx
  */
 import React, { useState, useEffect, useCallback } from 'react';
 import { ImageCropModal } from './ImageCropModal';
 import { CardLibrary, type CardLibraryFilter } from './CardLibrary';
 import { CardForgeCardEditor } from './CardForgeCardEditor';
-import { projectId, publicAnonKey } from '../utils/supabase/info';
-import { packToForgeCards, mergeForgeOverlays } from '../services/cardForge/packToForge';
-import { loadCardOverlays, saveCardOverlay } from '../services/storage/cardOverlays';
-import type { ForgeCardData } from '../services/cardForge/types';
-import type { ForgeCardKind } from '../services/cardForge/categories';
+import { projectId, publicAnonKey } from '../../utils/supabase/info';
+import { packToForgeCards, mergeForgeOverlays } from '../../services/cardForge/packToForge';
+import { loadCardOverlays, saveCardOverlay } from '../../services/storage/cardOverlays';
+import type { ForgeCardData } from '../../services/cardForge/types';
+import type { ForgeCardKind } from '../../services/cardForge/categories';
 
 const emptyCard = (type: ForgeCardKind): ForgeCardData => ({
   id: `custom-${Date.now()}`,
@@ -32,7 +32,7 @@ function createKindFromFilter(filter: CardLibraryFilter): ForgeCardKind {
   return filter === 'All' ? 'Element' : filter;
 }
 
-export function CardForge() {
+export function ForgeView() {
   const [cards, setCards] = useState<ForgeCardData[]>([]);
   const [selectedCard, setSelectedCard] = useState<ForgeCardData | null>(null);
   const [searchTerm, setSearchTerm] = useState('');

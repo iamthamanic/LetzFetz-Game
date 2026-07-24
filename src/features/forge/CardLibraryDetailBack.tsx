@@ -1,19 +1,19 @@
 /**
  * Parchment "back" face for Card Library hover — full card info (Character Info/Ulti style).
- * Location: src/components/CardLibraryDetailBack.tsx
+ * Location: src/features/forge/CardLibraryDetailBack.tsx
  */
 import React from 'react';
-import { categoryLabel } from '../services/cardForge/categories';
-import type { ForgeCardData } from '../services/cardForge/types';
-import { forgeCharacterDefFromCard } from './cards/characterCardProps';
-import { FORGE_ELEMENT_DE } from './cards/cardPortraitPresentation';
-import { getUltimateForCharacter } from '../game/packs/characterSetup';
-import { CardNamePlate } from './ui/CardNamePlate';
-import { CardDividerBar } from './cards/grungeCardParts';
-import { ElementIcon, ELEMENT_LABELS_DE } from './ui/ElementIcon';
-import { characterUsesMysteryIcon } from '../services/icons/elementIcons';
-import { CardIllustrationLoop } from './ui/CardIllustrationLoop';
-import { CardGrungeOverlay } from './ui/CardGrungeOverlay';
+import { categoryLabel } from '../../services/cardForge/categories';
+import type { ForgeCardData } from '../../services/cardForge/types';
+import { forgeCharacterDefFromCard } from '../../components/cards/characterCardProps';
+import { FORGE_ELEMENT_DE } from '../../components/cards/cardPortraitPresentation';
+import { getUltimateForCharacter } from '../../game/packs/characterSetup';
+import { CardNamePlate } from '../../components/ui/CardNamePlate';
+import { CardDividerBar } from '../../components/cards/grungeCardParts';
+import { ElementIcon, ELEMENT_LABELS_DE } from '../../components/ui/ElementIcon';
+import { characterUsesMysteryIcon } from '../../services/icons/elementIcons';
+import { CardIllustrationLoop } from '../../components/ui/CardIllustrationLoop';
+import { CardGrungeOverlay } from '../../components/ui/CardGrungeOverlay';
 
 const CARD_TYPE_DE: Record<string, string> = {
   attack: 'Angriff',

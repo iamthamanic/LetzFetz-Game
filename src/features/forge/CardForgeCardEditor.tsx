@@ -1,18 +1,18 @@
 /**
  * Card Forge editor — kind-specific fields for V1 rulebook cards.
- * Location: src/components/CardForgeCardEditor.tsx
+ * Location: src/features/forge/CardForgeCardEditor.tsx
  */
 import React from 'react';
 import { X, Save, Trash2, Upload, StickyNote, Lock, Loader2 } from 'lucide-react';
 import { Card } from './Card';
 import { CardNotes } from './CardNotes';
-import { Input } from './ui/Input';
-import { Select } from './ui/Select';
-import { Button } from './ui/Button';
-import { Badge } from './ui/Badge';
-import { Panel } from './ui/Panel';
-import { CARD_CATEGORIES } from '../services/cardForge/categories';
-import type { ForgeCardData, ForgeElement } from '../services/cardForge/types';
+import { Input } from '../../components/ui/Input';
+import { Select } from '../../components/ui/Select';
+import { Button } from '../../components/ui/Button';
+import { Badge } from '../../components/ui/Badge';
+import { Panel } from '../../components/ui/Panel';
+import { CARD_CATEGORIES } from '../../services/cardForge/categories';
+import type { ForgeCardData, ForgeElement } from '../../services/cardForge/types';
 
 const ELEMENTS: ForgeElement[] = ['Fire', 'Water', 'Earth', 'Air', 'Light', 'Shadow', 'Neutral', 'Frei'];
 

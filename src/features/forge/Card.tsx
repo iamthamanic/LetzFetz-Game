@@ -1,14 +1,14 @@
 /**
  * Card.tsx — drag/edit wrapper around the grunge LetzFetzCard frame.
- * Location: src/components/Card.tsx
+ * Location: src/features/forge/Card.tsx
  */
 import React, { useState } from 'react';
-import { LetzFetzCard } from './cards/LetzFetzCard';
-import { forgeCharacterDefFromCard } from './cards/characterCardProps';
+import { LetzFetzCard } from '../../components/cards/LetzFetzCard';
+import { forgeCharacterDefFromCard } from '../../components/cards/characterCardProps';
 import { CardNotes } from './CardNotes';
 import { CardEffectsModal } from './CardEffectsModal';
-import type { ForgeCardKind } from '../services/cardForge/categories';
-import type { ForgeElement } from '../services/cardForge/types';
+import type { ForgeCardKind } from '../../services/cardForge/categories';
+import type { ForgeElement } from '../../services/cardForge/types';
 
 interface CardProps {
   id: string;

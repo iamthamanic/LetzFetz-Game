@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { CardForge } from './components/CardForge';
+import { ForgeView } from './features/forge/ForgeView';
 import { SandboxView } from './features/sandbox/SandboxView';
 import { Notes } from './features/shell/Notes';
 import { GameView } from './components/game/GameView';
@@ -81,7 +81,7 @@ function AppShell() {
         <div
           className={`flex min-h-0 flex-1 flex-col ${currentView === 'forge' ? '' : 'hidden'}`}
         >
-          <CardForge />
+          <ForgeView />
         </div>
         <div
           className={`flex min-h-0 flex-1 flex-col ${currentView === 'arena' ? '' : 'hidden'}`}

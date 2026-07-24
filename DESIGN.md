@@ -143,8 +143,8 @@ Wenn du Brand anfasst, diese Dateien prüfen:
 | `src/components/cards/useCardPortraitPresentation.ts` | React-Wrapper für Portrait-Chrome |
 | `src/components/cards/grungeCardParts.tsx` | Shared `CardDividerBar`, `CardFrameCorners` |
 | `src/components/cards/characterCardProps.ts` | `forgeCharacterDefFromCard()` |
-| `src/components/CardLibrary.tsx` | Karten-Bibliothek: Filter-Chips + 4er-Raster |
-| `src/components/CardForge.tsx` | Shell — Body bleibt nüchtern |
+| `src/features/forge/CardLibrary.tsx` | Karten-Bibliothek: Filter-Chips + 4er-Raster |
+| `src/features/forge/ForgeView.tsx` | Shell — Body bleibt nüchtern |
 
 ### Noch **ohne** Brand-Font (bewusst / später)
 

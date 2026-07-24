@@ -16,7 +16,7 @@ function shot(page: import('@playwright/test').Page, name: string) {
 
 async function openForgeWithCharacter(page: import('@playwright/test').Page, name: string) {
   await page.goto('/');
-  await page.getByRole('button', { name: 'Cards' }).click();
+  await page.getByTestId('main-menu-forge').click();
   await expect(page.getByTestId('card-library')).toBeVisible({ timeout: 15_000 });
   await expect(page.getByText('Base Pack V1')).toBeVisible();
   await page.getByRole('tab', { name: /Charakter/i }).click();
@@ -94,7 +94,7 @@ test.describe('Card Forge single-column editor', () => {
   test('element cards: single-column stats + library regression', async ({ page }) => {
     await page.setViewportSize({ width: 1280, height: 720 });
     await page.goto('/');
-    await page.getByRole('button', { name: 'Cards' }).click();
+    await page.getByTestId('main-menu-forge').click();
     await expect(page.getByTestId('card-library')).toBeVisible({ timeout: 15_000 });
 
     await page.getByRole('tab', { name: /Element/i }).click();
