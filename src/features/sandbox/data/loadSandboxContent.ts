@@ -6,7 +6,10 @@
  */
 import { BASE_PACK } from '../../../game/packs/base-pack';
 import type { ContentPack } from '../../../game/types';
-import { packToForgeCards, mergeForgeOverlays } from '../../../services/cardForge/packToForge';
+import {
+  mergePresentationOverlays,
+  packToPresentationCards,
+} from '../../../components/cards/packPresentation';
 import {
   loadCardOverlays,
   type CardOverlayEntry,
@@ -60,14 +63,14 @@ export function loadSandboxContent(
   options: LoadSandboxContentOptions = {},
 ): SandboxContent {
   const pack = options.pack ?? BASE_PACK;
-  const packCards = packToForgeCards(pack);
+  const packCards = packToPresentationCards(pack);
   const knownIds = new Set(packCards.map((c) => c.id));
 
   const overlays = (options.overlays ?? loadCardOverlays()).filter((entry) =>
     knownIds.has(entry.id),
   );
 
-  const merged = mergeForgeOverlays(packCards, overlays);
+  const merged = mergePresentationOverlays(packCards, overlays);
   return {
     cards: merged.map(toSandboxCard),
     arenas: arenasFromPack(pack),

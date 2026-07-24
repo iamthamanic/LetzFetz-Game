@@ -1,13 +1,34 @@
 /**
- * Converts rules-engine BASE_PACK into Card Forge library entries.
- * Location: src/services/cardForge/packToForge.ts
+ * Neutral pack → card presentation records (shared by Forge and Sandbox).
+ * Location: src/components/cards/packPresentation.ts
  */
 import type { ContentPack, Element } from '../../game/types';
 import { BASE_PACK } from '../../game/packs/base-pack';
-import { resolveCardArtPath } from '../cardArt/manifest';
-import type { ForgeCardData, ForgeElement } from './types';
+import { resolveCardArtPath } from '../../services/cardArt/manifest';
+import type { CardElement, CardKind } from './cardTypes';
 
-const ELEMENT_LABELS: Record<Element, ForgeElement> = {
+export interface CardPresentationData {
+  id: string;
+  name: string;
+  type: CardKind;
+  element: CardElement;
+  elements?: [CardElement, CardElement];
+  elementDisplay?: string;
+  stats_json: {
+    hp?: number;
+    value?: number;
+    cardType?: 'attack' | 'block' | 'boost';
+    resistance?: number;
+  };
+  effects: string[];
+  image_asset: string;
+  notes?: string;
+  fromPack?: boolean;
+  created_at?: string;
+  updated_at?: string;
+}
+
+const ELEMENT_LABELS: Record<Element, CardElement> = {
   fire: 'Fire',
   water: 'Water',
   earth: 'Earth',
@@ -31,13 +52,13 @@ const CARD_TYPE_DE: Record<string, string> = {
   boost: 'Boost',
 };
 
-function toForgeElement(element: Element): ForgeElement {
+function toCardElement(element: Element): CardElement {
   return ELEMENT_LABELS[element];
 }
 
-function characterElementLabel(elements: [Element, Element]): ForgeElement {
+function characterElementLabel(elements: [Element, Element]): CardElement {
   if (elements[0] === 'light' && elements[1] === 'shadow') return 'Frei';
-  return toForgeElement(elements[0]);
+  return toCardElement(elements[0]);
 }
 
 function characterElementDisplay(elements: [Element, Element]): string {
@@ -45,8 +66,10 @@ function characterElementDisplay(elements: [Element, Element]): string {
   return `${ELEMENT_DE[elements[0]]} / ${ELEMENT_DE[elements[1]]}`;
 }
 
-export function packToForgeCards(pack: ContentPack = BASE_PACK): ForgeCardData[] {
-  const cards: ForgeCardData[] = [];
+export function packToPresentationCards(
+  pack: ContentPack = BASE_PACK,
+): CardPresentationData[] {
+  const cards: CardPresentationData[] = [];
 
   for (const c of pack.characters) {
     const ult = pack.ultimates.find((u) => u.id === c.ultimateId);
@@ -55,7 +78,7 @@ export function packToForgeCards(pack: ContentPack = BASE_PACK): ForgeCardData[]
       name: c.name,
       type: 'Character',
       element: characterElementLabel(c.elements),
-      elements: [toForgeElement(c.elements[0]), toForgeElement(c.elements[1])],
+      elements: [toCardElement(c.elements[0]), toCardElement(c.elements[1])],
       elementDisplay: characterElementDisplay(c.elements),
       stats_json: { hp: 20 },
       effects: [
@@ -78,9 +101,9 @@ export function packToForgeCards(pack: ContentPack = BASE_PACK): ForgeCardData[]
       type: 'Ultimate',
       element: char ? characterElementLabel(char.elements) : 'Neutral',
       elements: char
-        ? ([toForgeElement(char.elements[0]), toForgeElement(char.elements[1])] as [
-            ForgeElement,
-            ForgeElement,
+        ? ([toCardElement(char.elements[0]), toCardElement(char.elements[1])] as [
+            CardElement,
+            CardElement,
           ])
         : undefined,
       elementDisplay: char ? characterElementDisplay(char.elements) : undefined,
@@ -101,7 +124,7 @@ export function packToForgeCards(pack: ContentPack = BASE_PACK): ForgeCardData[]
       id: e.id,
       name: e.name,
       type: 'Element',
-      element: toForgeElement(e.element),
+      element: toCardElement(e.element),
       stats_json: {
         value: e.value,
         cardType: e.cardType,
@@ -166,10 +189,10 @@ export function packToForgeCards(pack: ContentPack = BASE_PACK): ForgeCardData[]
   return cards;
 }
 
-export function mergeForgeOverlays(
-  packCards: ForgeCardData[],
-  overlays: Partial<ForgeCardData>[],
-): ForgeCardData[] {
+export function mergePresentationOverlays<T extends CardPresentationData>(
+  packCards: T[],
+  overlays: Partial<T>[],
+): T[] {
   const overlayById = new Map(overlays.filter((o) => o.id).map((o) => [o.id!, o]));
   return packCards.map((card) => {
     const overlay = overlayById.get(card.id);

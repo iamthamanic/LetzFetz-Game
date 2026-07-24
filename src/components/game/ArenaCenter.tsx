@@ -5,7 +5,7 @@
 import React from 'react';
 import type { ArenaCardDef } from '../../game/types';
 import type { ArenaState } from '../../game/types/game';
-import { arenaDefToForgeProps } from '../cards/characterCardProps';
+import { arenaDefToCardProps } from '../cards/characterCardProps';
 import { getArenaTheme } from './arenaTheme';
 import { GameCharacterCard } from './GameCharacterCard';
 
@@ -28,7 +28,7 @@ export function ArenaCenter({ arena, arenaState }: ArenaCenterProps) {
         🏟️ Arena
       </h2>
       <GameCharacterCard
-        {...arenaDefToForgeProps(arena)}
+        {...arenaDefToCardProps(arena)}
         size="lg"
         footerNote={mutationNote}
       />

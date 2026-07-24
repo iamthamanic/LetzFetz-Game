@@ -9,9 +9,8 @@ import { CardGrungeOverlay } from '../ui/CardGrungeOverlay';
 import { CardNamePlate } from '../ui/CardNamePlate';
 import { CharacterCardGlitch } from '../ui/CharacterCardGlitch';
 import { ElementIcon } from '../ui/ElementIcon';
-import type { ForgeCardKind } from '../../services/cardForge/categories';
-import type { ForgeElement } from '../../services/cardForge/types';
-import { forgeElementToBrandIconKey } from '../../services/icons/elementIcons';
+import type { CardElement, CardKind } from './cardTypes';
+import { cardElementToBrandIconKey } from '../../services/icons/elementIcons';
 import { buildCardDisplayModel } from './cardDisplayModel';
 import {
   buildCardPortraitPresentation,
@@ -32,8 +31,8 @@ export type LetzFetzCardLayout = 'portrait' | 'tcg';
 export interface LetzFetzCardProps {
   id: string;
   name: string;
-  type: ForgeCardKind;
-  element: ForgeElement;
+  type: CardKind;
+  element: CardElement;
   elementDisplay?: string;
   gameElements?: [Element, Element];
   role?: string;
@@ -77,8 +76,8 @@ function noiseFilterId(id: string): string {
   return `lfz-noise-${id.replace(/[^a-zA-Z0-9_-]/g, '')}`;
 }
 
-function typeIcon(type: ForgeCardKind): string {
-  const icons: Record<ForgeCardKind, string> = {
+function typeIcon(type: CardKind): string {
+  const icons: Record<CardKind, string> = {
     Character: '⚔️',
     Ultimate: '💫',
     Element: '🃏',
@@ -118,7 +117,7 @@ export function LetzFetzCard({
 }: LetzFetzCardProps) {
   const accent = ELEMENT_ACCENTS[element] ?? ELEMENT_ACCENTS.Neutral;
   const filterId = noiseFilterId(id);
-  const brandIcon = forgeElementToBrandIconKey(element);
+  const brandIcon = cardElementToBrandIconKey(element);
   const compact = size === 'md' || size === 'sm';
   const portrait = layout === 'portrait';
   const display = buildCardDisplayModel({

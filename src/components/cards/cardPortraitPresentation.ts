@@ -3,8 +3,8 @@
  * Location: src/components/cards/cardPortraitPresentation.ts
  */
 import type { Element } from '../../game/types';
-import type { ForgeCardKind } from '../../services/cardForge/categories';
-import type { ForgeElement } from '../../services/cardForge/types';
+import type { CardElement, CardKind } from './cardTypes';
+import { CARD_ELEMENT_DE } from './cardTypes';
 import type { BrandIconKey } from '../../services/icons/elementIcons';
 import {
   characterUsesMysteryIcon,
@@ -18,21 +18,10 @@ export type CardPortraitSize = 'sm' | 'md' | 'lg' | 'fluid';
 /** Prefer Sofort (hand/combat) or Gebaut (engine slots) for the effect line. */
 export type CardEffectFocus = 'instant' | 'bound';
 
-export const FORGE_ELEMENT_DE: Record<ForgeElement, string> = {
-  Fire: 'Feuer',
-  Water: 'Wasser',
-  Earth: 'Erde',
-  Air: 'Luft',
-  Shadow: 'Schatten',
-  Light: 'Licht',
-  Neutral: 'Neutral',
-  Frei: 'Frei',
-};
-
 export interface CardPortraitInput {
   id: string;
-  type: ForgeCardKind;
-  element: ForgeElement;
+  type: CardKind;
+  element: CardElement;
   elementDisplay?: string;
   gameElements?: [Element, Element];
   role?: string;
@@ -144,7 +133,7 @@ export function buildCardPortraitPresentation(input: CardPortraitInput): CardPor
       typeBadge = null;
       elementBadge =
         input.elementDisplay?.trim() ||
-        FORGE_ELEMENT_DE[input.element] ||
+        CARD_ELEMENT_DE[input.element] ||
         input.element;
       if (elementBadge === 'Neutral') elementBadge = null;
       subtitle = null;

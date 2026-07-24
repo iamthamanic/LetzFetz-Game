@@ -2,7 +2,7 @@ import { describe, expect, it } from 'vitest';
 import {
   BRAND_ICON_KEYS,
   characterUsesMysteryIcon,
-  forgeElementToBrandIconKey,
+  cardElementToBrandIconKey,
   resolveBrandIconPath,
   resolveElementIconRasterPath,
 } from './elementIcons';
@@ -24,9 +24,9 @@ describe('elementIcons', () => {
     expect(characterUsesMysteryIcon('knuspergnom')).toBe(false);
   });
 
-  it('maps forge elements to brand icon keys', () => {
-    expect(forgeElementToBrandIconKey('Fire')).toBe('fire');
-    expect(forgeElementToBrandIconKey('Neutral')).toBe('mystery');
-    expect(forgeElementToBrandIconKey('Frei')).toBe('mystery');
+  it('maps card elements to brand icon keys', () => {
+    expect(cardElementToBrandIconKey('Fire')).toBe('fire');
+    expect(cardElementToBrandIconKey('Neutral')).toBe('mystery');
+    expect(cardElementToBrandIconKey('Frei')).toBe('mystery');
   });
 });

@@ -4,18 +4,17 @@
  */
 import React, { useState } from 'react';
 import { LetzFetzCard } from '../../components/cards/LetzFetzCard';
-import { forgeCharacterDefFromCard } from '../../components/cards/characterCardProps';
+import { forgeCharacterDefFromCard } from './model/characterFromForgeCard';
 import { CardNotes } from './CardNotes';
 import { CardEffectsModal } from './CardEffectsModal';
-import type { ForgeCardKind } from '../../services/cardForge/categories';
-import type { ForgeElement } from '../../services/cardForge/types';
+import type { CardElement, CardKind } from '../../components/cards/cardTypes';
 
 interface CardProps {
   id: string;
   name: string;
-  type: ForgeCardKind;
-  element: ForgeElement;
-  elements?: [ForgeElement, ForgeElement];
+  type: CardKind;
+  element: CardElement;
+  elements?: [CardElement, CardElement];
   elementDisplay?: string;
   stats_json?: { hp?: number; mana?: number; attack?: number; value?: number; cardType?: string };
   effects?: string[];

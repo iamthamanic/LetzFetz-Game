@@ -7,30 +7,20 @@ import { createPortal } from 'react-dom';
 import { LetzFetzCard } from '../../components/cards/LetzFetzCard';
 import { Button } from '../../components/ui/Button';
 import { Modal } from '../../components/ui/Modal';
-import { FORGE_CARD_KINDS, type ForgeCardKind } from '../../services/cardForge/categories';
-import type { ForgeElement } from '../../services/cardForge/types';
+import { CARD_KINDS, CARD_ELEMENTS, type CardElement, type CardKind } from '../../components/cards/cardTypes';
 import type { SandboxCard as SandboxCardModel } from './model/sandboxTypes';
 
-const FORGE_ELEMENTS: ForgeElement[] = [
-  'Fire',
-  'Water',
-  'Earth',
-  'Air',
-  'Light',
-  'Shadow',
-  'Neutral',
-  'Frei',
-];
+const FORGE_ELEMENTS: CardElement[] = CARD_ELEMENTS;
 
-export function toForgeKind(kind: string): ForgeCardKind {
-  return FORGE_CARD_KINDS.includes(kind as ForgeCardKind)
-    ? (kind as ForgeCardKind)
+export function toCardKind(kind: string): CardKind {
+  return CARD_KINDS.includes(kind as CardKind)
+    ? (kind as CardKind)
     : 'Element';
 }
 
-export function toForgeElement(element: string): ForgeElement {
-  return FORGE_ELEMENTS.includes(element as ForgeElement)
-    ? (element as ForgeElement)
+export function toCardElement(element: string): CardElement {
+  return FORGE_ELEMENTS.includes(element as CardElement)
+    ? (element as CardElement)
     : 'Neutral';
 }
 
@@ -49,8 +39,8 @@ export function SandboxCardFace({
 }: SandboxCardProps) {
   const [notesOpen, setNotesOpen] = useState(false);
   const [draftNotes, setDraftNotes] = useState(card.notes);
-  const type = toForgeKind(card.kind);
-  const element = toForgeElement(card.element);
+  const type = toCardKind(card.kind);
+  const element = toCardElement(card.element);
 
   return (
     <div

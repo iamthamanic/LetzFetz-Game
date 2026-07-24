@@ -7,12 +7,12 @@ import { ImageCropModal } from './ImageCropModal';
 import { CardLibrary, type CardLibraryFilter } from './CardLibrary';
 import { CardForgeCardEditor } from './CardForgeCardEditor';
 import { projectId, publicAnonKey } from '../../utils/supabase/info';
-import { packToForgeCards, mergeForgeOverlays } from '../../services/cardForge/packToForge';
+import { packToForgeCards, mergeForgeOverlays } from './data/packToForge';
 import { loadCardOverlays, saveCardOverlay } from '../../services/storage/cardOverlays';
-import type { ForgeCardData } from '../../services/cardForge/types';
-import type { ForgeCardKind } from '../../services/cardForge/categories';
+import type { ForgeCardData } from './model/types';
+import type { CardKind } from '../../components/cards/cardTypes';
 
-const emptyCard = (type: ForgeCardKind): ForgeCardData => ({
+const emptyCard = (type: CardKind): ForgeCardData => ({
   id: `custom-${Date.now()}`,
   name: '',
   type,
@@ -28,7 +28,7 @@ function prepareCardForEdit(card: ForgeCardData): ForgeCardData {
   return { ...card, effects: card.effects?.length ? card.effects : [''] };
 }
 
-function createKindFromFilter(filter: CardLibraryFilter): ForgeCardKind {
+function createKindFromFilter(filter: CardLibraryFilter): CardKind {
   return filter === 'All' ? 'Element' : filter;
 }
 

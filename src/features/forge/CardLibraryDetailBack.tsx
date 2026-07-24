@@ -3,10 +3,10 @@
  * Location: src/features/forge/CardLibraryDetailBack.tsx
  */
 import React from 'react';
-import { categoryLabel } from '../../services/cardForge/categories';
-import type { ForgeCardData } from '../../services/cardForge/types';
-import { forgeCharacterDefFromCard } from '../../components/cards/characterCardProps';
-import { FORGE_ELEMENT_DE } from '../../components/cards/cardPortraitPresentation';
+import { categoryLabel } from './model/categories';
+import type { ForgeCardData } from './model/types';
+import { forgeCharacterDefFromCard } from './model/characterFromForgeCard';
+import { CARD_ELEMENT_DE } from '../../components/cards/cardTypes';
 import { getUltimateForCharacter } from '../../game/packs/characterSetup';
 import { CardNamePlate } from '../../components/ui/CardNamePlate';
 import { CardDividerBar } from '../../components/cards/grungeCardParts';
@@ -78,7 +78,7 @@ export function CardLibraryDetailBack({
     : null;
 
   const elementLabel =
-    card.elementDisplay || FORGE_ELEMENT_DE[card.element] || card.element;
+    card.elementDisplay || CARD_ELEMENT_DE[card.element] || card.element;
 
   const instantLines: string[] = [];
   const boundLines: string[] = [];

@@ -3,7 +3,7 @@
  * Location: src/components/cards/cardDisplayModel.test.ts
  */
 import { describe, expect, it } from 'vitest';
-import { buildCardDisplayModel, elementDefToForgeProps } from './cardDisplayModel';
+import { buildCardDisplayModel, elementDefToCardProps } from './cardDisplayModel';
 
 describe('cardDisplayModel', () => {
   it('maps element card effects to EN labels with DE text', () => {
@@ -51,7 +51,7 @@ describe('cardDisplayModel', () => {
   });
 
   it('builds game element card props with art path', () => {
-    const props = elementDefToForgeProps({
+    const props = elementDefToCardProps({
       id: 'fire-attack-4',
       name: 'Feuer 4 Angriff',
       kind: 'element',
