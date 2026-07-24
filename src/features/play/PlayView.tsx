@@ -45,6 +45,16 @@ import { ScrollText } from 'lucide-react';
 import { isPlaytestMode } from './services/playtest/isPlaytestMode';
 import { PlaytestCheatbox } from './PlaytestCheatbox';
 import { audioManager } from '../../services/audio/audioManager';
+import {
+  playCombatAttack,
+  playCombatBlock,
+  playDiceRoll,
+  playDiceSettle,
+  playInvalidAction,
+  playMatchOutcome,
+  playPresentationStepStart,
+} from './audio/playSfxBridge';
+import { W6_DIE_ROLL_MS } from './board/W6Die3D';
 import { usePresentationQueue } from './presentation';
 import {
   buildOpeningDealSteps,
@@ -126,6 +136,9 @@ export function PlayView() {
   const coachFooterReveal = turnStartAnnounceDone;
 
   const presentation = usePresentationQueue({
+    onStepStart: (step) => {
+      playPresentationStepStart(step);
+    },
     onStepComplete: (step) => {
       if (isOpeningDealStep(step)) {
         const beats = openingDealBeats(step);
@@ -258,6 +271,11 @@ export function PlayView() {
   }, [state?.winner, presentation.flush]);
 
   useEffect(() => {
+    if (!state?.winner) return;
+    playMatchOutcome(state.winner === HUMAN);
+  }, [state?.winner]);
+
+  useEffect(() => {
     if (!state || !openingDealFinished) {
       prevStateRef.current = state;
       return;
@@ -380,6 +398,10 @@ export function PlayView() {
             action.type === 'CHALLENGE'
           ) {
             setLastRoll(action.diceRoll ?? null);
+            if (playerId === BOT) {
+              playDiceRoll();
+              window.setTimeout(() => playDiceSettle(), W6_DIE_ROLL_MS);
+            }
           }
           setActionError(null);
           if (playerId === HUMAN) {
@@ -390,6 +412,7 @@ export function PlayView() {
           return next;
         } catch (e) {
           const message = e instanceof Error ? e.message : 'Aktion fehlgeschlagen.';
+          playInvalidAction();
           setActionError(message);
           return prev;
         }
@@ -479,7 +502,7 @@ export function PlayView() {
     setPendingIntent(null);
   }, [state?.phase, state?.activePlayer, state?.combat?.attackValue]);
 
-  // Combat SFX stingers — fire on combat state transitions.
+  // Combat SFX — typed IDs via AudioManager (procedural until assets exist).
   const prevCombatRef = useRef<GameState['combat']>(null);
   const prevEventRef = useRef<string | null>(null);
   useEffect(() => {
@@ -488,18 +511,16 @@ export function PlayView() {
     const prevCombat = prevCombatRef.current;
     const combatStarted = !prevCombat && state.combat;
     if (combatStarted) {
-      audioManager.playStinger('play');
+      playCombatAttack();
     }
     prevCombatRef.current = state.combat;
 
     const prevEvent = prevEventRef.current;
     if (state.lastEvent && state.lastEvent !== prevEvent) {
       if (state.lastEvent.includes('Block')) {
-        if (state.lastEvent.includes('Schaden') || state.lastEvent.includes('zerstört')) {
-          audioManager.playStingerSequence(['block', 'damage'], 60);
-        } else {
-          audioManager.playStinger('block');
-        }
+        const withDamage =
+          state.lastEvent.includes('Schaden') || state.lastEvent.includes('zerstört');
+        playCombatBlock(withDamage);
       }
     }
     prevEventRef.current = state.lastEvent;
@@ -510,21 +531,28 @@ export function PlayView() {
     [state, pendingIntent, matchPack],
   );
 
+  const announceDiceRoll = useCallback(() => {
+    playDiceRoll();
+    window.setTimeout(() => playDiceSettle(), W6_DIE_ROLL_MS);
+  }, []);
+
   const playAttack = useCallback(
     (instanceId: string) => {
       if (presentation.isInputLocked) return;
       const roll = rollD6();
+      announceDiceRoll();
       setLastRoll(roll);
       dispatch({ type: 'PLAY_ATTACK', cardInstanceId: instanceId, diceRoll: roll }, HUMAN);
       setPendingIntent(null);
     },
-    [dispatch, presentation.isInputLocked],
+    [announceDiceRoll, dispatch, presentation.isInputLocked],
   );
 
   const playChallenge = useCallback(
     (attackInstanceId: string, targetBoundInstanceId: string) => {
       if (presentation.isInputLocked) return;
       const roll = rollD6();
+      announceDiceRoll();
       setLastRoll(roll);
       dispatch(
         {
@@ -537,18 +565,19 @@ export function PlayView() {
       );
       setPendingIntent(null);
     },
-    [dispatch, presentation.isInputLocked],
+    [announceDiceRoll, dispatch, presentation.isInputLocked],
   );
 
   const playBlock = useCallback(
     (instanceId: string) => {
       if (presentation.isInputLocked) return;
       const roll = rollD6();
+      announceDiceRoll();
       setLastRoll(roll);
       dispatch({ type: 'PLAY_BLOCK', cardInstanceId: instanceId, diceRoll: roll }, HUMAN);
       setPendingIntent(null);
     },
-    [dispatch, presentation.isInputLocked],
+    [announceDiceRoll, dispatch, presentation.isInputLocked],
   );
 
   const handleDispatch = useCallback(
@@ -588,6 +617,7 @@ export function PlayView() {
           return next;
         } catch (e) {
           const message = e instanceof Error ? e.message : 'Aktion fehlgeschlagen.';
+          playInvalidAction();
           setActionError(message);
           return prev;
         }

@@ -5,6 +5,7 @@
 import React, { useEffect, useRef } from 'react';
 import { BrandLogoText } from '../../../components/ui/BrandLogoText';
 import { Panel } from '../../../components/ui/Panel';
+import { playRoundStart } from '../audio/playSfxBridge';
 import { prefersReducedMotion } from '../presentation/prefersReducedMotion';
 
 /** Visible hold time before the phase-coach footer materializes. */
@@ -26,6 +27,8 @@ export function TurnStartAnnounce({
 
   useEffect(() => {
     if (!active) return;
+
+    playRoundStart();
 
     if (prefersReducedMotion()) {
       onCompleteRef.current();

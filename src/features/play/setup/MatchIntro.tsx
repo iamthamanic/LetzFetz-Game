@@ -15,7 +15,10 @@ import { BrandLogoText } from '../../../components/ui/BrandLogoText';
 import { W6Die3D, W6_DIE_ROLL_MS } from '../board/W6Die3D';
 import { prefersReducedMotion } from '../presentation/prefersReducedMotion';
 import { audioManager } from '../../../services/audio/audioManager';
+import { playDiceRoll, playDiceSettle } from '../audio/playSfxBridge';
 import { CLASH_IMPACT_FRACTION } from '../../../services/audio/clashSound';
+import { useSettings } from '../../../services/settings/SettingsProvider';
+import { effectiveVolume } from '../../../services/audio/types';
 
 type IntroPhase = 'vs' | 'crash' | 'initiative' | 'winner' | 'arena';
 
@@ -53,6 +56,7 @@ export function MatchIntro({
   onInitiativeResolved,
   onContinue,
 }: MatchIntroProps) {
+  const { settings } = useSettings();
   const [phase, setPhase] = useState<IntroPhase>('vs');
   const [reduceMotion, setReduceMotion] = useState(false);
   const [videoFailed, setVideoFailed] = useState(false);
@@ -116,9 +120,11 @@ export function MatchIntro({
     setWinnerId(null);
     setPhase('initiative');
     setStatusText('Würfel fallen…');
+    playDiceRoll();
 
     const delay = prefersReducedMotion() ? 0 : W6_DIE_ROLL_MS;
     schedule(() => {
+      playDiceSettle();
       const result = resolveInitiative(h, b);
       if (result.outcome === 'tie') {
         // Land without a winner, then re-roll.
@@ -172,13 +178,25 @@ export function MatchIntro({
     if (phase !== 'arena' || !showVideo) return;
     const el = videoRef.current;
     if (!el) return;
-    el.muted = false;
-    el.volume = 0.85;
+    const vol = effectiveVolume(
+      {
+        muted: settings.audio.muted,
+        master: settings.audio.master,
+        sfx: settings.audio.sfx,
+        ui: settings.audio.ui,
+        ambience: settings.audio.ambience,
+        music: settings.audio.music,
+      },
+      'ambience',
+      0.85,
+    );
+    el.muted = settings.audio.muted || vol <= 0;
+    el.volume = vol;
     el.play().catch(() => setVideoFailed(true));
     return () => {
       el.pause();
     };
-  }, [phase, showVideo]);
+  }, [phase, showVideo, settings.audio]);
 
   const showVsLayout = phase === 'vs' || phase === 'crash';
   const isCrash = phase === 'crash';
