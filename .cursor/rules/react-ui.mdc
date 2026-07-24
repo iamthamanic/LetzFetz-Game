@@ -12,7 +12,7 @@ Styleguide: `Letz-Fetz-Game/docs/UI_STYLEGUIDE.md`
 Importiere aus `components/ui/` — kein neues Button/Input-Styling inline.
 
 ## Feature-Slices
-- Feature-owned UI lebt unter `src/features/<feature>/`
+- Feature-owned UI lebt unter `src/features/<feature>/` (Shell: `features/shell/` — AppBrand, AppNav, MainMenu, Settings, Notes)
 - Shared bleiben: `components/ui/`, `components/cards/`, `services/history|cardArt|icons`
 - Kein Feature→Feature-Import; keine Re-Export-Stubs bei Moves
 - Transition: Shell / Forge / Play folgen nach Sandbox MVP 0.1 (siehe AGENTS.md)

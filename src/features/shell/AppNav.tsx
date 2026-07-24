@@ -1,11 +1,11 @@
 /**
  * App shell navigation — view tabs, history back/forward, notes action.
- * Location: src/components/AppNav.tsx
+ * Location: src/features/shell/AppNav.tsx
  */
 import React from 'react';
 import { ChevronLeft, ChevronRight, Gamepad2, Layers, Swords, StickyNote } from 'lucide-react';
-import { Tabs, type TabItem } from './ui/Tabs';
-import { Button } from './ui/Button';
+import { Tabs, type TabItem } from '../../components/ui/Tabs';
+import { Button } from '../../components/ui/Button';
 
 export type AppView = 'menu' | 'forge' | 'arena' | 'play' | 'settings';
 

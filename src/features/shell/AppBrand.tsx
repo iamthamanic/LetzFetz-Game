@@ -1,10 +1,11 @@
 /**
  * App header brand — official Letz Fetz logo; click returns to the main menu.
- * Location: src/components/AppBrand.tsx
+ * Location: src/features/shell/AppBrand.tsx
  */
 import React from 'react';
+import { LETZ_FETZ_LOGO_SRC } from '../../components/brand/letzFetzLogo';
 
-export const LETZ_FETZ_LOGO_SRC = '/brand/letz-fetz-logo.png';
+export { LETZ_FETZ_LOGO_SRC };
 
 interface AppBrandProps {
   onHome?: () => void;

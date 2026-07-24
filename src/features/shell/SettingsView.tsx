@@ -1,13 +1,13 @@
 /**
  * App settings screen — lightweight preferences / about.
- * Location: src/components/SettingsView.tsx
+ * Location: src/features/shell/SettingsView.tsx
  */
 import React from 'react';
 import { ArrowLeft } from 'lucide-react';
-import { Button } from './ui/Button';
-import { BrandLogoText } from './ui/BrandLogoText';
-import { GrungeAppShell } from './ui/GrungeAppShell';
-import { Panel } from './ui/Panel';
+import { Button } from '../../components/ui/Button';
+import { BrandLogoText } from '../../components/ui/BrandLogoText';
+import { GrungeAppShell } from '../../components/ui/GrungeAppShell';
+import { Panel } from '../../components/ui/Panel';
 
 interface SettingsViewProps {
   onBack: () => void;

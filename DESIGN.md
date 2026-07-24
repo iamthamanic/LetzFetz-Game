@@ -13,7 +13,7 @@ Vollständige Primitives & Migration: [`docs/UI_STYLEGUIDE.md`](docs/UI_STYLEGUI
 | Asset | Pfad | Verwendung |
 |-------|------|------------|
 | **Logo (PNG)** | `public/brand/letz-fetz-logo.png` | Header, jede Stelle die „offizielles Logo“ braucht |
-| **Logo export** | `AppBrand.tsx` → `LETZ_FETZ_LOGO_SRC` | Einzige Source-of-Truth für Logo-URL |
+| **Logo export** | `features/shell/AppBrand.tsx` + `components/brand/letzFetzLogo.ts` | Einzige Source-of-Truth für Logo-URL |
 | **Display-Font** | `public/fonts/BadSuabiaSwing-Regular.woff2` + `.otf` | `--font-brand` / Klasse `font-brand` |
 | **Fallback-Font** | `public/fonts/FRAZZLE_.ttf` | Nur wenn Bad Suabia nicht lädt |
 
@@ -111,8 +111,8 @@ Wenn du Brand anfasst, diese Dateien prüfen:
 
 | Datei | Was |
 |-------|-----|
-| `src/components/AppBrand.tsx` | Logo `<img>`, `LETZ_FETZ_LOGO_SRC` |
-| `src/components/AppNav.tsx` | Labels: Play, Edit, Sandbox |
+| `src/features/shell/AppBrand.tsx` | Logo `<img>` |
+| `src/features/shell/AppNav.tsx` | Labels: Play, Edit, Sandbox |
 | `src/components/ui/Tabs.tsx` | Tab-Label: `font-brand` |
 | `src/index.css` | tokens, `.brand-logo-text`, `.grunge-app-shell`, parchment/grunge |
 | `src/components/ui/BrandLogoText.tsx` | Logo-style live headings |
@@ -170,7 +170,7 @@ Wenn du Brand anfasst, diese Dateien prüfen:
 
 ## 6. App shell navigation
 
-**Implementierung:** `App.tsx` → `AppBrand` + `AppNav` → `components/ui/Tabs`.
+**Implementierung:** `App.tsx` → `features/shell` (`AppBrand` + `AppNav`) → `components/ui/Tabs`.
 
 ### Layout
 
@@ -193,13 +193,13 @@ Wenn du Brand anfasst, diese Dateien prüfen:
 
 ### Config
 
-`NAV_ITEMS` in `AppNav.tsx` — neue Views nur über Config-Array.
+`NAV_ITEMS` in `features/shell/AppNav.tsx` — neue Views nur über Config-Array.
 
 ---
 
 ## 7. Neue UI — Brand-Regeln
 
-1. Logo braucht? → `LETZ_FETZ_LOGO_SRC` / `AppBrand` Pattern, nicht neues PNG-Pfad-Chaos.
+1. Logo braucht? → `LETZ_FETZ_LOGO_SRC` (`components/brand/letzFetzLogo.ts`) / `AppBrand` Pattern, nicht neues PNG-Pfad-Chaos.
 2. Kurzes Display-Label (≤ 3 Wörter)? → `font-brand uppercase tracking-wide` (Cream automatisch).
 3. Beschreibung / Hilfetext? → **kein** `font-brand`, `text-stone-400`.
 4. Neue Farbe? → erst Token in `index.css` `@theme`, dann Tailwind-Klasse.

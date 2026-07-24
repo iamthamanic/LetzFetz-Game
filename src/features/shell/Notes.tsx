@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import { X, Plus, Edit2, Trash2, MessageSquare, Save } from 'lucide-react';
-import { apiGet, apiPost, apiPut, apiDelete, formatTimestamp } from '../utils/api';
+import { apiGet, apiPost, apiPut, apiDelete, formatTimestamp } from '../../utils/api';
 
 interface Comment { id: string; text: string; timestamp: string; }
 interface Note { id: string; title: string; content: string; created_at: string; updated_at: string; comments: Comment[]; }

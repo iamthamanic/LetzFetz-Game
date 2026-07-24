@@ -3,7 +3,7 @@
  * Location: src/components/cards/CardBackFace.tsx
  */
 import React from 'react';
-import { LETZ_FETZ_LOGO_SRC } from '../AppBrand';
+import { LETZ_FETZ_LOGO_SRC } from '../brand/letzFetzLogo';
 
 interface CardBackFaceProps {
   className?: string;

@@ -1,13 +1,13 @@
 /**
  * App home — vertical menu: Play, Cards, Sandbox, Settings.
- * Location: src/components/MainMenu.tsx
+ * Location: src/features/shell/MainMenu.tsx
  */
 import React from 'react';
 import { Gamepad2, Layers, Swords, Settings } from 'lucide-react';
-import { LETZ_FETZ_LOGO_SRC } from './AppBrand';
-import { GrungeAppShell } from './ui/GrungeAppShell';
+import { LETZ_FETZ_LOGO_SRC } from '../../components/brand/letzFetzLogo';
+import { GrungeAppShell } from '../../components/ui/GrungeAppShell';
 import type { AppView } from './AppNav';
-import type { TabTone } from './ui/Tabs';
+import type { TabTone } from '../../components/ui/Tabs';
 
 interface MainMenuProps {
   onNavigate: (view: Exclude<AppView, 'menu'>) => void;
