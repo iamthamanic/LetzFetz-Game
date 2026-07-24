@@ -1,12 +1,12 @@
 /**
  * Arena sidebar — LetzFetz card on the right with mutation footer.
- * Location: src/components/game/ArenaCenter.tsx
+ * Location: src/features/play/setup/ArenaCenter.tsx
  */
 import React from 'react';
-import type { ArenaCardDef } from '../../game/types';
-import type { ArenaState } from '../../game/types/game';
-import { arenaDefToCardProps } from '../cards/characterCardProps';
-import { getArenaTheme } from './arenaTheme';
+import type { ArenaCardDef } from '../../../game/types';
+import type { ArenaState } from '../../../game/types/game';
+import { arenaDefToCardProps } from '../../../components/cards/characterCardProps';
+import { getArenaTheme } from '../../../components/game/arenaTheme';
 import { GameCharacterCard } from './GameCharacterCard';
 
 interface ArenaCenterProps {

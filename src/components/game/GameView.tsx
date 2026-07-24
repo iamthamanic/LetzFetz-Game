@@ -22,7 +22,11 @@ import {
 } from '../../game';
 import { chooseLlmBotAction } from '../../features/play/services/bot/chooseLlmBotAction';
 import type { BotDecisionSource } from '../../features/play/services/bot/chooseLlmBotAction';
-import { GameSetup, DEFAULT_SETUP_CHARACTER_ID, type GameSetupPhase } from './GameSetup';
+import {
+  GameSetup,
+  DEFAULT_SETUP_CHARACTER_ID,
+  type GameSetupPhase,
+} from '../../features/play/setup/GameSetup';
 import { GrungeAppShell } from '../ui/GrungeAppShell';
 import { PhaseCoachBanner } from './PhaseCoachBanner';
 import { PhaseCoachFooter, FOOTER_REVEAL_TOTAL_MS } from './PhaseCoachFooter';
@@ -32,7 +36,7 @@ import { ActionBar } from './ActionBar';
 import { ActionPhaseBar, actionPhaseLegalFlags } from './ActionPhaseBar';
 import { BuildPhaseBar } from './BuildPhaseBar';
 import { PlaymatBoard } from './PlaymatBoard';
-import { MatchIntro } from './MatchIntro';
+import { MatchIntro } from '../../features/play/setup/MatchIntro';
 import { buildGameViewModel } from './buildGameViewModel';
 import type { PendingIntent } from './gameActionHelpers';
 import { Button } from '../ui/Button';

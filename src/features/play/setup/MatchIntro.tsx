@@ -1,24 +1,24 @@
 /**
  * Pregame intro: VS → clash → initiative W6 → winner → arena reveal with effects.
- * Location: src/components/game/MatchIntro.tsx
+ * Location: src/features/play/setup/MatchIntro.tsx
  */
 import React, { useState, useEffect, useRef, useCallback } from 'react';
-import type { ContentPack, PlayerId } from '../../game';
-import { rollD6, resolveInitiative, startingPlayerFromInitiative } from '../../game';
+import type { ContentPack, PlayerId } from '../../../game';
+import { rollD6, resolveInitiative, startingPlayerFromInitiative } from '../../../game';
 import { CharacterSelectCard } from './CharacterSelectCard';
 import { CharacterPreviewWithDetails } from './CharacterPreviewWithDetails';
 import { GameCharacterCard } from './GameCharacterCard';
-import { arenaDefToCardProps } from '../cards/characterCardProps';
-import { resolveCardArtPath, resolveCardVideoPath } from '../../services/cardArt/manifest';
-import { Button } from '../ui/Button';
-import { BrandLogoText } from '../ui/BrandLogoText';
-import { W6Die3D, W6_DIE_ROLL_MS } from './W6Die3D';
-import { prefersReducedMotion } from './presentation/prefersReducedMotion';
+import { arenaDefToCardProps } from '../../../components/cards/characterCardProps';
+import { resolveCardArtPath, resolveCardVideoPath } from '../../../services/cardArt/manifest';
+import { Button } from '../../../components/ui/Button';
+import { BrandLogoText } from '../../../components/ui/BrandLogoText';
+import { W6Die3D, W6_DIE_ROLL_MS } from '../../../components/game/W6Die3D';
+import { prefersReducedMotion } from '../../../components/game/presentation/prefersReducedMotion';
 import {
   CLASH_IMPACT_FRACTION,
   playClashSoundAt,
   preloadClashSound,
-} from '../../features/play/services/audio/clashSound';
+} from '../services/audio/clashSound';
 
 type IntroPhase = 'vs' | 'crash' | 'initiative' | 'winner' | 'arena';
 
