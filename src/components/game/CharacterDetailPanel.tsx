@@ -1,15 +1,15 @@
 /**
  * Info / Ulti text panels for character setup carousel (center slide).
- * Location: src/features/play/setup/CharacterDetailPanel.tsx
+ * Location: src/components/game/CharacterDetailPanel.tsx
  */
 import React from 'react';
-import type { CharacterCardDef, UltimateCardDef } from '../../../game';
-import { CardIllustrationLoop } from '../../../components/ui/CardIllustrationLoop';
-import { CardNamePlate } from '../../../components/ui/CardNamePlate';
-import { CardGrungeOverlay } from '../../../components/ui/CardGrungeOverlay';
-import { ElementIcon, ELEMENT_LABELS_DE } from '../../../components/ui/ElementIcon';
-import { characterUsesMysteryIcon } from '../../../services/icons/elementIcons';
-import { CardDividerBar } from '../../../components/cards/grungeCardParts';
+import type { CharacterCardDef, UltimateCardDef } from '../../game';
+import { CardIllustrationLoop } from '../ui/CardIllustrationLoop';
+import { CardNamePlate } from '../ui/CardNamePlate';
+import { CardGrungeOverlay } from '../ui/CardGrungeOverlay';
+import { ElementIcon, ELEMENT_LABELS_DE } from '../ui/ElementIcon';
+import { characterUsesMysteryIcon } from '../../services/icons/elementIcons';
+import { CardDividerBar } from '../cards/grungeCardParts';
 
 export type CharacterDetailTab = 'info' | 'ulti';
 

@@ -8,11 +8,12 @@ Relocate the coherent pregame flow (mode select, character carousel, match intro
 
 ## Happy Path
 
-- [ ] Nine setup/intro files live under `src/features/play/setup/` with unchanged filenames.
+- [ ] Eight setup/intro files live under `src/features/play/setup/` with unchanged filenames.
+- [ ] `CharacterDetailPanel.tsx` stays shared under `src/components/game/` (used by Play setup and Forge library).
 - [ ] Old paths under `src/components/game/` deleted; no re-export stubs.
 - [ ] `GameView.tsx` imports `GameSetup` and `MatchIntro` from the new slice path.
 - [ ] `GameBoard.tsx` imports `ArenaBackdrop` and `ArenaCenter` from the new slice path.
-- [ ] Internal imports within moved modules and forge `CharacterDetailPanel` consumer updated directly.
+- [ ] Internal imports within moved modules updated directly; no `features/forge` ↔ `features/play` imports.
 - [ ] Shared layers unchanged: `services/history`, `components/ui`, `components/cards`, play audio at `features/play/services/audio/`.
 - [ ] `npm run checks` green.
 
@@ -26,7 +27,7 @@ Relocate the coherent pregame flow (mode select, character carousel, match intro
 ## Regression
 
 - [ ] Bot mode → character carousel → start → Letz Fetz intro → board unchanged.
-- [ ] Forge card library hover still shows CharacterDetailPanel info/ulti tabs.
+- [ ] Forge card library hover still shows shared `CharacterDetailPanel` info/ulti tabs.
 
 ## Security Coverage
 
@@ -36,7 +37,7 @@ Relocate the coherent pregame flow (mode select, character carousel, match intro
 
 - Depends on #61 (play support services already under `features/play/services/`).
 - Board/presentation modules remain in `components/game/` until a later slice.
-- `CharacterDetailPanel` shared by forge library is updated to import from play setup (temporary cross-slice coupling until a neutral cards extraction).
+- `CharacterDetailPanel` remains shared in `components/game/` to avoid feature→feature imports.
 
 ## Screenshots
 

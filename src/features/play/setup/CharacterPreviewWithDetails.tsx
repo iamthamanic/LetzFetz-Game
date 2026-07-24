@@ -7,7 +7,7 @@ import type { CharacterCardDef } from '../../../game';
 import { getUltimateForCharacter } from '../../../game/packs/characterSetup';
 import { Tabs } from '../../../components/ui/Tabs';
 import { CharacterSelectCard } from './CharacterSelectCard';
-import { CharacterDetailPanel, type CharacterDetailTab } from './CharacterDetailPanel';
+import { CharacterDetailPanel, type CharacterDetailTab } from '../../../components/game/CharacterDetailPanel';
 
 type DetailTab = 'character' | CharacterDetailTab;
 
