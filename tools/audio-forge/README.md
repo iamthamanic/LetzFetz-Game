@@ -26,9 +26,23 @@ From repo root (`Letz-Fetz-Game/`):
 
 ```bash
 npm run audio:help
+npm run audio:audit
+npm run audio:plan -- --dry-run
 npm run audio:generate -- --provider mock --id card.draw
 npm run audio:test
 ```
+
+### Exit codes (`audio:audit`)
+
+| Code | Meaning |
+|------|---------|
+| 0 | Clean — used IDs are in the manifest; existing/approved files present |
+| 1 | Used ID missing from manifest and/or existing asset file missing |
+| 2 | Manifest / CLI error |
+
+### `audio:plan`
+
+Adds **planned** rows for literal IDs found in `src/` that are missing from the manifest. **Never** overwrites curated `prompt` (or other fields) on existing entries.
 
 Direct:
 
