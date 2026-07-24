@@ -8,7 +8,7 @@ import { rollD6, resolveInitiative, startingPlayerFromInitiative } from '../../g
 import { CharacterSelectCard } from './CharacterSelectCard';
 import { CharacterPreviewWithDetails } from './CharacterPreviewWithDetails';
 import { GameCharacterCard } from './GameCharacterCard';
-import { arenaDefToForgeProps } from '../cards/characterCardProps';
+import { arenaDefToCardProps } from '../cards/characterCardProps';
 import { resolveCardArtPath, resolveCardVideoPath } from '../../services/cardArt/manifest';
 import { Button } from '../ui/Button';
 import { BrandLogoText } from '../ui/BrandLogoText';
@@ -356,7 +356,7 @@ export function MatchIntro({
                 />
               ) : arenaDef ? (
                 <div className="flex justify-center bg-stone-900 p-4" data-testid="arena-teaser-fallback">
-                  <GameCharacterCard {...arenaDefToForgeProps(arenaDef)} size="lg" />
+                  <GameCharacterCard {...arenaDefToCardProps(arenaDef)} size="lg" />
                 </div>
               ) : null}
             </div>

@@ -11,10 +11,11 @@ import { Select } from '../../components/ui/Select';
 import { Button } from '../../components/ui/Button';
 import { Badge } from '../../components/ui/Badge';
 import { Panel } from '../../components/ui/Panel';
-import { CARD_CATEGORIES } from '../../services/cardForge/categories';
-import type { ForgeCardData, ForgeElement } from '../../services/cardForge/types';
+import { CARD_CATEGORIES } from './model/categories';
+import type { ForgeCardData } from './model/types';
+import type { CardElement } from '../../components/cards/cardTypes';
 
-const ELEMENTS: ForgeElement[] = ['Fire', 'Water', 'Earth', 'Air', 'Light', 'Shadow', 'Neutral', 'Frei'];
+const ELEMENTS: CardElement[] = ['Fire', 'Water', 'Earth', 'Air', 'Light', 'Shadow', 'Neutral', 'Frei'];
 
 interface CardForgeCardEditorProps {
   selectedCard: ForgeCardData;

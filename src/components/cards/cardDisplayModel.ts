@@ -3,8 +3,7 @@
  * Location: src/components/cards/cardDisplayModel.ts
  */
 import type { ElementCardDef } from '../../game/types';
-import type { ForgeCardKind } from '../../services/cardForge/categories';
-import type { ForgeElement } from '../../services/cardForge/types';
+import type { CardElement, CardKind } from './cardTypes';
 import { resolveCardArtPath } from '../../services/cardArt/manifest';
 import { CARD_TYPE_EN, KIND_LABELS } from './cardFrameTokens';
 
@@ -32,7 +31,7 @@ function stripPrefix(line: string, prefix: string): string | null {
 }
 
 function parseEffectsToModel(
-  type: ForgeCardKind,
+  type: CardKind,
   effects: string[],
   stats?: {
     hp?: number;
@@ -133,9 +132,9 @@ function parseEffectsToModel(
 }
 
 export function buildCardDisplayModel(input: {
-  type: ForgeCardKind;
+  type: CardKind;
   elementDisplay?: string;
-  element?: ForgeElement;
+  element?: CardElement;
   effects?: string[];
   effects_text?: string;
   stats_json?: {
@@ -157,12 +156,12 @@ export function buildCardDisplayModel(input: {
   return model;
 }
 
-export function elementDefToForgeProps(def: ElementCardDef) {
+export function elementDefToCardProps(def: ElementCardDef) {
   return {
     id: def.id,
     name: def.name,
-    type: 'Element' as ForgeCardKind,
-    element: forgeElementFromGame(def.element),
+    type: 'Element' as CardKind,
+    element: cardElementFromGame(def.element),
     stats_json: {
       value: def.value,
       cardType: def.cardType,
@@ -176,8 +175,8 @@ export function elementDefToForgeProps(def: ElementCardDef) {
   };
 }
 
-function forgeElementFromGame(element: ElementCardDef['element']): ForgeElement {
-  const map: Record<ElementCardDef['element'], ForgeElement> = {
+function cardElementFromGame(element: ElementCardDef['element']): CardElement {
+  const map: Record<ElementCardDef['element'], CardElement> = {
     fire: 'Fire',
     water: 'Water',
     earth: 'Earth',

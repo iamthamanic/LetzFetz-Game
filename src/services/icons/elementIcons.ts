@@ -3,7 +3,7 @@
  * Location: src/services/icons/elementIcons.ts
  */
 import type { Element } from '../../game/types/elements';
-import type { ForgeElement } from '../cardForge/types';
+import type { CardElement } from '../../components/cards/cardTypes';
 import type { BrandIconKey } from '../cardArt/prompts/elementSymbols';
 
 export type { BrandIconKey };
@@ -49,8 +49,8 @@ export function elementToBrandIconKey(element: Element): BrandIconKey {
   return element;
 }
 
-export function forgeElementToBrandIconKey(element: ForgeElement): BrandIconKey {
-  const map: Record<ForgeElement, BrandIconKey> = {
+export function cardElementToBrandIconKey(element: CardElement): BrandIconKey {
+  const map: Record<CardElement, BrandIconKey> = {
     Fire: 'fire',
     Water: 'water',
     Earth: 'earth',

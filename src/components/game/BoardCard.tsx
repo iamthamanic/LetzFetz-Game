@@ -5,7 +5,7 @@
 import React from 'react';
 import type { ElementCardDef, GlitchCardDef } from '../../game/types';
 import { LetzFetzCard, type LetzFetzCardSize } from '../cards/LetzFetzCard';
-import { elementDefToForgeProps } from '../cards/cardDisplayModel';
+import { elementDefToCardProps } from '../cards/cardDisplayModel';
 import { resolveCardArtPath } from '../../services/cardArt/manifest';
 import { CardEffectTooltip } from './CardEffectTooltip';
 
@@ -142,7 +142,7 @@ export function BoardCard({
     );
   }
 
-  const props = elementDefToForgeProps(def);
+  const props = elementDefToCardProps(def);
   const effectFocus =
     size === 'bound' || size === 'opponentBound' ? ('bound' as const) : ('instant' as const);
 

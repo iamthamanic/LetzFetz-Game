@@ -3,8 +3,7 @@
  * Location: src/components/cards/cardFrameTokens.ts
  */
 import type { Element } from '../../game/types';
-import type { ForgeCardKind } from '../../services/cardForge/categories';
-import type { ForgeElement } from '../../services/cardForge/types';
+import type { CardElement, CardKind } from './cardTypes';
 
 /** Dual-element side stripe — character portrait cards */
 export const CHARACTER_ELEMENT_STRIPE_FROM: Record<Element, string> = {
@@ -25,7 +24,7 @@ export const CHARACTER_ELEMENT_STRIPE_TO: Record<Element, string> = {
   light: 'to-amber-700/80',
 };
 
-export const KIND_LABELS: Record<ForgeCardKind, string> = {
+export const KIND_LABELS: Record<CardKind, string> = {
   Character: 'CHARACTER',
   Ultimate: 'ULTIMATE',
   Element: 'ELEMENT',
@@ -33,7 +32,7 @@ export const KIND_LABELS: Record<ForgeCardKind, string> = {
   Glitch: 'GLITCH',
 };
 
-export const ELEMENT_ACCENTS: Record<ForgeElement, { stripe: string; glow: string; badge: string }> = {
+export const ELEMENT_ACCENTS: Record<CardElement, { stripe: string; glow: string; badge: string }> = {
   Fire: {
     stripe: 'bg-red-600',
     glow: 'from-red-900/40 via-transparent to-transparent',

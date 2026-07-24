@@ -6,19 +6,20 @@
 import React, { useEffect, useRef, useState } from 'react';
 import { createPortal } from 'react-dom';
 import { Plus, Loader2 } from 'lucide-react';
-import { CARD_CATEGORIES, type ForgeCardKind } from '../../services/cardForge/categories';
+import { CARD_CATEGORIES } from './model/categories';
+import type { CardKind } from '../../components/cards/cardTypes';
 import { Input } from '../../components/ui/Input';
 import { Button } from '../../components/ui/Button';
 import { Badge } from '../../components/ui/Badge';
 import { EmptyState } from '../../components/ui/EmptyState';
 import { LetzFetzCard } from '../../components/cards/LetzFetzCard';
-import { forgeCharacterDefFromCard } from '../../components/cards/characterCardProps';
+import { forgeCharacterDefFromCard } from './model/characterFromForgeCard';
 import { CardLibraryDetailBack } from './CardLibraryDetailBack';
 import { CharacterDetailPanel } from '../../components/game/CharacterDetailPanel';
 import { getUltimateForCharacter } from '../../game/packs/characterSetup';
-import type { ForgeCardData } from '../../services/cardForge/types';
+import type { ForgeCardData } from './model/types';
 
-export type CardLibraryFilter = ForgeCardKind | 'All';
+export type CardLibraryFilter = CardKind | 'All';
 
 interface CardLibraryProps {
   cards: ForgeCardData[];

@@ -1,7 +1,7 @@
 import { describe, it, expect } from 'vitest';
 import { packToForgeCards } from './packToForge';
-import { BASE_PACK } from '../../game/packs/base-pack';
-import { CARD_CATEGORIES } from './categories';
+import { BASE_PACK } from '../../../game/packs/base-pack';
+import { CARD_CATEGORIES } from '../model/categories';
 
 describe('packToForgeCards', () => {
   it('exports all 90 V1 cards with rulebook categories', () => {
