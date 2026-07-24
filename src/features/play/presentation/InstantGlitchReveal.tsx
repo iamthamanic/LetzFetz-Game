@@ -1,6 +1,6 @@
 /**
  * Center-stage reveal for Sofort-Glitches (both players see face + resolution).
- * Location: src/components/game/presentation/InstantGlitchReveal.tsx
+ * Location: src/features/play/presentation/InstantGlitchReveal.tsx
  */
 import React from 'react';
 import { resolveCardArtPath } from '../../../services/cardArt/manifest';

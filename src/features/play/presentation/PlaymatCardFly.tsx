@@ -1,11 +1,11 @@
 /**
  * Flying card-back overlay for hidden draw presentation steps.
  * Opening deal uses OpeningDealFly; face-up human draws use DrawCardReveal.
- * Location: src/components/game/presentation/PlaymatCardFly.tsx
+ * Location: src/features/play/presentation/PlaymatCardFly.tsx
  */
 import React from 'react';
 import type { PlayerId } from '../../../game/types';
-import { CardBackFace } from '../../cards/CardBackFace';
+import { CardBackFace } from '../../../components/cards/CardBackFace';
 import type { PresentationStep } from './types';
 import { isDrawCardStep } from './buildDrawCardStep';
 

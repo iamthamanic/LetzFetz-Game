@@ -1,6 +1,6 @@
 /**
  * Presentation step for a played attack/challenge card flying from hand to combat.
- * Location: src/components/game/presentation/buildAttackCardFlyStep.ts
+ * Location: src/features/play/presentation/buildAttackCardFlyStep.ts
  */
 import type { GameState, PlayerId } from '../../../game/types';
 import type { PresentationStep } from './types';

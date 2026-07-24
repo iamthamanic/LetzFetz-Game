@@ -1,12 +1,12 @@
 /**
  * Human draw: large face-up center reveal, then fly into the HandFan end slot.
  * Bot / hidden draws still use PlaymatCardFly (card back).
- * Location: src/components/game/presentation/DrawCardReveal.tsx
+ * Location: src/features/play/presentation/DrawCardReveal.tsx
  */
 import React, { useEffect, useRef, useState } from 'react';
 import type { ContentPack, PlayerId } from '../../../game/types';
 import { findElementDef, findGlitchDef } from '../../../game';
-import { BoardCard } from '../BoardCard';
+import { BoardCard } from '../../../components/game/BoardCard';
 import { prefersReducedMotion } from './prefersReducedMotion';
 import type { PresentationStep } from './types';
 import { DRAW_CARD_FLY_MS, DRAW_CARD_REVEAL_MS, isDrawCardStep } from './buildDrawCardStep';

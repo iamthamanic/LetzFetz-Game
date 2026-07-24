@@ -1,6 +1,6 @@
 /**
  * Single draw-phase presentation step (deck → optional center reveal → hand).
- * Location: src/components/game/presentation/buildDrawCardStep.ts
+ * Location: src/features/play/presentation/buildDrawCardStep.ts
  */
 import type { GameState, PlayerId } from '../../../game/types';
 import type { PresentationStep } from './types';

@@ -1,6 +1,6 @@
 /**
  * React hook wrapping the pure presentation queue reducer.
- * Location: src/components/game/presentation/usePresentationQueue.ts
+ * Location: src/features/play/presentation/usePresentationQueue.ts
  *
  * Allowed hooks: useState, useRef, useEffect only (project standard).
  */

@@ -4,7 +4,7 @@
  * Location: src/components/game/PhaseCoachFooter.tsx
  */
 import React, { useEffect, useState } from 'react';
-import { prefersReducedMotion } from './presentation/prefersReducedMotion';
+import { prefersReducedMotion } from '../../features/play/presentation/prefersReducedMotion';
 
 export const FOOTER_GLITCH_DELAY_MS = 40;
 export const FOOTER_GLITCH_MS = 520;

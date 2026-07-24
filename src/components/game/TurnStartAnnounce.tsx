@@ -5,7 +5,7 @@
 import React, { useEffect, useRef } from 'react';
 import { BrandLogoText } from '../ui/BrandLogoText';
 import { Panel } from '../ui/Panel';
-import { prefersReducedMotion } from './presentation/prefersReducedMotion';
+import { prefersReducedMotion } from '../../features/play/presentation/prefersReducedMotion';
 
 /** Visible hold time before the phase-coach footer materializes. */
 export const TURN_START_ANNOUNCE_MS = 2000;

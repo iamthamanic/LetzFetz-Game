@@ -1,11 +1,11 @@
 /**
  * Center-screen damage VFX: character portrait, red shimmer/hit, LP countdown.
- * Location: src/components/game/presentation/DamageHitReveal.tsx
+ * Location: src/features/play/presentation/DamageHitReveal.tsx
  */
 import React, { useEffect, useState } from 'react';
 import { Heart } from 'lucide-react';
 import type { ContentPack, PlayerId } from '../../../game/types';
-import { CardIllustrationLoop } from '../../ui/CardIllustrationLoop';
+import { CardIllustrationLoop } from '../../../components/ui/CardIllustrationLoop';
 import { prefersReducedMotion } from './prefersReducedMotion';
 import type { PresentationStep } from './types';
 import { isDamageHitStep } from './buildDamageHitStep';

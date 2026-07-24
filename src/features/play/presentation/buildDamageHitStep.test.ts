@@ -1,6 +1,6 @@
 /**
  * Unit tests for damage-hit presentation steps.
- * Location: src/components/game/presentation/buildDamageHitStep.test.ts
+ * Location: src/features/play/presentation/buildDamageHitStep.test.ts
  */
 import { describe, expect, it } from 'vitest';
 import type { GameState } from '../../../game/types';

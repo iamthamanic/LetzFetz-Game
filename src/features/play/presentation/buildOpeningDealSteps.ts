@@ -1,6 +1,6 @@
 /**
  * Builds presentation steps for the opening deal — human + opponent in parallel beats.
- * Location: src/components/game/presentation/buildOpeningDealSteps.ts
+ * Location: src/features/play/presentation/buildOpeningDealSteps.ts
  */
 import { DEFAULT_RULESET } from '../../../game/types/ruleset';
 import type { GameState, PlayerId, RulesetConfig } from '../../../game/types';

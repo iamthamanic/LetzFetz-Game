@@ -45,7 +45,7 @@ import { ScrollText } from 'lucide-react';
 import { isPlaytestMode } from '../../features/play/services/playtest/isPlaytestMode';
 import { PlaytestCheatbox } from './PlaytestCheatbox';
 import { playStinger, playStingerSequence, unlockAudio } from '../../features/play/services/audio/combatStingers';
-import { usePresentationQueue } from './presentation';
+import { usePresentationQueue } from '../../features/play/presentation';
 import {
   buildOpeningDealSteps,
   fullDealRevealCounts,
@@ -71,7 +71,7 @@ import {
   buildDamageHitSteps,
   buildCombatResolveSnapshot,
   buildCombatResolveStep,
-} from './presentation';
+} from '../../features/play/presentation';
 import { useAppHistory } from '../../services/history/AppHistoryContext';
 
 const HUMAN: PlayerId = 'p1';

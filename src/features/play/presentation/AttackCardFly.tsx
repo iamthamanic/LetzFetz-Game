@@ -1,6 +1,6 @@
 /**
  * Attack/challenge card face flying from hand to the combat stage.
- * Location: src/components/game/presentation/AttackCardFly.tsx
+ * Location: src/features/play/presentation/AttackCardFly.tsx
  */
 import React from 'react';
 import { resolveCardArtPath } from '../../../services/cardArt/manifest';

@@ -1,6 +1,6 @@
 /**
  * Face-up card flying from hand into an engine slot, with impact dust on land.
- * Location: src/components/game/presentation/BuildCardFly.tsx
+ * Location: src/features/play/presentation/BuildCardFly.tsx
  */
 import React, { useEffect, useState } from 'react';
 import { resolveCardArtPath } from '../../../services/cardArt/manifest';

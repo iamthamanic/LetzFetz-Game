@@ -1,6 +1,6 @@
 /**
  * Unit tests for draw-card presentation steps.
- * Location: src/components/game/presentation/buildDrawCardStep.test.ts
+ * Location: src/features/play/presentation/buildDrawCardStep.test.ts
  */
 import { describe, expect, it } from 'vitest';
 import { createGame, BASE_PACK, applyAction } from '../../../game';

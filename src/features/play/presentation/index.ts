@@ -1,6 +1,6 @@
 /**
  * GamePresentationQueue — UI-only animation sequencing layer.
- * Location: src/components/game/presentation/
+ * Location: src/features/play/presentation/
  *
  * ## Purpose
  * Sits between engine `dispatch` and immediate React re-render so Deal/Draw/Play

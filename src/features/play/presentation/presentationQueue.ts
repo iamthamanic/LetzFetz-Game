@@ -1,6 +1,6 @@
 /**
  * Pure presentation queue reducer — testable without React.
- * Location: src/components/game/presentation/presentationQueue.ts
+ * Location: src/features/play/presentation/presentationQueue.ts
  */
 import type { PresentationQueueSnapshot, PresentationStep } from './types';
 

@@ -1,6 +1,6 @@
 /**
  * Presentation step: fullscreen combat resolve (stack → clash → remainder).
- * Location: src/components/game/presentation/buildCombatResolveStep.ts
+ * Location: src/features/play/presentation/buildCombatResolveStep.ts
  */
 import { diceBonusFromRoll } from '../../../game/engine/dice';
 import { findElementDef } from '../../../game/engine/lookup';

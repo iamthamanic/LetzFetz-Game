@@ -1,6 +1,6 @@
 /**
  * Unit tests for combat-resolve presentation snapshot.
- * Location: src/components/game/presentation/buildCombatResolveStep.test.ts
+ * Location: src/features/play/presentation/buildCombatResolveStep.test.ts
  */
 import { describe, expect, it } from 'vitest';
 import { BASE_PACK } from '../../../game';

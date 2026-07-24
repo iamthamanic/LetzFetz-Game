@@ -1,6 +1,6 @@
 /**
  * Builds a build-snap presentation step — fly hand → engine + impact.
- * Location: src/components/game/presentation/buildBuildSnapStep.ts
+ * Location: src/features/play/presentation/buildBuildSnapStep.ts
  */
 import type { GameState, PlayerId } from '../../../game/types';
 import type { PresentationStep } from './types';
