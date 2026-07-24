@@ -7,10 +7,11 @@ import { PlaymatZonePreview } from './features/play/board/PlaymatZonePreview';
 import { AppBrand } from './features/shell/AppBrand';
 import { AppNav, type AppView } from './features/shell/AppNav';
 import { MainMenu } from './features/shell/MainMenu';
-import { SettingsView } from './features/shell/SettingsView';
+import { SettingsView } from './features/settings/SettingsView';
 import { isPlaymatPreview } from './features/play/services/playtest/isPlaymatPreview';
 import { AppHistoryProvider, useAppHistory } from './services/history/AppHistoryContext';
 import { AudioSettingsSync } from './services/audio/AudioSettingsSync';
+import { DisplaySettingsSync } from './services/settings/DisplaySettingsSync';
 import { SettingsProvider } from './services/settings/SettingsProvider';
 
 function AppShell() {
@@ -111,6 +112,7 @@ export default function App() {
     <AppHistoryProvider>
       <SettingsProvider>
         <AudioSettingsSync />
+        <DisplaySettingsSync />
         <AppShell />
       </SettingsProvider>
     </AppHistoryProvider>
