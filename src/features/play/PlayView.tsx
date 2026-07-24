@@ -1,6 +1,6 @@
 /**
  * Main playable game view — solo vs heuristic or LLM bot (orchestration only).
- * Location: src/components/game/GameView.tsx
+ * Location: src/features/play/PlayView.tsx
  */
 import React, { useState, useEffect, useRef, useCallback, useMemo } from 'react';
 import {
@@ -20,32 +20,32 @@ import {
   pickOpponentCharacter,
   createSeededRng,
 } from '../../game';
-import { chooseLlmBotAction } from '../../features/play/services/bot/chooseLlmBotAction';
-import type { BotDecisionSource } from '../../features/play/services/bot/chooseLlmBotAction';
+import { chooseLlmBotAction } from './services/bot/chooseLlmBotAction';
+import type { BotDecisionSource } from './services/bot/chooseLlmBotAction';
 import {
   GameSetup,
   DEFAULT_SETUP_CHARACTER_ID,
   type GameSetupPhase,
-} from '../../features/play/setup/GameSetup';
-import { GrungeAppShell } from '../ui/GrungeAppShell';
-import { PhaseCoachBanner } from '../../features/play/board/PhaseCoachBanner';
-import { PhaseCoachFooter, FOOTER_REVEAL_TOTAL_MS } from '../../features/play/board/PhaseCoachFooter';
-import { TurnStartAnnounce } from '../../features/play/board/TurnStartAnnounce';
-import { buildPhaseCoachHint } from '../../features/play/board/phaseCoachHint';
-import { ActionBar } from '../../features/play/board/ActionBar';
-import { ActionPhaseBar, actionPhaseLegalFlags } from '../../features/play/board/ActionPhaseBar';
-import { BuildPhaseBar } from '../../features/play/board/BuildPhaseBar';
-import { PlaymatBoard } from '../../features/play/board/PlaymatBoard';
-import { MatchIntro } from '../../features/play/setup/MatchIntro';
-import { buildGameViewModel } from '../../features/play/board/buildGameViewModel';
-import type { PendingIntent } from '../../features/play/board/gameActionHelpers';
-import { Button } from '../ui/Button';
-import { Badge } from '../ui/Badge';
+} from './setup/GameSetup';
+import { GrungeAppShell } from '../../components/ui/GrungeAppShell';
+import { PhaseCoachBanner } from './board/PhaseCoachBanner';
+import { PhaseCoachFooter, FOOTER_REVEAL_TOTAL_MS } from './board/PhaseCoachFooter';
+import { TurnStartAnnounce } from './board/TurnStartAnnounce';
+import { buildPhaseCoachHint } from './board/phaseCoachHint';
+import { ActionBar } from './board/ActionBar';
+import { ActionPhaseBar, actionPhaseLegalFlags } from './board/ActionPhaseBar';
+import { BuildPhaseBar } from './board/BuildPhaseBar';
+import { PlaymatBoard } from './board/PlaymatBoard';
+import { MatchIntro } from './setup/MatchIntro';
+import { buildGameViewModel } from './board/buildGameViewModel';
+import type { PendingIntent } from './board/gameActionHelpers';
+import { Button } from '../../components/ui/Button';
+import { Badge } from '../../components/ui/Badge';
 import { ScrollText } from 'lucide-react';
-import { isPlaytestMode } from '../../features/play/services/playtest/isPlaytestMode';
+import { isPlaytestMode } from './services/playtest/isPlaytestMode';
 import { PlaytestCheatbox } from './PlaytestCheatbox';
-import { playStinger, playStingerSequence, unlockAudio } from '../../features/play/services/audio/combatStingers';
-import { usePresentationQueue } from '../../features/play/presentation';
+import { playStinger, playStingerSequence, unlockAudio } from './services/audio/combatStingers';
+import { usePresentationQueue } from './presentation';
 import {
   buildOpeningDealSteps,
   fullDealRevealCounts,
@@ -71,7 +71,7 @@ import {
   buildDamageHitSteps,
   buildCombatResolveSnapshot,
   buildCombatResolveStep,
-} from '../../features/play/presentation';
+} from './presentation';
 import { useAppHistory } from '../../services/history/AppHistoryContext';
 
 const HUMAN: PlayerId = 'p1';
@@ -88,7 +88,7 @@ function readBotMode(): BotMode {
   }
 }
 
-export function GameView() {
+export function PlayView() {
   const playtestMode = isPlaytestMode();
   const { push } = useAppHistory();
   const [matchPack, setMatchPack] = useState<ContentPack>(BASE_PACK);

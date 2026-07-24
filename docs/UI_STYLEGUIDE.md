@@ -11,7 +11,7 @@ Siehe auch: [AGENTS.md](../../AGENTS.md) (Architektur & Prioritäten).
 
 | Kontext | Ton | Beispiel |
 |---------|-----|----------|
-| **Spiel** (`components/game/`) | Verspielt, energiegeladen | Emojis, Gradients, Würfel-Animationen |
+| **Spiel** (`features/play/`) | Verspielt, energiegeladen | Emojis, Gradients, Würfel-Animationen |
 | **Editor** (Card Forge, Einstellungen) | Nüchtern, werkzeugartig | Klare Labels, weniger Deko |
 | **Sandbox Arena** | Mittel — visueller Tisch | Bestehendes Verhalten beibehalten |
 
@@ -178,7 +178,7 @@ Main-Höhe: `h-[calc(100vh-88px)]`
 
 ---
 
-## 5. Spiel-UI (`components/game/`)
+## 5. Spiel-UI (`features/play/`)
 
 Verspielter Ton. Orientierung am physischen Kartentisch.
 
@@ -304,11 +304,11 @@ Jede Daten-abhängige View braucht:
 ## 11. Migration bestehender Screens
 
 Bestehende Komponenten (`App.tsx`, `CardForge`, `Arena`, …) werden **schrittweise** auf Primitives migriert (Phase 1b).
-Neue Screens (ab `components/game/`) **sofort** styleguide-konform bauen.
+Neue Screens (ab `features/play/`) **sofort** styleguide-konform bauen.
 
 Priorität Migration:
 
 1. `components/ui/*` Primitives anlegen — ✅
 2. `App.tsx` Header-Nav — ✅ (`features/shell` (`AppNav`, `AppBrand`); siehe [DESIGN.md](../DESIGN.md))
-3. Neue Game-UI — ✅ (`components/game/`)
+3. Neue Game-UI — ✅ (`features/play/`)
 4. Card Forge (inkrementell) — ⏳

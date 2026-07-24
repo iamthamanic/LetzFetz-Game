@@ -1,6 +1,6 @@
 /**
  * Dev-only playtest cheatbox — scenario presets, O11 LP/Mono, state patches.
- * Location: src/components/game/PlaytestCheatbox.tsx
+ * Location: src/features/play/PlaytestCheatbox.tsx
  */
 import React, { useState, useEffect } from 'react';
 import { Bug, ChevronDown, ChevronUp } from 'lucide-react';
@@ -20,9 +20,9 @@ import {
   applyAndValidatePlaytestPatch,
   type PlaytestPatch,
 } from '../../game/playtest';
-import { Panel } from '../ui/Panel';
-import { Button } from '../ui/Button';
-import { Input } from '../ui/Input';
+import { Panel } from '../../components/ui/Panel';
+import { Button } from '../../components/ui/Button';
+import { Input } from '../../components/ui/Input';
 
 const HP_CAPS: PlaytestHpCap[] = [20, 25, 30];
 const MONO_MODES: { id: MonoBonusMode; label: string }[] = [
