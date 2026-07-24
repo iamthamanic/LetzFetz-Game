@@ -18,7 +18,7 @@ import {
   CLASH_IMPACT_FRACTION,
   playClashSoundAt,
   preloadClashSound,
-} from '../../services/audio/clashSound';
+} from '../../features/play/services/audio/clashSound';
 
 type IntroPhase = 'vs' | 'crash' | 'initiative' | 'winner' | 'arena';
 

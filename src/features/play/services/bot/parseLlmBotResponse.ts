@@ -1,6 +1,6 @@
 /**
  * Parse LLM bot JSON reply into a legal action index.
- * Location: src/services/bot/parseLlmBotResponse.ts
+ * Location: src/features/play/services/bot/parseLlmBotResponse.ts
  */
 
 export type LlmBotPick = {

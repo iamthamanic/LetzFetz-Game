@@ -3,7 +3,7 @@
  * Location: vite-plugins/llmBotApi.ts
  */
 import type { Plugin, Connect } from 'vite';
-import { parseLlmBotResponse } from '../src/services/bot/parseLlmBotResponse';
+import { parseLlmBotResponse } from '../src/features/play/services/bot/parseLlmBotResponse';
 
 type Body = {
   system?: string;
