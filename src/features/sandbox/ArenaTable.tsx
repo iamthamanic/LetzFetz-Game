@@ -1,26 +1,28 @@
+/**
+ * Sandbox table canvas — placed cards + arena info.
+ * Location: src/features/sandbox/ArenaTable.tsx
+ */
 import React from 'react';
-import { Card } from './Card';
+import { SandboxCardFace } from './SandboxCard';
 import { ArenaInfoPanel } from './ArenaInfoPanel';
+import type { SandboxArena, SandboxCard, SandboxPlacedCard } from './model/sandboxTypes';
 
-interface PlacedCard {
-  cardData: any;
-  position: { x: number; y: number };
-  zIndex: number;
-  id: string;
+export interface PlacedCardView {
+  record: SandboxPlacedCard;
+  card: SandboxCard;
 }
 
 interface ArenaTableProps {
   tableRef: React.RefObject<HTMLDivElement | null>;
-  placedCards: PlacedCard[];
+  placedCards: PlacedCardView[];
   zoomLevel: number;
   panOffset: { x: number; y: number };
   draggedPlacedCard: { index: number; offsetX: number; offsetY: number } | null;
   showArenaInfo: boolean;
-  activeArenaBiom: any;
-  activeArenaMutation: any;
+  activeArena: SandboxArena | null;
+  arenaVariantText: string | null;
   arenaInfoExpanded: boolean;
   arenaInfoPosition: { x: number; y: number };
-  diceHistory: any[];
   onDragOver: (e: React.DragEvent) => void;
   onDrop: (e: React.DragEvent) => void;
   onWheel: (e: React.WheelEvent) => void;
@@ -40,11 +42,10 @@ export function ArenaTable({
   panOffset,
   draggedPlacedCard,
   showArenaInfo,
-  activeArenaBiom,
-  activeArenaMutation,
+  activeArena,
+  arenaVariantText,
   arenaInfoExpanded,
   arenaInfoPosition,
-  diceHistory,
   onDragOver,
   onDrop,
   onWheel,
@@ -63,17 +64,16 @@ export function ArenaTable({
       onDrop={onDrop}
       onWheel={onWheel}
       onMouseDown={onMouseDown}
-      className="flex-1 relative overflow-hidden cursor-grab active:cursor-grabbing"
+      className="relative flex-1 cursor-grab overflow-hidden active:cursor-grabbing"
       style={{
         backgroundImage:
-          'linear-gradient(to bottom right, rgb(17, 24, 39), rgb(3, 7, 18), rgb(0, 0, 0)), radial-gradient(circle at 20% 50%, rgba(120, 119, 198, 0.1), transparent 50%), radial-gradient(circle at 80% 80%, rgba(168, 85, 247, 0.1), transparent 50%)',
+          'linear-gradient(to bottom right, rgb(28, 25, 23), rgb(12, 10, 9), rgb(0, 0, 0)), radial-gradient(circle at 20% 50%, rgba(245, 158, 11, 0.08), transparent 50%), radial-gradient(circle at 80% 80%, rgba(120, 113, 108, 0.12), transparent 50%)',
         backgroundSize: 'cover',
         backgroundPosition: 'center',
         backgroundRepeat: 'no-repeat',
-        backgroundColor: 'rgb(3, 7, 18)',
+        backgroundColor: 'rgb(12, 10, 9)',
       }}
     >
-      {/* Zoomable Inner Canvas */}
       <div
         className="absolute"
         style={{
@@ -85,7 +85,6 @@ export function ArenaTable({
           willChange: 'transform',
         }}
       >
-        {/* Grid Pattern */}
         <div
           className="absolute inset-0 opacity-10"
           style={{
@@ -95,21 +94,19 @@ export function ArenaTable({
           }}
         />
 
-        {/* Drop Zone Hint */}
         {placedCards.length === 0 && (
-          <div className="absolute inset-0 flex items-center justify-center text-gray-600 pointer-events-none">
+          <div className="pointer-events-none absolute inset-0 flex items-center justify-center text-stone-600">
             <div className="text-center">
-              <div className="text-6xl mb-4">🎴</div>
-              <p className="text-xl">Drag cards from the deck to place them on the table</p>
-              <p className="text-sm mt-2">Drag cards to move them • Right-click to remove</p>
+              <div className="mb-4 text-6xl">🎴</div>
+              <p className="text-xl">Karten aus dem Deck auf den Tisch ziehen</p>
+              <p className="mt-2 text-sm">Ziehen zum Verschieben • Entfernen über ✕</p>
             </div>
           </div>
         )}
 
-        {/* Arena Info Panel */}
-        {showArenaInfo && (activeArenaBiom || activeArenaMutation) && (
+        {showArenaInfo && activeArena && (
           <div
-            className="absolute pointer-events-auto cursor-move"
+            className="pointer-events-auto absolute cursor-move"
             style={{
               left: `${arenaInfoPosition.x}px`,
               top: `${arenaInfoPosition.y}px`,
@@ -118,9 +115,8 @@ export function ArenaTable({
             onMouseDown={onArenaPanelMouseDown}
           >
             <ArenaInfoPanel
-              arenaName={diceHistory[0]?.arenaName || 'Arena'}
-              biom={activeArenaBiom}
-              mutation={activeArenaMutation}
+              arena={activeArena}
+              variantText={arenaVariantText}
               isExpanded={arenaInfoExpanded}
               onToggle={onToggleArenaInfo}
               onClose={onCloseArenaInfo}
@@ -128,36 +124,27 @@ export function ArenaTable({
           </div>
         )}
 
-        {/* Placed Cards */}
-        {placedCards.map((placedCard, index) => {
-          if (!placedCard.position || typeof placedCard.position.x !== 'number' || typeof placedCard.position.y !== 'number') {
-            console.warn('Skipping card with invalid position:', placedCard);
-            return null;
-          }
-
-          return (
-            <div
-              key={placedCard.id}
-              className="absolute cursor-move select-none touch-none"
-              style={{
-                left: `${placedCard.position.x}px`,
-                top: `${placedCard.position.y}px`,
-                zIndex: placedCard.zIndex || 1,
-                willChange: draggedPlacedCard?.index === index ? 'transform' : 'auto',
-                transition: draggedPlacedCard?.index === index ? 'none' : 'transform 0.1s ease-out',
-              }}
-              onMouseDown={(e) => onPlacedCardMouseDown(e, index)}
-            >
-              <Card
-                {...placedCard.cardData}
-                preview={false}
-                scale={0.6}
-                onRemove={() => onRemoveCard(index)}
-                onNotesChange={(notes: string) => onCardNotesChange(placedCard.cardData.id, notes)}
-              />
-            </div>
-          );
-        })}
+        {placedCards.map((placed, index) => (
+          <div
+            key={placed.record.instanceId}
+            className="absolute cursor-move select-none touch-none"
+            style={{
+              left: `${placed.record.position.x}px`,
+              top: `${placed.record.position.y}px`,
+              zIndex: placed.record.zIndex || 1,
+              willChange: draggedPlacedCard?.index === index ? 'transform' : 'auto',
+              transition: draggedPlacedCard?.index === index ? 'none' : 'transform 0.1s ease-out',
+            }}
+            onMouseDown={(e) => onPlacedCardMouseDown(e, index)}
+          >
+            <SandboxCardFace
+              card={placed.card}
+              scale={0.6}
+              onRemove={() => onRemoveCard(index)}
+              onNotesChange={(notes) => onCardNotesChange(placed.card.id, notes)}
+            />
+          </div>
+        ))}
       </div>
     </div>
   );

@@ -1,14 +1,20 @@
 /**
  * Sandbox dice roller.
- * Location: src/components/DiceRoller.tsx
+ * Location: src/features/sandbox/DiceRoller.tsx
  */
 import React, { useState } from 'react';
 import { Dices, Lock, RotateCcw, Check, X } from 'lucide-react';
-import { Button } from './ui/Button';
-import { Select } from './ui/Select';
+import { Button } from '../../components/ui/Button';
+import { Select } from '../../components/ui/Select';
+
+export interface DiceRollResult {
+  type: string;
+  value: number;
+  timestamp: string;
+}
 
 interface DiceRollerProps {
-  onRoll: (result: { type: string; value: number; timestamp: string }) => void;
+  onRoll: (result: DiceRollResult) => void;
 }
 
 interface Die {
@@ -19,8 +25,8 @@ interface Die {
 }
 
 export function DiceRoller({ onRoll }: DiceRollerProps) {
-  const [diceType, setDiceType] = useState<number>(6);
-  const [diceCount, setDiceCount] = useState<number>(1);
+  const [diceType, setDiceType] = useState(6);
+  const [diceCount, setDiceCount] = useState(1);
   const [dice, setDice] = useState<Die[]>([]);
   const [rolling, setRolling] = useState(false);
   const [hasRolled, setHasRolled] = useState(false);
@@ -60,27 +66,34 @@ export function DiceRoller({ onRoll }: DiceRollerProps) {
     let iterations = 0;
     const interval = setInterval(() => {
       setDice((prev) =>
-        prev.map((die) =
-          die.rolling ? { ...die, value: Math.floor(Math.random() * diceType) + 1 } : die
-        )
+        prev.map((die) =>
+          die.rolling ? { ...die, value: Math.floor(Math.random() * diceType) + 1 } : die,
+        ),
       );
       iterations++;
 
       if (iterations >= 10) {
         clearInterval(interval);
-        const finalDice = newDice.map((die) =
-          die.rolling
-            ? { ...die, value: Math.floor(Math.random() * diceType) + 1, rolling: false }
-            : { ...die, rolling: false }
+        setDice((prev) =>
+          prev.map((die) =>
+            die.rolling
+              ? {
+                  ...die,
+                  value: Math.floor(Math.random() * diceType) + 1,
+                  rolling: false,
+                }
+              : { ...die, rolling: false },
+          ),
         );
-        setDice(finalDice);
         setRolling(false);
       }
     }, 80);
   };
 
   const toggleLock = (id: string) => {
-    setDice((prev) => prev.map((die) => (die.id === id ? { ...die, locked: !die.locked } : die)));
+    setDice((prev) =>
+      prev.map((die) => (die.id === id ? { ...die, locked: !die.locked } : die)),
+    );
   };
 
   const acceptRoll = () => {
@@ -115,7 +128,13 @@ export function DiceRoller({ onRoll }: DiceRollerProps) {
             onChange={(e) => setDiceCount(Number(e.target.value))}
             className="w-28"
           />
-          <Button variant="accent" size="sm" icon={<Dices className="h-4 w-4" />} onClick={rollDice} disabled={rolling}>
+          <Button
+            variant="accent"
+            size="sm"
+            icon={<Dices className="h-4 w-4" />}
+            onClick={rollDice}
+            disabled={rolling}
+          >
             Würfeln
           </Button>
         </div>
@@ -125,6 +144,7 @@ export function DiceRoller({ onRoll }: DiceRollerProps) {
             {dice.map((die) => (
               <button
                 key={die.id}
+                type="button"
                 onClick={() => toggleLock(die.id)}
                 disabled={rolling}
                 className={`relative flex h-12 w-12 flex-col items-center justify-center rounded-lg border transition-all ${
@@ -134,7 +154,9 @@ export function DiceRoller({ onRoll }: DiceRollerProps) {
                 }`}
                 title={die.locked ? 'Entsperren' : 'Sperren'}
               >
-                {die.locked && <Lock className="absolute right-1 top-1 h-3 w-3 text-emerald-400" />}
+                {die.locked && (
+                  <Lock className="absolute right-1 top-1 h-3 w-3 text-emerald-400" />
+                )}
                 <span className="text-lg font-bold text-stone-100">{die.value}</span>
                 <span className="text-[9px] text-stone-500">W{diceType}</span>
               </button>
@@ -143,7 +165,9 @@ export function DiceRoller({ onRoll }: DiceRollerProps) {
 
           <div className="flex flex-col items-center rounded border border-stone-800 bg-stone-900 px-3 py-1">
             <span className="text-[9px] text-stone-500">Summe</span>
-            <span className="text-lg font-bold text-amber-300">{dice.reduce((sum, die) => sum + die.value, 0)}</span>
+            <span className="text-lg font-bold text-amber-300">
+              {dice.reduce((sum, die) => sum + die.value, 0)}
+            </span>
           </div>
 
           <Button
@@ -156,10 +180,22 @@ export function DiceRoller({ onRoll }: DiceRollerProps) {
           >
             Neu
           </Button>
-          <Button variant="success" size="sm" icon={<Check className="h-4 w-4" />} onClick={acceptRoll} disabled={rolling}>
+          <Button
+            variant="success"
+            size="sm"
+            icon={<Check className="h-4 w-4" />}
+            onClick={acceptRoll}
+            disabled={rolling}
+          >
             OK
           </Button>
-          <Button variant="danger" size="sm" icon={<X className="h-4 w-4" />} onClick={reset} disabled={rolling}>
+          <Button
+            variant="danger"
+            size="sm"
+            icon={<X className="h-4 w-4" />}
+            onClick={reset}
+            disabled={rolling}
+          >
             Reset
           </Button>
         </div>
