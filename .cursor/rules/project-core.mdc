@@ -1,0 +1,40 @@
+---
+description: Letz Fetz — Kernarchitektur, Stack, Prioritäten
+alwaysApply: true
+---
+
+# Letz Fetz — Core
+
+Lies `AGENTS.md` im Repo-Root zuerst.
+
+## Stack
+- Vite + React 18 + Tailwind — **kein** Next.js, **kein** DaisyUI
+- Icons: lucide-react
+- Hooks: nur `useState`, `useRef`, `useEffect`
+
+## Sprache
+- UI-Strings: **Deutsch** | Code/Kommentare: **Englisch** | Produktname: **Letz Fetz**
+
+## Architektur
+- `src/game/` — pure TS Rules Engine, kein React
+- `src/features/` — Feature-Slices (Sandbox → Shell → Forge → Play); kein Feature→Feature-Import
+- `src/components/ui/` — UI Primitives (Styleguide); bleiben shared
+- `src/components/cards/` — neutrale Karten-Präsentation
+- `src/services/` — nur echte Shared-Capabilities (history, cardArt, icons, storage, transport)
+- `App.tsx` — Composition Root; direkte Feature-Imports, **keine** Re-Export-Stubs
+- Relocation: Importe umstellen + alten Pfad im selben Change löschen
+
+## Priorität
+1. Rules Engine + Solo-Bot (local-first, kein Backend)
+2. Game UI
+3. Appwrite später (nicht Supabase ausbauen)
+
+## Regeln
+- Wahrheit: `Letz-Fetz-Game/docs/rules/SPIELANLEITUNG_V1.md`
+- Redesign-WIP: `Letz-Fetz-Game/docs/rules/SPIELANLEITUNG_V2_WIP.md` (nicht Engine, bis freigegeben)
+- Regeländerungen → Anleitung im selben Change mitziehen (siehe AGENTS.md)
+
+## Validierung
+```bash
+cd Letz-Fetz-Game && npm run build
+```
