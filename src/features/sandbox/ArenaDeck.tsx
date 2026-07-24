@@ -1,30 +1,23 @@
 /**
- * Arena sandbox card deck sidebar.
- * Location: src/components/ArenaDeck.tsx
+ * Sandbox card deck sidebar.
+ * Location: src/features/sandbox/ArenaDeck.tsx
  */
 import React from 'react';
-import { Menu, X, Search, Loader2 } from 'lucide-react';
-import { Card } from './Card';
-import { Input } from './ui/Input';
-import { EmptyState } from './ui/EmptyState';
-import { Button } from './ui/Button';
-
-interface PlacedCard {
-  cardData: any;
-  position: { x: number; y: number };
-  zIndex: number;
-  id: string;
-}
+import { Menu, X, Loader2 } from 'lucide-react';
+import { SandboxCardFace } from './SandboxCard';
+import { Input } from '../../components/ui/Input';
+import { EmptyState } from '../../components/ui/EmptyState';
+import { Button } from '../../components/ui/Button';
+import type { SandboxCard } from './model/sandboxTypes';
 
 interface ArenaDeckProps {
-  cards: any[];
-  placedCards: PlacedCard[];
+  cards: SandboxCard[];
   loading: boolean;
   sidebarOpen: boolean;
   searchTerm: string;
   onToggleSidebar: () => void;
   onSearchChange: (term: string) => void;
-  onDragStart: (e: React.DragEvent, card: any) => void;
+  onDragStart: (e: React.DragEvent, card: SandboxCard) => void;
 }
 
 export function ArenaDeck({
@@ -36,16 +29,14 @@ export function ArenaDeck({
   onSearchChange,
   onDragStart,
 }: ArenaDeckProps) {
-  const filteredCards = cards.filter((card) => {
-    const search = searchTerm.toLowerCase();
-    return (
-      card.name?.toLowerCase().includes(search) ||
-      card.type?.toLowerCase().includes(search) ||
-      card.element?.toLowerCase().includes(search) ||
-      card.effects?.some((effect: string) => effect.toLowerCase().includes(search)) ||
-      card.effects_text?.toLowerCase().includes(search)
-    );
-  });
+  const search = searchTerm.toLowerCase();
+  const filteredCards = cards.filter(
+    (card) =>
+      card.name.toLowerCase().includes(search) ||
+      card.kind.toLowerCase().includes(search) ||
+      card.element.toLowerCase().includes(search) ||
+      card.effects.some((effect) => effect.toLowerCase().includes(search)),
+  );
 
   return (
     <>
@@ -82,7 +73,7 @@ export function ArenaDeck({
           ) : cards.length === 0 ? (
             <EmptyState
               title="Keine Karten"
-              subtitle="Erstelle Karten in der Card Forge, um sie hier zu platzieren."
+              subtitle="Pack-Karten fehlen — Base Pack prüfen."
               icon="🃏"
             />
           ) : filteredCards.length === 0 ? (
@@ -96,7 +87,7 @@ export function ArenaDeck({
                 className="cursor-grab active:cursor-grabbing"
               >
                 <div className="origin-top scale-[0.55] transition-transform hover:scale-[0.6]">
-                  <Card {...card} preview={false} />
+                  <SandboxCardFace card={card} />
                 </div>
               </div>
             ))

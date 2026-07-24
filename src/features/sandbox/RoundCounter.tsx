@@ -1,11 +1,11 @@
 /**
  * Round counter and notes for sandbox arena.
- * Location: src/components/RoundCounter.tsx
+ * Location: src/features/sandbox/RoundCounter.tsx
  */
 import React, { useState } from 'react';
 import { ChevronUp, ChevronDown, NotebookPen } from 'lucide-react';
-import { Panel } from './ui/Panel';
-import { Button } from './ui/Button';
+import { Panel } from '../../components/ui/Panel';
+import { Button } from '../../components/ui/Button';
 
 interface RoundCounterProps {
   round: number;
@@ -14,13 +14,20 @@ interface RoundCounterProps {
   onNotesChange: (notes: string) => void;
 }
 
-export function RoundCounter({ round, onRoundChange, notes, onNotesChange }: RoundCounterProps) {
+export function RoundCounter({
+  round,
+  onRoundChange,
+  notes,
+  onNotesChange,
+}: RoundCounterProps) {
   const [isExpanded, setIsExpanded] = useState(false);
 
   return (
     <Panel className="absolute bottom-36 left-1/2 w-48 -translate-x-1/2 space-y-2">
       <div className="flex flex-col items-center gap-2">
-        <span className="text-[10px] font-semibold uppercase tracking-wider text-stone-500">Runde</span>
+        <span className="text-[10px] font-semibold uppercase tracking-wider text-stone-500">
+          Runde
+        </span>
 
         <div className="flex items-center gap-2">
           <Button
@@ -45,7 +52,12 @@ export function RoundCounter({ round, onRoundChange, notes, onNotesChange }: Rou
           />
         </div>
 
-        <Button variant="ghost" size="sm" icon={<NotebookPen className="h-3.5 w-3.5" />} onClick={() => setIsExpanded(!isExpanded)}>
+        <Button
+          variant="ghost"
+          size="sm"
+          icon={<NotebookPen className="h-3.5 w-3.5" />}
+          onClick={() => setIsExpanded(!isExpanded)}
+        >
           {isExpanded ? 'Notizen ausblenden' : 'Notizen'}
         </Button>
       </div>
@@ -56,7 +68,7 @@ export function RoundCounter({ round, onRoundChange, notes, onNotesChange }: Rou
             value={notes}
             onChange={(e) => onNotesChange(e.target.value)}
             placeholder="Rundennotizen…"
-            className="w-full rounded-lg border border-stone-700 bg-stone-900 px-2 py-1.5 text-xs text-stone-100 outline-none transition-colors focus:border-purple-500 resize-none"
+            className="w-full resize-none rounded-lg border border-stone-700 bg-stone-900 px-2 py-1.5 text-xs text-stone-100 outline-none transition-colors focus:border-amber-500"
             rows={3}
           />
         </div>

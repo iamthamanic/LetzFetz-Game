@@ -1,12 +1,13 @@
 /**
  * Player status HUD for sandbox arena.
- * Location: src/components/PlayerHUD.tsx
+ * Location: src/features/sandbox/PlayerHUD.tsx
  */
 import React from 'react';
 import { Heart, Plus, Minus } from 'lucide-react';
-import { Panel } from './ui/Panel';
-import { Button } from './ui/Button';
-import { Input } from './ui/Input';
+import { Panel } from '../../components/ui/Panel';
+import { Button } from '../../components/ui/Button';
+import { Input } from '../../components/ui/Input';
+import type { SandboxCustomField } from './model/sandboxTypes';
 
 interface PlayerHUDProps {
   playerName: string;
@@ -15,7 +16,7 @@ interface PlayerHUDProps {
   position: 'bottom-left' | 'bottom-right';
   notes: string;
   onNotesChange: (notes: string) => void;
-  customFields: Array<{ name: string; value: number }>;
+  customFields: SandboxCustomField[];
   onCustomFieldChange: (index: number, value: number) => void;
   onCustomFieldNameChange: (index: number, name: string) => void;
 }
@@ -36,15 +37,8 @@ export function PlayerHUD({
     'bottom-right': 'bottom-4 right-4',
   };
 
-  const handleCustomFieldIncrement = (index: number, amount: number) => {
-    const newValue = Math.max(0, customFields[index].value + amount);
-    onCustomFieldChange(index, newValue);
-  };
-
   return (
-    <Panel
-      className={`absolute ${positionClasses[position]} w-[260px] space-y-3`}
-    >
+    <Panel className={`absolute ${positionClasses[position]} w-[260px] space-y-3`}>
       <div className="flex items-center justify-between">
         <span className="text-sm font-bold text-stone-100">{playerName}</span>
         <Heart className="h-4 w-4 text-red-500" />
@@ -62,7 +56,7 @@ export function PlayerHUD({
           type="number"
           min={0}
           value={hp}
-          onChange={(e) => onHpChange(Math.max(0, parseInt(e.target.value) || 0))}
+          onChange={(e) => onHpChange(Math.max(0, parseInt(e.target.value, 10) || 0))}
           className="flex-1 text-center"
         />
         <Button
@@ -82,21 +76,23 @@ export function PlayerHUD({
                 variant="danger"
                 size="sm"
                 icon={<Minus className="h-3 w-3" />}
-                onClick={() => handleCustomFieldIncrement(index, -1)}
+                onClick={() => onCustomFieldChange(index, Math.max(0, field.value - 1))}
                 className="px-1 py-1"
               />
               <input
                 type="number"
                 value={field.value}
                 min={0}
-                onChange={(e) => onCustomFieldChange(index, Math.max(0, parseInt(e.target.value) || 0))}
-                className="w-full rounded border border-stone-700 bg-stone-900 py-0.5 text-center text-xs text-stone-100 outline-none focus:border-purple-500"
+                onChange={(e) =>
+                  onCustomFieldChange(index, Math.max(0, parseInt(e.target.value, 10) || 0))
+                }
+                className="w-full rounded border border-stone-700 bg-stone-900 py-0.5 text-center text-xs text-stone-100 outline-none focus:border-amber-500"
               />
               <Button
                 variant="success"
                 size="sm"
                 icon={<Plus className="h-3 w-3" />}
-                onClick={() => handleCustomFieldIncrement(index, 1)}
+                onClick={() => onCustomFieldChange(index, field.value + 1)}
                 className="px-1 py-1"
               />
             </div>
@@ -105,7 +101,7 @@ export function PlayerHUD({
               value={field.name}
               onChange={(e) => onCustomFieldNameChange(index, e.target.value)}
               placeholder="Stat"
-              className="w-full rounded border border-stone-800 bg-stone-900/50 py-0.5 text-center text-[9px] text-stone-400 outline-none focus:border-purple-500"
+              className="w-full rounded border border-stone-800 bg-stone-900/50 py-0.5 text-center text-[9px] text-stone-400 outline-none focus:border-amber-500"
             />
           </div>
         ))}
@@ -115,7 +111,7 @@ export function PlayerHUD({
         value={notes}
         onChange={(e) => onNotesChange(e.target.value)}
         placeholder="Notizen…"
-        className="w-full rounded-lg border border-stone-700 bg-stone-900 px-2 py-1.5 text-xs text-stone-100 outline-none transition-colors focus:border-purple-500 resize-none"
+        className="w-full resize-none rounded-lg border border-stone-700 bg-stone-900 px-2 py-1.5 text-xs text-stone-100 outline-none transition-colors focus:border-amber-500"
         rows={2}
       />
     </Panel>

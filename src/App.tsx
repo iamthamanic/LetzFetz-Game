@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
 import { CardForge } from './components/CardForge';
-import { Arena } from './components/Arena';
+import { SandboxView } from './features/sandbox/SandboxView';
 import { Notes } from './components/Notes';
 import { GameView } from './components/game/GameView';
 import { PlaymatZonePreview } from './components/game/PlaymatZonePreview';
@@ -86,7 +86,7 @@ function AppShell() {
         <div
           className={`flex min-h-0 flex-1 flex-col ${currentView === 'arena' ? '' : 'hidden'}`}
         >
-          <Arena key={arenaKey} />
+          <SandboxView key={arenaKey} />
         </div>
         <div
           className={`flex min-h-0 flex-1 flex-col ${currentView === 'play' ? '' : 'hidden'}`}
