@@ -10,6 +10,7 @@ import {
   playClashSound,
   playClashSoundAt,
   preloadClashSound,
+  unlockClashAudio,
 } from './clashSound';
 import { HowlerAudioAdapter } from './howlerAudioAdapter';
 import { ProceduralAudioAdapter } from './proceduralAudioAdapter';
@@ -55,6 +56,7 @@ class AudioManager {
   unlock(): void {
     this.howler.unlock();
     this.procedural.unlock();
+    unlockClashAudio();
   }
 
   play(id: SoundId): void {
