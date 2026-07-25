@@ -27,12 +27,21 @@ Produktname: **Letz Fetz**.
 | ID | Thema | Entscheidung |
 |----|--------|--------------|
 | V3-D1 | Regelquelle | Dump `letz-fetz-v3-überarbeitung.md` = kanonischer Inhalt (§1–§20) |
-| V3-D2 | Fetzgerät | **Träger / Antrieb / Aufsatz** (§12) — Zielmodell, nicht nur Soft-Tags |
+| V3-D2 | Fetzgerät | **Träger / Antrieb / Aufsatz** (§12) — Zielmodell; Engine `fetzSlot` + Phrase-Adapter |
 | V3-D3 | vs V2 D8/E2 | V2 freie Reihe wird **zugunsten V3-Slots adaptiert/ersetzt**; Phrase ist Migrationspfad, keine Endwahrheit |
 | V3-D4 | Rollout | Engine darf vertikal slicen + Flag; Target bleibt volles V3 |
 | V3-D5 | Reaktionwahl | Mehrfach → aktiver Spieler (`pendingChoice`); max 1 Reaktion/Aktion (§3, §18) |
 | V3-D6 | Schaden | Block → Schild → Verhinderung → Leben (§5.1); Schild ≠ Vollblock |
 | V3-D7 | Soft-layer Design | Vorherige Annahme „V3 nur Kampflayer auf Phrase“ → **verworfen** |
+
+### Engine mapping (issue #107)
+
+| V2 phraseSlot | V3 fetzSlot |
+|---------------|-------------|
+| core | traeger |
+| mode | antrieb |
+| tool | aufsatz |
+| charge | (Ladung, keine Rolle) |
 
 ---
 

@@ -37,6 +37,7 @@ import {
   phraseSlotCards,
   resolveV2BuildSlot,
 } from './phraseBuild';
+import { resolveBuildSlots } from './status/fetzgeraetSlots';
 import {
   applyActivateArchetype,
   boundDisplayName,
@@ -732,18 +733,20 @@ function applyBuildCard(
       next.piles.discard.push(old);
     }
 
-    const phraseSlot = resolveV2BuildSlot(pack, defId, next.players[playerId].bound);
+    const slots = resolveBuildSlots(pack, defId, next.players[playerId].bound, ruleset);
     const [card] = next.players[playerId].hand.splice(handIdx, 1);
     const builtName = part?.name ?? findElementDef(pack, defId)?.name ?? 'Karte';
     const bound: BoundCardInstance = {
       ...card,
       exhausted: false,
       resistanceBonus: 0,
-      phraseSlot,
+      phraseSlot: slots.phraseSlot,
+      fetzSlot: slots.fetzSlot,
     };
     next.players[playerId].bound.push(bound);
     next.phase = phaseAfter;
-    next.lastEvent = `${builtName} gebaut (${phraseSlot}).`;
+    const slotLabel = slots.fetzSlot ?? slots.phraseSlot;
+    next.lastEvent = `${builtName} gebaut (${slotLabel}).`;
     return next;
   }
 
