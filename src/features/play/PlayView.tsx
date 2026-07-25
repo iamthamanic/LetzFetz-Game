@@ -21,6 +21,7 @@ import {
   createSeededRng,
 } from '../../game';
 import { chooseLlmBotAction } from './services/bot/chooseLlmBotAction';
+import { ReactionPickModal } from './board/ReactionPickModal';
 import type { BotDecisionSource } from './services/bot/chooseLlmBotAction';
 import {
   GameSetup,
@@ -966,6 +967,16 @@ export function PlayView() {
           ) : undefined
         }
       />
+      {state?.pendingChoice?.type === 'pick-reaction' &&
+        state.pendingChoice.chooserId === HUMAN && (
+          <ReactionPickModal
+            open
+            options={state.pendingChoice.options}
+            onPick={(reactionId) => {
+              handleDispatch({ type: 'PICK_REACTION', reactionId });
+            }}
+          />
+        )}
       </div>
     </GrungeAppShell>
   );
