@@ -982,7 +982,11 @@ export function applyAction(
       let working = vulkan.state;
       working = {
         ...working,
-        meta: { ...working.meta, v3ReactionsThisAction: 0 },
+        meta: {
+          ...working.meta,
+          v3ReactionsThisAction: 0,
+          v3BlockShieldThisAction: false,
+        },
       };
       diceRoll = vulkan.roll;
       const attackValue = computeAttackValueForPlayer(pack, working, playerId, def, diceRoll, ruleset);

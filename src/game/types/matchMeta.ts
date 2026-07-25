@@ -38,6 +38,8 @@ export interface MatchMeta {
   monoBonusMode?: MonoBonusMode;
   /** V3: reactions resolved in the current main action (max 1 by default). */
   v3ReactionsThisAction?: number;
+  /** V3 Finsternis: block new shield until current action ends. */
+  v3BlockShieldThisAction?: boolean;
 }
 
 export type PendingChoice =

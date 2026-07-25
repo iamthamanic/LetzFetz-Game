@@ -80,6 +80,9 @@ export function setShield(state: GameState, playerId: PlayerId, amount: number):
 }
 
 export function addShield(state: GameState, playerId: PlayerId, amount: number): GameState {
+  if (state.meta.v3BlockShieldThisAction) {
+    return state;
+  }
   const current = state.players[playerId].shield ?? 0;
   return setShield(state, playerId, current + amount);
 }
