@@ -49,6 +49,10 @@ export type GameAction =
       type: 'BASAR_EXHAUST';
       discardHandInstanceId: string;
       targetBoundInstanceId: string;
+    }
+  | {
+      type: 'PICK_REACTION';
+      reactionId: string;
     };
 
 export interface ActionContext {

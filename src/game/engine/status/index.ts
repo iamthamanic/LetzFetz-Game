@@ -5,3 +5,5 @@
 export * from './applyStatus';
 export * from './elementImpulse';
 export * from './shield';
+export * from './reactions';
+export * from './reactionChoice';

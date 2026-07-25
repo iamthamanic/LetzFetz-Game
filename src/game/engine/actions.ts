@@ -24,9 +24,10 @@ import {
 import { applyElementEffect, applyBoundActivation, finishMainAction, applyInstantGlitch } from './effects';
 import { findElementDef, findEnginePartDef, findGlitchDef } from './lookup';
 import { applyDamageThroughShield } from './status/shield';
-import { applyElementImpulse } from './status/elementImpulse';
+import { pickReaction, resolveImpulseReactions } from './status/reactionChoice';
 import type { Element } from '../types';
 import { isV3CombatEnabled } from '../types';
+import type { ReactionId } from './status/reactions';
 import {
   canBuildBoost,
   canBuildEnginePart,
@@ -316,13 +317,13 @@ function applyPlayerAttackDamage(
     pipeline.isHit &&
     hitImpulseElement
   ) {
-    const impulse = applyElementImpulse(next, defenderId, hitImpulseElement, ruleset);
-    next = impulse.state;
-    if (impulse.kind === 'mark') {
-      next.lastEvent = `${next.lastEvent ?? ''} Impuls → ${impulse.markId}.`.trim();
-    } else if (impulse.kind === 'reaction') {
-      next.lastEvent = `${next.lastEvent ?? ''} Impuls → Reaktion möglich.`.trim();
-    }
+    next = resolveImpulseReactions(
+      next,
+      defenderId,
+      hitImpulseElement,
+      ruleset,
+      attackerId,
+    );
   }
 
   next = afterHighAttackValue(next, attackerId, attackValue, ruleset);
@@ -432,6 +433,8 @@ function pendingChoicePlayer(pending: PendingChoice): PlayerId {
     case 'must-discard':
     case 'spaeti-extra-build':
       return pending.playerId;
+    case 'pick-reaction':
+      return pending.chooserId;
   }
 }
 
@@ -533,6 +536,11 @@ function getPendingLegalActions(state: GameState, ctx: PackContext): GameAction[
       break;
     case 'spaeti-extra-build':
       actions.push(...listBuildActionsForPlayer(state, ctx.pack, eligible, rulesetOf(ctx)));
+      break;
+    case 'pick-reaction':
+      for (const opt of pending.options) {
+        actions.push({ type: 'PICK_REACTION', reactionId: opt.reactionId });
+      }
       break;
   }
 
@@ -800,9 +808,14 @@ function applyPendingChoiceAction(
         case 'optional-draw-discard':
         case 'must-discard':
         case 'spaeti-extra-build':
+        case 'pick-reaction':
           throw new Error('Arena effect cannot be skipped');
       }
       break;
+    }
+    case 'PICK_REACTION': {
+      if (pending.type !== 'pick-reaction') throw new Error('Wrong pending type');
+      return pickReaction(state, action.reactionId as ReactionId);
     }
     case 'TAKE_OPTIONAL_DRAW': {
       if (pending.type !== 'optional-draw-discard') throw new Error('Wrong pending type');
@@ -967,6 +980,10 @@ export function applyAction(
       let diceRoll = action.diceRoll ?? rollD6(rng);
       const vulkan = applyVulkanAttackRoll(state, playerId, diceRoll);
       let working = vulkan.state;
+      working = {
+        ...working,
+        meta: { ...working.meta, v3ReactionsThisAction: 0 },
+      };
       diceRoll = vulkan.roll;
       const attackValue = computeAttackValueForPlayer(pack, working, playerId, def, diceRoll, ruleset);
 

@@ -1,4 +1,6 @@
 import type { PlayerId } from './ruleset';
+import type { Element } from './elements';
+import type { PrimaryMarkId } from './status';
 
 /** Playtest LP caps (D35 / O11). Cap = start; heals clamp here. */
 export type PlaytestHpCap = 20 | 25 | 30;
@@ -34,6 +36,8 @@ export interface MatchMeta {
   playtestHpCap?: PlaytestHpCap;
   /** Playtest: mono phrase bonus mode (O11); unused by V1 combat. */
   monoBonusMode?: MonoBonusMode;
+  /** V3: reactions resolved in the current main action (max 1 by default). */
+  v3ReactionsThisAction?: number;
 }
 
 export type PendingChoice =
@@ -68,6 +72,18 @@ export type PendingChoice =
   | {
       type: 'spaeti-extra-build';
       playerId: PlayerId;
+    }
+  | {
+      /** V3: active player picks one reaction when multiple marks match. */
+      type: 'pick-reaction';
+      chooserId: PlayerId;
+      targetId: PlayerId;
+      impulseElement: Element;
+      options: Array<{
+        reactionId: string;
+        markId: PrimaryMarkId;
+        labelDe: string;
+      }>;
     };
 
 export function createEmptyMeta(): MatchMeta {

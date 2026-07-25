@@ -17,6 +17,8 @@ function actingPlayerForStep(state: GameState): PlayerId {
       case 'must-discard':
       case 'spaeti-extra-build':
         return state.pendingChoice.playerId;
+      case 'pick-reaction':
+        return state.pendingChoice.chooserId;
     }
   }
   return state.activePlayer;
