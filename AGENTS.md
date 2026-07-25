@@ -113,18 +113,22 @@ Design: `.qa/design/vertical-slice-architecture.md`
 
 | Dokument | Rolle |
 |----------|--------|
-| [`docs/rules/SPIELANLEITUNG_V1.md`](Letz-Fetz-Game/docs/rules/SPIELANLEITUNG_V1.md) | **Aktuelle Wahrheit** — physisches V1 + Rules Engine (`src/game/`) |
-| [`docs/rules/SPIELANLEITUNG_V2_DRAFT.md`](Letz-Fetz-Game/docs/rules/SPIELANLEITUNG_V2_DRAFT.md) | V2 spielbarer Draft — **noch nicht** Engine-Wahrheit |
-| [`docs/rules/SPIELANLEITUNG_V2_WIP.md`](Letz-Fetz-Game/docs/rules/SPIELANLEITUNG_V2_WIP.md) | Redesign-Entwurf (Grill/Design D1–D35) |
+| [`docs/rules/SPIELANLEITUNG_V1.md`](docs/rules/SPIELANLEITUNG_V1.md) | **Aktuelle Engine-Wahrheit** — physisches V1 + Default `src/game/` |
+| [`docs/rules/SPIELANLEITUNG_V2_DRAFT.md`](docs/rules/SPIELANLEITUNG_V2_DRAFT.md) | V2 spielbarer Draft — Vorgänger; **nicht** Ziel gegen V3 |
+| [`docs/rules/SPIELANLEITUNG_V2_WIP.md`](docs/rules/SPIELANLEITUNG_V2_WIP.md) | V2 Grill-Log (D1–D35); Phrase D8/E2 historisch — Zielslots siehe V3 |
+| [`docs/rules/SPIELANLEITUNG_V3_WIP.md`](docs/rules/SPIELANLEITUNG_V3_WIP.md) | **Ziel-Regelmodell** (Impulse/Marken/21 Reaktionen/Träger·Antrieb·Aufsatz); Engine hinter Flag bis Cutover |
+| [`docs/letz-fetz-v3-überarbeitung.md`](docs/letz-fetz-v3-überarbeitung.md) | V3 Volltext-Dump (§1–§20) — kanonischer Inhalt für V3 WIP |
+| `docs/rules/SPIELANLEITUNG_V3_DRAFT.md` | (geplant) spielbare V3-Prosa nach P0-Playtests |
 
-**Bei Unklarheit:** Spielanleitung V1 schlägt Prototyp-Code und Chat-Erinnerung.
+**Bei Unklarheit:** Solange kein Cutover: V1 schlägt Prototyp-Code. **Zielentscheidungen** (Slots, Reaktionen) schlagen V2 Phrase — siehe V3 WIP Konfliktnotiz. Soft-layer „V3 nur auf Phrase“ ist verworfen (`.qa/design/v3-rules-engine.md`).
 
 **Pflege-Pflicht für Agenten:**
 
 1. Regel- oder Kartentext-Änderungen an **V1** → `SPIELANLEITUNG_V1.md` sofort mitziehen.
-2. Design-Entscheidungen zum Engine-/Fetzen-Redesign → `SPIELANLEITUNG_V2_WIP.md` (Festgelegt / Offen / Verworfen); spielbare Formulierung → `SPIELANLEITUNG_V2_DRAFT.md`.
-3. Erst wenn V2 explizit freigegeben ist, wird sie V1 als Regelquelle ersetzen; bis dahin implementiert `src/game/` **V1**.
-4. Kurzreferenz in diesem Abschnitt und in `.cursor/rules/game-engine.mdc` bei Regelbrüchen aktualisieren.
+2. V2-Historie / Phrase-Migration → `SPIELANLEITUNG_V2_WIP.md` / `SPIELANLEITUNG_V2_DRAFT.md`.
+3. V3-Zielregeln → `SPIELANLEITUNG_V3_WIP.md` + Dump `letz-fetz-v3-überarbeitung.md` im selben Change.
+4. Default-Engine bleibt **V1**, bis V3 explizit freigegeben ist; V3-Slices dürfen hinter Ruleset-Flag landen.
+5. Kurzreferenz hier und in `.cursor/rules/game-engine.mdc` / `project-core.mdc` bei Regelbrüchen aktualisieren.
 
 ---
 
@@ -290,9 +294,11 @@ Globale Agent-Skills (Pipeline + ECC-Helfer): siehe **Agent-Workflows** oben; in
 
 | Dokument | Inhalt |
 |----------|--------|
-| [SPIELANLEITUNG_V1.md](Letz-Fetz-Game/docs/rules/SPIELANLEITUNG_V1.md) | Verbindliches Regelwerk V1 (Engine + physisch) |
-| [SPIELANLEITUNG_V2_DRAFT.md](Letz-Fetz-Game/docs/rules/SPIELANLEITUNG_V2_DRAFT.md) | V2 spielbarer Draft (Pack/Cheatbox vorgezogen) |
-| [SPIELANLEITUNG_V2_WIP.md](Letz-Fetz-Game/docs/rules/SPIELANLEITUNG_V2_WIP.md) | Engine-/Fetzen-Redesign Grill-Log |
+| [SPIELANLEITUNG_V1.md](docs/rules/SPIELANLEITUNG_V1.md) | Verbindliches Regelwerk V1 (Engine-Default + physisch) |
+| [SPIELANLEITUNG_V2_DRAFT.md](docs/rules/SPIELANLEITUNG_V2_DRAFT.md) | V2 spielbarer Draft (Vorgänger) |
+| [SPIELANLEITUNG_V2_WIP.md](docs/rules/SPIELANLEITUNG_V2_WIP.md) | V2 Grill-Log (historisch vs V3-Slots) |
+| [SPIELANLEITUNG_V3_WIP.md](docs/rules/SPIELANLEITUNG_V3_WIP.md) | V3 Ziel-Regelmodell + Cutover |
+| [letz-fetz-v3-überarbeitung.md](docs/letz-fetz-v3-überarbeitung.md) | V3 Volltext-Dump |
 | [DESIGN.md](Letz-Fetz-Game/DESIGN.md) | Agent UI Brief — Navigation, Hybrid-Ton, Anti-Patterns |
 | [UI_STYLEGUIDE.md](Letz-Fetz-Game/docs/UI_STYLEGUIDE.md) | Tokens, Komponenten, Spiel- vs Editor-UI |
 | [audio-system.md](Letz-Fetz-Game/docs/audio-system.md) | AudioManager, Settings volumes, Audio Forge CLI |

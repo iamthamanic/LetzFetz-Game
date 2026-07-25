@@ -31,9 +31,10 @@ Lies `AGENTS.md` im Repo-Root zuerst.
 3. Appwrite später (nicht Supabase ausbauen)
 
 ## Regeln
-- Wahrheit: `Letz-Fetz-Game/docs/rules/SPIELANLEITUNG_V1.md`
-- Redesign-WIP: `Letz-Fetz-Game/docs/rules/SPIELANLEITUNG_V2_WIP.md` (nicht Engine, bis freigegeben)
-- Regeländerungen → Anleitung im selben Change mitziehen (siehe AGENTS.md)
+- Engine-Default: `docs/rules/SPIELANLEITUNG_V1.md`
+- V2 WIP (historisch): `docs/rules/SPIELANLEITUNG_V2_WIP.md`
+- V3 Zielmodell: `docs/rules/SPIELANLEITUNG_V3_WIP.md` + Dump `docs/letz-fetz-v3-überarbeitung.md` (Flag bis Cutover; Slots schlagen V2 Phrase)
+- Regeländerungen → passende Anleitung im selben Change mitziehen (siehe AGENTS.md)
 
 ## Validierung
 ```bash

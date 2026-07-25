@@ -1,8 +1,9 @@
 # Letz Fetz — Spielanleitung V2 (WIP / Redesign)
 
-> **Status:** Entwurf aus Design-Grill (D1–D35) — **Struktur geschlossen**; noch nicht Engine-Wahrheit, bis V2 freigegeben.  
-> **Aktuelle Wahrheit für Code & Playtests:** [`SPIELANLEITUNG_V1.md`](./SPIELANLEITUNG_V1.md)  
-> **Pflege:** Bei jeder festgelegten Design-Entscheidung in diesem Dokument nachziehen. Wenn V2 „fertig genug“ ist, ersetzt sie V1 als Regelquelle (AGENTS.md + Engine).
+> **Status:** Entwurf aus Design-Grill (D1–D35) — **Struktur geschlossen**; historischer Vorgänger.  
+> **Aktuelle Engine-Wahrheit:** [`SPIELANLEITUNG_V1.md`](./SPIELANLEITUNG_V1.md)  
+> **Ziel-Regelmodell (LOCKED 2026-07-25):** [`SPIELANLEITUNG_V3_WIP.md`](./SPIELANLEITUNG_V3_WIP.md) — V3 Träger/Antrieb/Aufsatz **schlägt** D8/E2 freie Phrase als Endwahrheit.  
+> **Pflege:** V2-Historie hier belassen; neue Slot-/Reaktionsarbeit → V3 WIP + Dump.
 
 Produktname: **Letz Fetz** (nicht „Lets Fetz“).
 
