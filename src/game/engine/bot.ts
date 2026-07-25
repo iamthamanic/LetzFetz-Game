@@ -216,6 +216,63 @@ function pickBestChallenge(
   return { ...best, diceRoll: rollD6() };
 }
 
+/** Heuristic scores for V3 reaction picks (higher = preferred when harming opponent). */
+const REACTION_PICK_SCORE: Record<string, number> = {
+  inferno: 12,
+  feuersturm: 11,
+  sonnenbrand: 10,
+  hexenbrand: 9,
+  tiefer_fluch: 8,
+  paranoia: 8,
+  hotbox: 7,
+  pollenflug: 6,
+  wirbel: 6,
+  dampf: 5,
+  ueberflutung: 5,
+  kraeutersud: 4,
+  deep_high: 4,
+  erleuchtung: 3,
+  finsternis: 7,
+  blitzschlag: 8,
+  erdbeben: 7,
+  tsunami: 8,
+  tornado: 7,
+  sonnensturm: 8,
+  schattenklinge: 8,
+};
+
+function pickBestReaction(
+  state: GameState,
+  actions: Extract<GameAction, { type: 'PICK_REACTION' }>[],
+): GameAction {
+  if (actions.length === 1) return actions[0];
+  const pending = state.pendingChoice;
+  const targetIsOpponent =
+    pending?.type === 'pick-reaction' && pending.targetId !== BOT_ID;
+
+  let best = actions[0];
+  let bestScore = -Infinity;
+  for (const action of actions) {
+    const base = REACTION_PICK_SCORE[action.reactionId] ?? 1;
+    // Prefer damaging picks vs opponent; invert slightly when self-targeted.
+    const score = targetIsOpponent ? base : -base;
+    if (score > bestScore) {
+      bestScore = score;
+      best = action;
+    }
+  }
+  // Deterministic tie-break: lexicographic reactionId
+  const tied = actions.filter((a) => {
+    const base = REACTION_PICK_SCORE[a.reactionId] ?? 1;
+    const score = targetIsOpponent ? base : -base;
+    return score === bestScore;
+  });
+  if (tied.length > 1) {
+    return [...tied].sort((a, b) => a.reactionId.localeCompare(b.reactionId))[0];
+  }
+  return best;
+}
+
 /** Heuristic bot for solo playtests — improved build, combat, and pressure. */
 export function chooseBotAction(state: GameState, pack: ContentPack): GameAction | null {
   const actions = getLegalActions(state, { pack, playerId: BOT_ID });
@@ -227,6 +284,12 @@ export function chooseBotAction(state: GameState, pack: ContentPack): GameAction
   }
 
   if (state.pendingChoice) {
+    const reactionPicks = actions.filter(
+      (a): a is Extract<GameAction, { type: 'PICK_REACTION' }> => a.type === 'PICK_REACTION',
+    );
+    if (reactionPicks.length > 0) {
+      return pickBestReaction(state, reactionPicks);
+    }
     return (
       actions.find((a) => a.type === 'TAKE_OPTIONAL_DRAW') ??
       actions.find((a) => a.type === 'RESOLVE_DRAW_DISCARD') ??
