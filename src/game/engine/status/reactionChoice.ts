@@ -13,6 +13,7 @@ import {
 import { applyStatus } from './applyStatus';
 import { REACTION_LABEL_DE, reactionIdFor, type ReactionId } from './reactions';
 import { applyReactionWithOutcome } from './reactionOutcomes';
+import { reactionLimitReached } from './v3CombatHooks';
 
 export interface PickReactionOption {
   reactionId: ReactionId;
@@ -32,8 +33,7 @@ export function resolveImpulseReactions(
 ): GameState {
   if (!isV3CombatEnabled(ruleset)) return state;
 
-  const reactionsUsed = state.meta.v3ReactionsThisAction ?? 0;
-  if (reactionsUsed >= 1) {
+  if (reactionLimitReached(state.meta)) {
     const markId = PRIMARY_MARK_BY_ELEMENT[impulseElement];
     return applyStatus(state, targetId, markId, 1);
   }

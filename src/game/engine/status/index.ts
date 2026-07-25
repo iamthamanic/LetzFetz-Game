@@ -11,3 +11,4 @@ export * from './reactionOutcomes';
 export * from './tickStatuses';
 export * from './fetzgeraetSlots';
 export * from './resonance';
+export * from './v3CombatHooks';

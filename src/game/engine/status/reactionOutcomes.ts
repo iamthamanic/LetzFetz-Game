@@ -10,6 +10,7 @@ import { applyDamageThroughShield } from './shield';
 import { REACTION_LABEL_DE, type ReactionId } from './reactions';
 import { infernoResonanceBonus } from './resonance';
 import type { ContentPack } from '../../types';
+import { readV3CombatHooks, shouldPreserveConsumedMark } from './v3CombatHooks';
 
 const NEGATIVE_STATUSES: StatusId[] = [
   'brennen',
@@ -72,7 +73,13 @@ export function applyReactionWithOutcome(
     v3ReactionsThisAction: (next.meta.v3ReactionsThisAction ?? 0) + 1,
   };
 
-  if (!keepsMark(reactionId)) {
+  const preserve = shouldPreserveConsumedMark(
+    next.meta,
+    reactionId,
+    keepsMark(reactionId),
+  );
+  next.meta = preserve.nextMeta;
+  if (!preserve.preserve) {
     next = removeStatus(next, ctx.targetId, ctx.consumedMark);
   }
 
@@ -135,9 +142,13 @@ export function applyReactionWithOutcome(
       next = applyStatus(next, ctx.targetId, 'verflucht', 2);
       break;
     }
-    case 'dampf':
-      next = applyStatus(next, ctx.targetId, 'nebel', 1);
+    case 'dampf': {
+      const fog = readV3CombatHooks(next.meta).dampfBecomesDichterNebel
+        ? 'dichter_nebel'
+        : 'nebel';
+      next = applyStatus(next, ctx.targetId, fog, 1);
       break;
+    }
     case 'hotbox': {
       next = applyStatus(next, ctx.targetId, 'high', 2);
       next = applyStatus(next, ctx.targetId, 'nebel', 1);

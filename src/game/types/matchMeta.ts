@@ -42,6 +42,14 @@ export interface MatchMeta {
   v3BlockShieldThisAction?: boolean;
   /** V3: turnNumber when full resonance was already used. */
   v3FullResonanceUsedRound?: number;
+  /** V3 ulti/blueprint: reaction cap this action (default 1). */
+  v3ReactionLimitThisAction?: number;
+  /** V3 blueprint: Dampf applies dichter_nebel instead of nebel. */
+  v3DampfBecomesDichterNebel?: boolean;
+  /** V3 ulti: preserve first consumed mark this action. */
+  v3PreserveFirstConsumedMark?: boolean;
+  /** V3: preserve-first-mark already consumed this action. */
+  v3FirstMarkPreservedThisAction?: boolean;
 }
 
 export type PendingChoice =
