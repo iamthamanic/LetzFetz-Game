@@ -1,11 +1,10 @@
 /**
- * Cards tab — library inventory of all cards; editor opens on select.
+ * Cards tab — library inventory; click opens preview modal with optional inline editor.
  * Location: src/features/forge/ForgeView.tsx
  */
 import React, { useState, useEffect, useCallback } from 'react';
 import { ImageCropModal } from './ImageCropModal';
 import { CardLibrary, type CardLibraryFilter } from './CardLibrary';
-import { CardForgeCardEditor } from './CardForgeCardEditor';
 import { projectId, publicAnonKey } from '../../utils/supabase/info';
 import { packToForgeCards, mergeForgeOverlays } from './data/packToForge';
 import { loadCardOverlays, saveCardOverlay } from '../../services/storage/cardOverlays';
@@ -95,7 +94,7 @@ export function ForgeView() {
     setIsCreating(false);
   };
 
-  const handleCloseEditor = () => {
+  const handleClosePreview = () => {
     setSelectedCard(null);
     setIsCreating(false);
   };
@@ -258,47 +257,40 @@ export function ForgeView() {
         c.effects.some((e) => e.toLowerCase().includes(searchTerm.toLowerCase())),
     );
 
-  const showEditor = selectedCard !== null;
-
   return (
     <div className="flex min-h-0 flex-1 bg-stone-950 text-stone-100">
-      {showEditor && selectedCard ? (
-        <CardForgeCardEditor
-          selectedCard={selectedCard}
-          isCreating={isCreating}
-          saving={saving}
-          uploading={uploading}
-          uploadProgress={uploadProgress}
-          onFieldChange={updateField}
-          onStatsChange={updateStats}
-          onEffectChange={updateEffect}
-          onAddEffect={addEffect}
-          onRemoveEffect={removeEffect}
-          onSave={handleSave}
-          onDelete={handleDelete}
-          onClose={handleCloseEditor}
-          onImageSelect={handleImageSelect}
-          onNotesModalOpen={() => setNotesModalOpen(true)}
-          notesModalOpen={notesModalOpen}
-          onNotesModalClose={() => setNotesModalOpen(false)}
-          onNotesSave={(notes) => {
-            updateField('notes', notes);
-            if (selectedCard.id) handleSave();
-          }}
-        />
-      ) : (
-        <CardLibrary
-          cards={cards}
-          filteredCards={filteredCards}
-          loading={loading}
-          searchTerm={searchTerm}
-          activeFilter={activeFilter}
-          onSearchChange={setSearchTerm}
-          onFilterChange={handleFilterChange}
-          onSelectCard={handleSelectCard}
-          onCreateNew={handleCreateNew}
-        />
-      )}
+      <CardLibrary
+        cards={cards}
+        filteredCards={filteredCards}
+        loading={loading}
+        searchTerm={searchTerm}
+        activeFilter={activeFilter}
+        onSearchChange={setSearchTerm}
+        onFilterChange={handleFilterChange}
+        onSelectCard={handleSelectCard}
+        onCreateNew={handleCreateNew}
+        previewCard={selectedCard}
+        onClosePreview={handleClosePreview}
+        isCreating={isCreating}
+        saving={saving}
+        uploading={uploading}
+        uploadProgress={uploadProgress}
+        onFieldChange={updateField}
+        onStatsChange={updateStats}
+        onEffectChange={updateEffect}
+        onAddEffect={addEffect}
+        onRemoveEffect={removeEffect}
+        onSave={handleSave}
+        onDelete={handleDelete}
+        onImageSelect={handleImageSelect}
+        notesModalOpen={notesModalOpen}
+        onNotesModalOpen={() => setNotesModalOpen(true)}
+        onNotesModalClose={() => setNotesModalOpen(false)}
+        onNotesSave={(notes) => {
+          updateField('notes', notes);
+          if (selectedCard?.id) void handleSave();
+        }}
+      />
 
       {imageToCrop && (
         <ImageCropModal
