@@ -26,6 +26,7 @@ import { findElementDef, findEnginePartDef, findGlitchDef } from './lookup';
 import { applyDamageThroughShield } from './status/shield';
 import { pickReaction, resolveImpulseReactions } from './status/reactionChoice';
 import { tickBrennenAfterMainAction, tickStatusesEndOfTurn } from './status/tickStatuses';
+import { clearV3ActionHooks } from './status/v3CombatHooks';
 import type { Element } from '../types';
 import { isV3CombatEnabled } from '../types';
 import type { ReactionId } from './status/reactions';
@@ -988,7 +989,7 @@ export function applyAction(
       working = {
         ...working,
         meta: {
-          ...working.meta,
+          ...clearV3ActionHooks(working.meta),
           v3ReactionsThisAction: 0,
           v3BlockShieldThisAction: false,
         },
