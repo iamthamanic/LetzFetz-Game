@@ -55,6 +55,22 @@ export type PhraseTag = 'core' | 'mode' | 'tool';
 /** Built slot on the phrase board (V2). */
 export type PhraseSlot = PhraseTag | 'charge';
 
+/** V3 Fetzgerät roles (§12) — target model replaces permanent V2 phrase truth. */
+export type FetzgeraetSlot = 'traeger' | 'antrieb' | 'aufsatz';
+
+/** Map legacy V2 phrase slots → V3 Fetzgerät roles (charge has no role slot). */
+export const PHRASE_TO_FETZ: Record<Exclude<PhraseSlot, 'charge'>, FetzgeraetSlot> = {
+  core: 'traeger',
+  mode: 'antrieb',
+  tool: 'aufsatz',
+};
+
+export const FETZ_TO_PHRASE: Record<FetzgeraetSlot, Exclude<PhraseSlot, 'charge'>> = {
+  traeger: 'core',
+  antrieb: 'mode',
+  aufsatz: 'tool',
+};
+
 /** Light passive while built (V2 E3 start set). */
 export type PassiveArchetype = 'p_atk' | 'p_block' | 'p_draw';
 
@@ -66,6 +82,8 @@ export interface EnginePartCardDef extends CardBase {
   kind: 'enginePart';
   element: Element;
   preferredTag: PhraseTag;
+  /** V3 preferred role; defaults from preferredTag via PHRASE_TO_FETZ when omitted. */
+  preferredRole?: FetzgeraetSlot;
   resistance: number;
   passiveArchetype: PassiveArchetype;
   activateArchetype: ActivateArchetype;
@@ -93,6 +111,8 @@ export interface BoundCardInstance extends CardInstance {
   treatedElement?: Element;
   /** V2 phrase board slot when built from a V2 pack. */
   phraseSlot?: PhraseSlot;
+  /** V3 Fetzgerät role slot (Träger/Antrieb/Aufsatz). */
+  fetzSlot?: FetzgeraetSlot;
 }
 
 export interface ContentPack {
