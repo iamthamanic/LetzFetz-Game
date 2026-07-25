@@ -10,8 +10,9 @@ alwaysApply: false
 - State ist immutable: `applyAction(state, action) → newState`
 - `getLegalActions(state, playerId)` für Bot und UI
 - Würfel: injizierbarer RNG für Tests (`() => number`)
-- Regelquelle: `Letz-Fetz-Game/docs/rules/SPIELANLEITUNG_V1.md` — schlägt Legacy-Prototyp-Code
-- Redesign-Entwurf (nicht implementieren, bis freigegeben): `Letz-Fetz-Game/docs/rules/SPIELANLEITUNG_V2_WIP.md`
+- Engine-Default: `docs/rules/SPIELANLEITUNG_V1.md` — schlägt Legacy-Prototyp-Code
+- V3 Zielmodell (Flag/Slices): `docs/rules/SPIELANLEITUNG_V3_WIP.md` + `docs/letz-fetz-v3-überarbeitung.md`
+- V2 WIP historisch (Phrase): `docs/rules/SPIELANLEITUNG_V2_WIP.md` — nicht gegen V3-Slots verteidigen
 - Neue Logik braucht Unit-Tests (Vitest)
-- Edge Cases aus Spielanleitung V1 §17 abdecken
-- Regeländerungen → Anleitung V1 (oder V2-WIP) **im selben Change** mitziehen
+- Edge Cases: V1 §17; unter V3-Flag zusätzlich V3 §17–§19
+- Regeländerungen → V1 und/oder V3-WIP (+ Dump) **im selben Change** mitziehen

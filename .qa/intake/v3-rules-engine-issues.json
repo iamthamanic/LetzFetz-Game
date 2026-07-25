@@ -1,0 +1,187 @@
+{
+  "epicSlug": "v3-rules-engine",
+  "designPath": ".qa/design/v3-rules-engine.md",
+  "defaultLabels": [],
+  "issues": [
+    {
+      "title": "V3 docs: promote rules WIP + AGENTS rule sources",
+      "featureSlug": "v3-docs-rulesource",
+      "priority": "P0",
+      "labels": [
+        "P0"
+      ],
+      "dependsOn": [],
+      "body": "## Intent\nV3-Überarbeitung als Regelquellen-WIP verankern: SPIELANLEITUNG_V3_WIP, AGENTS-Tabelle, V1/V2-Beziehung und Widersprüche (Phrase vs Träger/Antrieb/Aufsatz) dokumentieren — ohne Engine-Code.\n\n## User Journey\n1. Autor öffnet docs/rules und AGENTS.md\n2. System zeigt V3 als Ziel-Wahrheit (WIP), V1 als aktuelle Engine-Wahrheit bis Cutover\n3. Autor sieht klar markierte Konflikte zu V2 D8/E2\n\n## Problem\nV3-Dump existiert, ist aber nicht in der Regelquellen-Tabelle; prior Design soft-layerte V2 Phrase.\n\n## Solution\nSpiegel/Promote nach docs/rules/SPIELANLEITUNG_V3_WIP.md; AGENTS.md + game-engine.mdc Regelquellen-Tabelle; kurze Konfliktnotiz Phrase→Slots; alten Design-Pfad als SUPERSEDED belassen. Kein Feature-Code außer Docs.\n\n## Runtime\n| Axis | This slice |\n|------|------------|\n| Local (desktop) | yes (docs only) |\n| Cloud session | no |\n| Appwrite Functions | skip |\n\n## Edge Cases\n- V2 WIP bleibt lesbar, aber als Vorgänger markiert\n- V1 bleibt Engine-Wahrheit bis Flag-Cutover dokumentiert\n\n## Acceptance\n- [ ] `docs/rules/SPIELANLEITUNG_V3_WIP.md` existiert und verweist auf den V3-Dump\n- [ ] AGENTS.md Regelquellen-Tabelle listet V3 WIP/DRAFT-Rollen\n- [ ] Widerspruch Phrase vs §12 Slots explizit zugunsten V3-Zielmodell notiert\n- [ ] `npm run checks` weiterhin grün (Docs-only)\n- [ ] Touched files: zero type escape hatches (`@typed-strict` / Boy Scout)\n\n## Design\nEpic: `.qa/design/v3-rules-engine.md`\n\n## Runner\nLabels: see issue labels\nFeature slug: see JSON"
+    },
+    {
+      "title": "V3 types: statuses, shield, GameState + ruleset flag",
+      "featureSlug": "v3-status-gamestate",
+      "priority": "P0",
+      "labels": [
+        "P0"
+      ],
+      "dependsOn": [
+        "V3 docs: promote rules WIP + AGENTS rule sources"
+      ],
+      "body": "## Intent\nTypmodell für Statusmarken, Buffs/Debuffs und Schild in GameState; optionaler Ruleset-/Pack-Flag für V3-Kampf — Zielmodell V3, Flag nur Rollout.\n\n## User Journey\n1. Entwickler liest PlayerState\n2. System trägt statuses[] und shield (max 5)\n3. Unter Default-Flag bleibt V1-Verhalten unverändert\n\n## Problem\nPlayerState hat weder Status noch Schild; kein typed StatusId.\n\n## Solution\nNeue `src/game/types/status.ts`; erweitere `game.ts` / `ruleset.ts` / createGame; Flag z.B. `v3Combat` default false bis Cutover. Keine Reaktionslogik in diesem Slice.\n\n## Runtime\n| Axis | This slice |\n|------|------------|\n| Local (desktop) | yes |\n| Cloud session | no |\n| Appwrite Functions | skip |\n\n## Edge Cases\n- Schild >5 clamp\n- Unbekannte Status-IDs beim Narrowing aus Pack ablehnen\n\n## Acceptance\n- [ ] StatusId + Stack-Limits laut V3 §6/§7/§19 typisiert\n- [ ] PlayerState.statuses + shield; createGame initialisiert\n- [ ] Ruleset-Flag schaltet V3-Pfad ab/zu ohne Breaking V1 Defaults\n- [ ] Unit-Tests für Init + Clamp\n- [ ] Touched files: zero type escape hatches (`@typed-strict` / Boy Scout)\n\n## Design\nEpic: `.qa/design/v3-rules-engine.md`\n\n## Runner\nLabels: see issue labels\nFeature slug: see JSON"
+    },
+    {
+      "title": "V3 element impulse + primary marks",
+      "featureSlug": "v3-element-impulse-marks",
+      "priority": "P0",
+      "labels": [
+        "P0"
+      ],
+      "dependsOn": [
+        "V3 types: statuses, shield, GameState + ruleset flag"
+      ],
+      "body": "## Intent\nElementimpuls-Pipeline: ohne Marke → primäre Marke; mit passender Marke → Reaktionshinweis (noch ohne volle Matrix). High-Überdosierung → Verpeilt.\n\n## User Journey\n1. Spieler löst Feuerimpuls aus (unter V3-Flag)\n2. Ziel ohne Marke erhält Brennen ×1\n3. UI/Log sieht Statusänderung (Engine-Event)\n\n## Problem\nKein Impuls-Konzept; Synergien nur UI-only.\n\n## Solution\n`elementImpulse.ts` + `applyStatus.ts`; Mapping Element→primäre Marke §3/§6; stapelbare Limits; High 4. Stapel → Verpeilt. Noch keine 21-Reaktions-Tabelle.\n\n## Runtime\n| Axis | This slice |\n|------|------------|\n| Local (desktop) | yes |\n| Cloud session | no |\n| Appwrite Functions | skip |\n\n## Edge Cases\n- Impuls ohne Treffer darf nicht feuern (Hook kommt in Combat-Slice)\n- Statusverstärkung ohne Impuls erzeugt keine Reaktion (§5.17)\n\n## Acceptance\n- [ ] Sechs primäre Marken-Mappings korrekt\n- [ ] Stack-Caps + High→Verpeilt\n- [ ] Vitest für Impulse ohne/mit Marke (Reaktion deferred stub OK)\n- [ ] Nur aktiv unter V3-Flag\n- [ ] Touched files: zero type escape hatches (`@typed-strict` / Boy Scout)\n\n## Design\nEpic: `.qa/design/v3-rules-engine.md`\n\n## Runner\nLabels: see issue labels\nFeature slug: see JSON"
+    },
+    {
+      "title": "V3 combat: timing hook + damage/shield pipeline",
+      "featureSlug": "v3-combat-shield-pipeline",
+      "priority": "P0",
+      "labels": [
+        "P0"
+      ],
+      "dependsOn": [
+        "V3 element impulse + primary marks"
+      ],
+      "body": "## Intent\nKampftiming §17 anbinden: Schaden Block→Schild→Verhinderung→Leben; Treffer/Vollblock-Trigger für Impulse; Schild löst keine Vollblockeffekte aus.\n\n## User Journey\n1. Angriff trifft trotz Block Restschaden\n2. Schild absorbiert vor HP\n3. Bei Treffer: Treffereffekt inkl. Elementimpuls\n\n## Problem\ncombat.ts kennt nur attack−block; actions.ts hat kein V3-Timing.\n\n## Solution\nErweitere `combat.ts` + Hook in `actions.ts` nach Resolve; Vollblock = 0 final damage → kein Trefferimpuls; Teilblock vs Vollblock Blockeffekte vorbereiten (API).\n\n## Runtime\n| Axis | This slice |\n|------|------------|\n| Local (desktop) | yes |\n| Cloud session | no |\n| Appwrite Functions | skip |\n\n## Edge Cases\n- Direkter Reaktionsschaden später: nur blockbar wenn Karte erlaubt\n- Schild max 5; kein Vollblock durch Schild\n\n## Acceptance\n- [ ] Damage-Pipeline Reihenfolge §5.1\n- [ ] Treffer vs Vollblock korrekt für Impulse\n- [ ] Vitest Schild-Absorption + Trefferimpuls-Gate\n- [ ] V1-Pfad unverändert ohne Flag\n- [ ] Touched files: zero type escape hatches (`@typed-strict` / Boy Scout)\n\n## Design\nEpic: `.qa/design/v3-rules-engine.md`\n\n## Runner\nLabels: see issue labels\nFeature slug: see JSON"
+    },
+    {
+      "title": "V3 reaction matrix core + pick-reaction choice",
+      "featureSlug": "v3-reaction-matrix-core",
+      "priority": "P0",
+      "labels": [
+        "P0"
+      ],
+      "dependsOn": [
+        "V3 combat: timing hook + damage/shield pipeline"
+      ],
+      "body": "## Intent\nReaktionskern: Lookup ungeordneter Elementpaare; verpflichtende Reaktion; Mehrfachwahl via pendingChoice für aktiven Spieler; max eine Reaktion pro Aktion.\n\n## User Journey\n1. Ziel hat Durchnässt und High; Feuerimpuls trifft\n2. System öffnet Wahl: Dampf | Hotbox\n3. Spieler wählt eine; andere Marke bleibt\n\n## Problem\nKein Reaction-Framework; pendingChoice kennt kein pick-reaction.\n\n## Solution\n`reactions.ts` Datenkern + `reactionChoice.ts`; erweitere PendingChoice; applyAction resolve; Reaktionsergebnis-Marken triggern keine Folge-Reaktion (§18).\n\n## Runtime\n| Axis | This slice |\n|------|------------|\n| Local (desktop) | yes |\n| Cloud session | no |\n| Appwrite Functions | skip |\n\n## Edge Cases\n- Eine Option → auto-resolve ohne Modal\n- Ultis dürfen Limit später ändern (Hook stub OK)\n\n## Acceptance\n- [ ] pendingChoice type pick-reaction\n- [ ] Verpflichtende Wahl wenn ≥1 Match\n- [ ] Max eine Reaktion / Aktion\n- [ ] Vitest Choice + Single-Auto\n- [ ] Touched files: zero type escape hatches (`@typed-strict` / Boy Scout)\n\n## Design\nEpic: `.qa/design/v3-rules-engine.md`\n\n## Runner\nLabels: see issue labels\nFeature slug: see JSON"
+    },
+    {
+      "title": "V3 mono reactions (6) + Dampf + P0 tests",
+      "featureSlug": "v3-mono-dampf-reactions",
+      "priority": "P0",
+      "labels": [
+        "P0"
+      ],
+      "dependsOn": [
+        "V3 reaction matrix core + pick-reaction choice"
+      ],
+      "body": "## Intent\nImplementiere sechs Mono-Reaktionen (Inferno…Tiefer Fluch) plus Dampf; P0-Vitest-Suite für Status/Impuls/Combat/Reaktionen.\n\n## User Journey\n1. Spieler zündet Inferno (3 Brennen + Feuerimpuls)\n2. System: 4 Direktschaden, kein neues Brennen\n3. Dampf: Durchnässt+Feuer → Nebel\n\n## Problem\nMatrix-Kern ohne konkrete Outcomes.\n\n## Solution\nOutcomes in reactions table; Direktschaden über Shield-Pipeline; Nebel-Status; konsolidierte Tests unter `src/game/engine/status/`.\n\n## Runtime\n| Axis | This slice |\n|------|------------|\n| Local (desktop) | yes |\n| Cloud session | no |\n| Appwrite Functions | skip |\n\n## Edge Cases\n- Inferno Stapel+1 Schaden\n- Deep High Überdosierung → Verpeilt\n- Dampf bidirektional Feuer↔Wasser\n\n## Acceptance\n- [ ] Alle 6 Mono + Dampf laut §8.1–8.7\n- [ ] Vitest deckt P0-Pfad ab; `npm run checks` grün\n- [ ] Keine 15 Mischreaktionen in diesem Slice (Stubs/TODO OK)\n- [ ] Touched files: zero type escape hatches (`@typed-strict` / Boy Scout)\n\n## Design\nEpic: `.qa/design/v3-rules-engine.md`\n\n## Runner\nLabels: see issue labels\nFeature slug: see JSON"
+    },
+    {
+      "title": "V3 remaining 15 mixed reactions",
+      "featureSlug": "v3-mixed-reactions-15",
+      "priority": "P1",
+      "labels": [
+        "P1"
+      ],
+      "dependsOn": [
+        "V3 mono reactions (6) + Dampf + P0 tests"
+      ],
+      "body": "## Intent\nVervollständige die 15 Mischreaktionen Hotbox…Finsternis laut Matrix §8.8–8.21.\n\n## User Journey\n1. Playtester löst Hotbox / Giftbrühe / Paranoia aus\n2. Engine wendet dokumentierte Effekte an\n3. Log zeigt Reaktionsnamen (DE)\n\n## Problem\nNur Mono+Dampf implementiert.\n\n## Solution\nErweitere Reaction-Table + Vitest pro Reaktion (Tabelle/parametrize).\n\n## Runtime\n| Axis | This slice |\n|------|------------|\n| Local (desktop) | yes |\n| Cloud session | no |\n| Appwrite Functions | skip |\n\n## Edge Cases\n- Pollenflug High für beide + Verpeilt-Cap\n- Finsternis: kein Schild bis Aktionsende\n\n## Acceptance\n- [ ] Alle 15 Mischreaktionen spezifikationskonform\n- [ ] Vitest parametrisiert oder pro Reaktion\n- [ ] `npm run checks` grün\n- [ ] Touched files: zero type escape hatches (`@typed-strict` / Boy Scout)\n\n## Design\nEpic: `.qa/design/v3-rules-engine.md`\n\n## Runner\nLabels: see issue labels\nFeature slug: see JSON"
+    },
+    {
+      "title": "V3 status ticks + §18 conflict rules",
+      "featureSlug": "v3-status-ticks-conflict",
+      "priority": "P1",
+      "labels": [
+        "P1"
+      ],
+      "dependsOn": [
+        "V3 remaining 15 mixed reactions"
+      ],
+      "body": "## Intent\nStatus-Ticks: Brennen nach Hauptaktion, Gift EOT, Erleuchtet Startwahl, Fluch/High/Nebel/Verpeilt/Geblendet/Fokus Timing; Konfliktregeln §18.\n\n## User Journey\n1. Charakter mit Brennen führt Angriff aus\n2. Nach Hauptaktion: 1 Schaden, −1 Brennen\n3. Gift am Zugende tickt vor anderen EOT\n\n## Problem\nMarken liegen nur; Ticks/Konflikte fehlen.\n\n## Solution\n`tickStatuses.ts` + Hooks in Phasen; Nebel vs Impuls; Verpeilt vs Sekundäreffekt; Geblendet vs Fokus.\n\n## Runtime\n| Axis | This slice |\n|------|------------|\n| Local (desktop) | yes |\n| Cloud session | no |\n| Appwrite Functions | skip |\n\n## Edge Cases\n- Reaktionen/Passives zählen nicht als Hauptaktion\n- EOT-Reihenfolge §18\n\n## Acceptance\n- [ ] Brennen/Gift/Erleuchtet/Fluch/Nebel/Verpeilt getestet\n- [ ] §18 Konflikte Vitest\n- [ ] Checks grün\n- [ ] Touched files: zero type escape hatches (`@typed-strict` / Boy Scout)\n\n## Design\nEpic: `.qa/design/v3-rules-engine.md`\n\n## Runner\nLabels: see issue labels\nFeature slug: see JSON"
+    },
+    {
+      "title": "V3 Fetzgerät Träger/Antrieb/Aufsatz model",
+      "featureSlug": "v3-fetzgeraet-slots",
+      "priority": "P1",
+      "labels": [
+        "P1"
+      ],
+      "dependsOn": [
+        "V3 status ticks + §18 conflict rules"
+      ],
+      "body": "## Intent\nFetzgerät-Zielmodell §12: Träger/Antrieb/Aufsatz statt dauerhafter V2-Phrase-Wahrheit; Migration/Adapter von phrase slots.\n\n## User Journey\n1. Spieler baut Träger, dann Antrieb, dann Aufsatz\n2. System erzwingt Slot-Semantik (max ein Teil pro Rolle im Zielmodell)\n3. Aktivierung verbraucht Ladung am Aufsatz\n\n## Problem\nEngine kennt phraseSlot core/mode/tool/charge als Wahrheit.\n\n## Solution\nTypen + Build-Pfad auf V3-Slots; phraseBuild adaptieren oder ersetzen (kein Re-Export-Stub); Docs WIP mitziehen; V1 bind ohne Slots bleibt möglich.\n\n## Runtime\n| Axis | This slice |\n|------|------------|\n| Local (desktop) | yes |\n| Cloud session | no |\n| Appwrite Functions | skip |\n\n## Edge Cases\n- Legacy phrase saves: migrate oder ablehnen klar\n- Erschöpfen/Aufrichten API für Wirbel/Rückenwind\n\n## Acceptance\n- [ ] Slot-Typen Träger|Antrieb|Aufsatz im Engine-Modell\n- [ ] Build/Activate Pfad unter V3-Flag\n- [ ] Tests + Docs Abgleich §12\n- [ ] Keine Feature→Feature Imports\n- [ ] Touched files: zero type escape hatches (`@typed-strict` / Boy Scout)\n\n## Design\nEpic: `.qa/design/v3-rules-engine.md`\n\n## Runner\nLabels: see issue labels\nFeature slug: see JSON"
+    },
+    {
+      "title": "V3 element resonance for Fetzgerät",
+      "featureSlug": "v3-element-resonance",
+      "priority": "P1",
+      "labels": [
+        "P1"
+      ],
+      "dependsOn": [
+        "V3 Fetzgerät Träger/Antrieb/Aufsatz model"
+      ],
+      "body": "## Intent\nElementresonanz §13: 2-Teile / 3-Teile Boni; volle Resonanz max 1× pro Runde.\n\n## User Journey\n1. Spieler hat zwei Feuer-Teile\n2. Erster Brennen-Stapel der Runde verursacht Sofortschaden\n3. Drei Feuer: Inferno +1 Schaden (1×/Runde)\n\n## Problem\nKeine Resonanz-Logik.\n\n## Solution\n`resonance.ts` + MatchMeta Counters; an Impulse/Reaktionen andocken.\n\n## Runtime\n| Axis | This slice |\n|------|------------|\n| Local (desktop) | yes |\n| Cloud session | no |\n| Appwrite Functions | skip |\n\n## Edge Cases\n- Ein Teil = kein Bonus\n- Volle Resonanz Cap pro Runde\n\n## Acceptance\n- [ ] Tabellen §13 für alle 6 Elemente (2er+3er)\n- [ ] Vitest Caps\n- [ ] Checks grün\n- [ ] Touched files: zero type escape hatches (`@typed-strict` / Boy Scout)\n\n## Design\nEpic: `.qa/design/v3-rules-engine.md`\n\n## Runner\nLabels: see issue labels\nFeature slug: see JSON"
+    },
+    {
+      "title": "Play UI: status chips + reaction modal",
+      "featureSlug": "v3-play-ui-status-reaction",
+      "priority": "P1",
+      "labels": [
+        "P1"
+      ],
+      "dependsOn": [
+        "V3 reaction matrix core + pick-reaction choice"
+      ],
+      "body": "## Intent\nPlay-UI: Status-Chips am Charakter-Dock und Reaktionswahl-Modal (Deutsch), nur dispatch — Engine bleibt authoritative.\n\n## User Journey\n1. Spieler sieht „Brennen ×2“ am Gegner\n2. Bei Mehrfachreaktion öffnet Modal „Reaktion wählen“\n3. Nach Wahl schließt Modal; State aktualisiert\n\n## Problem\nKeine Status-Präsentation; pendingChoice UI kennt pick-reaction nicht.\n\n## Solution\nfeatures/play Komponenten; ui/ Primitives; lucide Icons; DE Labels. Kein DaisyUI.\n\n## Runtime\n| Axis | This slice |\n|------|------------|\n| Local (desktop) | yes |\n| Cloud session | no |\n| Appwrite Functions | skip |\n\n## Edge Cases\n- Auto-resolve eine Option → kein Modal\n- Screenreader-taugliche Dialog-Labels\n\n## Acceptance\n- [ ] Status-Chips sichtbar unter V3-Flag/State\n- [ ] Modal für pick-reaction\n- [ ] Styleguide-Primitives; DE Copy\n- [ ] verify-ui Evidence wenn Acceptance es verlangt\n- [ ] Touched files: zero type escape hatches (`@typed-strict` / Boy Scout)\n\n## Design\nEpic: `.qa/design/v3-rules-engine.md`\n\n## Runner\nLabels: see issue labels\nFeature slug: see JSON"
+    },
+    {
+      "title": "V3 ulti / transform / blueprint hooks",
+      "featureSlug": "v3-ulti-transform-hooks",
+      "priority": "P2",
+      "labels": [
+        "P2"
+      ],
+      "dependsOn": [
+        "V3 element resonance for Fetzgerät"
+      ],
+      "body": "## Intent\nHooks für Ultis/Transformation/Area51-Blueprints (§14–16): Reaktionslimit, Markenerhalt, Mutation — ohne volles Content-Authoring.\n\n## User Journey\n1. Ulti setzt „zwei Reaktionen diese Aktion“\n2. Blueprint mutiert Dampf→Dichter Nebel\n3. Engine respektiert Hooks\n\n## Problem\nultimate.ts kennt keine Status/Reaktions-Hooks.\n\n## Solution\nExtension points + minimale Stubs/Tests; Content später.\n\n## Runtime\n| Axis | This slice |\n|------|------------|\n| Local (desktop) | yes |\n| Cloud session | no |\n| Appwrite Functions | skip |\n\n## Edge Cases\n- Default ohne Hook = V3 Standardlimit 1\n- Blueprints brechen Regeln nur ausdrücklich\n\n## Acceptance\n- [ ] Hook-API dokumentiert + Vitest Smoke\n- [ ] Kein Big-Bang Content\n- [ ] Checks grün\n- [ ] Touched files: zero type escape hatches (`@typed-strict` / Boy Scout)\n\n## Design\nEpic: `.qa/design/v3-rules-engine.md`\n\n## Runner\nLabels: see issue labels\nFeature slug: see JSON"
+    },
+    {
+      "title": "Pack schema: element impulse keywords",
+      "featureSlug": "v3-pack-impulse-schema",
+      "priority": "P2",
+      "labels": [
+        "P2"
+      ],
+      "dependsOn": [
+        "V3 element impulse + primary marks"
+      ],
+      "body": "## Intent\nPack/Card-Schema für Impuls-Keywords und Treffer-/Vollblock-Trigger; Validierung vor Engine-Nutzung.\n\n## User Journey\n1. Autor trägt Treffer: Feuerimpuls im Pack ein\n2. Engine liest typed effect\n3. Ungültige Keywords werden rejected\n\n## Problem\nKarten haben Fließtext ohne typed Impulse.\n\n## Solution\nErweitere cards types + Pack-Parser/Validator; Seed-Beispiele minimal.\n\n## Runtime\n| Axis | This slice |\n|------|------------|\n| Local (desktop) | yes |\n| Cloud session | no |\n| Appwrite Functions | skip |\n\n## Edge Cases\n- unknown JSON → narrow, kein any\n- Legacy-Karten ohne Impuls bleiben gültig\n\n## Acceptance\n- [ ] Typed impulse fields + Validator\n- [ ] Mindestens 1 Seed-Beispiel\n- [ ] Checks grün\n- [ ] Touched files: zero type escape hatches (`@typed-strict` / Boy Scout)\n\n## Design\nEpic: `.qa/design/v3-rules-engine.md`\n\n## Runner\nLabels: see issue labels\nFeature slug: see JSON"
+    },
+    {
+      "title": "Bot heuristics for reaction picks",
+      "featureSlug": "v3-bot-reaction-heuristics",
+      "priority": "P2",
+      "labels": [
+        "P2"
+      ],
+      "dependsOn": [
+        "V3 remaining 15 mixed reactions"
+      ],
+      "body": "## Intent\nHeuristik-Bot wählt bei pick-reaction eine legale Reaktion (Solo local-first).\n\n## User Journey\n1. Bot ist aktiver Spieler bei Mehrfachwahl\n2. System wählt ohne UI-Modal\n3. Partie läuft weiter\n\n## Problem\nbot.ts kennt pick-reaction nicht.\n\n## Solution\nErweitere getLegalActions + bot choose; einfache Score-Heuristik (KISS).\n\n## Runtime\n| Axis | This slice |\n|------|------------|\n| Local (desktop) | yes |\n| Cloud session | no |\n| Appwrite Functions | skip |\n\n## Edge Cases\n- Keine legale Aktion → Fehler vermeiden\n- Deterministisch mit Seed wenn möglich\n\n## Acceptance\n- [ ] Bot resolved pick-reaction\n- [ ] Vitest Smoke\n- [ ] Checks grün\n- [ ] Touched files: zero type escape hatches (`@typed-strict` / Boy Scout)\n\n## Design\nEpic: `.qa/design/v3-rules-engine.md`\n\n## Runner\nLabels: see issue labels\nFeature slug: see JSON"
+    },
+    {
+      "title": "V3 E2E / verify-ui acceptance pass",
+      "featureSlug": "v3-e2e-verify-ui",
+      "priority": "P2",
+      "labels": [
+        "P2"
+      ],
+      "dependsOn": [
+        "Play UI: status chips + reaction modal",
+        "V3 remaining 15 mixed reactions",
+        "V3 status ticks + §18 conflict rules"
+      ],
+      "body": "## Intent\nAcceptance/verify-ui für V3 Play-Pfad: Status-Chips, Reaktionsmodal, Smoke einer Mono- und Mischreaktion.\n\n## User Journey\n1. QA startet Solo mit V3-Flag\n2. Erzeugt Brennen und Dampf-Wahl\n3. Evidence in .qa/evidence falls Acceptance verlangt\n\n## Problem\nEngine+UI existieren slice-weise ohne End-to-End-Abnahme.\n\n## Solution\nAcceptance-Datei + verify-ui Durchlauf; kein neuer Scope.\n\n## Runtime\n| Axis | This slice |\n|------|------------|\n| Local (desktop) | yes |\n| Cloud session | no |\n| Appwrite Functions | skip |\n\n## Edge Cases\n- Flag aus → V1 UI unverändert\n- Modal Keyboard Escape/Cancel policy dokumentieren\n\n## Acceptance\n- [ ] Acceptance `v3-e2e-verify-ui` PASS\n- [ ] verify-ui Evidence wo verlangt\n- [ ] `npm run checks` grün\n- [ ] Touched files: zero type escape hatches (`@typed-strict` / Boy Scout)\n\n## Design\nEpic: `.qa/design/v3-rules-engine.md`\n\n## Runner\nLabels: see issue labels\nFeature slug: see JSON"
+    }
+  ]
+}
