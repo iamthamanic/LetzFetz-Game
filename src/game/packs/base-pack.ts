@@ -410,6 +410,12 @@ const ALL_ELEMENTS: Element[] = ['fire', 'water', 'earth', 'air', 'shadow', 'lig
 
 export function buildBasePack(): ContentPack {
   const elementCards = ALL_ELEMENTS.flatMap(elementCardsFor);
+  // V3 seed: Treffer Feuerimpuls on top fire attack (pack schema example).
+  const seeded = elementCards.map((card) =>
+    card.id === 'fire-attack-6'
+      ? { ...card, elementImpulse: { element: 'fire' as const, trigger: 'onHit' as const } }
+      : card,
+  );
   return {
     id: 'base-pack-v1',
     name: 'Letz Fetz Base Pack',
@@ -417,7 +423,7 @@ export function buildBasePack(): ContentPack {
     characters: CHARACTERS,
     ultimates: ULTIMATES,
     arenas: ARENAS,
-    elementCards,
+    elementCards: seeded,
     glitches: GLITCHES,
   };
 }

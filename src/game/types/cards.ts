@@ -1,4 +1,5 @@
 import type { Element } from './elements';
+import type { ElementImpulseKeyword } from './impulseSchema';
 
 export type ElementCardType = 'attack' | 'block' | 'boost';
 export type GlitchTiming = 'playable' | 'instant';
@@ -15,6 +16,8 @@ export interface ElementCardDef extends CardBase {
   value: number;
   instantText: string;
   boundText: string;
+  /** V3: typed impulse keyword (optional; legacy cards omit). */
+  elementImpulse?: ElementImpulseKeyword;
 }
 
 export interface CharacterCardDef extends CardBase {
