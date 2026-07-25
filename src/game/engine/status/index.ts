@@ -10,3 +10,4 @@ export * from './reactionChoice';
 export * from './reactionOutcomes';
 export * from './tickStatuses';
 export * from './fetzgeraetSlots';
+export * from './resonance';

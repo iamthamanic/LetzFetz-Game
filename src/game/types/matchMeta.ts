@@ -40,6 +40,8 @@ export interface MatchMeta {
   v3ReactionsThisAction?: number;
   /** V3 Finsternis: block new shield until current action ends. */
   v3BlockShieldThisAction?: boolean;
+  /** V3: turnNumber when full resonance was already used. */
+  v3FullResonanceUsedRound?: number;
 }
 
 export type PendingChoice =
