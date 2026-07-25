@@ -8,6 +8,7 @@ import type { ContentPack, GameState, PlayerId } from '../../../../game';
 import { CardIllustrationLoop } from '../../../../components/ui/CardIllustrationLoop';
 import { Badge } from '../../../../components/ui/Badge';
 import { Heart, Layers } from 'lucide-react';
+import { StatusChips } from '../StatusChips';
 
 interface CharacterDockProps {
   state: GameState;
@@ -71,6 +72,11 @@ export function CharacterDock({
             <Heart className="h-3 w-3 shrink-0" />
             {shownHp} LP
           </p>
+          <StatusChips
+            statuses={player.statuses ?? []}
+            shield={player.shield ?? 0}
+            testId={`status-chips-${playerId}`}
+          />
         </div>
         <p className="flex shrink-0 items-center gap-1 text-[10px] text-stone-400">
           <Layers className="h-3 w-3" />
@@ -117,6 +123,11 @@ export function CharacterDock({
             <Heart className="h-3.5 w-3.5 shrink-0" />
             {shownHp} LP
           </p>
+          <StatusChips
+            statuses={player.statuses ?? []}
+            shield={player.shield ?? 0}
+            testId={`status-chips-${playerId}`}
+          />
           <p className="flex items-center gap-1 text-[10px] text-stone-300">
             <Layers className="h-3 w-3 shrink-0" />
             Hand {handCount}
