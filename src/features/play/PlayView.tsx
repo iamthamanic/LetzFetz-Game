@@ -583,7 +583,8 @@ export function PlayView() {
 
   const handleDispatch = useCallback(
     (action: GameAction) => {
-      if (presentation.isInputLocked) return;
+      // Reaction pick must stay available even if presentation locks other inputs.
+      if (presentation.isInputLocked && action.type !== 'PICK_REACTION') return;
 
       setState((prev) => {
         if (!prev) return prev;

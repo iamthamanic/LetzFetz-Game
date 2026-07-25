@@ -1,4 +1,11 @@
-import type { GameState, MonoBonusMode, PlayerId, PlaytestHpCap, TurnPhase } from '../types';
+import type {
+  GameState,
+  MonoBonusMode,
+  PlayerId,
+  PlaytestHpCap,
+  StatusInstance,
+  TurnPhase,
+} from '../types';
 import { collectInvariantViolations } from '../engine/invariants';
 import { rulesetFromState } from '../engine/rulesetFromState';
 import { cloneState } from '../engine/helpers';
@@ -14,6 +21,14 @@ export interface PlaytestPatch {
   playtestHpCap?: PlaytestHpCap;
   /** O11: mono bonus mode (stored; V2 combat later). */
   monoBonusMode?: MonoBonusMode;
+  /** Enable V3 combat layer for this match. */
+  v3CombatEnabled?: boolean;
+  /** Replace P1 statuses (V3 chips / reaction demos). */
+  p1Statuses?: StatusInstance[];
+  /** Replace P2 statuses. */
+  p2Statuses?: StatusInstance[];
+  /** Open a pick-reaction pending choice (UI demo). */
+  demoPickReaction?: boolean;
 }
 
 export interface PlaytestValidationResult {
@@ -33,6 +48,27 @@ export function applyPlaytestPatch(state: GameState, patch: PlaytestPatch): Game
   }
   if (patch.monoBonusMode !== undefined) {
     next.meta = { ...next.meta, monoBonusMode: patch.monoBonusMode };
+  }
+  if (patch.v3CombatEnabled !== undefined) {
+    next.meta = { ...next.meta, v3CombatEnabled: patch.v3CombatEnabled };
+  }
+  if (patch.p1Statuses !== undefined) {
+    next.players.p1.statuses = patch.p1Statuses.map((s) => ({ ...s }));
+  }
+  if (patch.p2Statuses !== undefined) {
+    next.players.p2.statuses = patch.p2Statuses.map((s) => ({ ...s }));
+  }
+  if (patch.demoPickReaction) {
+    next.pendingChoice = {
+      type: 'pick-reaction',
+      chooserId: 'p1',
+      targetId: 'p2',
+      impulseElement: 'fire',
+      options: [
+        { reactionId: 'inferno', markId: 'brennen', labelDe: 'Inferno' },
+        { reactionId: 'dampf', markId: 'durchnaesst', labelDe: 'Dampf' },
+      ],
+    };
   }
   if (patch.p1Hp !== undefined) next.players.p1.hp = patch.p1Hp;
   if (patch.p2Hp !== undefined) next.players.p2.hp = patch.p2Hp;

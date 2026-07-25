@@ -155,6 +155,9 @@ export function createGame(config: CreateGameConfig): GameState {
   if (arenaDef.id === 'arena-schattenbasar' && d6Variant === 1) {
     state.meta.basarExhaustAvailable = true;
   }
+  if (ruleset.v3Combat === true) {
+    state.meta.v3CombatEnabled = true;
+  }
 
   const skippedInstants: CardInstance[] = [];
 

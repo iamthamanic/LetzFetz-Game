@@ -36,6 +36,8 @@ export interface MatchMeta {
   playtestHpCap?: PlaytestHpCap;
   /** Playtest: mono phrase bonus mode (O11); unused by V1 combat. */
   monoBonusMode?: MonoBonusMode;
+  /** Playtest / match: enable V3 combat layer (impulses, reactions, shield). */
+  v3CombatEnabled?: boolean;
   /** V3: reactions resolved in the current main action (max 1 by default). */
   v3ReactionsThisAction?: number;
   /** V3 Finsternis: block new shield until current action ends. */

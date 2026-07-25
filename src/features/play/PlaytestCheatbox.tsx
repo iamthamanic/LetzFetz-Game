@@ -118,6 +118,36 @@ export function PlaytestCheatbox({
     onApplyState(result.state);
   };
 
+  const applyV3Combat = (enabled: boolean) => {
+    const result = applyAndValidatePlaytestPatch(state, { v3CombatEnabled: enabled });
+    if (!result.ok || !result.state) {
+      onError(result.error ?? 'V3-Flag ungültig.');
+      return;
+    }
+    onError(null);
+    onApplyState(result.state);
+  };
+
+  const demoV3StatusesAndReaction = () => {
+    const result = applyAndValidatePlaytestPatch(state, {
+      v3CombatEnabled: true,
+      p1Statuses: [{ id: 'brennen', stacks: 2 }],
+      p2Statuses: [
+        { id: 'brennen', stacks: 1 },
+        { id: 'durchnaesst', stacks: 1 },
+      ],
+      demoPickReaction: true,
+    });
+    if (!result.ok || !result.state) {
+      onError(result.error ?? 'V3-Demo ungültig.');
+      return;
+    }
+    onError(null);
+    onApplyState(result.state);
+  };
+
+  const v3On = state.meta.v3CombatEnabled === true;
+
   return (
     <div className="pointer-events-auto absolute bottom-3 right-3 z-40 w-72 max-w-[calc(100vw-1.5rem)]">
       <Panel tone="game" dense className="border-amber-700/60">
@@ -188,6 +218,35 @@ export function PlaytestCheatbox({
                     {mode.label}
                   </Button>
                 ))}
+              </div>
+              <p className="mb-1 pt-1 text-[10px] font-semibold uppercase tracking-wider text-stone-500">
+                V3 Kampf · {v3On ? 'an' : 'aus'}
+              </p>
+              <div className="flex flex-wrap gap-1.5">
+                <Button
+                  variant={v3On ? 'accent' : 'secondary'}
+                  size="sm"
+                  onClick={() => applyV3Combat(true)}
+                  data-testid="playtest-v3-on"
+                >
+                  V3 an
+                </Button>
+                <Button
+                  variant={!v3On ? 'accent' : 'secondary'}
+                  size="sm"
+                  onClick={() => applyV3Combat(false)}
+                  data-testid="playtest-v3-off"
+                >
+                  V3 aus
+                </Button>
+                <Button
+                  variant="secondary"
+                  size="sm"
+                  onClick={demoV3StatusesAndReaction}
+                  data-testid="playtest-v3-demo"
+                >
+                  V3 Demo
+                </Button>
               </div>
               <p className="text-[10px] text-stone-500">
                 Mono wirkt erst mit V2-Engine; Modus wird gespeichert.
