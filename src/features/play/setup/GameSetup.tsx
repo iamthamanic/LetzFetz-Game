@@ -3,7 +3,7 @@
  * Location: src/features/play/setup/GameSetup.tsx
  */
 import React, { useState } from 'react';
-import { ArrowLeft, Bot, Globe, Layers, Package, WifiOff } from 'lucide-react';
+import { ArrowLeft, Bot, Globe, Layers, Package, Sparkles, WifiOff } from 'lucide-react';
 import { BASE_PACK } from '../../../game';
 import { Button } from '../../../components/ui/Button';
 import { BrandLogoText } from '../../../components/ui/BrandLogoText';
@@ -12,10 +12,11 @@ import { Badge } from '../../../components/ui/Badge';
 import { Panel } from '../../../components/ui/Panel';
 import { useAppHistory } from '../../../services/history/AppHistoryContext';
 import { MenuGlitchBackdrop } from '../../../components/ui/MenuGlitchBackdrop';
+import type { GamePackChoice } from './resolveGamePackChoice';
 
 export type GameSetupMode = 'bot' | 'online';
 export type GameSetupPhase = 'mode' | 'bot' | 'online';
-export type GamePackChoice = 'base' | 'p100';
+export type { GamePackChoice };
 
 export interface BotMatchStart {
   mode: 'bot';
@@ -169,12 +170,12 @@ export function GameSetup({
               </h2>
             </div>
 
-            <Panel className="mx-auto max-w-md space-y-3" tone="game" data-testid="game-pack-select">
+            <Panel className="mx-auto max-w-xl space-y-3" tone="game" data-testid="game-pack-select">
               <div className="flex items-center gap-2 text-sm font-medium text-stone-200">
                 <Layers className="h-4 w-4 text-purple-400" aria-hidden />
                 Kartenset
               </div>
-              <div className="grid grid-cols-1 gap-2 sm:grid-cols-2" role="group" aria-label="Kartenset wählen">
+              <div className="grid grid-cols-1 gap-2 sm:grid-cols-3" role="group" aria-label="Kartenset wählen">
                 <button
                   type="button"
                   data-testid="game-pack-base"
@@ -211,6 +212,25 @@ export function GameSetup({
                   </div>
                   <span className="text-sm font-semibold text-stone-100">V2 P100 Playtest</span>
                   <span className="text-xs text-stone-400">100 Karten · 30 Leben · Phrase</span>
+                </button>
+
+                <button
+                  type="button"
+                  data-testid="game-pack-v3"
+                  aria-pressed={packChoice === 'v3'}
+                  onClick={() => setPackChoice('v3')}
+                  className={`flex flex-col items-start gap-1 rounded-lg border p-3 text-left transition-all focus:outline-none focus-visible:ring-2 focus-visible:ring-purple-500 ${
+                    packChoice === 'v3'
+                      ? 'border-amber-500/60 bg-amber-950/30'
+                      : 'border-stone-800 bg-stone-900/40 hover:border-stone-600'
+                  }`}
+                >
+                  <div className="flex w-full items-center justify-between gap-2">
+                    <Sparkles className="h-4 w-4 text-amber-400" aria-hidden />
+                    {packChoice === 'v3' ? <Badge variant="warning">V3</Badge> : null}
+                  </div>
+                  <span className="text-sm font-semibold text-stone-100">V3 Playtest</span>
+                  <span className="text-xs text-stone-400">Basis-Karten · V3-Kampf · 20 Leben</span>
                 </button>
               </div>
             </Panel>

@@ -5,8 +5,8 @@
 import React, { useState, useEffect, useRef, useCallback, useMemo } from 'react';
 import {
   BASE_PACK,
-  V2_P100_PACK,
   P100_RULESET,
+  V3_RULESET,
   createGame,
   applyAction,
   chooseBotAction,
@@ -28,6 +28,7 @@ import {
   DEFAULT_SETUP_CHARACTER_ID,
   type GameSetupPhase,
 } from './setup/GameSetup';
+import { resolveGamePackChoice } from './setup/resolveGamePackChoice';
 import { GrungeAppShell } from '../../components/ui/GrungeAppShell';
 import { PhaseCoachBanner } from './board/PhaseCoachBanner';
 import { PhaseCoachFooter, FOOTER_REVEAL_TOTAL_MS } from './board/PhaseCoachFooter';
@@ -671,7 +672,7 @@ export function PlayView() {
             setDealReveal({ p1: 0, p2: 0 });
             setHeldBackHandCards({});
             prevStateRef.current = null;
-            const selectedPack = packChoice === 'p100' ? V2_P100_PACK : BASE_PACK;
+            const { pack: selectedPack, ruleset, playtestHpCap } = resolveGamePackChoice(packChoice);
             setMatchPack(selectedPack);
             const seed = Date.now();
             matchSeedRef.current = seed;
@@ -682,11 +683,11 @@ export function PlayView() {
               p1CharacterId: humanCharacterId,
               p2CharacterId: botCharacterId,
               startingPlayer: HUMAN,
-              ruleset: packChoice === 'p100' ? P100_RULESET : undefined,
+              ruleset,
               seed,
             });
-            if (packChoice === 'p100') {
-              next.meta = { ...next.meta, playtestHpCap: 30 };
+            if (playtestHpCap !== undefined) {
+              next.meta = { ...next.meta, playtestHpCap };
             }
             push({
               undo: () => {
@@ -797,7 +798,12 @@ export function PlayView() {
                   seed,
                   arenaId: state.arena.arenaId,
                   d6Variant: state.arena.d6Variant,
-                  ruleset: matchPack.id === 'v2-p100' ? P100_RULESET : undefined,
+                  ruleset:
+                    state.meta.v3CombatEnabled === true
+                      ? V3_RULESET
+                      : matchPack.id === 'v2-p100'
+                        ? P100_RULESET
+                        : undefined,
                 }),
               );
             }}
