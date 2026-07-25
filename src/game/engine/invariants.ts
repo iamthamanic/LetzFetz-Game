@@ -1,6 +1,6 @@
 import type { GameAction, GameState, PlayerId, RulesetConfig } from '../types';
 import type { ContentPack } from '../types';
-import { DEFAULT_RULESET } from '../types';
+import { DEFAULT_RULESET, MAX_SHIELD, STATUS_STACK_LIMIT, isStatusId } from '../types';
 import type { Rng } from './deck';
 import { opponentOf } from './createGame';
 import { isV2Pack } from './phraseBuild';
@@ -76,6 +76,39 @@ export function collectInvariantViolations(
         code: 'BOUND_OVERFLOW',
         message: `${playerId} has ${player.bound.length} bound cards (max ${ruleset.maxBoundCards})`,
       });
+    }
+
+    const shield = player.shield ?? 0;
+    if (shield < 0 || shield > MAX_SHIELD) {
+      violations.push({
+        code: 'SHIELD_OUT_OF_RANGE',
+        message: `${playerId} shield ${shield} outside 0..${MAX_SHIELD}`,
+      });
+    }
+
+    const seenStatus = new Set<string>();
+    for (const status of player.statuses ?? []) {
+      if (!isStatusId(status.id)) {
+        violations.push({
+          code: 'STATUS_UNKNOWN',
+          message: `${playerId} has unknown status id`,
+        });
+        continue;
+      }
+      if (seenStatus.has(status.id)) {
+        violations.push({
+          code: 'STATUS_DUPLICATE',
+          message: `${playerId} has duplicate status ${status.id}`,
+        });
+      }
+      seenStatus.add(status.id);
+      const max = STATUS_STACK_LIMIT[status.id];
+      if (status.stacks < 1 || status.stacks > max) {
+        violations.push({
+          code: 'STATUS_STACKS_OUT_OF_RANGE',
+          message: `${playerId} ${status.id} stacks ${status.stacks} outside 1..${max}`,
+        });
+      }
     }
 
     if (options.pack && isV2Pack(options.pack)) {

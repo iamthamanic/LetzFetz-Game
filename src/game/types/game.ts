@@ -1,6 +1,7 @@
 import type { BoundCardInstance, CardInstance } from './cards';
 import type { MatchMeta, PendingChoice } from './matchMeta';
 import type { PlayerId, TurnPhase } from './ruleset';
+import type { StatusInstance } from './status';
 
 /** Playtest LP caps (D35 / O11). Cap = start; heals clamp here. */
 export type PlaytestHpCap = 20 | 25 | 30;
@@ -22,6 +23,10 @@ export interface PlayerState {
   /** Stiernackenkommando Ulti: next attack damage doubled. */
   doubleNextAttack: boolean;
   notes: string;
+  /** V3 status marks / buffs / debuffs (empty under V1-only play). */
+  statuses: StatusInstance[];
+  /** V3 shield (max 5); unused when v3Combat is off. */
+  shield: number;
 }
 
 export interface SharedPiles {
