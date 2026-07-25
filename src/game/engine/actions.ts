@@ -25,6 +25,7 @@ import { applyElementEffect, applyBoundActivation, finishMainAction, applyInstan
 import { findElementDef, findEnginePartDef, findGlitchDef } from './lookup';
 import { applyDamageThroughShield } from './status/shield';
 import { pickReaction, resolveImpulseReactions } from './status/reactionChoice';
+import { tickBrennenAfterMainAction, tickStatusesEndOfTurn } from './status/tickStatuses';
 import type { Element } from '../types';
 import { isV3CombatEnabled } from '../types';
 import type { ReactionId } from './status/reactions';
@@ -327,6 +328,7 @@ function applyPlayerAttackDamage(
   }
 
   next = afterHighAttackValue(next, attackerId, attackValue, ruleset);
+  next = tickBrennenAfterMainAction(next, attackerId, ruleset);
   return checkWinner(next);
 }
 
@@ -1212,6 +1214,7 @@ export function applyAction(
         throw new Error('Cannot end turn in this phase');
       }
       next = onEndTurnArena(state, playerId, ruleset);
+      next = tickStatusesEndOfTurn(next, playerId, ruleset);
       next = enforceHandLimit(next, playerId, ruleset);
       const nextPlayer = opponentOf(playerId);
       next = {

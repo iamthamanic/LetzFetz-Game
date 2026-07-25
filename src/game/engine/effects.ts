@@ -8,6 +8,7 @@ import { opponentOf, checkWinner } from './createGame';
 import { cloneState, drawForPlayer, clampHp } from './helpers';
 import { findElementDef, findGlitchDef } from './lookup';
 import type { Rng } from './deck';
+import { tickBrennenAfterMainAction } from './status/tickStatuses';
 
 function capBoostDamage(state: GameState, damage: number): number {
   if (state.arena.arenaId !== 'arena-spaeti') return damage;
@@ -237,3 +238,16 @@ export function finishMainAction(state: GameState, message?: string): GameState 
   if (message) next.lastEvent = message;
   return next;
 }
+
+/** Finish main action then V3 Brennen tick for the acting player. */
+export function finishMainActionWithTicks(
+  state: GameState,
+  playerId: PlayerId,
+  ruleset: RulesetConfig,
+  message?: string,
+): GameState {
+  let next = finishMainAction(state, message);
+  if (next.pendingChoice) return next;
+  return tickBrennenAfterMainAction(next, playerId, ruleset);
+}
+

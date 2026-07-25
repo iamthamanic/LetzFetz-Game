@@ -8,3 +8,4 @@ export * from './shield';
 export * from './reactions';
 export * from './reactionChoice';
 export * from './reactionOutcomes';
+export * from './tickStatuses';
