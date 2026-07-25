@@ -23,6 +23,10 @@ import {
 } from './helpers';
 import { applyElementEffect, applyBoundActivation, finishMainAction, applyInstantGlitch } from './effects';
 import { findElementDef, findEnginePartDef, findGlitchDef } from './lookup';
+import { applyDamageThroughShield } from './status/shield';
+import { applyElementImpulse } from './status/elementImpulse';
+import type { Element } from '../types';
+import { isV3CombatEnabled } from '../types';
 import {
   canBuildBoost,
   canBuildEnginePart,
@@ -288,18 +292,39 @@ function applyPlayerAttackDamage(
   ruleset: RulesetConfig,
   pack: ContentPack,
   rng: () => number,
+  hitImpulseElement?: Element | null,
 ): GameState {
-  let next = cloneState(state);
-  next.players[defenderId].hp = clampHp(next.players[defenderId].hp - damage, ruleset);
+  const pipeline = applyDamageThroughShield(state, defenderId, damage, ruleset);
+  let next = pipeline.state;
   next.combat = null;
   next.phase = 'end';
+
+  const absorbedNote =
+    pipeline.shieldAbsorbed > 0 ? ` Schild ${pipeline.shieldAbsorbed}.` : '';
   next.lastEvent =
     damage > 0
-      ? `${damage} Schaden (${attackValue} vs ${blockValue} Block).`
+      ? `${pipeline.hpDamage} Schaden (${attackValue} vs ${blockValue} Block).${absorbedNote}`
       : `Komplett geblockt (${attackValue} vs ${blockValue}).`;
-  if (isSumpf(next) && damage === 0) {
+
+  if (isSumpf(next) && pipeline.isFullBlock) {
     next = applyMandatoryArenaDrawDiscard(next, defenderId, 'sumpf-full-block', pack, rng, ruleset);
   }
+
+  // V3 §17: Treffer-Impulse after hit/full-block distinction (shield does not cancel hit).
+  if (
+    isV3CombatEnabled(ruleset) &&
+    pipeline.isHit &&
+    hitImpulseElement
+  ) {
+    const impulse = applyElementImpulse(next, defenderId, hitImpulseElement, ruleset);
+    next = impulse.state;
+    if (impulse.kind === 'mark') {
+      next.lastEvent = `${next.lastEvent ?? ''} Impuls → ${impulse.markId}.`.trim();
+    } else if (impulse.kind === 'reaction') {
+      next.lastEvent = `${next.lastEvent ?? ''} Impuls → Reaktion möglich.`.trim();
+    }
+  }
+
   next = afterHighAttackValue(next, attackerId, attackValue, ruleset);
   return checkWinner(next);
 }
