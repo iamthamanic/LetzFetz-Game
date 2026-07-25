@@ -1,14 +1,18 @@
 /**
- * V3 reaction choice window + stub resolve (full outcomes in later slices).
+ * V3 reaction choice window + outcome resolve.
  * Location: src/game/engine/status/reactionChoice.ts
  */
 import type { Element, GameState, PlayerId, PrimaryMarkId, RulesetConfig } from '../../types';
 import { isV3CombatEnabled } from '../../types';
 import { cloneState } from '../helpers';
-import { applyElementImpulse, type ReactionCandidate } from './elementImpulse';
-import { applyStatus, removeStatus } from './applyStatus';
-import { PRIMARY_MARK_BY_ELEMENT } from './elementImpulse';
+import {
+  applyElementImpulse,
+  PRIMARY_MARK_BY_ELEMENT,
+  type ReactionCandidate,
+} from './elementImpulse';
+import { applyStatus } from './applyStatus';
 import { REACTION_LABEL_DE, reactionIdFor, type ReactionId } from './reactions';
+import { applyReactionWithOutcome } from './reactionOutcomes';
 
 export interface PickReactionOption {
   reactionId: ReactionId;
@@ -18,7 +22,6 @@ export interface PickReactionOption {
 
 /**
  * After an impulse that found marks: auto-resolve one candidate, or open pick-reaction.
- * Enforces max one reaction per action via meta.v3ReactionsThisAction.
  */
 export function resolveImpulseReactions(
   state: GameState,
@@ -44,7 +47,7 @@ export function resolveImpulseReactions(
   if (options.length === 0) return impulse.state;
 
   if (options.length === 1) {
-    return applyReactionStub(impulse.state, targetId, options[0], chooserId);
+    return applyChosenReaction(impulse.state, targetId, options[0], chooserId, ruleset);
   }
 
   const next = cloneState(impulse.state);
@@ -77,27 +80,28 @@ export function candidatesToOptions(
   return options;
 }
 
-/** Core stub: consume chosen mark, no new mark, no outcome effects yet (#104+). */
-export function applyReactionStub(
+export function applyChosenReaction(
   state: GameState,
   targetId: PlayerId,
   option: PickReactionOption,
-  _chooserId: PlayerId,
+  chooserId: PlayerId,
+  ruleset: RulesetConfig,
 ): GameState {
-  let next = removeStatus(state, targetId, option.markId);
-  next = cloneState(next);
-  next.pendingChoice = null;
-  next.meta = {
-    ...next.meta,
-    v3ReactionsThisAction: (next.meta.v3ReactionsThisAction ?? 0) + 1,
-  };
-  next.lastEvent = `Reaktion: ${option.labelDe}.`;
-  return next;
+  return applyReactionWithOutcome(state, option.reactionId, {
+    targetId,
+    chooserId,
+    consumedMark: option.markId,
+    ruleset,
+  });
 }
+
+/** @deprecated use applyChosenReaction */
+export const applyReactionStub = applyChosenReaction;
 
 export function pickReaction(
   state: GameState,
   reactionId: ReactionId,
+  ruleset: RulesetConfig,
 ): GameState {
   const pending = state.pendingChoice;
   if (pending?.type !== 'pick-reaction') {
@@ -105,5 +109,15 @@ export function pickReaction(
   }
   const option = pending.options.find((o) => o.reactionId === reactionId);
   if (!option) throw new Error('Illegal reaction choice');
-  return applyReactionStub(state, pending.targetId, option, pending.chooserId);
+  return applyChosenReaction(
+    state,
+    pending.targetId,
+    {
+      reactionId: option.reactionId as ReactionId,
+      markId: option.markId,
+      labelDe: option.labelDe,
+    },
+    pending.chooserId,
+    ruleset,
+  );
 }

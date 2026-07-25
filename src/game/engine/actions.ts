@@ -815,7 +815,7 @@ function applyPendingChoiceAction(
     }
     case 'PICK_REACTION': {
       if (pending.type !== 'pick-reaction') throw new Error('Wrong pending type');
-      return pickReaction(state, action.reactionId as ReactionId);
+      return pickReaction(state, action.reactionId as ReactionId, ruleset);
     }
     case 'TAKE_OPTIONAL_DRAW': {
       if (pending.type !== 'optional-draw-discard') throw new Error('Wrong pending type');
