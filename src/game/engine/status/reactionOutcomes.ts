@@ -8,6 +8,8 @@ import { cloneState } from '../helpers';
 import { addShield, applyStatus, getStatus, removeStatus, setShield } from './applyStatus';
 import { applyDamageThroughShield } from './shield';
 import { REACTION_LABEL_DE, type ReactionId } from './reactions';
+import { infernoResonanceBonus } from './resonance';
+import type { ContentPack } from '../../types';
 
 const NEGATIVE_STATUSES: StatusId[] = [
   'brennen',
@@ -26,6 +28,8 @@ export interface ReactionContext {
   chooserId: PlayerId;
   consumedMark: PrimaryMarkId;
   ruleset: RulesetConfig;
+  /** Optional pack for resonance bonuses. */
+  pack?: import('../../types').ContentPack;
 }
 
 function keepsMark(reactionId: ReactionId): boolean {
@@ -81,7 +85,13 @@ export function applyReactionWithOutcome(
         stacksRemoved += leftover.stacks;
         next = removeStatus(next, ctx.targetId, 'brennen');
       }
-      next = applyDamageThroughShield(next, ctx.targetId, stacksRemoved + 1, ctx.ruleset).state;
+      let damage = stacksRemoved + 1;
+      if (ctx.pack) {
+        const reso = infernoResonanceBonus(next, ctx.pack, ctx.chooserId, ctx.ruleset);
+        next = reso.state;
+        damage += reso.bonus;
+      }
+      next = applyDamageThroughShield(next, ctx.targetId, damage, ctx.ruleset).state;
       break;
     }
     case 'ueberflutung':
