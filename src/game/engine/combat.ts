@@ -45,6 +45,14 @@ export function resolveDamage(attackValue: number, blockValue: number): number {
   return damage > 0 ? damage : 0;
 }
 
+/**
+ * V3 §17 steps 9–11: post-block damage before shield.
+ * Shield is applied separately via `applyDamageThroughShield`.
+ */
+export function postBlockDamage(attackValue: number, blockValue: number): number {
+  return resolveDamage(attackValue, blockValue);
+}
+
 /** Challenge: attack must exceed resistance + block (+ bonuses). */
 export function challengeSucceeded(
   attackValue: number,
