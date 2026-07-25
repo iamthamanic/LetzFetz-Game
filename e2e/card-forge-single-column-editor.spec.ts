@@ -24,6 +24,8 @@ async function openForgeWithCharacter(page: import('@playwright/test').Page, nam
   const cardBtn = library.locator('[data-testid^="card-library-item-"]').filter({ hasText: name }).first();
   await cardBtn.scrollIntoViewIfNeeded();
   await cardBtn.click();
+  await expect(page.getByTestId('card-library-hover-preview')).toBeVisible({ timeout: 10_000 });
+  await page.getByTestId('card-library-preview-edit').click();
   await expect(page.getByTestId('card-forge-preview')).toBeVisible({ timeout: 10_000 });
 }
 
@@ -103,6 +105,8 @@ test.describe('Card Forge single-column editor', () => {
 
     await page.getByRole('tab', { name: /Element/i }).click();
     await page.getByTestId('card-library').locator('[data-testid^="card-library-item-"]').first().click();
+    await expect(page.getByTestId('card-library-hover-preview')).toBeVisible();
+    await page.getByTestId('card-library-preview-edit').click();
     await expect(page.getByTestId('card-forge-preview')).toBeVisible();
 
     const stacked = await page.evaluate(() => {

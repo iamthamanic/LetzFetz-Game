@@ -1,0 +1,40 @@
+{
+  "status": "recorded",
+  "user_impact": {
+    "de": [
+      "Karten-Bibliothek: Klick öffnet Vorschau (Front/Rückseite/Ulti); Edit und Neue Karte im gleichen Modal."
+    ],
+    "en": [
+      "Card library: click opens preview (front/back/ulti); Edit and New Card stay in the same modal."
+    ]
+  },
+  "developer_impact": {
+    "de": [
+      "ForgeView hält die Library gemountet; Editor läuft inline in CardLibrary-Modal."
+    ],
+    "en": [
+      "ForgeView keeps the library mounted; editor runs inline in the CardLibrary modal."
+    ]
+  },
+  "operational_impact": {
+    "de": [],
+    "en": []
+  },
+  "packages": [],
+  "affected_features": ["card-forge"],
+  "affected_components": [
+    "src/features/forge/CardLibrary.tsx",
+    "src/features/forge/ForgeView.tsx",
+    "e2e/card-forge-single-column-editor.spec.ts"
+  ],
+  "breaking_changes": [],
+  "migration_required": false,
+  "security_relevant": false,
+  "evidence": [],
+  "summary": {
+    "de": "Card-Library-Vorschau per Klick-Modal mit Inline-Editor.",
+    "en": "Card library click-to-preview modal with inline editor."
+  },
+  "date": "2026-07-25",
+  "id": "2026-07-25-card-library-preview-modal"
+}

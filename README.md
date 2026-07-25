@@ -53,4 +53,8 @@
   npm run generate:higgsfield-chars -- --key=knuspergnom
   npm run generate:higgsfield-chars -- --all --force
   ```
-  
+
+  ## Recent changes
+
+  - **2026-07-25** — Card Forge: Klick öffnet Vorschau-Modal; Edit im gleichen Modal (`feat/card-library-preview-modal`)
+ 
