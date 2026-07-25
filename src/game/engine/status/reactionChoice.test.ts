@@ -59,7 +59,7 @@ describe('resolveImpulseReactions', () => {
     state = applyStatus(state, 'p2', 'durchnaesst', 1);
     state = applyStatus(state, 'p2', 'high', 1);
     state = resolveImpulseReactions(state, 'p2', 'fire', V3_RULESET, 'p1');
-    state = pickReaction(state, 'dampf');
+    state = pickReaction(state, 'dampf', V3_RULESET);
     expect(getStatus(state, 'p2', 'durchnaesst')).toBeUndefined();
     expect(getStatus(state, 'p2', 'high')?.stacks).toBe(1);
     expect(state.meta.v3ReactionsThisAction).toBe(1);
