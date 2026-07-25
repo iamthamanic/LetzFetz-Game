@@ -26,11 +26,15 @@ export function cloneState(state: GameState): GameState {
         ...src.players.p1,
         hand: [...src.players.p1.hand],
         bound: src.players.p1.bound.map((b) => ({ ...b })),
+        statuses: (src.players.p1.statuses ?? []).map((s) => ({ ...s })),
+        shield: src.players.p1.shield ?? 0,
       },
       p2: {
         ...src.players.p2,
         hand: [...src.players.p2.hand],
         bound: src.players.p2.bound.map((b) => ({ ...b })),
+        statuses: (src.players.p2.statuses ?? []).map((s) => ({ ...s })),
+        shield: src.players.p2.shield ?? 0,
       },
     },
     piles: {

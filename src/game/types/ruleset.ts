@@ -10,6 +10,11 @@ export interface RulesetConfig {
   p2SecondHand: number;
   mainDeckSize: number;
   diceBonusTable: { min: number; max: number; bonus: number }[];
+  /**
+   * When true, V3 combat layer (statuses, shield, impulses, reactions) is active.
+   * Default false — Engine-Default bleibt V1 bis Cutover (SPIELANLEITUNG_V3_WIP).
+   */
+  v3Combat?: boolean;
 }
 
 export const DEFAULT_RULESET: RulesetConfig = {
@@ -25,7 +30,18 @@ export const DEFAULT_RULESET: RulesetConfig = {
     { min: 3, max: 4, bonus: 1 },
     { min: 5, max: 6, bonus: 2 },
   ],
+  v3Combat: false,
 };
+
+/** V1 defaults with V3 combat enabled (playtests / unit tests). */
+export const V3_RULESET: RulesetConfig = {
+  ...DEFAULT_RULESET,
+  v3Combat: true,
+};
+
+export function isV3CombatEnabled(ruleset: RulesetConfig): boolean {
+  return ruleset.v3Combat === true;
+}
 
 export type PlayerId = 'p1' | 'p2';
 

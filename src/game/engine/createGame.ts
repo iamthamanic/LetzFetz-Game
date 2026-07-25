@@ -127,6 +127,8 @@ export function createGame(config: CreateGameConfig): GameState {
     ultimateAvailable: true,
     doubleNextAttack: false,
     notes: '',
+    statuses: [] as GameState['players']['p1']['statuses'],
+    shield: 0,
   });
 
   const state: GameState = {
