@@ -19,6 +19,25 @@ const BED_TO_ID: Record<MusicBed, SoundId> = {
   match: 'music.match.default',
 };
 
+/**
+ * Match bed only while Play tab shows an active board after MatchIntro continues.
+ * Setup and intro keep the menu bed (Pulsefront).
+ */
+export function resolveMusicBed(
+  currentViewIsPlay: boolean,
+  battleMusicActive: boolean,
+): MusicBed {
+  return currentViewIsPlay && battleMusicActive ? 'match' : 'menu';
+}
+
+/** PlayView signal: game state on board and intro dismissed. */
+export function isBattleMusicActive(
+  hasGameState: boolean,
+  introOpen: boolean,
+): boolean {
+  return hasGameState && !introOpen;
+}
+
 interface MusicBedSyncProps {
   bed: MusicBed;
 }
