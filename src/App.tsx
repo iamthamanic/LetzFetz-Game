@@ -11,7 +11,7 @@ import { SettingsView } from './features/settings/SettingsView';
 import { isPlaymatPreview } from './features/play/services/playtest/isPlaymatPreview';
 import { AppHistoryProvider, useAppHistory } from './services/history/AppHistoryContext';
 import { AudioSettingsSync } from './services/audio/AudioSettingsSync';
-import { MusicBedSync } from './services/audio/MusicBedSync';
+import { MusicBedSync, resolveMusicBed } from './services/audio/MusicBedSync';
 import { DisplaySettingsSync } from './services/settings/DisplaySettingsSync';
 import { SettingsProvider } from './services/settings/SettingsProvider';
 import { Modal } from './components/ui/Modal';
@@ -22,8 +22,10 @@ function AppShell() {
   const [settingsOpen, setSettingsOpen] = useState(false);
   const [arenaKey, setArenaKey] = useState(0);
   const [playSessionKey, setPlaySessionKey] = useState(0);
+  /** True only while Play has a live board after MatchIntro (from PlayView). */
+  const [battleMusicActive, setBattleMusicActive] = useState(false);
   const { push, canGoBack, canGoForward, goBack, goForward } = useAppHistory();
-  const musicBed = currentView === 'play' ? 'match' : 'menu';
+  const musicBed = resolveMusicBed(currentView === 'play', battleMusicActive);
 
   const openSettings = () => setSettingsOpen(true);
   const closeSettings = () => setSettingsOpen(false);
@@ -96,7 +98,10 @@ function AppShell() {
         <div
           className={`flex min-h-0 flex-1 flex-col ${currentView === 'play' ? '' : 'hidden'}`}
         >
-          <PlayView key={playSessionKey} />
+          <PlayView
+            key={playSessionKey}
+            onBattleMusicActiveChange={setBattleMusicActive}
+          />
         </div>
       </main>
 

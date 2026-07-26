@@ -47,6 +47,7 @@ import { ScrollText } from 'lucide-react';
 import { isPlaytestMode } from './services/playtest/isPlaytestMode';
 import { PlaytestCheatbox } from './PlaytestCheatbox';
 import { audioManager } from '../../services/audio/audioManager';
+import { isBattleMusicActive } from '../../services/audio/MusicBedSync';
 import {
   playCombatAttack,
   playCombatBlock,
@@ -100,7 +101,12 @@ function readBotMode(): BotMode {
   }
 }
 
-export function PlayView() {
+interface PlayViewProps {
+  /** True only when match is on the board after MatchIntro continues (Iron Surge). */
+  onBattleMusicActiveChange?: (active: boolean) => void;
+}
+
+export function PlayView({ onBattleMusicActiveChange }: PlayViewProps) {
   const playtestMode = isPlaytestMode();
   const { push } = useAppHistory();
   const [matchPack, setMatchPack] = useState<ContentPack>(BASE_PACK);
@@ -234,6 +240,17 @@ export function PlayView() {
   useEffect(() => {
     stateRef.current = state;
   }, [state]);
+
+  const hasGameState = state != null;
+  useEffect(() => {
+    onBattleMusicActiveChange?.(isBattleMusicActive(hasGameState, introOpen));
+  }, [hasGameState, introOpen, onBattleMusicActiveChange]);
+
+  useEffect(() => {
+    return () => {
+      onBattleMusicActiveChange?.(false);
+    };
+  }, [onBattleMusicActiveChange]);
 
   useEffect(() => {
     botPausedRef.current = botPaused;
