@@ -3,7 +3,10 @@
   "name": "Licht-Aufsatz 01",
   "slot": "aufsatz",
   "element": "light",
-  "sockets": ["SOCKET_ATTACK_ORIGIN"],
+  "sockets": [
+    "SOCKET_ATTACK_ORIGIN",
+    "SOCKET_VFX_FRONT"
+  ],
   "modelUrl": "/engine-parts/mvp/v3-part-light-aufsatz-01.glb",
   "previewUrl": "/cards/engine/v3-part-light-aufsatz-01.png",
   "budgets": {

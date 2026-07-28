@@ -108,7 +108,9 @@ Central material mapping and toon/outline live in the play `engine3d` layer (fol
 | #133 | R3F `WeaponAssembler` + one Play detail canvas |
 | #134 | Snapshot memory cache + `asset:*` CLI stubs + `adding-a-new-part.md` |
 
-MVP ID mapping (#132 locked — `engineParts36.ts` not authored yet; IDs stay stable for #133):
+Catalog (#143): `src/game/packs/v3/engineParts36.ts` → `V3_ENGINE_PARTS_36` (6×3×2 = 36). Registry + GLBs derive from it.
+
+MVP demo trio (#132 locked, still in the 36):
 
 | Role | Part id | GLB |
 |------|---------|-----|
@@ -116,7 +118,7 @@ MVP ID mapping (#132 locked — `engineParts36.ts` not authored yet; IDs stay st
 | Schatten Antrieb | `v3-part-shadow-antrieb-01` | `public/engine-parts/mvp/v3-part-shadow-antrieb-01.glb` |
 | Licht Aufsatz | `v3-part-light-aufsatz-01` | `public/engine-parts/mvp/v3-part-light-aufsatz-01.glb` |
 
-Registry: `src/services/engineAssets/partRegistry.ts` · Spec stubs: `docs/engine-system/specs/`
+Registry: `src/services/engineAssets/partRegistry.ts` · Spec stubs: `docs/engine-system/specs/` (36) · Regenerate: `npm run generate:engine-part-glbs -- --all`
 
 ## 5. Socket contract (assets)
 

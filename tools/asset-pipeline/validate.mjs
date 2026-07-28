@@ -9,18 +9,25 @@
  *
  * No Meshy / network. Follow-up: real GLB socket + budget checks.
  */
-import { existsSync } from 'node:fs';
+import { existsSync, readdirSync } from 'node:fs';
 import { dirname, join } from 'node:path';
 import { fileURLToPath } from 'node:url';
 
 const ROOT = join(dirname(fileURLToPath(import.meta.url)), '..', '..');
+const SPECS_DIR = join(ROOT, 'docs', 'engine-system', 'specs');
 
-/** MVP registry ids from ADR #132 (keep in sync with partRegistry). */
-const MVP_IDS = new Set([
-  'v3-part-water-traeger-01',
-  'v3-part-shadow-antrieb-01',
-  'v3-part-light-aufsatz-01',
-]);
+/** Known registry ids = committed spec stubs (derived from V3_ENGINE_PARTS_36). */
+function loadRegisteredIds() {
+  try {
+    return new Set(
+      readdirSync(SPECS_DIR)
+        .filter((f) => f.endsWith('.json'))
+        .map((f) => f.replace(/\.json$/, '')),
+    );
+  } catch {
+    return new Set();
+  }
+}
 
 function usage() {
   console.error(`Usage: npm run asset:validate -- <asset-id>
@@ -51,11 +58,12 @@ function main() {
     process.exit(2);
   }
 
+  const registered = loadRegisteredIds();
   const glbPath = join(ROOT, 'public', 'engine-parts', 'mvp', `${assetId}.glb`);
   const previewPath = join(ROOT, 'public', 'cards', 'engine', `${assetId}.png`);
-  const specPath = join(ROOT, 'docs', 'engine-system', 'specs', `${assetId}.json`);
+  const specPath = join(SPECS_DIR, `${assetId}.json`);
 
-  const inMvp = MVP_IDS.has(assetId);
+  const inRegistry = registered.has(assetId);
   const glbOk = existsSync(glbPath);
   const previewOk = existsSync(previewPath);
   const specOk = existsSync(specPath);
@@ -64,10 +72,10 @@ function main() {
 DE: Status für „${assetId}"
 EN: Status for "${assetId}"
 
-  registryMVP: ${inMvp ? 'yes' : 'no (not in MVP×3 set)'}
-  glb:         ${glbOk ? `ok → ${glbPath}` : 'missing (ok for stub)'}
-  previewPNG:  ${previewOk ? `ok → ${previewPath}` : 'missing (optional)'}
-  specJSON:    ${specOk ? `ok → ${specPath}` : 'missing (optional)'}
+  registrySpec: ${inRegistry ? 'yes' : `no (not in ${registered.size} specs)`}
+  glb:          ${glbOk ? `ok → ${glbPath}` : 'missing (ok for stub)'}
+  previewPNG:   ${previewOk ? `ok → ${previewPath}` : 'missing (optional)'}
+  specJSON:     ${specOk ? `ok → ${specPath}` : 'missing (optional)'}
 
 DE: Stub exit 0 — echte Socket-/Budget-Checks folgen.
 EN: Stub exit 0 — real socket/budget checks are a follow-up.

@@ -1,0 +1,19 @@
+{
+  "id": "v3-part-light-antrieb-01",
+  "name": "Licht-Antrieb 01",
+  "slot": "antrieb",
+  "element": "light",
+  "sockets": [
+    "SOCKET_OUTPUT",
+    "SOCKET_VFX_CORE",
+    "SOCKET_EXHAUST"
+  ],
+  "modelUrl": "/engine-parts/mvp/v3-part-light-antrieb-01.glb",
+  "previewUrl": "/cards/engine/v3-part-light-antrieb-01.png",
+  "budgets": {
+    "maxTriangles": 48,
+    "maxTexturePx": 0,
+    "placeholder": true
+  },
+  "version": 1
+}

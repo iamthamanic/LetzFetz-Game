@@ -9,3 +9,9 @@ export {
   measureOffBiasRate,
   CBIAS_DEFAULTS,
 } from './v2';
+export {
+  V3_ENGINE_PARTS_36,
+  V3_ENGINE_PARTS_36_BY_ID,
+  listV3EnginePartIds,
+  type V3EnginePartRef,
+} from './v3';
