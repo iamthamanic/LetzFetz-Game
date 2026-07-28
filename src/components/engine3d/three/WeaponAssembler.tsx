@@ -1,16 +1,16 @@
 /**
  * Assembles Träger → Antrieb (SOCKET_DRIVE) → Aufsatz (SOCKET_OUTPUT).
- * Location: src/features/play/engine3d/three/WeaponAssembler.tsx
+ * Location: src/components/engine3d/three/WeaponAssembler.tsx
  * ADR D4: R3F hooks allowed under engine3d/three/**
  */
 import { useCallback, useEffect, useRef, useState } from 'react';
 import { useFrame } from '@react-three/fiber';
 import type { Group, Object3D } from 'three';
-import type { EngineRecipe } from '../../../../game/types/engineVisual';
+import type { EngineRecipe } from '../../../game/types/engineVisual';
 import {
   lookupEnginePartAsset,
   type EnginePartAssetEntry,
-} from '../../../../services/engineAssets/partRegistry';
+} from '../../../services/engineAssets/partRegistry';
 import { PartModel } from './PartModel';
 import { attachToSocket, detachFromParent } from './model-utils';
 

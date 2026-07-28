@@ -13,7 +13,7 @@ Importiere aus `components/ui/` — kein neues Button/Input-Styling inline.
 
 ## Feature-Slices
 - Feature-owned UI lebt unter `src/features/<feature>/` (Shell: `features/shell/` — AppBrand, AppNav, MainMenu, Settings, Notes)
-- Shared bleiben: `components/ui/`, `components/cards/`, `components/character/`, `services/history|cardArt|icons`
+- Shared bleiben: `components/ui/`, `components/cards/`, `components/character/`, `components/engine3d/`, `services/history|cardArt|icons|engineAssets`
 - Kein Feature→Feature-Import; keine Re-Export-Stubs bei Moves
 - Play entry: `features/play/PlayView.tsx` (App composition root import)
 

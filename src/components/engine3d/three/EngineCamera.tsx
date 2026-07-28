@@ -1,6 +1,6 @@
 /**
  * Fixed perspective camera for engine detail preview.
- * Location: src/features/play/engine3d/three/EngineCamera.tsx
+ * Location: src/components/engine3d/three/EngineCamera.tsx
  */
 import { PerspectiveCamera } from '@react-three/drei';
 

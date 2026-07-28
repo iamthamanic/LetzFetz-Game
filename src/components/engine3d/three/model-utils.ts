@@ -1,6 +1,6 @@
 /**
  * Pure Three.js scene helpers for Fetzgerät assembly (no WebGL required).
- * Location: src/features/play/engine3d/three/model-utils.ts
+ * Location: src/components/engine3d/three/model-utils.ts
  * Hook exception ADR D4 — this file may import `three`.
  */
 import { Object3D } from 'three';

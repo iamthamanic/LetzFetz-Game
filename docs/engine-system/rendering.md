@@ -8,7 +8,7 @@
 | UI | Tech |
 |----|------|
 | Cards / board thumbs | Static image via `resolveCardArtPath` → registry `previewUrl`, else `/cards/engine/{id}.png` |
-| Detail / build preview | Single `@react-three/fiber` canvas |
+| Detail / build preview | Single `@react-three/fiber` canvas (`src/components/engine3d/`) |
 | Cached engine art | Snapshot keyed by `createRenderKey` (#134) |
 
 ## Snapshot cache (#134)
@@ -26,16 +26,17 @@ Board cards stay 2D — thumbs resolve through `src/services/cardArt/manifest.ts
 (`resolveCardArtPath` / `resolveEnginePartArtPath` → `lookupEnginePartAsset.previewUrl`).
 Snapshot cache remains infrastructure for future generated thumbs, not a cutover in #134.
 
-## Play integration (#133)
+## Play + Library integration (#133 / #145)
 
 | Entry | Behavior |
 |-------|----------|
-| Playtest Cheatbox → **3D-Assembler (MVP)** | Opens `EnginePreviewPanel` with hardcoded MVP×3 recipe |
+| Playtest Cheatbox → **3D-Assembler (MVP)** | Opens Play `EnginePreviewPanel` with hardcoded MVP×3 recipe |
 | Bound recipe with Träger + registry GLB | Button **Fetzgerät 3D** (bottom-left) → same panel via `boundToRecipe` |
-| Forge Card Library | **Follow-up** — no Feature→Feature import; optional later `src/components/engine3d/` |
+| Forge Card Library detail | When `lookupEnginePartAsset(card.id)` → shared `EnginePreviewCanvas` (carrier-only recipe) |
 
-Code: `src/features/play/engine3d/` (`EnginePreviewCanvas`, `WeaponAssembler`, …).  
-Hook exception: only `engine3d/three/**` (ADR D4).
+Shared presentational: `src/components/engine3d/` (`EnginePreviewCanvas`, `WeaponAssembler`, …).  
+Play-owned shell: `src/features/play/engine3d/` (`EnginePreviewPanel`, snapshot cache, MVP demo).  
+Hook exception: only `components/engine3d/three/**` (ADR D4).
 
 ## V3 assets (#132 / #143)
 

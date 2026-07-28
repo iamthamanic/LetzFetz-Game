@@ -6,7 +6,7 @@ import {
   ENGINE_RENDER_VERSION,
   type EngineRecipe,
 } from '../../../game/types/engineVisual';
-import { lookupEnginePartAsset } from '../../../services/engineAssets/partRegistry';
+import { recipeHasRegistryAsset as sharedRecipeHasRegistryAsset } from '../../../components/engine3d';
 
 /** Demo recipe using three ids from `V3_ENGINE_PARTS_36`. */
 export const MVP_DEMO_RECIPE: EngineRecipe = {
@@ -19,8 +19,5 @@ export const MVP_DEMO_RECIPE: EngineRecipe = {
 
 /** True when at least one recipe part has a GLB registry entry. */
 export function recipeHasRegistryAsset(recipe: EngineRecipe): boolean {
-  for (const id of [recipe.carrierId, recipe.driveId, recipe.attachmentId]) {
-    if (id && lookupEnginePartAsset(id)) return true;
-  }
-  return false;
+  return sharedRecipeHasRegistryAsset(recipe);
 }

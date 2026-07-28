@@ -52,16 +52,17 @@ English field names (`carrier` / `drive` / `attachment`) are **DTO aliases only*
 ### D2 — Feature slice placement (no Feature→Feature imports)
 
 ```text
-src/game/…                 # recipe, validate, renderKey (pure)
-src/services/engineAssets/ # registry URLs, lookup (shared)
-src/features/play/engine3d/# R3F canvas, assembler, snapshot helpers
-public/engine-parts/       # GLB + generated previews
-tools/asset-pipeline/      # CLI (npm scripts)
-docs/engine-system/        # this folder
+src/game/…                    # recipe, validate, renderKey (pure)
+src/services/engineAssets/    # registry URLs, lookup (shared)
+src/components/engine3d/      # R3F canvas + assembler (shared Play + Forge)
+src/features/play/engine3d/   # Play panel, MVP demo, snapshot helpers
+public/engine-parts/          # GLB + generated previews
+tools/asset-pipeline/         # CLI (npm scripts)
+docs/engine-system/           # this folder
 ```
 
 - **Do not** create `features/engine-builder` that Play must import.
-- Card Forge / Library may use shared `services/engineAssets` + optional shared presentational components under `src/components/` if needed later.
+- Card Forge / Library use shared `services/engineAssets` + `src/components/engine3d/` — no Feature→Feature.
 - `App.tsx` remains composition root.
 
 ### D3 — Live 3D only where it pays off
@@ -78,7 +79,7 @@ Never mount a Three.js canvas per hand card.
 
 Project default hooks: `useState` / `useRef` / `useEffect`.
 
-**Exception (documented):** files under `src/features/play/engine3d/three/**` may use additional hooks required by `@react-three/fiber` / `@react-three/drei`. Do not spread that exception into `src/game/` or unrelated features.
+**Exception (documented):** files under `src/components/engine3d/three/**` may use additional hooks required by `@react-three/fiber` / `@react-three/drei`. Do not spread that exception into `src/game/` or unrelated features.
 
 ### D5 — Package manager and CLI
 
@@ -151,7 +152,8 @@ docs/engine-system/
 src/game/types/engineVisual.ts   # #131
 src/game/engine/engineRecipe.ts  # #131
 src/services/engineAssets/       # #132 (partRegistry + types)
-src/features/play/engine3d/      # #133–#134
+src/components/engine3d/         # #145 shared canvas
+src/features/play/engine3d/      # #133–#134 panel + snapshot
 public/engine-parts/mvp/         # #132 placeholder GLBs
 docs/engine-system/specs/        # #132 part spec JSON stubs
 scripts/generate-mvp-placeholder-glbs.ts  # regenerate MVP GLBs

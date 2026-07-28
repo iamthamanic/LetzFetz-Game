@@ -1,13 +1,13 @@
 /**
  * Single R3F canvas for Fetzgerät detail preview (max one per view).
- * Location: src/features/play/engine3d/EnginePreviewCanvas.tsx
+ * Location: src/components/engine3d/EnginePreviewCanvas.tsx
  * Outside three/**: only useState / useRef / useEffect.
  */
 import React, { Suspense, useEffect, useState, useCallback } from 'react';
 import { Canvas } from '@react-three/fiber';
 import { Html } from '@react-three/drei';
-import type { EngineRecipe } from '../../../game/types/engineVisual';
-import { prefersReducedMotion } from '../presentation/prefersReducedMotion';
+import type { EngineRecipe } from '../../game/types/engineVisual';
+import { prefersReducedMotion } from './prefersReducedMotion';
 import { EngineCamera } from './three/EngineCamera';
 import { EngineLighting } from './three/EngineLighting';
 import {
