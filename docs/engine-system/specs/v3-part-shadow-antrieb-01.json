@@ -1,0 +1,15 @@
+{
+  "id": "v3-part-shadow-antrieb-01",
+  "name": "Schatten-Antrieb 01",
+  "slot": "antrieb",
+  "element": "shadow",
+  "sockets": ["SOCKET_OUTPUT", "SOCKET_VFX_CORE"],
+  "modelUrl": "/engine-parts/mvp/v3-part-shadow-antrieb-01.glb",
+  "previewUrl": "/cards/engine/v3-part-shadow-antrieb-01.png",
+  "budgets": {
+    "maxTriangles": 48,
+    "maxTexturePx": 0,
+    "placeholder": true
+  },
+  "version": 1
+}

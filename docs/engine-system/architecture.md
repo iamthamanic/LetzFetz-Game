@@ -108,13 +108,15 @@ Central material mapping and toon/outline live in the play `engine3d` layer (fol
 | #133 | R3F `WeaponAssembler` + one Play detail canvas |
 | #134 | Snapshot memory cache + `asset:*` CLI stubs + `adding-a-new-part.md` |
 
-Suggested MVP ID mapping (adjust in #132 if art/socket needs differ):
+MVP ID mapping (#132 locked — `engineParts36.ts` not authored yet; IDs stay stable for #133):
 
-| Role | Example existing id |
-|------|---------------------|
-| Wasser Träger | `v3-part-water-traeger-01` or `-02` |
-| Schatten Antrieb | `v3-part-shadow-antrieb-01` or `-02` |
-| Licht Aufsatz | `v3-part-light-aufsatz-01` or `-02` |
+| Role | Part id | GLB |
+|------|---------|-----|
+| Wasser Träger | `v3-part-water-traeger-01` | `public/engine-parts/mvp/v3-part-water-traeger-01.glb` |
+| Schatten Antrieb | `v3-part-shadow-antrieb-01` | `public/engine-parts/mvp/v3-part-shadow-antrieb-01.glb` |
+| Licht Aufsatz | `v3-part-light-aufsatz-01` | `public/engine-parts/mvp/v3-part-light-aufsatz-01.glb` |
+
+Registry: `src/services/engineAssets/partRegistry.ts` · Spec stubs: `docs/engine-system/specs/`
 
 ## 5. Socket contract (assets)
 
@@ -146,9 +148,11 @@ docs/engine-system/
 
 src/game/types/engineVisual.ts   # #131
 src/game/engine/engineRecipe.ts  # #131
-src/services/engineAssets/       # #132
+src/services/engineAssets/       # #132 (partRegistry + types)
 src/features/play/engine3d/      # #133–#134
-public/engine-parts/mvp/         # #132
+public/engine-parts/mvp/         # #132 placeholder GLBs
+docs/engine-system/specs/        # #132 part spec JSON stubs
+scripts/generate-mvp-placeholder-glbs.ts  # regenerate MVP GLBs
 tools/asset-pipeline/            # #134
 ```
 
