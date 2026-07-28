@@ -5,6 +5,44 @@
 import type { ElementCardDef, PendingCombat } from '../../../game/types';
 import { formatCombatStageImpulseHint } from '../../../components/cards/impulseKeywordCopy';
 
+/** Dump §10 attack kinds we can distinguish from card defs today. */
+export type CombatAttackKind = 'normal' | 'element' | 'status' | 'reaction';
+
+export function classifyCombatAttackKind(
+  attackDef?: ElementCardDef | null,
+): CombatAttackKind | null {
+  if (!attackDef) return null;
+  if (attackDef.elementImpulse) return 'element';
+  const text = `${attackDef.instantText} ${attackDef.boundText}`.toLowerCase();
+  if (text.includes('reaktion')) return 'reaction';
+  if (
+    text.includes('status') ||
+    text.includes('marke') ||
+    text.includes('brennen') ||
+    text.includes('gift')
+  ) {
+    return 'status';
+  }
+  if (attackDef.cardType === 'attack') return 'normal';
+  return null;
+}
+
+const ATTACK_KIND_LABEL_DE: Record<CombatAttackKind, string> = {
+  normal: 'Normalangriff',
+  element: 'Elementangriff',
+  status: 'Statusangriff',
+  reaction: 'Reaktionsangriff',
+};
+
+/** Visible §10 type line; null when kind cannot be distinguished. */
+export function buildCombatStageAttackTypeLine(
+  attackDef?: ElementCardDef | null,
+): string | null {
+  const kind = classifyCombatAttackKind(attackDef);
+  if (!kind) return null;
+  return `Angriffsart: ${ATTACK_KIND_LABEL_DE[kind]}`;
+}
+
 export function buildCombatStageTitle(
   combat: PendingCombat,
   isHumanDefender: boolean,
