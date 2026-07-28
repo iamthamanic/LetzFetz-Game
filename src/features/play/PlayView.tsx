@@ -46,6 +46,12 @@ import { Badge } from '../../components/ui/Badge';
 import { ScrollText } from 'lucide-react';
 import { isPlaytestMode } from './services/playtest/isPlaytestMode';
 import { PlaytestCheatbox } from './PlaytestCheatbox';
+import {
+  EnginePreviewPanel,
+  MVP_DEMO_RECIPE,
+  recipeHasRegistryAsset,
+} from './engine3d';
+import { boundToRecipe, validateRecipe } from '../../game/engine/engineRecipe';
 import { audioManager } from '../../services/audio/audioManager';
 import { isBattleMusicActive } from '../../services/audio/MusicBedSync';
 import {
@@ -119,6 +125,10 @@ export function PlayView({ onBattleMusicActiveChange }: PlayViewProps) {
   const [actionError, setActionError] = useState<string | null>(null);
   const [introOpen, setIntroOpen] = useState(false);
   const [botPaused, setBotPaused] = useState(false);
+  /** Playtest: force MVP×3 3D assembler preview. */
+  const [enginePreviewMvp, setEnginePreviewMvp] = useState(false);
+  /** Open 3D panel for bound recipe when registry assets exist. */
+  const [enginePreviewBoundOpen, setEnginePreviewBoundOpen] = useState(false);
   const [botMode, setBotMode] = useState<BotMode>(readBotMode);
   const [botReason, setBotReason] = useState<string | null>(null);
   const [botSource, setBotSource] = useState<BotDecisionSource | null>(null);
@@ -550,6 +560,18 @@ export function PlayView({ onBattleMusicActiveChange }: PlayViewProps) {
     [state, pendingIntent, matchPack],
   );
 
+  const humanBoundRecipe = state ? boundToRecipe(state.players[HUMAN].bound) : null;
+  const boundEnginePreviewEligible = Boolean(
+    humanBoundRecipe &&
+      validateRecipe(humanBoundRecipe).active &&
+      recipeHasRegistryAsset(humanBoundRecipe),
+  );
+  const enginePreviewRecipe = enginePreviewMvp
+    ? MVP_DEMO_RECIPE
+    : enginePreviewBoundOpen && humanBoundRecipe && boundEnginePreviewEligible
+      ? humanBoundRecipe
+      : null;
+
   const announceDiceRoll = useCallback(() => {
     playDiceRoll();
     window.setTimeout(() => playDiceSettle(), W6_DIE_ROLL_MS);
@@ -865,6 +887,36 @@ export function PlayView({ onBattleMusicActiveChange }: PlayViewProps) {
             onBotPausedChange={setBotPaused}
             onApplyState={handleApplyPlaytestState}
             onError={setActionError}
+            enginePreviewMvp={enginePreviewMvp}
+            onEnginePreviewMvpChange={(enabled) => {
+              setEnginePreviewMvp(enabled);
+              if (enabled) setEnginePreviewBoundOpen(false);
+            }}
+          />
+        )}
+
+        {boundEnginePreviewEligible && !enginePreviewMvp && !enginePreviewBoundOpen && (
+          <div className="pointer-events-auto absolute bottom-3 left-3 z-40">
+            <Button
+              variant="secondary"
+              size="sm"
+              data-testid="engine-preview-open-bound"
+              onClick={() => setEnginePreviewBoundOpen(true)}
+            >
+              Fetzgerät 3D
+            </Button>
+          </div>
+        )}
+
+        {enginePreviewRecipe && (
+          <EnginePreviewPanel
+            recipe={enginePreviewRecipe}
+            pack={matchPack}
+            title={enginePreviewMvp ? 'MVP-Demo (3 Teile)' : undefined}
+            onClose={() => {
+              setEnginePreviewMvp(false);
+              setEnginePreviewBoundOpen(false);
+            }}
           />
         )}
 

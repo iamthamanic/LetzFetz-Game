@@ -39,6 +39,9 @@ interface PlaytestCheatboxProps {
   onBotPausedChange: (paused: boolean) => void;
   onApplyState: (state: GameState) => void;
   onError: (message: string | null) => void;
+  /** Force MVP×3 WeaponAssembler preview (#133). */
+  enginePreviewMvp: boolean;
+  onEnginePreviewMvpChange: (enabled: boolean) => void;
 }
 
 export function PlaytestCheatbox({
@@ -48,6 +51,8 @@ export function PlaytestCheatbox({
   onBotPausedChange,
   onApplyState,
   onError,
+  enginePreviewMvp,
+  onEnginePreviewMvpChange,
 }: PlaytestCheatboxProps) {
   const [open, setOpen] = useState(true);
   const [patchPhase, setPatchPhase] = useState<TurnPhase>(state.phase);
@@ -313,6 +318,19 @@ export function PlaytestCheatbox({
                 className="rounded border-stone-600 bg-stone-900"
               />
               Bot pausieren
+            </label>
+
+            <label
+              className="flex cursor-pointer items-center gap-2 border-t border-stone-800 pt-2 text-xs text-stone-300"
+              data-testid="playtest-engine-3d-mvp"
+            >
+              <input
+                type="checkbox"
+                checked={enginePreviewMvp}
+                onChange={(e) => onEnginePreviewMvpChange(e.target.checked)}
+                className="rounded border-stone-600 bg-stone-900"
+              />
+              3D-Assembler (MVP)
             </label>
           </div>
         )}
