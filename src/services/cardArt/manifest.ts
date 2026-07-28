@@ -1,8 +1,15 @@
 /**
  * Card art manifest — 48 shared illustrations mapped to all 90 pack cards.
  * Location: src/services/cardArt/manifest.ts
+ *
+ * Engine-part thumbs: registry `previewUrl` via `lookupEnginePartAsset`, else
+ * `/cards/engine/{id}.png` (shared services only — no feature imports).
  */
 import type { Element } from '../../game/types';
+import {
+  ENGINE_CARD_ART_PUBLIC_ROOT,
+  lookupEnginePartAsset,
+} from '../engineAssets/partRegistry';
 import { CHARACTER_PROMPTS } from './prompts/characters';
 import { ULTIMATE_PROMPTS } from './prompts/ultimates';
 import {
@@ -93,13 +100,35 @@ export function illustrationKeyForCardId(cardId: string): string | null {
   return null;
 }
 
+/**
+ * Prefer non-blank registry preview; otherwise `/cards/engine/{id}.png`.
+ * Pure — Vitest covers blank preview without mocking the registry.
+ */
+export function enginePartPreviewOrFallback(cardId: string, previewUrl: string): string {
+  const preview = previewUrl.trim();
+  const path = preview || `${ENGINE_CARD_ART_PUBLIC_ROOT}/${cardId}.png`;
+  return publicAssetUrl(path);
+}
+
+/**
+ * Resolve static art for a registered engine part.
+ * Prefers registry `previewUrl`; blank/missing → `/cards/engine/{id}.png`.
+ * Unknown id → empty string (callers keep previous no-art behavior).
+ */
+export function resolveEnginePartArtPath(cardId: string): string {
+  const entry = lookupEnginePartAsset(cardId);
+  if (!entry) return '';
+  return enginePartPreviewOrFallback(cardId, entry.previewUrl);
+}
+
 /** Default image path for a pack card id, or empty string if unknown. */
 export function resolveCardArtPath(cardId: string): string {
   const key = illustrationKeyForCardId(cardId);
-  if (!key) return '';
-  const def = manifestByKey.get(key);
-  if (!def) return '';
-  return illustrationPublicPath(key, def.kind);
+  if (key) {
+    const def = manifestByKey.get(key);
+    if (def) return illustrationPublicPath(key, def.kind);
+  }
+  return resolveEnginePartArtPath(cardId);
 }
 
 /** Public URL for the shared Letz Fetz card back (brand logo). */
