@@ -59,6 +59,8 @@ Catalog: `V3_ENGINE_PARTS_36` (36 ids). Demo trio:
 
 Regenerate boxes + specs: `npm run generate:engine-part-glbs -- --all` (alias: `generate:mvp-engine-glbs`). Spec stubs: `docs/engine-system/specs/` (36).
 
+**Pilot real meshes (#165):** the trio above are low-poly prisms/spike (`placeholder: false`, spec `version: 2`). Regenerate with `npm run generate:pilot-engine-glbs` — do **not** overwrite them with `--all` box regen unless intentional. Remaining 33 parts stay unit-box placeholders.
+
 ## Assembly
 
 1. Load Träger GLB → clone scene  

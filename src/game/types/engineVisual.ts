@@ -5,7 +5,7 @@
  */
 
 /** Bump when socket/material assembly contract changes. */
-export const ENGINE_RENDER_VERSION = 1;
+export const ENGINE_RENDER_VERSION = 2;
 
 /**
  * Derived visual recipe. English field names are DTO aliases only:
