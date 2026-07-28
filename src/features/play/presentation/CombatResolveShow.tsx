@@ -13,6 +13,7 @@ import {
   isCombatResolveStep,
   type CombatResolveSnapshot,
 } from './buildCombatResolveStep';
+import { resolveCombatImpulseFeedback } from '../../../components/cards/impulseKeywordCopy';
 
 type Phase = 'reveal' | 'dice' | 'receipt' | 'result';
 
@@ -113,6 +114,11 @@ export function CombatResolveShow({
   const whoseBlock = snap.defenderId === humanPlayerId ? 'Deine Verteidigung' : 'Gegner-Block';
   const showDice = phase === 'dice' || phase === 'receipt' || phase === 'result';
   const showReceipt = phase === 'receipt' || phase === 'result';
+  const impulseFeedback = resolveCombatImpulseFeedback({
+    damage: snap.damage,
+    attackImpulse: attackDef?.elementImpulse,
+    blockImpulse: blockDef?.elementImpulse,
+  });
 
   return (
     <div
@@ -259,6 +265,14 @@ export function CombatResolveShow({
               {snap.damage > 0 ? `−${snap.damage}` : '0'}
             </p>
             <p className="mt-1 text-sm font-bold">{outcomeCopy(snap)}</p>
+            {impulseFeedback && (
+              <p
+                data-testid="combat-resolve-impulse"
+                className="mt-2 text-xs font-semibold uppercase tracking-wide text-amber-200"
+              >
+                {impulseFeedback}
+              </p>
+            )}
             {snap.outcome === 'challenge-destroy' && (
               <p className="mt-2 text-xs font-semibold uppercase tracking-wide text-amber-200">
                 Gebaute Karte zerstört

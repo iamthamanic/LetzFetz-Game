@@ -3,8 +3,9 @@
  * Location: src/components/cards/LetzFetzCard.tsx
  */
 import React from 'react';
-import type { Element } from '../../game/types';
+import type { Element, ElementImpulseKeyword } from '../../game/types';
 import { ImageWithFallback } from '../figma/ImageWithFallback';
+import { Badge } from '../ui/Badge';
 import { CardGrungeOverlay } from '../ui/CardGrungeOverlay';
 import { CardNamePlate } from '../ui/CardNamePlate';
 import { CharacterCardGlitch } from '../ui/CharacterCardGlitch';
@@ -24,6 +25,7 @@ import {
 } from './cardFrameTokens';
 import { CardDividerBar, CardFrameCorners } from './grungeCardParts';
 import { CardBackFace } from './CardBackFace';
+import { formatImpulseTriggerLabel } from './impulseKeywordCopy';
 
 export type LetzFetzCardSize = 'sm' | 'md' | 'lg' | 'fluid';
 export type LetzFetzCardLayout = 'portrait' | 'tcg';
@@ -58,6 +60,8 @@ export interface LetzFetzCardProps {
   footerNote?: string;
   /** Which engine text to emphasize on Element cards. */
   effectFocus?: CardEffectFocus;
+  /** V3 pack keyword — shows Elementimpuls chip when present. */
+  elementImpulse?: ElementImpulseKeyword | null;
   /** Skip top parchment icon bar (library grid — more art). */
   hideHeader?: boolean;
   className?: string;
@@ -110,6 +114,7 @@ export function LetzFetzCard({
   disabled = false,
   footerNote,
   effectFocus,
+  elementImpulse = null,
   hideHeader = false,
   className = '',
   imageFit = 'cover',
@@ -127,6 +132,7 @@ export function LetzFetzCard({
     effects,
     effects_text,
     stats_json,
+    elementImpulse,
   });
   const presentation = portrait
     ? buildCardPortraitPresentation({
@@ -141,6 +147,7 @@ export function LetzFetzCard({
         stats_json,
         size,
         effectFocus,
+        elementImpulse,
       })
     : null;
 
@@ -264,6 +271,28 @@ export function LetzFetzCard({
           data-testid="card-element-badge"
         >
           {presentation.elementBadge}
+        </div>
+      )}
+      {display.impulseKeywordChip && size !== 'sm' && (
+        <div
+          className={`pointer-events-none absolute bottom-1 left-1 right-1 z-[3] flex justify-center ${
+            compact ? 'px-0.5' : 'px-1'
+          }`}
+        >
+          <Badge
+            variant="warning"
+            data-testid="card-elementimpuls-chip"
+            title={
+              elementImpulse
+                ? formatImpulseTriggerLabel(elementImpulse.trigger)
+                : undefined
+            }
+            className={`max-w-full truncate border-amber-700/70 bg-amber-950/85 text-amber-100 normal-case tracking-wide shadow ${
+              compact ? 'px-1 py-px text-[7px]' : 'px-1.5 py-0.5 text-[8px]'
+            }`}
+          >
+            {display.impulseKeywordChip}
+          </Badge>
         </div>
       )}
       {exhausted && size !== 'sm' && (

@@ -9,6 +9,7 @@ import type { PendingCombat } from '../../../../game/types';
 import { BoardCard } from '../BoardCard';
 import { Button } from '../../../../components/ui/Button';
 import {
+  buildCombatStageImpulseLine,
   buildCombatStageSubtitle,
   buildCombatStageTitle,
 } from '../combatStageCopy';
@@ -47,7 +48,8 @@ export function CombatStage({
   const targetDef = targetBound ? findElementDef(pack, targetBound.defId) : undefined;
 
   const title = buildCombatStageTitle(combat, isHumanDefender);
-  const subtitle = buildCombatStageSubtitle(isHumanDefender, botThinking);
+  const subtitle = buildCombatStageSubtitle(isHumanDefender, botThinking, attackDef);
+  const impulseLine = buildCombatStageImpulseLine(attackDef);
   const canBlock = blockActions.some((a) => a.type === 'PLAY_BLOCK');
 
   return (
@@ -79,6 +81,14 @@ export function CombatStage({
                 <span className="text-[10px] font-semibold uppercase tracking-wide text-red-300/90">
                   Angriff
                 </span>
+                {impulseLine && (
+                  <span
+                    data-testid="combat-stage-impulse"
+                    className="max-w-[11rem] text-center text-[10px] font-semibold leading-snug text-amber-200/90 sm:max-w-[14rem] sm:text-[11px]"
+                  >
+                    {impulseLine}
+                  </span>
+                )}
               </div>
             )}
             {/* Values/dice stay hidden until both sides decided — see CombatResolveShow. */}
