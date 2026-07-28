@@ -9,6 +9,7 @@
 - Shared charge: `fetzCharge`.
 - Resonance: `src/game/engine/status/resonance.ts`.
 - Part defs: `EnginePartCardDef` in pack (`V2_P100_PACK` / future `engineParts36`).
+- 3D asset lookup (URLs/sockets only): `lookupEnginePartAsset` in `src/services/engineAssets/partRegistry.ts` — MVP ids `v3-part-water-traeger-01`, `v3-part-shadow-antrieb-01`, `v3-part-light-aufsatz-01`.
 
 ## Visual recipe
 
