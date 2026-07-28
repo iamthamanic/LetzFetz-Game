@@ -39,7 +39,7 @@
 
 | Dump | Thema | Engine | UI / UX | Notiz |
 |------|--------|--------|---------|--------|
-| §10 | Angriffsarten (normal/Status/Element/Reaktion) | 🟡 Combat + Impulse | ❌ | Keine Typ-Unterscheidung in Combat-Stage-Copy |
+| §10 | Angriffsarten (normal/Status/Element/Reaktion) | 🟡 Combat + Impulse | ✅ Stage-Copy (#168) | `combat-stage-attack-type` wenn unterscheidbar |
 | §11 | Block / Vollblock / Teilblock / Reaktionsblock | 🟡 `isHit` / `isFullBlock` + Impulse | ✅ | #150 `CombatFeedbackToasts` + Resolve „Vollblock“ |
 | §12 | Fetzgerät Träger/Antrieb/Aufsatz | ✅ `fetzgeraetSlots.ts` + Adapter; 📦 **36er Roster** (`engineParts36.ts`) | ✅ Slot-Labels Träger/Antrieb/Aufsatz unter `v3Combat`; Charge-Spalte bleibt Adapter | Effekttexte + Ladung-Pool; Trigger: Hit/Block/Incoming/High/Focus/StatusDmg + Activate |
 | §13 | Elementresonanz (1/2/3 Teile) | ✅ `resonance.ts` | ✅ `ResonanceHud` am Engine-Row | HUD bei Tier ≥2 |

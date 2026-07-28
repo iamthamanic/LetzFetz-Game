@@ -9,6 +9,7 @@ import type { PendingCombat } from '../../../../game/types';
 import { BoardCard } from '../BoardCard';
 import { Button } from '../../../../components/ui/Button';
 import {
+  buildCombatStageAttackTypeLine,
   buildCombatStageImpulseLine,
   buildCombatStageSubtitle,
   buildCombatStageTitle,
@@ -49,6 +50,7 @@ export function CombatStage({
 
   const title = buildCombatStageTitle(combat, isHumanDefender);
   const subtitle = buildCombatStageSubtitle(isHumanDefender, botThinking, attackDef);
+  const attackTypeLine = buildCombatStageAttackTypeLine(attackDef);
   const impulseLine = buildCombatStageImpulseLine(attackDef);
   const canBlock = blockActions.some((a) => a.type === 'PLAY_BLOCK');
 
@@ -68,6 +70,14 @@ export function CombatStage({
         <div className="flex-none space-y-1 text-center">
           <h2 className="text-lg font-bold text-amber-100 sm:text-xl">{title}</h2>
           <p className="text-sm text-stone-400">{subtitle}</p>
+          {attackTypeLine && (
+            <p
+              data-testid="combat-stage-attack-type"
+              className="text-xs font-semibold uppercase tracking-wide text-amber-300/90"
+            >
+              {attackTypeLine}
+            </p>
+          )}
         </div>
 
         <div className="flex min-h-0 flex-1 items-stretch justify-center gap-3 py-4 sm:gap-6 sm:py-5">
