@@ -6,7 +6,7 @@ import React from 'react';
 import { BoardCard, type BoardCardSize } from './BoardCard';
 import type { BoundSlotView } from './buildGameViewModel';
 import { Button } from '../../../components/ui/Button';
-import { resolveCardArtPath } from '../../../services/cardArt/manifest';
+import { resolveBoardCardArtPath } from '../engine3d/rendering/resolveEnginePartThumb';
 
 const SLOT_DIM: Record<BoardCardSize, string> = {
   hand: 'w-24 h-36 sm:w-28 sm:h-40',
@@ -46,7 +46,7 @@ export function BoundCardSlot({
   const dim = SLOT_DIM[cardSize];
   const showBuildPulse = buildPending && buildHasFreeSlot && !slot.instanceId;
   const showReplacePulse = buildPending && slot.isReplaceTarget;
-  const ghostSrc = ghostCharacterId ? resolveCardArtPath(ghostCharacterId) : null;
+  const ghostSrc = ghostCharacterId ? resolveBoardCardArtPath(ghostCharacterId) : null;
   const hasCard = Boolean(slot.instanceId && (slot.def || slot.cardName));
 
   if (!hasCard) {
