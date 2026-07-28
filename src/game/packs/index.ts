@@ -12,6 +12,15 @@ export {
 export {
   V3_ENGINE_PARTS_36,
   V3_ENGINE_PARTS_36_BY_ID,
+  V3_ENGINE_PART_DEFS,
   listV3EnginePartIds,
+  generateFetzParts,
+  ROLE_BIAS,
   type V3EnginePartRef,
+  V3_PACK,
+  buildV3Pack,
+  buildV3ElementCards,
+  V3_MIX,
+  V3_PACK_RULESET,
+  V3_BLUEPRINT_SEED,
 } from './v3';

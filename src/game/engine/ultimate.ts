@@ -1,9 +1,12 @@
 import type { BoundCardInstance, ContentPack, GameState, PlayerId, RulesetConfig } from '../types';
+import { isV3CombatEnabled } from '../types';
 import { opponentOf, checkWinner } from './createGame';
 import { cloneState, drawForPlayer, clampHp } from './helpers';
 import { applyInstantGlitch } from './effects';
 import { findElementDef, findGlitchDef } from './lookup';
 import type { Rng } from './deck';
+import { applyStatus } from './status/applyStatus';
+import { enableDoubleReactionThisAction } from './status/v3CombatHooks';
 
 function findUltimateId(pack: ContentPack, characterId: string): string | undefined {
   return pack.characters.find((c) => c.id === characterId)?.ultimateId;
@@ -78,6 +81,11 @@ export function applyUltimateEffect(
       next.players[opponent].hp = clampHp(next.players[opponent].hp - 5, ruleset);
       next.players[playerId].hp = clampHp(next.players[playerId].hp + 3, ruleset);
       next.lastEvent = 'Mit Alles und Scharf: 5 Schaden, 3 Heilung.';
+      if (isV3CombatEnabled(ruleset)) {
+        next = applyStatus(next, opponent, 'brennen', 2);
+        next = enableDoubleReactionThisAction(next);
+        next.lastEvent += ' V3: 2 Brennen, Doppelreaktion.';
+      }
       next = buildFromHandAfterUlti(next, pack, playerId, ruleset);
       break;
     }
@@ -88,11 +96,19 @@ export function applyUltimateEffect(
         next = drawForPlayer(next, playerId, 1, rng, ruleset);
       }
       next.lastEvent = 'Lass laufen, Bruder: 4 Heilung, 3 Schaden.';
+      if (isV3CombatEnabled(ruleset)) {
+        next = applyStatus(next, opponent, 'durchnaesst', 1);
+        next.lastEvent += ' V3: Durchnässt.';
+      }
       break;
     }
     case 'ulti-stiernackenkommando': {
       next.players[playerId].doubleNextAttack = true;
       next.lastEvent = 'Rückhandbombe: Nächster Angriff doppelter Schaden.';
+      if (isV3CombatEnabled(ruleset)) {
+        next = enableDoubleReactionThisAction(next);
+        next.lastEvent += ' V3: Doppelreaktion.';
+      }
       break;
     }
     case 'ulti-kokabell': {

@@ -25,8 +25,21 @@ import { applyElementEffect, applyBoundActivation, finishMainAction, applyInstan
 import { findElementDef, findEnginePartDef, findGlitchDef } from './lookup';
 import { applyDamageThroughShield } from './status/shield';
 import { pickReaction, resolveImpulseReactions } from './status/reactionChoice';
-import { tickBrennenAfterMainAction, tickStatusesEndOfTurn } from './status/tickStatuses';
+import {
+  tickBrennenAfterMainAction,
+  tickStatusesEndOfTurn,
+  tryConsumeFokusReroll,
+} from './status/tickStatuses';
 import { clearV3ActionHooks } from './status/v3CombatHooks';
+import { tryApplyTransform } from './status/transform';
+import { getStatus, hasStatus } from './status/applyStatus';
+import {
+  activateFetzPart,
+  hasPoolActivate,
+  partActivateCost,
+  runFetzPassiveTrigger,
+} from './status/fetzgeraetEffects';
+import { canSpendFetzCharge, gainFetzCharge } from './status/fetzCharge';
 import type { Element } from '../types';
 import { isV3CombatEnabled } from '../types';
 import type { ReactionId } from './status/reactions';
@@ -297,8 +310,22 @@ function applyPlayerAttackDamage(
   pack: ContentPack,
   rng: () => number,
   hitImpulseElement?: Element | null,
+  fullBlockImpulseElement?: Element | null,
 ): GameState {
-  const pipeline = applyDamageThroughShield(state, defenderId, damage, ruleset);
+  let workingDamage = damage;
+  let workingAttack = attackValue;
+  let workingBlock = blockValue;
+
+  if (isV3CombatEnabled(ruleset) && workingDamage > 0) {
+    const reduced = runFetzPassiveTrigger(state, pack, defenderId, ruleset, 'onIncomingDamage', {
+      attackerId,
+      incomingDamage: workingDamage,
+    });
+    state = reduced.state;
+    workingDamage = reduced.incomingDamage ?? workingDamage;
+  }
+
+  const pipeline = applyDamageThroughShield(state, defenderId, workingDamage, ruleset);
   let next = pipeline.state;
   next.combat = null;
   next.phase = 'end';
@@ -306,32 +333,101 @@ function applyPlayerAttackDamage(
   const absorbedNote =
     pipeline.shieldAbsorbed > 0 ? ` Schild ${pipeline.shieldAbsorbed}.` : '';
   next.lastEvent =
-    damage > 0
-      ? `${pipeline.hpDamage} Schaden (${attackValue} vs ${blockValue} Block).${absorbedNote}`
-      : `Komplett geblockt (${attackValue} vs ${blockValue}).`;
+    workingDamage > 0
+      ? `${pipeline.hpDamage} Schaden (${workingAttack} vs ${workingBlock} Block).${absorbedNote}`
+      : `Komplett geblockt (${workingAttack} vs ${workingBlock}).`;
 
   if (isSumpf(next) && pipeline.isFullBlock) {
     next = applyMandatoryArenaDrawDiscard(next, defenderId, 'sumpf-full-block', pack, rng, ruleset);
   }
 
-  // V3 §17: Treffer-Impulse after hit/full-block distinction (shield does not cancel hit).
-  if (
-    isV3CombatEnabled(ruleset) &&
-    pipeline.isHit &&
-    hitImpulseElement
-  ) {
+  const highBefore: Record<PlayerId, number> = {
+    p1: getStatus(next, 'p1', 'high')?.stacks ?? 0,
+    p2: getStatus(next, 'p2', 'high')?.stacks ?? 0,
+  };
+
+  if (isV3CombatEnabled(ruleset) && pipeline.isHit && hitImpulseElement) {
     next = resolveImpulseReactions(
       next,
       defenderId,
       hitImpulseElement,
       ruleset,
       attackerId,
+      pack,
+    );
+  }
+  if (isV3CombatEnabled(ruleset) && pipeline.isFullBlock && fullBlockImpulseElement) {
+    next = resolveImpulseReactions(
+      next,
+      attackerId,
+      fullBlockImpulseElement,
+      ruleset,
+      defenderId,
+      pack,
     );
   }
 
-  next = afterHighAttackValue(next, attackerId, attackValue, ruleset);
+  if (isV3CombatEnabled(ruleset)) {
+    for (const pid of ['p1', 'p2'] as PlayerId[]) {
+      const after = getStatus(next, pid, 'high')?.stacks ?? 0;
+      if (after !== highBefore[pid]) {
+        next = runFetzPassiveTrigger(next, pack, pid, ruleset, 'onHighGainOrSpend', {
+          bonus: after > highBefore[pid],
+        }).state;
+      }
+    }
+  }
+
+  if (isV3CombatEnabled(ruleset) && pipeline.isHit) {
+    const hadBurn = hasStatus(state, defenderId, 'brennen');
+    const hitFx = runFetzPassiveTrigger(next, pack, attackerId, ruleset, 'onAttackHit', {
+      bonus: hadBurn,
+    });
+    next = hitFx.state;
+  }
+
+  if (isV3CombatEnabled(ruleset) && blockValue > 0) {
+    const blockFx = runFetzPassiveTrigger(next, pack, defenderId, ruleset, 'onAfterOwnBlock', {
+      bonus: pipeline.isFullBlock,
+      blockValue: workingBlock,
+    });
+    next = blockFx.state;
+    if (pipeline.isFullBlock) {
+      const shieldFx = runFetzPassiveTrigger(
+        next,
+        pack,
+        defenderId,
+        ruleset,
+        'onShieldFullBlockOrRepair',
+        { bonus: true },
+      );
+      next = shieldFx.state;
+    }
+  }
+
+  next = afterHighAttackValue(next, attackerId, workingAttack, ruleset);
+  const hpBeforeTick = next.players[attackerId].hp;
   next = tickBrennenAfterMainAction(next, attackerId, ruleset);
+  if (isV3CombatEnabled(ruleset) && next.players[attackerId].hp < hpBeforeTick) {
+    for (const pid of ['p1', 'p2'] as PlayerId[]) {
+      next = runFetzPassiveTrigger(next, pack, pid, ruleset, 'onStatusOrReactionDamage', {
+        bonus: false,
+      }).state;
+    }
+  }
   return checkWinner(next);
+}
+
+function impulseFromCard(
+  pack: ContentPack,
+  defId: string | undefined,
+  trigger: 'onHit' | 'onFullBlock',
+): Element | null {
+  if (!defId) return null;
+  const def = findElementDef(pack, defId);
+  const kw = def?.elementImpulse;
+  if (!kw || kw.trigger !== trigger) return null;
+  return kw.element;
 }
 
 function resolveCombat(
@@ -340,9 +436,10 @@ function resolveCombat(
   ruleset: RulesetConfig,
   pack: ContentPack,
   rng: () => number,
+  blockCardDefId?: string | null,
 ): GameState {
   if (!state.combat) return state;
-  const { attackerId, defenderId, attackValue } = state.combat;
+  const { attackerId, defenderId, attackValue, attackCardDefId } = state.combat;
   let damage = resolveDamage(attackValue, blockValue);
   let doubleAttackApplied = false;
 
@@ -357,6 +454,9 @@ function resolveCombat(
     }
   }
 
+  const hitImpulse = impulseFromCard(pack, attackCardDefId, 'onHit');
+  const fullBlockImpulse = impulseFromCard(pack, blockCardDefId ?? undefined, 'onFullBlock');
+
   if (damage > 0 && defenderHasRueckkopplung(state)) {
     const next = cloneState(state);
     next.pendingChoice = {
@@ -368,6 +468,8 @@ function resolveCombat(
       blockValue,
       mode: 'player',
       doubleAttackApplied,
+      attackCardDefId,
+      blockCardDefId: blockCardDefId ?? undefined,
     };
     next.combat = null;
     next.lastEvent = `Schaden ${damage} — Rückkopplung möglich.`;
@@ -384,6 +486,8 @@ function resolveCombat(
     ruleset,
     pack,
     rng,
+    damage > 0 ? hitImpulse : null,
+    damage <= 0 ? fullBlockImpulse : null,
   );
 }
 
@@ -611,7 +715,7 @@ export function getLegalActions(state: GameState, ctx: PackContext): GameAction[
 
         const element = findElementDef(ctx.pack, card.defId);
         if (element?.cardType === 'boost') {
-          if (canBuildBoost(bound)) {
+          if (isV3CombatEnabled(rulesetOf(ctx)) || canBuildBoost(bound)) {
             actions.push({ type: 'BUILD_CARD', cardInstanceId: card.instanceId });
           } else {
             const chargeCard = bound.find((b) => b.phraseSlot === 'charge');
@@ -661,8 +765,17 @@ export function getLegalActions(state: GameState, ctx: PackContext): GameAction[
     }
     const player = state.players[ctx.playerId];
     const lockedId = state.meta.activationLockedBoundId;
+    const v3 = isV3CombatEnabled(rulesetOf(ctx));
     for (const bound of player.bound) {
       if (bound.exhausted || bound.instanceId === lockedId) continue;
+      const enginePart = findEnginePartDef(ctx.pack, bound.defId);
+      if (v3 && enginePart && hasPoolActivate(enginePart)) {
+        const cost = partActivateCost(enginePart);
+        if (cost != null && canSpendFetzCharge(state, ctx.playerId, cost)) {
+          actions.push({ type: 'ACTIVATE_BOUND', boundInstanceId: bound.instanceId });
+        }
+        continue;
+      }
       for (const handCard of hand) {
         actions.push({
           type: 'ACTIVATE_BOUND',
@@ -715,6 +828,16 @@ function applyBuildCard(
       throw new Error('Cannot build this card in V2');
     }
 
+    // V3 shared pool: Ladung-Karten füllen den Pool statt Charge-Slot.
+    if (element?.cardType === 'boost' && isV3CombatEnabled(ruleset)) {
+      const [card] = next.players[playerId].hand.splice(handIdx, 1);
+      next.piles.discard.push(card);
+      next = gainFetzCharge(next, playerId, element.value);
+      next.phase = phaseAfter;
+      next.lastEvent = `${element.name}: +${element.value} Ladung (Pool ${next.players[playerId].fetzCharge}).`;
+      return next;
+    }
+
     if (action.discardBoundId) {
       const discardIdx = next.players[playerId].bound.findIndex(
         (b) => b.instanceId === action.discardBoundId,
@@ -748,6 +871,7 @@ function applyBuildCard(
     next.phase = phaseAfter;
     const slotLabel = slots.fetzSlot ?? slots.phraseSlot;
     next.lastEvent = `${builtName} gebaut (${slotLabel}).`;
+    next = tryApplyTransform(next, pack, playerId, ruleset);
     return next;
   }
 
@@ -798,6 +922,8 @@ function applyPendingChoiceAction(
         case 'damage-reduce': {
           let next = cloneState(state);
           next.pendingChoice = null;
+          const hitImpulse = impulseFromCard(pack, pending.attackCardDefId, 'onHit');
+          const fullBlockImpulse = impulseFromCard(pack, pending.blockCardDefId, 'onFullBlock');
           next = applyPlayerAttackDamage(
             next,
             pending.attackerId,
@@ -808,6 +934,8 @@ function applyPendingChoiceAction(
             ruleset,
             pack,
             rng,
+            pending.damage > 0 ? hitImpulse : null,
+            pending.damage <= 0 ? fullBlockImpulse : null,
           );
           return next;
         }
@@ -821,7 +949,7 @@ function applyPendingChoiceAction(
     }
     case 'PICK_REACTION': {
       if (pending.type !== 'pick-reaction') throw new Error('Wrong pending type');
-      return pickReaction(state, action.reactionId as ReactionId, ruleset);
+      return pickReaction(state, action.reactionId as ReactionId, ruleset, pack);
     }
     case 'TAKE_OPTIONAL_DRAW': {
       if (pending.type !== 'optional-draw-discard') throw new Error('Wrong pending type');
@@ -995,7 +1123,37 @@ export function applyAction(
         },
       };
       diceRoll = vulkan.roll;
-      const attackValue = computeAttackValueForPlayer(pack, working, playerId, def, diceRoll, ruleset);
+
+      if (isV3CombatEnabled(ruleset) && action.diceRoll == null) {
+        const fokus = tryConsumeFokusReroll(working, playerId);
+        if (fokus.granted) {
+          working = fokus.state;
+          diceRoll = rollD6(rng);
+          working = runFetzPassiveTrigger(
+            working,
+            pack,
+            playerId,
+            ruleset,
+            'onFocusOrReroll',
+            {},
+          ).state;
+        }
+      }
+
+      let attackValue = computeAttackValueForPlayer(pack, working, playerId, def, diceRoll, ruleset);
+
+      if (isV3CombatEnabled(ruleset)) {
+        const announce = runFetzPassiveTrigger(
+          working,
+          pack,
+          playerId,
+          ruleset,
+          'onAttackAnnounce',
+          { attackValue },
+        );
+        working = announce.state;
+        attackValue = announce.attackValue ?? attackValue;
+      }
 
       next = discardFromHand(working, playerId, action.cardInstanceId);
       next = markAttackOrChallenge(next);
@@ -1124,6 +1282,18 @@ export function applyAction(
       const boundDef = findElementDef(pack, bound.defId);
       if (!enginePart && !boundDef) throw new Error('Invalid bound card');
 
+      if (isV3CombatEnabled(ruleset) && enginePart && hasPoolActivate(enginePart)) {
+        next = activateFetzPart(state, pack, playerId, action.boundInstanceId, ruleset);
+        const exhaustFx = runFetzPassiveTrigger(next, pack, playerId, ruleset, 'onPartExhaust', {
+          bonus: enginePart.element === 'air',
+        });
+        next = exhaustFx.state;
+        return finishMainAction(checkWinner(next));
+      }
+
+      if (!action.discardHandInstanceId) {
+        throw new Error('Hand discard required to activate');
+      }
       next = discardFromHand(state, playerId, action.discardHandInstanceId);
       if (enginePart) {
         next = applyActivateArchetype(
@@ -1260,7 +1430,7 @@ function applyCombatResponse(
     if (state.combat.mode === 'challenge') {
       return resolveChallengeCombat(state, pack, 0, ruleset);
     }
-    return resolveCombat(state, 0, ruleset, pack, rng);
+    return resolveCombat(state, 0, ruleset, pack, rng, null);
   }
 
   if (action.type === 'PLAY_BLOCK') {
@@ -1274,6 +1444,23 @@ function applyCombatResponse(
     const sumpf = applySumpfBlockRoll(state, playerId, diceRoll);
     let working = sumpf.state;
     diceRoll = sumpf.roll;
+
+    if (isV3CombatEnabled(ruleset) && action.diceRoll == null) {
+      const fokus = tryConsumeFokusReroll(working, playerId);
+      if (fokus.granted) {
+        working = fokus.state;
+        diceRoll = rollD6(rng);
+        working = runFetzPassiveTrigger(
+          working,
+          pack,
+          playerId,
+          ruleset,
+          'onFocusOrReroll',
+          {},
+        ).state;
+      }
+    }
+
     const blockValue = computeBlockValueForPlayer(
       pack,
       working,
@@ -1288,7 +1475,7 @@ function applyCombatResponse(
     if (state.combat.mode === 'challenge') {
       next = resolveChallengeCombat(next, pack, blockValue, ruleset);
     } else {
-      next = resolveCombat(next, blockValue, ruleset, pack, rng);
+      next = resolveCombat(next, blockValue, ruleset, pack, rng, def.id);
     }
     if (next.lastEvent) {
       next.lastEvent = `Block ${blockValue} (Würfel ${diceRoll}). ${next.lastEvent}`;

@@ -28,10 +28,11 @@ export function countPartsByElement(
 ): Partial<Record<Element, number>> {
   const counts: Partial<Record<Element, number>> = {};
   for (const card of bound) {
-    if (!effectiveFetzSlot(card) && card.phraseSlot === 'charge') continue;
     if (card.phraseSlot === 'charge') continue;
     const el = boundPartElement(pack, card);
     if (!el) continue;
+    // Prefer fetz role when present; otherwise count as part if engine part
+    if (!effectiveFetzSlot(card) && !findEnginePartDef(pack, card.defId)) continue;
     counts[el] = (counts[el] ?? 0) + 1;
   }
   return counts;
@@ -48,15 +49,30 @@ export function resonanceTierFor(
   return 0;
 }
 
-export interface ResonanceFlags {
-  /** Full resonance already used this round (turnNumber). */
-  v3FullResonanceUsedRound?: number;
-  v3ResonanceFireBurnTickUsed?: boolean;
-  v3ResonanceWaterChargeUsed?: boolean;
-  v3ResonanceEarthHighUsed?: boolean;
-  v3ResonanceAirUprightUsed?: boolean;
-  v3ResonanceLightCleanseUsed?: boolean;
-  v3ResonanceShadowCurseUsed?: boolean;
+export function hasTwoPartResonance(
+  pack: ContentPack,
+  bound: BoundCardInstance[],
+  element: Element,
+): boolean {
+  return resonanceTierFor(pack, bound, element) >= 2;
+}
+
+export function hasFullResonance(
+  pack: ContentPack,
+  bound: BoundCardInstance[],
+  element: Element,
+): boolean {
+  return resonanceTierFor(pack, bound, element) >= 3;
+}
+
+function fullResonanceAvailable(state: GameState): boolean {
+  return state.meta.v3FullResonanceUsedRound !== state.turnNumber;
+}
+
+function markFullResonanceUsed(state: GameState): GameState {
+  const next = cloneState(state);
+  next.meta = { ...next.meta, v3FullResonanceUsedRound: state.turnNumber };
+  return next;
 }
 
 /** Inferno +1 damage when full fire resonance and not yet used this round. */
@@ -67,20 +83,100 @@ export function infernoResonanceBonus(
   ruleset: RulesetConfig,
 ): { bonus: number; state: GameState } {
   if (!isV3CombatEnabled(ruleset)) return { bonus: 0, state };
-  const tier = resonanceTierFor(pack, state.players[ownerId].bound, 'fire');
-  if (tier < 3) return { bonus: 0, state };
-  if (state.meta.v3FullResonanceUsedRound === state.turnNumber) {
+  if (!hasFullResonance(pack, state.players[ownerId].bound, 'fire')) {
     return { bonus: 0, state };
   }
-  const next = cloneState(state);
-  next.meta = { ...next.meta, v3FullResonanceUsedRound: state.turnNumber };
-  return { bonus: 1, state: next };
+  if (!fullResonanceAvailable(state)) return { bonus: 0, state };
+  return { bonus: 1, state: markFullResonanceUsed(state) };
 }
 
-export function hasTwoPartResonance(
+/** Überflutung: full water resonance → Überflutet costs +2 (encoded as stack note via meta). */
+export function ueberflutungExtraCharge(
+  state: GameState,
   pack: ContentPack,
-  bound: BoundCardInstance[],
-  element: Element,
-): boolean {
-  return resonanceTierFor(pack, bound, element) >= 2;
+  ownerId: PlayerId,
+  ruleset: RulesetConfig,
+): { extraCharge: number; state: GameState } {
+  if (!isV3CombatEnabled(ruleset)) return { extraCharge: 0, state };
+  if (!hasFullResonance(pack, state.players[ownerId].bound, 'water')) {
+    return { extraCharge: 0, state };
+  }
+  if (!fullResonanceAvailable(state)) return { extraCharge: 0, state };
+  return { extraCharge: 1, state: markFullResonanceUsed(state) };
+}
+
+/** Deep High: full earth → draw 2 discard 1 (vs draw 1 discard 1). */
+export function deepHighExtraDraw(
+  state: GameState,
+  pack: ContentPack,
+  ownerId: PlayerId,
+  ruleset: RulesetConfig,
+): { extraDraw: number; state: GameState } {
+  if (!isV3CombatEnabled(ruleset)) return { extraDraw: 0, state };
+  if (!hasFullResonance(pack, state.players[ownerId].bound, 'earth')) {
+    return { extraDraw: 0, state };
+  }
+  if (!fullResonanceAvailable(state)) return { extraDraw: 0, state };
+  return { extraDraw: 1, state: markFullResonanceUsed(state) };
+}
+
+/** Rückenwind: full air → upright up to 2 parts. */
+export function rueckenwindUprightLimit(
+  state: GameState,
+  pack: ContentPack,
+  ownerId: PlayerId,
+  ruleset: RulesetConfig,
+): { limit: number; state: GameState } {
+  if (!isV3CombatEnabled(ruleset)) return { limit: 1, state };
+  if (!hasFullResonance(pack, state.players[ownerId].bound, 'air')) {
+    return { limit: 1, state };
+  }
+  if (!fullResonanceAvailable(state)) return { limit: 1, state };
+  return { limit: 2, state: markFullResonanceUsed(state) };
+}
+
+/** Erleuchtung: full light → remove up to 2 negatives. */
+export function erleuchtungCleanseLimit(
+  state: GameState,
+  pack: ContentPack,
+  ownerId: PlayerId,
+  ruleset: RulesetConfig,
+): { limit: number; state: GameState } {
+  if (!isV3CombatEnabled(ruleset)) return { limit: 1, state };
+  if (!hasFullResonance(pack, state.players[ownerId].bound, 'light')) {
+    return { limit: 1, state };
+  }
+  if (!fullResonanceAvailable(state)) return { limit: 1, state };
+  return { limit: 2, state: markFullResonanceUsed(state) };
+}
+
+/** Tiefer Fluch: full shadow → max stacks temporarily 4 once. */
+export function tieferFluchMaxStacks(
+  state: GameState,
+  pack: ContentPack,
+  ownerId: PlayerId,
+  ruleset: RulesetConfig,
+): { maxStacks: number; state: GameState } {
+  if (!isV3CombatEnabled(ruleset)) return { maxStacks: 3, state };
+  if (!hasFullResonance(pack, state.players[ownerId].bound, 'shadow')) {
+    return { maxStacks: 3, state };
+  }
+  if (!fullResonanceAvailable(state)) return { maxStacks: 3, state };
+  return { maxStacks: 4, state: markFullResonanceUsed(state) };
+}
+
+/** Two-part water: first water reaction this round grants a Ladung (boost) to hand — KISS: +1 lastEvent only / meta flag. */
+export function tryTwoPartWaterReactionCharge(
+  state: GameState,
+  pack: ContentPack,
+  ownerId: PlayerId,
+  ruleset: RulesetConfig,
+): GameState {
+  if (!isV3CombatEnabled(ruleset)) return state;
+  if (!hasTwoPartResonance(pack, state.players[ownerId].bound, 'water')) return state;
+  if (state.meta.v3ResonanceWaterChargeUsed) return state;
+  const next = cloneState(state);
+  next.meta = { ...next.meta, v3ResonanceWaterChargeUsed: true };
+  next.lastEvent = `${next.lastEvent ?? ''} Wasser-Resonanz: +1 Ladung.`.trim();
+  return next;
 }

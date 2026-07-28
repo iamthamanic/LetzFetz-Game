@@ -27,6 +27,8 @@ export interface PlayerState {
   statuses: StatusInstance[];
   /** V3 shield (max 5); unused when v3Combat is off. */
   shield: number;
+  /** V3 shared Fetzgerät charge pool (0…6). */
+  fetzCharge: number;
 }
 
 export interface SharedPiles {

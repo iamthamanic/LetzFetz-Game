@@ -90,6 +90,10 @@ export interface EnginePartCardDef extends CardBase {
   resistance: number;
   passiveArchetype: PassiveArchetype;
   activateArchetype: ActivateArchetype;
+  /** V3 authored effect copy (display/canon; hooks may still use archetypes). */
+  effectText?: string;
+  /** V3 Aufsatz activation cost in shared charge units (when set). */
+  activateCost?: number;
 }
 
 export type CardDef =
@@ -129,4 +133,6 @@ export interface ContentPack {
   glitches: GlitchCardDef[];
   /** V2 phrase parts — optional; included in main deck when present. */
   engineParts?: EnginePartCardDef[];
+  /** V3 Area51 blueprint seed combos (optional). */
+  blueprints?: import('./blueprint').BlueprintDef[];
 }

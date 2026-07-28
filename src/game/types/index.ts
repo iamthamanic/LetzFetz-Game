@@ -3,6 +3,7 @@ export * from './ruleset';
 export * from './status';
 export * from './impulseSchema';
 export * from './cards';
+export * from './blueprint';
 export * from './engineVisual';
 export * from './matchMeta';
 export * from './game';
