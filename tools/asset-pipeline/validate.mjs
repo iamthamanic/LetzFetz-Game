@@ -33,10 +33,21 @@ Examples:
 `);
 }
 
+/** Reject path traversal / separators — asset ids are single path segments. */
+function isSafeAssetId(id) {
+  return /^[a-zA-Z0-9][a-zA-Z0-9._-]{0,127}$/.test(id);
+}
+
 function main() {
   const assetId = process.argv[2];
   if (!assetId || assetId.startsWith('-')) {
     usage();
+    process.exit(2);
+  }
+  if (!isSafeAssetId(assetId)) {
+    console.error(
+      'DE: Ungültige Asset-ID (nur Buchstaben, Ziffern, ._- ; kein Pfad).\nEN: Invalid asset id (no path separators or ..).',
+    );
     process.exit(2);
   }
 
