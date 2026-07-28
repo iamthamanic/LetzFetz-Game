@@ -6,6 +6,8 @@ import React from 'react';
 import type { PlayerId, TurnPhase } from '../../../game/types';
 import { PhaseBar } from './PhaseBar';
 import { Badge } from '../../../components/ui/Badge';
+import { V3HookChips } from './V3HookChips';
+import type { V3HookChip } from './v3HookSurface';
 
 interface PhaseCoachBannerProps {
   currentPhase: TurnPhase;
@@ -14,6 +16,8 @@ interface PhaseCoachBannerProps {
   turnNumber: number;
   activePlayerId: PlayerId;
   humanPlayerId: PlayerId;
+  /** Active Ulti / Blueprint / Transform hooks (thin V3 surface). */
+  v3HookChips?: V3HookChip[];
 }
 
 export function PhaseCoachBanner({
@@ -23,6 +27,7 @@ export function PhaseCoachBanner({
   turnNumber,
   activePlayerId,
   humanPlayerId,
+  v3HookChips = [],
 }: PhaseCoachBannerProps) {
   return (
     <div
@@ -39,6 +44,7 @@ export function PhaseCoachBanner({
       <Badge variant="accent" className="shrink-0">
         Runde {turnNumber}
       </Badge>
+      <V3HookChips chips={v3HookChips} />
       <span className="sr-only">{phaseLabel}</span>
     </div>
   );

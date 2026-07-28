@@ -34,6 +34,7 @@ import { PhaseCoachBanner } from './board/PhaseCoachBanner';
 import { PhaseCoachFooter, FOOTER_REVEAL_TOTAL_MS } from './board/PhaseCoachFooter';
 import { TurnStartAnnounce } from './board/TurnStartAnnounce';
 import { buildPhaseCoachHint } from './board/phaseCoachHint';
+import { buildV3HookSurface } from './board/v3HookSurface';
 import { ActionBar } from './board/ActionBar';
 import { ActionPhaseBar, actionPhaseLegalFlags } from './board/ActionPhaseBar';
 import { BuildPhaseBar } from './board/BuildPhaseBar';
@@ -691,6 +692,11 @@ export function PlayView({ onBattleMusicActiveChange }: PlayViewProps) {
     });
   }, [state, view, pendingIntent, botThinking]);
 
+  const v3HookChips = useMemo(() => {
+    if (!state) return [];
+    return buildV3HookSurface(state, matchPack, HUMAN);
+  }, [state, matchPack]);
+
   if (!state || !view) {
     return (
       <GrungeAppShell>
@@ -936,6 +942,7 @@ export function PlayView({ onBattleMusicActiveChange }: PlayViewProps) {
             turnNumber={state.turnNumber}
             activePlayerId={state.activePlayer}
             humanPlayerId={HUMAN}
+            v3HookChips={v3HookChips}
           />
         }
         actions={
