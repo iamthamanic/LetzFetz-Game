@@ -1,7 +1,7 @@
 # Rendering (Fetzgerät 3D)
 
-**Status:** Live detail canvas in Play (#133); snapshots / CLI in #134  
-**See also:** [architecture.md](./architecture.md)
+**Status:** Live detail canvas in Play (#133); in-memory snapshot cache + asset CLI stubs (#134)  
+**See also:** [architecture.md](./architecture.md), [asset-pipeline.md](./asset-pipeline.md), [adding-a-new-part.md](./adding-a-new-part.md)
 
 ## Surfaces
 
@@ -10,6 +10,19 @@
 | Cards / board thumbs | Static image (`previewUrl` or legacy PNG) |
 | Detail / build preview | Single `@react-three/fiber` canvas |
 | Cached engine art | Snapshot keyed by `createRenderKey` (#134) |
+
+## Snapshot cache (#134)
+
+| Piece | Location |
+|-------|----------|
+| Cache `get` / `set` / `invalidate` | `src/features/play/engine3d/rendering/engine-snapshot-cache.ts` |
+| Best-effort request | `requestEngineSnapshot(recipe, options?)` |
+| Key | `createRenderKey(recipe)` — includes `renderVersion` + `cosmeticSeed` + part ids |
+| Invalidation | Bump `ENGINE_RENDER_VERSION` or call `invalidateEngineSnapshot(key?)` |
+| CI / headless | Default **placeholder** 1×1 PNG data URL (no WebGL). Pass `canvas` for live `toDataURL`. |
+| Play UI | Optional **Snapshot cachen** on `EnginePreviewPanel` (warms memory cache; not persisted) |
+
+Board cards stay 2D — cache is infrastructure for future thumbs, not a cutover in #134.
 
 ## Play integration (#133)
 

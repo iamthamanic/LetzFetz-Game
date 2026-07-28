@@ -2,7 +2,7 @@
  * Play UI panel hosting the single Engine 3D preview canvas.
  * Location: src/features/play/engine3d/EnginePreviewPanel.tsx
  */
-import React from 'react';
+import React, { useState } from 'react';
 import { X } from 'lucide-react';
 import type { EngineRecipe } from '../../../game/types/engineVisual';
 import { createEngineDisplayName } from '../../../game/engine/engineRecipe';
@@ -10,6 +10,7 @@ import type { ContentPack } from '../../../game/types';
 import { Button } from '../../../components/ui/Button';
 import { Panel } from '../../../components/ui/Panel';
 import { EnginePreviewCanvas } from './EnginePreviewCanvas';
+import { requestEngineSnapshot } from './rendering/requestEngineSnapshot';
 
 interface EnginePreviewPanelProps {
   recipe: EngineRecipe;
@@ -24,9 +25,24 @@ export function EnginePreviewPanel({
   title,
   onClose,
 }: EnginePreviewPanelProps) {
+  const [snapshotHint, setSnapshotHint] = useState<string | null>(null);
   const heading =
     title ??
     (pack ? createEngineDisplayName(pack, recipe) : 'Fetzgerät 3D');
+
+  const onCacheSnapshot = () => {
+    // Stub-friendly: no WebGL canvas grab in CI; placeholder warms memory cache.
+    const result = requestEngineSnapshot(recipe);
+    if (result.source === 'cache') {
+      setSnapshotHint('Snapshot aus Cache');
+    } else if (result.source === 'placeholder') {
+      setSnapshotHint('Snapshot-Stub gespeichert (Platzhalter)');
+    } else if (result.dataUrl) {
+      setSnapshotHint('Snapshot gespeichert');
+    } else {
+      setSnapshotHint('Kein Snapshot verfügbar');
+    }
+  };
 
   return (
     <div
@@ -51,6 +67,21 @@ export function EnginePreviewPanel({
           </Button>
         </div>
         <EnginePreviewCanvas recipe={recipe} className="h-48 w-full" />
+        <div className="mt-2 flex flex-wrap items-center gap-2">
+          <Button
+            variant="secondary"
+            size="sm"
+            onClick={onCacheSnapshot}
+            data-testid="engine-snapshot-cache-btn"
+          >
+            Snapshot cachen
+          </Button>
+          {snapshotHint ? (
+            <p className="text-[10px] text-stone-400" role="status">
+              {snapshotHint}
+            </p>
+          ) : null}
+        </div>
       </Panel>
     </div>
   );

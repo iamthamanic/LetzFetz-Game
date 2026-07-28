@@ -143,8 +143,8 @@ docs/engine-system/
   architecture.md          # this file
   gameplay-model.md        # stub → expand with #131
   rendering.md             # stub → expand with #133/#134
-  asset-pipeline.md        # #134
-  adding-a-new-part.md     # #134
+  asset-pipeline.md        # #134 (CLI stubs + snapshot notes)
+  adding-a-new-part.md     # #134 (author checklist)
 
 src/game/types/engineVisual.ts   # #131
 src/game/engine/engineRecipe.ts  # #131
