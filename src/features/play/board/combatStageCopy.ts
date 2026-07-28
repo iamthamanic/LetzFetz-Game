@@ -2,7 +2,8 @@
  * German UI copy for the playmat combat stage.
  * Location: src/features/play/board/combatStageCopy.ts
  */
-import type { PendingCombat } from '../../../game/types';
+import type { ElementCardDef, PendingCombat } from '../../../game/types';
+import { formatCombatStageImpulseHint } from '../../../components/cards/impulseKeywordCopy';
 
 export function buildCombatStageTitle(
   combat: PendingCombat,
@@ -17,12 +18,25 @@ export function buildCombatStageTitle(
 export function buildCombatStageSubtitle(
   isHumanDefender: boolean,
   botThinking: boolean,
+  attackDef?: ElementCardDef | null,
 ): string {
+  const impulseHint =
+    attackDef?.elementImpulse?.trigger === 'onHit'
+      ? formatCombatStageImpulseHint(attackDef.elementImpulse)
+      : null;
+
   if (isHumanDefender) {
-    return 'Spiele eine Block-Karte oder passe — gewürfelt wird erst danach.';
+    const base = 'Spiele eine Block-Karte oder passe — gewürfelt wird erst danach.';
+    return impulseHint ? `${base} ${impulseHint}.` : base;
   }
-  if (botThinking) return 'Gegner entscheidet über Block…';
-  return 'Warte auf die Verteidigungsentscheidung…';
+  if (botThinking) {
+    return impulseHint
+      ? `Gegner entscheidet über Block… ${impulseHint}.`
+      : 'Gegner entscheidet über Block…';
+  }
+  return impulseHint
+    ? `Warte auf die Verteidigungsentscheidung… ${impulseHint}.`
+    : 'Warte auf die Verteidigungsentscheidung…';
 }
 
 export function combatValueLabel(combat: PendingCombat): string {
@@ -37,4 +51,12 @@ export function defenderPendingValue(isHumanDefender: boolean, botThinking: bool
   if (isHumanDefender) return '?';
   if (botThinking) return '…';
   return '—';
+}
+
+/** Visible impulse line under the attack card on the combat stage. */
+export function buildCombatStageImpulseLine(
+  attackDef?: ElementCardDef | null,
+): string | null {
+  if (!attackDef?.elementImpulse) return null;
+  return formatCombatStageImpulseHint(attackDef.elementImpulse);
 }

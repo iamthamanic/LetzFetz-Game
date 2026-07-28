@@ -7,6 +7,7 @@ import { createPortal } from 'react-dom';
 import type { ElementCardDef, GlitchCardDef } from '../../../game/types';
 import { getElementSynergy } from '../../../game/rules/elementSynergies';
 import { ELEMENT_LABELS_DE } from '../../../components/ui/ElementIcon';
+import { formatImpulseTooltipLine } from '../../../components/cards/impulseKeywordCopy';
 
 const CARD_TYPE_DE: Record<ElementCardDef['cardType'], string> = {
   attack: 'Angriff',
@@ -101,6 +102,9 @@ function ElementTooltipBody({ def, hint }: { def: ElementCardDef; hint?: string 
   const typeLabel = CARD_TYPE_DE[def.cardType];
   const elementLabel = ELEMENT_LABELS_DE[def.element];
   const synergy = getElementSynergy(def.element);
+  const impulseLine = def.elementImpulse
+    ? formatImpulseTooltipLine(def.elementImpulse)
+    : null;
 
   return (
     <>
@@ -108,6 +112,14 @@ function ElementTooltipBody({ def, hint }: { def: ElementCardDef; hint?: string 
       <p className="mt-0.5 text-[11px] font-semibold uppercase tracking-wide text-amber-400/90">
         {elementLabel} · {typeLabel} · {def.value}
       </p>
+      {impulseLine && (
+        <p
+          data-testid="card-effect-tooltip-impulse"
+          className="mt-1 text-[11px] font-semibold text-amber-200/95"
+        >
+          {impulseLine}
+        </p>
+      )}
       <dl className="mt-2 space-y-2 text-xs leading-snug text-stone-200">
         <div>
           <dt className="font-semibold text-emerald-400/90">Sofort</dt>

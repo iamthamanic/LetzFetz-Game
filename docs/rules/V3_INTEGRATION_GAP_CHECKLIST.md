@@ -25,7 +25,7 @@
 | §2.1 | Direkte Effekte (Katalog) | 🟡 Teilmenge in Combat/Status | ❌ | Nicht jeder Keyword-Effekt als generisches Effect-System |
 | §2.2–2.3 | Zustände + Elementmarken | ✅ `types/status.ts`, `applyStatus`, Impulse | ✅ `StatusChips` | Labels DE; kein Teaching/Tooltip-Detail |
 | §2.4 / §8–§9 | 21 Reaktionen | ✅ `reactions.ts` + `reactionOutcomes.ts` | 🟡 `ReactionPickModal` nur bei Mehrfachwahl | Einzel-Reaktion ohne Modal/Banner |
-| §3 | Elementattribut vs Impuls | ✅ `elementImpulse` Schema + Pack | ❌ Impuls nicht als Keyword auf Karte/Stage | Spieler sieht Element, nicht „Impuls“ |
+| §3 | Elementattribut vs Impuls | ✅ `elementImpulse` Schema + Pack | ✅ Chip + Stage/Resolve-Copy (#148) | `card-elementimpuls-chip` / `combat-stage-impulse` / `combat-resolve-impulse` |
 | §4 | Quellen (Angriff/Block/Fetz/Ulti/…) | 🟡 Combat + Bound + Hooks | 🟡 Karten/Slots | Blueprint/Transform nur Hooks |
 | §5.1 | Schaden Block→Schild→HP | ✅ `shield.ts` | 🟡 Schild-Chip | Keine Pipeline-Visualisierung |
 | §5.2–5.18 | Heilung, ziehen, filtern, Würfel, … | 🟡 gemischt V1/V3 | ❌ | Viele Katalog-Effekte nicht V3-spezifisch verdrahtet |
@@ -73,7 +73,7 @@
 | Resonanz-Anzeige | ✅ `ResonanceHud` | Chip am Engine-Row bei Tier ≥2/3 |
 | Slot-UX Playmat | ✅ | V3: Träger/Antrieb/Aufsatz Labels (`data-fetz-slot`) |
 | Combat-Feedback Toasts | ✅ `CombatFeedbackToasts` | Impuls / Auto-Reaktion / Schild-Absorb |
-| Karten-Keyword „Elementimpuls“ | 📦 | Forge + LetzFetzCard + Pack-Texte |
+| Karten-Keyword „Elementimpuls“ | ✅ Chip + Tooltip (#148) | LetzFetzCard / display model + Combat Stage/Resolve |
 | V3-Tutorial / Onboarding | ✅ Coach-Kette in erster Tutorial-Partie | Screens + Match-Hints |
 | Sandbox / Forge auf V3-Fantasy | ✅ Default `V3_PACK` | Forge Lookup + Sandbox Loader |
 | Physische Marker/Token | 🚫 | Außerhalb Repo |
@@ -91,7 +91,7 @@ Priorisierte UX-Backlog-Schnitte (Empfehlung):
 2. **P1 UX:** Resonanz-HUD + Fetzgerät-Slot-Labels am Playmat  
    - ✅ **2026-07-27:** `ResonanceHud` + Träger/Antrieb/Aufsatz Labels unter `v3Combat`  
 3. **P1 UX:** Reaktions-Toast auch bei Auto-Resolve (nicht nur Modal) — ✅ über Combat-Feedback  
-4. **P2 UX:** Keyword/Tooltip „Elementimpuls“ auf Karten; kurze In-Game-Hilfe  
+4. **P2 UX:** Keyword/Tooltip „Elementimpuls“ auf Karten — ✅ #148 (`impulseKeywordCopy` + chip)
 5. **Docs:** `SPIELANLEITUNG_V3_DRAFT.md` + Cutover AGENTS wenn Playtests grün  
 
 Acceptance: `.qa/acceptance/v3-tutorial-setup-flow.md`  

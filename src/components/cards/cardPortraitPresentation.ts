@@ -2,7 +2,7 @@
  * Portrait card chrome — subtitle, effect line, element badge, header icons.
  * Location: src/components/cards/cardPortraitPresentation.ts
  */
-import type { Element } from '../../game/types';
+import type { Element, ElementImpulseKeyword } from '../../game/types';
 import type { CardElement, CardKind } from './cardTypes';
 import { CARD_ELEMENT_DE } from './cardTypes';
 import type { BrandIconKey } from '../../services/icons/elementIcons';
@@ -35,6 +35,8 @@ export interface CardPortraitInput {
   };
   size?: CardPortraitSize;
   effectFocus?: CardEffectFocus;
+  /** V3: when set, display model exposes Elementimpuls chip. */
+  elementImpulse?: ElementImpulseKeyword | null;
 }
 
 export interface CardPortraitPresentation {
@@ -98,6 +100,7 @@ export function buildCardPortraitPresentation(input: CardPortraitInput): CardPor
     effects: input.effects,
     effects_text: input.effects_text,
     stats_json: input.stats_json,
+    elementImpulse: input.elementImpulse,
   });
 
   const namePlateSize = namePlateSizeForCard(input.size);

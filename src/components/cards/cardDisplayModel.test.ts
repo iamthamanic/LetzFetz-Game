@@ -64,5 +64,29 @@ describe('cardDisplayModel', () => {
 
     expect(props.image_asset).toBe('/cards/element/fire-attack.png');
     expect(props.type).toBe('Element');
+    expect(props.elementImpulse).toBeUndefined();
+  });
+
+  it('surfaces Elementimpuls chip when pack keyword is present', () => {
+    const props = elementDefToCardProps({
+      id: 'v3-fire-attack-4-1',
+      name: 'Feuer 4 Angriff',
+      kind: 'element',
+      element: 'fire',
+      cardType: 'attack',
+      value: 4,
+      instantText: 'Angriff 4. Treffer: Erzeuge einen Feuer-Impuls.',
+      boundText: 'V3: Angriff bleibt Hand-only.',
+      elementImpulse: { element: 'fire', trigger: 'onHit' },
+    });
+    expect(props.elementImpulse).toEqual({ element: 'fire', trigger: 'onHit' });
+
+    const model = buildCardDisplayModel({
+      type: 'Element',
+      element: 'Fire',
+      effects: props.effects,
+      elementImpulse: props.elementImpulse,
+    });
+    expect(model.impulseKeywordChip).toBe('Elementimpuls · Feuer');
   });
 });

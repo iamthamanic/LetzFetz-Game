@@ -46,17 +46,31 @@ function ensureAttackInHand(
   pack: ContentPack,
   playerId: PlayerId,
 ): GameState {
+  const hasImpulseAttack = state.players[playerId].hand.some((card) => {
+    const def = findElementDef(pack, card.defId);
+    return def?.cardType === 'attack' && Boolean(def.elementImpulse);
+  });
+  if (hasImpulseAttack) return state;
+
   const hasAttack = state.players[playerId].hand.some((card) => {
     const def = findElementDef(pack, card.defId);
     return def?.cardType === 'attack';
   });
-  if (hasAttack) return state;
 
   const deckIdx = state.piles.deck.findIndex((card) => {
     const def = findElementDef(pack, card.defId);
-    return def?.cardType === 'attack';
+    return def?.cardType === 'attack' && Boolean(def.elementImpulse);
   });
-  if (deckIdx < 0) return state;
+  const fallbackIdx =
+    deckIdx >= 0
+      ? deckIdx
+      : state.piles.deck.findIndex((card) => {
+          const def = findElementDef(pack, card.defId);
+          return def?.cardType === 'attack';
+        });
+  if (fallbackIdx < 0) return state;
+  // Prefer swapping in an impulse attack even when a plain attack is already in hand.
+  if (hasAttack && deckIdx < 0) return state;
 
   const next = {
     ...state,
@@ -72,8 +86,20 @@ function ensureAttackInHand(
       discard: [...state.piles.discard],
     },
   };
-  const [attackCard] = next.piles.deck.splice(deckIdx, 1);
-  if (next.players[playerId].hand.length >= 6) {
+  const [attackCard] = next.piles.deck.splice(fallbackIdx, 1);
+  if (hasAttack) {
+    const plainIdx = next.players[playerId].hand.findIndex((card) => {
+      const def = findElementDef(pack, card.defId);
+      return def?.cardType === 'attack' && !def.elementImpulse;
+    });
+    if (plainIdx >= 0) {
+      const [removed] = next.players[playerId].hand.splice(plainIdx, 1);
+      next.piles.deck.push(removed);
+    } else if (next.players[playerId].hand.length >= 6) {
+      const [discarded] = next.players[playerId].hand.splice(0, 1);
+      next.piles.discard.push(discarded);
+    }
+  } else if (next.players[playerId].hand.length >= 6) {
     const [discarded] = next.players[playerId].hand.splice(0, 1);
     next.piles.discard.push(discarded);
   }
@@ -102,10 +128,15 @@ function scenarioFreshAction(pack: ContentPack): GameState {
 function scenarioDefenderBlock(pack: ContentPack): GameState {
   let state = advanceToPhase(baseMatch(pack, 'p2'), 'action', pack);
   state = ensureAttackInHand(state, pack, 'p2');
-  const attack = state.players.p2.hand.find((card) => {
-    const def = findElementDef(pack, card.defId);
-    return def?.cardType === 'attack';
-  });
+  const attack =
+    state.players.p2.hand.find((card) => {
+      const def = findElementDef(pack, card.defId);
+      return def?.cardType === 'attack' && Boolean(def.elementImpulse);
+    }) ??
+    state.players.p2.hand.find((card) => {
+      const def = findElementDef(pack, card.defId);
+      return def?.cardType === 'attack';
+    });
   if (!attack) return state;
 
   state = applyAction(

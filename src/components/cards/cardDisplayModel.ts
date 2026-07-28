@@ -2,10 +2,11 @@
  * Normalizes pack / forge card data into grunge frame display rows.
  * Location: src/components/cards/cardDisplayModel.ts
  */
-import type { ElementCardDef } from '../../game/types';
+import type { ElementCardDef, ElementImpulseKeyword } from '../../game/types';
 import type { CardElement, CardKind } from './cardTypes';
 import { resolveCardArtPath } from '../../services/cardArt/manifest';
 import { CARD_TYPE_EN, KIND_LABELS } from './cardFrameTokens';
+import { formatImpulseKeywordChip } from './impulseKeywordCopy';
 
 export interface CardTextBlock {
   label: string;
@@ -23,6 +24,8 @@ export interface CardDisplayModel {
   statCells: CardStatCell[];
   textBlocks: CardTextBlock[];
   footerBullets: string[];
+  /** V3 keyword chip when pack card carries elementImpulse. */
+  impulseKeywordChip: string | null;
 }
 
 function stripPrefix(line: string, prefix: string): string | null {
@@ -39,6 +42,7 @@ function parseEffectsToModel(
     cardType?: string;
     resistance?: number;
   },
+  elementImpulse?: ElementImpulseKeyword | null,
 ): CardDisplayModel {
   const textBlocks: CardTextBlock[] = [];
   const footerBullets: string[] = [];
@@ -128,6 +132,7 @@ function parseEffectsToModel(
     statCells,
     textBlocks,
     footerBullets,
+    impulseKeywordChip: elementImpulse ? formatImpulseKeywordChip(elementImpulse) : null,
   };
 }
 
@@ -143,6 +148,7 @@ export function buildCardDisplayModel(input: {
     cardType?: string;
     resistance?: number;
   };
+  elementImpulse?: ElementImpulseKeyword | null;
 }): CardDisplayModel {
   const effects =
     input.effects && input.effects.length > 0
@@ -151,7 +157,12 @@ export function buildCardDisplayModel(input: {
         ? [input.effects_text]
         : [];
 
-  const model = parseEffectsToModel(input.type, effects, input.stats_json);
+  const model = parseEffectsToModel(
+    input.type,
+    effects,
+    input.stats_json,
+    input.elementImpulse,
+  );
   model.elementLabel = input.elementDisplay ?? input.element ?? '';
   return model;
 }
@@ -172,6 +183,7 @@ export function elementDefToCardProps(def: ElementCardDef) {
       `Gebaut: ${def.boundText}`,
     ],
     image_asset: resolveCardArtPath(def.id),
+    elementImpulse: def.elementImpulse,
   };
 }
 
