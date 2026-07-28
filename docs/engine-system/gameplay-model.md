@@ -8,8 +8,8 @@
 - Built parts live in `GameState.players[id].bound` with `fetzSlot` (or legacy `phraseSlot`).
 - Shared charge: `fetzCharge`.
 - Resonance: `src/game/engine/status/resonance.ts`.
-- Part defs: `EnginePartCardDef` in pack (`V2_P100_PACK` / future `engineParts36`).
-- 3D asset lookup (URLs/sockets only): `lookupEnginePartAsset` in `src/services/engineAssets/partRegistry.ts` — MVP ids `v3-part-water-traeger-01`, `v3-part-shadow-antrieb-01`, `v3-part-light-aufsatz-01`.
+- Part defs: `EnginePartCardDef` in pack (`V2_P100_PACK`); V3 id catalog `V3_ENGINE_PARTS_36` in `src/game/packs/v3/engineParts36.ts`.
+- 3D asset lookup (URLs/sockets only): `lookupEnginePartAsset` in `src/services/engineAssets/partRegistry.ts` — all 36 `v3-part-*` ids from the catalog.
 
 ## Visual recipe
 

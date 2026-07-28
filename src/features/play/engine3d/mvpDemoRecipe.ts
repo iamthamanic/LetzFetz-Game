@@ -8,7 +8,7 @@ import {
 } from '../../../game/types/engineVisual';
 import { lookupEnginePartAsset } from '../../../services/engineAssets/partRegistry';
 
-/** Hardcoded MVP×3 — registry ids until engineParts36 is authored. */
+/** Demo recipe using three ids from `V3_ENGINE_PARTS_36`. */
 export const MVP_DEMO_RECIPE: EngineRecipe = {
   carrierId: 'v3-part-water-traeger-01',
   driveId: 'v3-part-shadow-antrieb-01',

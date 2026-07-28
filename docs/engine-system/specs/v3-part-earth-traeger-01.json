@@ -1,0 +1,19 @@
+{
+  "id": "v3-part-earth-traeger-01",
+  "name": "Erde-Träger 01",
+  "slot": "traeger",
+  "element": "earth",
+  "sockets": [
+    "SOCKET_DRIVE",
+    "SOCKET_ATTACHMENT_FALLBACK",
+    "SOCKET_VFX_REAR"
+  ],
+  "modelUrl": "/engine-parts/mvp/v3-part-earth-traeger-01.glb",
+  "previewUrl": "/cards/engine/v3-part-earth-traeger-01.png",
+  "budgets": {
+    "maxTriangles": 48,
+    "maxTexturePx": 0,
+    "placeholder": true
+  },
+  "version": 1
+}

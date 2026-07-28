@@ -1,5 +1,5 @@
 /**
- * Unit tests for engine part asset registry lookup.
+ * Unit tests for engine part asset registry lookup (all 36 V3 parts).
  * Location: src/services/engineAssets/partRegistry.test.ts
  */
 import { existsSync } from 'node:fs';
@@ -7,17 +7,16 @@ import { dirname, join } from 'node:path';
 import { fileURLToPath } from 'node:url';
 import { describe, expect, it } from 'vitest';
 import {
+  V3_ENGINE_PARTS_36,
+  listV3EnginePartIds,
+} from '../../game/packs/v3/engineParts36';
+import {
   listEnginePartAssets,
   lookupEnginePartAsset,
+  SOCKETS_BY_SLOT,
 } from './partRegistry';
 
 const REPO_ROOT = join(dirname(fileURLToPath(import.meta.url)), '../../..');
-
-const MVP_IDS = [
-  'v3-part-water-traeger-01',
-  'v3-part-shadow-antrieb-01',
-  'v3-part-light-aufsatz-01',
-] as const;
 
 describe('lookupEnginePartAsset', () => {
   it('returns null for unknown id', () => {
@@ -25,32 +24,34 @@ describe('lookupEnginePartAsset', () => {
     expect(lookupEnginePartAsset('')).toBeNull();
   });
 
-  it('maps MVP×3 ids to modelUrl, previewUrl, slot, sockets, version', () => {
-    const water = lookupEnginePartAsset('v3-part-water-traeger-01');
-    expect(water).not.toBeNull();
-    expect(water!.slot).toBe('traeger');
-    expect(water!.modelUrl).toBe('/engine-parts/mvp/v3-part-water-traeger-01.glb');
-    expect(water!.previewUrl).toBe('/cards/engine/v3-part-water-traeger-01.png');
-    expect(water!.sockets).toEqual(['SOCKET_DRIVE', 'SOCKET_VFX_REAR']);
-    expect(water!.version).toBe(1);
-
-    const drive = lookupEnginePartAsset('v3-part-shadow-antrieb-01');
-    expect(drive!.slot).toBe('antrieb');
-    expect(drive!.sockets).toEqual(['SOCKET_OUTPUT', 'SOCKET_VFX_CORE']);
-
-    const tip = lookupEnginePartAsset('v3-part-light-aufsatz-01');
-    expect(tip!.slot).toBe('aufsatz');
-    expect(tip!.sockets).toEqual(['SOCKET_ATTACK_ORIGIN']);
+  it('resolves every V3_ENGINE_PARTS_36 id', () => {
+    for (const id of listV3EnginePartIds()) {
+      const entry = lookupEnginePartAsset(id);
+      expect(entry, `missing registry entry for ${id}`).not.toBeNull();
+      expect(entry!.id).toBe(id);
+      expect(entry!.modelUrl).toBe(`/engine-parts/mvp/${id}.glb`);
+      expect(entry!.previewUrl).toBe(`/cards/engine/${id}.png`);
+      expect(entry!.version).toBe(1);
+    }
   });
 
-  it('lists exactly the three MVP entries', () => {
+  it('uses the canonical socket set for each slot', () => {
+    for (const part of V3_ENGINE_PARTS_36) {
+      const entry = lookupEnginePartAsset(part.id);
+      expect(entry).not.toBeNull();
+      expect(entry!.slot).toBe(part.slot);
+      expect(entry!.sockets).toEqual(SOCKETS_BY_SLOT[part.slot]);
+    }
+  });
+
+  it('lists exactly 36 entries matching the catalog', () => {
     const list = listEnginePartAssets();
-    expect(list).toHaveLength(3);
-    expect(list.map((e) => e.id).sort()).toEqual([...MVP_IDS].sort());
+    expect(list).toHaveLength(36);
+    expect(list.map((e) => e.id)).toEqual(listV3EnginePartIds());
   });
 
   it('has committed GLB files for each registry modelUrl', () => {
-    for (const id of MVP_IDS) {
+    for (const id of listV3EnginePartIds()) {
       const entry = lookupEnginePartAsset(id);
       expect(entry).not.toBeNull();
       const rel = entry!.modelUrl.replace(/^\//, '');

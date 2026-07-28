@@ -2,11 +2,15 @@
  * Maps V3 Fetzgerät part defIds to placeholder GLB URLs + socket metadata.
  * Location: src/services/engineAssets/partRegistry.ts
  *
- * No Three.js — lookup only. Assembler (#133) consumes these entries.
+ * Derived from `V3_ENGINE_PARTS_36` + `SOCKETS_BY_SLOT` — no parallel ID list.
+ * No Three.js — lookup only. Assembler consumes these entries.
  */
+import { V3_ENGINE_PARTS_36 } from '../../game/packs/v3/engineParts36';
+import { SOCKETS_BY_SLOT } from './slotSockets';
 import type { EnginePartAssetEntry, EnginePartSocketName } from './types';
 
 export type { EnginePartAssetEntry, EnginePartSocketName };
+export { SOCKETS_BY_SLOT } from './slotSockets';
 
 /** Public root for modular engine GLBs (Vite `public/`). */
 export const ENGINE_PARTS_PUBLIC_ROOT = '/engine-parts';
@@ -14,49 +18,29 @@ export const ENGINE_PARTS_PUBLIC_ROOT = '/engine-parts';
 /** Card-art fallback convention until GLB previews exist. */
 export const ENGINE_CARD_ART_PUBLIC_ROOT = '/cards/engine';
 
-const MVP_ASSET_VERSION = 1;
+const ASSET_VERSION = 1;
 
-/**
- * MVP×3 — ADR-suggested IDs (engineParts36 not yet authored; keep stable for #133).
- * Wasser Träger / Schatten Antrieb / Licht Aufsatz.
- */
-const REGISTRY: ReadonlyMap<string, EnginePartAssetEntry> = new Map([
-  [
-    'v3-part-water-traeger-01',
-    {
-      id: 'v3-part-water-traeger-01',
-      modelUrl: `${ENGINE_PARTS_PUBLIC_ROOT}/mvp/v3-part-water-traeger-01.glb`,
-      previewUrl: `${ENGINE_CARD_ART_PUBLIC_ROOT}/v3-part-water-traeger-01.png`,
-      slot: 'traeger',
-      sockets: ['SOCKET_DRIVE', 'SOCKET_VFX_REAR'] as const satisfies readonly EnginePartSocketName[],
-      version: MVP_ASSET_VERSION,
+function buildRegistry(): ReadonlyMap<string, EnginePartAssetEntry> {
+  const entries: Array<[string, EnginePartAssetEntry]> = V3_ENGINE_PARTS_36.map(
+    (part) => {
+      const entry: EnginePartAssetEntry = {
+        id: part.id,
+        modelUrl: `${ENGINE_PARTS_PUBLIC_ROOT}/mvp/${part.id}.glb`,
+        previewUrl: `${ENGINE_CARD_ART_PUBLIC_ROOT}/${part.id}.png`,
+        slot: part.slot,
+        sockets: SOCKETS_BY_SLOT[part.slot],
+        version: ASSET_VERSION,
+      };
+      return [part.id, entry];
     },
-  ],
-  [
-    'v3-part-shadow-antrieb-01',
-    {
-      id: 'v3-part-shadow-antrieb-01',
-      modelUrl: `${ENGINE_PARTS_PUBLIC_ROOT}/mvp/v3-part-shadow-antrieb-01.glb`,
-      previewUrl: `${ENGINE_CARD_ART_PUBLIC_ROOT}/v3-part-shadow-antrieb-01.png`,
-      slot: 'antrieb',
-      sockets: ['SOCKET_OUTPUT', 'SOCKET_VFX_CORE'] as const satisfies readonly EnginePartSocketName[],
-      version: MVP_ASSET_VERSION,
-    },
-  ],
-  [
-    'v3-part-light-aufsatz-01',
-    {
-      id: 'v3-part-light-aufsatz-01',
-      modelUrl: `${ENGINE_PARTS_PUBLIC_ROOT}/mvp/v3-part-light-aufsatz-01.glb`,
-      previewUrl: `${ENGINE_CARD_ART_PUBLIC_ROOT}/v3-part-light-aufsatz-01.png`,
-      slot: 'aufsatz',
-      sockets: ['SOCKET_ATTACK_ORIGIN'] as const satisfies readonly EnginePartSocketName[],
-      version: MVP_ASSET_VERSION,
-    },
-  ],
-]);
+  );
+  return new Map(entries);
+}
 
-/** All registered MVP part assets (stable order). */
+/** All 36 V3 part assets (order matches `V3_ENGINE_PARTS_36`). */
+const REGISTRY: ReadonlyMap<string, EnginePartAssetEntry> = buildRegistry();
+
+/** All registered part assets (stable catalog order). */
 export function listEnginePartAssets(): readonly EnginePartAssetEntry[] {
   return [...REGISTRY.values()];
 }

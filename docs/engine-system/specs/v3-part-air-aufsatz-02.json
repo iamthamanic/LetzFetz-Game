@@ -1,0 +1,18 @@
+{
+  "id": "v3-part-air-aufsatz-02",
+  "name": "Luft-Aufsatz 02",
+  "slot": "aufsatz",
+  "element": "air",
+  "sockets": [
+    "SOCKET_ATTACK_ORIGIN",
+    "SOCKET_VFX_FRONT"
+  ],
+  "modelUrl": "/engine-parts/mvp/v3-part-air-aufsatz-02.glb",
+  "previewUrl": "/cards/engine/v3-part-air-aufsatz-02.png",
+  "budgets": {
+    "maxTriangles": 48,
+    "maxTexturePx": 0,
+    "placeholder": true
+  },
+  "version": 1
+}

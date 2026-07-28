@@ -1,26 +1,35 @@
 /**
- * One-shot generator: tiny box GLBs with named EMPTY socket nodes for MVP×3.
+ * Placeholder box GLBs with named EMPTY socket nodes for all 36 V3 parts.
  * Location: scripts/generate-mvp-placeholder-glbs.ts
  *
- * Run: npx tsx scripts/generate-mvp-placeholder-glbs.ts
- * Output: public/engine-parts/mvp/*.glb
+ * Run: npm run generate:mvp-engine-glbs
+ *      npm run generate:engine-part-glbs -- --all
+ * Output: public/engine-parts/mvp/*.glb + docs/engine-system/specs/*.json
  */
-import { mkdirSync } from 'node:fs';
+import { mkdirSync, writeFileSync } from 'node:fs';
 import { dirname, join } from 'node:path';
 import { fileURLToPath } from 'node:url';
 import { Document, NodeIO } from '@gltf-transform/core';
+import { V3_ENGINE_PARTS_36 } from '../src/game/packs/v3/engineParts36';
+import {
+  BOX_HALF_BY_SLOT,
+  SOCKETS_BY_SLOT,
+  SOCKET_TRANSLATIONS,
+} from '../src/services/engineAssets/slotSockets';
+import type { EnginePartSocketName } from '../src/services/engineAssets/types';
+import type { FetzgeraetSlot } from '../src/game/types/cards';
 
 const ROOT = join(dirname(fileURLToPath(import.meta.url)), '..');
 const OUT_DIR = join(ROOT, 'public', 'engine-parts', 'mvp');
+const SPECS_DIR = join(ROOT, 'docs', 'engine-system', 'specs');
 
 type Vec3 = [number, number, number];
 
 interface PartGlbSpec {
   fileName: string;
   rootName: string;
-  /** Box half-extents (world units). */
   boxHalf: Vec3;
-  sockets: ReadonlyArray<{ name: string; translation: Vec3 }>;
+  sockets: ReadonlyArray<{ name: EnginePartSocketName; translation: Vec3 }>;
 }
 
 /** Unit cube centred at origin — 8 verts, 12 tris. */
@@ -88,39 +97,89 @@ async function writePartGlb(spec: PartGlbSpec): Promise<string> {
   return outPath;
 }
 
-const PARTS: readonly PartGlbSpec[] = [
-  {
-    fileName: 'v3-part-water-traeger-01.glb',
-    rootName: 'water_traeger_01',
-    boxHalf: [0.6, 0.15, 0.25],
-    sockets: [
-      { name: 'SOCKET_DRIVE', translation: [0, 0.2, 0] },
-      { name: 'SOCKET_VFX_REAR', translation: [0, 0, -0.35] },
-    ],
-  },
-  {
-    fileName: 'v3-part-shadow-antrieb-01.glb',
-    rootName: 'shadow_antrieb_01',
-    boxHalf: [0.25, 0.25, 0.35],
-    sockets: [
-      { name: 'SOCKET_OUTPUT', translation: [0, 0.3, 0] },
-      { name: 'SOCKET_VFX_CORE', translation: [0, 0, 0] },
-    ],
-  },
-  {
-    fileName: 'v3-part-light-aufsatz-01.glb',
-    rootName: 'light_aufsatz_01',
-    boxHalf: [0.2, 0.35, 0.2],
-    sockets: [{ name: 'SOCKET_ATTACK_ORIGIN', translation: [0, 0.45, 0.1] }],
-  },
-];
+function toGlbSpec(
+  id: string,
+  slot: FetzgeraetSlot,
+): PartGlbSpec {
+  const sockets = SOCKETS_BY_SLOT[slot].map((name) => ({
+    name,
+    translation: [...SOCKET_TRANSLATIONS[name]] as Vec3,
+  }));
+  const boxHalf = [...BOX_HALF_BY_SLOT[slot]] as Vec3;
+  return {
+    fileName: `${id}.glb`,
+    rootName: id.replace(/^v3-part-/, '').replace(/-/g, '_'),
+    boxHalf,
+    sockets,
+  };
+}
+
+interface PartSpecJson {
+  id: string;
+  name: string;
+  slot: FetzgeraetSlot;
+  element: string;
+  sockets: readonly EnginePartSocketName[];
+  modelUrl: string;
+  previewUrl: string;
+  budgets: {
+    maxTriangles: number;
+    maxTexturePx: number;
+    placeholder: boolean;
+  };
+  version: number;
+}
+
+function writeSpecJson(part: {
+  id: string;
+  name: string;
+  slot: FetzgeraetSlot;
+  element: string;
+}): string {
+  const payload: PartSpecJson = {
+    id: part.id,
+    name: part.name,
+    slot: part.slot,
+    element: part.element,
+    sockets: SOCKETS_BY_SLOT[part.slot],
+    modelUrl: `/engine-parts/mvp/${part.id}.glb`,
+    previewUrl: `/cards/engine/${part.id}.png`,
+    budgets: {
+      maxTriangles: 48,
+      maxTexturePx: 0,
+      placeholder: true,
+    },
+    version: 1,
+  };
+  const outPath = join(SPECS_DIR, `${part.id}.json`);
+  writeFileSync(outPath, `${JSON.stringify(payload, null, 2)}\n`, 'utf8');
+  return outPath;
+}
+
+function wantsAll(argv: string[]): boolean {
+  return argv.includes('--all') || argv.includes('--mvp') || argv.length === 0;
+}
 
 async function main(): Promise<void> {
-  mkdirSync(OUT_DIR, { recursive: true });
-  for (const part of PARTS) {
-    const path = await writePartGlb(part);
-    console.log(`wrote ${path}`);
+  const argv = process.argv.slice(2);
+  if (!wantsAll(argv) && argv.some((a) => a.startsWith('-'))) {
+    console.error(
+      'Usage: npm run generate:engine-part-glbs [-- --all]\nWrites all 36 V3 placeholder GLBs + specs.',
+    );
+    process.exit(2);
   }
+
+  mkdirSync(OUT_DIR, { recursive: true });
+  mkdirSync(SPECS_DIR, { recursive: true });
+
+  for (const part of V3_ENGINE_PARTS_36) {
+    const glbPath = await writePartGlb(toGlbSpec(part.id, part.slot));
+    const specPath = writeSpecJson(part);
+    console.log(`wrote ${glbPath}`);
+    console.log(`wrote ${specPath}`);
+  }
+
+  console.log(`done: ${V3_ENGINE_PARTS_36.length} GLBs + specs`);
 }
 
 main().catch((err: unknown) => {

@@ -3,7 +3,11 @@
   "name": "Wasser-Träger 01",
   "slot": "traeger",
   "element": "water",
-  "sockets": ["SOCKET_DRIVE", "SOCKET_VFX_REAR"],
+  "sockets": [
+    "SOCKET_DRIVE",
+    "SOCKET_ATTACHMENT_FALLBACK",
+    "SOCKET_VFX_REAR"
+  ],
   "modelUrl": "/engine-parts/mvp/v3-part-water-traeger-01.glb",
   "previewUrl": "/cards/engine/v3-part-water-traeger-01.png",
   "budgets": {

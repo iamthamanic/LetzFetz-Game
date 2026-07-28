@@ -35,15 +35,17 @@ Board cards stay 2D — cache is infrastructure for future thumbs, not a cutover
 Code: `src/features/play/engine3d/` (`EnginePreviewCanvas`, `WeaponAssembler`, …).  
 Hook exception: only `engine3d/three/**` (ADR D4).
 
-## MVP assets (#132)
+## V3 assets (#132 / #143)
 
-| Part id | `modelUrl` | Required sockets |
-|---------|------------|------------------|
-| `v3-part-water-traeger-01` | `/engine-parts/mvp/v3-part-water-traeger-01.glb` | `SOCKET_DRIVE` (+ `SOCKET_VFX_REAR`) |
-| `v3-part-shadow-antrieb-01` | `/engine-parts/mvp/v3-part-shadow-antrieb-01.glb` | `SOCKET_OUTPUT`, `SOCKET_VFX_CORE` |
-| `v3-part-light-aufsatz-01` | `/engine-parts/mvp/v3-part-light-aufsatz-01.glb` | `SOCKET_ATTACK_ORIGIN` |
+Catalog: `V3_ENGINE_PARTS_36` (36 ids). Demo trio:
 
-Regenerate boxes: `npm run generate:mvp-engine-glbs`. Spec stubs: `docs/engine-system/specs/`.
+| Part id | `modelUrl` | Slot sockets (`SOCKETS_BY_SLOT`) |
+|---------|------------|----------------------------------|
+| `v3-part-water-traeger-01` | `/engine-parts/mvp/v3-part-water-traeger-01.glb` | `SOCKET_DRIVE`, `SOCKET_ATTACHMENT_FALLBACK`, `SOCKET_VFX_REAR` |
+| `v3-part-shadow-antrieb-01` | `/engine-parts/mvp/v3-part-shadow-antrieb-01.glb` | `SOCKET_OUTPUT`, `SOCKET_VFX_CORE`, `SOCKET_EXHAUST` |
+| `v3-part-light-aufsatz-01` | `/engine-parts/mvp/v3-part-light-aufsatz-01.glb` | `SOCKET_ATTACK_ORIGIN`, `SOCKET_VFX_FRONT` |
+
+Regenerate boxes + specs: `npm run generate:engine-part-glbs -- --all` (alias: `generate:mvp-engine-glbs`). Spec stubs: `docs/engine-system/specs/` (36).
 
 ## Assembly
 
