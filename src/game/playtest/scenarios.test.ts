@@ -101,4 +101,16 @@ describe('playtest patches', () => {
     expect(result.ok, result.error).toBe(true);
     expect(result.state?.meta.monoBonusMode).toBe('mb3');
   });
+
+  it('demoV3Hooks seeds ulti + combat hook meta', () => {
+    const base = buildPlaytestScenario(BASE_PACK, 'fresh-action');
+    const result = applyAndValidatePlaytestPatch(base, { demoV3Hooks: true });
+    expect(result.ok, result.error).toBe(true);
+    expect(result.state?.players.p1.ultimateAvailable).toBe(true);
+    expect(result.state?.meta.v3CombatEnabled).toBe(true);
+    expect(result.state?.meta.v3ReactionLimitThisAction).toBe(2);
+    expect(result.state?.meta.v3DampfBecomesDichterNebel).toBe(true);
+    expect(result.state?.meta.v3PreserveFirstConsumedMark).toBe(true);
+    expect(result.state?.meta.v3TransformedPlayers).toEqual(['p1']);
+  });
 });

@@ -151,6 +151,16 @@ export function PlaytestCheatbox({
     onApplyState(result.state);
   };
 
+  const demoV3UltiBlueprintHooks = () => {
+    const result = applyAndValidatePlaytestPatch(state, { demoV3Hooks: true });
+    if (!result.ok || !result.state) {
+      onError(result.error ?? 'Ulti/Blueprint-Demo ungültig.');
+      return;
+    }
+    onError(null);
+    onApplyState(result.state);
+  };
+
   const v3On = state.meta.v3CombatEnabled === true;
 
   return (
@@ -251,6 +261,14 @@ export function PlaytestCheatbox({
                   data-testid="playtest-v3-demo"
                 >
                   V3 Demo
+                </Button>
+                <Button
+                  variant="secondary"
+                  size="sm"
+                  onClick={demoV3UltiBlueprintHooks}
+                  data-testid="playtest-v3-hooks-demo"
+                >
+                  Ulti/Blueprint
                 </Button>
               </div>
               <p className="text-[10px] text-stone-500">

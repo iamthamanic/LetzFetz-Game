@@ -29,6 +29,8 @@ export interface PlaytestPatch {
   p2Statuses?: StatusInstance[];
   /** Open a pick-reaction pending choice (UI demo). */
   demoPickReaction?: boolean;
+  /** Seed Ulti + V3 blueprint/ulti combat hooks for HUD demo (#149). */
+  demoV3Hooks?: boolean;
 }
 
 export interface PlaytestValidationResult {
@@ -69,6 +71,17 @@ export function applyPlaytestPatch(state: GameState, patch: PlaytestPatch): Game
         { reactionId: 'dampf', markId: 'durchnaesst', labelDe: 'Dampf' },
       ],
     };
+  }
+  if (patch.demoV3Hooks) {
+    next.meta = {
+      ...next.meta,
+      v3CombatEnabled: true,
+      v3ReactionLimitThisAction: 2,
+      v3DampfBecomesDichterNebel: true,
+      v3PreserveFirstConsumedMark: true,
+      v3TransformedPlayers: ['p1'],
+    };
+    next.players.p1.ultimateAvailable = true;
   }
   if (patch.p1Hp !== undefined) next.players.p1.hp = patch.p1Hp;
   if (patch.p2Hp !== undefined) next.players.p2.hp = patch.p2Hp;

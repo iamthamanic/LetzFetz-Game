@@ -114,7 +114,7 @@ export function CharacterDock({
               </Badge>
             )}
             {isHuman && player.ultimateAvailable && (
-              <Badge variant="accent" className="text-[9px]">
+              <Badge variant="accent" className="text-[9px]" data-testid="dock-ulti-ready">
                 Ulti
               </Badge>
             )}
