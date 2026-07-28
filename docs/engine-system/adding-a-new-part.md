@@ -23,7 +23,8 @@ Checklist for authors and agents. Follow ADR [`architecture.md`](./architecture.
 
 - [ ] Place GLB at `public/engine-parts/…/<id>.glb` (MVP: `public/engine-parts/mvp/`)
 - [ ] Named EMPTY nodes match ADR socket contract
-- [ ] Or regenerate placeholders: `npm run generate:mvp-engine-glbs` (boxes only)
+- [ ] Or regenerate placeholders: `npm run generate:mvp-engine-glbs` (boxes only — overwrites pilots)
+- [ ] Pilot trio real meshes: `npm run generate:pilot-engine-glbs` then `npm run asset:validate -- <id>`
 
 ## 4. Registry
 
@@ -37,7 +38,7 @@ Checklist for authors and agents. Follow ADR [`architecture.md`](./architecture.
 - [ ] After material/camera/socket contract changes: bump `ENGINE_RENDER_VERSION` in `engineVisual.ts` (invalidates `createRenderKey` caches)
 - [ ] Optional: warm cache with `requestEngineSnapshot(recipe)` from Play detail UI
 
-## 6. Validate / preview (stubs today)
+## 6. Validate / preview
 
 ```bash
 npm run asset:validate -- <id>
@@ -46,7 +47,7 @@ npm run asset:preview -- <id>
 npm run asset:all -- <id>
 ```
 
-- [ ] Stubs exit 0 and print DE/EN paths — real socket/budget checks are follow-up ([`asset-pipeline.md`](./asset-pipeline.md))
+- [ ] `asset:validate` exits 0 (sockets + budgets) — see [`asset-pipeline.md`](./asset-pipeline.md)
 
 ## 7. Docs & checks
 
