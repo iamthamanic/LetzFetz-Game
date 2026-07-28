@@ -7,7 +7,7 @@
 
 | UI | Tech |
 |----|------|
-| Cards / board thumbs | Static image (`previewUrl` or legacy PNG) |
+| Cards / board thumbs | Static image via `resolveCardArtPath` → registry `previewUrl`, else `/cards/engine/{id}.png` |
 | Detail / build preview | Single `@react-three/fiber` canvas |
 | Cached engine art | Snapshot keyed by `createRenderKey` (#134) |
 
@@ -22,7 +22,9 @@
 | CI / headless | Default **placeholder** 1×1 PNG data URL (no WebGL). Pass `canvas` for live `toDataURL`. |
 | Play UI | Optional **Snapshot cachen** on `EnginePreviewPanel` (warms memory cache; not persisted) |
 
-Board cards stay 2D — cache is infrastructure for future thumbs, not a cutover in #134.
+Board cards stay 2D — thumbs resolve through `src/services/cardArt/manifest.ts`
+(`resolveCardArtPath` / `resolveEnginePartArtPath` → `lookupEnginePartAsset.previewUrl`).
+Snapshot cache remains infrastructure for future generated thumbs, not a cutover in #134.
 
 ## Play integration (#133)
 

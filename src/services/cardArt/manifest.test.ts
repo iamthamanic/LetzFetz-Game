@@ -4,14 +4,17 @@
  */
 import { describe, expect, it } from 'vitest';
 import { BASE_PACK } from '../../game/packs/base-pack';
+import { V3_ENGINE_PARTS_36 } from '../../game/packs/v3/engineParts36';
 import {
   ILLUSTRATION_MANIFEST,
+  enginePartPreviewOrFallback,
   illustrationKeyForCardId,
   illustrationPublicPath,
   resolveCardArtPath,
   resolveCardBackPath,
   resolveCharacterIdleVideoPath,
   resolveElementAttackVideoPath,
+  resolveEnginePartArtPath,
   ELEMENT_ATTACK_VIDEO_MANIFEST,
 } from './manifest';
 
@@ -52,6 +55,34 @@ describe('card art manifest', () => {
     expect(resolveCardArtPath('arena-spaeti')).toBe('/cards/arena/arena-spaeti.png');
     expect(resolveCardArtPath('glitch-riss')).toBe('/cards/glitch/glitch-riss.png');
     expect(resolveCardArtPath('ulti-knuspergnom')).toBe('/cards/ultimate/ulti-knuspergnom.png');
+  });
+
+  it('resolves engine part art from registry previewUrl', () => {
+    for (const part of V3_ENGINE_PARTS_36) {
+      expect(resolveCardArtPath(part.id)).toBe(`/cards/engine/${part.id}.png`);
+      expect(resolveEnginePartArtPath(part.id)).toBe(`/cards/engine/${part.id}.png`);
+    }
+  });
+
+  it('falls back to PNG path when previewUrl is blank', () => {
+    expect(enginePartPreviewOrFallback('v3-part-water-traeger-01', '')).toBe(
+      '/cards/engine/v3-part-water-traeger-01.png',
+    );
+    expect(enginePartPreviewOrFallback('v3-part-water-traeger-01', '   ')).toBe(
+      '/cards/engine/v3-part-water-traeger-01.png',
+    );
+    expect(
+      enginePartPreviewOrFallback(
+        'v3-part-water-traeger-01',
+        '/cards/engine/custom-preview.png',
+      ),
+    ).toBe('/cards/engine/custom-preview.png');
+  });
+
+  it('leaves unknown ids empty (no engine registry hit)', () => {
+    expect(resolveCardArtPath('v3-part-does-not-exist')).toBe('');
+    expect(resolveEnginePartArtPath('v3-part-does-not-exist')).toBe('');
+    expect(resolveCardArtPath('unknown-card')).toBe('');
   });
 
   it('includes style guardrails in every prompt', () => {
