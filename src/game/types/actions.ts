@@ -18,7 +18,8 @@ export type GameAction =
   | {
       type: 'ACTIVATE_BOUND';
       boundInstanceId: string;
-      discardHandInstanceId: string;
+      /** V1/V2 / legacy: discard a hand card to pay activation. Optional under V3 pool activate. */
+      discardHandInstanceId?: string;
       targetBoundId?: string;
     }
   | { type: 'BUILD_CARD'; cardInstanceId: string; discardBoundId?: string }

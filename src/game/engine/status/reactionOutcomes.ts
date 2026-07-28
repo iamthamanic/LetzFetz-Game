@@ -8,7 +8,7 @@ import { cloneState } from '../helpers';
 import { addShield, applyStatus, getStatus, removeStatus, setShield } from './applyStatus';
 import { applyDamageThroughShield } from './shield';
 import { REACTION_LABEL_DE, type ReactionId } from './reactions';
-import { infernoResonanceBonus } from './resonance';
+import { infernoResonanceBonus, tryTwoPartWaterReactionCharge, ueberflutungExtraCharge, deepHighExtraDraw, rueckenwindUprightLimit, erleuchtungCleanseLimit, tieferFluchMaxStacks } from './resonance';
 import type { ContentPack } from '../../types';
 import { readV3CombatHooks, shouldPreserveConsumedMark } from './v3CombatHooks';
 
@@ -103,32 +103,69 @@ export function applyReactionWithOutcome(
     }
     case 'ueberflutung':
       next = applyStatus(next, ctx.targetId, 'ueberflutet', 1);
+      if (ctx.pack) {
+        const reso = ueberflutungExtraCharge(next, ctx.pack, ctx.chooserId, ctx.ruleset);
+        next = reso.state;
+        if (reso.extraCharge > 0) {
+          next.lastEvent = `${REACTION_LABEL_DE.ueberflutung}: volle Wasser-Resonanz (+1 Ladungskosten).`;
+        }
+        next = tryTwoPartWaterReactionCharge(next, ctx.pack, ctx.chooserId, ctx.ruleset);
+      }
       break;
     case 'deep_high': {
       if (!getStatus(next, ctx.targetId, 'high')) {
         next = applyStatus(next, ctx.targetId, 'high', stacksBefore);
       }
       next = applyStatus(next, ctx.targetId, 'high', 1);
+      if (ctx.pack) {
+        const reso = deepHighExtraDraw(next, ctx.pack, ctx.chooserId, ctx.ruleset);
+        next = reso.state;
+        // Base: filter 1; full reso: +1 draw (KISS: draw from deck if available)
+        const draws = 1 + reso.extraDraw;
+        for (let i = 0; i < draws; i++) {
+          const top = next.piles.deck.pop();
+          if (top) next.players[ctx.chooserId].hand.push(top);
+        }
+        next = forceDiscardOne(next, ctx.chooserId);
+      }
       break;
     }
     case 'rueckenwind': {
       next = applyStatus(next, ctx.targetId, 'fokus', 1);
-      const exhausted = next.players[ctx.targetId].bound.find((b) => b.exhausted);
-      if (exhausted) {
-        next = cloneState(next);
-        const idx = next.players[ctx.targetId].bound.findIndex(
-          (b) => b.instanceId === exhausted.instanceId,
-        );
-        if (idx >= 0) next.players[ctx.targetId].bound[idx].exhausted = false;
+      let uprightLimit = 1;
+      if (ctx.pack) {
+        const reso = rueckenwindUprightLimit(next, ctx.pack, ctx.chooserId, ctx.ruleset);
+        next = reso.state;
+        uprightLimit = reso.limit;
+      }
+      let uprighted = 0;
+      next = cloneState(next);
+      for (const b of next.players[ctx.targetId].bound) {
+        if (uprighted >= uprightLimit) break;
+        if (b.exhausted) {
+          b.exhausted = false;
+          uprighted += 1;
+        }
       }
       break;
     }
     case 'erleuchtung': {
+      let cleanseLimit = 1;
+      if (ctx.pack) {
+        const reso = erleuchtungCleanseLimit(next, ctx.pack, ctx.chooserId, ctx.ruleset);
+        next = reso.state;
+        cleanseLimit = reso.limit;
+      }
       const negatives = (next.players[ctx.targetId].statuses ?? []).filter((s) =>
         NEGATIVE_STATUSES.includes(s.id),
       );
-      if (negatives.length > 0) {
-        next = removeStatus(next, ctx.targetId, negatives[0].id);
+      let cleansed = 0;
+      for (const n of negatives) {
+        if (cleansed >= cleanseLimit) break;
+        next = removeStatus(next, ctx.targetId, n.id);
+        cleansed += 1;
+      }
+      if (cleansed > 0) {
         next = addShield(next, ctx.targetId, 1);
       } else {
         next = addShield(next, ctx.targetId, 2);
@@ -136,10 +173,24 @@ export function applyReactionWithOutcome(
       break;
     }
     case 'tiefer_fluch': {
+      let maxStacks = 3;
+      if (ctx.pack) {
+        const reso = tieferFluchMaxStacks(next, ctx.pack, ctx.chooserId, ctx.ruleset);
+        next = reso.state;
+        maxStacks = reso.maxStacks;
+      }
       if (!getStatus(next, ctx.targetId, 'verflucht')) {
         next = applyStatus(next, ctx.targetId, 'verflucht', stacksBefore);
       }
       next = applyStatus(next, ctx.targetId, 'verflucht', 2);
+      const curse = getStatus(next, ctx.targetId, 'verflucht');
+      if (curse && curse.stacks > maxStacks) {
+        next = cloneState(next);
+        const list = next.players[ctx.targetId].statuses ?? [];
+        const idx = list.findIndex((s) => s.id === 'verflucht');
+        if (idx >= 0) list[idx] = { ...list[idx], stacks: maxStacks };
+        next.players[ctx.targetId].statuses = list;
+      }
       break;
     }
     case 'dampf': {

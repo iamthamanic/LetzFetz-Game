@@ -14,6 +14,8 @@ import { applyStatus } from './applyStatus';
 import { REACTION_LABEL_DE, reactionIdFor, type ReactionId } from './reactions';
 import { applyReactionWithOutcome } from './reactionOutcomes';
 import { reactionLimitReached } from './v3CombatHooks';
+import { applyActiveBlueprintHooks } from './applyBlueprints';
+import type { ContentPack } from '../../types';
 
 export interface PickReactionOption {
   reactionId: ReactionId;
@@ -30,15 +32,21 @@ export function resolveImpulseReactions(
   impulseElement: Element,
   ruleset: RulesetConfig,
   chooserId: PlayerId,
+  pack?: ContentPack,
 ): GameState {
   if (!isV3CombatEnabled(ruleset)) return state;
 
-  if (reactionLimitReached(state.meta)) {
-    const markId = PRIMARY_MARK_BY_ELEMENT[impulseElement];
-    return applyStatus(state, targetId, markId, 1);
+  let working = state;
+  if (pack) {
+    working = applyActiveBlueprintHooks(working, pack, chooserId, ruleset);
   }
 
-  const impulse = applyElementImpulse(state, targetId, impulseElement, ruleset);
+  if (reactionLimitReached(working.meta)) {
+    const markId = PRIMARY_MARK_BY_ELEMENT[impulseElement];
+    return applyStatus(working, targetId, markId, 1);
+  }
+
+  const impulse = applyElementImpulse(working, targetId, impulseElement, ruleset);
   if (impulse.kind !== 'reaction') {
     return impulse.state;
   }
@@ -47,7 +55,7 @@ export function resolveImpulseReactions(
   if (options.length === 0) return impulse.state;
 
   if (options.length === 1) {
-    return applyChosenReaction(impulse.state, targetId, options[0], chooserId, ruleset);
+    return applyChosenReaction(impulse.state, targetId, options[0], chooserId, ruleset, pack);
   }
 
   const next = cloneState(impulse.state);
@@ -86,12 +94,14 @@ export function applyChosenReaction(
   option: PickReactionOption,
   chooserId: PlayerId,
   ruleset: RulesetConfig,
+  pack?: ContentPack,
 ): GameState {
   return applyReactionWithOutcome(state, option.reactionId, {
     targetId,
     chooserId,
     consumedMark: option.markId,
     ruleset,
+    pack,
   });
 }
 
@@ -102,6 +112,7 @@ export function pickReaction(
   state: GameState,
   reactionId: ReactionId,
   ruleset: RulesetConfig,
+  pack?: ContentPack,
 ): GameState {
   const pending = state.pendingChoice;
   if (pending?.type !== 'pick-reaction') {
@@ -119,5 +130,6 @@ export function pickReaction(
     },
     pending.chooserId,
     ruleset,
+    pack,
   );
 }

@@ -83,3 +83,7 @@ Bis Schritt 4: Default-Partie = V1-Verhalten.
 - [ ] Pack-Keyword-Schema für Impulse (Issue Pack-Schema)
 - [ ] Physische Marker/Token außerhalb Repo
 - [ ] V3_DRAFT spielbare Kurzprosa nach P0-Playtests
+
+### Lückenliste (Dump → Engine → UI)
+
+**[`V3_INTEGRATION_GAP_CHECKLIST.md`](./V3_INTEGRATION_GAP_CHECKLIST.md)** — Abgleich §1–§20 inkl. Fetz-Trigger-Pfade (#147).

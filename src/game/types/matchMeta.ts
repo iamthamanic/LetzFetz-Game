@@ -44,6 +44,15 @@ export interface MatchMeta {
   v3BlockShieldThisAction?: boolean;
   /** V3: turnNumber when full resonance was already used. */
   v3FullResonanceUsedRound?: number;
+  /** V3 two-part resonance once flags (per match / until cleared). */
+  v3ResonanceFireBurnTickUsed?: boolean;
+  v3ResonanceWaterChargeUsed?: boolean;
+  v3ResonanceEarthHighUsed?: boolean;
+  v3ResonanceAirUprightUsed?: boolean;
+  v3ResonanceLightCleanseUsed?: boolean;
+  v3ResonanceShadowCurseUsed?: boolean;
+  /** V3: players who already transformed this match. */
+  v3TransformedPlayers?: PlayerId[];
   /** V3 ulti/blueprint: reaction cap this action (default 1). */
   v3ReactionLimitThisAction?: number;
   /** V3 blueprint: Dampf applies dichter_nebel instead of nebel. */
@@ -52,6 +61,8 @@ export interface MatchMeta {
   v3PreserveFirstConsumedMark?: boolean;
   /** V3: preserve-first-mark already consumed this action. */
   v3FirstMarkPreservedThisAction?: boolean;
+  /** V3: part defIds that already fired a once-per-turn trigger this turn. */
+  v3FetzTriggerUsed?: Record<PlayerId, string[]>;
 }
 
 export type PendingChoice =
@@ -71,6 +82,10 @@ export type PendingChoice =
       mode: 'player' | 'challenge';
       targetBoundInstanceId?: string;
       doubleAttackApplied?: boolean;
+      /** For V3 Treffer-Impulse after Rückkopplung window. */
+      attackCardDefId?: string;
+      /** For V3 Vollblock-Impulse if damage later reduced to 0. */
+      blockCardDefId?: string;
     }
   | {
       type: 'optional-draw-discard';
@@ -129,5 +144,9 @@ export function resetTurnMeta(meta: MatchMeta, activePlayer: PlayerId): MatchMet
     didAttackOrChallengeThisTurn: false,
     clubSwapAvailable: meta.clubSwapAvailable,
     basarExhaustAvailable: meta.basarExhaustAvailable,
+    v3FetzTriggerUsed: {
+      p1: activePlayer === 'p1' ? [] : (meta.v3FetzTriggerUsed?.p1 ?? []),
+      p2: activePlayer === 'p2' ? [] : (meta.v3FetzTriggerUsed?.p2 ?? []),
+    },
   };
 }
