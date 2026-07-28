@@ -63,7 +63,7 @@ export function ForgeView() {
             (c: ForgeCardData) =>
               c.id &&
               !packCards.some((p) => p.id === c.id) &&
-              ['Character', 'Ultimate', 'Element', 'Arena', 'Glitch'].includes(c.type),
+              ['Character', 'Ultimate', 'Element', 'Arena', 'Glitch', 'Engine'].includes(c.type),
           )
           .map((c: ForgeCardData) => ({
             ...c,
@@ -251,6 +251,7 @@ export function ForgeView() {
     .filter(
       (c) =>
         !searchTerm ||
+        c.id.toLowerCase().includes(searchTerm.toLowerCase()) ||
         c.name.toLowerCase().includes(searchTerm.toLowerCase()) ||
         c.element.toLowerCase().includes(searchTerm.toLowerCase()) ||
         (c.elementDisplay?.toLowerCase().includes(searchTerm.toLowerCase()) ?? false) ||

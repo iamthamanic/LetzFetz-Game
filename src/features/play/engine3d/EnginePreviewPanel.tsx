@@ -9,7 +9,7 @@ import { createEngineDisplayName } from '../../../game/engine/engineRecipe';
 import type { ContentPack } from '../../../game/types';
 import { Button } from '../../../components/ui/Button';
 import { Panel } from '../../../components/ui/Panel';
-import { EnginePreviewCanvas } from './EnginePreviewCanvas';
+import { EnginePreviewCanvas } from '../../../components/engine3d';
 import { requestEngineSnapshot } from './rendering/requestEngineSnapshot';
 
 interface EnginePreviewPanelProps {

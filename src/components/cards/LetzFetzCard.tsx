@@ -87,6 +87,7 @@ function typeIcon(type: CardKind): string {
     Element: '🃏',
     Arena: '🏟️',
     Glitch: '🌀',
+    Engine: '🔧',
   };
   return icons[type];
 }

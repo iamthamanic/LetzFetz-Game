@@ -186,6 +186,33 @@ export function packToPresentationCards(
     });
   }
 
+  const SLOT_DE: Record<string, string> = {
+    traeger: 'Träger',
+    antrieb: 'Antrieb',
+    aufsatz: 'Aufsatz',
+  };
+
+  for (const p of pack.engineParts ?? []) {
+    const slot = p.preferredRole ?? 'traeger';
+    const effects = [
+      `Element: ${ELEMENT_DE[p.element]}`,
+      `Rolle: ${SLOT_DE[slot] ?? slot}`,
+      `Widerstand: ${p.resistance}`,
+    ];
+    if (p.effectText) effects.push(`Effekt: ${p.effectText}`);
+    if (p.activateCost != null) effects.push(`Aktivierung: ${p.activateCost} Ladungen`);
+    cards.push({
+      id: p.id,
+      name: p.name,
+      type: 'Engine',
+      element: toCardElement(p.element),
+      stats_json: { resistance: p.resistance },
+      effects,
+      image_asset: resolveCardArtPath(p.id),
+      fromPack: true,
+    });
+  }
+
   return cards;
 }
 

@@ -1,12 +1,13 @@
 import { describe, it, expect } from 'vitest';
 import { packToForgeCards } from './packToForge';
 import { BASE_PACK } from '../../../game/packs/base-pack';
+import { V3_PACK } from '../../../game/packs/v3';
 import { CARD_CATEGORIES } from '../model/categories';
 
 describe('packToForgeCards', () => {
-  it('exports all 90 V1 cards with rulebook categories', () => {
+  it('exports V1 cards plus V3 Fetzgerät parts with rulebook categories', () => {
     const cards = packToForgeCards(BASE_PACK);
-    expect(cards).toHaveLength(90);
+    expect(cards).toHaveLength(90 + (V3_PACK.engineParts?.length ?? 0));
 
     for (const category of CARD_CATEGORIES) {
       const count = cards.filter((c) => c.type === category.id).length;
@@ -35,5 +36,12 @@ describe('packToForgeCards', () => {
     expect(glitches).toHaveLength(10);
     expect(glitches.some((g) => g.id === 'glitch-selbstschaden')).toBe(true);
     expect(glitches.some((g) => g.id === 'glitch-riss')).toBe(true);
+  });
+
+  it('includes registered V3 engine parts as Engine kind', () => {
+    const part = packToForgeCards().find((c) => c.id === 'v3-part-water-traeger-01');
+    expect(part?.type).toBe('Engine');
+    expect(part?.name).toBeTruthy();
+    expect(part?.image_asset).toContain('v3-part-water-traeger-01');
   });
 });

@@ -1,6 +1,6 @@
 /**
  * Unit tests for engine3d model-utils (no WebGL).
- * Location: src/features/play/engine3d/three/model-utils.test.ts
+ * Location: src/components/engine3d/three/model-utils.test.ts
  */
 import { describe, expect, it } from 'vitest';
 import { Object3D } from 'three';

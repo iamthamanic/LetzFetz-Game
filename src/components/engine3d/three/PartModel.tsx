@@ -1,6 +1,6 @@
 /**
  * Loads one engine-part GLB and exposes a cloned scene via callback.
- * Location: src/features/play/engine3d/three/PartModel.tsx
+ * Location: src/components/engine3d/three/PartModel.tsx
  * ADR D4: R3F hooks allowed under engine3d/three/**
  */
 import { useEffect, useMemo } from 'react';

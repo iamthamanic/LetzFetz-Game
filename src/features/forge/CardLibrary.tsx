@@ -19,6 +19,10 @@ import { CharacterDetailPanel } from '../../components/character/CharacterDetail
 import { getUltimateForCharacter } from '../../game/packs/characterSetup';
 import { CardForgeCardEditor } from './CardForgeCardEditor';
 import type { ForgeCardData } from './model/types';
+import {
+  EnginePreviewCanvas,
+  recipeFromPartId,
+} from '../../components/engine3d';
 
 export type CardLibraryFilter = CardKind | 'All';
 
@@ -155,6 +159,7 @@ function CardLibraryPreviewModal({
         })
       : null;
   const ultimate = characterDef ? getUltimateForCharacter(characterDef) : undefined;
+  const engineRecipe = recipeFromPartId(card.id);
 
   useEffect(() => {
     const onKey = (e: KeyboardEvent) => {
@@ -288,6 +293,21 @@ function CardLibraryPreviewModal({
                     tab="ulti"
                     ultimate={ultimate}
                     className={PREVIEW_PANEL_FRAME}
+                  />
+                </div>
+              ) : null}
+
+              {engineRecipe ? (
+                <div
+                  className={`flex ${panelH} w-72 shrink-0 flex-col gap-2 rounded-lg border border-stone-600/50 bg-stone-900/80 p-2`}
+                  data-testid="card-library-engine-3d"
+                >
+                  <p className="font-brand text-[10px] uppercase tracking-wide text-stone-400">
+                    3D-Vorschau
+                  </p>
+                  <EnginePreviewCanvas
+                    recipe={engineRecipe}
+                    className="min-h-0 flex-1"
                   />
                 </div>
               ) : null}

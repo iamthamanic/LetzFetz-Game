@@ -1,6 +1,6 @@
 /**
  * Minimal lighting for MVP placeholder GLBs.
- * Location: src/features/play/engine3d/three/EngineLighting.tsx
+ * Location: src/components/engine3d/three/EngineLighting.tsx
  */
 export function EngineLighting() {
   return (
