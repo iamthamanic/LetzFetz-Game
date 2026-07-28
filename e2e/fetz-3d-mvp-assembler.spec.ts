@@ -48,8 +48,15 @@ test.describe('Fetzgerät 3D MVP — assembler panel', () => {
     expect(hasCanvas || hasFallback).toBeTruthy();
 
     await page.getByTestId('engine-snapshot-cache-btn').click();
-    await expect(panel.getByRole('status')).toBeVisible({ timeout: 5000 });
+    const status = panel.getByRole('status');
+    await expect(status).toBeVisible({ timeout: 5000 });
+    await expect(status).toContainText(/Snapshot/);
     await shot(page, '03-snapshot-cached.png');
+    // Prefer canvas/cache when WebGL works; stub text only without canvas.
+    const statusText = (await status.textContent()) ?? '';
+    expect(
+      /Canvas-Snapshot|Snapshot aus Cache|Snapshot-Stub|Kein Snapshot/.test(statusText),
+    ).toBeTruthy();
 
     await panel.getByRole('button', { name: '3D-Vorschau schließen' }).click();
     await expect(panel).toHaveCount(0);

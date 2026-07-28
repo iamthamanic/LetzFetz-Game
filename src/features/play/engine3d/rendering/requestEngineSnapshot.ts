@@ -1,9 +1,10 @@
 /**
- * Best-effort engine snapshot request (cache + optional canvas / placeholder stub).
+ * Best-effort engine snapshot request (cache + canvas capture / placeholder stub).
  * Location: src/features/play/engine3d/rendering/requestEngineSnapshot.ts
  *
- * WebGL capture is hard in CI — without a canvas, stores a 1×1 PNG placeholder
- * (or returns null when allowPlaceholder is false). Live toDataURL when canvas given.
+ * Prefer live WebGL `HTMLCanvasElement.toDataURL` (Play panel passes canvas from
+ * EnginePreviewCanvas). Without a canvas / on capture failure: 1×1 PNG placeholder
+ * (or miss when allowPlaceholder is false). Headless CI uses the stub path.
  */
 import type { EngineRecipe } from '../../../../game/types/engineVisual';
 import { createRenderKey } from '../../../../game/engine/engineRecipe';
@@ -28,6 +29,11 @@ export interface RequestEngineSnapshotOptions {
   allowPlaceholder?: boolean;
   /** MIME for toDataURL; default image/png. */
   mimeType?: string;
+  /**
+   * Skip cache read and re-capture (or re-stub).
+   * Use when a live canvas is available so a prior placeholder does not stick.
+   */
+  force?: boolean;
 }
 
 export interface EngineSnapshotResult {
@@ -51,7 +57,7 @@ function tryCanvasDataUrl(
 
 /**
  * Resolve a snapshot for `recipe`:
- * 1. Cache hit by createRenderKey
+ * 1. Cache hit by createRenderKey (unless force)
  * 2. Optional canvas toDataURL → cache
  * 3. Placeholder stub (default) → cache
  * 4. Or miss (null, not cached) when allowPlaceholder=false
@@ -61,9 +67,11 @@ export function requestEngineSnapshot(
   options: RequestEngineSnapshotOptions = {},
 ): EngineSnapshotResult {
   const renderKey = createRenderKey(recipe);
-  const cached = getEngineSnapshot(renderKey);
-  if (cached) {
-    return { renderKey, dataUrl: cached.dataUrl, source: 'cache' };
+  if (!options.force) {
+    const cached = getEngineSnapshot(renderKey);
+    if (cached) {
+      return { renderKey, dataUrl: cached.dataUrl, source: 'cache' };
+    }
   }
 
   const mimeType = options.mimeType ?? 'image/png';

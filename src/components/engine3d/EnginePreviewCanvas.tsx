@@ -3,7 +3,7 @@
  * Location: src/components/engine3d/EnginePreviewCanvas.tsx
  * Outside three/**: only useState / useRef / useEffect.
  */
-import React, { Suspense, useEffect, useState, useCallback } from 'react';
+import React, { Suspense, useEffect, useRef, useState, useCallback } from 'react';
 import { Canvas } from '@react-three/fiber';
 import { Html } from '@react-three/drei';
 import type { EngineRecipe } from '../../game/types/engineVisual';
@@ -40,16 +40,33 @@ function LoadingFallback() {
 interface EnginePreviewCanvasProps {
   recipe: EngineRecipe;
   className?: string;
+  /**
+   * Live WebGL canvas for snapshot capture (`toDataURL`).
+   * Called with the element after R3F create; `null` on unmount / no-WebGL paths.
+   */
+  onGlCanvasReady?: (canvas: HTMLCanvasElement | null) => void;
 }
 
-export function EnginePreviewCanvas({ recipe, className }: EnginePreviewCanvasProps) {
+export function EnginePreviewCanvas({
+  recipe,
+  className,
+  onGlCanvasReady,
+}: EnginePreviewCanvasProps) {
   const [webglOk, setWebglOk] = useState(true);
   const [issues, setIssues] = useState<AssemblerIssue[]>([]);
   const [reducedMotion, setReducedMotion] = useState(false);
+  const onGlCanvasReadyRef = useRef(onGlCanvasReady);
+  onGlCanvasReadyRef.current = onGlCanvasReady;
 
   useEffect(() => {
     setWebglOk(detectWebGL());
     setReducedMotion(prefersReducedMotion());
+  }, []);
+
+  useEffect(() => {
+    return () => {
+      onGlCanvasReadyRef.current?.(null);
+    };
   }, []);
 
   const onIssuesChange = useCallback((next: AssemblerIssue[]) => {
@@ -91,8 +108,11 @@ export function EnginePreviewCanvas({ recipe, className }: EnginePreviewCanvasPr
     >
       <Canvas
         dpr={[1, 1.5]}
-        gl={{ antialias: true, alpha: true }}
+        gl={{ antialias: true, alpha: true, preserveDrawingBuffer: true }}
         style={{ width: '100%', height: '100%', minHeight: 180 }}
+        onCreated={(state) => {
+          onGlCanvasReadyRef.current?.(state.gl.domElement);
+        }}
       >
         <color attach="background" args={['#1c1917']} />
         <EngineCamera />
