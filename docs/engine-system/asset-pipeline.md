@@ -1,6 +1,6 @@
 # Asset pipeline (Fetzgerät 3D)
 
-**Status:** CLI stubs (#134) — no Meshy, no paid APIs  
+**Status:** Validate is real (#164) — no Meshy, no paid APIs  
 **See also:** [architecture.md](./architecture.md), [adding-a-new-part.md](./adding-a-new-part.md)
 
 ## Purpose
@@ -9,17 +9,28 @@ Local npm commands to validate / preview modular engine part assets. Mirrors `to
 
 | Script | Command | Today |
 |--------|---------|--------|
-| Validate | `npm run asset:validate -- <asset-id>` | Stub: MVP registry + file existence report (DE/EN) |
+| Validate | `npm run asset:validate -- <asset-id>` | Real: GLB exists, SOCKET_* nodes vs spec, triangle + byte budgets |
 | Preview | `npm run asset:preview -- <asset-id>` | Stub: path + in-app snapshot hint |
 | All | `npm run asset:all -- <asset-id>` | Runs validate then preview |
 
-## Exit codes
+## Exit codes (`asset:validate`)
 
 | Code | Meaning |
 |------|---------|
-| `0` | Stub completed / reported status |
-| `2` | Usage error (missing `<asset-id>`) |
-| `1` | Reserved for future real validation failures |
+| `0` | Validation passed (sockets + budgets OK) |
+| `1` | Validation failed (missing GLB / sockets / over budget / unknown id / bad GLB) |
+| `2` | Usage error (missing/invalid `<asset-id>`) |
+
+## Checks (validate)
+
+1. Asset id is a safe single path segment (no `..` / separators).
+2. Spec JSON exists under `docs/engine-system/specs/<id>.json`.
+3. GLB exists under `public/engine-parts/mvp/<id>.glb`.
+4. GLB JSON chunk lists every `sockets[]` name from the spec as a node `name`.
+5. Estimated triangle count (indices/3) ≤ `budgets.maxTriangles` (default 12 000 if omitted).
+6. File size ≤ `budgets.maxBytes` when set; otherwise default 512 KiB.
+
+Preview PNG remains **optional**.
 
 ## Layout
 
@@ -29,7 +40,7 @@ tools/asset-pipeline/
   preview.mjs
   all.mjs
 public/engine-parts/mvp/     # GLBs
-docs/engine-system/specs/    # JSON stubs
+docs/engine-system/specs/    # JSON stubs (sockets + budgets)
 src/services/engineAssets/   # partRegistry
 ```
 
@@ -48,8 +59,8 @@ In-app cache: `src/features/play/engine3d/rendering/`
 
 Bump `ENGINE_RENDER_VERSION` when assembly/shaders/camera contract changes so keys miss old entries.
 
-## Follow-ups (explicitly not this stub)
+## Follow-ups (still out of scope)
 
-- Real GLB socket + triangle budget checks
 - Offline/headless WebGL snapshot writer
 - Meshy/Tripo or other generation providers (keep secrets out of git)
+- Mass production of all 36 non-placeholder GLBs

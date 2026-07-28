@@ -1,0 +1,57 @@
+{
+  "epicSlug": "fetz-v3-production-followups",
+  "designPath": ".qa/design/fetz-v3-production-followups.md",
+  "defaultLabels": ["agent-ready"],
+  "issues": [
+    {
+      "title": "Asset pipeline: real GLB socket + budget validate",
+      "featureSlug": "fetz-asset-validate-real",
+      "priority": "P0",
+      "labels": ["P0", "agent-ready"],
+      "dependsOn": [],
+      "body": "## Intent\nReplace the asset-pipeline validate stub with real checks: GLB file exists, named sockets match `SOCKETS_BY_SLOT` for the part’s Fetz-slot, and a triangle/byte budget gate — fail with exit code 1 so CI/local can catch bad parts.\n\n## User Journey\n1. Author runs `npm run asset:validate -- v3-part-water-traeger-01`\n2. System reports DE/EN status (sockets, size, registry)\n3. Author sees exit 0 on pass, exit 1 on missing GLB / bad sockets / over budget\n\n## Problem\n`tools/asset-pipeline/validate.mjs` always exits 0; docs mark socket/budget checks as follow-up. Placeholder GLBs cannot be gated.\n\n## Solution\nExtend `tools/asset-pipeline/validate.mjs` (and docs in `docs/engine-system/asset-pipeline.md`): parse GLB (or lightweight glTF JSON chunk) for node/socket names aligned with `src/services/engineAssets/slotSockets.ts`; enforce file-size and optional triangle budget; keep usage exit 2. No Meshy, no network, no secrets.\n\n## Runtime\n| Axis | This slice |\n|------|------------|\n| Local (desktop) | yes |\n| Cloud session | no |\n| Appwrite Functions | skip |\n\n## Edge Cases\n- Unknown asset id → fail (exit 1), not silent 0\n- Path-traversal ids still rejected (exit 2)\n- Preview PNG still optional\n\n## Acceptance\n- [ ] `npm run asset:validate -- <known-id>` exits 0 only when GLB exists and required sockets present under budget\n- [ ] Missing/invalid GLB or sockets → exit 1 with clear DE/EN message\n- [ ] `docs/engine-system/asset-pipeline.md` documents real checks (stub note removed)\n- [ ] `npm run checks` still green; no Three.js in `src/game/`\n- [ ] Touched files: zero type escape hatches (`@typed-strict` / Boy Scout)\n\n## Design\nEpic: `.qa/design/fetz-v3-production-followups.md`\n\n## Runner\nLabels: P0, agent-ready\nFeature slug: `fetz-asset-validate-real`"
+    },
+    {
+      "title": "Ship pilot real GLBs for MVP trio parts",
+      "featureSlug": "fetz-glb-pilot-three",
+      "priority": "P0",
+      "labels": ["P0", "agent-ready"],
+      "dependsOn": [
+        "Asset pipeline: real GLB socket + budget validate"
+      ],
+      "body": "## Intent\nReplace placeholder box GLBs for the documented MVP trio with distinctive real meshes that pass `asset:validate` and assemble correctly in `WeaponAssembler` / Play preview.\n\n## User Journey\n1. Player opens Engine-Preview for a build using the pilot parts\n2. System loads GLBs that are visually distinct per slot (Träger / Antrieb / Aufsatz)\n3. Player sees assembled weapon, not three identical unit boxes\n\n## Problem\nAll 36 `public/engine-parts/mvp/*.glb` are ~1 KB placeholders. Mass replace is out of scope; need a prove-out path.\n\n## Solution\nAuthor/export three GLBs only: `v3-part-water-traeger-01`, `v3-part-shadow-antrieb-01`, `v3-part-light-aufsatz-01` (see `docs/engine-system/rendering.md`). Named sockets per `SOCKETS_BY_SLOT`. Bump registry `version` or document asset version for those ids. Hand-authored / script-generated meshes OK — Meshy not required. Leave other 33 as placeholders.\n\n## Runtime\n| Axis | This slice |\n|------|------------|\n| Local (desktop) | yes |\n| Cloud session | no |\n| Appwrite Functions | skip |\n\n## Edge Cases\n- Non-pilot parts still load placeholders without crash\n- `asset:validate` must pass for all three pilot ids\n- Assembler socket parenting unchanged for non-pilot builds\n\n## Acceptance\n- [ ] Three pilot GLBs committed under `public/engine-parts/mvp/` and pass `npm run asset:validate`\n- [ ] Visually distinct from unit-box placeholders in Engine preview (e2e or evidence screenshot)\n- [ ] Remaining 33 parts unchanged; MVP demo recipe still works\n- [ ] Docs note pilot vs placeholder in `adding-a-new-part.md` or `rendering.md`\n- [ ] Touched files: zero type escape hatches (`@typed-strict` / Boy Scout)\n\n## Design\nEpic: `.qa/design/fetz-v3-production-followups.md`\n\n## Runner\nLabels: P0, agent-ready\nFeature slug: `fetz-glb-pilot-three`"
+    },
+    {
+      "title": "Board thumbs: prefer engine snapshot cache",
+      "featureSlug": "fetz-board-snapshot-thumbs",
+      "priority": "P0",
+      "labels": ["P0", "agent-ready"],
+      "dependsOn": [],
+      "body": "## Intent\nCut over Play board / bound engine-part thumbs from static registry `previewUrl` to prefer `#146` in-memory snapshot cache (`getEngineSnapshot` / `requestEngineSnapshot`), with PNG `previewUrl` fallback when cache misses.\n\n## User Journey\n1. Player builds / previews an engine and caches a snapshot (or opens preview so cache warms)\n2. System stores data URL under `createRenderKey(recipe)`\n3. Player sees that snapshot on bound slot / board card thumb instead of only `/cards/engine/*.png`\n\n## Problem\n`BoundCardSlot` / `BoardCard` use `resolveCardArtPath` → registry `previewUrl`. Acceptance for #146 explicitly deferred board cutover.\n\n## Solution\nPlay-owned helper (near `features/play/engine3d/rendering/` or board): for engine-part defIds, if recipe snapshot exists use `dataUrl`; else `resolveEnginePartArtPath`. Wire `BoundCardSlot` / relevant board surfaces. No Feature→Feature. No offscreen WebGL in this slice — miss stays PNG. Update checklist/docs note.\n\n## Runtime\n| Axis | This slice |\n|------|------------|\n| Local (desktop) | yes (in-memory cache) |\n| Cloud session | no |\n| Appwrite Functions | skip |\n\n## Edge Cases\n- Cache miss / placeholder 1×1 → prefer PNG fallback over blank stub when detecting tiny placeholder\n- Non-engine cards unchanged\n- Headless tests: mock cache; no WebGL required\n\n## Acceptance\n- [ ] Bound engine-part thumbs prefer cached snapshot when `renderKey` hit\n- [ ] Miss → registry/card-art PNG (no broken image)\n- [ ] Vitest for resolver helper; `npm run checks` green\n- [ ] Docs/`V3` or engine-system note: board cutover done\n- [ ] Touched files: zero type escape hatches (`@typed-strict` / Boy Scout)\n\n## Design\nEpic: `.qa/design/fetz-v3-production-followups.md`\n\n## Runner\nLabels: P0, agent-ready\nFeature slug: `fetz-board-snapshot-thumbs`"
+    },
+    {
+      "title": "V3 StatusChips: Marken/Buff Wirkungscopy tooltips",
+      "featureSlug": "v3-status-effect-copy",
+      "priority": "P1",
+      "labels": ["P1", "agent-ready"],
+      "dependsOn": [],
+      "body": "## Intent\nAdd short German Wirkungscopy (tooltips) on Play `StatusChips` for primary marks and key buffs/debuffs so players understand §6/§7 effects during a match — without shipping an in-app Regelbuch.\n\n## User Journey\n1. Spieler sieht Chip „Brennen ×2“\n2. Hover/Focus öffnet Tooltip mit kurzer Wirkungsbeschreibung\n3. Spieler versteht Tick/Wirkung ohne Dump zu öffnen\n\n## Problem\nChecklist A §6/§7: Engine + Chips ✅ but „Wirkungs-Copy fehlt in UI“.\n\n## Solution\nCopy module under `features/play/board/` (DE strings); wire `StatusChips` / existing tooltip primitive. Cover primary marks + common buffs already in `types/status`. No new Engine rules. Update `V3_INTEGRATION_GAP_CHECKLIST.md` row.\n\n## Runtime\n| Axis | This slice |\n|------|------------|\n| Local (desktop) | yes |\n| Cloud session | no |\n| Appwrite Functions | skip |\n\n## Edge Cases\n- Unknown status id → generic DE fallback, no crash\n- Reduced motion / keyboard focus still shows copy\n\n## Acceptance\n- [ ] Primary marks have DE Wirkungstooltips on chips\n- [ ] At least core buffs/debuffs used in V3_PACK covered\n- [ ] Checklist §6/§7 UI note updated\n- [ ] Styleguide primitives; `npm run checks` green\n- [ ] Touched files: zero type escape hatches (`@typed-strict` / Boy Scout)\n\n## Design\nEpic: `.qa/design/fetz-v3-production-followups.md`\n\n## Runner\nLabels: P1, agent-ready\nFeature slug: `v3-status-effect-copy`"
+    },
+    {
+      "title": "V3 Combat stage: Angriffstypen-Copy (§10)",
+      "featureSlug": "v3-combat-attack-type-copy",
+      "priority": "P1",
+      "labels": ["P1", "agent-ready"],
+      "dependsOn": [],
+      "body": "## Intent\nSurface Dump §10 attack-type distinction (normal / Status / Element / Reaktion) in Combat Stage copy so players can read what kind of attack is resolving — building on existing `combatStageCopy` + impulse chips.\n\n## User Journey\n1. Spieler startet Kampfauflösung\n2. Combat Stage zeigt Typ-Hinweis (z. B. Elementangriff / Reaktionsangriff)\n3. Spieler verknüpft Impuls/Marke-Feedback mit Angriffsart\n\n## Problem\nChecklist B §10: Engine 🟡, UI ❌ „Keine Typ-Unterscheidung in Combat-Stage-Copy“.\n\n## Solution\nExtend `combatStageCopy.ts` (+ tests) to label attack kind from existing combat/view-model fields; DE strings only. No new combat math. Update gap checklist.\n\n## Runtime\n| Axis | This slice |\n|------|------------|\n| Local (desktop) | yes |\n| Cloud session | no |\n| Appwrite Functions | skip |\n\n## Edge Cases\n- Ambiguous/legacy V1 path → neutral copy, no wrong claim\n- Missing type → omit line rather than invent\n\n## Acceptance\n- [ ] Combat Stage shows DE Angriffstyp when distinguishable\n- [ ] Vitest for copy mapping; no Engine rule change required\n- [ ] Checklist §10 UI updated\n- [ ] `npm run checks` green\n- [ ] Touched files: zero type escape hatches (`@typed-strict` / Boy Scout)\n\n## Design\nEpic: `.qa/design/fetz-v3-production-followups.md`\n\n## Runner\nLabels: P1, agent-ready\nFeature slug: `v3-combat-attack-type-copy`"
+    },
+    {
+      "title": "V3 Träger Ladung-Spend Confirm UI",
+      "featureSlug": "v3-traeger-charge-confirm",
+      "priority": "P1",
+      "labels": ["P1", "agent-ready"],
+      "dependsOn": [],
+      "body": "## Intent\nAdd an explicit German Confirm UI when spending shared Fetzgerät Ladung via Träger activate paths, so charge spend is intentional (checklist: Confirm-UI für Träger-Spend fehlt).\n\n## User Journey\n1. Spieler aktiviert Träger-Effekt der Ladung kostet\n2. System zeigt Confirm (Kosten + Restladung)\n3. Spieler bestätigt → `dispatch`; Abbruch lässt State unverändert\n\n## Problem\nCharge pool + chip exist; accidental spend risk; gap checklist calls out missing Confirm UI.\n\n## Solution\nPlay board Confirm using `components/ui` Modal/Button; wire only Träger spend / activate paths that deduct `fetzCharge`. Engine already authoritative — UI confirms before dispatch. Update gap checklist D-row.\n\n## Runtime\n| Axis | This slice |\n|------|------------|\n| Local (desktop) | yes |\n| Cloud session | no |\n| Appwrite Functions | skip |\n\n## Edge Cases\n- Insufficient charge → disabled Confirm + DE reason\n- Bot path unchanged (no modal for bot)\n- Cancel does not dispatch\n\n## Acceptance\n- [ ] Human Träger charge-spend shows Confirm with cost + remaining\n- [ ] Confirm dispatches; cancel does not\n- [ ] Insufficient charge blocked with DE message\n- [ ] Gap checklist updated; Styleguide primitives; `npm run checks` green\n- [ ] Touched files: zero type escape hatches (`@typed-strict` / Boy Scout)\n\n## Design\nEpic: `.qa/design/fetz-v3-production-followups.md`\n\n## Runner\nLabels: P1, agent-ready\nFeature slug: `v3-traeger-charge-confirm`"
+    }
+  ]
+}
