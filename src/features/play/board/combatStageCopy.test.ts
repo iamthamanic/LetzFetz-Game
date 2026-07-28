@@ -1,9 +1,11 @@
 import { describe, expect, it } from 'vitest';
 import type { ElementCardDef, PendingCombat } from '../../../game/types';
 import {
+  buildCombatStageAttackTypeLine,
   buildCombatStageImpulseLine,
   buildCombatStageSubtitle,
   buildCombatStageTitle,
+  classifyCombatAttackKind,
   combatValueLabel,
   defenderValueLabel,
   defenderPendingValue,
@@ -57,6 +59,22 @@ describe('combatStageCopy', () => {
     expect(buildCombatStageSubtitle(true, false, impulseAttack)).toContain('Elementimpuls');
     expect(buildCombatStageImpulseLine(impulseAttack)).toContain('Elementimpuls');
     expect(buildCombatStageImpulseLine(null)).toBeNull();
+  });
+
+  it('classifies §10 Angriffstyp from card def', () => {
+    expect(classifyCombatAttackKind(impulseAttack)).toBe('element');
+    expect(buildCombatStageAttackTypeLine(impulseAttack)).toBe('Angriffsart: Elementangriff');
+    expect(classifyCombatAttackKind({ ...impulseAttack, elementImpulse: undefined })).toBe(
+      'normal',
+    );
+    expect(
+      classifyCombatAttackKind({
+        ...impulseAttack,
+        elementImpulse: undefined,
+        instantText: 'Verursacht Gift-Status.',
+      }),
+    ).toBe('status');
+    expect(buildCombatStageAttackTypeLine(null)).toBeNull();
   });
 
   it('names combat value by mode', () => {
