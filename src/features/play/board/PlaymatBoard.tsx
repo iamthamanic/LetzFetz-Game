@@ -2,9 +2,10 @@
  * Duel board on full-bleed playmat — replaces vertical tableau + arena sidebar.
  * Location: src/features/play/board/PlaymatBoard.tsx
  */
-import React from 'react';
+import React, { useState } from 'react';
 import type { ContentPack, GameAction, GameState, PlayerId } from '../../../game';
-import { findElementDef, isV2Pack } from '../../../game';
+import { findElementDef, findEnginePartDef, isV2Pack } from '../../../game';
+import { partActivateCost, peekCharge } from '../../../game/engine/status';
 import type { GameViewModel } from './buildGameViewModel';
 import type { PendingIntent } from './gameActionHelpers';
 import type { PresentationStep } from '../presentation/types';
@@ -15,6 +16,7 @@ import {
   findDirectBuildAction,
   findDiscardDrawAction,
   findPlayGlitchAction,
+  findPoolActivateAction,
 } from './gameActionHelpers';
 import { CharacterDock, CombatStage, DeckPile, DiscardPile } from './zones';
 import { BoundCardRow } from './BoundCardRow';
@@ -24,6 +26,7 @@ import { ArenaPlaymatBadge } from './ArenaPlaymatBadge';
 import { Panel } from '../../../components/ui/Panel';
 import { Button } from '../../../components/ui/Button';
 import { DndPlaymat } from './DndPlaymat';
+import { FetzChargeConfirmModal } from './FetzChargeConfirmModal';
 
 interface PlaymatBoardProps {
   state: GameState;
@@ -77,6 +80,11 @@ export function PlaymatBoard({
   onNewGame,
 }: PlaymatBoardProps) {
   const humanId = view.human;
+  const [chargeConfirm, setChargeConfirm] = useState<{
+    boundInstanceId: string;
+    partName: string;
+    cost: number;
+  } | null>(null);
   const botId = view.bot;
   const damageFreezeHp =
     activePresentationStep && isDamageHitStep(activePresentationStep)
@@ -109,7 +117,30 @@ export function PlaymatBoard({
   };
 
   const handleStartActivate = (boundInstanceId: string) => {
+    const poolAction = findPoolActivateAction(view.legalActions, boundInstanceId);
+    if (poolAction) {
+      const bound = state.players[humanId].bound.find((b) => b.instanceId === boundInstanceId);
+      const part = bound ? findEnginePartDef(pack, bound.defId) : null;
+      const cost = part ? partActivateCost(part) : null;
+      if (part && cost != null) {
+        setChargeConfirm({
+          boundInstanceId,
+          partName: part.name,
+          cost,
+        });
+        return;
+      }
+    }
     onPendingChange({ type: 'activate', boundInstanceId });
+  };
+
+  const handleConfirmChargeActivate = () => {
+    if (!chargeConfirm) return;
+    const action = findPoolActivateAction(view.legalActions, chargeConfirm.boundInstanceId);
+    if (action) {
+      onDispatch(action);
+    }
+    setChargeConfirm(null);
   };
 
   const handleOpponentSlotClick = (slot: (typeof view.botBoundSlots)[0]) => {
@@ -496,6 +527,17 @@ export function PlaymatBoard({
           </aside>
         </div>
       </div>
+      {chargeConfirm && (
+        <FetzChargeConfirmModal
+          open
+          partName={chargeConfirm.partName}
+          cost={chargeConfirm.cost}
+          chargeBefore={peekCharge(state, humanId)}
+          canAfford={peekCharge(state, humanId) >= chargeConfirm.cost}
+          onConfirm={handleConfirmChargeActivate}
+          onCancel={() => setChargeConfirm(null)}
+        />
+      )}
     </div>
     </DndPlaymat>
   );

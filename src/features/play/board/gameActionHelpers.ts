@@ -91,6 +91,21 @@ export function findActivateAction(
   );
 }
 
+/** V3 pool activate: ACTIVATE_BOUND without hand discard. */
+export function findPoolActivateAction(
+  legalActions: GameAction[],
+  boundInstanceId: string,
+): GameAction | null {
+  return (
+    legalActions.find(
+      (a) =>
+        a.type === 'ACTIVATE_BOUND' &&
+        a.boundInstanceId === boundInstanceId &&
+        a.discardHandInstanceId == null,
+    ) ?? null
+  );
+}
+
 export function findDiscardDrawAction(
   legalActions: GameAction[],
   discardInstanceId: string,
