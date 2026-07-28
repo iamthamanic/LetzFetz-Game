@@ -22,6 +22,7 @@ import {
 } from '../../game';
 import { chooseLlmBotAction } from './services/bot/chooseLlmBotAction';
 import { ReactionPickModal } from './board/ReactionPickModal';
+import { CombatFeedbackToasts } from './board/CombatFeedbackToasts';
 import type { BotDecisionSource } from './services/bot/chooseLlmBotAction';
 import {
   GameSetup,
@@ -1060,6 +1061,7 @@ export function PlayView({ onBattleMusicActiveChange }: PlayViewProps) {
             }}
           />
         )}
+      {state && <CombatFeedbackToasts lastEvent={state.lastEvent} />}
       </div>
     </GrungeAppShell>
   );

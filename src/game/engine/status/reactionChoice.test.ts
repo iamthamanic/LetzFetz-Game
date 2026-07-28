@@ -38,6 +38,7 @@ describe('resolveImpulseReactions', () => {
     expect(getStatus(state, 'p2', 'durchnaesst')).toBeUndefined();
     expect(state.meta.v3ReactionsThisAction).toBe(1);
     expect(state.lastEvent).toContain('Dampf');
+    expect(state.lastEvent).toMatch(/^Auto-Reaktion:/);
   });
 
   it('opens pick-reaction when multiple marks match', () => {

@@ -332,10 +332,11 @@ function applyPlayerAttackDamage(
 
   const absorbedNote =
     pipeline.shieldAbsorbed > 0 ? ` Schild ${pipeline.shieldAbsorbed}.` : '';
-  next.lastEvent =
+  const combatSummary =
     workingDamage > 0
       ? `${pipeline.hpDamage} Schaden (${workingAttack} vs ${workingBlock} Block).${absorbedNote}`
-      : `Komplett geblockt (${workingAttack} vs ${workingBlock}).`;
+      : `Komplett geblockt — Vollblock (${workingAttack} vs ${workingBlock}).${absorbedNote}`;
+  next.lastEvent = combatSummary;
 
   if (isSumpf(next) && pipeline.isFullBlock) {
     next = applyMandatoryArenaDrawDiscard(next, defenderId, 'sumpf-full-block', pack, rng, ruleset);
@@ -365,6 +366,17 @@ function applyPlayerAttackDamage(
       defenderId,
       pack,
     );
+  }
+
+  // Keep Vollblock visible when impulse/reaction overwrote lastEvent.
+  if (
+    pipeline.isFullBlock &&
+    next.lastEvent &&
+    next.lastEvent !== combatSummary &&
+    !next.lastEvent.includes('Komplett geblockt') &&
+    !next.lastEvent.includes('Vollblock')
+  ) {
+    next.lastEvent = `${combatSummary} ${next.lastEvent}`;
   }
 
   if (isV3CombatEnabled(ruleset)) {
