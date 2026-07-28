@@ -23,14 +23,14 @@
 |------|--------|--------|---------|--------|
 | §1 | Systemziel / Effektkette | ⚙️ Timing in `actions.ts` + Status-Pipeline | ✅ Tutorial-Coach + Match-Hints | Kette in Tutorial-Partie |
 | §2.1 | Direkte Effekte (Katalog) | 🟡 Teilmenge in Combat/Status | ❌ | Nicht jeder Keyword-Effekt als generisches Effect-System |
-| §2.2–2.3 | Zustände + Elementmarken | ✅ `types/status.ts`, `applyStatus`, Impulse | ✅ `StatusChips` | Labels DE; kein Teaching/Tooltip-Detail |
+| §2.2–2.3 | Zustände + Elementmarken | ✅ `types/status.ts`, `applyStatus`, Impulse | ✅ `StatusChips` + Wirkungstooltips (#167) | Labels DE; kurze Wirkungscopy |
 | §2.4 / §8–§9 | 21 Reaktionen | ✅ `reactions.ts` + `reactionOutcomes.ts` | 🟡 `ReactionPickModal` nur bei Mehrfachwahl | Einzel-Reaktion ohne Modal/Banner |
 | §3 | Elementattribut vs Impuls | ✅ `elementImpulse` Schema + Pack | ✅ Chip + Stage/Resolve-Copy (#148) | `card-elementimpuls-chip` / `combat-stage-impulse` / `combat-resolve-impulse` |
 | §4 | Quellen (Angriff/Block/Fetz/Ulti/…) | 🟡 Combat + Bound + Hooks | 🟡 Karten/Slots | Blueprint/Transform nur Hooks |
 | §5.1 | Schaden Block→Schild→HP | ✅ `shield.ts` | 🟡 Schild-Chip | Keine Pipeline-Visualisierung |
 | §5.2–5.18 | Heilung, ziehen, filtern, Würfel, … | 🟡 gemischt V1/V3 | ❌ | Viele Katalog-Effekte nicht V3-spezifisch verdrahtet |
-| §6 | Primärmarken-Wirkungen | ⚙️ + Ticks | ✅ Chips | Wirkungs-Copy fehlt in UI |
-| §7 | Buffs/Debuffs (Nebel, Gift, …) | ⚙️ `tickStatuses` / Konflikte | ✅ Chips | Gleiches: keine Wirkungserklärung |
+| §6 | Primärmarken-Wirkungen | ⚙️ + Ticks | ✅ Chips + Tooltip (#167) | Kurze DE-Wirkungscopy |
+| §7 | Buffs/Debuffs (Nebel, Gift, …) | ⚙️ `tickStatuses` / Konflikte | ✅ Chips + Tooltip (#167) | Kurze DE-Wirkungscopy |
 | §8–§9 | Reaktionsmatrix + Übersicht | ✅ | 🟡 nur Wahl-Modal | Keine Matrix-Hilfe / Log |
 
 ---
