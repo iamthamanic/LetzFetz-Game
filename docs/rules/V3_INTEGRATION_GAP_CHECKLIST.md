@@ -68,8 +68,8 @@
 | `SPIELANLEITUNG_V3_DRAFT.md` | ✅ | Spielbare Kurzprosa |
 | Phase-Coach V3-Sprache | ✅ Tutorial + Start/Aktion | Impuls/Marke/Reaktion/Schild |
 | Combat-Stage Feedback | ✅ Toasts | siehe Feedback-Ticket |
-| Gemeinsamer Ladungspool max. 6 | ✅ `fetzCharge` + Chip | UI Chip am CharacterDock; Confirm-UI für Träger-Spend fehlt |
-| Teil-Trigger + Aufsatz activateCost | ✅ Katalog + Combat/Block/Activate + High/Focus/StatusDmg | Once/Zug Flags; optional Confirm-UI für Träger-Spend offen |
+| Gemeinsamer Ladungspool max. 6 | ✅ `fetzCharge` + Chip | UI Chip am CharacterDock; Confirm-UI für Pool-Activate (#169) |
+| Teil-Trigger + Aufsatz activateCost | ✅ Katalog + Combat/Block/Activate + High/Focus/StatusDmg | Once/Zug Flags; Confirm für Pool-Activate (#169); Träger auto-spend ohne Modal |
 | Resonanz-Anzeige | ✅ `ResonanceHud` | Chip am Engine-Row bei Tier ≥2/3 |
 | Slot-UX Playmat | ✅ | V3: Träger/Antrieb/Aufsatz Labels (`data-fetz-slot`) |
 | Combat-Feedback Toasts | ✅ `CombatFeedbackToasts` (#150) | Vollblock / Auto-Reaktion / Schild-Absorb |

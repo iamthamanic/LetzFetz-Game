@@ -7,6 +7,7 @@ import {
   findDirectBuildAction,
   findDiscardDrawAction,
   findPlayGlitchAction,
+  findPoolActivateAction,
   hasChallengeForAttack,
 } from './gameActionHelpers';
 
@@ -19,6 +20,7 @@ describe('gameActionHelpers', () => {
     { type: 'PLAY_ATTACK', cardInstanceId: 'a1' },
     { type: 'DISCARD_DRAW', discardInstanceId: 'h3' },
     { type: 'ACTIVATE_BOUND', boundInstanceId: 'b1', discardHandInstanceId: 'h4' },
+    { type: 'ACTIVATE_BOUND', boundInstanceId: 'b-pool' },
   ];
 
   it('detects build replace requirement', () => {
@@ -59,5 +61,13 @@ describe('gameActionHelpers', () => {
     expect(findDiscardDrawAction(pending, 'h5')?.type).toBe('RESOLVE_DRAW_DISCARD');
     expect(findPlayGlitchAction(pending, 'g1')?.type).toBe('PLAY_GLITCH');
     expect(findPlayGlitchAction(pending, 'g2')).toBeNull();
+  });
+
+  it('finds V3 pool activate without hand discard', () => {
+    expect(findPoolActivateAction(legal, 'b-pool')).toEqual({
+      type: 'ACTIVATE_BOUND',
+      boundInstanceId: 'b-pool',
+    });
+    expect(findPoolActivateAction(legal, 'b1')).toBeNull();
   });
 });
