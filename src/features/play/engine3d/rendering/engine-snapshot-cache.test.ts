@@ -97,4 +97,68 @@ describe('requestEngineSnapshot', () => {
     expect(miss.source).toBe('miss');
     expect(getEngineSnapshot(miss.renderKey)).toBeNull();
   });
+
+  it('captures canvas toDataURL into cache (same renderKey → cache hit)', () => {
+    const fakeUrl = 'data:image/png;base64,REALCANVASDATA';
+    const canvas = {
+      toDataURL: () => fakeUrl,
+    } as HTMLCanvasElement;
+
+    const first = requestEngineSnapshot(baseRecipe, {
+      canvas,
+      allowPlaceholder: false,
+    });
+    expect(first.source).toBe('canvas');
+    expect(first.dataUrl).toBe(fakeUrl);
+    expect(getEngineSnapshot(first.renderKey)?.dataUrl).toBe(fakeUrl);
+
+    const second = requestEngineSnapshot(baseRecipe);
+    expect(second.source).toBe('cache');
+    expect(second.dataUrl).toBe(fakeUrl);
+  });
+
+  it('falls back to placeholder when canvas toDataURL throws', () => {
+    const canvas = {
+      toDataURL: () => {
+        throw new Error('tainted');
+      },
+    } as HTMLCanvasElement;
+
+    const result = requestEngineSnapshot(baseRecipe, { canvas });
+    expect(result.source).toBe('placeholder');
+    expect(result.dataUrl).toBe(ENGINE_SNAPSHOT_PLACEHOLDER_DATA_URL);
+  });
+
+  it('canvas miss with allowPlaceholder false does not cache', () => {
+    const canvas = {
+      toDataURL: () => {
+        throw new Error('tainted');
+      },
+    } as HTMLCanvasElement;
+
+    const miss = requestEngineSnapshot(baseRecipe, {
+      canvas,
+      allowPlaceholder: false,
+    });
+    expect(miss.source).toBe('miss');
+    expect(getEngineSnapshot(miss.renderKey)).toBeNull();
+  });
+
+  it('force re-captures over a cached placeholder when canvas is provided', () => {
+    requestEngineSnapshot(baseRecipe);
+    expect(requestEngineSnapshot(baseRecipe).source).toBe('cache');
+
+    const fakeUrl = 'data:image/png;base64,FORCEDCANVAS';
+    const canvas = {
+      toDataURL: () => fakeUrl,
+    } as HTMLCanvasElement;
+
+    const forced = requestEngineSnapshot(baseRecipe, {
+      canvas,
+      force: true,
+    });
+    expect(forced.source).toBe('canvas');
+    expect(forced.dataUrl).toBe(fakeUrl);
+    expect(getEngineSnapshot(forced.renderKey)?.dataUrl).toBe(fakeUrl);
+  });
 });

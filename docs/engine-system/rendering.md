@@ -1,6 +1,6 @@
 # Rendering (Fetzgerät 3D)
 
-**Status:** Live detail canvas in Play (#133); in-memory snapshot cache + asset CLI stubs (#134)  
+**Status:** Live detail canvas in Play (#133); in-memory snapshot cache + asset CLI stubs (#134); real canvas `toDataURL` capture (#146)  
 **See also:** [architecture.md](./architecture.md), [asset-pipeline.md](./asset-pipeline.md), [adding-a-new-part.md](./adding-a-new-part.md)
 
 ## Surfaces
@@ -9,9 +9,9 @@
 |----|------|
 | Cards / board thumbs | Static image via `resolveCardArtPath` → registry `previewUrl`, else `/cards/engine/{id}.png` |
 | Detail / build preview | Single `@react-three/fiber` canvas (`src/components/engine3d/`) |
-| Cached engine art | Snapshot keyed by `createRenderKey` (#134) |
+| Cached engine art | Snapshot keyed by `createRenderKey` (#134 / #146) |
 
-## Snapshot cache (#134)
+## Snapshot cache (#134 / #146)
 
 | Piece | Location |
 |-------|----------|
@@ -19,12 +19,21 @@
 | Best-effort request | `requestEngineSnapshot(recipe, options?)` |
 | Key | `createRenderKey(recipe)` — includes `renderVersion` + `cosmeticSeed` + part ids |
 | Invalidation | Bump `ENGINE_RENDER_VERSION` or call `invalidateEngineSnapshot(key?)` |
-| CI / headless | Default **placeholder** 1×1 PNG data URL (no WebGL). Pass `canvas` for live `toDataURL`. |
-| Play UI | Optional **Snapshot cachen** on `EnginePreviewPanel` (warms memory cache; not persisted) |
+| Live capture | `EnginePreviewCanvas` → `onGlCanvasReady(canvas)` → panel **Snapshot cachen** passes `canvas` (+ `force` if canvas present) → `toDataURL` (source `canvas`) |
+| R3F note | `preserveDrawingBuffer: true` so the buffer survives composite for capture |
+| CI / headless | Without canvas: **placeholder** 1×1 PNG data URL. Stub only as fallback. |
+| Play UI | **Snapshot cachen** on `EnginePreviewPanel` — DE status: Cache / Canvas / Stub / Miss |
+
+Capture path (open preview):
+
+1. R3F `Canvas` `onCreated` → `gl.domElement` via `onGlCanvasReady`
+2. User clicks **Snapshot cachen** → `requestEngineSnapshot(recipe, { canvas, force: true })`
+3. Cache stores data URL by `createRenderKey`; later calls without force → source `cache`
+4. No canvas / capture fail → placeholder stub (default)
 
 Board cards stay 2D — thumbs resolve through `src/services/cardArt/manifest.ts`
 (`resolveCardArtPath` / `resolveEnginePartArtPath` → `lookupEnginePartAsset.previewUrl`).
-Snapshot cache remains infrastructure for future generated thumbs, not a cutover in #134.
+Snapshot cache remains infrastructure for future generated thumbs, not a cutover.
 
 ## Play + Library integration (#133 / #145)
 

@@ -41,9 +41,10 @@ In-app cache: `src/features/play/engine3d/rendering/`
 - `get` / `set` / `invalidate` — in-memory only
 - `requestEngineSnapshot(recipe, { canvas?, allowPlaceholder? })`
   - Cache hit → reuse
-  - Optional `HTMLCanvasElement.toDataURL`
-  - Default: 1×1 PNG **placeholder** (CI / headless friendly)
+  - Live preview: pass WebGL `HTMLCanvasElement` from `EnginePreviewCanvas` (`onGlCanvasReady`) → `toDataURL` → cache (source `canvas`)
+  - Fallback: 1×1 PNG **placeholder** when no canvas / capture fails (CI / headless)
   - `allowPlaceholder: false` → miss, nothing cached
+  - `force: true` → skip cache read (re-capture from canvas or re-stub)
 
 Bump `ENGINE_RENDER_VERSION` when assembly/shaders/camera contract changes so keys miss old entries.
 
