@@ -31,6 +31,8 @@ export interface PlaytestPatch {
   demoPickReaction?: boolean;
   /** Seed Ulti + V3 blueprint/ulti combat hooks for HUD demo (#149). */
   demoV3Hooks?: boolean;
+  /** Seed lastEvent for combat feedback toasts (#150). */
+  demoCombatFeedback?: 'vollblock' | 'auto-reaction' | 'both';
 }
 
 export interface PlaytestValidationResult {
@@ -82,6 +84,17 @@ export function applyPlaytestPatch(state: GameState, patch: PlaytestPatch): Game
       v3TransformedPlayers: ['p1'],
     };
     next.players.p1.ultimateAvailable = true;
+  }
+  if (patch.demoCombatFeedback === 'vollblock') {
+    next.combat = null;
+    next.lastEvent = 'Komplett geblockt — Vollblock (6 vs 8).';
+  } else if (patch.demoCombatFeedback === 'auto-reaction') {
+    next.combat = null;
+    next.lastEvent = 'Auto-Reaktion: Inferno.';
+  } else if (patch.demoCombatFeedback === 'both') {
+    next.combat = null;
+    next.lastEvent =
+      'Komplett geblockt — Vollblock (6 vs 8). Auto-Reaktion: Dampf.';
   }
   if (patch.p1Hp !== undefined) next.players.p1.hp = patch.p1Hp;
   if (patch.p2Hp !== undefined) next.players.p2.hp = patch.p2Hp;

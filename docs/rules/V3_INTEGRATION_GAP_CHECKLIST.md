@@ -40,7 +40,7 @@
 | Dump | Thema | Engine | UI / UX | Notiz |
 |------|--------|--------|---------|--------|
 | §10 | Angriffsarten (normal/Status/Element/Reaktion) | 🟡 Combat + Impulse | ❌ | Keine Typ-Unterscheidung in Combat-Stage-Copy |
-| §11 | Block / Vollblock / Teilblock / Reaktionsblock | 🟡 `isHit` / `isFullBlock` + Impulse | ❌ | Vollblock-Impuls unsichtbar |
+| §11 | Block / Vollblock / Teilblock / Reaktionsblock | 🟡 `isHit` / `isFullBlock` + Impulse | ✅ | #150 `CombatFeedbackToasts` + Resolve „Vollblock“ |
 | §12 | Fetzgerät Träger/Antrieb/Aufsatz | ✅ `fetzgeraetSlots.ts` + Adapter; 📦 **36er Roster** (`engineParts36.ts`) | ✅ Slot-Labels Träger/Antrieb/Aufsatz unter `v3Combat`; Charge-Spalte bleibt Adapter | Effekttexte + Ladung-Pool; Trigger: Hit/Block/Incoming/High/Focus/StatusDmg + Activate |
 | §13 | Elementresonanz (1/2/3 Teile) | ✅ `resonance.ts` | ✅ `ResonanceHud` am Engine-Row | HUD bei Tier ≥2 |
 | §14 | Ultis | 🟡 `ultimate.ts` + V3 Hooks | ❌ | Keine Ulti-V3-Erklärung |
@@ -72,7 +72,7 @@
 | Teil-Trigger + Aufsatz activateCost | ✅ Katalog + Combat/Block/Activate + High/Focus/StatusDmg | Once/Zug Flags; optional Confirm-UI für Träger-Spend offen |
 | Resonanz-Anzeige | ✅ `ResonanceHud` | Chip am Engine-Row bei Tier ≥2/3 |
 | Slot-UX Playmat | ✅ | V3: Träger/Antrieb/Aufsatz Labels (`data-fetz-slot`) |
-| Combat-Feedback Toasts | ✅ `CombatFeedbackToasts` | Impuls / Auto-Reaktion / Schild-Absorb |
+| Combat-Feedback Toasts | ✅ `CombatFeedbackToasts` (#150) | Vollblock / Auto-Reaktion / Schild-Absorb |
 | Karten-Keyword „Elementimpuls“ | ✅ Chip + Tooltip (#148) | LetzFetzCard / display model + Combat Stage/Resolve |
 | V3-Tutorial / Onboarding | ✅ Coach-Kette in erster Tutorial-Partie | Screens + Match-Hints |
 | Sandbox / Forge auf V3-Fantasy | ✅ Default `V3_PACK` | Forge Lookup + Sandbox Loader |

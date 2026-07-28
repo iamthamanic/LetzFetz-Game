@@ -14,6 +14,7 @@ import {
   type CombatResolveSnapshot,
 } from './buildCombatResolveStep';
 import { resolveCombatImpulseFeedback } from '../../../components/cards/impulseKeywordCopy';
+import { formatVollblockOutcomeLabel } from '../board/combatFeedbackCopy';
 
 type Phase = 'reveal' | 'dice' | 'receipt' | 'result';
 
@@ -33,7 +34,7 @@ function outcomeCopy(snap: CombatResolveSnapshot): string {
     return `${snap.destroyedCardName ?? 'Karte'} zerstört`;
   }
   if (snap.outcome === 'challenge-fail') return 'Herausforderung fehlgeschlagen';
-  if (snap.outcome === 'blocked' || snap.damage <= 0) return 'Komplett geblockt';
+  if (snap.outcome === 'blocked' || snap.damage <= 0) return formatVollblockOutcomeLabel();
   return `${snap.damage} Schaden`;
 }
 
@@ -264,7 +265,16 @@ export function CombatResolveShow({
             <p className="text-4xl font-black tabular-nums sm:text-5xl">
               {snap.damage > 0 ? `−${snap.damage}` : '0'}
             </p>
-            <p className="mt-1 text-sm font-bold">{outcomeCopy(snap)}</p>
+            <p
+              className="mt-1 text-sm font-bold"
+              data-testid={
+                snap.outcome === 'blocked' || snap.damage <= 0
+                  ? 'combat-resolve-vollblock'
+                  : 'combat-resolve-outcome'
+              }
+            >
+              {outcomeCopy(snap)}
+            </p>
             {impulseFeedback && (
               <p
                 data-testid="combat-resolve-impulse"

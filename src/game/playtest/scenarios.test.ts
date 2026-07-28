@@ -113,4 +113,15 @@ describe('playtest patches', () => {
     expect(result.state?.meta.v3PreserveFirstConsumedMark).toBe(true);
     expect(result.state?.meta.v3TransformedPlayers).toEqual(['p1']);
   });
+
+  it('demoCombatFeedback seeds Vollblock + Auto-Reaktion lastEvent', () => {
+    const base = buildPlaytestScenario(BASE_PACK, 'fresh-action');
+    const result = applyAndValidatePlaytestPatch(base, {
+      demoCombatFeedback: 'both',
+    });
+    expect(result.ok, result.error).toBe(true);
+    expect(result.state?.lastEvent).toContain('Vollblock');
+    expect(result.state?.lastEvent).toContain('Auto-Reaktion');
+    expect(result.state?.combat).toBeNull();
+  });
 });

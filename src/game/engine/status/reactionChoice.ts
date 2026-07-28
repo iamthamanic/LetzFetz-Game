@@ -55,7 +55,18 @@ export function resolveImpulseReactions(
   if (options.length === 0) return impulse.state;
 
   if (options.length === 1) {
-    return applyChosenReaction(impulse.state, targetId, options[0], chooserId, ruleset, pack);
+    const resolved = applyChosenReaction(
+      impulse.state,
+      targetId,
+      options[0],
+      chooserId,
+      ruleset,
+      pack,
+    );
+    const next = cloneState(resolved);
+    // Distinguish auto-resolve from modal pick so Play can toast without a modal.
+    next.lastEvent = `Auto-Reaktion: ${options[0].labelDe}.`;
+    return next;
   }
 
   const next = cloneState(impulse.state);
