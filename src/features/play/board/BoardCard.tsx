@@ -6,7 +6,8 @@ import React from 'react';
 import type { ElementCardDef, GlitchCardDef } from '../../../game/types';
 import { LetzFetzCard, type LetzFetzCardSize } from '../../../components/cards/LetzFetzCard';
 import { elementDefToCardProps } from '../../../components/cards/cardDisplayModel';
-import { resolveCardArtPath } from '../../../services/cardArt/manifest';
+import { lookupEnginePartAsset } from '../../../services/engineAssets/partRegistry';
+import { resolveBoardCardArtPath } from '../engine3d/rendering/resolveEnginePartThumb';
 import { CardEffectTooltip } from './CardEffectTooltip';
 
 export type BoardCardSize = 'hand' | 'bound' | 'opponentBound' | 'combat' | 'showcase';
@@ -119,7 +120,8 @@ export function BoardCard({
   }
 
   if (!def) {
-    const artPath = resolveCardArtPath(defId ?? name ?? 'glitch');
+    const artKey = defId ?? name ?? 'glitch';
+    const artPath = resolveBoardCardArtPath(artKey);
     const glitchLabel = glitchDef?.name ?? name ?? 'Glitch';
     const glitchEffects = glitchDef
       ? [`Timing: ${glitchDef.timing}`, `Effekt: ${glitchDef.effectText}`]
@@ -145,6 +147,9 @@ export function BoardCard({
   const props = elementDefToCardProps(def);
   const effectFocus =
     size === 'bound' || size === 'opponentBound' ? ('bound' as const) : ('instant' as const);
+  const image_asset = lookupEnginePartAsset(def.id)
+    ? resolveBoardCardArtPath(def.id)
+    : props.image_asset;
 
   return wrapTooltip(
     <LetzFetzCard
@@ -154,6 +159,7 @@ export function BoardCard({
       type="Element"
       element={props.element ?? 'Neutral'}
       size={letzSize}
+      image_asset={image_asset}
       selected={selected}
       exhausted={exhausted}
       effectFocus={effectFocus}

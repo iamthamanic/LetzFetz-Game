@@ -7,7 +7,7 @@
 
 | UI | Tech |
 |----|------|
-| Cards / board thumbs | Static image via `resolveCardArtPath` → registry `previewUrl`, else `/cards/engine/{id}.png` |
+| Cards / board thumbs | Snapshot cache hit (`resolveEnginePartThumb`) → else registry `previewUrl` / `/cards/engine/{id}.png` |
 | Detail / build preview | Single `@react-three/fiber` canvas (`src/components/engine3d/`) |
 | Cached engine art | Snapshot keyed by `createRenderKey` (#134 / #146) |
 
@@ -31,9 +31,10 @@ Capture path (open preview):
 3. Cache stores data URL by `createRenderKey`; later calls without force → source `cache`
 4. No canvas / capture fail → placeholder stub (default)
 
-Board cards stay 2D — thumbs resolve through `src/services/cardArt/manifest.ts`
-(`resolveCardArtPath` / `resolveEnginePartArtPath` → `lookupEnginePartAsset.previewUrl`).
-Snapshot cache remains infrastructure for future generated thumbs, not a cutover.
+Board / bound engine-part thumbs prefer the in-memory snapshot cache
+(`resolveEnginePartThumb` / `resolveBoardCardArtPath` in Play). Cache miss or
+1×1 placeholder stub → registry `previewUrl` / `/cards/engine/{id}.png`.
+Full cutover of Forge library grids remains PNG-first.
 
 ## Play + Library integration (#133 / #145)
 

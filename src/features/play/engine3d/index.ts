@@ -22,3 +22,9 @@ export type {
   EngineSnapshotSource,
   RequestEngineSnapshotOptions,
 } from './rendering/requestEngineSnapshot';
+export {
+  isEngineSnapshotPlaceholder,
+  lookupEngineSnapshotThumb,
+  resolveBoardCardArtPath,
+  resolveEnginePartThumb,
+} from './rendering/resolveEnginePartThumb';
