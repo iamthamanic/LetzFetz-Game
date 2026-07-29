@@ -1,0 +1,207 @@
+{
+  "epicSlug": "v5-formula-migration",
+  "designPath": ".qa/design/v5-formula-migration.md",
+  "defaultLabels": [],
+  "issues": [
+    {
+      "title": "V5 docs: promote spielkonzept + AGENTS + SPIELUEBERSICHT",
+      "featureSlug": "v5-docs-rulesource",
+      "priority": "P0",
+      "labels": [
+        "P0"
+      ],
+      "dependsOn": [],
+      "body": "## Intent\nRegelquellen und Produktübersicht auf V5 als Zielwahrheit umstellen; V1 als Regression, V3 als Vorgänger markieren.\n\n## User Journey\n1. Agent/Dev liest AGENTS.md und SPIELUEBERSICHT.\n2. Sieht V5 als Default-Ziel und Verweis auf letz-fetz-v5-spielkonzept.md.\n3. V1/V3 Pfade bleiben dokumentiert als Legacy/Regression.\n\n## Problem\nAGENTS und SPIELUEBERSICHT beschreiben noch V1/V3 Bound/Fetzgerät als Primärziel.\n\n## Solution\nAnlegen/Erweitern von `docs/rules/SPIELANLEITUNG_V5_DRAFT.md` (Spielprosa-Kern), AGENTS Regelquellen-Tabelle, SPIELUEBERSICHT „heute vs V5“, `.cursor/rules/project-core.mdc` Pointer. Kein Engine-Code.\n\n## Runtime\n| Axis | This slice |\n|------|------------|\n| Local (desktop) | yes |\n| Cloud session | no |\n| Appwrite Functions | skip |\n\n## Edge Cases\n- Alte V3-WIP-Links bleiben, klar als historisch gelabelt.\n- Kein Löschen von SPIELANLEITUNG_V1.md.\n\n## Acceptance\n\n- [ ] SPIELANLEITUNG_V5_DRAFT.md existiert mit Phasen + Formel + Kampfkern.\n- [ ] AGENTS.md listet V5 als Produkt-Default-Ziel; V1 Regression dokumentiert.\n- [ ] SPIELUEBERSICHT_AKTUELL.md spiegelt V5-Ziel und Legacy-Tiles.\n- [ ] `npm run checks` unverändert grün (docs-only).\n- [ ] Touched files: zero type escape hatches (`@typed-strict` / Boy Scout)\n\n## Design\nEpic: `.qa/design/v5-formula-migration.md`\n\n## Blockers\n(see dependsOn)\n\n## Runner\nFeature slug: `v5-docs-rulesource`\n"
+    },
+    {
+      "title": "V5 types: formula slots, card kinds, visual contracts, ruleset flag",
+      "featureSlug": "v5-formula-types",
+      "priority": "P0",
+      "labels": [
+        "P0"
+      ],
+      "dependsOn": [
+        "V5 docs: promote spielkonzept + AGENTS + SPIELUEBERSICHT"
+      ],
+      "body": "## Intent\nTypen und Ruleset-Flag für Formelplätze, neue Kartenarten und Visual-Vertrag ohne Gameplay-Verhalten.\n\n## User Journey\n1. Dev importiert neue Types aus src/game/types.\n2. Ruleset kann v5Formula aktivieren; Charge-Max-Konstante 3 dokumentiert.\n3. Visual-Interfaces TechniqueVisual/EssenceVisual/CatalystVisual existieren.\n\n## Problem\nNur BoundCardInstance/enginePart/Fetz-Slots; kein Visual-Vertrag für Formel.\n\n## Solution\nErweitere `cards.ts`, `game.ts`, `ruleset.ts`, neues `formulaVisual.ts` (oder ähnlich). PlayerState: formula slots (technik/essenz/katalysator) parallel oder Ersatz hinter Flag. MAX charge 3 für V5. Keine Action-Logik in diesem Slice.\n\n## Runtime\n| Axis | This slice |\n|------|------------|\n| Local (desktop) | yes |\n| Cloud session | no |\n| Appwrite Functions | skip |\n\n## Edge Cases\n- v5Formula false → bestehende Typen weiter gültig.\n- Kein Breaking ohne Flag.\n\n## Acceptance\n\n- [ ] Card kinds: technique | essence | catalyst | item (oder gleichwertig) typisiert.\n- [ ] RulesetConfig.v5Formula (oder äquivalent) + Helper.\n- [ ] TechniqueVisual / EssenceVisual / CatalystVisual exportiert.\n- [ ] Vitest kompiliert; typed-strict clean auf touched files.\n- [ ] Touched files: zero type escape hatches (`@typed-strict` / Boy Scout)\n\n## Design\nEpic: `.qa/design/v5-formula-migration.md`\n\n## Blockers\n(see dependsOn)\n\n## Runner\nFeature slug: `v5-formula-types`\n"
+    },
+    {
+      "title": "V5 engine: Formelphase actions (build/replace/activate/schnellmix/skip)",
+      "featureSlug": "v5-formula-phase-actions",
+      "priority": "P0",
+      "labels": [
+        "P0"
+      ],
+      "dependsOn": [
+        "V5 types: formula slots, card kinds, visual contracts, ruleset flag"
+      ],
+      "body": "## Intent\nUnter v5Formula ersetzt die Formelphase die Bindungsphase mit genau einer Formelaktion.\n\n## User Journey\n1. Spieler in Formelphase wählt bauen, ersetzen, aktivieren, Schnellmix oder passen.\n2. Illegal actions werden von getLegalActions ausgeschlossen.\n3. Phase advance funktioniert wie bisher danach.\n\n## Problem\nbuild-Phase erlaubt nur BUILD_CARD/SKIP_BUILD für Element-Bound.\n\n## Solution\nNeue/umgebaute Actions in actions.ts + getLegalActions; Tests für Happy Path und Illegal. Activate Exhaustion vorbereiten, volle Effekt-Auflösung darf stubben wenn Resolution-Slice folgt — dann klare TODOs nur wenn Acceptance erlaubt; besser minimale Activate = exhaust + no-op effect bis Resolution-Slice, dokumentiert.\n\n## Runtime\n| Axis | This slice |\n|------|------------|\n| Local (desktop) | yes |\n| Cloud session | no |\n| Appwrite Functions | skip |\n\n## Edge Cases\n- Leerer Slot vs voller Slot.\n- Ersetzen legt alte Karte auf Discard.\n- Schnellmix ohne Board-Platz.\n\n## Acceptance\n\n- [ ] Bei v5Formula: Formelphase akzeptiert die fünf Formelaktionen; Bound-Build für Elementkarten illegal.\n- [ ] Genau eine Formelaktion pro Formelphase.\n- [ ] Vitest deckt legal/illegal + Skip ab.\n- [ ] Ohne v5Formula unverändertes V1/V3-Verhalten (Regressionstest).\n- [ ] Touched files: zero type escape hatches (`@typed-strict` / Boy Scout)\n\n## Design\nEpic: `.qa/design/v5-formula-migration.md`\n\n## Blockers\n(see dependsOn)\n\n## Runner\nFeature slug: `v5-formula-phase-actions`\n"
+    },
+    {
+      "title": "V5 engine: formula resolution (Teil-/Vollformel + prep hooks)",
+      "featureSlug": "v5-formula-resolution",
+      "priority": "P0",
+      "labels": [
+        "P0"
+      ],
+      "dependsOn": [
+        "V5 engine: Formelphase actions (build/replace/activate/schnellmix/skip)"
+      ],
+      "body": "## Intent\nFormelaktivierung löst Effekte nach Technik→Essenz→Katalysator auf und setzt Vorbereitungen für die Aktionsphase.\n\n## User Journey\n1. Spieler aktiviert Formel mit Durchschuss + Glut.\n2. Nächster Angriff erhält Prep (z.B. ignore 1 Schild) und Feuer-Sekundärelement-Hook.\n3. Komponenten werden erschöpft.\n\n## Problem\nACTIVATE_BOUND ist Hand-Discard/Charge-Pool Fetzgerät-Logik.\n\n## Solution\nNeues Modul formulaResolve.ts (pure); integriert in Activate. Teilformeln laut §11.5. Vitest mit MVP-Karteneffekten (auch wenn Pack später kommt: Fixture-Defs im Test).\n\n## Runtime\n| Axis | This slice |\n|------|------------|\n| Local (desktop) | yes |\n| Cloud session | no |\n| Appwrite Functions | skip |\n\n## Edge Cases\n- Gestörte Komponenten ignorieren.\n- Nur Technik vs volle Formel.\n- Sofort-Technik vs Vorbereitung.\n\n## Acceptance\n\n- [ ] Aktivierung wendet Tech/Essenz/Katalysator in Reihenfolge §15.1 an (Kernpfade).\n- [ ] Vorbereitung Angriff/Block/Boost wird im State getragen und in Aktionsphase verbraucht.\n- [ ] Verwendete Komponenten erschöpft.\n- [ ] Unit-Tests für mind. 3 Kombinationen (Teil + Voll).\n- [ ] Touched files: zero type escape hatches (`@typed-strict` / Boy Scout)\n\n## Design\nEpic: `.qa/design/v5-formula-migration.md`\n\n## Blockers\n(see dependsOn)\n\n## Runner\nFeature slug: `v5-formula-resolution`\n"
+    },
+    {
+      "title": "V5 engine: challenge disturb/destroy + start restore",
+      "featureSlug": "v5-challenge-disturbed",
+      "priority": "P0",
+      "labels": [
+        "P0"
+      ],
+      "dependsOn": [
+        "V5 engine: formula resolution (Teil-/Vollformel + prep hooks)"
+      ],
+      "body": "## Intent\nHerausfordern zielt auf Formelkomponenten mit Stabilität; Differenz steuert gestört vs zerstört; Startphase stellt gestörte wieder her.\n\n## User Journey\n1. Angreifer fordert gegnerische Technik heraus.\n2. Bei +1–2: gestört (quer); bei +3+: zerstört auf Ablage.\n3. Nächste Startphase des Besitzers: gestört → normal.\n\n## Problem\nChallenge zerstört/überlebt Bound ohne Gestört-Zwischenstufe und ohne Stabilität.\n\n## Solution\nErweitere combat/challenge Path; FormulaComponent.disturbed; Startphase restore. Kein LP-Schaden (§24.5).\n\n## Runtime\n| Axis | This slice |\n|------|------------|\n| Local (desktop) | yes |\n| Cloud session | no |\n| Appwrite Functions | skip |\n\n## Edge Cases\n- Bereits gestört + Angriff höher → zerstört.\n- Block mit W6 auf Verteidigung.\n- Leere Formel: keine Challenge-Ziele.\n\n## Acceptance\n\n- [ ] Challenge-Ergebnisse laut V5 §24.2 implementiert.\n- [ ] Gestört ignoriert Effekt/Element bis Restore.\n- [ ] Startphase stellt eigene gestörte Komponenten wieder her.\n- [ ] Vitest für Margin-Tabelle + Restore.\n- [ ] Touched files: zero type escape hatches (`@typed-strict` / Boy Scout)\n\n## Design\nEpic: `.qa/design/v5-formula-migration.md`\n\n## Blockers\n(see dependsOn)\n\n## Runner\nFeature slug: `v5-challenge-disturbed`\n"
+    },
+    {
+      "title": "V5 engine: Fetzladung max 3 + Großformel gate",
+      "featureSlug": "v5-charge-grossformel",
+      "priority": "P0",
+      "labels": [
+        "P0"
+      ],
+      "dependsOn": [
+        "V5 engine: formula resolution (Teil-/Vollformel + prep hooks)"
+      ],
+      "body": "## Intent\nVolle erfolgreiche Formel gibt 1 Fetzladung (max 3); Großformel nur bei 3 Ladung und verbraucht Katalysator/Ladung laut §11.6.\n\n## User Journey\n1. Spieler aktiviert volle Formel erfolgreich → Ladung +1.\n2. Bei 3 Ladung ist Großformel in Aktionsphase legal.\n3. Nach Großformel: Ladung 0, Katalysator abgelegt, Tech/Essenz erschöpft, einmalig verbraucht.\n\n## Problem\nfetzCharge max 6; Ulti oft ohne Ladungsvoraussetzung.\n\n## Solution\nCap 3 unter v5Formula; Charge-Gewinn nur volle Formel; PLAY_ULTIMATE/Großformel gate. Tests.\n\n## Runtime\n| Axis | This slice |\n|------|------------|\n| Local (desktop) | yes |\n| Cloud session | no |\n| Appwrite Functions | skip |\n\n## Edge Cases\n- Verhinderter Effekt → keine Ladung.\n- Ulti zweimal illegal.\n- v3Combat-Pfad ohne Regression wenn Flag aus.\n\n## Acceptance\n\n- [ ] MAX charge 3 unter v5Formula.\n- [ ] Ladung nur bei voller erfolgreicher Formelaktivierung.\n- [ ] Großformel legal nur bei charge===3 und noch nicht verbraucht.\n- [ ] Vitest für Cap, Gain, Gate, Nachwirkung.\n- [ ] Touched files: zero type escape hatches (`@typed-strict` / Boy Scout)\n\n## Design\nEpic: `.qa/design/v5-formula-migration.md`\n\n## Blockers\n(see dependsOn)\n\n## Runner\nFeature slug: `v5-charge-grossformel`\n"
+    },
+    {
+      "title": "V5 combat: align marks/reactions/shield copy to spielkonzept §17–20",
+      "featureSlug": "v5-combat-matrix-align",
+      "priority": "P0",
+      "labels": [
+        "P0"
+      ],
+      "dependsOn": [
+        "V5 types: formula slots, card kinds, visual contracts, ruleset flag"
+      ],
+      "body": "## Intent\nKampflayer-Namen und Kern-Outcomes an V5-Matrix anpassen (Verwirbelt/Verstrahlt, Vollblock-Impuls, Nebenstatus).\n\n## User Journey\n1. Treffer setzt Primärmarke laut V5.\n2. Zweiter Impuls löst Reaktion aus Matrix aus.\n3. UI-Copy (wenn vorhanden) nutzt V5-Namen.\n\n## Problem\nV3 Status-IDs/Copy weichen von V5-Prosa ab.\n\n## Solution\nMappe/aliase Status-IDs; aktualisiere reactionOutcomes wo nötig; statusEffectCopy DE. Schild-Pipeline behalten. Keine neuen Engine-Features außerhalb Align.\n\n## Runtime\n| Axis | This slice |\n|------|------------|\n| Local (desktop) | yes |\n| Cloud session | no |\n| Appwrite Functions | skip |\n\n## Edge Cases\n- Max eine Primärmarke.\n- Reaktion limit 1/Aktion.\n- Legacy-Status-Strings in Tests updaten.\n\n## Acceptance\n\n- [ ] Primärmarken-Namen/Effekte matchen V5 §18 Kernverhalten.\n- [ ] Reaktionsmatrix §19 Kernpfade (mind. Mono + Dampf) aligned oder explizit gemappt.\n- [ ] Vollblock kann Impuls auslösen wo V5 es verlangt.\n- [ ] Vitest grün; typed-strict clean.\n- [ ] Touched files: zero type escape hatches (`@typed-strict` / Boy Scout)\n\n## Design\nEpic: `.qa/design/v5-formula-migration.md`\n\n## Blockers\n(see dependsOn)\n\n## Runner\nFeature slug: `v5-combat-matrix-align`\n"
+    },
+    {
+      "title": "V5 pack: MVP deck (9 formula + items + mix) + Play setup tile",
+      "featureSlug": "v5-mvp-pack",
+      "priority": "P0",
+      "labels": [
+        "P0"
+      ],
+      "dependsOn": [
+        "V5 engine: Formelphase actions (build/replace/activate/schnellmix/skip)",
+        "V5 engine: formula resolution (Teil-/Vollformel + prep hooks)",
+        "V5 engine: Fetzladung max 3 + Großformel gate",
+        "V5 combat: align marks/reactions/shield copy to spielkonzept §17–20"
+      ],
+      "body": "## Intent\nV5_PACK mit MVP-9 Formelkomponenten, Gegenständen, Deck-Mix und Play-Setup-Kachel als Default-Playtest.\n\n## User Journey\n1. User wählt Play → V5 (Standard).\n2. Match startet mit 20 LP, shared 106-naher Mix, Formelregeln an.\n3. MVP-Karten sind im Deck/Forge sichtbar.\n\n## Problem\nKein V5-Pack; Play v3 nutzt Base+Flag; 36 engineParts.\n\n## Solution\nsrc/game/packs/v5/*; resolveGamePackChoice + GameSetup DE Labels; Regeln 20 LP, v5Formula true, combat layer an. MVP: Durchschuss, Notfallbarriere, Rückhandtechnik; Glut, Kondensat, Kräuterstaub; Echo, Überladung, Spiegelung + Gegenstände laut §21 (mind. 3, ideal 6).\n\n## Runtime\n| Axis | This slice |\n|------|------------|\n| Local (desktop) | yes |\n| Cloud session | no |\n| Appwrite Functions | skip |\n\n## Edge Cases\n- Deck-Größe dokumentieren wenn <106 bis Full-Content.\n- Base-Tile bleibt.\n- Pack-JSON narrow unknown.\n\n## Acceptance\n\n- [ ] V5_PACK exportiert und in packs/index.\n- [ ] Play-Setup-Kachel V5 Badge Standard; startet v5Formula Match.\n- [ ] MVP-9 + Items im Content; Engine akzeptiert kinds.\n- [ ] Vitest: createMatch / draw / formula build smoke.\n- [ ] Touched files: zero type escape hatches (`@typed-strict` / Boy Scout)\n\n## Design\nEpic: `.qa/design/v5-formula-migration.md`\n\n## Blockers\n(see dependsOn)\n\n## Runner\nFeature slug: `v5-mvp-pack`\n"
+    },
+    {
+      "title": "V5 visual recipe + Formula Rig Playmat (composed core)",
+      "featureSlug": "v5-visual-recipe-rig",
+      "priority": "P1",
+      "labels": [
+        "P1",
+        "needs-design"
+      ],
+      "dependsOn": [
+        "V5 pack: MVP deck (9 formula + items + mix) + Play setup tile"
+      ],
+      "body": "## Intent\nVisualRecipe aus Eigenschaften; Formelgestell zeigt Essenz→Technikkern→Katalysatorring statt drei gleichwertiger Karten.\n\n## User Journey\n1. Spieler sieht auf dem Playmat die komponierte Formel.\n2. Wasser-Angriff + Durchschuss + Feueressenz + Echo liest sich als Bohrstrahl mit Feuerkern/Echo.\n3. Kein Hardcode if (idA && idB && idC).\n\n## Problem\nEngineRecipe Träger/Antrieb/Aufsatz; Bound-Row zeigt Einzelkarten.\n\n## Solution\nNeues visualRecipe Modul; FormulaRig React-Komponente in play/board; MVP Visual-Profile für 9 Komponenten. Fetz-3D Live-Zone für V5-Matches aus oder hinter Legacy. Primär/Sekundär-Gewichtung in Recipe-Feldern.\n\n## Runtime\n| Axis | This slice |\n|------|------------|\n| Local (desktop) | yes |\n| Cloud session | no |\n| Appwrite Functions | skip |\n\n## Edge Cases\n- Leere Slots.\n- Nur Technik gefüllt.\n- prefers-reduced-motion: keine Pflicht-VFX.\n\n## Acceptance\n\n- [ ] VisualRecipe wird aus Slot-IDs + optionaler Aktionskarte gebaut (property-based).\n- [ ] FormulaRig UI sichtbar in V5-Match; DE Labels.\n- [ ] MVP-9 haben TechniqueVisual/EssenceVisual/CatalystVisual Daten.\n- [ ] Vitest für recipe builder; UI nutzt Primitives/Styleguide.\n- [ ] Touched files: zero type escape hatches (`@typed-strict` / Boy Scout)\n\n## Design\nEpic: `.qa/design/v5-formula-migration.md`\n\n## Blockers\n(see dependsOn)\n\n## Runner\nFeature slug: `v5-visual-recipe-rig`\n"
+    },
+    {
+      "title": "V5 Play UI: wire Formelphase + items + challenge + Großformel",
+      "featureSlug": "v5-play-actions-ui",
+      "priority": "P1",
+      "labels": [
+        "P1",
+        "needs-design"
+      ],
+      "dependsOn": [
+        "V5 visual recipe + Formula Rig Playmat (composed core)",
+        "V5 engine: challenge disturb/destroy + start restore"
+      ],
+      "body": "## Intent\nPlayView/Phase-Coach dispatcht alle V5-Formel- und Aktionsoptionen inkl. Gegenstand und Großformel.\n\n## User Journey\n1. User durchläuft Start→Ziehen→Formel→Aktion→Ende gegen Bot.\n2. UI zeigt legale Formelaktionen und Challenge-Ziele.\n3. Fehlerzustände Deutsch.\n\n## Problem\nUI noch an Bound-Build / ACTIVATE_BOUND / Fetz-Charge-Modal gekoppelt.\n\n## Solution\ngameActionHelpers, PlayView, Presentation Steps anpassen; FetzChargeConfirm nur Legacy. Gegenstände als Hauptaktion.\n\n## Runtime\n| Axis | This slice |\n|------|------------|\n| Local (desktop) | yes |\n| Cloud session | no |\n| Appwrite Functions | skip |\n\n## Edge Cases\n- Pending combat Block-Fenster.\n- Handlimit Endphase.\n- Bot-Zug Progress.\n\n## Acceptance\n\n- [ ] Mensch kann alle MVP-Formelaktionen und Hauptaktionen inkl. Item/Großformel ausführen wenn legal.\n- [ ] Challenge-UI für Formelkomponenten.\n- [ ] V1 Base-Match weiterhin spielbar.\n- [ ] npm run checks grün.\n- [ ] Touched files: zero type escape hatches (`@typed-strict` / Boy Scout)\n\n## Design\nEpic: `.qa/design/v5-formula-migration.md`\n\n## Blockers\n(see dependsOn)\n\n## Runner\nFeature slug: `v5-play-actions-ui`\n"
+    },
+    {
+      "title": "V5 bot heuristics for formula phase and charge",
+      "featureSlug": "v5-bot-formula",
+      "priority": "P1",
+      "labels": [
+        "P1"
+      ],
+      "dependsOn": [
+        "V5 Play UI: wire Formelphase + items + challenge + Großformel"
+      ],
+      "body": "## Intent\nHeuristik-Bot wählt sinnvolle Formelaktionen, Challenge und Großformel unter v5Formula.\n\n## User Journey\n1. Solo-Match: Bot bindet/aktiviert Formel und greift an/blockt.\n2. Bot stuckt nicht in Formelphase.\n\n## Problem\nbot.ts scored Bound-Build/Activate Fetz.\n\n## Solution\nErweitere bot.ts + Tests; keine LLM-Pflicht.\n\n## Runtime\n| Axis | This slice |\n|------|------------|\n| Local (desktop) | yes |\n| Cloud session | no |\n| Appwrite Functions | skip |\n\n## Edge Cases\n- Leere Hand.\n- Volle Formel vs Schnellmix.\n- Reaction pick unverändert sinnvoll.\n\n## Acceptance\n\n- [ ] Bot erzeugt legale Actions in Formelphase.\n- [ ] Bot kann Großformel nutzen wenn charge===3 und vorteilhaft.\n- [ ] Vitest bot smoke unter v5Formula.\n- [ ] typed-strict clean.\n- [ ] Touched files: zero type escape hatches (`@typed-strict` / Boy Scout)\n\n## Design\nEpic: `.qa/design/v5-formula-migration.md`\n\n## Blockers\n(see dependsOn)\n\n## Runner\nFeature slug: `v5-bot-formula`\n"
+    },
+    {
+      "title": "V5 characters: passives + Großformel texts per §25",
+      "featureSlug": "v5-character-grossformel",
+      "priority": "P1",
+      "labels": [
+        "P1"
+      ],
+      "dependsOn": [
+        "V5 pack: MVP deck (9 formula + items + mix) + Play setup tile"
+      ],
+      "body": "## Intent\nSieben Charaktere: Passiven und Großformeln gemäß V5 §25 (Formel-Bezug), Engine + Pack.\n\n## User Journey\n1. User wählt Knuspergnom; Passive triggert bei Formelbau/-nutzung Erde/Feuer.\n2. Großformel bei 3 Ladung wirkt laut Text.\n\n## Problem\nPassive/Ulti noch V1/V3-Texte ohne Formelphase.\n\n## Solution\nPack character/ultimate defs + engine hooks; Vitest pro Charakter mind. Passive oder Ulti-Smoke.\n\n## Runtime\n| Axis | This slice |\n|------|------------|\n| Local (desktop) | yes |\n| Cloud session | no |\n| Appwrite Functions | skip |\n\n## Edge Cases\n- Passive 1× pro Zug Limits.\n- Ulti einmalig.\n\n## Acceptance\n\n- [ ] Alle 7 Charaktere haben V5-Passive + Großformel-Daten.\n- [ ] Mindestens 3 Charakter-Effekte engine-getestet.\n- [ ] Play Setup zeigt aktualisierte DE-Texte.\n- [ ] typed-strict clean.\n- [ ] Touched files: zero type escape hatches (`@typed-strict` / Boy Scout)\n\n## Design\nEpic: `.qa/design/v5-formula-migration.md`\n\n## Blockers\n(see dependsOn)\n\n## Runner\nFeature slug: `v5-character-grossformel`\n"
+    },
+    {
+      "title": "V5 Build: retarget Combinate slots to Technik/Essenz/Katalysator",
+      "featureSlug": "v5-build-slots-retarget",
+      "priority": "P1",
+      "labels": [
+        "P1",
+        "needs-design"
+      ],
+      "dependsOn": [
+        "V5 types: formula slots, card kinds, visual contracts, ruleset flag"
+      ],
+      "body": "## Intent\nBuild-Combinate nutzt Formel-Rollen statt Träger/Antrieb/Aufsatz; Development bleibt Authoring-Shell.\n\n## User Journey\n1. User öffnet Build → Combinate.\n2. Drei Slots heißen Technik / Essenz / Katalysator (DE).\n3. Session persist funktioniert.\n\n## Problem\nbuildTypes und UI hardcoden Fetzgerät-Rollen.\n\n## Solution\nRetarget model/buildTypes, BuildSlotsPanel, ResultCard Copy; Catalog kann MVP-IDs stubben. Keine Meshy-Batch-Pflicht.\n\n## Runtime\n| Axis | This slice |\n|------|------------|\n| Local (desktop) | yes |\n| Cloud session | no |\n| Appwrite Functions | skip |\n\n## Edge Cases\n- Alte localStorage-Sessions: migrate oder reset dokumentiert.\n\n## Acceptance\n\n- [ ] Combinate-UI zeigt Formel-Rollen.\n- [ ] Keine Produkt-Copy „Fetzgerät · Entwurf“ als Default.\n- [ ] npm run checks / relevante Tests grün.\n- [ ] typed-strict clean.\n- [ ] Touched files: zero type escape hatches (`@typed-strict` / Boy Scout)\n\n## Design\nEpic: `.qa/design/v5-formula-migration.md`\n\n## Blockers\n(see dependsOn)\n\n## Runner\nFeature slug: `v5-build-slots-retarget`\n"
+    },
+    {
+      "title": "V5 full formula content: remaining techniques/essences/catalysts + items",
+      "featureSlug": "v5-full-formula-content",
+      "priority": "P2",
+      "labels": [
+        "P2"
+      ],
+      "dependsOn": [
+        "V5 pack: MVP deck (9 formula + items + mix) + Play setup tile",
+        "V5 characters: passives + Großformel texts per §25"
+      ],
+      "body": "## Intent\nRestliche Formel- und Gegenstandskarten laut Spielkonzept (§12–14, §21–22) in V5_PACK; Deck-Mix 106.\n\n## User Journey\n1. Forge/Play enthält alle 12+12+12 + 6 Items + Glitches.\n2. Match deck size matches Konzept.\n\n## Problem\nNur MVP-9 im Pack.\n\n## Solution\nContent-only + schmale Engine-Hooks falls Effekte fehlen; Visual-Profile stubs für neue IDs (delivery/shape enums).\n\n## Runtime\n| Axis | This slice |\n|------|------------|\n| Local (desktop) | yes |\n| Cloud session | no |\n| Appwrite Functions | skip |\n\n## Edge Cases\n- Unbekannte Effekte → expliziter unsupported fail in Tests oder implementieren.\n\n## Acceptance\n\n- [ ] 12 Techniken, 12 Essenzen, 12 Katalysatoren, 6 Gegenstände im Pack.\n- [ ] mainDeckSize ≈ 106 dokumentiert/assertet.\n- [ ] Smoke-Test createMatch + shuffle.\n- [ ] typed-strict clean.\n- [ ] Touched files: zero type escape hatches (`@typed-strict` / Boy Scout)\n\n## Design\nEpic: `.qa/design/v5-formula-migration.md`\n\n## Blockers\n(see dependsOn)\n\n## Runner\nFeature slug: `v5-full-formula-content`\n"
+    },
+    {
+      "title": "V5 legacy soft-retire: Bound-4 / Fetz-3D not default; gate V3 pack",
+      "featureSlug": "v5-legacy-soft-retire",
+      "priority": "P2",
+      "labels": [
+        "P2"
+      ],
+      "dependsOn": [
+        "V5 Play UI: wire Formelphase + items + challenge + Großformel",
+        "V5 Build: retarget Combinate slots to Technik/Essenz/Katalysator"
+      ],
+      "body": "## Intent\nV3-Fetzgerät-Live-3D und Bound-4 sind nicht mehr Default-Play; Legacy hinter klaren Tiles/Flags; tote Default-Pfade entfernt oder gated.\n\n## User Journey\n1. Frischer User landet auf V5.\n2. Base-Pack und optional V3 Playtest bleiben wählbar.\n3. V5-Match zeigt kein Träger/Antrieb/Aufsatz-3D als Hauptformel.\n\n## Problem\nDefault und UI pushen noch Fetz-3D/Bound.\n\n## Solution\nGate BoardEngineLiveZone; Labels; docs engine-system Hinweis „legacy V3“. Kein Massenlöschen der Meshy-Assets.\n\n## Runtime\n| Axis | This slice |\n|------|------------|\n| Local (desktop) | yes |\n| Cloud session | no |\n| Appwrite Functions | skip |\n\n## Edge Cases\n- Bestehende Saves/Sessions.\n- Forge zeigt legacy parts nur wenn relevant.\n\n## Acceptance\n\n- [ ] Play Default = V5 ohne Fetz-3D-Hauptpräsentation.\n- [ ] Base und dokumentierter Legacy-Pfad funktionieren.\n- [ ] AGENTS/SPIELUEBERSICHT erwähnen Soft-Retire.\n- [ ] checks grün.\n- [ ] Touched files: zero type escape hatches (`@typed-strict` / Boy Scout)\n\n## Design\nEpic: `.qa/design/v5-formula-migration.md`\n\n## Blockers\n(see dependsOn)\n\n## Runner\nFeature slug: `v5-legacy-soft-retire`\n"
+    },
+    {
+      "title": "V5 E2E / verify-ui: solo formula match smoke",
+      "featureSlug": "v5-e2e-verify-ui",
+      "priority": "P2",
+      "labels": [
+        "P2"
+      ],
+      "dependsOn": [
+        "V5 bot heuristics for formula phase and charge",
+        "V5 legacy soft-retire: Bound-4 / Fetz-3D not default; gate V3 pack"
+      ],
+      "body": "## Intent\nPlaywright/Verify-UI: V5-Match starten, Formel bauen, angreifen, Partie-Ende oder Rematch erreichbar.\n\n## User Journey\n1. CI/Dev führt e2e smoke aus.\n2. Evidence-Screenshots unter .qa/evidence/v5-e2e-verify-ui/.\n\n## Problem\nKeine V5-E2E-Abdeckung.\n\n## Solution\nSpec unter e2e oder .qa/runs; nutzt data-testid falls nötig (minimal).\n\n## Runtime\n| Axis | This slice |\n|------|------------|\n| Local (desktop) | yes |\n| Cloud session | no |\n| Appwrite Functions | skip |\n\n## Edge Cases\n- Bot-Timeout.\n- Reduced motion.\n\n## Acceptance\n\n- [ ] E2E startet V5-Match und führt mind. eine Formelaktion + eine Kampfaktion aus.\n- [ ] Evidence-Screenshots vorhanden.\n- [ ] npm run checks + e2e smoke grün (oder dokumentierter project e2e command).\n- [ ] typed-strict clean auf touched files.\n- [ ] Touched files: zero type escape hatches (`@typed-strict` / Boy Scout)\n\n## Design\nEpic: `.qa/design/v5-formula-migration.md`\n\n## Blockers\n(see dependsOn)\n\n## Runner\nFeature slug: `v5-e2e-verify-ui`\n"
+    }
+  ]
+}
