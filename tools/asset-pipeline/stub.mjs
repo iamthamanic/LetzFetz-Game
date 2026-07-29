@@ -43,18 +43,7 @@ const COMMANDS = {
     titleEn: 'Model stub — mesh generation (Meshy/Tripo later, no secrets).',
     next: 'public/engine-parts/mvp/<id>.glb',
   },
-  normalize: {
-    id: true,
-    titleDe: 'Normalize-Stub — nutze später `npm run asset:blender -- normalize_part <id>`.',
-    titleEn: 'Normalize stub — later use `npm run asset:blender -- normalize_part <id>`.',
-    next: 'public/engine-parts/mvp/<id>.glb',
-  },
-  optimize: {
-    id: true,
-    titleDe: 'Optimize-Stub — Budget/Decimate (noch nicht implementiert).',
-    titleEn: 'Optimize stub — budget/decimate (not implemented yet).',
-    next: 'public/engine-parts/mvp/<id>.glb',
-  },
+  // normalize / optimize are real runners (see normalize.mjs / optimize.mjs) — #190
   publish: {
     id: true,
     titleDe: 'Publish-Stub — Registry/Manifest-Update (noch nicht implementiert).',

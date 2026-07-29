@@ -15,6 +15,12 @@ npm run asset:blender -- validate_sockets <asset-id>
 npm run asset:blender -- normalize_part <asset-id>
 npm run asset:blender -- render_preview <asset-id>          # skip if PNG exists
 npm run asset:blender -- render_preview <asset-id> --force  # overwrite PNG
+
+# Preferred wrappers (same Blender scripts / exit codes):
+npm run asset:normalize -- <asset-id>              # → normalize_part; overwrites MVP GLB
+npm run asset:normalize -- <asset-id> --out path.glb
+npm run asset:optimize -- <asset-id>               # gltf-transform repack (no Blender)
+npm run asset:preview -- <asset-id>                # → render_preview
 ```
 
 Equivalent:
