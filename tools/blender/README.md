@@ -49,4 +49,4 @@ npm run asset:blender -- render_preview v3-part-water-traeger-01 --force
 # likewise: v3-part-shadow-antrieb-01, v3-part-light-aufsatz-01
 ```
 
-See also: [`docs/engine-system/asset-pipeline.md`](../../docs/engine-system/asset-pipeline.md), [`asset-specification.md`](../../docs/engine-system/asset-specification.md).
+See also: [`docs/engine-system/blender-workflow.md`](../../docs/engine-system/blender-workflow.md), [`asset-pipeline.md`](../../docs/engine-system/asset-pipeline.md), [`asset-specification.md`](../../docs/engine-system/asset-specification.md), [`troubleshooting.md`](../../docs/engine-system/troubleshooting.md).

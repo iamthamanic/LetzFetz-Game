@@ -143,22 +143,27 @@ Missing sockets: loud error + debug marker in development; controlled fallback i
 
 ```text
 docs/engine-system/
-  architecture.md          # this file
-  asset-specification.md   # #182 sockets / budgets / preview contract
-  gameplay-model.md        # stub → expand with #131
-  rendering.md             # stub → expand with #133/#134
-  asset-pipeline.md        # #134 (CLI stubs + snapshot notes)
-  adding-a-new-part.md     # #134 (author checklist)
+  architecture.md          # this file (ADR index)
+  asset-specification.md   # sockets / budgets / preview contract
+  gameplay-model.md        # recipe / adapters (game layer)
+  rendering.md             # surfaces, cache, materials, visual/mobile
+  asset-pipeline.md        # npm asset:* CLI
+  blender-workflow.md      # #194 Blender ops loop
+  mcp-and-cli-setup.md     # #194 CLI authority; MCP YAGNI
+  troubleshooting.md       # #194 sockets / WebGL / cache / CLI
+  mobile-perf-report.md    # #193 measure + budgets
+  adding-a-new-part.md     # author checklist
 
-src/game/types/engineVisual.ts   # #131
-src/game/engine/engineRecipe.ts  # #131
-src/services/engineAssets/       # #132 (partRegistry + types)
-src/components/engine3d/         # #145 shared canvas
-src/features/play/engine3d/      # #133–#134 panel + snapshot
-public/engine-parts/mvp/         # #132 placeholder GLBs
-docs/engine-system/specs/        # #132 part spec JSON stubs
-scripts/generate-mvp-placeholder-glbs.ts  # regenerate MVP GLBs
-tools/asset-pipeline/            # #134
+src/game/types/engineVisual.ts
+src/game/engine/engineRecipe.ts
+src/services/engineAssets/       # partRegistry + types
+src/components/engine3d/         # shared canvas
+src/features/play/engine3d/      # panel + snapshot
+public/engine-parts/mvp/         # GLBs
+docs/engine-system/specs/        # part spec JSON
+scripts/generate-mvp-placeholder-glbs.ts
+tools/asset-pipeline/
+tools/blender/
 ```
 
 ## 8. Validation

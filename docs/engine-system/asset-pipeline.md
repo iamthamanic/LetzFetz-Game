@@ -1,7 +1,7 @@
 # Asset pipeline (Fetzgerät 3D)
 
 **Status:** Validate + preview + normalize + optimize real; remaining Brief §18 stubs (#189) — no Meshy, no paid APIs  
-**See also:** [architecture.md](./architecture.md), [asset-specification.md](./asset-specification.md), [adding-a-new-part.md](./adding-a-new-part.md)
+**See also:** [architecture.md](./architecture.md), [asset-specification.md](./asset-specification.md), [adding-a-new-part.md](./adding-a-new-part.md), [blender-workflow.md](./blender-workflow.md), [mcp-and-cli-setup.md](./mcp-and-cli-setup.md), [troubleshooting.md](./troubleshooting.md)
 
 ## Purpose
 
