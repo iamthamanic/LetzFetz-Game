@@ -1,4 +1,4 @@
-import type { BoundCardInstance, CardInstance } from './cards';
+import type { BoundCardInstance, CardInstance, FormulaComponentInstance } from './cards';
 import type { MatchMeta, PendingChoice } from './matchMeta';
 import type { PlayerId, TurnPhase } from './ruleset';
 import type { StatusInstance } from './status';
@@ -14,11 +14,20 @@ export interface PlaytestSettings {
   monoBonusMode?: MonoBonusMode;
 }
 
+/** V5 Formelboard — at most one component per slot. */
+export interface FormulaBoard {
+  technik: FormulaComponentInstance | null;
+  essenz: FormulaComponentInstance | null;
+  katalysator: FormulaComponentInstance | null;
+}
+
 export interface PlayerState {
   characterId: string;
   hp: number;
   hand: CardInstance[];
   bound: BoundCardInstance[];
+  /** V5 Formelplätze; empty/null slots when unused. */
+  formula: FormulaBoard;
   ultimateAvailable: boolean;
   /** Stiernackenkommando Ulti: next attack damage doubled. */
   doubleNextAttack: boolean;
@@ -27,7 +36,7 @@ export interface PlayerState {
   statuses: StatusInstance[];
   /** V3 shield (max 5); unused when v3Combat is off. */
   shield: number;
-  /** V3 shared Fetzgerät charge pool (0…6). */
+  /** Shared charge pool: V3 max 6, V5 Fetzladung max 3. */
   fetzCharge: number;
 }
 
