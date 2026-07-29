@@ -1,8 +1,13 @@
 /**
- * In-memory engine snapshot cache keyed by createRenderKey.
+ * In-memory engine snapshot cache keyed by createRenderKey (L1).
  * Location: src/features/play/engine3d/rendering/engine-snapshot-cache.ts
  * ADR: docs/engine-system/architecture.md (#134)
+ * L2 IndexedDB: engine-snapshot-idb.ts (#188)
  */
+import {
+  deleteEngineSnapshotIdb,
+  putEngineSnapshotIdb,
+} from './engine-snapshot-idb';
 
 export interface EngineSnapshotEntry {
   /** data: URL or absolute/relative image URL */
@@ -34,23 +39,34 @@ export function getEngineSnapshot(renderKey: string): EngineSnapshotEntry | null
   return raw;
 }
 
-/** Store or replace a snapshot for the given renderKey. */
-export function setEngineSnapshot(renderKey: string, dataUrl: string): EngineSnapshotEntry {
+/**
+ * Store or replace a snapshot for the given renderKey (L1 + async L2 write-through).
+ * Pass `persist: false` when hydrating from IDB to avoid echo writes.
+ */
+export function setEngineSnapshot(
+  renderKey: string,
+  dataUrl: string,
+  options?: { storedAt?: number; persist?: boolean },
+): EngineSnapshotEntry {
   const entry: EngineSnapshotEntry = {
     dataUrl,
-    storedAt: Date.now(),
+    storedAt: options?.storedAt ?? Date.now(),
   };
   store.set(renderKey, entry);
+  if (options?.persist !== false) {
+    void putEngineSnapshotIdb(renderKey, entry);
+  }
   return entry;
 }
 
-/** Remove one key, or clear the entire cache when omit key. */
+/** Remove one key, or clear the entire cache when omit key (L1 + async L2). */
 export function invalidateEngineSnapshot(renderKey?: string): void {
   if (renderKey === undefined) {
     store.clear();
-    return;
+  } else {
+    store.delete(renderKey);
   }
-  store.delete(renderKey);
+  void deleteEngineSnapshotIdb(renderKey);
 }
 
 /** Test / debug helper — current entry count. */

@@ -19,6 +19,7 @@ export {
   engineSnapshotCacheSize,
 } from './rendering/engine-snapshot-cache';
 export type { EngineSnapshotEntry } from './rendering/engine-snapshot-cache';
+export { hydrateEngineSnapshotCache } from './rendering/hydrateEngineSnapshots';
 export {
   requestEngineSnapshot,
   ENGINE_SNAPSHOT_PLACEHOLDER_DATA_URL,

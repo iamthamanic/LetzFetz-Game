@@ -12,18 +12,20 @@
 | Detail / Forge part preview | Shared `EnginePreviewCanvas` (Forge library); Playtest MVP reuses **board** Live-3D (no second canvas) |
 | Cached engine art | Snapshot keyed by `createRenderKey` (#134 / #146) |
 
-## Snapshot cache (#134 / #146)
+## Snapshot cache (#134 / #146 / #188)
 
 | Piece | Location |
 |-------|----------|
-| Cache `get` / `set` / `invalidate` | `src/features/play/engine3d/rendering/engine-snapshot-cache.ts` |
+| L1 Cache `get` / `set` / `invalidate` | `src/features/play/engine3d/rendering/engine-snapshot-cache.ts` |
+| L2 IndexedDB write-through + hydrate | `engine-snapshot-idb.ts` / `hydrateEngineSnapshots.ts` |
 | Best-effort request | `requestEngineSnapshot(recipe, options?)` |
 | Key | `createRenderKey(recipe)` — includes `renderVersion` + `cosmeticSeed` + part ids |
-| Invalidation | Bump `ENGINE_RENDER_VERSION` or call `invalidateEngineSnapshot(key?)` |
-| Live capture | `EnginePreviewCanvas` → `onGlCanvasReady(canvas)` → panel **Snapshot cachen** passes `canvas` (+ `force` if canvas present) → `toDataURL` (source `canvas`) |
+| Invalidation | Bump `ENGINE_RENDER_VERSION` or call `invalidateEngineSnapshot(key?)` (clears L1 + L2) |
+| Live capture | `EnginePreviewCanvas` → `onGlCanvasReady(canvas)` → board auto-warmup / panel **Snapshot cachen** |
 | R3F note | `preserveDrawingBuffer: true` so the buffer survives composite for capture |
 | CI / headless | Without canvas: **placeholder** 1×1 PNG data URL. Stub only as fallback. |
-| Play UI | **Snapshot cachen** on `EnginePreviewPanel` — DE status: Cache / Canvas / Stub / Miss |
+| Reload | `PlayView` mounts → `hydrateEngineSnapshotCache()` fills L1 from IDB; corrupt/stale/`rv*` mismatch dropped |
+| Play UI | Board zone auto-warmup; optional panel **Snapshot cachen** still available for Forge-style debug |
 
 Capture path (open preview):
 
