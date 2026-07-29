@@ -1,0 +1,17 @@
+{
+  "measuredAt": "2026-07-29T08:24:17.293Z",
+  "viewport": {
+    "width": 390,
+    "height": 844
+  },
+  "deviceProfile": "Chromium mobile emulation 390×844 (isMobile+touch)",
+  "webgl": true,
+  "canvasCount": 1,
+  "loadMs": 453,
+  "fpsAvg": 119.5,
+  "fpsMin": 58.5,
+  "frames": 240,
+  "reducedMotion": true,
+  "recipe": "MVP_DEMO_RECIPE",
+  "note": "Emulated mobile GPU via desktop Chromium — treat as relative budget signal, not device ground truth"
+}

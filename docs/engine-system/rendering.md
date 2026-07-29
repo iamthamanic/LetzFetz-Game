@@ -137,6 +137,17 @@ Commit updated files under `e2e/fetz-3d-visual-regression-mvp.spec.ts-snapshots/
 
 `npm run checks` (build + unit) does **not** run this harness.
 
+## Mobile performance (#193)
+
+| Piece | Location |
+|-------|----------|
+| Report | [`mobile-perf-report.md`](./mobile-perf-report.md) |
+| Metrics JSON | [`mobile-perf-metrics.json`](./mobile-perf-metrics.json) |
+| E2E protocol | `npm run test:e2e:mobile-perf` (390×844 Chromium mobile) |
+| Optional HUD | `?enginePerf=1` / `localStorage lf-engine-perf=1` → `EnginePerfHud` |
+
+**Budgets (runtime):** ≥30 FPS interactive target on real mid-tier phones; ≤1 Live-3D canvas; outline already disabled for reduced-motion / ≤2 cores / ≤2 GB `deviceMemory`. Emulation metrics are relative — see report.
+
 ## Rules
 
 - Max one active Engine canvas per view.

@@ -68,7 +68,7 @@ export async function enableMvpLiveEngine(
  */
 export async function waitForMvpSnapshotWarmup(page: Page): Promise<void> {
   const zone = page.getByTestId('board-engine-live-zone');
-  await expect(zone.getByRole('status')).toContainText(/Snapshot/, {
+  await expect(zone.getByText(/Snapshot/)).toBeVisible({
     timeout: 15_000,
   });
 }

@@ -4,6 +4,7 @@
  * No Feature→Feature. Hook exception: three/** only (ADR D4).
  */
 export { EnginePreviewCanvas, detectWebGL } from './EnginePreviewCanvas';
+export { isEnginePerfHudEnabled } from './enginePerfFlag';
 export {
   recipeFromPartId,
   recipeHasRegistryAsset,
