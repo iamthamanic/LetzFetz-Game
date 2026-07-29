@@ -8,7 +8,8 @@
 | UI | Tech |
 |----|------|
 | Cards / board thumbs | Snapshot cache hit (`resolveEnginePartThumb`) → else static PNG for ids in `ENGINE_PART_PNG_SHIPPED_IDS` (MVP trio #185) when `ENGINE_PART_PNG_ART_SHIPPED`, else empty (no broken img) |
-| Detail / build preview | Single `@react-three/fiber` canvas (`src/components/engine3d/`) |
+| **Board Engine-Zone (primary Live-3D, #187)** | One `EnginePreviewCanvas` in `BoardEngineLiveZone` under human bound row; auto `requestEngineSnapshot` after montage warmup |
+| Detail / Forge part preview | Shared `EnginePreviewCanvas` (Forge library); Playtest MVP reuses **board** Live-3D (no second canvas) |
 | Cached engine art | Snapshot keyed by `createRenderKey` (#134 / #146) |
 
 ## Snapshot cache (#134 / #146)
@@ -38,16 +39,18 @@ Board / bound engine-part thumbs prefer the in-memory snapshot cache
 gradient/icon fallback instead of a 404/`index.html` broken image).
 Forge library grids: same resolver; detail view still uses live 3D canvas.
 
-## Play + Library integration (#133 / #145)
+## Play + Library integration (#133 / #145 / #187)
 
 | Entry | Behavior |
 |-------|----------|
-| Playtest Cheatbox → **3D-Assembler (MVP)** | Opens Play `EnginePreviewPanel` with hardcoded MVP×3 recipe |
-| Bound recipe with Träger + registry GLB | Button **Fetzgerät 3D** (bottom-left) → same panel via `boundToRecipe` |
+| Human Engine-Zone | `BoardEngineLiveZone` — Live-3D when bound recipe is active + registry assets; empty DE placeholder otherwise |
+| Auto snapshot warmup | After canvas ready + montage delay (`boardEngineWarmupDelayMs`), `requestEngineSnapshot({ force: true })` — no mandatory button |
+| Playtest Cheatbox → **3D-Assembler (MVP)** | Same board zone shows `MVP_DEMO_RECIPE` (still one canvas) |
+| Opponent Engine-Zone | 2D thumbs only (cache/PNG) — never a second R3F canvas |
 | Forge Card Library detail | When `lookupEnginePartAsset(card.id)` → shared `EnginePreviewCanvas` (carrier-only recipe) |
 
 Shared presentational: `src/components/engine3d/` (`EnginePreviewCanvas`, `WeaponAssembler`, …).  
-Play-owned shell: `src/features/play/engine3d/` (`EnginePreviewPanel`, snapshot cache, MVP demo).  
+Play-owned shell: `src/features/play/engine3d/` (`BoardEngineLiveZone`, optional `EnginePreviewPanel`, snapshot cache, MVP demo).  
 Hook exception: only `components/engine3d/three/**` (ADR D4).
 
 ## V3 assets (#132 / #143)
