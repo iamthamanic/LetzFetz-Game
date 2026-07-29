@@ -105,6 +105,38 @@ Stagger (Brief §12 general montage — not per-combo clips):
 
 Carrier-only recipes skip drive/attachment windows (no fake dock). Recipe id change resets progress. `prefers-reduced-motion`: assembled pose, zero tween. Snapshots / `ENGINE_RENDER_VERSION` are unaffected (runtime motion only).
 
+## Visual regression — MVP trio (#192)
+
+| Piece | Location |
+|-------|----------|
+| Playwright harness | `e2e/fetz-3d-visual-regression-mvp.spec.ts` |
+| Helpers | `e2e/helpers/engineMvpVisual.ts` |
+| Playwright baseline | `e2e/fetz-3d-visual-regression-mvp.spec.ts-snapshots/` |
+| Evidence PNG | `.qa/evidence/fetz-3d-visual-regression-mvp/mvp-trio-assembly.png` |
+| npm | `npm run test:e2e:visual-mvp` · update: `npm run test:e2e:visual-mvp:update` |
+
+**Recipe under test:** `MVP_DEMO_RECIPE` (Wasser-Träger + Schatten-Antrieb + Licht-Aufsatz) via Playtest cheatbox **3D-Assembler (MVP)** → board `BoardEngineLiveZone` (fixed `EngineCamera`, reduced-motion assembled pose).
+
+### Fail conditions
+
+| Outcome | Result |
+|---------|--------|
+| Pixel diff &gt; `maxDiffPixelRatio` (0.04) vs baseline | **FAIL** |
+| Zone mounts neither canvas nor WebGL fallback | **FAIL** |
+| WebGL unavailable (fallback only) | **`test.skip`** with explicit note — never a silent green pixel pass |
+
+### Baseline refresh
+
+Re-generate after intentional montage/material/asset changes **or** when bumping `ENGINE_RENDER_VERSION`:
+
+```bash
+npm run test:e2e:visual-mvp:update
+```
+
+Commit updated files under `e2e/fetz-3d-visual-regression-mvp.spec.ts-snapshots/` and the evidence PNG. Platform suffix in Playwright snapshot names is expected (Chromium + OS); refresh on the machine you use for visual checks.
+
+`npm run checks` (build + unit) does **not** run this harness.
+
 ## Rules
 
 - Max one active Engine canvas per view.
