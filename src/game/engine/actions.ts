@@ -30,6 +30,16 @@ import {
   formulaSlotForDef,
 } from './formulaSlots';
 import {
+  destroyFormulaComponent,
+  disturbFormulaComponent,
+  findFormulaComponent,
+  formulaChallengeOutcome,
+  formulaComponentElement,
+  formulaComponentStability,
+  listFormulaComponents,
+  restoreOwnerFormulaAtStart,
+} from './formulaChallenge';
+import {
   resolveFormulaActivate,
   takeAttackPrepBonus,
   takeBlockPrepBonus,
@@ -120,7 +130,11 @@ function runStartPhase(
   rng: () => number,
   ruleset: RulesetConfig,
 ): GameState {
-  const next = onStartPhaseArena(state, playerId, rng, ruleset);
+  let next = onStartPhaseArena(state, playerId, rng, ruleset);
+  if (isV5FormulaEnabled(ruleset)) {
+    next = cloneState(next);
+    next.players[playerId].formula = restoreOwnerFormulaAtStart(next.players[playerId].formula);
+  }
   next.phase = 'draw';
   return next;
 }
@@ -210,6 +224,21 @@ function computeChallengeAttackValue(
 ): number {
   const base = computeAttackValueForPlayer(pack, state, playerId, attackDef, diceRoll, ruleset);
   const targetElement = challengeTargetElement(pack, targetBound);
+  if (!targetElement) return base;
+  return base + counterBonus(attackDef.element, targetElement);
+}
+
+function computeFormulaChallengeAttackValue(
+  pack: ContentPack,
+  state: GameState,
+  playerId: PlayerId,
+  attackDef: ElementCardDef,
+  targetComp: FormulaComponentInstance,
+  diceRoll: number,
+  ruleset: RulesetConfig,
+): number {
+  const base = computeAttackValueForPlayer(pack, state, playerId, attackDef, diceRoll, ruleset);
+  const targetElement = formulaComponentElement(pack, targetComp);
   if (!targetElement) return base;
   return base + counterBonus(attackDef.element, targetElement);
 }
@@ -540,6 +569,50 @@ function resolveCombat(
   );
 }
 
+function resolveFormulaChallengeCombat(
+  state: GameState,
+  pack: ContentPack,
+  blockValue: number,
+): GameState {
+  if (!state.combat || state.combat.mode !== 'challenge' || !state.combat.targetBoundInstanceId) {
+    return state;
+  }
+  const next = cloneState(state);
+  const { defenderId, attackValue, targetBoundInstanceId } = state.combat;
+  const target = findFormulaComponent(next.players[defenderId].formula, targetBoundInstanceId);
+  if (!target) throw new Error('Challenge formula target not found');
+
+  const stability = formulaComponentStability(pack, target);
+  const defense = stability + blockValue;
+  const outcome = formulaChallengeOutcome(attackValue, defense, target.disturbed);
+  const def = findFormulaComponentDef(pack, target.defId);
+  const targetName = def?.name ?? target.defId;
+
+  if (outcome === 'destroy') {
+    const destroyed = destroyFormulaComponent(next.players[defenderId].formula, target.instanceId);
+    next.players[defenderId].formula = destroyed.board;
+    if (destroyed.removed) {
+      next.piles.discard.push({
+        instanceId: destroyed.removed.instanceId,
+        defId: destroyed.removed.defId,
+      });
+    }
+    next.lastEvent = `Herausforderung — ${targetName} zerstört (${attackValue} vs ${defense}).`;
+  } else if (outcome === 'disturb') {
+    next.players[defenderId].formula = disturbFormulaComponent(
+      next.players[defenderId].formula,
+      target.instanceId,
+    );
+    next.lastEvent = `Herausforderung — ${targetName} gestört (${attackValue} vs ${defense}).`;
+  } else {
+    next.lastEvent = `Herausforderung wirkungslos (${attackValue} vs ${defense}).`;
+  }
+
+  next.combat = null;
+  next.phase = 'end';
+  return checkWinner(next);
+}
+
 function resolveChallengeCombat(
   state: GameState,
   pack: ContentPack,
@@ -547,6 +620,17 @@ function resolveChallengeCombat(
   ruleset: RulesetConfig,
 ): GameState {
   if (!state.combat || state.combat.mode !== 'challenge') return state;
+
+  if (isV5FormulaEnabled(ruleset) && state.combat.targetBoundInstanceId) {
+    const formulaTarget = findFormulaComponent(
+      state.players[state.combat.defenderId].formula,
+      state.combat.targetBoundInstanceId,
+    );
+    if (formulaTarget) {
+      return resolveFormulaChallengeCombat(state, pack, blockValue);
+    }
+  }
+
   const next = cloneState(state);
   const { attackerId, defenderId, attackValue, targetBoundInstanceId } = state.combat;
 
@@ -822,18 +906,29 @@ export function getLegalActions(state: GameState, ctx: PackContext): GameAction[
   if (state.phase === 'action') {
     const opponent = opponentOf(ctx.playerId);
     const oppBound = state.players[opponent].bound;
+    const v5 = isV5FormulaEnabled(ruleset);
 
     for (const card of hand) {
       const def = findElementDef(ctx.pack, card.defId);
       if (def?.cardType === 'attack') {
         actions.push({ type: 'PLAY_ATTACK', cardInstanceId: card.instanceId });
-        for (const bound of oppBound) {
-          if (!canChallengeBoundTarget(ctx.pack, bound)) continue;
-          actions.push({
-            type: 'CHALLENGE',
-            attackCardInstanceId: card.instanceId,
-            targetBoundInstanceId: bound.instanceId,
-          });
+        if (v5) {
+          for (const comp of listFormulaComponents(state.players[opponent].formula)) {
+            actions.push({
+              type: 'CHALLENGE',
+              attackCardInstanceId: card.instanceId,
+              targetBoundInstanceId: comp.instanceId,
+            });
+          }
+        } else {
+          for (const bound of oppBound) {
+            if (!canChallengeBoundTarget(ctx.pack, bound)) continue;
+            actions.push({
+              type: 'CHALLENGE',
+              attackCardInstanceId: card.instanceId,
+              targetBoundInstanceId: bound.instanceId,
+            });
+          }
         }
       }
       if (def?.cardType === 'boost') {
@@ -1390,11 +1485,17 @@ export function applyAction(
     case 'CHALLENGE': {
       if (state.phase !== 'action') throw new Error('Not in action phase');
       const defenderId = opponentOf(playerId);
-      const target = state.players[defenderId].bound.find(
-        (b) => b.instanceId === action.targetBoundInstanceId,
-      );
-      if (!target) throw new Error('Challenge target not found');
-      if (!canChallengeBoundTarget(pack, target)) throw new Error('Challenge target not legal');
+      const formulaTarget = isV5FormulaEnabled(ruleset)
+        ? findFormulaComponent(state.players[defenderId].formula, action.targetBoundInstanceId)
+        : undefined;
+      const boundTarget = formulaTarget
+        ? undefined
+        : state.players[defenderId].bound.find((b) => b.instanceId === action.targetBoundInstanceId);
+
+      if (!formulaTarget && !boundTarget) throw new Error('Challenge target not found');
+      if (boundTarget && !canChallengeBoundTarget(pack, boundTarget)) {
+        throw new Error('Challenge target not legal');
+      }
 
       const handCard = state.players[playerId].hand.find(
         (c) => c.instanceId === action.attackCardInstanceId,
@@ -1406,15 +1507,25 @@ export function applyAction(
       const vulkan = applyVulkanAttackRoll(state, playerId, diceRoll);
       let working = vulkan.state;
       diceRoll = vulkan.roll;
-      const attackValue = computeChallengeAttackValue(
-        pack,
-        working,
-        playerId,
-        def,
-        target,
-        diceRoll,
-        ruleset,
-      );
+      const attackValue = formulaTarget
+        ? computeFormulaChallengeAttackValue(
+            pack,
+            working,
+            playerId,
+            def,
+            formulaTarget,
+            diceRoll,
+            ruleset,
+          )
+        : computeChallengeAttackValue(
+            pack,
+            working,
+            playerId,
+            def,
+            boundTarget!,
+            diceRoll,
+            ruleset,
+          );
 
       next = discardFromHand(working, playerId, action.attackCardInstanceId);
       next = markAttackOrChallenge(next);

@@ -17,3 +17,4 @@ export * from './phraseBuild';
 export * from './phraseBonuses';
 export * from './formulaSlots';
 export * from './formulaResolve';
+export * from './formulaChallenge';
