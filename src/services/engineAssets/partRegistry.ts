@@ -18,8 +18,8 @@ export const ENGINE_PARTS_PUBLIC_ROOT = '/engine-parts';
 /** Card-art fallback convention until GLB previews exist. */
 export const ENGINE_CARD_ART_PUBLIC_ROOT = '/cards/engine';
 
-/** Bumped when pilot (or any) part meshes change enough to invalidate lookups. */
-const ASSET_VERSION = 2;
+/** Bumped when pilot / batch meshes change enough to invalidate lookups. */
+const ASSET_VERSION = 3;
 
 function buildRegistry(): ReadonlyMap<string, EnginePartAssetEntry> {
   const entries: Array<[string, EnginePartAssetEntry]> = V3_ENGINE_PARTS_36.map(

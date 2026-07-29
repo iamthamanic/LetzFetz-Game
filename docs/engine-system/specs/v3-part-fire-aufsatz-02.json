@@ -10,9 +10,10 @@
   "modelUrl": "/engine-parts/mvp/v3-part-fire-aufsatz-02.glb",
   "previewUrl": "/cards/engine/v3-part-fire-aufsatz-02.png",
   "budgets": {
-    "maxTriangles": 48,
+    "maxTriangles": 256,
     "maxTexturePx": 0,
-    "placeholder": true
+    "placeholder": false
   },
-  "version": 1
+  "version": 2,
+  "batch": "A"
 }
