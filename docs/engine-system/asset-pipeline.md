@@ -1,6 +1,6 @@
 # Asset pipeline (Fetzgerät 3D)
 
-**Status:** Validate + preview + normalize + optimize real; remaining Brief §18 stubs (#189) — no Meshy, no paid APIs  
+**Status:** Validate + preview + normalize + optimize real; optional Meshy `asset:model` (#198, opt-in); remaining Brief §18 stubs (#189)  
 **See also:** [architecture.md](./architecture.md), [asset-specification.md](./asset-specification.md), [adding-a-new-part.md](./adding-a-new-part.md), [blender-workflow.md](./blender-workflow.md), [mcp-and-cli-setup.md](./mcp-and-cli-setup.md), [troubleshooting.md](./troubleshooting.md)
 
 ## Purpose
@@ -15,7 +15,8 @@ Local npm commands to validate / preview / (later) author modular engine part as
 | Optimize | `npm run asset:optimize -- <asset-id>` | Real: `@gltf-transform/core` repack + byte budget (#190) |
 | All | `npm run asset:all -- <asset-id>` | Runs validate then preview |
 | Blender | `npm run asset:blender -- <script> <asset-id>` | `validate_sockets` / `normalize_part` / `render_preview` (#184) |
-| Spec / concept / multiview / model / publish | `npm run asset:<cmd> -- <id>` | **Stub** (#189) — DE/EN status + expected path, exit 0 |
+| Model | `npm run asset:model -- <id> --provider=meshy` | Optional Meshy text→3D (#198) — opt-in + `MESHY_API_KEY`; writes `docs/engine-system/raw/<id>/model.glb` only on success |
+| Spec / concept / multiview / publish | `npm run asset:<cmd> -- <id>` | **Stub** (#189) — DE/EN status + expected path, exit 0 |
 | Batch | `npm run assets:validate\|previews\|registry\|report` | **Stub** (#189) — no id |
 
 ## Normalize + optimize (#190)
@@ -33,6 +34,24 @@ npm run asset:optimize -- v3-part-water-traeger-01 --out /tmp/water-opt.glb
 | `asset:optimize` | `@gltf-transform/core` NodeIO read/write (repack) | Same overwrite rules. Fails exit **1** if size &gt; Spec `budgets.maxBytes` (default 512 KiB). No Draco/meshopt yet (YAGNI). |
 
 Recommended local order: `normalize` → `optimize` → `validate` → `preview`.
+
+## Optional Meshy model (#198)
+
+**Disabled by default.** Fail closed — exit **1** without writing if:
+
+- `--provider=meshy` missing, or
+- `MESHY_API_KEY` unset, or
+- network / Meshy task fails
+
+```bash
+# .env (gitignored) — see .env.example
+MESHY_API_KEY=…
+npm run asset:model -- v3-part-fire-traeger-01 --provider=meshy
+# success → docs/engine-system/raw/<id>/model.glb (not MVP overwrite)
+npm run asset:normalize -- <id> --out /tmp/norm.glb   # author reviews
+```
+
+Secrets never in Git. Tripo not wired (YAGNI). `npm run checks` does not call Meshy.
 
 CI `npm run checks` does **not** invoke Blender or these commands.
 

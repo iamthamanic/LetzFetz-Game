@@ -27,7 +27,7 @@ Environment:
 |----------|---------|
 | `BLENDER_BIN` | Absolute path to Blender when not on `PATH` |
 
-No secrets, no network calls in the asset CLI suite. Stub commands (`asset:spec`, `asset:model`, …) print DE/EN status and exit 0 — they do **not** invent Meshy/paid APIs.
+No secrets in Git. Stub commands (`asset:spec`, …) print DE/EN status and exit 0. **`asset:model`** is real but **opt-in** (`--provider=meshy` + `MESHY_API_KEY`) — see [`asset-pipeline.md`](./asset-pipeline.md).
 
 ## MCP (optional / YAGNI)
 
