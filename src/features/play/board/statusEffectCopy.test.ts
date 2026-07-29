@@ -1,9 +1,10 @@
 /**
- * Tests for V3 status Wirkungscopy.
+ * Tests for V5 status Wirkungscopy / labels.
  * Location: src/features/play/board/statusEffectCopy.test.ts
  */
 import { describe, it, expect } from 'vitest';
-import { shieldEffectCopyDe, statusEffectCopyDe } from './statusEffectCopy';
+import { primaryMarkLabelDe } from '../../../game/types';
+import { shieldEffectCopyDe, statusEffectCopyDe, statusLabelDe } from './statusEffectCopy';
 
 describe('statusEffectCopyDe', () => {
   it('covers primary marks with non-empty DE copy', () => {
@@ -12,15 +13,21 @@ describe('statusEffectCopyDe', () => {
     }
   });
 
-  it('covers common buffs/debuffs', () => {
-    for (const id of ['nebel', 'gift', 'verpeilt', 'fokus', 'schild']) {
-      if (id === 'schild') continue;
+  it('uses V5 labels Verwirbelt / Verstrahlt', () => {
+    expect(primaryMarkLabelDe('aufgewirbelt')).toBe('Verwirbelt');
+    expect(primaryMarkLabelDe('erleuchtet')).toBe('Verstrahlt');
+    expect(statusLabelDe('aufgewirbelt')).toBe('Verwirbelt');
+    expect(statusLabelDe('erleuchtet')).toBe('Verstrahlt');
+  });
+
+  it('covers common buffs/debuffs including V5 side effects', () => {
+    for (const id of ['nebel', 'nebelbank', 'toxisch', 'katalysatorausfall', 'gift', 'verpeilt', 'fokus']) {
       expect(statusEffectCopyDe(id).length).toBeGreaterThan(8);
     }
     expect(shieldEffectCopyDe()).toMatch(/Schild/);
   });
 
   it('falls back for unknown ids', () => {
-    expect(statusEffectCopyDe('totally-unknown-status')).toMatch(/Status/);
+    expect(statusEffectCopyDe('totally-unknown-status')).toMatch(/Status|SPIELANLEITUNG/);
   });
 });

@@ -1,27 +1,10 @@
 /**
- * V3 status chips for character docks (German labels + Wirkungstooltips).
+ * Combat status chips for character docks (German labels + Wirkungstooltips).
  * Location: src/features/play/board/StatusChips.tsx
  */
 import React from 'react';
-import type { StatusId, StatusInstance } from '../../../game/types';
-import { shieldEffectCopyDe, statusEffectCopyDe } from './statusEffectCopy';
-
-const STATUS_LABEL_DE: Record<StatusId, string> = {
-  brennen: 'Brennen',
-  durchnaesst: 'Durchnässt',
-  high: 'High',
-  aufgewirbelt: 'Aufgewirbelt',
-  erleuchtet: 'Erleuchtet',
-  verflucht: 'Verflucht',
-  nebel: 'Nebel',
-  dichter_nebel: 'Dichter Nebel',
-  verpeilt: 'Verpeilt',
-  geblendet: 'Geblendet',
-  gift: 'Gift',
-  ueberflutet: 'Überflutet',
-  fokus: 'Fokus',
-  ausgeblendet: 'Ausgeblendet',
-};
+import type { StatusInstance } from '../../../game/types';
+import { shieldEffectCopyDe, statusEffectCopyDe, statusLabelDe } from './statusEffectCopy';
 
 interface StatusChipsProps {
   statuses: StatusInstance[];
@@ -49,7 +32,7 @@ export function StatusChips({ statuses, shield = 0, testId }: StatusChipsProps) 
         </li>
       )}
       {statuses.map((s) => {
-        const label = STATUS_LABEL_DE[s.id] ?? s.id;
+        const label = statusLabelDe(s.id);
         const effect = statusEffectCopyDe(s.id);
         const stack = s.stacks > 1 ? ` ×${s.stacks}` : '';
         return (

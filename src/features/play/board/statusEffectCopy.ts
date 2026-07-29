@@ -1,35 +1,59 @@
 /**
- * Short German Wirkungscopy for V3 status chips (§6/§7).
+ * Short German Wirkungscopy for combat status chips (V5 §18 / §20).
  * Location: src/features/play/board/statusEffectCopy.ts
  */
-import type { StatusId } from '../../../game/types';
+import {
+  PRIMARY_MARK_LABEL_DE,
+  type PrimaryMarkId,
+  type StatusId,
+  isStatusId,
+} from '../../../game/types';
 
 const STATUS_EFFECT_DE: Record<StatusId, string> = {
-  brennen: 'Primärmarke Feuer: Tick-Schaden; Impuls kann Reaktionen auslösen.',
-  durchnaesst: 'Primärmarke Wasser: schwächt Brand; Impuls kann Dampf o.ä. auslösen.',
-  high: 'Primärmarke Luft: stapelbar; Überdosierung → Verpeilt.',
-  aufgewirbelt: 'Primärmarke Luft/Erde-Nähe: erschwert Zielen / Kontrolle.',
-  erleuchtet: 'Primärmarke Licht: deckt auf / verstärkt Licht-Impulse.',
-  verflucht: 'Primärmarke Schatten: stapelbar; dunkle Impulse und Reaktionen.',
-  nebel: 'Sicht und Treffer erschwert; oft aus Dampf/Reaktionen.',
-  dichter_nebel: 'Stärkerer Nebel: noch schwerer zu treffen.',
-  verpeilt: 'Überdosierung High: Aktionen gestört / Risiko erhöht.',
-  geblendet: 'Blendung: Angriffe und Reaktionen erschwert.',
+  brennen: 'Zu Beginn des nächsten eigenen Zuges: 1 Lebensschaden (ignoriert Schild). Danach entfernen.',
+  durchnaesst: 'Nächster Block −1 Kampfwert. Danach entfernen (sonst spätestens Endphase).',
+  high: 'Nächster eigener Boost oder Gegenstand: ziehe 1, wirf 1 ab. Danach entfernen.',
+  aufgewirbelt: 'Nächster eigener Angriff oder Herausforderung −1. Danach entfernen.',
+  erleuchtet: 'Nächster eigener Block −1. Danach entfernen.',
+  verflucht: 'Nächster eigener Heil- oder Schildgewinn −1. Danach entfernen.',
+  nebel: 'Nächster Angriff und nächster Block jeweils −1. Danach entfernen.',
+  dichter_nebel: 'Stärkerer Nebel: Angriff und Block stärker erschwert.',
+  nebelbank: 'Angriffe von und gegen dich −1 bis zur nächsten Startphase.',
+  verpeilt: 'Überdosierung High: Aktionen gestört.',
+  geblendet: 'Nächster Block −2; bis Startphase kein Reaktions-Glitch.',
   gift: 'Tick-Schaden über Züge; stapelbar bis Cap.',
-  ueberflutet: 'Wasser-Überladung: Kontrolle / Bewegung beeinträchtigt.',
-  fokus: 'Konzentration: stärkt nächste Aktion oder Impuls.',
-  ausgeblendet: 'Schwerer zu treffen / aus dem Fokus genommen.',
+  toxisch: 'Beim nächsten Boost oder Gegenstand: 1 Lebensschaden. Danach entfernen.',
+  ueberflutet: 'Bis zu 2 Schild entfernt / Block −1 wenn kein Schild.',
+  fokus: 'Konzentration: stärkt nächste Aktion.',
+  ausgeblendet: 'Schwerer zu treffen / aus dem Fokus.',
+  heilblockade: 'Keine Heilung bis zum angegebenen Zeitpunkt.',
+  katalysatorausfall: 'Katalysator wird bei der nächsten Formelaktivierung ignoriert.',
+  stabilitaetsbruch: 'Gewählte Formelkomponente vorübergehend −1 Stabilität.',
 };
 
 const SHIELD_EFFECT_DE =
   'Schild absorbiert Schaden vor Leben (nicht gleich Vollblock). Max. 5.';
 
-const FALLBACK_DE = 'Aktiver Status — siehe Regelwerk V3 für Details.';
+const FALLBACK_DE = 'Aktiver Status — siehe SPIELANLEITUNG_V5_DRAFT / Spielkonzept.';
+
+/** Display name for chips (V5 labels for primary marks). */
+export function statusLabelDe(id: string): string {
+  if (id in PRIMARY_MARK_LABEL_DE) {
+    return PRIMARY_MARK_LABEL_DE[id as PrimaryMarkId];
+  }
+  if (isStatusId(id)) {
+    return id
+      .split('_')
+      .map((p) => p.charAt(0).toUpperCase() + p.slice(1))
+      .join(' ');
+  }
+  return id;
+}
 
 /** Wirkungstext für einen Status; unbekannte Ids → generischer Fallback. */
 export function statusEffectCopyDe(id: string): string {
-  if (id in STATUS_EFFECT_DE) {
-    return STATUS_EFFECT_DE[id as StatusId];
+  if (isStatusId(id)) {
+    return STATUS_EFFECT_DE[id];
   }
   return FALLBACK_DE;
 }
