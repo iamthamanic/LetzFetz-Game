@@ -12,6 +12,7 @@ import {
   type EnginePartAssetEntry,
 } from '../../../services/engineAssets/partRegistry';
 import { PartModel } from './PartModel';
+import { shouldEnableEngineOutline } from './EngineMaterials';
 import { attachToSocket, detachFromParent } from './model-utils';
 
 const SOCKET_DRIVE = 'SOCKET_DRIVE';
@@ -53,6 +54,7 @@ export function WeaponAssembler({
   const carrierEntry = resolveEntry(recipe.carrierId);
   const driveEntry = resolveEntry(recipe.driveId);
   const attachmentEntry = resolveEntry(recipe.attachmentId);
+  const outline = shouldEnableEngineOutline(reducedMotion);
 
   const onCarrierReady = useCallback((scene: Object3D | null) => {
     if (scene) scenesRef.current.carrier = scene;
@@ -197,12 +199,14 @@ export function WeaponAssembler({
       <PartModel
         url={carrierEntry.modelUrl}
         assetId={carrierEntry.id}
+        outline={outline}
         onReady={onCarrierReady}
       />
       {driveEntry ? (
         <PartModel
           url={driveEntry.modelUrl}
           assetId={driveEntry.id}
+          outline={outline}
           onReady={onDriveReady}
         />
       ) : null}
@@ -210,6 +214,7 @@ export function WeaponAssembler({
         <PartModel
           url={attachmentEntry.modelUrl}
           assetId={attachmentEntry.id}
+          outline={outline}
           onReady={onAttachmentReady}
         />
       ) : null}

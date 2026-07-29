@@ -64,9 +64,23 @@ Regenerate boxes + specs: `npm run generate:engine-part-glbs -- --all` (alias: `
 
 **Pilot real meshes (#165):** the trio above are low-poly prisms/spike (`placeholder: false`, spec `version: 2`). Regenerate with `npm run generate:pilot-engine-glbs` — do **not** overwrite them with `--all` box regen unless intentional. Remaining 33 parts stay unit-box placeholders.
 
+## Materials / toon look (#183)
+
+| Piece | Location |
+|-------|----------|
+| Semantic classes → `MeshToonMaterial` | `src/components/engine3d/three/EngineMaterials.ts` |
+| Apply on part clone | `PartModel` → `applyEngineLook` |
+| Outline | `EdgesGeometry` LineSegments (`__engineToonOutline`); off when `prefers-reduced-motion` or low `hardwareConcurrency` / `deviceMemory` |
+| Element tint | Cosmetic from part id (`v3-part-<element>-…`) on core/emission/fallback only — **not** rules |
+| Cache invalidation | Bump `ENGINE_RENDER_VERSION` (currently **3**) when look contract changes |
+
+Unknown glTF material names → `MAT_FALLBACK` toon (no crash). Gameplay / `src/game/` never imports materials.
+
+Classes: `MAT_METAL`, `MAT_RUBBER`, `MAT_GLASS`, `MAT_WOOD`, `MAT_CONCRETE`, `MAT_CERAMIC`, `MAT_ELEMENT_CORE`, `MAT_EMISSION` — see [`asset-specification.md`](./asset-specification.md).
+
 ## Assembly
 
-1. Load Träger GLB → clone scene  
+1. Load Träger GLB → clone scene (+ toon remap / outline)  
 2. Attach Antrieb under Träger `SOCKET_DRIVE`  
 3. Attach Aufsatz under Antrieb `SOCKET_OUTPUT`  
 4. Missing socket: Dev overlay + `console.error` with asset id; Prod German fallback string  
