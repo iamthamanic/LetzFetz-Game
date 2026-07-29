@@ -15,5 +15,5 @@ export * from './invariants';
 export * from './rulesetFromState';
 export * from './phraseBuild';
 export * from './phraseBonuses';
-export * from './engineRecipe';
-export * from './adapterPairDisplay';
+export * from './formulaSlots';
+export * from './formulaResolve';

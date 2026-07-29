@@ -129,6 +129,7 @@ export function createGame(config: CreateGameConfig): GameState {
       essenz: null,
       katalysator: null,
     } as GameState['players']['p1']['formula'],
+    formulaPrep: null,
     ultimateAvailable: true,
     doubleNextAttack: false,
     notes: '',

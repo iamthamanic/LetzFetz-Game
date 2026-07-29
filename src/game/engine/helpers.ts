@@ -36,6 +36,9 @@ export function cloneState(state: GameState): GameState {
         hand: [...src.players.p1.hand],
         bound: src.players.p1.bound.map((b) => ({ ...b })),
         formula: cloneFormulaBoard(src.players.p1.formula),
+        formulaPrep: src.players.p1.formulaPrep
+          ? { ...src.players.p1.formulaPrep }
+          : null,
         statuses: (src.players.p1.statuses ?? []).map((s) => ({ ...s })),
         shield: src.players.p1.shield ?? 0,
         fetzCharge: src.players.p1.fetzCharge ?? 0,
@@ -45,6 +48,9 @@ export function cloneState(state: GameState): GameState {
         hand: [...src.players.p2.hand],
         bound: src.players.p2.bound.map((b) => ({ ...b })),
         formula: cloneFormulaBoard(src.players.p2.formula),
+        formulaPrep: src.players.p2.formulaPrep
+          ? { ...src.players.p2.formulaPrep }
+          : null,
         statuses: (src.players.p2.statuses ?? []).map((s) => ({ ...s })),
         shield: src.players.p2.shield ?? 0,
         fetzCharge: src.players.p2.fetzCharge ?? 0,
