@@ -34,6 +34,10 @@ export function buildMainDeckInstances(pack: ContentPack, rng: Rng): CardInstanc
   const defs = [
     ...pack.elementCards,
     ...(pack.engineParts ?? []),
+    ...(pack.techniques ?? []),
+    ...(pack.essences ?? []),
+    ...(pack.catalysts ?? []),
+    ...(pack.items ?? []),
     ...pack.glitches,
   ];
   const instances = defs.map((d) => ({
