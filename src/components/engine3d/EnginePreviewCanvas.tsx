@@ -7,6 +7,8 @@ import React, { Suspense, useEffect, useRef, useState, useCallback } from 'react
 import { Canvas } from '@react-three/fiber';
 import { Html } from '@react-three/drei';
 import type { EngineRecipe } from '../../game/types/engineVisual';
+import { EnginePerfHud } from './EnginePerfHud';
+import { isEnginePerfHudEnabled } from './enginePerfFlag';
 import { prefersReducedMotion } from './prefersReducedMotion';
 import { EngineCamera } from './three/EngineCamera';
 import { EngineLighting } from './three/EngineLighting';
@@ -55,12 +57,14 @@ export function EnginePreviewCanvas({
   const [webglOk, setWebglOk] = useState(true);
   const [issues, setIssues] = useState<AssemblerIssue[]>([]);
   const [reducedMotion, setReducedMotion] = useState(false);
+  const [perfHud, setPerfHud] = useState(false);
   const onGlCanvasReadyRef = useRef(onGlCanvasReady);
   onGlCanvasReadyRef.current = onGlCanvasReady;
 
   useEffect(() => {
     setWebglOk(detectWebGL());
     setReducedMotion(prefersReducedMotion());
+    setPerfHud(isEnginePerfHudEnabled());
   }, []);
 
   useEffect(() => {
@@ -76,10 +80,11 @@ export function EnginePreviewCanvas({
   if (!webglOk) {
     return (
       <div
-        className={`flex items-center justify-center rounded-lg border border-stone-700 bg-stone-950/90 p-4 text-center text-sm text-stone-300 ${className ?? ''}`}
+        className={`relative flex items-center justify-center rounded-lg border border-stone-700 bg-stone-950/90 p-4 text-center text-sm text-stone-300 ${className ?? ''}`}
         data-testid="engine-preview-no-webgl"
         role="status"
       >
+        {perfHud ? <EnginePerfHud webglActive={false} /> : null}
         3D-Vorschau nicht verfügbar (WebGL fehlt).
       </div>
     );
@@ -106,6 +111,7 @@ export function EnginePreviewCanvas({
       className={`relative overflow-hidden rounded-lg border border-stone-700 bg-gradient-to-b from-stone-900 to-stone-950 ${className ?? ''}`}
       data-testid="engine-preview-canvas"
     >
+      {perfHud ? <EnginePerfHud webglActive /> : null}
       <Canvas
         dpr={[1, 1.5]}
         gl={{ antialias: true, alpha: true, preserveDrawingBuffer: true }}

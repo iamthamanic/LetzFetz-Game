@@ -88,6 +88,7 @@
             "test:e2e:ui": "playwright test --ui",
             "test:e2e:visual-mvp": "playwright test e2e/fetz-3d-visual-regression-mvp.spec.ts",
             "test:e2e:visual-mvp:update": "playwright test e2e/fetz-3d-visual-regression-mvp.spec.ts --update-snapshots",
+            "test:e2e:mobile-perf": "playwright test e2e/fetz-3d-mobile-perf.spec.ts",
             "generate:mvp-engine-glbs": "npx tsx scripts/generate-mvp-placeholder-glbs.ts --all",
             "generate:engine-part-glbs": "npx tsx scripts/generate-mvp-placeholder-glbs.ts",
             "generate:pilot-engine-glbs": "npx tsx scripts/generate-pilot-real-glbs.ts",

@@ -121,6 +121,8 @@ Placeholder boxes use very low `maxTriangles` (e.g. 48). Pilot meshes (#165) use
 
 Over budget → `asset:validate` exit `1`.
 
+**Runtime (mobile preview):** interactive floor ≥30 FPS / ≤1 Live-3D canvas — see [`mobile-perf-report.md`](./mobile-perf-report.md). Triangle/byte caps above are unchanged by the #193 measure pass.
+
 ## 5. Material names (semantic classes)
 
 Gameplay **never** reads materials for rules (ADR D6). Central mapping / toon outline is a follow-up (`EngineMaterials`). Authors should name glTF materials with stable prefixes so remapping works:
