@@ -92,6 +92,7 @@
             "asset:validate": "node tools/asset-pipeline/validate.mjs",
             "asset:preview": "node tools/asset-pipeline/preview.mjs",
             "asset:all": "node tools/asset-pipeline/all.mjs",
+            "asset:blender": "node tools/blender/run.mjs",
             "generate:card-art": "npx tsx scripts/generate-base-pack-art.ts",
             "generate:element-effect-art": "npx tsx scripts/generate-element-effect-art.ts",
             "generate:higgsfield-chars": "npx tsx scripts/generate-higgsfield-characters.ts",

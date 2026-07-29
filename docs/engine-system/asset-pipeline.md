@@ -10,8 +10,21 @@ Local npm commands to validate / preview modular engine part assets. Mirrors `to
 | Script | Command | Today |
 |--------|---------|--------|
 | Validate | `npm run asset:validate -- <asset-id>` | Real: GLB exists, SOCKET_* nodes vs spec, triangle + byte budgets |
-| Preview | `npm run asset:preview -- <asset-id>` | Stub: path + in-app snapshot hint |
+| Preview | `npm run asset:preview -- <asset-id>` | Stub: path + in-app snapshot hint (Blender render: `asset:blender`) |
 | All | `npm run asset:all -- <asset-id>` | Runs validate then preview |
+| Blender | `npm run asset:blender -- <script> <asset-id>` | `validate_sockets` / `normalize_part` / `render_preview` (#184) |
+
+## Blender CLI (#184)
+
+Requires Blender on `PATH` or `BLENDER_BIN`. Missing Blender → exit **1** with DE/EN message (CI `npm run checks` does **not** invoke Blender).
+
+```bash
+npm run asset:blender -- validate_sockets v3-part-water-traeger-01
+npm run asset:blender -- normalize_part v3-part-water-traeger-01
+npm run asset:blender -- render_preview v3-part-water-traeger-01 --force
+```
+
+Scripts live under `tools/blender/` (`README.md`). Preview PNG: `public/cards/engine/<id>.png` (idempotent unless `--force`). Socket names must match Spec JSON / [`asset-specification.md`](./asset-specification.md).
 
 ## Exit codes (`asset:validate`)
 
