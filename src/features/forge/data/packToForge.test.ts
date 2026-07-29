@@ -42,6 +42,7 @@ describe('packToForgeCards', () => {
     const part = packToForgeCards().find((c) => c.id === 'v3-part-water-traeger-01');
     expect(part?.type).toBe('Engine');
     expect(part?.name).toBeTruthy();
-    expect(part?.image_asset).toContain('v3-part-water-traeger-01');
+    // Static engine PNGs not shipped yet — empty avoids broken <img> (snapshot/detail canvas instead).
+    expect(part?.image_asset).toBe('');
   });
 });

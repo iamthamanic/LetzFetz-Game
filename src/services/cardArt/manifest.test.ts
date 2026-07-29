@@ -57,14 +57,14 @@ describe('card art manifest', () => {
     expect(resolveCardArtPath('ulti-knuspergnom')).toBe('/cards/ultimate/ulti-knuspergnom.png');
   });
 
-  it('resolves engine part art from registry previewUrl', () => {
+  it('suppresses missing engine PNG URLs until ENGINE_PART_PNG_ART_SHIPPED', () => {
     for (const part of V3_ENGINE_PARTS_36) {
-      expect(resolveCardArtPath(part.id)).toBe(`/cards/engine/${part.id}.png`);
-      expect(resolveEnginePartArtPath(part.id)).toBe(`/cards/engine/${part.id}.png`);
+      expect(resolveCardArtPath(part.id)).toBe('');
+      expect(resolveEnginePartArtPath(part.id)).toBe('');
     }
   });
 
-  it('falls back to PNG path when previewUrl is blank', () => {
+  it('falls back to PNG path when previewUrl is blank (path helper)', () => {
     expect(enginePartPreviewOrFallback('v3-part-water-traeger-01', '')).toBe(
       '/cards/engine/v3-part-water-traeger-01.png',
     );
