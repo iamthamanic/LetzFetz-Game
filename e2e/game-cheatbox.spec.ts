@@ -77,7 +77,7 @@ test.describe('Game Cheatbox — playtest panel', () => {
     await page.getByLabel('Bot pausieren').uncheck();
     await page.waitForTimeout(1500);
 
-    await page.getByRole('button', { name: 'Cards' }).click();
+    await page.getByRole('button', { name: 'Material' }).click();
     await expect(page.getByText(/V1-Karten|Character|Element/i).first()).toBeVisible({
       timeout: 10000,
     });

@@ -10,10 +10,10 @@ import { CARD_ELEMENT_DE } from '../../components/cards/cardTypes';
 import { getUltimateForCharacter } from '../../game/packs/characterSetup';
 import { CardNamePlate } from '../../components/ui/CardNamePlate';
 import { CardDividerBar } from '../../components/cards/grungeCardParts';
-import { ElementIcon, ELEMENT_LABELS_DE } from '../../components/ui/ElementIcon';
-import { characterUsesMysteryIcon } from '../../services/icons/elementIcons';
 import { CardIllustrationLoop } from '../../components/ui/CardIllustrationLoop';
 import { CardGrungeOverlay } from '../../components/ui/CardGrungeOverlay';
+import { CardElementMarks } from '../../components/cards/CardElementMarks';
+import { resolveCardElementMarks } from '../../components/cards/elementMarks';
 
 const CARD_TYPE_DE: Record<string, string> = {
   attack: 'Angriff',
@@ -80,6 +80,13 @@ export function CardLibraryDetailBack({
   const elementLabel =
     card.elementDisplay || CARD_ELEMENT_DE[card.element] || card.element;
 
+  const elementMarks = resolveCardElementMarks({
+    id: card.id,
+    type: card.type,
+    element: card.element,
+    gameElements: characterDef?.elements,
+  });
+
   const instantLines: string[] = [];
   const boundLines: string[] = [];
   const otherEffectLines: string[] = [];
@@ -142,27 +149,22 @@ export function CardLibraryDetailBack({
           {characterDef ? (
             <>
               <DetailRow label="Elemente">
-                {characterUsesMysteryIcon(characterDef.id) ? (
-                  <span className="inline-flex items-center gap-1.5 text-on-parchment">
-                    <ElementIcon element="mystery" size="sm" variant="grunge" />
-                    Frei / Frei
-                  </span>
-                ) : (
-                  <span className="inline-flex flex-wrap items-center gap-x-2 gap-y-1 text-on-parchment">
-                    <span className="inline-flex items-center gap-1">
-                      <ElementIcon element={characterDef.elements[0]} size="sm" variant="grunge" />
-                      {ELEMENT_LABELS_DE[characterDef.elements[0]]}
-                    </span>
-                    <span aria-hidden className="opacity-70">
-                      /
-                    </span>
-                    <span className="inline-flex items-center gap-1">
-                      <ElementIcon element={characterDef.elements[1]} size="sm" variant="grunge" />
-                      {ELEMENT_LABELS_DE[characterDef.elements[1]]}
-                    </span>
-                  </span>
-                )}
+                <CardElementMarks
+                  info={elementMarks}
+                  showMarks={false}
+                  testId="detail-elements"
+                />
               </DetailRow>
+              {elementMarks.marks.length > 0 ? (
+                <DetailRow label="Elementeffekte">
+                  <CardElementMarks
+                    info={elementMarks}
+                    showIcons={false}
+                    showMarks
+                    testId="detail-element-marks"
+                  />
+                </DetailRow>
+              ) : null}
               <DetailRow label="Rolle">{characterDef.role}</DetailRow>
               <DetailRow label="Passiv">{characterDef.passiveText}</DetailRow>
               <DetailRow label="Strategie">{characterDef.strategyHint}</DetailRow>
@@ -177,7 +179,27 @@ export function CardLibraryDetailBack({
             </>
           ) : (
             <>
-              <DetailRow label="Element">{elementLabel}</DetailRow>
+              <DetailRow label="Element">
+                {elementMarks.icons.length > 0 ? (
+                  <CardElementMarks
+                    info={elementMarks}
+                    showMarks={false}
+                    testId="detail-elements"
+                  />
+                ) : (
+                  elementLabel
+                )}
+              </DetailRow>
+              {elementMarks.marks.length > 0 ? (
+                <DetailRow label="Elementeffekt">
+                  <CardElementMarks
+                    info={elementMarks}
+                    showIcons={false}
+                    showMarks
+                    testId="detail-element-marks"
+                  />
+                </DetailRow>
+              ) : null}
               {cardTypeLabel ? <DetailRow label="Typ">{cardTypeLabel}</DetailRow> : null}
               {card.stats_json?.value != null ? (
                 <DetailRow label="Wert">{card.stats_json.value}</DetailRow>

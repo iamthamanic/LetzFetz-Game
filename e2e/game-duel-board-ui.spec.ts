@@ -99,7 +99,7 @@ test.describe('Game Duel Board UI — Sprint 1', () => {
       timeout: 5000,
     });
 
-    await page.getByRole('button', { name: 'Cards' }).click();
+    await page.getByRole('button', { name: 'Material' }).click();
     await expect(page.getByText(/V1-Karten|Character|Element/i).first()).toBeVisible({
       timeout: 10000,
     });

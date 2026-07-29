@@ -23,7 +23,7 @@ interface AppNavProps {
 
 const NAV_ITEMS: TabItem[] = [
   { id: 'play', label: 'Play', icon: <Gamepad2 className="h-4 w-4 shrink-0" />, tone: 'play' },
-  { id: 'forge', label: 'Cards', icon: <Layers className="h-4 w-4 shrink-0" />, tone: 'editor' },
+  { id: 'forge', label: 'Material', icon: <Layers className="h-4 w-4 shrink-0" />, tone: 'editor' },
   { id: 'arena', label: 'Sandbox', icon: <Swords className="h-4 w-4 shrink-0" />, tone: 'sandbox' },
   {
     id: 'settings',

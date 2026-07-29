@@ -1,5 +1,5 @@
 /**
- * Cards tab — library inventory; click opens preview modal with optional inline editor.
+ * Material tab — library inventory; click opens preview modal with optional inline editor.
  * Location: src/features/forge/ForgeView.tsx
  */
 import React, { useState, useEffect, useCallback } from 'react';
@@ -28,7 +28,8 @@ function prepareCardForEdit(card: ForgeCardData): ForgeCardData {
 }
 
 function createKindFromFilter(filter: CardLibraryFilter): CardKind {
-  return filter === 'All' ? 'Element' : filter;
+  if (filter === 'All' || filter === 'Effects') return 'Element';
+  return filter;
 }
 
 export function ForgeView() {
@@ -246,17 +247,20 @@ export function ForgeView() {
     }
   };
 
-  const filteredCards = cards
-    .filter((c) => activeFilter === 'All' || c.type === activeFilter)
-    .filter(
-      (c) =>
-        !searchTerm ||
-        c.id.toLowerCase().includes(searchTerm.toLowerCase()) ||
-        c.name.toLowerCase().includes(searchTerm.toLowerCase()) ||
-        c.element.toLowerCase().includes(searchTerm.toLowerCase()) ||
-        (c.elementDisplay?.toLowerCase().includes(searchTerm.toLowerCase()) ?? false) ||
-        c.effects.some((e) => e.toLowerCase().includes(searchTerm.toLowerCase())),
-    );
+  const filteredCards =
+    activeFilter === 'Effects'
+      ? []
+      : cards
+          .filter((c) => activeFilter === 'All' || c.type === activeFilter)
+          .filter(
+            (c) =>
+              !searchTerm ||
+              c.id.toLowerCase().includes(searchTerm.toLowerCase()) ||
+              c.name.toLowerCase().includes(searchTerm.toLowerCase()) ||
+              c.element.toLowerCase().includes(searchTerm.toLowerCase()) ||
+              (c.elementDisplay?.toLowerCase().includes(searchTerm.toLowerCase()) ?? false) ||
+              c.effects.some((e) => e.toLowerCase().includes(searchTerm.toLowerCase())),
+          );
 
   return (
     <div className="flex min-h-0 flex-1 bg-stone-950 text-stone-100">
