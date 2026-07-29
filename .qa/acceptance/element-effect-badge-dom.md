@@ -14,7 +14,7 @@ Elementeffekt cards (Material → Effekte) must expose the element badge as its 
 - [ ] DOM picker can hit the element badge without selecting the full mark ImageWithFallback
 - [ ] Luft (`air`) badge on ElementEffectCard uses white–gray chip (stone/neutral), not sky blue
 - [ ] Other elements’ badges keep their existing colors
-- [ ] Luft elsewhere (play chips, frame stripes, default ElementIcon) stays sky blue unless this ticket changes them
+- [ ] Luft default (ElementIcon / frames) is also white–gray — see `air-element-neutral-gray.md`
 
 ## Edge Cases
 - [ ] Compact sizes (`sm`/`md`) still show a readable badge without layout break
@@ -27,7 +27,7 @@ Elementeffekt cards (Material → Effekte) must expose the element badge as its 
 
 ## Assumptions
 - Badge was already a React overlay; hit-testing failed due to `pointer-events-none` on the badge stack
-- Neutral Luft tone is scoped to effect-card badges only (shared ELEMENT_META sky remains default)
+- Follow-up: global Luft default is stone white/gray (no `airTone` prop)
 
 ## Screenshots
 | Step | Filename |
@@ -39,5 +39,5 @@ Elementeffekt cards (Material → Effekte) must expose the element badge as its 
 - Files touched: `src/components/cards/ElementEffectCard.tsx`, `src/components/ui/ElementIcon.tsx`, `.qa/acceptance/element-effect-badge-dom.md`
 - Root cause: badge was already a Lucide overlay `span`, but parent used `pointer-events-none` so DOM picker hit the mark `img`
 - Fix: remove `pointer-events-none` from badge stack; classes `element-badge` / `element-badge-{element}` + `data-testid="element-badge"`
-- Luft on effect cards: `airTone="neutral"` → stone-100 / stone-700 chip; global Luft stays sky
+- Luft: default ElementIcon air tokens are stone-100 / stone-700 (global); see `air-element-neutral-gray.md`
 - Unit tests: none (UI hit-test / token styling)
