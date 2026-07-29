@@ -1,12 +1,12 @@
 # Adding a new Fetzgerät part
 
-Checklist for authors and agents. Follow ADR [`architecture.md`](./architecture.md). Slots stay **Träger / Antrieb / Aufsatz** in gameplay; English recipe fields are DTO aliases only.
+Checklist for authors and agents. Follow ADR [`architecture.md`](./architecture.md) and the binding [`asset-specification.md`](./asset-specification.md). Slots stay **Träger / Antrieb / Aufsatz** in gameplay; English recipe fields are DTO aliases only.
 
 ## 0. Preconditions
 
 - [ ] Part has a stable **defId** (e.g. `v3-part-water-traeger-01`) shared by pack content and registry
 - [ ] Slot role chosen: `traeger` | `antrieb` | `aufsatz`
-- [ ] Required sockets for that role known (ADR §5)
+- [ ] Required sockets for that role known ([`asset-specification.md`](./asset-specification.md) / ADR §5 / `SOCKETS_BY_SLOT`)
 
 ## 1. Content / rules (if gameplay card)
 
@@ -51,7 +51,7 @@ npm run asset:all -- <id>
 
 ## 7. Docs & checks
 
-- [ ] Update this checklist / [`rendering.md`](./rendering.md) if sockets or surfaces change
+- [ ] Update this checklist / [`asset-specification.md`](./asset-specification.md) / [`rendering.md`](./rendering.md) if sockets or surfaces change
 - [ ] `npm run checks` green
 - [ ] Zero `three` imports under `src/game/`
 - [ ] No Meshy/API secrets in repo

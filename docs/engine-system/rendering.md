@@ -1,7 +1,7 @@
 # Rendering (Fetzgerät 3D)
 
 **Status:** Live detail canvas in Play (#133); in-memory snapshot cache + asset CLI stubs (#134); real canvas `toDataURL` capture (#146)  
-**See also:** [architecture.md](./architecture.md), [asset-pipeline.md](./asset-pipeline.md), [adding-a-new-part.md](./adding-a-new-part.md)
+**See also:** [architecture.md](./architecture.md), [asset-specification.md](./asset-specification.md), [asset-pipeline.md](./asset-pipeline.md), [adding-a-new-part.md](./adding-a-new-part.md)
 
 ## Surfaces
 
