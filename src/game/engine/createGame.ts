@@ -124,6 +124,11 @@ export function createGame(config: CreateGameConfig): GameState {
     hp: ruleset.startingHp,
     hand: [] as GameState['players']['p1']['hand'],
     bound: [] as GameState['players']['p1']['bound'],
+    formula: {
+      technik: null,
+      essenz: null,
+      katalysator: null,
+    } as GameState['players']['p1']['formula'],
     ultimateAvailable: true,
     doubleNextAttack: false,
     notes: '',

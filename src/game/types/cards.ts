@@ -58,8 +58,18 @@ export type PhraseTag = 'core' | 'mode' | 'tool';
 /** Built slot on the phrase board (V2). */
 export type PhraseSlot = PhraseTag | 'charge';
 
-/** V3 Fetzgerät roles (§12) — target model replaces permanent V2 phrase truth. */
+/** V3 Fetzgerät roles (§12) — legacy; V5 uses FormulaSlot. */
 export type FetzgeraetSlot = 'traeger' | 'antrieb' | 'aufsatz';
+
+/** V5 Formelplätze (Technik / Essenz / Katalysator). */
+export type FormulaSlot = 'technik' | 'essenz' | 'katalysator';
+
+export type FormulaActivationMode =
+  | 'instant'
+  | 'prep_attack'
+  | 'prep_block'
+  | 'prep_boost'
+  | 'reaction';
 
 /** Map legacy V2 phrase slots → V3 Fetzgerät roles (charge has no role slot). */
 export const PHRASE_TO_FETZ: Record<Exclude<PhraseSlot, 'charge'>, FetzgeraetSlot> = {
@@ -96,13 +106,50 @@ export interface EnginePartCardDef extends CardBase {
   activateCost?: number;
 }
 
+/** V5 Technik — execution form; no element. */
+export interface TechniqueCardDef extends CardBase {
+  kind: 'technique';
+  stability: number;
+  activationMode: FormulaActivationMode;
+  effectText: string;
+  visual?: import('./formulaVisual').TechniqueVisual;
+}
+
+/** V5 Essenz — secondary element + status contribution. */
+export interface EssenceCardDef extends CardBase {
+  kind: 'essence';
+  element: Element;
+  stability: number;
+  effectText: string;
+  visual?: import('./formulaVisual').EssenceVisual;
+}
+
+/** V5 Katalysator — timing / transformation. */
+export interface CatalystCardDef extends CardBase {
+  kind: 'catalyst';
+  stability: number;
+  effectText: string;
+  visual?: import('./formulaVisual').CatalystVisual;
+}
+
+/** V5 Gegenstand — one-shot tactical card. */
+export interface ItemCardDef extends CardBase {
+  kind: 'item';
+  timing: 'action' | 'reaction';
+  effectText: string;
+}
+
 export type CardDef =
   | ElementCardDef
   | CharacterCardDef
   | UltimateCardDef
   | ArenaCardDef
   | GlitchCardDef
-  | EnginePartCardDef;
+  | EnginePartCardDef
+  | TechniqueCardDef
+  | EssenceCardDef
+  | CatalystCardDef
+  | ItemCardDef;
 
 /** Runtime card instance in a match (deck/hand/bound). */
 export interface CardInstance {
@@ -122,6 +169,16 @@ export interface BoundCardInstance extends CardInstance {
   fetzSlot?: FetzgeraetSlot;
 }
 
+/** V5 Formelkomponente on the formula board. */
+export interface FormulaComponentInstance extends CardInstance {
+  slot: FormulaSlot;
+  exhausted: boolean;
+  /** V5 §24 — disturbed components ignore effect/element until start restore. */
+  disturbed: boolean;
+  /** Temporary stability delta until owner's next start (can be negative). */
+  stabilityBonus: number;
+}
+
 export interface ContentPack {
   id: string;
   name: string;
@@ -133,6 +190,11 @@ export interface ContentPack {
   glitches: GlitchCardDef[];
   /** V2 phrase parts — optional; included in main deck when present. */
   engineParts?: EnginePartCardDef[];
+  /** V5 Formelkomponenten — optional; main deck when present. */
+  techniques?: TechniqueCardDef[];
+  essences?: EssenceCardDef[];
+  catalysts?: CatalystCardDef[];
+  items?: ItemCardDef[];
   /** V3 Area51 blueprint seed combos (optional). */
   blueprints?: import('./blueprint').BlueprintDef[];
 }

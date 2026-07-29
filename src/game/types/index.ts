@@ -5,6 +5,7 @@ export * from './impulseSchema';
 export * from './cards';
 export * from './blueprint';
 export * from './engineVisual';
+export * from './formulaVisual';
 export * from './matchMeta';
 export * from './game';
 export * from './actions';
