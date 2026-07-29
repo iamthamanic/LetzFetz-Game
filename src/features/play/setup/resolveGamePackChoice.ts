@@ -7,12 +7,14 @@ import {
   V2_P100_PACK,
   P100_RULESET,
   V3_RULESET,
+  V5_PACK,
+  V5_PACK_RULESET,
   type ContentPack,
   type RulesetConfig,
 } from '../../../game';
 
-/** Kartenset tile in Play setup (V1 base, V2 P100, or V3 combat on base cards). */
-export type GamePackChoice = 'base' | 'p100' | 'v3';
+/** Kartenset tile in Play setup. */
+export type GamePackChoice = 'base' | 'p100' | 'v3' | 'v5';
 
 export interface ResolvedGamePackChoice {
   pack: ContentPack;
@@ -23,6 +25,8 @@ export interface ResolvedGamePackChoice {
 /** Resolve Kartenset tile to engine pack + optional ruleset / playtest HP cap. */
 export function resolveGamePackChoice(choice: GamePackChoice): ResolvedGamePackChoice {
   switch (choice) {
+    case 'v5':
+      return { pack: V5_PACK, ruleset: V5_PACK_RULESET, playtestHpCap: 20 };
     case 'p100':
       return { pack: V2_P100_PACK, ruleset: P100_RULESET, playtestHpCap: 30 };
     case 'v3':

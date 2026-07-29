@@ -40,7 +40,7 @@ export function GameSetup({
   onStart,
 }: GameSetupProps) {
   const { push } = useAppHistory();
-  const [packChoice, setPackChoice] = useState<GamePackChoice>('base');
+  const [packChoice, setPackChoice] = useState<GamePackChoice>('v5');
 
   const goPhase = (next: GameSetupPhase) => {
     if (next === phase) return;
@@ -170,12 +170,33 @@ export function GameSetup({
               </h2>
             </div>
 
-            <Panel className="mx-auto max-w-xl space-y-3" tone="game" data-testid="game-pack-select">
+            <Panel className="mx-auto max-w-2xl space-y-3" tone="game" data-testid="game-pack-select">
               <div className="flex items-center gap-2 text-sm font-medium text-stone-200">
                 <Layers className="h-4 w-4 text-purple-400" aria-hidden />
                 Kartenset
               </div>
-              <div className="grid grid-cols-1 gap-2 sm:grid-cols-3" role="group" aria-label="Kartenset wählen">
+              <div className="grid grid-cols-1 gap-2 sm:grid-cols-2 lg:grid-cols-4" role="group" aria-label="Kartenset wählen">
+                <button
+                  type="button"
+                  data-testid="game-pack-v5"
+                  aria-pressed={packChoice === 'v5'}
+                  onClick={() => setPackChoice('v5')}
+                  className={`flex flex-col items-start gap-1 rounded-lg border p-3 text-left transition-all focus:outline-none focus-visible:ring-2 focus-visible:ring-purple-500 ${
+                    packChoice === 'v5'
+                      ? 'border-emerald-500/60 bg-emerald-950/30'
+                      : 'border-stone-800 bg-stone-900/40 hover:border-stone-600'
+                  }`}
+                >
+                  <div className="flex w-full items-center justify-between gap-2">
+                    <Sparkles className="h-4 w-4 text-emerald-400" aria-hidden />
+                    {packChoice === 'v5' ? <Badge variant="success">Standard</Badge> : null}
+                  </div>
+                  <span className="text-sm font-semibold text-stone-100">V5 Formel</span>
+                  <span className="text-xs text-stone-400">
+                    MVP-9 · Gegenstände · 20 Leben
+                  </span>
+                </button>
+
                 <button
                   type="button"
                   data-testid="game-pack-base"
@@ -183,13 +204,13 @@ export function GameSetup({
                   onClick={() => setPackChoice('base')}
                   className={`flex flex-col items-start gap-1 rounded-lg border p-3 text-left transition-all focus:outline-none focus-visible:ring-2 focus-visible:ring-purple-500 ${
                     packChoice === 'base'
-                      ? 'border-emerald-500/60 bg-emerald-950/30'
+                      ? 'border-stone-500/60 bg-stone-900/60'
                       : 'border-stone-800 bg-stone-900/40 hover:border-stone-600'
                   }`}
                 >
                   <div className="flex w-full items-center justify-between gap-2">
-                    <Package className="h-4 w-4 text-emerald-400" aria-hidden />
-                    {packChoice === 'base' ? <Badge variant="success">Standard</Badge> : null}
+                    <Package className="h-4 w-4 text-stone-400" aria-hidden />
+                    {packChoice === 'base' ? <Badge variant="default">V1</Badge> : null}
                   </div>
                   <span className="text-sm font-semibold text-stone-100">Basis-Pack (V1)</span>
                   <span className="text-xs text-stone-400">70 Karten · 20 Leben</span>
