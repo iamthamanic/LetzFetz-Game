@@ -24,6 +24,14 @@ export type GameAction =
     }
   | { type: 'BUILD_CARD'; cardInstanceId: string; discardBoundId?: string }
   | { type: 'SKIP_BUILD' }
+  /** V5 Formelphase: place Technik/Essenz/Katalysator into empty matching slot. */
+  | { type: 'FORMULA_BUILD'; cardInstanceId: string }
+  /** V5 Formelphase: discard occupied slot component, place new same-slot-type from hand. */
+  | { type: 'FORMULA_REPLACE'; cardInstanceId: string }
+  /** V5 Formelphase: activate upright non-disturbed components (exhaust; full resolve #221). */
+  | { type: 'FORMULA_ACTIVATE' }
+  /** V5 Formelphase: discard formula card from hand for one-shot (stub effect until #221). */
+  | { type: 'FORMULA_SCHNELLMIX'; cardInstanceId: string }
   | { type: 'END_TURN' }
   /** Playable glitch (own turn main action, or reaction when pendingChoice allows). */
   | {

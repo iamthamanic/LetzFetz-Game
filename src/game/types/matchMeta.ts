@@ -38,6 +38,8 @@ export interface MatchMeta {
   monoBonusMode?: MonoBonusMode;
   /** Playtest / match: enable V3 combat layer (impulses, reactions, shield). */
   v3CombatEnabled?: boolean;
+  /** Match: enable V5 Formelboard (Technik/Essenz/Katalysator). */
+  v5FormulaEnabled?: boolean;
   /** V3: reactions resolved in the current main action (max 1 by default). */
   v3ReactionsThisAction?: number;
   /** V3 Finsternis: block new shield until current action ends. */

@@ -164,6 +164,9 @@ export function createGame(config: CreateGameConfig): GameState {
   if (ruleset.v3Combat === true) {
     state.meta.v3CombatEnabled = true;
   }
+  if (ruleset.v5Formula === true) {
+    state.meta.v5FormulaEnabled = true;
+  }
 
   const skippedInstants: CardInstance[] = [];
 
