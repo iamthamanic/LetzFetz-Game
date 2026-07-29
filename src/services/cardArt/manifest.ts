@@ -113,27 +113,37 @@ export function enginePartPreviewOrFallback(cardId: string, previewUrl: string):
 
 /**
  * When false, `resolveEnginePartArtPath` does not emit `/cards/engine/{id}.png`
- * URLs (those files are not committed yet). Returning the path made Vite serve
- * `index.html` (200) → ImageWithFallback broken-icon. Play still prefers
- * snapshot cache via `resolveEnginePartThumb`. Flip after shipping all 36 PNGs.
+ * URLs. When true, only ids in `ENGINE_PART_PNG_SHIPPED_IDS` resolve (MVP trio
+ * first; batch issues grow the set). Play still prefers snapshot cache via
+ * `resolveEnginePartThumb`.
  */
-export const ENGINE_PART_PNG_ART_SHIPPED = false;
+export const ENGINE_PART_PNG_ART_SHIPPED = true;
+
+/** Committed preview PNGs under `public/cards/engine/` (grow with GLB batches). */
+export const ENGINE_PART_PNG_SHIPPED_IDS: ReadonlySet<string> = new Set([
+  'v3-part-water-traeger-01',
+  'v3-part-shadow-antrieb-01',
+  'v3-part-light-aufsatz-01',
+]);
 
 /**
  * Resolve static art for a registered engine part.
  * Prefers registry `previewUrl`; blank/missing → `/cards/engine/{id}.png`
- * when `ENGINE_PART_PNG_ART_SHIPPED`. Unknown id → empty string.
+ * when shipped for that id. Unknown id → empty string.
  */
 export function resolveEnginePartArtPath(cardId: string): string {
   const entry = lookupEnginePartAsset(cardId);
   if (!entry) return '';
-  if (!ENGINE_PART_PNG_ART_SHIPPED) {
-    const preview = entry.previewUrl.trim();
-    // Convention paths 404 until assets land; keep non-convention overrides.
-    if (!preview || preview.startsWith(`${ENGINE_CARD_ART_PUBLIC_ROOT}/`)) {
-      return '';
+  if (!ENGINE_PART_PNG_ART_SHIPPED || !ENGINE_PART_PNG_SHIPPED_IDS.has(cardId)) {
+    if (!ENGINE_PART_PNG_ART_SHIPPED) {
+      const preview = entry.previewUrl.trim();
+      // Convention paths 404 until assets land; keep non-convention overrides.
+      if (!preview || preview.startsWith(`${ENGINE_CARD_ART_PUBLIC_ROOT}/`)) {
+        return '';
+      }
+      return publicAssetUrl(preview);
     }
-    return publicAssetUrl(preview);
+    return '';
   }
   return enginePartPreviewOrFallback(cardId, entry.previewUrl);
 }

@@ -10,7 +10,7 @@ Local npm commands to validate / preview modular engine part assets. Mirrors `to
 | Script | Command | Today |
 |--------|---------|--------|
 | Validate | `npm run asset:validate -- <asset-id>` | Real: GLB exists, SOCKET_* nodes vs spec, triangle + byte budgets |
-| Preview | `npm run asset:preview -- <asset-id>` | Stub: path + in-app snapshot hint (Blender render: `asset:blender`) |
+| Preview | `npm run asset:preview -- <asset-id>` | Real: Blender `render_preview` → `public/cards/engine/<id>.png` (#185) |
 | All | `npm run asset:all -- <asset-id>` | Runs validate then preview |
 | Blender | `npm run asset:blender -- <script> <asset-id>` | `validate_sockets` / `normalize_part` / `render_preview` (#184) |
 

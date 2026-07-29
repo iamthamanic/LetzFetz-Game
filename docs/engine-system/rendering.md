@@ -7,7 +7,7 @@
 
 | UI | Tech |
 |----|------|
-| Cards / board thumbs | Snapshot cache hit (`resolveEnginePartThumb`) → else static PNG when `ENGINE_PART_PNG_ART_SHIPPED`, else empty (no broken img) |
+| Cards / board thumbs | Snapshot cache hit (`resolveEnginePartThumb`) → else static PNG for ids in `ENGINE_PART_PNG_SHIPPED_IDS` (MVP trio #185) when `ENGINE_PART_PNG_ART_SHIPPED`, else empty (no broken img) |
 | Detail / build preview | Single `@react-three/fiber` canvas (`src/components/engine3d/`) |
 | Cached engine art | Snapshot keyed by `createRenderKey` (#134 / #146) |
 
