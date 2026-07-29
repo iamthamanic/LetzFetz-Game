@@ -33,11 +33,36 @@ No secrets in Git. Stub commands (`asset:spec`, …) print DE/EN status and exit
 
 | Topic | Policy |
 |-------|--------|
-| Productized MCP server for assets | **Out of scope** for MVP (ADR D7 — no Meshy/Tripo MCP productization) |
-| Cursor / agent MCP wrappers | If added later, they must **shell out to the same npm scripts** — no duplicated validate/normalize logic |
-| This doc | Bedienhinweis only: prefer teaching the CLI; do not maintain parallel MCP schemas here |
+| Productized Meshy MCP | Out of scope — use CLI `asset:model` (#198) |
+| **letz-fetz-assets-mcp** (#199) | Thin stdio server: `tools/letz-fetz-assets-mcp/server.mjs` — tools **only** `spawnSync('npm', ['run', 'asset:…'])` |
+| Cursor config | Point MCP `command` at `node` + absolute path to `server.mjs`; `cwd` = repo root |
 
-When an agent needs assets: run `npm run asset:…` (or document the exact command). Do not invent MCP tools that re-implement `tools/asset-pipeline/*.mjs` or `tools/blender/*.py`.
+### Tools (CLI mirrors)
+
+| MCP tool | npm script |
+|----------|------------|
+| `validate_model` | `asset:validate -- <asset_id>` |
+| `normalize_part` | `asset:normalize -- <asset_id>` |
+| `optimize_part` | `asset:optimize -- <asset_id>` |
+| `preview_part` | `asset:preview -- <asset_id>` |
+
+`asset_id` must match `^[a-zA-Z0-9][a-zA-Z0-9._-]{0,127}$`. Cwd is fixed to the repo root — no filesystem escape via tool args.
+
+Example Cursor MCP entry (local only):
+
+```json
+{
+  "mcpServers": {
+    "letz-fetz-assets": {
+      "command": "node",
+      "args": ["tools/letz-fetz-assets-mcp/server.mjs"],
+      "cwd": "/absolute/path/to/Letz-Fetz-Game"
+    }
+  }
+}
+```
+
+Prefer teaching the CLI. Do not add parallel validate logic inside the MCP process.
 
 ## Related
 
