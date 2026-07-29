@@ -69,7 +69,11 @@ Regenerate boxes + specs: `npm run generate:engine-part-glbs -- --all` (alias: `
 
 **Pilot real meshes (#165):** the trio above are low-poly prisms/spike (`placeholder: false`, spec `version: 2`). Regenerate with `npm run generate:pilot-engine-glbs` — `generate:engine-part-glbs --all` **skips** authored Specs (`placeholder: false`).
 
-**Batch A (#195):** fire ×6 + remaining water ×5 (excludes pilot `water-traeger-01`) via `npm run generate:batch-a-engine-glbs` — distinctive prisms/spikes, Spec `batch: "A"`, `placeholder: false`. Remaining earth/air/shadow/light (non-pilot) stay unit-box placeholders until later batches.
+**Batch A (#195):** fire ×6 + remaining water ×5 via `npm run generate:batch-a-engine-glbs`.
+
+**Batch B (#196):** earth ×6 + air ×6 via `npm run generate:batch-b-engine-glbs`.
+
+Remaining light/shadow non-pilots stay placeholders until Batch C (#197). Shared generator: `scripts/generate-batch-glbs.ts`.
 
 ## Materials / toon look (#183)
 

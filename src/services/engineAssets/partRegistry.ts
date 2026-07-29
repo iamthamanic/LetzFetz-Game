@@ -19,7 +19,7 @@ export const ENGINE_PARTS_PUBLIC_ROOT = '/engine-parts';
 export const ENGINE_CARD_ART_PUBLIC_ROOT = '/cards/engine';
 
 /** Bumped when pilot / batch meshes change enough to invalidate lookups. */
-const ASSET_VERSION = 3;
+const ASSET_VERSION = 4;
 
 function buildRegistry(): ReadonlyMap<string, EnginePartAssetEntry> {
   const entries: Array<[string, EnginePartAssetEntry]> = V3_ENGINE_PARTS_36.map(
