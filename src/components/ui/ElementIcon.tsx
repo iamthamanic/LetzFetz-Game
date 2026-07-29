@@ -38,6 +38,11 @@ interface ElementIconProps {
   showLabel?: boolean;
   variant?: ElementIconVariant;
   className?: string;
+  /**
+   * Luft only: `neutral` = white–gray chip (effect-card badges).
+   * Default keeps sky blue for play / frame / filters.
+   */
+  airTone?: 'sky' | 'neutral';
 }
 
 const SIZE_CLASSES: Record<ElementIconSize, string> = {
@@ -71,10 +76,15 @@ const MYSTERY_GLYPH_SIZE: Record<ElementIconSize, string> = {
   lg: 'text-lg',
 };
 
-const ELEMENT_META: Record<
-  Element,
-  { Icon: LucideIcon; color: string; bg: string; border: string; animClass: string }
-> = {
+type ElementVisualMeta = {
+  Icon: LucideIcon;
+  color: string;
+  bg: string;
+  border: string;
+  animClass: string;
+};
+
+const ELEMENT_META: Record<Element, ElementVisualMeta> = {
   fire: {
     Icon: Flame,
     color: 'text-red-400',
@@ -119,6 +129,15 @@ const ELEMENT_META: Record<
   },
 };
 
+/** White–gray Luft chip for ElementEffectCard badges (not global Luft identity). */
+const AIR_NEUTRAL_META: ElementVisualMeta = {
+  Icon: Wind,
+  color: 'text-stone-100',
+  bg: 'bg-stone-700/75',
+  border: 'border-stone-400/55',
+  animClass: 'element-icon-air',
+};
+
 const MYSTERY_META = {
   Icon: HelpCircle,
   color: 'text-purple-300',
@@ -127,6 +146,15 @@ const MYSTERY_META = {
   animClass: 'element-icon-shadow',
   label: 'Mysterium',
 };
+
+function resolveElementMeta(
+  element: ElementIconKind,
+  airTone: 'sky' | 'neutral',
+): ElementVisualMeta | typeof MYSTERY_META {
+  if (element === 'mystery') return MYSTERY_META;
+  if (element === 'air' && airTone === 'neutral') return AIR_NEUTRAL_META;
+  return ELEMENT_META[element];
+}
 
 function brandIconKey(element: ElementIconKind): BrandIconKey {
   return element;
@@ -211,6 +239,7 @@ export function ElementIcon({
   showLabel = false,
   variant = 'lucide',
   className = '',
+  airTone = 'sky',
 }: ElementIconProps) {
   if (variant === 'brand') {
     const iconNode = (
@@ -239,7 +268,7 @@ export function ElementIcon({
 
     const label =
       element === 'mystery' ? MYSTERY_META.label : ELEMENT_LABELS_DE[element as Element];
-    const meta = element === 'mystery' ? MYSTERY_META : ELEMENT_META[element as Element];
+    const meta = resolveElementMeta(element, airTone);
 
     return (
       <span className="inline-flex items-center gap-1.5" title={label}>
@@ -249,7 +278,7 @@ export function ElementIcon({
     );
   }
 
-  const meta = element === 'mystery' ? MYSTERY_META : ELEMENT_META[element];
+  const meta = resolveElementMeta(element, airTone);
   const { Icon } = meta;
 
   const iconNode = (

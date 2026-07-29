@@ -59,8 +59,9 @@ export function ElementEffectCard({
         />
         <div className="pointer-events-none absolute inset-0 z-[2] bg-gradient-to-t from-[#5a5048]/90 via-transparent to-brand-beige-shadow/15" />
 
+        {/* Badge stack is hit-testable (no pointer-events-none) so DOM picker / a11y can target it. */}
         <div
-          className="pointer-events-none absolute right-1 top-1 z-[3] flex flex-col items-end gap-0.5"
+          className="absolute right-1 top-1 z-[3] flex flex-col items-end gap-0.5"
           data-testid="card-art-type-badge"
         >
           <span
@@ -72,15 +73,17 @@ export function ElementEffectCard({
             Effekt
           </span>
           <span
-            className={`element-badge-shimmer inline-flex items-center rounded border border-stone-600/80 bg-black/90 shadow-md ${
+            className={`element-badge element-badge-${element} element-badge-shimmer inline-flex items-center rounded border border-stone-600/80 bg-black/90 shadow-md ${
               compact ? 'gap-0.5 px-1 py-0.5' : 'gap-1 px-1.5 py-1'
             }`}
-            data-testid="card-art-element-icons"
-            aria-label="Element"
+            data-testid="element-badge"
+            data-element={element}
+            aria-label={ELEMENT_LABELS_DE[element]}
           >
             <ElementIcon
               element={element}
               size="sm"
+              airTone={element === 'air' ? 'neutral' : 'sky'}
               className={compact ? '!p-0.5 scale-[0.72]' : '!p-0.5 scale-[0.85]'}
             />
             <span className="element-badge-shimmer__shine" aria-hidden />
