@@ -102,7 +102,7 @@
             "asset:spec": "node tools/asset-pipeline/stub.mjs spec",
             "asset:concept": "node tools/asset-pipeline/stub.mjs concept",
             "asset:multiview": "node tools/asset-pipeline/stub.mjs multiview",
-            "asset:model": "node tools/asset-pipeline/stub.mjs model",
+            "asset:model": "node tools/asset-pipeline/model.mjs",
             "asset:normalize": "node tools/asset-pipeline/normalize.mjs",
             "asset:optimize": "node tools/asset-pipeline/optimize.mjs",
             "asset:publish": "node tools/asset-pipeline/stub.mjs publish",

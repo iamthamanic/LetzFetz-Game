@@ -39,9 +39,9 @@ const COMMANDS = {
   },
   model: {
     id: true,
-    titleDe: 'Model-Stub — Mesh-Generierung (Meshy/Tripo später, keine Secrets).',
-    titleEn: 'Model stub — mesh generation (Meshy/Tripo later, no secrets).',
-    next: 'public/engine-parts/mvp/<id>.glb',
+    titleDe: 'Model — nutze npm run asset:model (Meshy opt-in), nicht diesen Stub.',
+    titleEn: 'Model — use npm run asset:model (Meshy opt-in), not this stub.',
+    next: 'docs/engine-system/raw/<id>/model.glb',
   },
   // normalize / optimize are real runners (see normalize.mjs / optimize.mjs) — #190
   publish: {

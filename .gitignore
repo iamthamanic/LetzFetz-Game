@@ -39,3 +39,6 @@ tools/hf.tar.gz
 # Python (Blender scripts)
 __pycache__/
 *.py[cod]
+
+# Meshy raw downloads (#198)
+docs/engine-system/raw/
