@@ -1,7 +1,7 @@
 # Asset pipeline (Fetzgerät 3D)
 
 **Status:** Validate is real (#164) — no Meshy, no paid APIs  
-**See also:** [architecture.md](./architecture.md), [adding-a-new-part.md](./adding-a-new-part.md)
+**See also:** [architecture.md](./architecture.md), [asset-specification.md](./asset-specification.md), [adding-a-new-part.md](./adding-a-new-part.md)
 
 ## Purpose
 

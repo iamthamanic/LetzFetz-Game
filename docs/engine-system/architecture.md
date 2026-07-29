@@ -123,7 +123,7 @@ Registry: `src/services/engineAssets/partRegistry.ts` · Spec stubs: `docs/engin
 
 ## 5. Socket contract (assets)
 
-Named nodes inside GLB (authoritative for assembler):
+Named nodes inside GLB (authoritative for assembler). Full human-readable contract: [`asset-specification.md`](./asset-specification.md) (mirrors `SOCKETS_BY_SLOT`).
 
 **Träger:** `SOCKET_DRIVE`, optional `SOCKET_ATTACHMENT_FALLBACK`, `SOCKET_VFX_REAR`  
 **Antrieb:** `SOCKET_OUTPUT`, `SOCKET_VFX_CORE`, `SOCKET_EXHAUST`  
@@ -144,6 +144,7 @@ Missing sockets: loud error + debug marker in development; controlled fallback i
 ```text
 docs/engine-system/
   architecture.md          # this file
+  asset-specification.md   # #182 sockets / budgets / preview contract
   gameplay-model.md        # stub → expand with #131
   rendering.md             # stub → expand with #133/#134
   asset-pipeline.md        # #134 (CLI stubs + snapshot notes)
