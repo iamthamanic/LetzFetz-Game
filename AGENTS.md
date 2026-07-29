@@ -105,30 +105,32 @@ Design: `.qa/design/vertical-slice-architecture.md`
 
 ## Produkt- & Spielregeln (Kurzreferenz)
 
-- 1v1, 20 Leben, 5 Zugphasen, max 4 gebundene Karten, Handlimit 6
+- 1v1, **20** Leben (V5 Playtest), 5 Zugphasen, **3 Formelplätze**, Handlimit 6
 - Elemente: Feuer, Wasser, Erde, Luft, Schatten, Licht
 - W6-Würfelbonus: 1–2 → +0, 3–4 → +1, 5–6 → +2
+- V5: Formel Technik/Essenz/Katalysator · Fetzladung max 3 · Großformel · Schild/Impulse/Marken/Reaktionen
 
 ### Regelquellen (verbindlich)
 
 | Dokument | Rolle |
 |----------|--------|
-| [`docs/rules/SPIELANLEITUNG_V1.md`](docs/rules/SPIELANLEITUNG_V1.md) | **Aktuelle Engine-Wahrheit** — physisches V1 + Default `src/game/` |
-| [`docs/rules/SPIELANLEITUNG_V2_DRAFT.md`](docs/rules/SPIELANLEITUNG_V2_DRAFT.md) | V2 spielbarer Draft — Vorgänger; **nicht** Ziel gegen V3 |
-| [`docs/rules/SPIELANLEITUNG_V2_WIP.md`](docs/rules/SPIELANLEITUNG_V2_WIP.md) | V2 Grill-Log (D1–D35); Phrase D8/E2 historisch — Zielslots siehe V3 |
-| [`docs/rules/SPIELANLEITUNG_V3_WIP.md`](docs/rules/SPIELANLEITUNG_V3_WIP.md) | **Ziel-Regelmodell** (Impulse/Marken/21 Reaktionen/Träger·Antrieb·Aufsatz); Engine hinter Flag bis Cutover |
-| [`docs/letz-fetz-v3-überarbeitung.md`](docs/letz-fetz-v3-überarbeitung.md) | V3 Volltext-Dump (§1–§20) — kanonischer Inhalt für V3 WIP |
-| `docs/rules/SPIELANLEITUNG_V3_DRAFT.md` | (geplant) spielbare V3-Prosa nach P0-Playtests |
+| [`docs/letz-fetz-v5-spielkonzept.md`](docs/letz-fetz-v5-spielkonzept.md) | **V5 Vollkonzept** (verbindlich für Cutover) |
+| [`docs/rules/SPIELANLEITUNG_V5_DRAFT.md`](docs/rules/SPIELANLEITUNG_V5_DRAFT.md) | **Ziel-Engine-Prosa V5** — Phasen, Formel, Kampfkern |
+| [`docs/rules/SPIELANLEITUNG_V1.md`](docs/rules/SPIELANLEITUNG_V1.md) | **Regression** — physisches V1 + spielbarer Base-Pfad bis Cutover |
+| [`docs/rules/SPIELANLEITUNG_V2_DRAFT.md`](docs/rules/SPIELANLEITUNG_V2_DRAFT.md) | V2 Draft — historisch |
+| [`docs/rules/SPIELANLEITUNG_V2_WIP.md`](docs/rules/SPIELANLEITUNG_V2_WIP.md) | V2 Grill-Log — historisch |
+| [`docs/rules/SPIELANLEITUNG_V3_WIP.md`](docs/rules/SPIELANLEITUNG_V3_WIP.md) | V3 Vorgänger (Fetzgerät-Slots) — Soft-Retire zugunsten V5-Formel |
+| [`docs/letz-fetz-v3-überarbeitung.md`](docs/letz-fetz-v3-überarbeitung.md) | V3 Dump — historisch / Referenz |
 
-**Bei Unklarheit:** Solange kein Cutover: V1 schlägt Prototyp-Code. **Zielentscheidungen** (Slots, Reaktionen) schlagen V2 Phrase — siehe V3 WIP Konfliktnotiz. Soft-layer „V3 nur auf Phrase“ ist verworfen (`.qa/design/v3-rules-engine.md`).
+**Bei Unklarheit:** **Produktziel = V5.** Spielbarer Default bis Engine-Cutover: Base/V1 bzw. bestehende Flags. Explizit Base-Pack → V1-Regression. V3-Fetzgerät ist nicht das Zielmodell.
 
 **Pflege-Pflicht für Agenten:**
 
 1. Regel- oder Kartentext-Änderungen an **V1** → `SPIELANLEITUNG_V1.md` sofort mitziehen.
-2. V2-Historie / Phrase-Migration → `SPIELANLEITUNG_V2_WIP.md` / `SPIELANLEITUNG_V2_DRAFT.md`.
-3. V3-Zielregeln → `SPIELANLEITUNG_V3_WIP.md` + Dump `letz-fetz-v3-überarbeitung.md` im selben Change.
-4. Default-Engine bleibt **V1**, bis V3 explizit freigegeben ist; V3-Slices dürfen hinter Ruleset-Flag landen.
-5. Kurzreferenz hier und in `.cursor/rules/game-engine.mdc` / `project-core.mdc` bei Regelbrüchen aktualisieren.
+2. V2-Historie → `SPIELANLEITUNG_V2_WIP.md` / `SPIELANLEITUNG_V2_DRAFT.md`.
+3. V3-Historie → `SPIELANLEITUNG_V3_WIP.md` + Dump (nur wenn Legacy-Pfad).
+4. **V5-Regeln** → `SPIELANLEITUNG_V5_DRAFT.md` + `letz-fetz-v5-spielkonzept.md` im selben Change.
+5. Kurzreferenz hier und in `.cursor/rules/project-core.mdc` bei Regelbrüchen aktualisieren.
 
 ---
 
@@ -294,16 +296,19 @@ Globale Agent-Skills (Pipeline + ECC-Helfer): siehe **Agent-Workflows** oben; in
 
 | Dokument | Inhalt |
 |----------|--------|
-| [SPIELANLEITUNG_V1.md](docs/rules/SPIELANLEITUNG_V1.md) | Verbindliches Regelwerk V1 (Engine-Default + physisch) |
-| [SPIELANLEITUNG_V2_DRAFT.md](docs/rules/SPIELANLEITUNG_V2_DRAFT.md) | V2 spielbarer Draft (Vorgänger) |
-| [SPIELANLEITUNG_V2_WIP.md](docs/rules/SPIELANLEITUNG_V2_WIP.md) | V2 Grill-Log (historisch vs V3-Slots) |
-| [SPIELANLEITUNG_V3_WIP.md](docs/rules/SPIELANLEITUNG_V3_WIP.md) | V3 Ziel-Regelmodell + Cutover |
-| [letz-fetz-v3-überarbeitung.md](docs/letz-fetz-v3-überarbeitung.md) | V3 Volltext-Dump |
-| [DESIGN.md](Letz-Fetz-Game/DESIGN.md) | Agent UI Brief — Navigation, Hybrid-Ton, Anti-Patterns |
-| [UI_STYLEGUIDE.md](Letz-Fetz-Game/docs/UI_STYLEGUIDE.md) | Tokens, Komponenten, Spiel- vs Editor-UI |
-| [audio-system.md](Letz-Fetz-Game/docs/audio-system.md) | AudioManager, Settings volumes, Audio Forge CLI |
+| [letz-fetz-v5-spielkonzept.md](docs/letz-fetz-v5-spielkonzept.md) | V5 Vollkonzept (Produktziel) |
+| [SPIELANLEITUNG_V5_DRAFT.md](docs/rules/SPIELANLEITUNG_V5_DRAFT.md) | V5 spielbare Prosa |
+| [SPIELANLEITUNG_V1.md](docs/rules/SPIELANLEITUNG_V1.md) | V1 Regression + physisch |
+| [SPIELANLEITUNG_V2_DRAFT.md](docs/rules/SPIELANLEITUNG_V2_DRAFT.md) | V2 Draft (historisch) |
+| [SPIELANLEITUNG_V2_WIP.md](docs/rules/SPIELANLEITUNG_V2_WIP.md) | V2 Grill-Log (historisch) |
+| [SPIELANLEITUNG_V3_WIP.md](docs/rules/SPIELANLEITUNG_V3_WIP.md) | V3 Vorgänger / Soft-Retire |
+| [letz-fetz-v3-überarbeitung.md](docs/letz-fetz-v3-überarbeitung.md) | V3 Dump (historisch) |
+| [SPIELUEBERSICHT_AKTUELL.md](docs/SPIELUEBERSICHT_AKTUELL.md) | Lesbare Ist-/Ziel-Übersicht |
+| [DESIGN.md](DESIGN.md) | Agent UI Brief — Navigation, Hybrid-Ton, Anti-Patterns |
+| [UI_STYLEGUIDE.md](docs/UI_STYLEGUIDE.md) | Tokens, Komponenten, Spiel- vs Editor-UI |
+| [audio-system.md](docs/audio-system.md) | AudioManager, Settings volumes, Audio Forge CLI |
 | [product-roadmap.md](.qa/design/product-roadmap.md) | Sprint-Backlog, Stufen A/B/C |
-| [README.md](Letz-Fetz-Game/README.md) | Dev-Setup (`npm i`, `npm run dev`) |
+| [README.md](README.md) | Dev-Setup (`npm i`, `npm run dev`) |
 | Figma | https://www.figma.com/design/wRBtVn8juwrMypsLFH740a/Letz-Fetz-Game |
 
 ## Living documentation
