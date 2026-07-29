@@ -67,7 +67,9 @@ Catalog: `V3_ENGINE_PARTS_36` (36 ids). Demo trio:
 
 Regenerate boxes + specs: `npm run generate:engine-part-glbs -- --all` (alias: `generate:mvp-engine-glbs`). Spec stubs: `docs/engine-system/specs/` (36).
 
-**Pilot real meshes (#165):** the trio above are low-poly prisms/spike (`placeholder: false`, spec `version: 2`). Regenerate with `npm run generate:pilot-engine-glbs` — do **not** overwrite them with `--all` box regen unless intentional. Remaining 33 parts stay unit-box placeholders.
+**Pilot real meshes (#165):** the trio above are low-poly prisms/spike (`placeholder: false`, spec `version: 2`). Regenerate with `npm run generate:pilot-engine-glbs` — `generate:engine-part-glbs --all` **skips** authored Specs (`placeholder: false`).
+
+**Batch A (#195):** fire ×6 + remaining water ×5 (excludes pilot `water-traeger-01`) via `npm run generate:batch-a-engine-glbs` — distinctive prisms/spikes, Spec `batch: "A"`, `placeholder: false`. Remaining earth/air/shadow/light (non-pilot) stay unit-box placeholders until later batches.
 
 ## Materials / toon look (#183)
 

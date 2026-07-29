@@ -6,7 +6,7 @@
  *      npm run generate:engine-part-glbs -- --all
  * Output: public/engine-parts/mvp/*.glb + docs/engine-system/specs/*.json
  */
-import { mkdirSync, writeFileSync } from 'node:fs';
+import { mkdirSync, readFileSync, writeFileSync, existsSync } from 'node:fs';
 import { dirname, join } from 'node:path';
 import { fileURLToPath } from 'node:url';
 import { Document, NodeIO } from '@gltf-transform/core';
@@ -160,11 +160,27 @@ function wantsAll(argv: string[]): boolean {
   return argv.includes('--all') || argv.includes('--mvp') || argv.length === 0;
 }
 
+/** Skip pilots / authored batches so `--all` does not wipe distinctive meshes. */
+function shouldSkipAuthoredPart(id: string): boolean {
+  const specPath = join(SPECS_DIR, `${id}.json`);
+  if (!existsSync(specPath)) return false;
+  try {
+    const raw: unknown = JSON.parse(readFileSync(specPath, 'utf8'));
+    if (typeof raw !== 'object' || raw === null) return false;
+    const budgets = (raw as { budgets?: { placeholder?: unknown } }).budgets;
+    if (budgets && budgets.placeholder === false) return true;
+    if ((raw as { pilot?: unknown }).pilot === true) return true;
+    return false;
+  } catch {
+    return false;
+  }
+}
+
 async function main(): Promise<void> {
   const argv = process.argv.slice(2);
   if (!wantsAll(argv) && argv.some((a) => a.startsWith('-'))) {
     console.error(
-      'Usage: npm run generate:engine-part-glbs [-- --all]\nWrites all 36 V3 placeholder GLBs + specs.',
+      'Usage: npm run generate:engine-part-glbs [-- --all]\nWrites placeholder GLBs + specs for parts still marked placeholder.',
     );
     process.exit(2);
   }
@@ -172,14 +188,23 @@ async function main(): Promise<void> {
   mkdirSync(OUT_DIR, { recursive: true });
   mkdirSync(SPECS_DIR, { recursive: true });
 
+  let written = 0;
+  let skipped = 0;
   for (const part of V3_ENGINE_PARTS_36) {
+    if (shouldSkipAuthoredPart(part.id)) {
+      console.warn(
+        `skip ${part.id} — Spec placeholder=false / pilot (use pilot or batch generators)`,
+      );
+      skipped += 1;
+      continue;
+    }
     const glbPath = await writePartGlb(toGlbSpec(part.id, part.slot));
     const specPath = writeSpecJson(part);
     console.log(`wrote ${glbPath}`);
     console.log(`wrote ${specPath}`);
+    written += 1;
   }
-
-  console.log(`done: ${V3_ENGINE_PARTS_36.length} GLBs + specs`);
+  console.log(`done: wrote ${written} placeholders, skipped ${skipped} authored`);
 }
 
 main().catch((err: unknown) => {

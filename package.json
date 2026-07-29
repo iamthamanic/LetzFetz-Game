@@ -92,6 +92,7 @@
             "generate:mvp-engine-glbs": "npx tsx scripts/generate-mvp-placeholder-glbs.ts --all",
             "generate:engine-part-glbs": "npx tsx scripts/generate-mvp-placeholder-glbs.ts",
             "generate:pilot-engine-glbs": "npx tsx scripts/generate-pilot-real-glbs.ts",
+            "generate:batch-a-engine-glbs": "npx tsx scripts/generate-batch-a-glbs.ts",
             "asset:validate": "node tools/asset-pipeline/validate.mjs",
             "asset:preview": "node tools/asset-pipeline/preview.mjs",
             "asset:all": "node tools/asset-pipeline/all.mjs",
