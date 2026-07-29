@@ -1,8 +1,8 @@
 {
   "runMode": "loop",
   "paused": false,
-  "activeIssue": null,
-  "phase": "setup",
+  "activeIssue": 190,
+  "phase": "commit",
   "completedIssues": [
     130,
     131,
@@ -20,7 +20,12 @@
     164,
     182,
     183,
-    184
+    184,
+    185,
+    186,
+    187,
+    188,
+    189
   ],
   "mergedIssues": [
     130,
@@ -39,7 +44,12 @@
     164,
     182,
     183,
-    184
+    184,
+    185,
+    186,
+    187,
+    188,
+    189
   ],
   "prUrls": {
     "130": "https://github.com/iamthamanic/LetzFetz-Game/pull/135",
@@ -58,7 +68,12 @@
     "164": "https://github.com/iamthamanic/LetzFetz-Game/pull/170",
     "182": "https://github.com/iamthamanic/LetzFetz-Game/pull/200",
     "183": "https://github.com/iamthamanic/LetzFetz-Game/pull/201",
-    "184": "https://github.com/iamthamanic/LetzFetz-Game/pull/202"
+    "184": "https://github.com/iamthamanic/LetzFetz-Game/pull/202",
+    "185": "https://github.com/iamthamanic/LetzFetz-Game/pull/203",
+    "186": "https://github.com/iamthamanic/LetzFetz-Game/pull/204",
+    "187": "https://github.com/iamthamanic/LetzFetz-Game/pull/205",
+    "188": "https://github.com/iamthamanic/LetzFetz-Game/pull/206",
+    "189": "https://github.com/iamthamanic/LetzFetz-Game/pull/207"
   },
   "retries": {
     "130": {
@@ -158,18 +173,47 @@
       "verifyUi": 0,
       "review": 0,
       "sameRootCause": 0
+    },
+    "187": {
+      "implement": 0,
+      "verifyTicket": 0,
+      "verifyUi": 0,
+      "review": 0,
+      "sameRootCause": 0
+    },
+    "188": {
+      "implement": 0,
+      "verifyTicket": 0,
+      "verifyUi": 0,
+      "review": 0,
+      "sameRootCause": 0
+    },
+    "189": {
+      "implement": 0,
+      "verifyTicket": 0,
+      "verifyUi": 0,
+      "review": 0,
+      "sameRootCause": 0
+    },
+    "190": {
+      "implement": 0,
+      "verifyTicket": 0,
+      "verifyUi": 0,
+      "review": 0,
+      "sameRootCause": 0
     }
   },
   "lastError": null,
   "repo": "iamthamanic/LetzFetz-Game",
   "queue": [
-    185,
-    186,
-    188,
-    189,
+    190,
     191,
-    195
+    192,
+    193,
+    194,
+    195,
+    198
   ],
-  "updatedAt": "2026-07-29T07:34:41.000Z",
+  "updatedAt": "2026-07-29T08:06:46.000Z",
   "milestoneFilter": null
 }
