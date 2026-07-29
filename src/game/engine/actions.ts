@@ -44,6 +44,10 @@ import {
   takeAttackPrepBonus,
   takeBlockPrepBonus,
 } from './formulaResolve';
+import {
+  applyGrossformelAftermath,
+  isFullFormulaActivatable,
+} from './formulaCharge';
 import { applyDamageThroughShield } from './status/shield';
 import { pickReaction, resolveImpulseReactions } from './status/reactionChoice';
 import {
@@ -63,7 +67,7 @@ import {
 } from './status/fetzgeraetEffects';
 import { canSpendFetzCharge, gainFetzCharge } from './status/fetzCharge';
 import type { Element } from '../types';
-import { isV3CombatEnabled, isV5FormulaEnabled } from '../types';
+import { isV3CombatEnabled, isV5FormulaEnabled, maxFetzChargeFor } from '../types';
 import type { ReactionId } from './status/reactions';
 import {
   canBuildBoost,
@@ -936,7 +940,12 @@ export function getLegalActions(state: GameState, ctx: PackContext): GameAction[
       }
     }
     if (state.players[ctx.playerId].ultimateAvailable) {
-      actions.push({ type: 'PLAY_ULTIMATE' });
+      if (
+        !isV5FormulaEnabled(ruleset) ||
+        state.players[ctx.playerId].fetzCharge >= maxFetzChargeFor(ruleset)
+      ) {
+        actions.push({ type: 'PLAY_ULTIMATE' });
+      }
     }
     for (const card of hand) {
       if (hand.length >= 1) {
@@ -1155,7 +1164,14 @@ function applyFormulaActivate(
   playerId: PlayerId,
   ruleset: RulesetConfig,
 ): GameState {
-  return resolveFormulaActivate(state, pack, playerId, ruleset);
+  const wasFull = isFullFormulaActivatable(state.players[playerId].formula);
+  let next = resolveFormulaActivate(state, pack, playerId, ruleset);
+  if (wasFull && isV5FormulaEnabled(ruleset)) {
+    const cap = maxFetzChargeFor(ruleset);
+    next = gainFetzCharge(next, playerId, 1, cap);
+    next.lastEvent = `${next.lastEvent ?? 'Formel aktiviert.'} +1 Fetzladung (${next.players[playerId].fetzCharge}/${cap}).`;
+  }
+  return next;
 }
 
 /**
@@ -1544,12 +1560,22 @@ export function applyAction(
     case 'PLAY_ULTIMATE': {
       if (state.phase !== 'action') throw new Error('Not in action phase');
       if (!state.players[playerId].ultimateAvailable) throw new Error('Ultimate already used');
+      if (isV5FormulaEnabled(ruleset)) {
+        const need = maxFetzChargeFor(ruleset);
+        if (state.players[playerId].fetzCharge < need) {
+          throw new Error(`Großformel requires ${need} Fetzladung`);
+        }
+      }
 
       const character = pack.characters.find((c) => c.id === state.players[playerId].characterId);
       if (!character) throw new Error('Character not found');
 
       next = applyUltimateEffect(state, pack, playerId, character.ultimateId, rng, ruleset);
       next.players[playerId].ultimateAvailable = false;
+      if (isV5FormulaEnabled(ruleset)) {
+        next = applyGrossformelAftermath(next, playerId);
+        next.lastEvent = `${next.lastEvent ?? 'Großformel.'} Fetzladung 0 — Katalysator abgelegt.`.trim();
+      }
       if (isKristall(next)) {
         next = drawForPlayer(next, playerId, 1, rng, ruleset, { allowExtra: true });
         const drawn = next.players[playerId].hand[next.players[playerId].hand.length - 1];
