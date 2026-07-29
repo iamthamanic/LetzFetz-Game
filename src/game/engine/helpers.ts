@@ -16,6 +16,15 @@ export function ensureMeta(state: GameState): GameState {
   };
 }
 
+function cloneFormulaBoard(formula: GameState['players']['p1']['formula']) {
+  const board = formula ?? { technik: null, essenz: null, katalysator: null };
+  return {
+    technik: board.technik ? { ...board.technik } : null,
+    essenz: board.essenz ? { ...board.essenz } : null,
+    katalysator: board.katalysator ? { ...board.katalysator } : null,
+  };
+}
+
 export function cloneState(state: GameState): GameState {
   const src = ensureMeta(state);
   const meta = src.meta;
@@ -26,6 +35,7 @@ export function cloneState(state: GameState): GameState {
         ...src.players.p1,
         hand: [...src.players.p1.hand],
         bound: src.players.p1.bound.map((b) => ({ ...b })),
+        formula: cloneFormulaBoard(src.players.p1.formula),
         statuses: (src.players.p1.statuses ?? []).map((s) => ({ ...s })),
         shield: src.players.p1.shield ?? 0,
         fetzCharge: src.players.p1.fetzCharge ?? 0,
@@ -34,6 +44,7 @@ export function cloneState(state: GameState): GameState {
         ...src.players.p2,
         hand: [...src.players.p2.hand],
         bound: src.players.p2.bound.map((b) => ({ ...b })),
+        formula: cloneFormulaBoard(src.players.p2.formula),
         statuses: (src.players.p2.statuses ?? []).map((s) => ({ ...s })),
         shield: src.players.p2.shield ?? 0,
         fetzCharge: src.players.p2.fetzCharge ?? 0,

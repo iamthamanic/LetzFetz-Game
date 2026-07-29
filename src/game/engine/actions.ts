@@ -2,6 +2,7 @@ import type {
   BoundCardInstance,
   ContentPack,
   ElementCardDef,
+  FormulaComponentInstance,
   GameAction,
   GameState,
   PendingChoice,
@@ -23,6 +24,10 @@ import {
 } from './helpers';
 import { applyElementEffect, applyBoundActivation, finishMainAction, applyInstantGlitch } from './effects';
 import { findElementDef, findEnginePartDef, findGlitchDef } from './lookup';
+import {
+  findFormulaComponentDef,
+  formulaSlotForDef,
+} from './formulaSlots';
 import { applyDamageThroughShield } from './status/shield';
 import { pickReaction, resolveImpulseReactions } from './status/reactionChoice';
 import {
@@ -41,7 +46,7 @@ import {
 } from './status/fetzgeraetEffects';
 import { canSpendFetzCharge, gainFetzCharge } from './status/fetzCharge';
 import type { Element } from '../types';
-import { isV3CombatEnabled } from '../types';
+import { isV3CombatEnabled, isV5FormulaEnabled } from '../types';
 import type { ReactionId } from './status/reactions';
 import {
   canBuildBoost,
@@ -80,6 +85,7 @@ import {
 import { listOwnTurnGlitchActions, applyPlayableGlitch } from './playableGlitches';
 
 export { findElementDef } from './lookup';
+export { findFormulaComponentDef, formulaSlotForDef } from './formulaSlots';
 
 export interface PackContext {
   pack: ContentPack;
@@ -584,6 +590,38 @@ function listBuildActionsForPlayer(
   return actions;
 }
 
+/** V5 Formelphase — exactly one of build / replace / activate / schnellmix / skip. */
+function listFormulaPhaseActions(
+  state: GameState,
+  pack: ContentPack,
+  playerId: PlayerId,
+): GameAction[] {
+  const actions: GameAction[] = [{ type: 'SKIP_BUILD' }];
+  const player = state.players[playerId];
+  const formula = player.formula;
+
+  for (const card of player.hand) {
+    const slot = formulaSlotForDef(pack, card.defId);
+    if (!slot) continue;
+    actions.push({ type: 'FORMULA_SCHNELLMIX', cardInstanceId: card.instanceId });
+    if (formula[slot] == null) {
+      actions.push({ type: 'FORMULA_BUILD', cardInstanceId: card.instanceId });
+    } else {
+      actions.push({ type: 'FORMULA_REPLACE', cardInstanceId: card.instanceId });
+    }
+  }
+
+  const hasActivatable = (['technik', 'essenz', 'katalysator'] as const).some((slot) => {
+    const comp = formula[slot];
+    return Boolean(comp && !comp.exhausted && !comp.disturbed);
+  });
+  if (hasActivatable) {
+    actions.push({ type: 'FORMULA_ACTIVATE' });
+  }
+
+  return actions;
+}
+
 function listClubSwapActions(state: GameState, pack: ContentPack, playerId: PlayerId): GameAction[] {
   const actions: GameAction[] = [];
   const hand = state.players[playerId].hand;
@@ -704,45 +742,49 @@ export function getLegalActions(state: GameState, ctx: PackContext): GameAction[
   }
 
   if (state.phase === 'build') {
-    actions.push({ type: 'SKIP_BUILD' });
-    const bound = state.players[ctx.playerId].bound;
-
-    if (isV2Pack(ctx.pack)) {
-      for (const card of hand) {
-        const part = findEnginePartDef(ctx.pack, card.defId);
-        if (part) {
-          if (canBuildEnginePart(bound)) {
-            actions.push({ type: 'BUILD_CARD', cardInstanceId: card.instanceId });
-          } else {
-            for (const phraseCard of phraseSlotCards(bound)) {
-              actions.push({
-                type: 'BUILD_CARD',
-                cardInstanceId: card.instanceId,
-                discardBoundId: phraseCard.instanceId,
-              });
-            }
-          }
-          continue;
-        }
-
-        const element = findElementDef(ctx.pack, card.defId);
-        if (element?.cardType === 'boost') {
-          if (isV3CombatEnabled(rulesetOf(ctx)) || canBuildBoost(bound)) {
-            actions.push({ type: 'BUILD_CARD', cardInstanceId: card.instanceId });
-          } else {
-            const chargeCard = bound.find((b) => b.phraseSlot === 'charge');
-            if (chargeCard) {
-              actions.push({
-                type: 'BUILD_CARD',
-                cardInstanceId: card.instanceId,
-                discardBoundId: chargeCard.instanceId,
-              });
-            }
-          }
-        }
-      }
+    if (isV5FormulaEnabled(ruleset)) {
+      actions.push(...listFormulaPhaseActions(state, ctx.pack, ctx.playerId));
     } else {
-      actions.push(...listBuildActionsForPlayer(state, ctx.pack, ctx.playerId, ruleset));
+      actions.push({ type: 'SKIP_BUILD' });
+      const bound = state.players[ctx.playerId].bound;
+
+      if (isV2Pack(ctx.pack)) {
+        for (const card of hand) {
+          const part = findEnginePartDef(ctx.pack, card.defId);
+          if (part) {
+            if (canBuildEnginePart(bound)) {
+              actions.push({ type: 'BUILD_CARD', cardInstanceId: card.instanceId });
+            } else {
+              for (const phraseCard of phraseSlotCards(bound)) {
+                actions.push({
+                  type: 'BUILD_CARD',
+                  cardInstanceId: card.instanceId,
+                  discardBoundId: phraseCard.instanceId,
+                });
+              }
+            }
+            continue;
+          }
+
+          const element = findElementDef(ctx.pack, card.defId);
+          if (element?.cardType === 'boost') {
+            if (isV3CombatEnabled(rulesetOf(ctx)) || canBuildBoost(bound)) {
+              actions.push({ type: 'BUILD_CARD', cardInstanceId: card.instanceId });
+            } else {
+              const chargeCard = bound.find((b) => b.phraseSlot === 'charge');
+              if (chargeCard) {
+                actions.push({
+                  type: 'BUILD_CARD',
+                  cardInstanceId: card.instanceId,
+                  discardBoundId: chargeCard.instanceId,
+                });
+              }
+            }
+          }
+        }
+      } else {
+        actions.push(...listBuildActionsForPlayer(state, ctx.pack, ctx.playerId, ruleset));
+      }
     }
   }
 
@@ -826,6 +868,9 @@ function applyBuildCard(
   ruleset: RulesetConfig,
   phaseAfter: TurnPhase,
 ): GameState {
+  if (isV5FormulaEnabled(ruleset)) {
+    throw new Error('BUILD_CARD not used under v5Formula — use FORMULA_* actions');
+  }
   let next = cloneState(state);
   const handIdx = next.players[playerId].hand.findIndex((c) => c.instanceId === action.cardInstanceId);
   if (handIdx === -1) throw new Error('Card not in hand');
@@ -907,6 +952,117 @@ function applyBuildCard(
   next.players[playerId].bound.push(bound);
   next.phase = phaseAfter;
   next.lastEvent = `${def.name} gebaut.`;
+  return next;
+}
+
+function applyFormulaBuild(
+  state: GameState,
+  pack: ContentPack,
+  playerId: PlayerId,
+  cardInstanceId: string,
+): GameState {
+  const next = cloneState(state);
+  const handIdx = next.players[playerId].hand.findIndex((c) => c.instanceId === cardInstanceId);
+  if (handIdx === -1) throw new Error('Card not in hand');
+  const handCard = next.players[playerId].hand[handIdx];
+  const slot = formulaSlotForDef(pack, handCard.defId);
+  const def = findFormulaComponentDef(pack, handCard.defId);
+  if (!slot || !def) throw new Error('Not a formula component');
+  if (next.players[playerId].formula[slot] != null) {
+    throw new Error('Formula slot occupied — use FORMULA_REPLACE');
+  }
+
+  const [card] = next.players[playerId].hand.splice(handIdx, 1);
+  const component: FormulaComponentInstance = {
+    ...card,
+    slot,
+    exhausted: false,
+    disturbed: false,
+    stabilityBonus: 0,
+  };
+  next.players[playerId].formula[slot] = component;
+  next.phase = 'action';
+  next.lastEvent = `${def.name} in Formelplatz ${slot} gebaut.`;
+  return next;
+}
+
+function applyFormulaReplace(
+  state: GameState,
+  pack: ContentPack,
+  playerId: PlayerId,
+  cardInstanceId: string,
+): GameState {
+  const next = cloneState(state);
+  const handIdx = next.players[playerId].hand.findIndex((c) => c.instanceId === cardInstanceId);
+  if (handIdx === -1) throw new Error('Card not in hand');
+  const handCard = next.players[playerId].hand[handIdx];
+  const slot = formulaSlotForDef(pack, handCard.defId);
+  const def = findFormulaComponentDef(pack, handCard.defId);
+  if (!slot || !def) throw new Error('Not a formula component');
+  const existing = next.players[playerId].formula[slot];
+  if (!existing) throw new Error('Formula slot empty — use FORMULA_BUILD');
+
+  next.piles.discard.push({
+    instanceId: existing.instanceId,
+    defId: existing.defId,
+  });
+  const [card] = next.players[playerId].hand.splice(handIdx, 1);
+  const component: FormulaComponentInstance = {
+    ...card,
+    slot,
+    exhausted: false,
+    disturbed: false,
+    stabilityBonus: 0,
+  };
+  next.players[playerId].formula[slot] = component;
+  next.phase = 'action';
+  next.lastEvent = `${def.name} ersetzt Formelplatz ${slot}.`;
+  return next;
+}
+
+/**
+ * Minimal V5 activate: exhaust upright non-disturbed components.
+ * Full Teil-/Vollformel effect matrix + prep hooks → issue #221.
+ */
+function applyFormulaActivate(state: GameState, playerId: PlayerId): GameState {
+  const next = cloneState(state);
+  const formula = next.players[playerId].formula;
+  let used = 0;
+  for (const slot of ['technik', 'essenz', 'katalysator'] as const) {
+    const comp = formula[slot];
+    if (!comp || comp.exhausted || comp.disturbed) continue;
+    formula[slot] = { ...comp, exhausted: true };
+    used += 1;
+  }
+  if (used === 0) throw new Error('No activatable formula components');
+  next.phase = 'action';
+  // Stub until #221 resolution slice.
+  next.lastEvent = `Formel aktiviert (${used} Komponenten erschöpft; Effekt folgt #221).`;
+  return next;
+}
+
+/**
+ * Minimal V5 Schnellmix: discard formula card from hand for one-shot.
+ * Printed one-shot effects → issue #221.
+ */
+function applyFormulaSchnellmix(
+  state: GameState,
+  pack: ContentPack,
+  playerId: PlayerId,
+  cardInstanceId: string,
+): GameState {
+  const next = cloneState(state);
+  const handIdx = next.players[playerId].hand.findIndex((c) => c.instanceId === cardInstanceId);
+  if (handIdx === -1) throw new Error('Card not in hand');
+  const handCard = next.players[playerId].hand[handIdx];
+  const def = findFormulaComponentDef(pack, handCard.defId);
+  if (!def) throw new Error('Not a formula component');
+
+  const [card] = next.players[playerId].hand.splice(handIdx, 1);
+  next.piles.discard.push(card);
+  next.phase = 'action';
+  // Stub until #221 resolution slice.
+  next.lastEvent = `Schnellmix: ${def.name} abgeworfen (Effekt folgt #221).`;
   return next;
 }
 
@@ -1108,11 +1264,34 @@ export function applyAction(
       if (state.phase !== 'build') throw new Error('Not in build phase');
       next = cloneState(state);
       next.phase = 'action';
-      next.lastEvent = 'Keine Karte gebaut.';
+      next.lastEvent = isV5FormulaEnabled(ruleset) ? 'Formelphase gepasst.' : 'Keine Karte gebaut.';
       return next;
+    }
+    case 'FORMULA_BUILD': {
+      if (state.phase !== 'build') throw new Error('Not in build phase');
+      if (!isV5FormulaEnabled(ruleset)) throw new Error('FORMULA_BUILD requires v5Formula');
+      return applyFormulaBuild(state, pack, playerId, action.cardInstanceId);
+    }
+    case 'FORMULA_REPLACE': {
+      if (state.phase !== 'build') throw new Error('Not in build phase');
+      if (!isV5FormulaEnabled(ruleset)) throw new Error('FORMULA_REPLACE requires v5Formula');
+      return applyFormulaReplace(state, pack, playerId, action.cardInstanceId);
+    }
+    case 'FORMULA_ACTIVATE': {
+      if (state.phase !== 'build') throw new Error('Not in build phase');
+      if (!isV5FormulaEnabled(ruleset)) throw new Error('FORMULA_ACTIVATE requires v5Formula');
+      return applyFormulaActivate(state, playerId);
+    }
+    case 'FORMULA_SCHNELLMIX': {
+      if (state.phase !== 'build') throw new Error('Not in build phase');
+      if (!isV5FormulaEnabled(ruleset)) throw new Error('FORMULA_SCHNELLMIX requires v5Formula');
+      return applyFormulaSchnellmix(state, pack, playerId, action.cardInstanceId);
     }
     case 'BUILD_CARD': {
       if (state.phase !== 'build') throw new Error('Not in build phase');
+      if (isV5FormulaEnabled(ruleset)) {
+        throw new Error('BUILD_CARD illegal under v5Formula');
+      }
       return applyBuildCard(state, pack, playerId, action, ruleset, 'action');
     }
     case 'PLAY_ATTACK': {
