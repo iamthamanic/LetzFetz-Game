@@ -31,11 +31,12 @@ describe('resolveEnginePartThumb', () => {
     expect(isEngineSnapshotPlaceholder(REAL_SNAP)).toBe(false);
   });
 
-  it('returns PNG path on cache miss', () => {
-    expect(resolveEnginePartThumb(PILOT)).toBe(`/cards/engine/${PILOT}.png`);
+  it('returns empty on cache miss until engine PNGs are shipped', () => {
+    // Avoid /cards/engine/*.png 404 → broken ImageWithFallback (see ENGINE_PART_PNG_ART_SHIPPED).
+    expect(resolveEnginePartThumb(PILOT)).toBe('');
   });
 
-  it('prefers cached real snapshot over PNG', () => {
+  it('prefers cached real snapshot over static fallback', () => {
     const recipe = recipeFromPartId(PILOT);
     expect(recipe).not.toBeNull();
     setEngineSnapshot(createRenderKey(recipe!), REAL_SNAP);
@@ -43,11 +44,11 @@ describe('resolveEnginePartThumb', () => {
     expect(lookupEngineSnapshotThumb(PILOT)).toBe(REAL_SNAP);
   });
 
-  it('skips placeholder cache entries and falls back to PNG', () => {
+  it('skips placeholder cache entries and falls back without broken URL', () => {
     const recipe = recipeFromPartId(PILOT)!;
     setEngineSnapshot(createRenderKey(recipe), ENGINE_SNAPSHOT_PLACEHOLDER_DATA_URL);
     expect(lookupEngineSnapshotThumb(PILOT)).toBeNull();
-    expect(resolveEnginePartThumb(PILOT)).toBe(`/cards/engine/${PILOT}.png`);
+    expect(resolveEnginePartThumb(PILOT)).toBe('');
   });
 
   it('resolveBoardCardArtPath leaves non-engine cards on cardArt', () => {

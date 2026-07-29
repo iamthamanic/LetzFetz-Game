@@ -2,8 +2,9 @@
  * Card art manifest — 48 shared illustrations mapped to all 90 pack cards.
  * Location: src/services/cardArt/manifest.ts
  *
- * Engine-part thumbs: registry `previewUrl` via `lookupEnginePartAsset`, else
- * `/cards/engine/{id}.png` (shared services only — no feature imports).
+ * Engine-part thumbs: registry `previewUrl` via `lookupEnginePartAsset` when
+ * `ENGINE_PART_PNG_ART_SHIPPED`; otherwise empty until PNGs are committed.
+ * Play prefers snapshot cache (`resolveEnginePartThumb`) over static PNG.
  */
 import type { Element } from '../../game/types';
 import {
@@ -111,13 +112,29 @@ export function enginePartPreviewOrFallback(cardId: string, previewUrl: string):
 }
 
 /**
+ * When false, `resolveEnginePartArtPath` does not emit `/cards/engine/{id}.png`
+ * URLs (those files are not committed yet). Returning the path made Vite serve
+ * `index.html` (200) → ImageWithFallback broken-icon. Play still prefers
+ * snapshot cache via `resolveEnginePartThumb`. Flip after shipping all 36 PNGs.
+ */
+export const ENGINE_PART_PNG_ART_SHIPPED = false;
+
+/**
  * Resolve static art for a registered engine part.
- * Prefers registry `previewUrl`; blank/missing → `/cards/engine/{id}.png`.
- * Unknown id → empty string (callers keep previous no-art behavior).
+ * Prefers registry `previewUrl`; blank/missing → `/cards/engine/{id}.png`
+ * when `ENGINE_PART_PNG_ART_SHIPPED`. Unknown id → empty string.
  */
 export function resolveEnginePartArtPath(cardId: string): string {
   const entry = lookupEnginePartAsset(cardId);
   if (!entry) return '';
+  if (!ENGINE_PART_PNG_ART_SHIPPED) {
+    const preview = entry.previewUrl.trim();
+    // Convention paths 404 until assets land; keep non-convention overrides.
+    if (!preview || preview.startsWith(`${ENGINE_CARD_ART_PUBLIC_ROOT}/`)) {
+      return '';
+    }
+    return publicAssetUrl(preview);
+  }
   return enginePartPreviewOrFallback(cardId, entry.previewUrl);
 }
 

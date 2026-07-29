@@ -7,7 +7,7 @@
 
 | UI | Tech |
 |----|------|
-| Cards / board thumbs | Snapshot cache hit (`resolveEnginePartThumb`) → else registry `previewUrl` / `/cards/engine/{id}.png` |
+| Cards / board thumbs | Snapshot cache hit (`resolveEnginePartThumb`) → else static PNG when `ENGINE_PART_PNG_ART_SHIPPED`, else empty (no broken img) |
 | Detail / build preview | Single `@react-three/fiber` canvas (`src/components/engine3d/`) |
 | Cached engine art | Snapshot keyed by `createRenderKey` (#134 / #146) |
 
@@ -33,8 +33,10 @@ Capture path (open preview):
 
 Board / bound engine-part thumbs prefer the in-memory snapshot cache
 (`resolveEnginePartThumb` / `resolveBoardCardArtPath` in Play). Cache miss or
-1×1 placeholder stub → registry `previewUrl` / `/cards/engine/{id}.png`.
-Full cutover of Forge library grids remains PNG-first.
+1×1 placeholder stub → `resolveEnginePartArtPath` (PNG only after
+`ENGINE_PART_PNG_ART_SHIPPED`; until then `''` so LetzFetzCard uses the
+gradient/icon fallback instead of a 404/`index.html` broken image).
+Forge library grids: same resolver; detail view still uses live 3D canvas.
 
 ## Play + Library integration (#133 / #145)
 
