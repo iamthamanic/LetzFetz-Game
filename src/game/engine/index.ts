@@ -19,3 +19,4 @@ export * from './formulaSlots';
 export * from './formulaResolve';
 export * from './formulaChallenge';
 export * from './formulaCharge';
+export * from './visualRecipe';

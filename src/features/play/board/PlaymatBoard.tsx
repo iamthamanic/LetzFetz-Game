@@ -4,7 +4,8 @@
  */
 import React, { useState } from 'react';
 import type { ContentPack, GameAction, GameState, PlayerId } from '../../../game';
-import { findElementDef, findEnginePartDef, isV2Pack } from '../../../game';
+import { findElementDef, findEnginePartDef, isV2Pack, isV5FormulaEnabled } from '../../../game';
+import { rulesetFromState } from '../../../game/engine/rulesetFromState';
 import { partActivateCost, peekCharge } from '../../../game/engine/status';
 import type { EngineRecipe } from '../../../game/types/engineVisual';
 import type { GameViewModel } from './buildGameViewModel';
@@ -21,6 +22,7 @@ import {
 } from './gameActionHelpers';
 import { CharacterDock, CombatStage, DeckPile, DiscardPile } from './zones';
 import { BoundCardRow } from './BoundCardRow';
+import { FormulaRig } from './FormulaRig';
 import { HandFan } from './HandFan';
 import { ArenaPlaymat } from './ArenaPlaymat';
 import { ArenaPlaymatBadge } from './ArenaPlaymatBadge';
@@ -91,6 +93,7 @@ export function PlaymatBoard({
   onNewGame,
 }: PlaymatBoardProps) {
   const humanId = view.human;
+  const v5Formula = isV5FormulaEnabled(rulesetFromState(state));
   const [chargeConfirm, setChargeConfirm] = useState<{
     boundInstanceId: string;
     partName: string;
@@ -427,17 +430,26 @@ export function PlaymatBoard({
           )}
 
           <section className="flex flex-none flex-col gap-2">
-            <BoundCardRow
-              label="Gegner-Engine"
-              slots={view.botBoundSlots}
-              cardSize="opponentBound"
-              snapBoundCardIds={snapBoundCardIds}
-              flyingBuildCardIds={flyingBuildCardIds}
-              align="start"
-              ghostCharacterId={state.players[botId].characterId}
-              showPhraseLabels={isV2Pack(pack)}
-              onSlotClick={handleOpponentSlotClick}
-            />
+            {v5Formula ? (
+              <FormulaRig
+                label="Gegner-Formel"
+                formula={state.players[botId].formula}
+                pack={pack}
+                testId="opponent-formula-rig"
+              />
+            ) : (
+              <BoundCardRow
+                label="Gegner-Engine"
+                slots={view.botBoundSlots}
+                cardSize="opponentBound"
+                snapBoundCardIds={snapBoundCardIds}
+                flyingBuildCardIds={flyingBuildCardIds}
+                align="start"
+                ghostCharacterId={state.players[botId].characterId}
+                showPhraseLabels={isV2Pack(pack)}
+                onSlotClick={handleOpponentSlotClick}
+              />
+            )}
           </section>
 
           <section className="flex min-h-[100px] flex-1 items-center justify-center py-1">
@@ -460,28 +472,38 @@ export function PlaymatBoard({
           </section>
 
           <section className="flex min-w-0 flex-none flex-col gap-2 border-t border-stone-800/80 pt-3">
-            <BoundCardRow
-              key={`human-engine-thumbs-${liveSnapshotEpoch}`}
-              label="Deine Engine"
-              slots={view.humanBoundSlots}
-              cardSize="bound"
-              snapBoundCardIds={snapBoundCardIds}
-              flyingBuildCardIds={flyingBuildCardIds}
-              buildPending={pending?.type === 'build'}
-              buildHasFreeSlot={buildHasFreeSlot}
-              align="start"
-              ghostCharacterId={state.players[humanId].characterId}
-              showPhraseLabels={isV2Pack(pack)}
-              onActivateBound={handleStartActivate}
-              onSlotClick={handleHumanSlotClick}
-            />
+            {v5Formula ? (
+              <FormulaRig
+                label="Deine Formel"
+                formula={state.players[humanId].formula}
+                pack={pack}
+                testId="human-formula-rig"
+              />
+            ) : (
+              <BoundCardRow
+                key={`human-engine-thumbs-${liveSnapshotEpoch}`}
+                label="Deine Engine"
+                slots={view.humanBoundSlots}
+                cardSize="bound"
+                snapBoundCardIds={snapBoundCardIds}
+                flyingBuildCardIds={flyingBuildCardIds}
+                buildPending={pending?.type === 'build'}
+                buildHasFreeSlot={buildHasFreeSlot}
+                align="start"
+                ghostCharacterId={state.players[humanId].characterId}
+                showPhraseLabels={isV2Pack(pack)}
+                onActivateBound={handleStartActivate}
+                onSlotClick={handleHumanSlotClick}
+              />
+            )}
 
-            <BoardEngineLiveZone
-              recipe={liveEngineRecipe}
-              heading={liveEngineRecipe ? 'Fetzgerät Live-3D' : 'Live-3D'}
-              onSnapshotWarmed={onLiveEngineSnapshotWarmed}
-            />
-
+            {!v5Formula ? (
+              <BoardEngineLiveZone
+                recipe={liveEngineRecipe}
+                heading={liveEngineRecipe ? 'Fetzgerät Live-3D' : 'Live-3D'}
+                onSnapshotWarmed={onLiveEngineSnapshotWarmed}
+              />
+            ) : null}
             {pending?.type === 'build' && (
               <div
                 data-testid="build-target-pill"
