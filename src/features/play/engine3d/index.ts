@@ -5,7 +5,13 @@
  * Presentational Canvas/Assembler: `src/components/engine3d/` (shared with Forge).
  */
 export { EnginePreviewPanel } from './EnginePreviewPanel';
+export { BoardEngineLiveZone } from './BoardEngineLiveZone';
 export { MVP_DEMO_RECIPE, recipeHasRegistryAsset } from './mvpDemoRecipe';
+export {
+  boardEngineWarmupDelayMs,
+  BOARD_ENGINE_WARMUP_MS,
+  BOARD_ENGINE_WARMUP_REDUCED_MS,
+} from './boardEngineWarmup';
 export {
   getEngineSnapshot,
   setEngineSnapshot,

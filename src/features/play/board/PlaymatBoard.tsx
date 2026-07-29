@@ -6,6 +6,7 @@ import React, { useState } from 'react';
 import type { ContentPack, GameAction, GameState, PlayerId } from '../../../game';
 import { findElementDef, findEnginePartDef, isV2Pack } from '../../../game';
 import { partActivateCost, peekCharge } from '../../../game/engine/status';
+import type { EngineRecipe } from '../../../game/types/engineVisual';
 import type { GameViewModel } from './buildGameViewModel';
 import type { PendingIntent } from './gameActionHelpers';
 import type { PresentationStep } from '../presentation/types';
@@ -27,6 +28,7 @@ import { Panel } from '../../../components/ui/Panel';
 import { Button } from '../../../components/ui/Button';
 import { DndPlaymat } from './DndPlaymat';
 import { FetzChargeConfirmModal } from './FetzChargeConfirmModal';
+import { BoardEngineLiveZone } from '../engine3d/BoardEngineLiveZone';
 
 interface PlaymatBoardProps {
   state: GameState;
@@ -46,6 +48,12 @@ interface PlaymatBoardProps {
   hiddenAttackCardId?: string | null;
   activePresentationStep?: PresentationStep | null;
   humanPlayerId?: PlayerId;
+  /** Primary Live-3D recipe for human Engine-Zone (null = empty placeholder). */
+  liveEngineRecipe?: EngineRecipe | null;
+  /** Incremented after auto snapshot warmup to refresh 2D thumbs. */
+  liveSnapshotEpoch?: number;
+  /** Bump board thumbs after auto snapshot warmup. */
+  onLiveEngineSnapshotWarmed?: () => void;
   onDispatch: (action: GameAction) => void;
   onPlayAttack: (instanceId: string) => void;
   onPlayChallenge: (attackInstanceId: string, targetBoundInstanceId: string) => void;
@@ -72,6 +80,9 @@ export function PlaymatBoard({
   hiddenAttackCardId = null,
   activePresentationStep = null,
   humanPlayerId = 'p1',
+  liveEngineRecipe = null,
+  liveSnapshotEpoch = 0,
+  onLiveEngineSnapshotWarmed,
   onDispatch,
   onPlayAttack,
   onPlayChallenge: _onPlayChallenge,
@@ -450,6 +461,7 @@ export function PlaymatBoard({
 
           <section className="flex min-w-0 flex-none flex-col gap-2 border-t border-stone-800/80 pt-3">
             <BoundCardRow
+              key={`human-engine-thumbs-${liveSnapshotEpoch}`}
               label="Deine Engine"
               slots={view.humanBoundSlots}
               cardSize="bound"
@@ -462,6 +474,12 @@ export function PlaymatBoard({
               showPhraseLabels={isV2Pack(pack)}
               onActivateBound={handleStartActivate}
               onSlotClick={handleHumanSlotClick}
+            />
+
+            <BoardEngineLiveZone
+              recipe={liveEngineRecipe}
+              heading={liveEngineRecipe ? 'Fetzgerät Live-3D' : 'Live-3D'}
+              onSnapshotWarmed={onLiveEngineSnapshotWarmed}
             />
 
             {pending?.type === 'build' && (
