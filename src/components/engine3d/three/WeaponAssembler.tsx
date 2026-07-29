@@ -2,6 +2,7 @@
  * Assembles Träger → Antrieb (SOCKET_DRIVE) → Aufsatz (SOCKET_OUTPUT).
  * Location: src/components/engine3d/three/WeaponAssembler.tsx
  * ADR D4: R3F hooks allowed under engine3d/three/**
+ * Montage: staggered dock via EngineAnimations (Brief §12).
  */
 import { useCallback, useEffect, useRef, useState } from 'react';
 import { useFrame } from '@react-three/fiber';
@@ -13,6 +14,10 @@ import {
 } from '../../../services/engineAssets/partRegistry';
 import { PartModel } from './PartModel';
 import { shouldEnableEngineOutline } from './EngineMaterials';
+import {
+  advanceMontageProgress,
+  resolveMontagePose,
+} from './EngineAnimations';
 import { attachToSocket, detachFromParent } from './model-utils';
 
 const SOCKET_DRIVE = 'SOCKET_DRIVE';
@@ -48,6 +53,17 @@ export function WeaponAssembler({
   const onIssuesRef = useRef(onIssuesChange);
   const [tick, setTick] = useState(0);
   const mountProgress = useRef(reducedMotion ? 1 : 0);
+  const assembledRef = useRef<{
+    drive: Object3D | null;
+    attachment: Object3D | null;
+    hasDrive: boolean;
+    hasAttachment: boolean;
+  }>({
+    drive: null,
+    attachment: null,
+    hasDrive: false,
+    hasAttachment: false,
+  });
 
   onIssuesRef.current = onIssuesChange;
 
@@ -87,6 +103,13 @@ export function WeaponAssembler({
       root.remove(root.children[0]!);
     }
 
+    assembledRef.current = {
+      drive: null,
+      attachment: null,
+      hasDrive: false,
+      hasAttachment: false,
+    };
+
     if (!carrierEntry) {
       if (recipe.carrierId) {
         issues.push({
@@ -106,7 +129,11 @@ export function WeaponAssembler({
 
     detachFromParent(carrier);
     carrier.position.set(0, 0, 0);
+    carrier.scale.set(1, 1, 1);
     root.add(carrier);
+
+    let driveMounted: Object3D | null = null;
+    let attachmentMounted: Object3D | null = null;
 
     if (driveEntry && drive) {
       const driveAttach = attachToSocket(carrier, SOCKET_DRIVE, drive);
@@ -120,19 +147,24 @@ export function WeaponAssembler({
         if (import.meta.env.DEV) {
           console.error('[WeaponAssembler]', issue.message, { assetId: driveEntry.id });
         }
-      } else if (attachmentEntry && attachment) {
-        const tipAttach = attachToSocket(drive, SOCKET_OUTPUT, attachment);
-        if (!tipAttach.ok) {
-          const issue: AssemblerIssue = {
-            assetId: attachmentEntry.id,
-            message: `Missing socket ${SOCKET_OUTPUT} on drive "${driveEntry.id}" (attachment "${attachmentEntry.id}")`,
-            userMessage: 'Aufsatz konnte nicht am Antrieb befestigt werden (Socket fehlt).',
-          };
-          issues.push(issue);
-          if (import.meta.env.DEV) {
-            console.error('[WeaponAssembler]', issue.message, {
+      } else {
+        driveMounted = drive;
+        if (attachmentEntry && attachment) {
+          const tipAttach = attachToSocket(drive, SOCKET_OUTPUT, attachment);
+          if (!tipAttach.ok) {
+            const issue: AssemblerIssue = {
               assetId: attachmentEntry.id,
-            });
+              message: `Missing socket ${SOCKET_OUTPUT} on drive "${driveEntry.id}" (attachment "${attachmentEntry.id}")`,
+              userMessage: 'Aufsatz konnte nicht am Antrieb befestigt werden (Socket fehlt).',
+            };
+            issues.push(issue);
+            if (import.meta.env.DEV) {
+              console.error('[WeaponAssembler]', issue.message, {
+                assetId: attachmentEntry.id,
+              });
+            }
+          } else {
+            attachmentMounted = attachment;
           }
         }
       }
@@ -160,6 +192,32 @@ export function WeaponAssembler({
       });
     }
 
+    assembledRef.current = {
+      drive: driveMounted,
+      attachment: attachmentMounted,
+      hasDrive: driveMounted !== null,
+      hasAttachment: attachmentMounted !== null,
+    };
+
+    // Apply initial pose immediately so first frame is not at socket origin mid-dock.
+    const pose = resolveMontagePose(
+      mountProgress.current,
+      {
+        hasDrive: driveMounted !== null,
+        hasAttachment: attachmentMounted !== null,
+      },
+      reducedMotion,
+    );
+    root.scale.setScalar(pose.rootScale);
+    if (driveMounted) {
+      driveMounted.position.set(0, 0, pose.driveLocalZ);
+      driveMounted.scale.setScalar(pose.driveScale);
+    }
+    if (attachmentMounted) {
+      attachmentMounted.position.set(0, 0, pose.attachmentLocalZ);
+      attachmentMounted.scale.setScalar(pose.attachmentScale);
+    }
+
     onIssuesRef.current?.(issues);
   }, [
     tick,
@@ -169,20 +227,44 @@ export function WeaponAssembler({
     recipe.carrierId,
     recipe.driveId,
     recipe.attachmentId,
+    reducedMotion,
   ]);
 
   useFrame((_, delta) => {
     const group = rootRef.current;
     if (!group) return;
+
+    const { drive, attachment, hasDrive, hasAttachment } = assembledRef.current;
+    const parts = { hasDrive, hasAttachment };
+
     if (reducedMotion) {
-      group.scale.setScalar(1);
+      mountProgress.current = 1;
+      const pose = resolveMontagePose(1, parts, true);
+      group.scale.setScalar(pose.rootScale);
+      if (drive) {
+        drive.position.set(0, 0, 0);
+        drive.scale.setScalar(1);
+      }
+      if (attachment) {
+        attachment.position.set(0, 0, 0);
+        attachment.scale.setScalar(1);
+      }
       return;
     }
+
     if (mountProgress.current < 1) {
-      mountProgress.current = Math.min(1, mountProgress.current + delta * 2.2);
-      const t = mountProgress.current;
-      const s = 1 - (1 - t) ** 3;
-      group.scale.setScalar(0.15 + s * 0.85);
+      mountProgress.current = advanceMontageProgress(mountProgress.current, delta);
+    }
+
+    const pose = resolveMontagePose(mountProgress.current, parts, false);
+    group.scale.setScalar(pose.rootScale);
+    if (drive) {
+      drive.position.set(0, 0, pose.driveLocalZ);
+      drive.scale.setScalar(pose.driveScale);
+    }
+    if (attachment) {
+      attachment.position.set(0, 0, pose.attachmentLocalZ);
+      attachment.scale.setScalar(pose.attachmentScale);
     }
   });
 

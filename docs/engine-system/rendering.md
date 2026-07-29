@@ -85,6 +85,21 @@ Classes: `MAT_METAL`, `MAT_RUBBER`, `MAT_GLASS`, `MAT_WOOD`, `MAT_CONCRETE`, `MA
 3. Attach Aufsatz under Antrieb `SOCKET_OUTPUT`  
 4. Missing socket: Dev overlay + `console.error` with asset id; Prod German fallback string  
 
+## Montage animation (#186)
+
+| Piece | Location |
+|-------|----------|
+| Phase math + dock offsets | `src/components/engine3d/three/EngineAnimations.ts` |
+| Applied each frame | `WeaponAssembler` `useFrame` |
+
+Stagger (Brief §12 general montage — not per-combo clips):
+
+1. Träger root scale-in (`0.15` → `1`)
+2. Antrieb approaches along local **+Z** on `SOCKET_DRIVE` (`MONTAGE_DOCK_DISTANCE` → `0`)
+3. Aufsatz approaches along local **+Z** on `SOCKET_OUTPUT`
+
+Carrier-only recipes skip drive/attachment windows (no fake dock). Recipe id change resets progress. `prefers-reduced-motion`: assembled pose, zero tween. Snapshots / `ENGINE_RENDER_VERSION` are unaffected (runtime motion only).
+
 ## Rules
 
 - Max one active Engine canvas per view.
