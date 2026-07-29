@@ -12,6 +12,7 @@ import {
   invalidateEngineSnapshot,
   setEngineSnapshot,
 } from './engine-snapshot-cache';
+import { setEngineSnapshotPersistStoreForTests } from './engine-snapshot-idb';
 import {
   ENGINE_SNAPSHOT_PLACEHOLDER_DATA_URL,
   requestEngineSnapshot,
@@ -26,6 +27,7 @@ const baseRecipe: EngineRecipe = {
 };
 
 afterEach(() => {
+  setEngineSnapshotPersistStoreForTests(null);
   invalidateEngineSnapshot();
 });
 

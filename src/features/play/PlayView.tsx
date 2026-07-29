@@ -50,6 +50,7 @@ import { isPlaytestMode } from './services/playtest/isPlaytestMode';
 import { PlaytestCheatbox } from './PlaytestCheatbox';
 import {
   MVP_DEMO_RECIPE,
+  hydrateEngineSnapshotCache,
   recipeHasRegistryAsset,
 } from './engine3d';
 import { boundToRecipe, validateRecipe } from '../../game/engine/engineRecipe';
@@ -251,6 +252,18 @@ export function PlayView({ onBattleMusicActiveChange }: PlayViewProps) {
   useEffect(() => {
     stateRef.current = state;
   }, [state]);
+
+  useEffect(() => {
+    let cancelled = false;
+    void hydrateEngineSnapshotCache().then((count) => {
+      if (!cancelled && count > 0) {
+        setEngineSnapshotEpoch((n) => n + 1);
+      }
+    });
+    return () => {
+      cancelled = true;
+    };
+  }, []);
 
   const hasGameState = state != null;
   useEffect(() => {
