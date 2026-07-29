@@ -3,7 +3,7 @@
  * Location: src/components/engine3d/three/model-utils.ts
  * Hook exception ADR D4 — this file may import `three`.
  */
-import { Object3D } from 'three';
+import { Mesh, Object3D, type Material } from 'three';
 
 /** Depth-first search for a named node (sockets are EMPTY nodes). */
 export function findObjectByName(root: Object3D, name: string): Object3D | null {
@@ -15,14 +15,27 @@ export function findObjectByName(root: Object3D, name: string): Object3D | null 
   return null;
 }
 
+function cloneMaterial(material: Material): Material {
+  return material.clone();
+}
+
 /**
  * Clone a loaded GLTF scene for safe multi-mount / socket parenting.
- * `clone(true)` deep-copies hierarchy; materials stay shared (fine for MVP boxes).
+ * Deep-copies hierarchy and materials so toon remapping does not mutate the GLTF cache.
  */
 export function cloneSceneSafe(scene: Object3D): Object3D {
   const clone = scene.clone(true);
   clone.traverse((node) => {
     node.matrixAutoUpdate = true;
+    if ((node as Mesh).isMesh) {
+      const mesh = node as Mesh;
+      const mat = mesh.material;
+      if (Array.isArray(mat)) {
+        mesh.material = mat.map(cloneMaterial);
+      } else if (mat) {
+        mesh.material = cloneMaterial(mat);
+      }
+    }
   });
   return clone;
 }
