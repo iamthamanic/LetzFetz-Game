@@ -62,7 +62,7 @@ export interface PendingCombat {
   attackRoll: number;
   attackValue: number;
   mode: 'player' | 'challenge';
-  /** Set when mode === 'challenge'. */
+  /** Set when mode === 'challenge' — bound instanceId or V5 formula component instanceId. */
   targetBoundInstanceId?: string;
   /** V5 Formel prep: shield points ignored on damage pipeline. */
   ignoreShield?: number;

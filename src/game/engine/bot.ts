@@ -2,9 +2,14 @@ import type { ContentPack, ElementCardDef, GameAction, GameState, PlayerId } fro
 import { getLegalActions, findElementDef, applyAction, type PackContext } from './actions';
 import { rulesetFromState } from './rulesetFromState';
 import { diceBonusFromRoll, rollD6 } from './dice';
-import { DEFAULT_RULESET } from '../types';
+import { DEFAULT_RULESET, isV5FormulaEnabled } from '../types';
 import { calculateCombatValue, resolveDamage, challengeSucceeded } from './combat';
 import { challengeTargetResistance } from './phraseBonuses';
+import {
+  findFormulaComponent,
+  formulaChallengeOutcome,
+  formulaComponentStability,
+} from './formulaChallenge';
 import { getCharacterElements } from './helpers';
 
 const BOT_ID: PlayerId = 'p2';
@@ -183,19 +188,40 @@ function pickBestChallenge(
 ): Extract<GameAction, { type: 'CHALLENGE' }> | null {
   if (actions.length === 0) return null;
 
+  const v5 = isV5FormulaEnabled(rulesetFromState(state));
   let best = actions[0];
   let bestScore = -Infinity;
 
   for (const action of actions) {
     const atkDef = handDef(state, BOT_ID, action.attackCardInstanceId, pack);
     if (!atkDef) continue;
-    const target = state.players[HUMAN_ID].bound.find((b) => b.instanceId === action.targetBoundInstanceId);
-    if (!target) continue;
 
     let maxAtk = 0;
     for (const roll of DICE_ROLLS) {
       maxAtk = Math.max(maxAtk, attackValue(state, pack, BOT_ID, atkDef, roll));
     }
+
+    if (v5) {
+      const target = findFormulaComponent(
+        state.players[HUMAN_ID].formula,
+        action.targetBoundInstanceId,
+      );
+      if (!target) continue;
+      const stability = formulaComponentStability(pack, target);
+      const outcome = formulaChallengeOutcome(maxAtk, stability, target.disturbed);
+      let score = maxAtk + stability * (outcome === 'destroy' ? 2 : outcome === 'disturb' ? 1.2 : 0.3);
+      if (target.disturbed) score += 1;
+      if (score > bestScore) {
+        bestScore = score;
+        best = action;
+      }
+      continue;
+    }
+
+    const target = state.players[HUMAN_ID].bound.find(
+      (b) => b.instanceId === action.targetBoundInstanceId,
+    );
+    if (!target) continue;
 
     const targetResistance = challengeTargetResistance(pack, target);
     const margin = state.arena.arenaId === 'arena-sumpf' ? 2 : 1;
@@ -206,6 +232,14 @@ function pickBestChallenge(
       bestScore = score;
       best = action;
     }
+  }
+
+  if (v5) {
+    const target = findFormulaComponent(state.players[HUMAN_ID].formula, best.targetBoundInstanceId);
+    if (!target) return null;
+    const stability = formulaComponentStability(pack, target);
+    if (stability < 2) return null;
+    return { ...best, diceRoll: rollD6() };
   }
 
   const target = state.players[HUMAN_ID].bound.find((b) => b.instanceId === best.targetBoundInstanceId);
