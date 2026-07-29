@@ -10,7 +10,7 @@ export const CHARACTER_ELEMENT_STRIPE_FROM: Record<Element, string> = {
   fire: 'from-red-600/90',
   water: 'from-cyan-600/90',
   earth: 'from-lime-600/90',
-  air: 'from-sky-400/90',
+  air: 'from-stone-200/90',
   shadow: 'from-purple-600/90',
   light: 'from-amber-300/90',
 };
@@ -19,7 +19,7 @@ export const CHARACTER_ELEMENT_STRIPE_TO: Record<Element, string> = {
   fire: 'to-red-900/80',
   water: 'to-cyan-900/80',
   earth: 'to-lime-900/80',
-  air: 'to-sky-800/80',
+  air: 'to-stone-700/80',
   shadow: 'to-purple-900/80',
   light: 'to-amber-700/80',
 };
@@ -50,9 +50,9 @@ export const ELEMENT_ACCENTS: Record<CardElement, { stripe: string; glow: string
     badge: 'text-lime-100 border-lime-800/60 bg-lime-950/70',
   },
   Air: {
-    stripe: 'bg-sky-400',
-    glow: 'from-sky-900/40 via-transparent to-transparent',
-    badge: 'text-sky-100 border-sky-600/60 bg-sky-950/70',
+    stripe: 'bg-stone-300',
+    glow: 'from-stone-800/40 via-transparent to-transparent',
+    badge: 'text-stone-100 border-stone-400/55 bg-stone-700/75',
   },
   Light: {
     stripe: 'bg-amber-300',

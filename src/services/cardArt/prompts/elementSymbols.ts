@@ -18,7 +18,7 @@ const ELEMENT_SYMBOL: Record<Element, string> = {
   fire: `${ICON_STYLE}, bold flame fire symbol, orange red glow`,
   water: `${ICON_STYLE}, water droplet wave symbol, cyan blue glow`,
   earth: `${ICON_STYLE}, mountain rock leaf earth symbol, green brown glow`,
-  air: `${ICON_STYLE}, wind swirl cyclone symbol, sky blue glow`,
+  air: `${ICON_STYLE}, wind swirl cyclone symbol, white gray stone glow`,
   shadow: `${ICON_STYLE}, crescent moon void shadow symbol, purple black glow`,
   light: `${ICON_STYLE}, radiant sun light beams symbol, warm gold white glow`,
 };

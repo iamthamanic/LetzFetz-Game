@@ -83,7 +83,6 @@ export function ElementEffectCard({
             <ElementIcon
               element={element}
               size="sm"
-              airTone={element === 'air' ? 'neutral' : 'sky'}
               className={compact ? '!p-0.5 scale-[0.72]' : '!p-0.5 scale-[0.85]'}
             />
             <span className="element-badge-shimmer__shine" aria-hidden />
