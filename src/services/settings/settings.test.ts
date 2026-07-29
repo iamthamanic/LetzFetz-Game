@@ -3,7 +3,7 @@
  * Location: src/services/settings/settings.test.ts
  */
 import { afterEach, beforeEach, describe, expect, it, vi } from 'vitest';
-import { createDefaultGameSettings } from './defaults';
+import { createDefaultGameSettings, isDevAudioMutedByDefault } from './defaults';
 import {
   clearGameSettings,
   loadGameSettings,
@@ -43,12 +43,17 @@ describe('GameSettings', () => {
     vi.unstubAllGlobals();
   });
 
-  it('createDefaultGameSettings returns versioned unmuted defaults', () => {
+  it('createDefaultGameSettings returns versioned defaults (muted in DEV)', () => {
     const d = createDefaultGameSettings();
     expect(d.version).toBe(GAME_SETTINGS_VERSION);
-    expect(d.audio.muted).toBe(false);
+    // Vite DEV / Vitest: fresh settings start muted so local work stays quiet.
+    expect(d.audio.muted).toBe(import.meta.env.DEV === true);
     expect(d.audio.master).toBe(1);
     expect(d.display.uiScale).toBe(1);
+  });
+
+  it('isDevAudioMutedByDefault tracks import.meta.env.DEV', () => {
+    expect(isDevAudioMutedByDefault()).toBe(import.meta.env.DEV === true);
   });
 
   it('validateGameSettings accepts a valid record', () => {
@@ -91,7 +96,9 @@ describe('GameSettings', () => {
   });
 
   it('load returns defaults when storage empty', () => {
-    expect(loadGameSettings()).toEqual(createDefaultGameSettings());
+    const loaded = loadGameSettings();
+    expect(loaded).toEqual(createDefaultGameSettings());
+    expect(loaded.audio.muted).toBe(isDevAudioMutedByDefault());
   });
 
   it('load returns defaults on corrupt JSON', () => {
@@ -118,6 +125,13 @@ describe('GameSettings', () => {
     localStorage.setItem(LEGACY_MUTE_STORAGE_KEY, '0');
     expect(loadGameSettings().audio.muted).toBe(false);
     expect(localStorage.getItem(LEGACY_MUTE_STORAGE_KEY)).toBeNull();
+  });
+
+  it('persisted unmuted settings win over DEV mute default', () => {
+    const settings = createDefaultGameSettings();
+    settings.audio.muted = false;
+    expect(saveGameSettings(settings).ok).toBe(true);
+    expect(loadGameSettings().audio.muted).toBe(false);
   });
 
   it('legacy mute overlays existing stored settings then deletes key', () => {
