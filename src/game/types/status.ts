@@ -1,9 +1,11 @@
 /**
- * V3 status / mark / shield model (SPIELANLEITUNG_V3_WIP + dump §6–§7 §19).
+ * V3/V5 status / mark / shield model.
  * Location: src/game/types/status.ts
+ * V5 display names (Verwirbelt / Verstrahlt) map via PRIMARY_MARK_LABEL_DE;
+ * engine ids stay `aufgewirbelt` / `erleuchtet` for save/compat.
  */
 
-/** All status ids used by the V3 combat layer. */
+/** All status ids used by the combat layer. */
 export type StatusId =
   | 'brennen'
   | 'durchnaesst'
@@ -13,14 +15,19 @@ export type StatusId =
   | 'verflucht'
   | 'nebel'
   | 'dichter_nebel'
+  | 'nebelbank'
   | 'verpeilt'
   | 'geblendet'
   | 'gift'
+  | 'toxisch'
   | 'ueberflutet'
   | 'fokus'
-  | 'ausgeblendet';
+  | 'ausgeblendet'
+  | 'heilblockade'
+  | 'katalysatorausfall'
+  | 'stabilitaetsbruch';
 
-/** Primary element marks (V3 §2.3 / §6). */
+/** Primary element marks (V5 §18 / legacy V3 §6). */
 export type PrimaryMarkId =
   | 'brennen'
   | 'durchnaesst'
@@ -44,12 +51,17 @@ export const STATUS_STACK_LIMIT: Record<StatusId, number> = {
   verflucht: 3,
   nebel: 1,
   dichter_nebel: 1,
+  nebelbank: 1,
   verpeilt: 1,
   geblendet: 1,
   gift: 3,
+  toxisch: 1,
   ueberflutet: 1,
   fokus: 1,
   ausgeblendet: 1,
+  heilblockade: 1,
+  katalysatorausfall: 1,
+  stabilitaetsbruch: 1,
 };
 
 export const MAX_SHIELD = 5;
@@ -62,6 +74,20 @@ export const PRIMARY_MARK_IDS: readonly PrimaryMarkId[] = [
   'erleuchtet',
   'verflucht',
 ] as const;
+
+/** V5 German labels for primary marks (spielkonzept §18). */
+export const PRIMARY_MARK_LABEL_DE: Record<PrimaryMarkId, string> = {
+  brennen: 'Brennen',
+  durchnaesst: 'Durchnässt',
+  high: 'High',
+  aufgewirbelt: 'Verwirbelt',
+  erleuchtet: 'Verstrahlt',
+  verflucht: 'Verflucht',
+};
+
+export function primaryMarkLabelDe(id: PrimaryMarkId): string {
+  return PRIMARY_MARK_LABEL_DE[id];
+}
 
 export function isStatusId(value: unknown): value is StatusId {
   return typeof value === 'string' && value in STATUS_STACK_LIMIT;
