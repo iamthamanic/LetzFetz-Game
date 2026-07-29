@@ -93,6 +93,7 @@
             "asset:preview": "node tools/asset-pipeline/preview.mjs",
             "asset:all": "node tools/asset-pipeline/all.mjs",
             "generate:card-art": "npx tsx scripts/generate-base-pack-art.ts",
+            "generate:element-effect-art": "npx tsx scripts/generate-element-effect-art.ts",
             "generate:higgsfield-chars": "npx tsx scripts/generate-higgsfield-characters.ts",
             "generate:higgsfield-name-plates": "npx tsx scripts/generate-higgsfield-name-plates.ts",
             "generate:higgsfield-all": "npx tsx scripts/generate-higgsfield-all.ts",

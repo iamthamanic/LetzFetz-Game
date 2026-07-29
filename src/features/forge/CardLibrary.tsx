@@ -23,8 +23,16 @@ import {
   EnginePreviewCanvas,
   recipeFromPartId,
 } from '../../components/engine3d';
+import { ElementEffectCard } from '../../components/cards/ElementEffectCard';
+import { ElementEffectPreviewModal } from '../../components/cards/ElementEffectPreviewModal';
+import {
+  PRIMARY_MARK_ENTRIES,
+  PRIMARY_MARK_LABEL_DE,
+} from '../../components/cards/elementMarkArt';
+import type { Element, PrimaryMarkId } from '../../game/types';
+import { ELEMENT_LABELS_DE } from '../../components/ui/ElementIcon';
 
-export type CardLibraryFilter = CardKind | 'All';
+export type CardLibraryFilter = CardKind | 'All' | 'Effects';
 
 interface CardLibraryProps {
   cards: ForgeCardData[];
@@ -60,6 +68,7 @@ interface CardLibraryProps {
 const FILTERS: Array<{ id: CardLibraryFilter; label: string }> = [
   { id: 'All', label: 'Alle' },
   ...CARD_CATEGORIES.map((c) => ({ id: c.id as CardLibraryFilter, label: c.label })),
+  { id: 'Effects', label: 'Effekte' },
 ];
 
 function LibraryCardFace({
@@ -81,6 +90,10 @@ function LibraryCardFace({
           effects: card.effects,
         })
       : null;
+  const engineRole =
+    card.type === 'Engine'
+      ? card.effects?.find((e) => e.startsWith('Rolle:'))?.replace(/^Rolle:\s*/, '').trim()
+      : undefined;
 
   return (
     <LetzFetzCard
@@ -93,7 +106,7 @@ function LibraryCardFace({
       effects={card.effects}
       image_asset={card.image_asset}
       gameElements={characterDef?.elements}
-      role={characterDef?.role}
+      role={characterDef?.role ?? engineRole}
       size={size}
       layout="portrait"
       hideHeader
@@ -350,7 +363,22 @@ export function CardLibrary({
   onNotesSave,
 }: CardLibraryProps) {
   const [internalPreviewCard, setInternalPreviewCard] = useState<ForgeCardData | null>(null);
+  const [previewEffect, setPreviewEffect] = useState<{
+    markId: PrimaryMarkId;
+    element: Element;
+  } | null>(null);
   const previewCard = externalPreviewCard ?? internalPreviewCard;
+  const showEffects = activeFilter === 'Effects';
+  const filteredEffects = PRIMARY_MARK_ENTRIES.filter(({ markId, element }) => {
+    if (!searchTerm) return true;
+    const q = searchTerm.toLowerCase();
+    return (
+      PRIMARY_MARK_LABEL_DE[markId].toLowerCase().includes(q) ||
+      ELEMENT_LABELS_DE[element].toLowerCase().includes(q) ||
+      element.toLowerCase().includes(q) ||
+      markId.toLowerCase().includes(q)
+    );
+  });
 
   const closePreview = () => {
     if (onClosePreview) {
@@ -370,33 +398,28 @@ export function CardLibrary({
   return (
     <div className="flex min-h-0 flex-1 flex-col bg-stone-950" data-testid="card-library">
       <header className="flex-none space-y-2.5 border-b border-stone-800 bg-stone-900/90 px-3 py-3 sm:px-4 sm:py-3.5">
-        <div className="flex flex-wrap items-end justify-between gap-2">
-          <div className="space-y-0.5">
-            <h2 className="font-brand-on-dark text-base uppercase leading-none tracking-wide sm:text-lg">
-              Karten-Bibliothek
+        <div className="flex flex-wrap items-center justify-between gap-2">
+          <div className="flex min-w-0 flex-1 flex-wrap items-center gap-2 sm:gap-3">
+            <h2 className="font-brand-on-dark shrink-0 text-base uppercase leading-none tracking-wide sm:text-lg">
+              Material
             </h2>
-            <p className="text-xs text-stone-500">
-              Base Pack V1 · {filteredCards.length} von {cards.length} Karten
-            </p>
-          </div>
-          <div className="flex flex-wrap items-end gap-2">
-            <Button
-              variant="accent"
-              size="sm"
-              icon={<Plus className="h-4 w-4" />}
-              onClick={onCreateNew}
-              className="font-brand uppercase leading-none tracking-wide"
-            >
-              Neue Karte
-            </Button>
             <Input
-              placeholder="Karten suchen…"
+              placeholder="Material suchen…"
               value={searchTerm}
               onChange={(e) => onSearchChange(e.target.value)}
-              className="max-w-sm"
-              aria-label="Karten suchen"
+              className="max-w-xs"
+              aria-label="Material suchen"
             />
           </div>
+          <Button
+            variant="accent"
+            size="sm"
+            icon={<Plus className="h-4 w-4" />}
+            onClick={onCreateNew}
+            className="font-brand uppercase leading-none tracking-wide"
+          >
+            Neue Karte
+          </Button>
         </div>
 
         <div className="flex flex-wrap gap-1.5" role="tablist" aria-label="Kartenfilter">
@@ -404,7 +427,9 @@ export function CardLibrary({
             const count =
               filter.id === 'All'
                 ? cards.length
-                : cards.filter((c) => c.type === filter.id).length;
+                : filter.id === 'Effects'
+                  ? PRIMARY_MARK_ENTRIES.length
+                  : cards.filter((c) => c.type === filter.id).length;
             const isActive = activeFilter === filter.id;
             return (
               <button
@@ -435,6 +460,34 @@ export function CardLibrary({
             <Loader2 className="mb-2 h-6 w-6 animate-spin" />
             <span className="text-sm">Karten werden geladen…</span>
           </div>
+        ) : showEffects ? (
+          filteredEffects.length === 0 ? (
+            <EmptyState
+              title={searchTerm ? 'Keine Treffer' : 'Keine Effekte'}
+              subtitle={searchTerm ? 'Andere Suchbegriffe ausprobieren' : undefined}
+            />
+          ) : (
+            <ul className="grid grid-cols-4 gap-1.5 sm:gap-2" data-testid="card-library-effects-grid">
+              {filteredEffects.map(({ markId, element }) => (
+                <li key={markId} className="min-w-0">
+                  <button
+                    type="button"
+                    onClick={() => setPreviewEffect({ markId, element })}
+                    className="group w-full rounded-md transition-transform hover:scale-[1.01] focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-purple-500"
+                    aria-label={`${PRIMARY_MARK_LABEL_DE[markId]} ansehen`}
+                    data-testid={`library-effect-${markId}`}
+                  >
+                    <ElementEffectCard
+                      markId={markId}
+                      element={element}
+                      size="fluid"
+                      className="!max-w-none"
+                    />
+                  </button>
+                </li>
+              ))}
+            </ul>
+          )
         ) : filteredCards.length === 0 ? (
           <EmptyState
             title={searchTerm ? 'Keine Treffer' : 'Kategorie leer'}
@@ -481,6 +534,14 @@ export function CardLibrary({
           onNotesModalOpen={onNotesModalOpen}
           onNotesModalClose={onNotesModalClose}
           onNotesSave={onNotesSave}
+        />
+      ) : null}
+
+      {previewEffect ? (
+        <ElementEffectPreviewModal
+          markId={previewEffect.markId}
+          element={previewEffect.element}
+          onClose={() => setPreviewEffect(null)}
         />
       ) : null}
     </div>

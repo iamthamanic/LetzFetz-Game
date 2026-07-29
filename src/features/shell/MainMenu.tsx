@@ -1,5 +1,5 @@
 /**
- * App home — vertical menu: Play, Cards, Sandbox, Settings.
+ * App home — vertical menu: Play, Material, Sandbox, Settings.
  * Location: src/features/shell/MainMenu.tsx
  */
 import React from 'react';
@@ -74,8 +74,8 @@ const PRIMARY_ITEMS: {
   },
   {
     id: 'forge',
-    label: 'Cards',
-    hint: 'Karten-Bibliothek — alle Karten durchsuchen',
+    label: 'Material',
+    hint: 'Material — alle Karten durchsuchen',
     icon: <Layers className="h-6 w-6" aria-hidden />,
     tone: 'editor',
   },
