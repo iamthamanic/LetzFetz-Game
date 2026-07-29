@@ -27,6 +27,7 @@ App → SettingsProvider → AudioManager (only public API for React)
 - `planned` IDs may be referenced in code; missing files → silent skip.
 - Procedural stingers (combat) until mastered assets are approved.
 - Mute applies via Settings (and arena video mute wiring where implemented).
+- **DEV default:** fresh/missing settings start with `audio.muted: true` (`import.meta.env.DEV`). Production defaults stay unmuted. Persisted localStorage always wins.
 
 ## Sound policy (summary)
 

@@ -49,6 +49,7 @@ export function MusicBedSync({ bed }: MusicBedSyncProps) {
   useEffect(() => {
     const onGesture = () => {
       audioManager.unlock();
+      if (audioManager.isMuted()) return;
       // Retry in the same gesture stack — unlock alone is not enough for HTML5 beds.
       audioManager.playMusic(BED_TO_ID[bedRef.current]);
     };

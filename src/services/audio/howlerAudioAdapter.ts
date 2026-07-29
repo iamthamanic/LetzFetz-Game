@@ -54,7 +54,8 @@ export class HowlerAudioAdapter {
     Howler.mute(settings.muted);
     Howler.volume(settings.muted ? 0 : settings.master);
     for (const entry of this.sounds.values()) {
-      entry.howl.volume(
+      this.setHowlVolumeImmediate(
+        entry.howl,
         effectiveVolume(settings, entry.category, entry.baseVolume),
       );
     }
@@ -133,6 +134,7 @@ export class HowlerAudioAdapter {
   /**
    * Single looped music bed. Same id while already playing → no restart.
    * Switching ids fades out then fades in.
+   * When muted, still tracks the bed id but keeps volume at 0 (no audible fade-in).
    */
   playMusic(id: SoundId, fadeMs = DEFAULT_MUSIC_FADE_MS): void {
     const meta = howlerSource(id);
@@ -141,7 +143,8 @@ export class HowlerAudioAdapter {
     if (this.musicId === id && this.musicHowl) {
       this.musicBaseVolume = meta.baseVolume;
       this.applyMusicVolume();
-      if (!this.musicHowl.playing()) {
+      // Do not restart playback while muted — Howler.mute + volume 0 stay in force.
+      if (!this.settings.muted && !this.musicHowl.playing()) {
         this.musicHowl.play();
       }
       return;
@@ -172,11 +175,11 @@ export class HowlerAudioAdapter {
       }
       this.musicHowl = howl;
       try {
-        howl.play();
         if (this.settings.muted || target <= 0) {
-          howl.volume(0);
+          this.setHowlVolumeImmediate(howl, 0);
           return;
         }
+        howl.play();
         howl.fade(0, target, Math.max(0, fadeMs));
       } catch {
         // Autoplay / decode failures — fail soft.
@@ -234,12 +237,35 @@ export class HowlerAudioAdapter {
 
   private applyMusicVolume(): void {
     if (!this.musicHowl) return;
-    const target = effectiveVolume(
-      this.settings,
-      'music',
-      this.musicBaseVolume,
-    );
-    this.musicHowl.volume(this.settings.muted ? 0 : target);
+    const target = this.settings.muted
+      ? 0
+      : effectiveVolume(this.settings, 'music', this.musicBaseVolume);
+    this.setHowlVolumeImmediate(this.musicHowl, target);
+  }
+
+  /**
+   * Set Howl volume without Howler's mid-fade bug: `volume()` calls `_stopFade`,
+   * which snaps to `_fadeTo` (e.g. full music gain) and can undo mute/volume-0.
+   */
+  private setHowlVolumeImmediate(howl: Howl, target: number): void {
+    const internal = howl as unknown as {
+      _sounds?: Array<{
+        _interval: ReturnType<typeof setInterval> | null;
+        _fadeTo: number | null;
+      }>;
+    };
+    for (const sound of internal._sounds ?? []) {
+      if (sound._interval) {
+        clearInterval(sound._interval);
+        sound._interval = null;
+        sound._fadeTo = null;
+      }
+    }
+    try {
+      howl.volume(target);
+    } catch {
+      // jsdom / disposed Howl
+    }
   }
 
   private unloadMusic(): void {

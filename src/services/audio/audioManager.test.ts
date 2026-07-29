@@ -106,4 +106,28 @@ describe('audioManager', () => {
     expect(audioManager.currentMusicId()).toBe('music.menu.main');
     expect(() => audioManager.playMusic('music.menu.main', 0)).not.toThrow();
   });
+
+  it('mute after playMusic keeps bed id and stays muted', () => {
+    audioManager.applySettings({
+      muted: false,
+      master: 1,
+      sfx: 1,
+      ui: 1,
+      ambience: 0.6,
+      music: 0.7,
+    });
+    expect(() => audioManager.playMusic('music.menu.main', 0)).not.toThrow();
+    audioManager.applySettings({
+      muted: true,
+      master: 1,
+      sfx: 1,
+      ui: 1,
+      ambience: 0.6,
+      music: 0.7,
+    });
+    expect(audioManager.isMuted()).toBe(true);
+    expect(audioManager.currentMusicId()).toBe('music.menu.main');
+    expect(() => audioManager.playMusic('music.menu.main', 0)).not.toThrow();
+    expect(audioManager.isMuted()).toBe(true);
+  });
 });
