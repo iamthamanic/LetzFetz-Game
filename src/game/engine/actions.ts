@@ -1,3 +1,4 @@
+import { rulesetFromState } from './rulesetFromState';
 import type {
   BoundCardInstance,
   ContentPack,
@@ -28,6 +29,11 @@ import {
   findFormulaComponentDef,
   formulaSlotForDef,
 } from './formulaSlots';
+import {
+  resolveFormulaActivate,
+  takeAttackPrepBonus,
+  takeBlockPrepBonus,
+} from './formulaResolve';
 import { applyDamageThroughShield } from './status/shield';
 import { pickReaction, resolveImpulseReactions } from './status/reactionChoice';
 import {
@@ -37,7 +43,8 @@ import {
 } from './status/tickStatuses';
 import { clearV3ActionHooks } from './status/v3CombatHooks';
 import { tryApplyTransform } from './status/transform';
-import { getStatus, hasStatus } from './status/applyStatus';
+import { applyStatus, getStatus, hasStatus } from './status/applyStatus';
+import { clampShield } from '../types';
 import {
   activateFetzPart,
   hasPoolActivate,
@@ -94,8 +101,13 @@ export interface PackContext {
   rng?: () => number;
 }
 
-function rulesetOf(ctx: PackContext): RulesetConfig {
-  return ctx.ruleset ?? DEFAULT_RULESET;
+function rulesetOf(ctx: PackContext, state?: GameState): RulesetConfig {
+  if (ctx.ruleset) return ctx.ruleset;
+  if (state) {
+    const fromState = rulesetFromState(state);
+    if (fromState.v5Formula || fromState.v3Combat) return fromState;
+  }
+  return DEFAULT_RULESET;
 }
 
 function rngOf(ctx: PackContext): () => number {
@@ -331,7 +343,9 @@ function applyPlayerAttackDamage(
     workingDamage = reduced.incomingDamage ?? workingDamage;
   }
 
-  const pipeline = applyDamageThroughShield(state, defenderId, workingDamage, ruleset);
+  const pipeline = applyDamageThroughShield(state, defenderId, workingDamage, ruleset, {
+    ignoreShield: state.combat?.ignoreShield ?? 0,
+  });
   let next = pipeline.state;
   next.combat = null;
   next.phase = 'end';
@@ -402,6 +416,23 @@ function applyPlayerAttackDamage(
       bonus: hadBurn,
     });
     next = hitFx.state;
+  }
+
+  // V5 Formelprep aftermath (Essenz-Marke / Spiegel-Schild).
+  if (isV5FormulaEnabled(ruleset) && pipeline.isHit) {
+    const prep = next.players[attackerId].formulaPrep;
+    if (prep) {
+      if (prep.mirrorShieldOnHit > 0) {
+        next.players[attackerId].shield = clampShield(
+          (next.players[attackerId].shield ?? 0) + prep.mirrorShieldOnHit,
+        );
+      }
+      const reactions = next.meta.v3ReactionsThisAction ?? 0;
+      if (prep.markIfNoReaction && reactions === 0) {
+        next = applyStatus(next, defenderId, prep.markIfNoReaction, 1);
+      }
+      next.players[attackerId].formulaPrep = null;
+    }
   }
 
   if (isV3CombatEnabled(ruleset) && blockValue > 0) {
@@ -693,7 +724,7 @@ function getPendingLegalActions(state: GameState, ctx: PackContext): GameAction[
       }
       break;
     case 'spaeti-extra-build':
-      actions.push(...listBuildActionsForPlayer(state, ctx.pack, eligible, rulesetOf(ctx)));
+      actions.push(...listBuildActionsForPlayer(state, ctx.pack, eligible, rulesetOf(ctx, state)));
       break;
     case 'pick-reaction':
       for (const opt of pending.options) {
@@ -709,7 +740,7 @@ function getPendingLegalActions(state: GameState, ctx: PackContext): GameAction[
 export function getLegalActions(state: GameState, ctx: PackContext): GameAction[] {
   if (state.winner) return [];
 
-  const ruleset = rulesetOf(ctx);
+  const ruleset = rulesetOf(ctx, state);
 
   if (state.pendingChoice) {
     return getPendingLegalActions(state, ctx);
@@ -768,7 +799,7 @@ export function getLegalActions(state: GameState, ctx: PackContext): GameAction[
 
           const element = findElementDef(ctx.pack, card.defId);
           if (element?.cardType === 'boost') {
-            if (isV3CombatEnabled(rulesetOf(ctx)) || canBuildBoost(bound)) {
+            if (isV3CombatEnabled(rulesetOf(ctx, state)) || canBuildBoost(bound)) {
               actions.push({ type: 'BUILD_CARD', cardInstanceId: card.instanceId });
             } else {
               const chargeCard = bound.find((b) => b.phraseSlot === 'charge');
@@ -819,7 +850,7 @@ export function getLegalActions(state: GameState, ctx: PackContext): GameAction[
     }
     const player = state.players[ctx.playerId];
     const lockedId = state.meta.activationLockedBoundId;
-    const v3 = isV3CombatEnabled(rulesetOf(ctx));
+    const v3 = isV3CombatEnabled(rulesetOf(ctx, state));
     for (const bound of player.bound) {
       if (bound.exhausted || bound.instanceId === lockedId) continue;
       const enginePart = findEnginePartDef(ctx.pack, bound.defId);
@@ -1021,24 +1052,15 @@ function applyFormulaReplace(
 }
 
 /**
- * Minimal V5 activate: exhaust upright non-disturbed components.
- * Full Teil-/Vollformel effect matrix + prep hooks → issue #221.
+ * V5 activate: Technik → Essenz → Katalysator resolve + prep hooks.
  */
-function applyFormulaActivate(state: GameState, playerId: PlayerId): GameState {
-  const next = cloneState(state);
-  const formula = next.players[playerId].formula;
-  let used = 0;
-  for (const slot of ['technik', 'essenz', 'katalysator'] as const) {
-    const comp = formula[slot];
-    if (!comp || comp.exhausted || comp.disturbed) continue;
-    formula[slot] = { ...comp, exhausted: true };
-    used += 1;
-  }
-  if (used === 0) throw new Error('No activatable formula components');
-  next.phase = 'action';
-  // Stub until #221 resolution slice.
-  next.lastEvent = `Formel aktiviert (${used} Komponenten erschöpft; Effekt folgt #221).`;
-  return next;
+function applyFormulaActivate(
+  state: GameState,
+  pack: ContentPack,
+  playerId: PlayerId,
+  ruleset: RulesetConfig,
+): GameState {
+  return resolveFormulaActivate(state, pack, playerId, ruleset);
 }
 
 /**
@@ -1079,7 +1101,7 @@ function applyPendingChoiceAction(
   }
 
   const pack = ctx.pack;
-  const ruleset = rulesetOf(ctx);
+  const ruleset = rulesetOf(ctx, state);
   const rng = rngOf(ctx);
 
   switch (action.type) {
@@ -1237,7 +1259,7 @@ export function applyAction(
   state = { ...state, instantReveals: [] };
   if (state.winner) return state;
   const pack = ctx.pack;
-  const ruleset = rulesetOf(ctx);
+  const ruleset = rulesetOf(ctx, state);
   const rng = rngOf(ctx);
 
   if (state.pendingChoice) {
@@ -1280,7 +1302,7 @@ export function applyAction(
     case 'FORMULA_ACTIVATE': {
       if (state.phase !== 'build') throw new Error('Not in build phase');
       if (!isV5FormulaEnabled(ruleset)) throw new Error('FORMULA_ACTIVATE requires v5Formula');
-      return applyFormulaActivate(state, playerId);
+      return applyFormulaActivate(state, pack, playerId, ruleset);
     }
     case 'FORMULA_SCHNELLMIX': {
       if (state.phase !== 'build') throw new Error('Not in build phase');
@@ -1333,6 +1355,10 @@ export function applyAction(
 
       let attackValue = computeAttackValueForPlayer(pack, working, playerId, def, diceRoll, ruleset);
 
+      const attackPrep = takeAttackPrepBonus(working, playerId);
+      working = attackPrep.state;
+      attackValue += attackPrep.combatBonus;
+
       if (isV3CombatEnabled(ruleset)) {
         const announce = runFetzPassiveTrigger(
           working,
@@ -1356,6 +1382,7 @@ export function applyAction(
         attackRoll: diceRoll,
         attackValue,
         mode: 'player',
+        ignoreShield: attackPrep.ignoreShield > 0 ? attackPrep.ignoreShield : undefined,
       };
       next.lastEvent = `Angriff ${attackValue} (Würfel ${diceRoll}). Gegner darf blocken.`;
       return next;
@@ -1612,7 +1639,7 @@ function applyCombatResponse(
   if (playerId !== defenderId) throw new Error('Only defender can respond');
 
   const pack = ctx.pack;
-  const ruleset = rulesetOf(ctx);
+  const ruleset = rulesetOf(ctx, state);
   const rng = rngOf(ctx);
   const attackDef = findElementDef(pack, attackCardDefId);
   if (!attackDef) throw new Error('Attack card missing');
@@ -1652,15 +1679,19 @@ function applyCombatResponse(
       }
     }
 
-    const blockValue = computeBlockValueForPlayer(
-      pack,
-      working,
-      playerId,
-      def,
-      diceRoll,
-      attackDef.element,
-      ruleset,
-    );
+    const blockPrep = takeBlockPrepBonus(working, playerId);
+    working = blockPrep.state;
+
+    const blockValue =
+      computeBlockValueForPlayer(
+        pack,
+        working,
+        playerId,
+        def,
+        diceRoll,
+        attackDef.element,
+        ruleset,
+      ) + blockPrep.combatBonus;
 
     let next = discardFromHand(working, playerId, action.cardInstanceId);
     if (state.combat.mode === 'challenge') {

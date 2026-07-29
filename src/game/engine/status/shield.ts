@@ -23,12 +23,14 @@ export interface DamagePipelineResult {
 
 /**
  * Apply remaining post-block damage: Shield then HP (when v3Combat).
+ * `ignoreShield` (V5 Durchschuss etc.) skips that many shield points for absorption.
  */
 export function applyDamageThroughShield(
   state: GameState,
   defenderId: PlayerId,
   postBlockDamage: number,
   ruleset: RulesetConfig,
+  options?: { ignoreShield?: number },
 ): DamagePipelineResult {
   const next = cloneState(state);
   const isFullBlock = postBlockDamage <= 0;
@@ -59,9 +61,10 @@ export function applyDamageThroughShield(
   }
 
   let remaining = postBlockDamage;
-  const shield = next.players[defenderId].shield ?? 0;
-  const absorbed = Math.min(shield, remaining);
-  next.players[defenderId].shield = shield - absorbed;
+  const ignore = Math.max(0, options?.ignoreShield ?? 0);
+  const effectiveShield = Math.max(0, (next.players[defenderId].shield ?? 0) - ignore);
+  const absorbed = Math.min(effectiveShield, remaining);
+  next.players[defenderId].shield = (next.players[defenderId].shield ?? 0) - absorbed;
   remaining -= absorbed;
 
   if (remaining > 0) {

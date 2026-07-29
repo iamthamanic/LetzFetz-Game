@@ -1,4 +1,5 @@
 import type { BoundCardInstance, CardInstance, FormulaComponentInstance } from './cards';
+import type { FormulaPrepState } from './formulaEffects';
 import type { MatchMeta, PendingChoice } from './matchMeta';
 import type { PlayerId, TurnPhase } from './ruleset';
 import type { StatusInstance } from './status';
@@ -28,6 +29,8 @@ export interface PlayerState {
   bound: BoundCardInstance[];
   /** V5 Formelplätze; empty/null slots when unused. */
   formula: FormulaBoard;
+  /** V5 pending prep from Formelaktivierung (null when none). */
+  formulaPrep: FormulaPrepState | null;
   ultimateAvailable: boolean;
   /** Stiernackenkommando Ulti: next attack damage doubled. */
   doubleNextAttack: boolean;
@@ -61,6 +64,8 @@ export interface PendingCombat {
   mode: 'player' | 'challenge';
   /** Set when mode === 'challenge'. */
   targetBoundInstanceId?: string;
+  /** V5 Formel prep: shield points ignored on damage pipeline. */
+  ignoreShield?: number;
 }
 
 /** Sofort-Glitch drawn this action — UI shows face-up in center for both players. */

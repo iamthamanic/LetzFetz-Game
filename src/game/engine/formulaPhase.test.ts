@@ -294,7 +294,7 @@ describe('V5 Formelphase — applyAction', () => {
     expect(state.players.p1.formula.essenz?.exhausted).toBe(false);
     expect(state.players.p1.formula.essenz?.disturbed).toBe(true);
     expect(state.players.p1.formula.katalysator?.exhausted).toBe(true);
-    expect(state.lastEvent).toMatch(/#221/);
+    expect(state.lastEvent).toMatch(/Formel aktiviert/);
   });
 
   it('schnellmix discards formula card without needing a board slot', () => {

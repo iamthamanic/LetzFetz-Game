@@ -113,6 +113,8 @@ export interface TechniqueCardDef extends CardBase {
   activationMode: FormulaActivationMode;
   effectText: string;
   visual?: import('./formulaVisual').TechniqueVisual;
+  /** Structured effect for engine resolve (optional until pack authoring). */
+  formulaEffect?: import('./formulaEffects').FormulaTechniqueEffect;
 }
 
 /** V5 Essenz — secondary element + status contribution. */
@@ -122,6 +124,7 @@ export interface EssenceCardDef extends CardBase {
   stability: number;
   effectText: string;
   visual?: import('./formulaVisual').EssenceVisual;
+  formulaEffect?: import('./formulaEffects').FormulaEssenceEffect;
 }
 
 /** V5 Katalysator — timing / transformation. */
@@ -130,6 +133,7 @@ export interface CatalystCardDef extends CardBase {
   stability: number;
   effectText: string;
   visual?: import('./formulaVisual').CatalystVisual;
+  formulaEffect?: import('./formulaEffects').FormulaCatalystEffect;
 }
 
 /** V5 Gegenstand — one-shot tactical card. */
