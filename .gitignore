@@ -35,3 +35,7 @@ supabase/backups/*.sql
 # Local Higgsfield CLI (large binary)
 tools/bin/hf
 tools/hf.tar.gz
+
+# Python (Blender scripts)
+__pycache__/
+*.py[cod]

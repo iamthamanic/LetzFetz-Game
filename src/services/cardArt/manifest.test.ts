@@ -4,9 +4,9 @@
  */
 import { describe, expect, it } from 'vitest';
 import { BASE_PACK } from '../../game/packs/base-pack';
-import { V3_ENGINE_PARTS_36 } from '../../game/packs/v3/engineParts36';
 import {
   ILLUSTRATION_MANIFEST,
+  ENGINE_PART_PNG_ART_SHIPPED,
   enginePartPreviewOrFallback,
   illustrationKeyForCardId,
   illustrationPublicPath,
@@ -57,11 +57,19 @@ describe('card art manifest', () => {
     expect(resolveCardArtPath('ulti-knuspergnom')).toBe('/cards/ultimate/ulti-knuspergnom.png');
   });
 
-  it('suppresses missing engine PNG URLs until ENGINE_PART_PNG_ART_SHIPPED', () => {
-    for (const part of V3_ENGINE_PARTS_36) {
-      expect(resolveCardArtPath(part.id)).toBe('');
-      expect(resolveEnginePartArtPath(part.id)).toBe('');
-    }
+  it('resolves MVP trio engine PNGs when shipped; blanks others', () => {
+    expect(ENGINE_PART_PNG_ART_SHIPPED).toBe(true);
+    expect(resolveEnginePartArtPath('v3-part-water-traeger-01')).toBe(
+      '/cards/engine/v3-part-water-traeger-01.png',
+    );
+    expect(resolveEnginePartArtPath('v3-part-shadow-antrieb-01')).toBe(
+      '/cards/engine/v3-part-shadow-antrieb-01.png',
+    );
+    expect(resolveEnginePartArtPath('v3-part-light-aufsatz-01')).toBe(
+      '/cards/engine/v3-part-light-aufsatz-01.png',
+    );
+    expect(resolveEnginePartArtPath('v3-part-fire-antrieb-01')).toBe('');
+    expect(resolveCardArtPath('v3-part-fire-antrieb-01')).toBe('');
   });
 
   it('falls back to PNG path when previewUrl is blank (path helper)', () => {
