@@ -1,11 +1,11 @@
 # Asset pipeline (Fetzgerät 3D)
 
-**Status:** Validate is real (#164) — no Meshy, no paid APIs  
+**Status:** Validate + preview real; Brief §18 suite stubs (#189) — no Meshy, no paid APIs  
 **See also:** [architecture.md](./architecture.md), [asset-specification.md](./asset-specification.md), [adding-a-new-part.md](./adding-a-new-part.md)
 
 ## Purpose
 
-Local npm commands to validate / preview modular engine part assets. Mirrors `tools/audio-forge` **exit-code clarity** without pulling Python.
+Local npm commands to validate / preview / (later) author modular engine part assets. Mirrors `tools/audio-forge` **exit-code clarity** without pulling Python.
 
 | Script | Command | Today |
 |--------|---------|--------|
@@ -13,6 +13,35 @@ Local npm commands to validate / preview modular engine part assets. Mirrors `to
 | Preview | `npm run asset:preview -- <asset-id>` | Real: Blender `render_preview` → `public/cards/engine/<id>.png` (#185) |
 | All | `npm run asset:all -- <asset-id>` | Runs validate then preview |
 | Blender | `npm run asset:blender -- <script> <asset-id>` | `validate_sockets` / `normalize_part` / `render_preview` (#184) |
+| Spec / concept / multiview / model | `npm run asset:<cmd> -- <id>` | **Stub** (#189) — DE/EN status + expected path, exit 0 |
+| Normalize / optimize / publish | `npm run asset:<cmd> -- <id>` | **Stub** (#189); normalize later → Blender |
+| Batch | `npm run assets:validate\|previews\|registry\|report` | **Stub** (#189) — no id |
+
+## Stub suite (#189)
+
+Shared runner: `tools/asset-pipeline/stub.mjs`. No network, no writes, no secrets.
+
+```bash
+npm run asset:spec -- v3-part-water-traeger-01
+npm run asset:concept -- v3-part-water-traeger-01
+npm run asset:multiview -- v3-part-water-traeger-01
+npm run asset:model -- v3-part-water-traeger-01
+npm run asset:normalize -- v3-part-water-traeger-01
+npm run asset:optimize -- v3-part-water-traeger-01
+npm run asset:publish -- v3-part-water-traeger-01
+npm run assets:validate
+npm run assets:previews
+npm run assets:registry
+npm run assets:report
+```
+
+### Exit codes (stubs + validate)
+
+| Code | Meaning |
+|------|---------|
+| `0` | OK — real validate passed, or stub acknowledged |
+| `1` | Real validation failed (validate/preview/blender only) |
+| `2` | Usage error (missing/invalid `<asset-id>`, unknown flags) |
 
 ## Blender CLI (#184)
 
@@ -25,14 +54,6 @@ npm run asset:blender -- render_preview v3-part-water-traeger-01 --force
 ```
 
 Scripts live under `tools/blender/` (`README.md`). Preview PNG: `public/cards/engine/<id>.png` (idempotent unless `--force`). Socket names must match Spec JSON / [`asset-specification.md`](./asset-specification.md).
-
-## Exit codes (`asset:validate`)
-
-| Code | Meaning |
-|------|---------|
-| `0` | Validation passed (sockets + budgets OK) |
-| `1` | Validation failed (missing GLB / sockets / over budget / unknown id / bad GLB) |
-| `2` | Usage error (missing/invalid `<asset-id>`) |
 
 ## Checks (validate)
 
@@ -52,6 +73,7 @@ tools/asset-pipeline/
   validate.mjs
   preview.mjs
   all.mjs
+  stub.mjs              # Brief §18 stubs (#189)
 public/engine-parts/mvp/     # GLBs
 docs/engine-system/specs/    # JSON stubs (sockets + budgets)
 src/services/engineAssets/   # partRegistry
@@ -62,18 +84,14 @@ src/services/engineAssets/   # partRegistry
 In-app cache: `src/features/play/engine3d/rendering/`
 
 - Key: `createRenderKey(recipe)` from `src/game/engine/engineRecipe.ts`
-- `get` / `set` / `invalidate` — in-memory only
+- L1 memory + L2 IndexedDB (#188)
 - `requestEngineSnapshot(recipe, { canvas?, allowPlaceholder? })`
-  - Cache hit → reuse
-  - Live preview: pass WebGL `HTMLCanvasElement` from `EnginePreviewCanvas` (`onGlCanvasReady`) → `toDataURL` → cache (source `canvas`)
-  - Fallback: 1×1 PNG **placeholder** when no canvas / capture fails (CI / headless)
-  - `allowPlaceholder: false` → miss, nothing cached
-  - `force: true` → skip cache read (re-capture from canvas or re-stub)
 
 Bump `ENGINE_RENDER_VERSION` when assembly/shaders/camera contract changes so keys miss old entries.
 
 ## Follow-ups (still out of scope)
 
+- Wire stub `normalize` → Blender (#190)
 - Offline/headless WebGL snapshot writer
 - Meshy/Tripo or other generation providers (keep secrets out of git)
 - Mass production of all 36 non-placeholder GLBs
