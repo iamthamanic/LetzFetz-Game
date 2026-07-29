@@ -19,6 +19,14 @@ export const V5_MVP_TECHNIQUES: TechniqueCardDef[] = [
     activationMode: 'prep_attack',
     effectText: 'Der nächste Angriff ignoriert 1 Schild.',
     formulaEffect: { kind: 'prep_attack', ignoreShield: 1 },
+    visual: {
+      id: 'durchschuss',
+      delivery: 'beam',
+      shape: 'drill',
+      castOrigin: 'hand',
+      forwardAxis: 'z',
+      scaleClass: 'medium',
+    },
   },
   {
     kind: 'technique',
@@ -28,6 +36,14 @@ export const V5_MVP_TECHNIQUES: TechniqueCardDef[] = [
     activationMode: 'instant',
     effectText: 'Erhalte 1 Schild.',
     formulaEffect: { kind: 'instant_shield', amount: 1 },
+    visual: {
+      id: 'notfallbarriere',
+      delivery: 'area',
+      shape: 'wall',
+      castOrigin: 'self',
+      forwardAxis: 'y',
+      scaleClass: 'medium',
+    },
   },
   {
     kind: 'technique',
@@ -37,9 +53,16 @@ export const V5_MVP_TECHNIQUES: TechniqueCardDef[] = [
     activationMode: 'prep_attack',
     effectText: 'Der nächste Angriff erhält +1.',
     formulaEffect: { kind: 'prep_attack', combatBonus: 1 },
+    visual: {
+      id: 'rueckhandtechnik',
+      delivery: 'melee',
+      shape: 'slash',
+      castOrigin: 'hand',
+      forwardAxis: 'x',
+      scaleClass: 'medium',
+    },
   },
 ];
-
 /** MVP Essenz ×3. */
 export const V5_MVP_ESSENCES: EssenceCardDef[] = [
   {
@@ -51,6 +74,14 @@ export const V5_MVP_ESSENCES: EssenceCardDef[] = [
     effectText:
       'Fügt die Formel Lebensschaden zu und entsteht keine Reaktion, erhält das Ziel Brennen.',
     formulaEffect: { kind: 'mark_if_no_reaction', mark: 'brennen' },
+    visual: {
+      id: 'eingekochte-glut',
+      element: 'fire',
+      materialProfile: 'ember',
+      particleProfile: 'sparks',
+      trailProfile: 'heat',
+      impactProfile: 'burn',
+    },
   },
   {
     kind: 'essence',
@@ -60,6 +91,14 @@ export const V5_MVP_ESSENCES: EssenceCardDef[] = [
     stability: 3,
     effectText: 'Entsteht keine Reaktion, erhält das Ziel Durchnässt.',
     formulaEffect: { kind: 'mark_if_no_reaction', mark: 'durchnaesst' },
+    visual: {
+      id: 'ueberdrucktes-kondensat',
+      element: 'water',
+      materialProfile: 'mist',
+      particleProfile: 'droplets',
+      trailProfile: 'vapor',
+      impactProfile: 'splash',
+    },
   },
   {
     kind: 'essence',
@@ -69,6 +108,14 @@ export const V5_MVP_ESSENCES: EssenceCardDef[] = [
     stability: 2,
     effectText: 'Entsteht keine Reaktion, erhält das Ziel High.',
     formulaEffect: { kind: 'mark_if_no_reaction', mark: 'high' },
+    visual: {
+      id: 'kraeuterstaub',
+      element: 'earth',
+      materialProfile: 'pollen',
+      particleProfile: 'dust',
+      trailProfile: 'haze',
+      impactProfile: 'settle',
+    },
   },
 ];
 
@@ -80,8 +127,13 @@ export const V5_MVP_CATALYSTS: CatalystCardDef[] = [
     name: 'Echo',
     stability: 2,
     effectText: 'Wiederhole zu Beginn deines nächsten Zuges 1 Punkt des Primärwerts.',
-    // Echo timing deferred — stub as primary_bonus 0 until echo engine slice.
     formulaEffect: { kind: 'primary_bonus', amount: 0 },
+    visual: {
+      id: 'echo',
+      timing: 'delayed',
+      transformation: 'duplicate',
+      animationProfile: 'echo-ring',
+    },
   },
   {
     kind: 'catalyst',
@@ -90,6 +142,12 @@ export const V5_MVP_CATALYSTS: CatalystCardDef[] = [
     stability: 2,
     effectText: 'Erhöhe den Primärwert um 2. Nach vollständiger Auflösung verlierst du 1 Leben.',
     formulaEffect: { kind: 'primary_bonus', amount: 2, selfDamage: 1 },
+    visual: {
+      id: 'ueberladung',
+      timing: 'instant',
+      transformation: 'overcharge',
+      animationProfile: 'surge',
+    },
   },
   {
     kind: 'catalyst',
@@ -99,6 +157,12 @@ export const V5_MVP_CATALYSTS: CatalystCardDef[] = [
     effectText:
       'Offensive Formel: Nach erfolgreichem Treffer erhältst du 1 Schild.',
     formulaEffect: { kind: 'mirror_shield_on_hit', amount: 1 },
+    visual: {
+      id: 'spiegelung',
+      timing: 'instant',
+      transformation: 'reflect',
+      animationProfile: 'mirror-flash',
+    },
   },
 ];
 
