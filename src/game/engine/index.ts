@@ -16,3 +16,4 @@ export * from './rulesetFromState';
 export * from './phraseBuild';
 export * from './phraseBonuses';
 export * from './engineRecipe';
+export * from './adapterPairDisplay';

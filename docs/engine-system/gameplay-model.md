@@ -36,6 +36,20 @@ Validation rules (MVP):
 3. Charge-bound cards are not part of the 3D recipe.
 4. Empty bound → empty recipe, invalid.
 
+## Adapter + pair-reaction display (#191)
+
+Pure display helpers in `src/game/engine/adapterPairDisplay.ts` (no Three.js, not match truth):
+
+| API | Role |
+|-----|------|
+| `selectAdapters(recipe, pack)` | Deterministic joint list (`drive` / `attachment`) for montage/HUD |
+| `selectAdaptersFromBound(bound, pack)` | Same via `boundToRecipe` |
+| `resolvePairReactions(bound, pack, ruleset)` | DE DTOs for V3 §13 pair (tier 2) + full (tier 3) resonance |
+
+- Incomplete recipe / bound → empty arrays (no throw).
+- `v3Combat` off (`DEFAULT_RULESET` / V1) → empty reaction DTOs.
+- Effect application stays in `resonance.ts`; these APIs only feed UI copy.
+
 ## Effects
 
-3D never computes damage, resonance, or activate costs. UI reads existing engine helpers.
+3D never computes damage, resonance, or activate costs. UI reads existing engine helpers (`resonance.ts`, `adapterPairDisplay.ts`).
