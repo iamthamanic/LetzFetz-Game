@@ -31,7 +31,7 @@ describe('lookupEnginePartAsset', () => {
       expect(entry!.id).toBe(id);
       expect(entry!.modelUrl).toBe(`/engine-parts/mvp/${id}.glb`);
       expect(entry!.previewUrl).toBe(`/cards/engine/${id}.png`);
-      expect(entry!.version).toBe(4);
+      expect(entry!.version).toBe(5);
     }
   });
 

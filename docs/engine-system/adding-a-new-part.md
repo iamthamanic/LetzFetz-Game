@@ -23,7 +23,7 @@ Checklist for authors and agents. Follow ADR [`architecture.md`](./architecture.
 
 - [ ] Place GLB at `public/engine-parts/…/<id>.glb` (MVP: `public/engine-parts/mvp/`)
 - [ ] Named EMPTY nodes match ADR socket contract
-- [ ] Or regenerate placeholders: `npm run generate:mvp-engine-glbs` (boxes only — **skips** Spec `placeholder: false` / pilot)
+- [ ] Or regenerate placeholders: `npm run generate:mvp-engine-glbs` (boxes only — **skips** Spec `placeholder: false` / pilot; after Batch C there are normally **no** remaining placeholders)
 - [ ] Pilot trio: `npm run generate:pilot-engine-glbs` then `npm run asset:validate -- <id>`
 - [ ] Batch A/B/C: `npm run generate:batch-{a,b,c}-engine-glbs` (`scripts/generate-batch-glbs.ts`)
 

@@ -73,7 +73,9 @@ Regenerate boxes + specs: `npm run generate:engine-part-glbs -- --all` (alias: `
 
 **Batch B (#196):** earth ×6 + air ×6 via `npm run generate:batch-b-engine-glbs`.
 
-Remaining light/shadow non-pilots stay placeholders until Batch C (#197). Shared generator: `scripts/generate-batch-glbs.ts`.
+**Batch C (#197):** remaining light + shadow (10 ids; pilots untouched) via `npm run generate:batch-c-engine-glbs`.
+
+**Status:** **36/36** Specs have `placeholder: false` (3 pilots + batches A/B/C). Unit-box placeholders retired. Shared generator: `scripts/generate-batch-glbs.ts`.
 
 ## Materials / toon look (#183)
 
