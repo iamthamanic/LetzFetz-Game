@@ -37,7 +37,7 @@ export interface EffekseerAdapter {
    */
   createEffect(
     path: string,
-    gl: WebGLRenderingContext,
+    gl: WebGLRenderingContext | WebGL2RenderingContext,
   ): EffekseerEffectInstance | null;
 }
 
@@ -198,7 +198,10 @@ class LiveEffekseerEffectInstance implements EffekseerEffectInstance {
 export class WasmEffekseerAdapter implements EffekseerAdapter {
   private readonly cache = new Map<string, EffekseerLoadState>();
   private readonly loader: EffekseerRuntimeLoader;
-  private readonly contexts = new WeakMap<WebGLRenderingContext, EffekseerContextLike>();
+  private readonly contexts = new WeakMap<
+    WebGLRenderingContext | WebGL2RenderingContext,
+    EffekseerContextLike
+  >();
   private api: EffekseerApi | null = null;
 
   constructor(loader: EffekseerRuntimeLoader = new BrowserEffekseerRuntimeLoader()) {
@@ -249,7 +252,7 @@ export class WasmEffekseerAdapter implements EffekseerAdapter {
 
   createEffect(
     path: string,
-    gl: WebGLRenderingContext,
+    gl: WebGLRenderingContext | WebGL2RenderingContext,
   ): EffekseerEffectInstance | null {
     if (this.cache.get(path) !== 'ready' || !this.api) {
       return null;
@@ -259,7 +262,8 @@ export class WasmEffekseerAdapter implements EffekseerAdapter {
     if (!context) {
       try {
         context = this.api.createContext();
-        context.init(gl, { enableExtensionsByDefault: true });
+        // Effekseer accepts WebGL2 contexts at runtime.
+        context.init(gl as WebGLRenderingContext, { enableExtensionsByDefault: true });
         this.contexts.set(gl, context);
       } catch {
         return null;
