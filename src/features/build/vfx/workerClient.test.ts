@@ -7,6 +7,7 @@ import {
   VfxWorkerError,
   createMeshyTextTo3d,
   normalizeMeshyTaskResponse,
+  renderBatchHeroFrame,
 } from './workerClient';
 
 function parseCreateTaskBodyForTest(body: unknown) {
@@ -97,5 +98,56 @@ describe('createMeshyTextTo3d', () => {
 describe('parseCreateTaskBody', () => {
   it('accepts task_id alias', () => {
     expect(parseCreateTaskBodyForTest({ task_id: 'tid-1' }).taskId).toBe('tid-1');
+  });
+});
+
+describe('renderBatchHeroFrame', () => {
+  afterEach(() => {
+    vi.unstubAllGlobals();
+  });
+
+  it('returns parsed batch render result on success', async () => {
+    vi.stubGlobal(
+      'fetch',
+      vi.fn().mockResolvedValue({
+        ok: true,
+        json: async () => ({
+          ok: true,
+          jobId: 'batch-1',
+          status: 'SUCCEEDED',
+          method: 'playwright',
+          pngUrl: '/vfx/batch/kombi-1.png',
+          renderOutput: {
+            kind: 'renderOutput',
+            id: 'render-1',
+            url: '/vfx/batch/kombi-1.png',
+            format: 'png',
+            width: 960,
+            height: 640,
+            capturedAt: '2026-07-30T12:00:00.000Z',
+          },
+        }),
+      }),
+    );
+    const result = await renderBatchHeroFrame('kombi-1');
+    expect(result.status).toBe('SUCCEEDED');
+    expect(result.pngUrl).toBe('/vfx/batch/kombi-1.png');
+    expect(result.renderOutput?.width).toBe(960);
+  });
+
+  it('throws API_ERROR on worker failure response', async () => {
+    vi.stubGlobal(
+      'fetch',
+      vi.fn().mockResolvedValue({
+        ok: false,
+        json: async () => ({ error: 'Ungültige Rezept-ID' }),
+      }),
+    );
+    await expect(renderBatchHeroFrame('bad')).rejects.toMatchObject({ code: 'API_ERROR' });
+  });
+
+  it('throws WORKER_DOWN when worker unreachable', async () => {
+    vi.stubGlobal('fetch', vi.fn().mockRejectedValue(new TypeError('Failed to fetch')));
+    await expect(renderBatchHeroFrame('kombi-1')).rejects.toMatchObject({ code: 'WORKER_DOWN' });
   });
 });

@@ -12,6 +12,7 @@ import { VfxInspectorPanel } from './VfxInspectorPanel';
 import { VfxNodeLibrary, type VfxStudioMode } from './VfxNodeLibrary';
 import { useAssetPipelineGraph } from './useAssetPipelineGraph';
 import { VfxSharedPreview } from './preview';
+import { VfxBatchPanel } from './VfxBatchPanel';
 
 export type { VfxStudioMode };
 
@@ -111,14 +112,9 @@ export function VfxStudioView() {
                 className="min-h-0 flex-1"
                 emptyMessage="Formel-Pipeline — Effekt auswählen"
               />
-            ) : (
-              <div
-                className="flex flex-1 items-center justify-center rounded-lg border border-dashed border-stone-800 bg-stone-950/80 p-6 text-center"
-                data-testid="vfx-studio-mode-placeholder"
-              >
-                <p className="text-xs text-stone-500">Batch-Render — demnächst (#261).</p>
-              </div>
-            )}
+            ) : mode === 'batch' ? (
+              <VfxBatchPanel />
+            ) : null}
           </main>
           <VfxInspectorPanel
             selectedNode={pipeline.selectedNode}
