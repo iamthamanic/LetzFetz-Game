@@ -10,12 +10,14 @@ import {
   defaultNormalizeNodeData,
   defaultSaveTechniqueNodeData,
   defaultSocketNodeData,
+  defaultEffekseerPresetNodeData,
 } from './nodes/vfxNodeTypes';
 
 export const DEFAULT_PIPELINE_NODE_IDS = {
   meshy: 'pipeline-meshy',
   normalize: 'pipeline-normalize',
   socket: 'pipeline-socket',
+  preset: 'pipeline-effekseer-preset',
   save: 'pipeline-save',
 } as const;
 
@@ -23,6 +25,7 @@ export const PIPELINE_NODE_ORDER = [
   DEFAULT_PIPELINE_NODE_IDS.meshy,
   DEFAULT_PIPELINE_NODE_IDS.normalize,
   DEFAULT_PIPELINE_NODE_IDS.socket,
+  DEFAULT_PIPELINE_NODE_IDS.preset,
   DEFAULT_PIPELINE_NODE_IDS.save,
 ] as const;
 
@@ -177,6 +180,13 @@ export function createDefaultAssetPipeline(
         ...PIPELINE_NODE_FLAGS,
       },
       {
+        id: DEFAULT_PIPELINE_NODE_IDS.preset,
+        type: VFX_PIPELINE_NODE_TYPES.vfxEffekseerPreset,
+        position: { x: 0, y: 0 },
+        data: defaultEffekseerPresetNodeData(),
+        ...PIPELINE_NODE_FLAGS,
+      },
+      {
         id: DEFAULT_PIPELINE_NODE_IDS.save,
         type: VFX_PIPELINE_NODE_TYPES.vfxSaveTechnique,
         position: { x: 0, y: 0 },
@@ -207,11 +217,19 @@ export function createDefaultAssetPipeline(
       selectable: false,
     },
     {
-      id: 'e-socket-save',
+      id: 'e-socket-preset',
       source: DEFAULT_PIPELINE_NODE_IDS.socket,
-      target: DEFAULT_PIPELINE_NODE_IDS.save,
+      target: DEFAULT_PIPELINE_NODE_IDS.preset,
       type: 'smoothstep',
       pathOptions: { offset: wrapOffset, borderRadius: 16 },
+      deletable: false,
+      selectable: false,
+    },
+    {
+      id: 'e-preset-save',
+      source: DEFAULT_PIPELINE_NODE_IDS.preset,
+      target: DEFAULT_PIPELINE_NODE_IDS.save,
+      type: 'smoothstep',
       deletable: false,
       selectable: false,
     },
