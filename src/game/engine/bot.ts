@@ -73,6 +73,15 @@ function bestBlockAction(
   actions: GameAction[],
 ): GameAction {
   if (!state.combat) return { type: 'PASS_BLOCK' };
+
+  // Prefer Kaputter Rückspiegel (−1 attack) before choosing block/pass.
+  const reactionItem = actions.find(
+    (a): a is Extract<GameAction, { type: 'PLAY_ITEM' }> => a.type === 'PLAY_ITEM',
+  );
+  if (reactionItem && state.combat.attackValue >= 2 && !state.combat.rueckspiegelArmed) {
+    return reactionItem;
+  }
+
   const { attackValue: atkVal, attackCardDefId } = state.combat;
   const attackDef = findElementDef(pack, attackCardDefId);
   const blockActions = actions.filter(

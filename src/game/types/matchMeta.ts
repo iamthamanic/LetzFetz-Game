@@ -84,6 +84,8 @@ export interface MatchMeta {
   >;
   /** V5 Mysterium: chosen element override for affinity this turn. */
   v5MysteriumElement?: Record<PlayerId, Element | null>;
+  /** V5 Halbe Dose Energy: HP to lose at start of that player's next turn. */
+  v5EnergyHangover?: Record<PlayerId, number>;
 }
 
 export type PendingChoice =

@@ -1,4 +1,5 @@
 import type { BoundCardInstance, CardInstance, FormulaComponentInstance } from './cards';
+import type { Element } from './elements';
 import type { FormulaPrepState } from './formulaEffects';
 import type { MatchMeta, PendingChoice } from './matchMeta';
 import type { PlayerId, TurnPhase } from './ruleset';
@@ -66,6 +67,10 @@ export interface PendingCombat {
   targetBoundInstanceId?: string;
   /** V5 Formel prep: shield points ignored on damage pipeline. */
   ignoreShield?: number;
+  /** V5 Nasser Socken: additional hit impulse element. */
+  extraHitImpulse?: Element;
+  /** V5 Kaputter Rückspiegel: on Vollblock apply Verstrahlt to attacker. */
+  rueckspiegelArmed?: boolean;
 }
 
 /** Sofort-Glitch drawn this action — UI shows face-up in center for both players. */

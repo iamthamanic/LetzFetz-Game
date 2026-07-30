@@ -2,6 +2,7 @@
  * Structured V5 formula component effects (data-driven resolve).
  * Location: src/game/types/formulaEffects.ts
  */
+import type { Element } from './elements';
 import type { PrimaryMarkId } from './status';
 
 export type FormulaTechniqueEffect =
@@ -103,4 +104,6 @@ export interface FormulaPrepState {
   chainSameActionBonus: number;
   /** Primary action type prepared by Technik (for chain / boost consume). */
   preparedActionType?: 'attack' | 'block' | 'boost';
+  /** Nasser Socken: next attack also fires this element impulse. */
+  extraHitImpulse?: Element;
 }
