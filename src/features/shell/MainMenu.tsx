@@ -1,9 +1,9 @@
 /**
- * App home — vertical menu: Play, Material, Sandbox, Settings.
+ * App home — vertical menu: Play, Material, Build, Settings.
  * Location: src/features/shell/MainMenu.tsx
  */
 import React from 'react';
-import { Gamepad2, Layers, Swords, Settings } from 'lucide-react';
+import { Boxes, Gamepad2, Layers, Settings } from 'lucide-react';
 import { LETZ_FETZ_LOGO_SRC } from '../../components/brand/letzFetzLogo';
 import { GrungeAppShell } from '../../components/ui/GrungeAppShell';
 import { MenuGlitchBackdrop } from '../../components/ui/MenuGlitchBackdrop';
@@ -80,10 +80,10 @@ const PRIMARY_ITEMS: {
     tone: 'editor',
   },
   {
-    id: 'arena',
-    label: 'Sandbox',
-    hint: 'Freier Arena-Tisch',
-    icon: <Swords className="h-6 w-6" aria-hidden />,
+    id: 'build',
+    label: 'Build',
+    hint: 'Werkbank — Combinate & Development',
+    icon: <Boxes className="h-6 w-6" aria-hidden />,
     tone: 'sandbox',
   },
 ];

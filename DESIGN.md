@@ -4,7 +4,7 @@ Verbindliche Kurzreferenz für **Brand-Identität**, **Farben**, **Typo** und **
 Vollständige Primitives & Migration: [`docs/UI_STYLEGUIDE.md`](docs/UI_STYLEGUIDE.md).
 
 **Produkt:** Letz Fetz — taktisches 1v1-Kartenduell (Playtest-Plattform).  
-**UI:** Deutsch (Spieltexte) · Nav-Labels **Play / Edit / Sandbox** (Display-English). **Code:** Englisch.
+**UI:** Deutsch (Spieltexte) · Nav-Labels **Play / Material / Build** (Display-English). **Code:** Englisch.
 
 ---
 
@@ -112,7 +112,7 @@ Wenn du Brand anfasst, diese Dateien prüfen:
 | Datei | Was |
 |-------|-----|
 | `src/features/shell/AppBrand.tsx` | Logo `<img>` |
-| `src/features/shell/AppNav.tsx` | Labels: Play, Edit, Sandbox |
+| `src/features/shell/AppNav.tsx` | Labels: Play, Material, Build |
 | `src/components/ui/Tabs.tsx` | Tab-Label: `font-brand` |
 | `src/index.css` | tokens, `.brand-logo-text`, `.grunge-app-shell`, parchment/grunge |
 | `src/components/ui/BrandLogoText.tsx` | Logo-style live headings |
@@ -176,7 +176,7 @@ Wenn du Brand anfasst, diese Dateien prüfen:
 
 - **Header:** `bg-stone-950/95 backdrop-blur-md border-b border-stone-800`
 - **Brand (links):** Logo-PNG via `AppBrand`
-- **Nav (rechts):** Play · Edit · Sandbox (`font-brand` auf Label)
+- **Nav (rechts):** Play · Material · Build (`font-brand` auf Label)
 - **Notizen:** Ghost-Button, `aria-label="Notizen öffnen"`
 
 ### Tab tones (`Tabs.tsx`)
@@ -184,12 +184,12 @@ Wenn du Brand anfasst, diese Dateien prüfen:
 | View | `tone` | Active |
 |------|--------|--------|
 | Play | `play` | Emerald/purple glow ring |
-| Edit | `editor` | `stone-800` |
-| Sandbox | `sandbox` | Amber ring |
+| Material | `editor` | Purple glow |
+| Build | `sandbox` | Amber ring |
 
 ### Test-IDs
 
-`app-header`, `app-brand`, `app-nav`, `nav-tab-play`, `nav-tab-forge`, `nav-tab-arena`
+`app-header`, `app-brand`, `app-nav`, `nav-tab-play`, `nav-tab-forge`, `nav-tab-build`
 
 ### Config
 
@@ -203,7 +203,7 @@ Wenn du Brand anfasst, diese Dateien prüfen:
 2. Kurzes Display-Label (≤ 3 Wörter)? → `font-brand uppercase tracking-wide` (Cream automatisch).
 3. Beschreibung / Hilfetext? → **kein** `font-brand`, `text-stone-400`.
 4. Neue Farbe? → erst Token in `index.css` `@theme`, dann Tailwind-Klasse.
-5. E2E: Nav-Buttons `Play`, `Edit`, `Sandbox` (`e2e/helpers/gameSetup.ts`).
+5. E2E: Nav-Buttons `Play`, `Material`, `Build` (`e2e/smoke.app-loads.spec.ts`, `e2e/build-shell-nav.spec.ts`).
 
 ---
 

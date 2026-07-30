@@ -81,7 +81,7 @@ test.describe('Game Cheatbox — playtest panel', () => {
     await expect(page.getByText(/V1-Karten|Character|Element/i).first()).toBeVisible({
       timeout: 10000,
     });
-    await page.getByRole('button', { name: 'Sandbox' }).click();
+    await page.getByRole('button', { name: 'Build' }).click();
     await page.waitForTimeout(300);
 
     await page.goto('/');

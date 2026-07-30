@@ -6,5 +6,5 @@ test('app loads with navigation tabs', async ({ page }) => {
   await expect(page.getByTestId('nav-tab-play')).toBeVisible();
   await expect(page.getByTestId('nav-tab-forge')).toBeVisible();
   await expect(page.getByRole('button', { name: 'Material' }).first()).toBeVisible();
-  await expect(page.getByTestId('nav-tab-arena')).toBeVisible();
+  await expect(page.getByTestId('nav-tab-build')).toBeVisible();
 });
