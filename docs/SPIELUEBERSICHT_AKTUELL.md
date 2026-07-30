@@ -9,7 +9,7 @@
 
 **Letz Fetz** ist ein taktisches **1-gegen-1-Kartenduell**.
 
-Jeder Spieler wählt einen **Charakter** (2 Elemente, Passive, Großformel). Im Zug kämpfst du mit Angriff/Block/Boost und baust parallel eine **Formel** aus **Technik · Essenz · Katalysator** (Produktziel V5). Bis zum Engine-Cutover bleibt digital vor allem das **V1-Basisduell** (gebundene Elementkarten) spielbar; V3-Fetzgerät ist Soft-Retire.
+Jeder Spieler wählt einen **Charakter** (2 Elemente, Passive, Großformel). Im Zug kämpfst du mit Angriff/Block/Boost und baust parallel eine **Formel** aus **Technik · Essenz · Katalysator** (**Play-Default = V5**). **Basis-Pack (V1)** bleibt als Regression wählbar; **V3-Fetzgerät / Bound-4 + Live-3D** ist Soft-Retire (explizite Legacy-Kachel, nicht Default).
 
 **Sieg:** Gegner auf **0 Leben** (oder darunter).
 
@@ -17,24 +17,24 @@ Die App ist eine **digitale Playtest- und Authoring-Plattform** — kein fertige
 
 ---
 
-## 2. Drei Ebenen: „Spielbar heute“ vs. „Legacy V3“ vs. „Produktziel V5“
+## 2. Drei Ebenen: „Play-Default V5“ vs. „Legacy V3“ vs. „V1 Regression“
 
-| Thema | **Heute spielbar** | Legacy V3 | **Produktziel V5** |
+| Thema | **Play-Default V5** | Legacy V3 | **V1 Basis** |
 |--------|-------------------|-----------|---------------------|
-| Leben | **20** (Basis) | V3-Pack oft 30 | **20** Playtest |
-| Auslage | max **4** gebundene Elementkarten | Träger / Antrieb / Aufsatz | **3 Formelplätze** |
-| Ulti | feste Ulti | + Charge-Pool | **Großformel** bei 3 Fetzladung |
-| Kampflayer | optional „V3 Playtest“ | Impulse/Marken/Reaktionen/Schild | bleibt + V5-Matrix/Namen |
-| Visual | Karten / optional Fetz-3D | 3D-Kombi | **Formelgestell** + Visual Recipe |
+| Leben | **20** Playtest | oft 20 (rules-on-base) | **20** |
+| Auslage | **3 Formelplätze** | Träger / Antrieb / Aufsatz | max **4** Bound |
+| Ulti | **Großformel** bei 3 Fetzladung | Charge-Pool 6 | feste Ulti |
+| Kampflayer | V5-Matrix + Impulse/Marken | V3-Kampf-Tile | klassisches Duell |
+| Visual | **Formelgestell** + Visual Recipe | optional Fetz-3D Live-Zone | Karten / Bound-Zeile |
 
 **Play-Setup-Kacheln (aktuell):**
 
-1. **Basis-Pack (V1)** — Badge „Standard“ → Regression  
-2. **V2 P100** — historischer Playtest  
-3. **V3 Playtest** — Basis + Kampflayer  
+1. **V5 Formel** — Badge „Standard“ → Default-Play (kein Fetz-3D als Hauptformel)
+2. **Basis-Pack (V1)** — Regression Bound-4
+3. **V2 P100** — historischer Playtest
+4. **V3 Playtest** — Badge „Legacy“ Soft-Retire (Fetzgerät-3D / Bound-Slots)
 
-**Geplant:** V5-Kachel als neuer Standard (Epic `v5-formula-migration`, Issues #218–#233).
-
+Meshy-Assets und V3-Pack-Code bleiben im Repo; sie sind nur nicht mehr der Default-Play-Pfad.
 ---
 
 ## 3. Match-Basics (aktueller Regelkern)

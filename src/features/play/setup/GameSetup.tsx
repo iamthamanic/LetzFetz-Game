@@ -193,7 +193,7 @@ export function GameSetup({
                   </div>
                   <span className="text-sm font-semibold text-stone-100">V5 Formel</span>
                   <span className="text-xs text-stone-400">
-                    MVP-9 · Gegenstände · 20 Leben
+                    12+12+12 Formel · Gegenstände · 20 Leben
                   </span>
                 </button>
 
@@ -213,7 +213,7 @@ export function GameSetup({
                     {packChoice === 'base' ? <Badge variant="default">V1</Badge> : null}
                   </div>
                   <span className="text-sm font-semibold text-stone-100">Basis-Pack (V1)</span>
-                  <span className="text-xs text-stone-400">70 Karten · 20 Leben</span>
+                  <span className="text-xs text-stone-400">Regression · Bound-4 · 20 Leben</span>
                 </button>
 
                 <button
@@ -232,7 +232,7 @@ export function GameSetup({
                     {packChoice === 'p100' ? <Badge variant="accent">Playtest</Badge> : null}
                   </div>
                   <span className="text-sm font-semibold text-stone-100">V2 P100 Playtest</span>
-                  <span className="text-xs text-stone-400">100 Karten · 30 Leben · Phrase</span>
+                  <span className="text-xs text-stone-400">Historisch · Phrase · 30 Leben</span>
                 </button>
 
                 <button
@@ -248,10 +248,12 @@ export function GameSetup({
                 >
                   <div className="flex w-full items-center justify-between gap-2">
                     <Sparkles className="h-4 w-4 text-amber-400" aria-hidden />
-                    {packChoice === 'v3' ? <Badge variant="warning">V3</Badge> : null}
+                    <Badge variant="warning">Legacy</Badge>
                   </div>
                   <span className="text-sm font-semibold text-stone-100">V3 Playtest</span>
-                  <span className="text-xs text-stone-400">Basis-Karten · V3-Kampf · 20 Leben</span>
+                  <span className="text-xs text-stone-400">
+                    Soft-Retire · Fetzgerät-3D · Bound-Slots
+                  </span>
                 </button>
               </div>
             </Panel>

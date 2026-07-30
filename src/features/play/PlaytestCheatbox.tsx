@@ -39,9 +39,11 @@ interface PlaytestCheatboxProps {
   onBotPausedChange: (paused: boolean) => void;
   onApplyState: (state: GameState) => void;
   onError: (message: string | null) => void;
-  /** Force MVP×3 WeaponAssembler preview (#133). */
+  /** Force MVP×3 WeaponAssembler preview (#133) — legacy Bound matches only. */
   enginePreviewMvp: boolean;
   onEnginePreviewMvpChange: (enabled: boolean) => void;
+  /** Hide Fetz-3D cheat when V5 Formel is the active match ruleset. */
+  allowEnginePreviewMvp?: boolean;
 }
 
 export function PlaytestCheatbox({
@@ -53,6 +55,7 @@ export function PlaytestCheatbox({
   onError,
   enginePreviewMvp,
   onEnginePreviewMvpChange,
+  allowEnginePreviewMvp = true,
 }: PlaytestCheatboxProps) {
   const [open, setOpen] = useState(true);
   const [patchPhase, setPatchPhase] = useState<TurnPhase>(state.phase);
@@ -359,18 +362,20 @@ export function PlaytestCheatbox({
               Bot pausieren
             </label>
 
-            <label
-              className="flex cursor-pointer items-center gap-2 border-t border-stone-800 pt-2 text-xs text-stone-300"
-              data-testid="playtest-engine-3d-mvp"
-            >
-              <input
-                type="checkbox"
-                checked={enginePreviewMvp}
-                onChange={(e) => onEnginePreviewMvpChange(e.target.checked)}
-                className="rounded border-stone-600 bg-stone-900"
-              />
-              3D-Assembler (MVP)
-            </label>
+            {allowEnginePreviewMvp ? (
+              <label
+                className="flex cursor-pointer items-center gap-2 border-t border-stone-800 pt-2 text-xs text-stone-300"
+                data-testid="playtest-engine-3d-mvp"
+              >
+                <input
+                  type="checkbox"
+                  checked={enginePreviewMvp}
+                  onChange={(e) => onEnginePreviewMvpChange(e.target.checked)}
+                  className="rounded border-stone-600 bg-stone-900"
+                />
+                3D-Assembler (Legacy V3)
+              </label>
+            ) : null}
           </div>
         )}
       </Panel>
