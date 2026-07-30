@@ -15,6 +15,7 @@ import { EmptyState } from '../../components/ui/EmptyState';
 import { LetzFetzCard } from '../../components/cards/LetzFetzCard';
 import { forgeCharacterDefFromCard } from './model/characterFromForgeCard';
 import { CardLibraryDetailBack } from './CardLibraryDetailBack';
+import { FormulaPlayOptInActions } from './components/FormulaPlayOptInActions';
 import { CharacterDetailPanel } from '../../components/character/CharacterDetailPanel';
 import { getUltimateForCharacter } from '../../game/packs/characterSetup';
 import { CardForgeCardEditor } from './CardForgeCardEditor';
@@ -314,6 +315,11 @@ function CardLibraryPreviewModal({
                 </div>
               ) : null}
             </div>
+            {card.type === 'Formula' ? (
+              <div className="px-1 pt-2 sm:px-2">
+                <FormulaPlayOptInActions card={card} />
+              </div>
+            ) : null}
           </div>
         )}
       </div>

@@ -2,8 +2,8 @@
  * Pre-match setup — mode first, then character carousel (bot) or online notice.
  * Location: src/features/play/setup/GameSetup.tsx
  */
-import React, { useState } from 'react';
-import { ArrowLeft, Bot, Globe, Layers, Package, Sparkles, WifiOff } from 'lucide-react';
+import React, { useEffect, useState } from 'react';
+import { ArrowLeft, Bot, Globe, Layers, Package, Sparkles, WifiOff, AlertTriangle } from 'lucide-react';
 import { BASE_PACK } from '../../../game';
 import { Button } from '../../../components/ui/Button';
 import { BrandLogoText } from '../../../components/ui/BrandLogoText';
@@ -13,6 +13,12 @@ import { Panel } from '../../../components/ui/Panel';
 import { useAppHistory } from '../../../services/history/AppHistoryContext';
 import { MenuGlitchBackdrop } from '../../../components/ui/MenuGlitchBackdrop';
 import type { GamePackChoice } from './resolveGamePackChoice';
+import {
+  FORMULA_PLAY_OPTIN_UPDATED_EVENT,
+  loadFormulaPlayOptInStore,
+  summarizeOutdatedOptIns,
+} from '../../../services/storage/formulaPlayOptIn';
+import { createFormulaPlayVersionResolvers } from '../../../services/storage/formulaPlayVersions';
 
 export type GameSetupMode = 'bot' | 'online';
 export type GameSetupPhase = 'mode' | 'bot' | 'online';
@@ -41,6 +47,27 @@ export function GameSetup({
 }: GameSetupProps) {
   const { push } = useAppHistory();
   const [packChoice, setPackChoice] = useState<GamePackChoice>('v5');
+  const [optInTick, setOptInTick] = useState(0);
+
+  useEffect(() => {
+    const refresh = () => setOptInTick((n) => n + 1);
+    window.addEventListener(FORMULA_PLAY_OPTIN_UPDATED_EVENT, refresh);
+    return () => window.removeEventListener(FORMULA_PLAY_OPTIN_UPDATED_EVENT, refresh);
+  }, []);
+
+  void optInTick;
+
+  const outdatedSummary =
+    packChoice === 'v5'
+      ? (() => {
+          const store = loadFormulaPlayOptInStore();
+          return summarizeOutdatedOptIns({
+            deckOptIns: store.deckOptIns,
+            activatedRecipes: store.activatedRecipes,
+            ...createFormulaPlayVersionResolvers(),
+          });
+        })()
+      : { outdatedDeckCount: 0, outdatedRecipeCount: 0, hasOutdated: false };
 
   const goPhase = (next: GameSetupPhase) => {
     if (next === phase) return;
@@ -256,6 +283,22 @@ export function GameSetup({
                   </span>
                 </button>
               </div>
+              {outdatedSummary.hasOutdated ? (
+                <div
+                  className="flex items-start gap-2 rounded-lg border border-amber-700/50 bg-amber-950/30 px-3 py-2 text-xs text-amber-100/90"
+                  data-testid="game-setup-formula-outdated-warning"
+                  role="status"
+                >
+                  <AlertTriangle className="mt-0.5 h-4 w-4 shrink-0 text-amber-400" aria-hidden />
+                  <p>
+                    {outdatedSummary.outdatedDeckCount > 0 && outdatedSummary.outdatedRecipeCount > 0
+                      ? `${outdatedSummary.outdatedDeckCount} Spieldeck-Einträge und ${outdatedSummary.outdatedRecipeCount} Feld-Rezepte sind OUTDATED — in Material → Formeln erneut hinzufügen oder aktivieren.`
+                      : outdatedSummary.outdatedDeckCount > 0
+                        ? `${outdatedSummary.outdatedDeckCount} Spieldeck-Einträge sind OUTDATED — in Material → Formeln erneut zum Spieldeck hinzufügen.`
+                        : `${outdatedSummary.outdatedRecipeCount} Feld-Rezepte sind OUTDATED — in Material → Formeln erneut aktivieren.`}
+                  </p>
+                </div>
+              ) : null}
             </Panel>
 
             <CharacterCarousel
