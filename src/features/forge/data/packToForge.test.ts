@@ -30,7 +30,8 @@ describe('packToForgeCards', () => {
       (V5_PACK.techniques?.length ?? 0) +
       (V5_PACK.essences?.length ?? 0) +
       (V5_PACK.catalysts?.length ?? 0);
-    expect(cards).toHaveLength(90 + formulaCount);
+    const itemCount = V5_PACK.items?.length ?? 0;
+    expect(cards).toHaveLength(90 + formulaCount + itemCount);
 
     for (const category of CARD_CATEGORIES) {
       const count = cards.filter((c) => c.type === category.id).length;
@@ -75,6 +76,13 @@ describe('packToForgeCards', () => {
     const katalysator = packToForgeCards().find((c) => c.id === 'v5-katalysator-echo');
     expect(katalysator?.type).toBe('Formula');
     expect(katalysator?.effects.some((e) => e === 'Rolle: Katalysator')).toBe(true);
+  });
+
+  it('includes V5 items as Item kind with art paths', () => {
+    const nagel = packToForgeCards().find((c) => c.id === 'v5-item-rostiger-nagel');
+    expect(nagel?.type).toBe('Item');
+    expect(nagel?.image_asset).toBe('/cards/item/rostiger-nagel.png');
+    expect(nagel?.effects.some((e) => e.startsWith('Timing:'))).toBe(true);
   });
 
   it('includes saved Combinate Kombinationen with Kombination role', () => {

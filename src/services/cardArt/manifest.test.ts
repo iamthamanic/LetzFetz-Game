@@ -54,7 +54,21 @@ describe('card art manifest', () => {
     expect(resolveCardArtPath('v5-essenz-wirbelluft')).toBe('/cards/formula/wirbelluft.png');
     expect(resolveCardArtPath('v5-essenz-sogschatten')).toBe('/cards/formula/sogschatten.png');
     expect(resolveCardArtPath('v5-katalysator-spiegelung')).toBe('/cards/formula/spiegelung.png');
-    expect(resolveCardArtPath('v5-item-rostiger-nagel')).toBe('');
+  });
+
+  it('resolves V5 item art under /cards/item/', () => {
+    expect(resolveCardArtPath('v5-item-rostiger-nagel')).toBe('/cards/item/rostiger-nagel.png');
+    expect(resolveCardArtPath('v5-item-nasser-socken')).toBe('/cards/item/nasser-socken.png');
+    expect(resolveCardArtPath('v5-item-kaputter-rueckspiegel')).toBe(
+      '/cards/item/kaputter-rueckspiegel.png',
+    );
+    expect(resolveCardArtPath('v5-item-halbe-dose-energy')).toBe('/cards/item/halbe-dose-energy.png');
+    expect(resolveCardArtPath('v5-item-verdaechtiger-pilz')).toBe(
+      '/cards/item/verdaechtiger-pilz.png',
+    );
+    expect(resolveCardArtPath('v5-item-kabelbinder-deluxe')).toBe(
+      '/cards/item/kabelbinder-deluxe.png',
+    );
   });
 
   it('resolves MVP trio engine PNGs when shipped; blanks others', () => {

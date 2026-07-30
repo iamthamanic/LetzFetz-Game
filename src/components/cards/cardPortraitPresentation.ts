@@ -190,6 +190,19 @@ export function buildCardPortraitPresentation(input: CardPortraitInput): CardPor
         null;
       break;
     }
+    case 'Item': {
+      showHeader = false;
+      headerIcons = [];
+      typeBadge = 'Gegenstand';
+      elementBadge =
+        effectField(input.effects, 'Timing: ') ?? null;
+      subtitle = null;
+      effectLine =
+        firstLine(effectField(input.effects, 'Effekt: ')) ??
+        firstLine(display.textBlocks.find((b) => b.label === 'EFFECT')?.text) ??
+        null;
+      break;
+    }
   }
 
   return {

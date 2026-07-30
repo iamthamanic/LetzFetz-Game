@@ -108,6 +108,13 @@ export function resolveFormulaCardArtPath(cardId: string): string {
   return publicAssetUrl(`/cards/formula/${match[1]}.png`);
 }
 
+/** Public path for a V5 Gegenstand PNG under `/cards/item/`. */
+export function resolveItemCardArtPath(cardId: string): string {
+  const match = cardId.match(/^v5-item-([a-z0-9-]+)$/);
+  if (!match) return '';
+  return publicAssetUrl(`/cards/item/${match[1]}.png`);
+}
+
 /**
  * Prefer non-blank registry preview; otherwise `/cards/engine/{id}.png`.
  * Pure — Vitest covers blank preview without mocking the registry.
@@ -164,6 +171,8 @@ export function resolveCardArtPath(cardId: string): string {
   }
   const formulaPath = resolveFormulaCardArtPath(cardId);
   if (formulaPath) return formulaPath;
+  const itemPath = resolveItemCardArtPath(cardId);
+  if (itemPath) return itemPath;
   return resolveEnginePartArtPath(cardId);
 }
 

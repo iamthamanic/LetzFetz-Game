@@ -60,18 +60,20 @@ function combinateRecipesToForgeCards(): ForgeCardData[] {
   });
 }
 
-/** Base pack + V5 Formelkomponenten when the pack has no formula defs of its own. */
+/** Base pack + V5 Formelkomponenten / Gegenstände when the pack has none of its own. */
 function packWithFormulaComponents(pack: ContentPack): ContentPack {
   const hasFormula =
     (pack.techniques?.length ?? 0) > 0 ||
     (pack.essences?.length ?? 0) > 0 ||
     (pack.catalysts?.length ?? 0) > 0;
-  if (hasFormula) return pack;
+  const hasItems = (pack.items?.length ?? 0) > 0;
+  if (hasFormula && hasItems) return pack;
   return {
     ...pack,
-    techniques: V5_PACK.techniques,
-    essences: V5_PACK.essences,
-    catalysts: V5_PACK.catalysts,
+    techniques: hasFormula ? pack.techniques : V5_PACK.techniques,
+    essences: hasFormula ? pack.essences : V5_PACK.essences,
+    catalysts: hasFormula ? pack.catalysts : V5_PACK.catalysts,
+    items: hasItems ? pack.items : V5_PACK.items,
   };
 }
 
