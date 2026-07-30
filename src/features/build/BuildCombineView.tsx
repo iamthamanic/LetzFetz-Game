@@ -10,6 +10,7 @@ import { BuildResultCard } from './BuildResultCard';
 import { loadFormulaCardCatalog } from './data/formulaCardCatalog';
 import {
   buildCombinationLabel,
+  countFilledSlots,
   findFormulaCard,
   type FormulaCatalogCard,
 } from './model/combinateFormula';
@@ -68,6 +69,7 @@ export function BuildCombineView({ active }: BuildCombineViewProps) {
   }, [session]);
 
   const combinationLabel = buildCombinationLabel(session.slots);
+  const filledSlotCount = countFilledSlots(session.slots);
 
   const lastDropped = findFormulaCard(catalog, session.lastDroppedPartId);
   const anySlotted =
@@ -89,7 +91,7 @@ export function BuildCombineView({ active }: BuildCombineViewProps) {
             Combinate
           </h1>
           <p className="text-[10px] text-stone-500 sm:text-[11px]">
-            Formel-Bausteine kombinieren · Vorschau-Platzhalter bis Effekseer (#257)
+            Formel-Bausteine kombinieren · Live-Vorschau mit Aura-Preset
           </p>
         </header>
 
@@ -99,6 +101,7 @@ export function BuildCombineView({ active }: BuildCombineViewProps) {
             focusImageUrl={focusCard?.imageUrl ?? null}
             focusLabel={focusCard?.name ?? 'Vorschau'}
             combinationLabel={combinationLabel}
+            hasSlottedCards={filledSlotCount > 0}
           />
         </div>
 
