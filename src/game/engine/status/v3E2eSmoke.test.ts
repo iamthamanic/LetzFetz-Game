@@ -28,12 +28,13 @@ describe('V3 E2E engine smoke', () => {
     expect(rulesetFromState(state).v3Combat).toBe(true);
   });
 
-  it('mono Inferno smoke', () => {
+  it('mono Überhitzt smoke', () => {
     let state = freshV3();
+    const hp = state.players.p2.hp;
     state = applyStatus(state, 'p2', 'brennen', 2);
     state = resolveImpulseReactions(state, 'p2', 'fire', V3_RULESET, 'p1');
-    expect(getStatus(state, 'p2', 'brennen')).toBeUndefined();
-    expect(state.players.p2.hp).toBeLessThan(20);
+    expect(getStatus(state, 'p2', 'brennen')?.stacks).toBe(1);
+    expect(state.players.p2.hp).toBe(hp - 1);
   });
 
   it('mixed Dampf smoke', () => {

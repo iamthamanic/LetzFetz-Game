@@ -19,10 +19,10 @@ describe('combatFeedbackCopy', () => {
   });
 
   it('emits Auto-Reaktion toast with reaction name', () => {
-    const toasts = parseCombatFeedbackToasts('Auto-Reaktion: Inferno.');
+    const toasts = parseCombatFeedbackToasts('Auto-Reaktion: Überhitzt.');
     expect(toasts).toHaveLength(1);
     expect(toasts[0]?.kind).toBe('auto-reaction');
-    expect(toasts[0]?.body).toContain('Inferno');
+    expect(toasts[0]?.body).toContain('Überhitzt');
     expect(toasts[0]?.body).toContain('keine Wahl');
     expect(toasts[0]?.testId).toBe('combat-feedback-auto-reaction');
   });
@@ -50,7 +50,7 @@ describe('combatFeedbackCopy', () => {
   });
 
   it('ignores manual Reaktion log without Auto- prefix', () => {
-    expect(parseCombatFeedbackToasts('Reaktion: Inferno.')).toEqual([]);
+    expect(parseCombatFeedbackToasts('Reaktion: Überhitzt.')).toEqual([]);
   });
 
   it('labels resolve outcome as Vollblock', () => {

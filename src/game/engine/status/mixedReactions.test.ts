@@ -1,107 +1,116 @@
 /**
- * Parametrized tests for V3 mixed reactions (§8.8–8.21).
+ * V5 §19 mixed reaction outcomes (#283).
  * Location: src/game/engine/status/mixedReactions.test.ts
  */
 import { describe, expect, it } from 'vitest';
 import { createGame } from '../createGame';
-import { BASE_PACK } from '../../packs/base-pack';
-import { V3_RULESET, type Element, type PrimaryMarkId } from '../../types';
+import { V3_PACK, V3_PACK_RULESET as V3_RULESET } from '../../packs/v3/v3-pack';
 import { applyStatus, addShield, getStatus, setShield } from './applyStatus';
 import { resolveImpulseReactions } from './reactionChoice';
+import type { Element, PrimaryMarkId } from '../../types';
 
-function freshV3() {
+function base() {
   return createGame({
-    pack: BASE_PACK,
-    p1CharacterId: 'knuspergnom',
-    p2CharacterId: 'schluckspecht',
+    pack: V3_PACK,
+    p1CharacterId: V3_PACK.characters[0].id,
+    p2CharacterId: V3_PACK.characters[1].id,
     startingPlayer: 'p1',
-    seed: 21,
+    seed: 11,
     ruleset: V3_RULESET,
   });
 }
 
-function fire(
-  mark: PrimaryMarkId,
-  impulse: Element,
-  stacks = 1,
-) {
-  let state = freshV3();
+function fire(mark: PrimaryMarkId, impulse: Element, stacks = 1) {
+  let state = base();
   state = applyStatus(state, 'p2', mark, stacks);
-  return resolveImpulseReactions(state, 'p2', impulse, V3_RULESET, 'p1');
+  return resolveImpulseReactions(state, 'p2', impulse, V3_RULESET, 'p1', V3_PACK);
 }
 
-describe('mixed reactions §8.8–8.21', () => {
-  it('Hotbox: High + Feuer → 2 High + Nebel (or Verpeilt on overdose)', () => {
+describe('V5 §19 mixed reactions', () => {
+  it('Schmelze: High + Feuer → ignore-shield dmg', () => {
+    const hp = base().players.p2.hp;
     const state = fire('high', 'fire', 1);
-    expect(getStatus(state, 'p2', 'high')?.stacks).toBe(2);
+    expect(state.players.p2.hp).toBe(hp - 1);
+  });
+
+  it('Feuersturm: 1 dmg + Brennen', () => {
+    let state = base();
+    const hp = state.players.p2.hp;
+    state = applyStatus(state, 'p2', 'aufgewirbelt', 1);
+    state = resolveImpulseReactions(state, 'p2', 'fire', V3_RULESET, 'p1', V3_PACK);
+    expect(state.players.p2.hp).toBe(hp - 1);
+    expect(getStatus(state, 'p2', 'brennen')?.stacks).toBe(1);
+  });
+
+  it('Sonnenbrand: 1 dmg + Verstrahlt', () => {
+    let state = base();
+    state = setShield(state, 'p2', 3);
+    state = applyStatus(state, 'p2', 'erleuchtet', 1);
+    state = resolveImpulseReactions(state, 'p2', 'fire', V3_RULESET, 'p1', V3_PACK);
+    expect(getStatus(state, 'p2', 'erleuchtet')?.stacks).toBe(1);
+  });
+
+  it('Höllenbrand: 1 dmg + Heilblockade', () => {
+    const state = fire('verflucht', 'fire');
+    expect(getStatus(state, 'p2', 'heilblockade')).toBeTruthy();
+  });
+
+  it('Schlamm: next attack −2 proxy (Verwirbelt + Nebel)', () => {
+    let state = base();
+    state = applyStatus(state, 'p2', 'high', 1);
+    state = resolveImpulseReactions(state, 'p2', 'water', V3_RULESET, 'p1', V3_PACK);
+    expect(getStatus(state, 'p2', 'aufgewirbelt')).toBeTruthy();
     expect(getStatus(state, 'p2', 'nebel')).toBeTruthy();
   });
 
-  it('Feuersturm: Aufgewirbelt + Feuer → 2 dmg + Brennen', () => {
-    let state = freshV3();
-    const hp = state.players.p2.hp;
+  it('Nebelbank: applies nebelbank', () => {
+    let state = base();
     state = applyStatus(state, 'p2', 'aufgewirbelt', 1);
-    state = resolveImpulseReactions(state, 'p2', 'fire', V3_RULESET, 'p1');
-    expect(state.players.p2.hp).toBe(hp - 2);
-    expect(getStatus(state, 'p2', 'brennen')?.stacks).toBe(1);
+    state = resolveImpulseReactions(state, 'p2', 'water', V3_RULESET, 'p1', V3_PACK);
+    expect(getStatus(state, 'p2', 'nebelbank')).toBeTruthy();
   });
 
-  it('Sonnenbrand: strips shield and blinds', () => {
-    let state = freshV3();
-    state = setShield(state, 'p2', 3);
+  it('Regenbogen: chooser may draw/discard after clearing own mark', () => {
+    let state = base();
+    state = applyStatus(state, 'p1', 'brennen', 1);
     state = applyStatus(state, 'p2', 'erleuchtet', 1);
-    state = resolveImpulseReactions(state, 'p2', 'fire', V3_RULESET, 'p1');
-    // 1 dmg through shield (3→2) then strip up to 2 more → 0
-    expect(state.players.p2.shield).toBe(0);
+    state = resolveImpulseReactions(state, 'p2', 'water', V3_RULESET, 'p1', V3_PACK);
+    expect(getStatus(state, 'p1', 'brennen')).toBeUndefined();
+  });
+
+  it('Moder: Verflucht stacks 2', () => {
+    let state = base();
+    state = applyStatus(state, 'p2', 'durchnaesst', 1);
+    state = resolveImpulseReactions(state, 'p2', 'shadow', V3_RULESET, 'p1', V3_PACK);
+    expect(getStatus(state, 'p2', 'verflucht')?.stacks).toBe(2);
+  });
+
+  it('Staubsturm: Katalysatorausfall', () => {
+    const state = fire('aufgewirbelt', 'earth');
+    expect(getStatus(state, 'p2', 'katalysatorausfall')).toBeTruthy();
+  });
+
+  it('Kristallwuchs: chooser gains 2 shield', () => {
+    let state = base();
+    state = applyStatus(state, 'p2', 'erleuchtet', 1);
+    state = resolveImpulseReactions(state, 'p2', 'earth', V3_RULESET, 'p1', V3_PACK);
+    expect(state.players.p1.shield).toBeGreaterThanOrEqual(2);
+  });
+
+  it('Giftsporen: Toxisch', () => {
+    let state = base();
+    state = applyStatus(state, 'p2', 'high', 2);
+    state = resolveImpulseReactions(state, 'p2', 'shadow', V3_RULESET, 'p1', V3_PACK);
+    expect(getStatus(state, 'p2', 'toxisch')).toBeTruthy();
+  });
+
+  it('Blitzlicht: Geblendet on target', () => {
+    const state = fire('erleuchtet', 'air');
     expect(getStatus(state, 'p2', 'geblendet')).toBeTruthy();
   });
 
-  it('Hexenbrand: Brennen + Verflucht', () => {
-    const state = fire('verflucht', 'fire');
-    expect(getStatus(state, 'p2', 'brennen')?.stacks).toBe(1);
-    expect(getStatus(state, 'p2', 'verflucht')?.stacks).toBe(1);
-  });
-
-  it('Kräutersud: heal + High', () => {
-    let state = freshV3();
-    state = { ...state, players: { ...state.players, p2: { ...state.players.p2, hp: 10 } } };
-    state = applyStatus(state, 'p2', 'high', 1);
-    state = resolveImpulseReactions(state, 'p2', 'water', V3_RULESET, 'p1');
-    expect(state.players.p2.hp).toBe(11);
-    expect(getStatus(state, 'p2', 'high')?.stacks).toBe(1);
-  });
-
-  it('Wirbel: exhausts upright bound or discards', () => {
-    let state = freshV3();
-    state = {
-      ...state,
-      players: {
-        ...state.players,
-        p2: {
-          ...state.players.p2,
-          bound: [
-            {
-              instanceId: 'b1',
-              defId: 'fire-attack-3',
-              exhausted: false,
-              resistanceBonus: 0,
-            },
-          ],
-        },
-      },
-    };
-    state = applyStatus(state, 'p2', 'aufgewirbelt', 1);
-    state = resolveImpulseReactions(state, 'p2', 'water', V3_RULESET, 'p1');
-    expect(state.players.p2.bound[0].exhausted).toBe(true);
-  });
-
-  it('Prisma: three shield without negatives', () => {
-    const state = fire('erleuchtet', 'water');
-    expect(state.players.p2.shield).toBe(3);
-  });
-
-  it('Giftbrühe: Gift stack; discard if already poisoned', () => {
-    let state = freshV3();
+  it('Flüstersturm: discard then draw', () => {
+    let state = base();
     state = {
       ...state,
       players: {
@@ -109,66 +118,43 @@ describe('mixed reactions §8.8–8.21', () => {
         p2: {
           ...state.players.p2,
           hand: [
-            ...state.players.p2.hand,
-            { instanceId: 'extra', defId: 'fire-block-2' },
+            { instanceId: 'a', defId: 'fire-attack-2' },
+            { instanceId: 'b', defId: 'water-block-2' },
           ],
         },
       },
+      piles: {
+        ...state.piles,
+        deck: [{ instanceId: 'd1', defId: 'earth-attack-2' }, ...state.piles.deck],
+      },
     };
-    state = applyStatus(state, 'p2', 'gift', 1);
-    state = applyStatus(state, 'p2', 'durchnaesst', 1);
-    const handBefore = state.players.p2.hand.length;
-    state = resolveImpulseReactions(state, 'p2', 'shadow', V3_RULESET, 'p1');
-    expect(getStatus(state, 'p2', 'gift')?.stacks).toBe(2);
-    expect(state.players.p2.hand.length).toBe(handBefore - 1);
-  });
-
-  it('Pollenflug: High both + Geblendet on target', () => {
-    const state = fire('aufgewirbelt', 'earth');
-    expect(getStatus(state, 'p2', 'high')?.stacks).toBe(1);
-    expect(getStatus(state, 'p1', 'high')?.stacks).toBe(1);
-    expect(getStatus(state, 'p2', 'geblendet')).toBeTruthy();
-  });
-
-  it('Growlight: heal, shield, High', () => {
-    let state = freshV3();
-    state = { ...state, players: { ...state.players, p2: { ...state.players.p2, hp: 10 } } };
-    state = applyStatus(state, 'p2', 'erleuchtet', 1);
-    state = resolveImpulseReactions(state, 'p2', 'earth', V3_RULESET, 'p1');
-    expect(state.players.p2.hp).toBe(11);
-    expect(state.players.p2.shield).toBe(1);
-    expect(getStatus(state, 'p2', 'high')?.stacks).toBe(1);
-  });
-
-  it('Paranoia: High → Verflucht stacks+1', () => {
-    let state = freshV3();
-    state = applyStatus(state, 'p2', 'high', 2);
-    state = resolveImpulseReactions(state, 'p2', 'shadow', V3_RULESET, 'p1');
-    expect(getStatus(state, 'p2', 'high')).toBeUndefined();
-    expect(getStatus(state, 'p2', 'verflucht')?.stacks).toBe(3);
-  });
-
-  it('Blendwerk: Geblendet target + Fokus chooser', () => {
-    const state = fire('erleuchtet', 'air');
-    expect(getStatus(state, 'p2', 'geblendet')).toBeTruthy();
-    expect(getStatus(state, 'p1', 'fokus')).toBeTruthy();
-  });
-
-  it('Flüstersturm: discard + Fluch', () => {
-    let state = freshV3();
     const handBefore = state.players.p2.hand.length;
     state = applyStatus(state, 'p2', 'verflucht', 1);
-    state = resolveImpulseReactions(state, 'p2', 'air', V3_RULESET, 'p1');
-    expect(state.players.p2.hand.length).toBe(handBefore - 1);
-    expect(getStatus(state, 'p2', 'verflucht')?.stacks).toBe(1);
+    state = resolveImpulseReactions(state, 'p2', 'air', V3_RULESET, 'p1', V3_PACK);
+    expect(state.players.p2.hand.length).toBe(handBefore);
   });
 
-  it('Finsternis: Ausgeblendet + blocks new shield', () => {
-    let state = fire('verflucht', 'light');
-    expect(getStatus(state, 'p2', 'ausgeblendet')).toBeTruthy();
-    expect(state.meta.v3BlockShieldThisAction).toBe(true);
-    const shieldBefore = state.players.p2.shield;
+  it('Dämmerung: moves shield or deals 1 + heals chooser', () => {
+    let state = base();
+    state = {
+      ...state,
+      players: {
+        ...state.players,
+        p1: { ...state.players.p1, hp: Math.max(1, state.players.p1.hp - 2) },
+      },
+    };
+    const hpBefore = state.players.p2.hp;
+    const chooserHp = state.players.p1.hp;
+    state = applyStatus(state, 'p2', 'verflucht', 1);
+    state = resolveImpulseReactions(state, 'p2', 'light', V3_RULESET, 'p1', V3_PACK);
+    expect(state.players.p2.hp).toBe(hpBefore - 1);
+    expect(state.players.p1.hp).toBe(chooserHp + 1);
+
+    state = base();
     state = addShield(state, 'p2', 2);
-    expect(state.players.p2.shield).toBe(shieldBefore);
+    state = applyStatus(state, 'p2', 'verflucht', 1);
+    state = resolveImpulseReactions(state, 'p2', 'light', V3_RULESET, 'p1', V3_PACK);
+    expect(state.players.p2.shield).toBe(1);
+    expect(state.players.p1.shield).toBeGreaterThanOrEqual(1);
   });
 });

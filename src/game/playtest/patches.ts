@@ -74,7 +74,7 @@ export function applyPlaytestPatch(state: GameState, patch: PlaytestPatch): Game
       targetId: 'p2',
       impulseElement: 'fire',
       options: [
-        { reactionId: 'inferno', markId: 'brennen', labelDe: 'Inferno' },
+        { reactionId: 'inferno', markId: 'brennen', labelDe: 'Überhitzt' },
         { reactionId: 'dampf', markId: 'durchnaesst', labelDe: 'Dampf' },
       ],
     };
@@ -95,7 +95,7 @@ export function applyPlaytestPatch(state: GameState, patch: PlaytestPatch): Game
     next.lastEvent = 'Komplett geblockt — Vollblock (6 vs 8).';
   } else if (patch.demoCombatFeedback === 'auto-reaction') {
     next.combat = null;
-    next.lastEvent = 'Auto-Reaktion: Inferno.';
+    next.lastEvent = 'Auto-Reaktion: Überhitzt.';
   } else if (patch.demoCombatFeedback === 'both') {
     next.combat = null;
     next.lastEvent =
