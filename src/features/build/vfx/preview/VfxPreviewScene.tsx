@@ -7,10 +7,12 @@ import { Bounds, Center, Grid, OrbitControls, useGLTF } from '@react-three/drei'
 import { useThree } from '@react-three/fiber';
 import type { OrbitControls as OrbitControlsImpl } from 'three-stdlib';
 import { AuraParticleStandIn } from './AuraParticleStandIn';
+import { EffekseerPlayback } from './EffekseerPlayback';
 import {
   VfxSocketMarkers,
   type VfxSocketMarkerEntry,
 } from './VfxSocketMarkers';
+import type { EffekseerLoadState } from './effekseerAdapter';
 import type { VfxEffectPresetDefinition } from './effectPresets';
 import type { Vec3 } from '../types/wireTypes';
 import type { VfxTechniqueSocketName } from '../sockets/vfxSocketRoles';
@@ -48,6 +50,8 @@ export interface VfxPreviewSceneProps {
   durationMs: number;
   modelUrls: string[];
   useStandIn: boolean;
+  loadState: EffekseerLoadState;
+  onEffekseerLiveChange?: (live: boolean) => void;
   socketMarkers?: VfxSocketMarkerEntry[];
   activeSocket?: VfxTechniqueSocketName;
   editableSockets?: boolean;
@@ -61,6 +65,8 @@ export function VfxPreviewScene({
   durationMs,
   modelUrls,
   useStandIn,
+  loadState,
+  onEffekseerLiveChange,
   socketMarkers = [],
   activeSocket = 'essenceOrigin',
   editableSockets = false,
@@ -116,6 +122,12 @@ export function VfxPreviewScene({
           </Bounds>
         ) : null}
       </Suspense>
+      <EffekseerPlayback
+        effectPath={preset.efkefcPath}
+        loadState={loadState}
+        playheadMs={playheadMs}
+        onLiveChange={onEffekseerLiveChange}
+      />
       {showAuraStandIn ? (
         <AuraParticleStandIn playheadMs={playheadMs} durationMs={durationMs} />
       ) : null}

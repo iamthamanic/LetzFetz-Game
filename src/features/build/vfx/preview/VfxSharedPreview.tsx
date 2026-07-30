@@ -55,9 +55,15 @@ function resolveStatusLabel(
   preset: VfxEffectPresetDefinition | null,
   loadState: EffekseerLoadState,
   filePresent: boolean,
+  effectLive: boolean,
 ): string {
   if (!preset) return 'Effekt nicht gefunden';
   if (loadState === 'loading') return `${preset.labelDe} — wird geladen…`;
+  if (effectLive) return `${preset.labelDe} — Effekseer aktiv`;
+  if (loadState === 'error') return `${preset.labelDe} — Effekseer-Fehler (Stand-in)`;
+  if (filePresent && loadState === 'ready') {
+    return `${preset.labelDe} — Effekseer bereit (Stand-in bis Kontext)`;
+  }
   if (filePresent) {
     return `${preset.labelDe} — Effekseer-Datei vorhanden (Stand-in aktiv)`;
   }
@@ -92,6 +98,7 @@ export const VfxSharedPreview = forwardRef<VfxSharedPreviewHandle, VfxSharedPrev
   );
   const [loadState, setLoadState] = useState<EffekseerLoadState>('idle');
   const [filePresent, setFilePresent] = useState(false);
+  const [effectLive, setEffectLive] = useState(false);
   const [contextLost, setContextLost] = useState(false);
   const adapterRef = useRef(getEffekseerAdapter());
   const previewRootRef = useRef<HTMLDivElement>(null);
@@ -123,6 +130,7 @@ export const VfxSharedPreview = forwardRef<VfxSharedPreviewHandle, VfxSharedPrev
     if (!active || !preset) {
       setLoadState('idle');
       setFilePresent(false);
+      setEffectLive(false);
       return;
     }
 
@@ -148,8 +156,8 @@ export const VfxSharedPreview = forwardRef<VfxSharedPreviewHandle, VfxSharedPrev
     if (!active) setContextLost(false);
   }, [active]);
 
-  const useStandIn = Boolean(preset) && loadState !== 'loading';
-  const statusLabel = resolveStatusLabel(preset, loadState, filePresent);
+  const useStandIn = Boolean(preset) && loadState !== 'loading' && !effectLive;
+  const statusLabel = resolveStatusLabel(preset, loadState, filePresent, effectLive);
 
   return (
     <div
@@ -212,6 +220,8 @@ export const VfxSharedPreview = forwardRef<VfxSharedPreviewHandle, VfxSharedPrev
                     durationMs={durationMs}
                     modelUrls={modelUrls}
                     useStandIn={useStandIn}
+                    loadState={loadState}
+                    onEffekseerLiveChange={setEffectLive}
                     socketMarkers={socketMarkers}
                     activeSocket={activeSocket}
                     editableSockets={editableSockets}
