@@ -186,29 +186,68 @@ export function packToPresentationCards(
     });
   }
 
-  const SLOT_DE: Record<string, string> = {
-    traeger: 'Träger',
-    antrieb: 'Antrieb',
-    aufsatz: 'Aufsatz',
+  const FORMULA_ROLE_DE = {
+    technique: 'Technik',
+    essence: 'Essenz',
+    catalyst: 'Katalysator',
+  } as const;
+
+  const ACTIVATION_MODE_DE: Record<string, string> = {
+    prep_attack: 'Angriff vorbereiten',
+    prep_block: 'Block vorbereiten',
+    prep_boost: 'Boost vorbereiten',
+    instant: 'Sofort',
   };
 
-  for (const p of pack.engineParts ?? []) {
-    const slot = p.preferredRole ?? 'traeger';
-    const effects = [
-      `Element: ${ELEMENT_DE[p.element]}`,
-      `Rolle: ${SLOT_DE[slot] ?? slot}`,
-      `Widerstand: ${p.resistance}`,
-    ];
-    if (p.effectText) effects.push(`Effekt: ${p.effectText}`);
-    if (p.activateCost != null) effects.push(`Aktivierung: ${p.activateCost} Ladungen`);
+  for (const t of pack.techniques ?? []) {
     cards.push({
-      id: p.id,
-      name: p.name,
-      type: 'Engine',
-      element: toCardElement(p.element),
-      stats_json: { resistance: p.resistance },
-      effects,
-      image_asset: resolveCardArtPath(p.id),
+      id: t.id,
+      name: t.name,
+      type: 'Formula',
+      element: 'Neutral',
+      stats_json: { resistance: t.stability },
+      effects: [
+        `Rolle: ${FORMULA_ROLE_DE.technique}`,
+        `Stabilität: ${t.stability}`,
+        `Modus: ${ACTIVATION_MODE_DE[t.activationMode] ?? t.activationMode}`,
+        `Effekt: ${t.effectText}`,
+      ],
+      image_asset: resolveCardArtPath(t.id),
+      fromPack: true,
+    });
+  }
+
+  for (const e of pack.essences ?? []) {
+    cards.push({
+      id: e.id,
+      name: e.name,
+      type: 'Formula',
+      element: toCardElement(e.element),
+      stats_json: { resistance: e.stability },
+      effects: [
+        `Rolle: ${FORMULA_ROLE_DE.essence}`,
+        `Element: ${ELEMENT_DE[e.element]}`,
+        `Stabilität: ${e.stability}`,
+        `Effekt: ${e.effectText}`,
+      ],
+      image_asset: resolveCardArtPath(e.id),
+      fromPack: true,
+    });
+  }
+
+  for (const c of pack.catalysts ?? []) {
+    cards.push({
+      id: c.id,
+      name: c.name,
+      type: 'Formula',
+      element: 'Neutral',
+      stats_json: { resistance: c.stability },
+      effects: [
+        `Rolle: ${FORMULA_ROLE_DE.catalyst}`,
+        `Stabilität: ${c.stability}`,
+        `Effekt: ${c.effectText}`,
+      ],
+      image_asset: resolveCardArtPath(c.id),
       fromPack: true,
     });
   }

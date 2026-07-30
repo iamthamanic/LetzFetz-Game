@@ -20,9 +20,11 @@ import { getUltimateForCharacter } from '../../game/packs/characterSetup';
 import { CardForgeCardEditor } from './CardForgeCardEditor';
 import type { ForgeCardData } from './model/types';
 import {
-  EnginePreviewCanvas,
-  recipeFromPartId,
-} from '../../components/engine3d';
+  FORMULA_ROLE_FILTERS,
+  cardMatchesFormulaRoleFilter,
+  formulaRoleFromCard,
+  type FormulaRoleFilter,
+} from './model/formulaRoles';
 import { ElementEffectCard } from '../../components/cards/ElementEffectCard';
 import { ElementEffectPreviewModal } from '../../components/cards/ElementEffectPreviewModal';
 import {
@@ -90,10 +92,8 @@ function LibraryCardFace({
           effects: card.effects,
         })
       : null;
-  const engineRole =
-    card.type === 'Engine'
-      ? card.effects?.find((e) => e.startsWith('Rolle:'))?.replace(/^Rolle:\s*/, '').trim()
-      : undefined;
+  const formulaRole =
+    card.type === 'Formula' ? formulaRoleFromCard(card) ?? undefined : undefined;
 
   return (
     <LetzFetzCard
@@ -106,7 +106,7 @@ function LibraryCardFace({
       effects={card.effects}
       image_asset={card.image_asset}
       gameElements={characterDef?.elements}
-      role={characterDef?.role ?? engineRole}
+      role={characterDef?.role ?? formulaRole}
       size={size}
       layout="portrait"
       hideHeader
@@ -172,7 +172,6 @@ function CardLibraryPreviewModal({
         })
       : null;
   const ultimate = characterDef ? getUltimateForCharacter(characterDef) : undefined;
-  const engineRecipe = recipeFromPartId(card.id);
 
   useEffect(() => {
     const onKey = (e: KeyboardEvent) => {
@@ -309,21 +308,6 @@ function CardLibraryPreviewModal({
                   />
                 </div>
               ) : null}
-
-              {engineRecipe ? (
-                <div
-                  className={`flex ${panelH} w-72 shrink-0 flex-col gap-2 rounded-lg border border-stone-600/50 bg-stone-900/80 p-2`}
-                  data-testid="card-library-engine-3d"
-                >
-                  <p className="font-brand text-[10px] uppercase tracking-wide text-stone-400">
-                    3D-Vorschau
-                  </p>
-                  <EnginePreviewCanvas
-                    recipe={engineRecipe}
-                    className="min-h-0 flex-1"
-                  />
-                </div>
-              ) : null}
             </div>
           </div>
         )}
@@ -363,12 +347,17 @@ export function CardLibrary({
   onNotesSave,
 }: CardLibraryProps) {
   const [internalPreviewCard, setInternalPreviewCard] = useState<ForgeCardData | null>(null);
+  const [formulaRoleFilter, setFormulaRoleFilter] = useState<FormulaRoleFilter>('All');
   const [previewEffect, setPreviewEffect] = useState<{
     markId: PrimaryMarkId;
     element: Element;
   } | null>(null);
   const previewCard = externalPreviewCard ?? internalPreviewCard;
   const showEffects = activeFilter === 'Effects';
+  const showFormulaRoles = activeFilter === 'Formula';
+  const roleFilteredCards = showFormulaRoles
+    ? filteredCards.filter((c) => cardMatchesFormulaRoleFilter(c, formulaRoleFilter))
+    : filteredCards;
   const filteredEffects = PRIMARY_MARK_ENTRIES.filter(({ markId, element }) => {
     if (!searchTerm) return true;
     const q = searchTerm.toLowerCase();
@@ -392,6 +381,13 @@ export function CardLibrary({
     onSelectCard(card);
     if (externalPreviewCard === undefined) {
       setInternalPreviewCard(card);
+    }
+  };
+
+  const handleFilterChange = (filter: CardLibraryFilter) => {
+    onFilterChange(filter);
+    if (filter !== 'Formula') {
+      setFormulaRoleFilter('All');
     }
   };
 
@@ -437,7 +433,7 @@ export function CardLibrary({
                 type="button"
                 role="tab"
                 aria-selected={isActive}
-                onClick={() => onFilterChange(filter.id)}
+                onClick={() => handleFilterChange(filter.id)}
                 className={`inline-flex items-center gap-1.5 rounded-md px-2.5 py-1 text-left transition-colors ${
                   isActive
                     ? 'bg-purple-900/40 text-purple-100 ring-1 ring-purple-700'
@@ -452,6 +448,45 @@ export function CardLibrary({
             );
           })}
         </div>
+
+        {showFormulaRoles ? (
+          <div
+            className="flex flex-wrap gap-1.5"
+            role="tablist"
+            aria-label="Formel-Rollenfilter"
+            data-testid="card-library-formula-role-filters"
+          >
+            {FORMULA_ROLE_FILTERS.map((filter) => {
+              const formulaCards = cards.filter((c) => c.type === 'Formula');
+              const count =
+                filter.id === 'All'
+                  ? formulaCards.length
+                  : filter.id === 'Kombination'
+                    ? 0
+                    : formulaCards.filter((c) => cardMatchesFormulaRoleFilter(c, filter.id)).length;
+              const isActive = formulaRoleFilter === filter.id;
+              return (
+                <button
+                  key={filter.id}
+                  type="button"
+                  role="tab"
+                  aria-selected={isActive}
+                  onClick={() => setFormulaRoleFilter(filter.id)}
+                  className={`inline-flex items-center gap-1.5 rounded-md px-2.5 py-1 text-left transition-colors ${
+                    isActive
+                      ? 'bg-amber-900/35 text-amber-100 ring-1 ring-amber-700/80'
+                      : 'bg-stone-900 text-stone-400 ring-1 ring-stone-800 hover:bg-stone-800 hover:text-stone-200'
+                  }`}
+                >
+                  <span className="font-brand text-[11px] uppercase leading-none tracking-wide sm:text-xs">
+                    {filter.label}
+                  </span>
+                  <Badge variant={isActive ? 'accent' : 'default'}>{count}</Badge>
+                </button>
+              );
+            })}
+          </div>
+        ) : null}
       </header>
 
       <div className="min-h-0 flex-1 overflow-y-auto px-2 py-2 sm:px-3 sm:py-3">
@@ -488,14 +523,26 @@ export function CardLibrary({
               ))}
             </ul>
           )
-        ) : filteredCards.length === 0 ? (
+        ) : roleFilteredCards.length === 0 ? (
           <EmptyState
-            title={searchTerm ? 'Keine Treffer' : 'Kategorie leer'}
-            subtitle={searchTerm ? 'Andere Suchbegriffe ausprobieren' : undefined}
+            title={
+              formulaRoleFilter === 'Kombination'
+                ? 'Noch keine Kombinationen'
+                : searchTerm
+                  ? 'Keine Treffer'
+                  : 'Kategorie leer'
+            }
+            subtitle={
+              formulaRoleFilter === 'Kombination'
+                ? 'Gespeicherte T+E+K-Kombis kommen mit Combinate (#255).'
+                : searchTerm
+                  ? 'Andere Suchbegriffe ausprobieren'
+                  : undefined
+            }
           />
         ) : (
           <ul className="grid grid-cols-4 gap-1.5 sm:gap-2">
-            {filteredCards.map((card) => (
+            {roleFilteredCards.map((card) => (
               <li key={card.id} className="min-w-0">
                 <button
                   type="button"

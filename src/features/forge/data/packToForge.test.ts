@@ -1,13 +1,18 @@
 import { describe, it, expect } from 'vitest';
 import { packToForgeCards } from './packToForge';
 import { BASE_PACK } from '../../../game/packs/base-pack';
-import { V3_PACK } from '../../../game/packs/v3';
+import { V5_PACK } from '../../../game/packs/v5';
 import { CARD_CATEGORIES } from '../model/categories';
+import { resolveFormulaCardArtPath } from '../../../services/cardArt/manifest';
 
 describe('packToForgeCards', () => {
-  it('exports V1 cards plus V3 Fetzgerät parts with rulebook categories', () => {
+  it('exports V1 cards plus V5 Formelkomponenten with rulebook categories', () => {
     const cards = packToForgeCards(BASE_PACK);
-    expect(cards).toHaveLength(90 + (V3_PACK.engineParts?.length ?? 0));
+    const formulaCount =
+      (V5_PACK.techniques?.length ?? 0) +
+      (V5_PACK.essences?.length ?? 0) +
+      (V5_PACK.catalysts?.length ?? 0);
+    expect(cards).toHaveLength(90 + formulaCount);
 
     for (const category of CARD_CATEGORIES) {
       const count = cards.filter((c) => c.type === category.id).length;
@@ -38,11 +43,19 @@ describe('packToForgeCards', () => {
     expect(glitches.some((g) => g.id === 'glitch-riss')).toBe(true);
   });
 
-  it('includes registered V3 engine parts as Engine kind', () => {
-    const part = packToForgeCards().find((c) => c.id === 'v3-part-water-traeger-01');
-    expect(part?.type).toBe('Engine');
-    expect(part?.name).toBeTruthy();
-    // MVP trio PNGs shipped (#185) — image_asset points at card preview.
-    expect(part?.image_asset).toBe('/cards/engine/v3-part-water-traeger-01.png');
+  it('includes V5 formula cards as Formula kind with role badges', () => {
+    const technik = packToForgeCards().find((c) => c.id === 'v5-technik-durchschuss');
+    expect(technik?.type).toBe('Formula');
+    expect(technik?.effects.some((e) => e === 'Rolle: Technik')).toBe(true);
+    expect(technik?.image_asset).toBe(resolveFormulaCardArtPath('v5-technik-durchschuss'));
+
+    const essenz = packToForgeCards().find((c) => c.id === 'v5-essenz-eingekochte-glut');
+    expect(essenz?.type).toBe('Formula');
+    expect(essenz?.effects.some((e) => e === 'Rolle: Essenz')).toBe(true);
+    expect(essenz?.element).toBe('Fire');
+
+    const katalysator = packToForgeCards().find((c) => c.id === 'v5-katalysator-echo');
+    expect(katalysator?.type).toBe('Formula');
+    expect(katalysator?.effects.some((e) => e === 'Rolle: Katalysator')).toBe(true);
   });
 });
