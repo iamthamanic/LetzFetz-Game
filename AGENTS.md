@@ -17,8 +17,8 @@ Dieses Repo ist die **digitale Playtest- und Authoring-Plattform** — kein fert
 ### Was dieses Repo **ist**
 
 - Card Forge (Karten/Arenen erstellen und verwalten)
-- Visueller Arena-Tisch (freies Platzieren — Sandbox)
-- **Zukünftig:** Rules Engine + spielbare Game-Ansicht (Solo vs Bot, dann P2P)
+- Engine-Werkbank Build (Meshy-Teile, Formel-Vorschau — local-first)
+- Rules Engine + spielbare Game-Ansicht (Solo vs Bot, dann P2P)
 - Local-first: Spielbar ohne Backend
 
 ### Was dieses Repo **nicht** ist
@@ -60,7 +60,7 @@ Letz-Fetz-Game/src/
 │   ├── types/            # GameState, Actions, Cards
 │   └── packs/            # Base Pack JSON (Seed)
 ├── features/             # Feature-Slices (Ziel)
-│   ├── sandbox/          # Freier Arena-Tisch (local-first) — MVP 0.1
+│   ├── build/            # Engine-Werkbank (Meshy-Teile, DnD, Vorschau)
 │   ├── shell/            # Nav/Menu/Settings
 │   ├── forge/            # Card Forge
 │   └── play/             # Solo-Spiel (PlayView entry, board, setup, presentation)
@@ -91,12 +91,12 @@ Letz-Fetz-Game/src/
 8. **Relocation:** Importe und Tests im selben Change umstellen, alten Pfad löschen. **Keine** Re-Export-Stubs, Forwarding-Module oder Alias-Bridges.
 9. Shared-Layer dürfen **nicht** nach `src/features/` importieren (Dependency-Richtung: App → features → shared).
 10. Persistierte/externe Daten betreten Typed Code als `unknown` und werden explizit genarrowed. Touched files: kein `any`, kein `@ts-*`, keine Lint/Type-Suppressions.
-11. **UI** ruft fürs echte Spiel `dispatch(action)` auf; Engine validiert und gibt neuen State zurück. Sandbox ist freier Tisch ohne Engine-Ausführung.
+11. **UI** ruft fürs echte Spiel `dispatch(action)` auf; Engine validiert und gibt neuen State zurück. Build ist kosmetische Authoring-Vorschau ohne Engine-Kampfwerte.
 
 ### Migrations-Reihenfolge (kein Big-Bang)
 
-1. Architekturvertrag + Sandbox Foundations (`vsa-sandbox-foundation`)
-2. Sandbox local-first Slice (`sandbox-local-slice`) — MVP 0.1
+1. Architekturvertrag + Sandbox Foundations (`vsa-sandbox-foundation`) — historisch
+2. Build workbench ersetzt Sandbox-Menüeintrag (`build-workbench`)
 3. Shell → Forge → Shared-Card-Boundary → Play (Support → Setup → Presentation → Board → Entry)
 
 Design: `.qa/design/vertical-slice-architecture.md`

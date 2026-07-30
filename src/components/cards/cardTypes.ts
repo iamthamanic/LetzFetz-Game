@@ -1,5 +1,5 @@
 /**
- * Neutral card presentation types — shared across Forge, Sandbox, and Play.
+ * Neutral card presentation types — shared across Forge and Play.
  * Location: src/components/cards/cardTypes.ts
  */
 

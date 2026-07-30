@@ -17,7 +17,7 @@ Lies `AGENTS.md` im Repo-Root zuerst.
 
 ## Architektur
 - `src/game/` — pure TS Rules Engine, kein React
-- `src/features/` — Feature-Slices (Sandbox → Shell → Forge → Play); kein Feature→Feature-Import
+- `src/features/` — Feature-Slices (Build → Shell → Forge → Play); kein Feature→Feature-Import
 - `src/components/ui/` — UI Primitives (Styleguide); bleiben shared
 - `src/components/cards/` — neutrale Karten-Präsentation
 - `src/components/character/` — shared character detail UI (Forge + Play setup)

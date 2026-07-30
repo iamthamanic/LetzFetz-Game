@@ -7,7 +7,7 @@ See German `docs/FEATURES.md` and `.project-memory/features/*.json` for bilingua
 | rules-engine-v1 | active |
 | solo-duel-ui | active |
 | card-forge | active |
-| sandbox-arena | active |
+| build-workbench | active |
 | card-library | active |
 | playtest-cheatbox | active |
 | llm-bot-ollama | active |
