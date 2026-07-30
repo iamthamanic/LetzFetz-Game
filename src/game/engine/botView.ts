@@ -126,11 +126,14 @@ export function botNeedsToAct(state: GameState, botId: PlayerId = 'p2'): boolean
     if (
       (p.type === 'must-discard' ||
         p.type === 'optional-draw-discard' ||
-        p.type === 'spaeti-extra-build') &&
+        p.type === 'spaeti-extra-build' ||
+        p.type === 'pillendoktora-boost' ||
+        p.type === 'mysterium-element') &&
       p.playerId === botId
     ) {
       return true;
     }
+    if (p.type === 'pick-reaction' && p.chooserId === botId) return true;
   }
   return state.activePlayer === botId && !state.combat;
 }
