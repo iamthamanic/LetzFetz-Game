@@ -33,7 +33,7 @@ import { Button } from '../../../components/ui/Button';
 import { DndPlaymat } from './DndPlaymat';
 import { FetzChargeConfirmModal } from './FetzChargeConfirmModal';
 import { BoardEngineLiveZone } from '../engine3d/BoardEngineLiveZone';
-import { shouldShowBoardEngineLiveZone } from './boardEngineLive';
+import { shouldShowBoardEngineLiveZone, shouldShowFormulaGestellCompose } from './boardEngineLive';
 
 interface PlaymatBoardProps {
   state: GameState;
@@ -470,7 +470,7 @@ export function PlaymatBoard({
           )}
 
           <section className="flex flex-none flex-col gap-2">
-            {v5Formula ? (
+            {shouldShowFormulaGestellCompose(v5Formula) ? (
               <FormulaRig
                 label="Gegner-Formel"
                 formula={state.players[botId].formula}
@@ -517,7 +517,7 @@ export function PlaymatBoard({
           </section>
 
           <section className="flex min-w-0 flex-none flex-col gap-2 border-t border-stone-800/80 pt-3">
-            {v5Formula ? (
+            {shouldShowFormulaGestellCompose(v5Formula) ? (
               <FormulaRig
                 label="Deine Formel"
                 formula={state.players[humanId].formula}
