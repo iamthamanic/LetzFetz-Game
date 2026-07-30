@@ -1,5 +1,5 @@
 /**
- * VFX Asset Pipeline — Socket stub node (default coords).
+ * VFX Asset Pipeline — Socket editor node (named attachment points).
  * Location: src/features/build/vfx/nodes/VfxSocketNode.tsx
  */
 import React from 'react';
@@ -7,13 +7,17 @@ import { Handle, Position, type NodeProps } from '@xyflow/react';
 import { Crosshair } from 'lucide-react';
 import { VfxNodeStatusBadge } from './VfxNodeStatusBadge';
 import type { VfxSocketNodeData } from './vfxNodeTypes';
+import { formatSocketPositionDe } from '../sockets/socketMapHelpers';
+import { VFX_TECHNIQUE_SOCKET_LABEL_DE } from '../sockets/vfxSocketRoles';
 
 export function VfxSocketNode({ data, selected }: NodeProps) {
   const nodeData = data as VfxSocketNodeData;
+  const activeLabel = VFX_TECHNIQUE_SOCKET_LABEL_DE[nodeData.activeSocket];
+  const activePos = nodeData.sockets[nodeData.activeSocket];
 
   return (
     <div
-      className={`min-w-[180px] rounded-lg border bg-stone-900/95 px-3 py-2 shadow-lg ${
+      className={`min-w-[200px] rounded-lg border bg-stone-900/95 px-3 py-2 shadow-lg ${
         selected ? 'border-amber-500/80' : 'border-stone-700'
       }`}
       data-testid="vfx-node-socket"
@@ -26,11 +30,16 @@ export function VfxSocketNode({ data, selected }: NodeProps) {
         </div>
         <VfxNodeStatusBadge status={nodeData.status} />
       </div>
-      <p className="text-[10px] text-stone-500">
-        Stub — {nodeData.socketName} @ (0, 0, 0)
+      <p className="text-[10px] text-stone-400">
+        {activeLabel} · {formatSocketPositionDe(activePos)}
       </p>
+      {!nodeData.glbUrl ? (
+        <p className="mt-1 text-[10px] text-amber-600/90">
+          Kein Modell — Sockets als Entwurf bearbeitbar.
+        </p>
+      ) : null}
       {nodeData.statusMessage ? (
-        <p className="mt-1 text-[10px] text-stone-400">{nodeData.statusMessage}</p>
+        <p className="mt-1 text-[10px] text-stone-500">{nodeData.statusMessage}</p>
       ) : null}
       <Handle type="source" position={Position.Right} className="!h-2 !w-2 !bg-violet-400" />
     </div>

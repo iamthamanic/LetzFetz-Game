@@ -9,13 +9,22 @@ import {
   VFX_STATUS_LABEL_DE,
   type VfxPromptNodeData,
   type VfxSaveTechniqueNodeData,
+  type VfxSocketNodeData,
 } from './nodes/vfxNodeTypes';
 import { isVfxAssetStatus, type VfxAssetStatus } from './types/status';
+import {
+  VFX_TECHNIQUE_SOCKET_LABEL_DE,
+  VFX_TECHNIQUE_SOCKET_NAMES,
+  type VfxTechniqueSocketName,
+} from './sockets/vfxSocketRoles';
+import type { Vec3 } from './types/wireTypes';
 
 interface VfxInspectorPanelProps {
   selectedNode: Node | null;
   onPromptChange: (prompt: string) => void;
   onTechniqueNameChange: (name: string) => void;
+  onActiveSocketChange: (name: VfxTechniqueSocketName) => void;
+  onSocketAxisChange: (name: VfxTechniqueSocketName, axis: keyof Vec3, value: number) => void;
 }
 
 function readStatus(data: Record<string, unknown>): VfxAssetStatus {
@@ -24,10 +33,17 @@ function readStatus(data: Record<string, unknown>): VfxAssetStatus {
   return 'DRAFT';
 }
 
+function parseAxisValue(raw: string): number {
+  const parsed = Number.parseFloat(raw);
+  return Number.isFinite(parsed) ? parsed : 0;
+}
+
 export function VfxInspectorPanel({
   selectedNode,
   onPromptChange,
   onTechniqueNameChange,
+  onActiveSocketChange,
+  onSocketAxisChange,
 }: VfxInspectorPanelProps) {
   if (!selectedNode) {
     return (
@@ -101,7 +117,73 @@ export function VfxInspectorPanel({
             />
           </label>
         ) : null}
+
+        {selectedNode.type === VFX_PIPELINE_NODE_TYPES.vfxSocket ? (
+          <SocketInspectorFields
+            data={data as VfxSocketNodeData}
+            onActiveSocketChange={onActiveSocketChange}
+            onSocketAxisChange={onSocketAxisChange}
+          />
+        ) : null}
       </div>
     </aside>
+  );
+}
+
+function SocketInspectorFields({
+  data,
+  onActiveSocketChange,
+  onSocketAxisChange,
+}: {
+  data: VfxSocketNodeData;
+  onActiveSocketChange: (name: VfxTechniqueSocketName) => void;
+  onSocketAxisChange: (name: VfxTechniqueSocketName, axis: keyof Vec3, value: number) => void;
+}) {
+  const active = data.activeSocket;
+  const position = data.sockets[active];
+
+  return (
+    <div className="mt-4 space-y-3">
+      <label className="block">
+        <span className="text-[10px] uppercase text-stone-500">Aktiver Socket</span>
+        <select
+          className="mt-1 w-full rounded border border-stone-700 bg-stone-950 px-2 py-1.5 text-xs text-stone-200 focus:border-violet-600 focus:outline-none"
+          value={active}
+          onChange={(e) => onActiveSocketChange(e.target.value as VfxTechniqueSocketName)}
+          data-testid="vfx-inspector-socket-role"
+        >
+          {VFX_TECHNIQUE_SOCKET_NAMES.map((name) => (
+            <option key={name} value={name}>
+              {VFX_TECHNIQUE_SOCKET_LABEL_DE[name]}
+            </option>
+          ))}
+        </select>
+      </label>
+
+      <fieldset>
+        <legend className="text-[10px] uppercase text-stone-500">Position (XYZ)</legend>
+        <div className="mt-1 grid grid-cols-3 gap-1.5">
+          {(['x', 'y', 'z'] as const).map((axis) => (
+            <label key={axis} className="block">
+              <span className="text-[9px] uppercase text-stone-600">{axis}</span>
+              <input
+                type="number"
+                step="0.01"
+                className="mt-0.5 w-full rounded border border-stone-700 bg-stone-950 px-1.5 py-1 text-xs text-stone-200 focus:border-violet-600 focus:outline-none"
+                value={position[axis]}
+                onChange={(e) =>
+                  onSocketAxisChange(active, axis, parseAxisValue(e.target.value))
+                }
+                data-testid={`vfx-inspector-socket-${axis}`}
+              />
+            </label>
+          ))}
+        </div>
+      </fieldset>
+
+      <p className="text-[10px] leading-snug text-stone-500">
+        Marker und Gizmo erscheinen in der Socket-Vorschau unter dem Graph.
+      </p>
+    </div>
   );
 }

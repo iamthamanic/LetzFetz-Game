@@ -15,6 +15,10 @@ import {
 } from './parseHelpers';
 import { parseVfxAssetStatus, type VfxAssetStatus } from './status';
 import { parseRenderOutput, type RenderOutput } from './renderOutput';
+import {
+  parseTechniqueSocketMap,
+  type VfxTechniqueSocketMap,
+} from '../sockets/socketMapHelpers';
 
 export const VFX_FORMULA_ROLES = ['technik', 'essenz', 'katalysator'] as const;
 export type VfxFormulaRole = (typeof VFX_FORMULA_ROLES)[number];
@@ -49,7 +53,11 @@ export interface TechniqueAsset extends VfxAssetMetadata {
   imageId: string | null;
   modelId: string | null;
   effectId: string | null;
+  /** Named attachment points for VFX (essenceOrigin, impact, …). */
+  sockets: VfxTechniqueSocketMap;
 }
+
+export type { VfxTechniqueSocketMap } from '../sockets/socketMapHelpers';
 
 export interface EssenceAsset extends VfxAssetMetadata {
   kind: 'essence';
@@ -170,6 +178,7 @@ export function parseTechniqueAsset(raw: unknown): TechniqueAsset {
     imageId: parseOptionalString(record, 'imageId'),
     modelId: parseOptionalString(record, 'modelId'),
     effectId: parseOptionalString(record, 'effectId'),
+    sockets: parseTechniqueSocketMap(record.sockets),
     ...parseAssetMetadata(record, 'TechniqueAsset'),
   };
 }

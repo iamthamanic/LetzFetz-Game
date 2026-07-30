@@ -15,6 +15,7 @@ import {
   removeTechniqueAsset,
 } from './registry';
 import type { FormulaRecipe, TechniqueAsset } from './types/assets';
+import { createDefaultSocketMap } from './sockets/socketMapHelpers';
 
 class MockStorage {
   private map = new Map<string, string>();
@@ -47,6 +48,7 @@ const sampleTechnique: TechniqueAsset = {
   imageId: null,
   modelId: '/vfx/mock/demo-technique.glb',
   effectId: null,
+  sockets: createDefaultSocketMap(),
 };
 
 const sampleRecipe: FormulaRecipe = {

@@ -2,7 +2,7 @@
  * VFX Studio shell — modes, node library, React Flow canvas, inspector.
  * Location: src/features/build/vfx/VfxStudioView.tsx
  */
-import React, { useEffect, useState } from 'react';
+import React, { useEffect, useMemo, useState } from 'react';
 import { Boxes, Layers, Workflow } from 'lucide-react';
 import { ReactFlowProvider } from '@xyflow/react';
 import { Tabs, type TabItem } from '../../../components/ui/Tabs';
@@ -13,6 +13,11 @@ import { VfxNodeLibrary, type VfxStudioMode } from './VfxNodeLibrary';
 import { useAssetPipelineGraph } from './useAssetPipelineGraph';
 import { VfxSharedPreview } from './preview';
 import { VfxBatchPanel } from './VfxBatchPanel';
+import {
+  VFX_PIPELINE_NODE_TYPES,
+  type VfxSocketNodeData,
+} from './nodes/vfxNodeTypes';
+import { VFX_TECHNIQUE_SOCKET_NAMES } from './sockets/vfxSocketRoles';
 
 export type { VfxStudioMode };
 
@@ -59,6 +64,20 @@ export function VfxStudioView() {
   const [mode, setMode] = useState<VfxStudioMode>(() => readInitialMode());
   const pipeline = useAssetPipelineGraph(mode === 'assets');
 
+  const selectedSocketData = useMemo(() => {
+    const node = pipeline.selectedNode;
+    if (!node || node.type !== VFX_PIPELINE_NODE_TYPES.vfxSocket) return null;
+    return node.data as VfxSocketNodeData;
+  }, [pipeline.selectedNode]);
+
+  const socketPreviewMarkers = useMemo(() => {
+    if (!selectedSocketData) return [];
+    return VFX_TECHNIQUE_SOCKET_NAMES.map((name) => ({
+      name,
+      position: selectedSocketData.sockets[name],
+    }));
+  }, [selectedSocketData]);
+
   useEffect(() => {
     try {
       sessionStorage.setItem(MODE_KEY, mode);
@@ -95,16 +114,33 @@ export function VfxStudioView() {
             onAddNode={pipeline.addPipelineNode}
             savedTechniques={pipeline.savedTechniques}
           />
-          <main className="flex min-h-0 min-w-0 flex-1 flex-col p-2 sm:p-3">
+          <main className="flex min-h-0 min-w-0 flex-1 flex-col gap-2 p-2 sm:p-3">
             {mode === 'assets' ? (
-              <VfxFlowCanvas
-                nodes={pipeline.nodes}
-                edges={pipeline.edges}
-                onNodesChange={pipeline.onNodesChange}
-                onEdgesChange={pipeline.onEdgesChange}
-                onConnect={pipeline.onConnect}
-                onSelectNode={pipeline.setSelectedNodeId}
-              />
+              <>
+                <VfxFlowCanvas
+                  nodes={pipeline.nodes}
+                  edges={pipeline.edges}
+                  onNodesChange={pipeline.onNodesChange}
+                  onEdgesChange={pipeline.onEdgesChange}
+                  onConnect={pipeline.onConnect}
+                  onSelectNode={pipeline.setSelectedNodeId}
+                />
+                {selectedSocketData ? (
+                  <VfxSharedPreview
+                    active
+                    presetId="aura"
+                    className="min-h-[14rem] flex-none sm:min-h-[16rem]"
+                    showTimeline={false}
+                    modelUrls={selectedSocketData.glbUrl ? [selectedSocketData.glbUrl] : []}
+                    socketMarkers={socketPreviewMarkers}
+                    activeSocket={selectedSocketData.activeSocket}
+                    editableSockets
+                    onSocketPositionChange={pipeline.updateSelectedSocketPosition}
+                    onSelectSocket={pipeline.updateSelectedActiveSocket}
+                    emptyMessage="Socket-Vorschau"
+                  />
+                ) : null}
+              </>
             ) : mode === 'formeln' ? (
               <VfxSharedPreview
                 active
@@ -120,6 +156,8 @@ export function VfxStudioView() {
             selectedNode={pipeline.selectedNode}
             onPromptChange={pipeline.updateSelectedPrompt}
             onTechniqueNameChange={pipeline.updateSelectedTechniqueName}
+            onActiveSocketChange={pipeline.updateSelectedActiveSocket}
+            onSocketAxisChange={pipeline.updateSelectedSocketAxis}
           />
         </div>
       </ReactFlowProvider>

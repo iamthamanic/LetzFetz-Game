@@ -14,6 +14,9 @@ import {
 import { VfxPreviewScene } from './VfxPreviewScene';
 import { captureCanvasHeroFrame } from '../../model/combinateSave';
 import type { RenderOutput } from '../types/renderOutput';
+import type { VfxSocketMarkerEntry } from './VfxSocketMarkers';
+import type { Vec3 } from '../types/wireTypes';
+import type { VfxTechniqueSocketName } from '../sockets/vfxSocketRoles';
 
 export interface VfxSharedPreviewHandle {
   /** Snapshot the WebGL canvas as a hero-frame PNG data URL. */
@@ -35,6 +38,12 @@ export interface VfxSharedPreviewProps {
   /** Controlled hero frame ms; falls back to preset default. */
   heroFrameMs?: number;
   onHeroFrameMsChange?: (ms: number) => void;
+  /** Socket markers to render on the model. */
+  socketMarkers?: VfxSocketMarkerEntry[];
+  activeSocket?: VfxTechniqueSocketName;
+  editableSockets?: boolean;
+  onSocketPositionChange?: (name: VfxTechniqueSocketName, position: Vec3) => void;
+  onSelectSocket?: (name: VfxTechniqueSocketName) => void;
 }
 
 function formatMs(ms: number): string {
@@ -65,6 +74,11 @@ export const VfxSharedPreview = forwardRef<VfxSharedPreviewHandle, VfxSharedPrev
       showTimeline = true,
       heroFrameMs: heroFrameMsProp,
       onHeroFrameMsChange,
+      socketMarkers = [],
+      activeSocket = 'essenceOrigin',
+      editableSockets = false,
+      onSocketPositionChange,
+      onSelectSocket,
     },
     ref,
   ) {
@@ -166,6 +180,11 @@ export const VfxSharedPreview = forwardRef<VfxSharedPreviewHandle, VfxSharedPrev
                 durationMs={durationMs}
                 modelUrls={modelUrls}
                 useStandIn={useStandIn}
+                socketMarkers={socketMarkers}
+                activeSocket={activeSocket}
+                editableSockets={editableSockets}
+                onSocketPositionChange={onSocketPositionChange}
+                onSelectSocket={onSelectSocket}
               />
             </Canvas>
             <div className="pointer-events-none absolute inset-x-0 top-0 flex justify-between gap-2 p-2">
