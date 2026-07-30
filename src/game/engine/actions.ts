@@ -24,11 +24,21 @@ import {
   clampHp,
 } from './helpers';
 import { applyElementEffect, applyBoundActivation, finishMainAction, applyInstantGlitch } from './effects';
-import { findElementDef, findEnginePartDef, findGlitchDef } from './lookup';
+import { findElementDef, findEnginePartDef, findGlitchDef, findItemDef } from './lookup';
 import {
   findFormulaComponentDef,
   formulaSlotForDef,
 } from './formulaSlots';
+import {
+  resolveFormulaActivate,
+  takeAttackPrepBonus,
+  takeBlockPrepBonus,
+  emptyFormulaPrep,
+} from './formulaResolve';
+import {
+  applyGrossformelAftermath,
+  isFullFormulaActivatable,
+} from './formulaCharge';
 import {
   destroyFormulaComponent,
   disturbFormulaComponent,
@@ -39,15 +49,6 @@ import {
   listFormulaComponents,
   restoreOwnerFormulaAtStart,
 } from './formulaChallenge';
-import {
-  resolveFormulaActivate,
-  takeAttackPrepBonus,
-  takeBlockPrepBonus,
-} from './formulaResolve';
-import {
-  applyGrossformelAftermath,
-  isFullFormulaActivatable,
-} from './formulaCharge';
 import { applyDamageThroughShield } from './status/shield';
 import { pickReaction, resolveImpulseReactions } from './status/reactionChoice';
 import {
@@ -939,6 +940,14 @@ export function getLegalActions(state: GameState, ctx: PackContext): GameAction[
         actions.push({ type: 'PLAY_BOOST', cardInstanceId: card.instanceId });
       }
     }
+    if (isV5FormulaEnabled(ruleset)) {
+      for (const card of hand) {
+        const item = findItemDef(ctx.pack, card.defId);
+        if (item?.timing === 'action') {
+          actions.push({ type: 'PLAY_ITEM', cardInstanceId: card.instanceId });
+        }
+      }
+    }
     if (state.players[ctx.playerId].ultimateAvailable) {
       if (
         !isV5FormulaEnabled(ruleset) ||
@@ -1589,6 +1598,53 @@ export function applyAction(
         }
       }
       return finishMainAction(next);
+    }
+    case 'PLAY_ITEM': {
+      if (state.phase !== 'action') throw new Error('Not in action phase');
+      if (!isV5FormulaEnabled(ruleset)) throw new Error('PLAY_ITEM requires v5Formula');
+      const handCard = state.players[playerId].hand.find(
+        (c) => c.instanceId === action.cardInstanceId,
+      );
+      const item = handCard ? findItemDef(pack, handCard.defId) : undefined;
+      if (!item || item.timing !== 'action') throw new Error('Not an action item');
+
+      next = discardFromHand(state, playerId, action.cardInstanceId);
+      const opp = opponentOf(playerId);
+
+      if (item.id === 'v5-item-rostiger-nagel') {
+        const prep = next.players[playerId].formulaPrep ?? emptyFormulaPrep();
+        prep.attackIgnoreShield += 2;
+        next.players[playerId].formulaPrep = prep;
+        next.lastEvent = `${item.name}: nächster Angriff ignoriert 2 Schild.`;
+      } else if (item.id === 'v5-item-verdaechtiger-pilz') {
+        next.players[playerId].shield = clampShield(
+          (next.players[playerId].shield ?? 0) + 2,
+        );
+        next = applyStatus(next, playerId, 'high', 1);
+        next.lastEvent = `${item.name}: +2 Schild und High.`;
+      } else if (item.id === 'v5-item-halbe-dose-energy') {
+        next = drawForPlayer(next, playerId, 2, rng, ruleset, { allowExtra: true });
+        next.lastEvent = `${item.name}: 2 Karten gezogen.`;
+      } else if (item.id === 'v5-item-kabelbinder-deluxe') {
+        const targetId = action.targetFormulaInstanceId;
+        const target = targetId
+          ? findFormulaComponent(next.players[opp].formula, targetId)
+          : listFormulaComponents(next.players[opp].formula).find(
+              (c) => formulaComponentStability(pack, c) <= 3 && !c.disturbed,
+            );
+        if (target && formulaComponentStability(pack, target) <= 3) {
+          next.players[opp].formula = disturbFormulaComponent(
+            next.players[opp].formula,
+            target.instanceId,
+          );
+          next.lastEvent = `${item.name}: Komponente gestört.`;
+        } else {
+          next.lastEvent = `${item.name}: kein gültiges Ziel (Stabilität ≤3).`;
+        }
+      } else {
+        next.lastEvent = `${item.name} gespielt.`;
+      }
+      return finishMainAction(checkWinner(next));
     }
     case 'PLAY_BOOST': {
       if (state.phase !== 'action') throw new Error('Not in action phase');

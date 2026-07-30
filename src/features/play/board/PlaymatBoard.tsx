@@ -18,7 +18,9 @@ import {
   findDirectBuildAction,
   findDiscardDrawAction,
   findPlayGlitchAction,
+  findPlayItemAction,
   findPoolActivateAction,
+  formulaChallengeTargetIds,
 } from './gameActionHelpers';
 import { CharacterDock, CombatStage, DeckPile, DiscardPile } from './zones';
 import { BoundCardRow } from './BoundCardRow';
@@ -216,7 +218,31 @@ export function PlaymatBoard({
     }
   };
 
-  const hasChallengeTargets = view.botBoundSlots.some((s) => s.isTargetable);
+  const handlePlayItem = (handInstanceId: string) => {
+    const action = findPlayItemAction(view.legalActions, handInstanceId);
+    if (action) {
+      onDispatch(action);
+      clearPending();
+    }
+  };
+
+  const handleFormulaChallengeClick = (instanceId: string) => {
+    if (pending?.type !== 'attack') return;
+    onPendingChange({
+      type: 'attack',
+      attackInstanceId: pending.attackInstanceId,
+      targetBoundInstanceId: instanceId,
+    });
+  };
+
+  const formulaChallengeIds =
+    pending?.type === 'attack'
+      ? formulaChallengeTargetIds(view.legalActions, pending.attackInstanceId)
+      : [];
+
+  const hasChallengeTargets = v5Formula
+    ? formulaChallengeIds.length > 0
+    : view.botBoundSlots.some((s) => s.isTargetable);
   const buildHasFreeSlot = view.humanBoundSlots.some((s) => !s.instanceId);
 
   const pendingHint = (() => {
@@ -226,9 +252,14 @@ export function PlaymatBoard({
         return hasChallengeTargets
           ? pending.targetBoundInstanceId
             ? 'Ziel gewählt — unten „Herausfordern“ oder „Direkt angreifen“.'
-            : 'Gegner-Engine antippen als Ziel, dann unten „Herausfordern“ — oder „Direkt angreifen“.'
+            : v5Formula
+              ? 'Gegner-Formelkomponente antippen als Ziel, dann unten „Herausfordern“ — oder „Direkt angreifen“.'
+              : 'Gegner-Engine antippen als Ziel, dann unten „Herausfordern“ — oder „Direkt angreifen“.'
           : 'Kein Herausforderungsziel — unten „Direkt angreifen“.';
       case 'build': {
+        if (v5Formula) {
+          return 'Formelkarte wird direkt gebaut oder ersetzt — kein Slot-Klick nötig.';
+        }
         const hasFreeSlot = view.humanBoundSlots.some((s) => !s.instanceId);
         return hasFreeSlot
           ? 'Klicke auf einen freien Engine-Slot, um die Karte zu bauen.'
@@ -436,6 +467,11 @@ export function PlaymatBoard({
                 formula={state.players[botId].formula}
                 pack={pack}
                 testId="opponent-formula-rig"
+                targetableInstanceIds={formulaChallengeIds}
+                selectedTargetId={
+                  pending?.type === 'attack' ? pending.targetBoundInstanceId : null
+                }
+                onComponentClick={handleFormulaChallengeClick}
               />
             ) : (
               <BoundCardRow
@@ -531,12 +567,15 @@ export function PlaymatBoard({
               onDiscardDraw={handleDiscardDraw}
               onActivateDiscard={handleActivateDiscard}
               onPlayGlitch={handlePlayGlitch}
+              onPlayItem={handlePlayItem}
             />
 
             {pending?.type === 'attack' && (
               <p className="text-center text-[11px] text-stone-400 sm:text-xs">
                 {hasChallengeTargets
-                  ? 'Herausfordern: Gegner-Engine-Slot anklicken. Direktangriff trifft die LP des Gegners.'
+                  ? v5Formula
+                    ? 'Herausfordern: Gegner-Formelkomponente anklicken. Direktangriff trifft die LP des Gegners.'
+                    : 'Herausfordern: Gegner-Engine-Slot anklicken. Direktangriff trifft die LP des Gegners.'
                   : 'Kein Herausforderungsziel — nur Direktangriff möglich.'}
               </p>
             )}
@@ -567,7 +606,7 @@ export function PlaymatBoard({
           </aside>
         </div>
       </div>
-      {chargeConfirm && (
+      {!v5Formula && chargeConfirm && (
         <FetzChargeConfirmModal
           open
           partName={chargeConfirm.partName}

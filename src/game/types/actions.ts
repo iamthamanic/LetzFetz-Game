@@ -14,6 +14,8 @@ export type GameAction =
   | { type: 'PASS_BLOCK' }
   | { type: 'PLAY_BOOST'; cardInstanceId: string }
   | { type: 'PLAY_ULTIMATE' }
+  /** V5 Gegenstand — action-timing item from hand (reaction items later). */
+  | { type: 'PLAY_ITEM'; cardInstanceId: string; targetFormulaInstanceId?: string }
   | { type: 'DISCARD_DRAW'; discardInstanceId: string }
   | {
       type: 'ACTIVATE_BOUND';

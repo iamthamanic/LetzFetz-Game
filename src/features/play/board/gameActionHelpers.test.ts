@@ -7,7 +7,9 @@ import {
   findDirectBuildAction,
   findDiscardDrawAction,
   findPlayGlitchAction,
+  findPlayItemAction,
   findPoolActivateAction,
+  formulaChallengeTargetIds,
   hasChallengeForAttack,
 } from './gameActionHelpers';
 
@@ -35,6 +37,23 @@ describe('gameActionHelpers', () => {
       cardInstanceId: 'h2',
       discardBoundId: 'b1',
     });
+  });
+
+  it('finds V5 formula build/replace without slot pick', () => {
+    const v5: GameAction[] = [
+      { type: 'FORMULA_BUILD', cardInstanceId: 'f1' },
+      { type: 'FORMULA_REPLACE', cardInstanceId: 'f2' },
+      { type: 'FORMULA_SCHNELLMIX', cardInstanceId: 'f3' },
+      { type: 'PLAY_ITEM', cardInstanceId: 'i1' },
+      { type: 'CHALLENGE', attackCardInstanceId: 'a1', targetBoundInstanceId: 'fc1' },
+      { type: 'CHALLENGE', attackCardInstanceId: 'a1', targetBoundInstanceId: 'fc2' },
+    ];
+    expect(findDirectBuildAction(v5, 'f1')?.type).toBe('FORMULA_BUILD');
+    expect(findDirectBuildAction(v5, 'f2')?.type).toBe('FORMULA_REPLACE');
+    expect(findDirectBuildAction(v5, 'f3')?.type).toBe('FORMULA_SCHNELLMIX');
+    expect(buildRequiresReplace(v5, 'f2')).toBe(false);
+    expect(findPlayItemAction(v5, 'i1')?.type).toBe('PLAY_ITEM');
+    expect(formulaChallengeTargetIds(v5, 'a1')).toEqual(['fc1', 'fc2']);
   });
 
   it('finds challenge for attack and target', () => {
