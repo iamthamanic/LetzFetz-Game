@@ -7,6 +7,7 @@ import {
   BASE_PACK,
   P100_RULESET,
   V3_RULESET,
+  V5_PACK_RULESET,
   createGame,
   applyAction,
   chooseBotAction,
@@ -862,23 +863,27 @@ export function PlayView({ onBattleMusicActiveChange }: PlayViewProps) {
               setHeldBackHandCards({});
               prevStateRef.current = null;
               const seed = matchSeedRef.current || Date.now();
-              setState(
-                createGame({
-                  pack: matchPack,
-                  p1CharacterId: state.players[HUMAN].characterId,
-                  p2CharacterId: state.players[BOT].characterId,
-                  startingPlayer,
-                  seed,
-                  arenaId: state.arena.arenaId,
-                  d6Variant: state.arena.d6Variant,
-                  ruleset:
-                    state.meta.v3CombatEnabled === true
+              const rebuilt = createGame({
+                pack: matchPack,
+                p1CharacterId: state.players[HUMAN].characterId,
+                p2CharacterId: state.players[BOT].characterId,
+                startingPlayer,
+                seed,
+                arenaId: state.arena.arenaId,
+                d6Variant: state.arena.d6Variant,
+                ruleset:
+                  state.meta.v5FormulaEnabled === true
+                    ? V5_PACK_RULESET
+                    : state.meta.v3CombatEnabled === true
                       ? V3_RULESET
                       : matchPack.id === 'v2-p100'
                         ? P100_RULESET
                         : undefined,
-                }),
-              );
+              });
+              if (state.meta.playtestHpCap !== undefined) {
+                rebuilt.meta = { ...rebuilt.meta, playtestHpCap: state.meta.playtestHpCap };
+              }
+              setState(rebuilt);
             }}
             onContinue={() => {
               push({

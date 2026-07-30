@@ -33,6 +33,11 @@ export interface PlaytestPatch {
   demoV3Hooks?: boolean;
   /** Seed lastEvent for combat feedback toasts (#150). */
   demoCombatFeedback?: 'vollblock' | 'auto-reaction' | 'both';
+  /**
+   * V5 E2E: jump to Formelphase with a Formelkarte + Angriff in P1 hand.
+   * Keeps existing match meta/ruleset (must already be v5Formula).
+   */
+  demoV5FormulaReady?: boolean;
 }
 
 export interface PlaytestValidationResult {
@@ -100,6 +105,46 @@ export function applyPlaytestPatch(state: GameState, patch: PlaytestPatch): Game
   if (patch.p2Hp !== undefined) next.players.p2.hp = patch.p2Hp;
   if (patch.winner !== undefined) next.winner = patch.winner;
   if (patch.clearCombat) next.combat = null;
+
+  if (patch.demoV5FormulaReady) {
+    next.phase = 'build';
+    next.activePlayer = 'p1';
+    next.combat = null;
+    next.winner = null;
+    next.pendingChoice = null;
+    const hand = [...next.players.p1.hand];
+    const deck = [...next.piles.deck];
+    const discard = [...next.piles.discard];
+    const p2Hand = [...next.players.p2.hand];
+
+    const pullIntoHand = (defId: string) => {
+      if (hand.some((c) => c.defId === defId)) return;
+      const sources: { cards: typeof deck; label: 'deck' | 'discard' | 'p2' }[] = [
+        { cards: deck, label: 'deck' },
+        { cards: discard, label: 'discard' },
+        { cards: p2Hand, label: 'p2' },
+      ];
+      for (const source of sources) {
+        const idx = source.cards.findIndex((c) => c.defId === defId);
+        if (idx < 0) continue;
+        while (hand.length >= 6) {
+          discard.push(hand.shift()!);
+        }
+        const [card] = source.cards.splice(idx, 1);
+        hand.push(card);
+        return;
+      }
+    };
+
+    pullIntoHand('v5-technik-durchschuss');
+    pullIntoHand('fire-attack-6');
+    next.players = {
+      ...next.players,
+      p1: { ...next.players.p1, hand },
+      p2: { ...next.players.p2, hand: p2Hand },
+    };
+    next.piles = { deck, discard };
+  }
 
   return next;
 }
