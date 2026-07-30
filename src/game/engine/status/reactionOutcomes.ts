@@ -11,6 +11,7 @@ import { REACTION_LABEL_DE, type ReactionId } from './reactions';
 import { infernoResonanceBonus, tryTwoPartWaterReactionCharge, ueberflutungExtraCharge, deepHighExtraDraw, rueckenwindUprightLimit, erleuchtungCleanseLimit, tieferFluchMaxStacks } from './resonance';
 import type { ContentPack } from '../../types';
 import { readV3CombatHooks, shouldPreserveConsumedMark } from './v3CombatHooks';
+import { takeReactionDamageBonus } from '../formulaResolve';
 
 const NEGATIVE_STATUSES: StatusId[] = [
   'brennen',
@@ -98,6 +99,9 @@ export function applyReactionWithOutcome(
         next = reso.state;
         damage += reso.bonus;
       }
+      const reactionBonus = takeReactionDamageBonus(next, ctx.chooserId);
+      next = reactionBonus.state;
+      damage += reactionBonus.bonus;
       next = applyDamageThroughShield(next, ctx.targetId, damage, ctx.ruleset).state;
       break;
     }
@@ -206,12 +210,26 @@ export function applyReactionWithOutcome(
       break;
     }
     case 'feuersturm': {
-      next = applyDamageThroughShield(next, ctx.targetId, 2, ctx.ruleset).state;
+      const reactionBonus = takeReactionDamageBonus(next, ctx.chooserId);
+      next = reactionBonus.state;
+      next = applyDamageThroughShield(
+        next,
+        ctx.targetId,
+        2 + reactionBonus.bonus,
+        ctx.ruleset,
+      ).state;
       next = applyStatus(next, ctx.targetId, 'brennen', 1);
       break;
     }
     case 'sonnenbrand': {
-      next = applyDamageThroughShield(next, ctx.targetId, 1, ctx.ruleset).state;
+      const reactionBonus = takeReactionDamageBonus(next, ctx.chooserId);
+      next = reactionBonus.state;
+      next = applyDamageThroughShield(
+        next,
+        ctx.targetId,
+        1 + reactionBonus.bonus,
+        ctx.ruleset,
+      ).state;
       const shield = next.players[ctx.targetId].shield ?? 0;
       next = setShield(next, ctx.targetId, Math.max(0, shield - 2));
       next = applyStatus(next, ctx.targetId, 'geblendet', 1);

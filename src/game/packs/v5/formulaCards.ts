@@ -2,8 +2,7 @@
  * Full V5 formula + item card defs (§12–14, §21) — 12+12+12+6.
  * Location: src/game/packs/v5/formulaCards.ts
  *
- * Engine hooks: only effects with existing Formula*Effect kinds resolve;
- * remaining cards ship effectText + visual stubs for content completeness.
+ * Every technique/essence/catalyst ships a resolving `formulaEffect` (§12–14).
  */
 import type {
   CatalystCardDef,
@@ -62,7 +61,7 @@ export const V5_TECHNIQUES: TechniqueCardDef[] = [
     activationMode: 'prep_attack',
     effectText:
       'Der nächste Angriff erhält −1 Kampfwert, erzeugt seinen Elementimpuls aber bereits bei Gleichstand.',
-    formulaEffect: { kind: 'prep_attack', combatBonus: -1 },
+    formulaEffect: { kind: 'prep_attack', combatBonus: -1, impulseOnTie: true },
     visual: techVisual('faecherstoss', 'area', 'cone', 'hand', 'x'),
   },
   {
@@ -73,6 +72,7 @@ export const V5_TECHNIQUES: TechniqueCardDef[] = [
     activationMode: 'prep_attack',
     effectText:
       'Verursacht der nächste Angriff Lebensschaden, verliert der Gegner zusätzlich 1 Schild.',
+    formulaEffect: { kind: 'prep_attack', stripShieldOnHpDamage: 1 },
     visual: techVisual('kettenhieb', 'melee', 'slash', 'hand', 'x'),
   },
   {
@@ -92,7 +92,7 @@ export const V5_TECHNIQUES: TechniqueCardDef[] = [
     stability: 3,
     activationMode: 'prep_block',
     effectText: 'Der nächste Block erhält +1. Bei Vollblock erleidet der Angreifer 1 Schaden.',
-    formulaEffect: { kind: 'prep_block', combatBonus: 1 },
+    formulaEffect: { kind: 'prep_block', combatBonus: 1, thornsOnFullBlock: 1 },
     visual: techVisual('retourkutsche', 'barrier', 'wall', 'self', 'y'),
   },
   {
@@ -112,6 +112,7 @@ export const V5_TECHNIQUES: TechniqueCardDef[] = [
     stability: 3,
     activationMode: 'instant',
     effectText: 'Entferne eine eigene Primärmarke.',
+    formulaEffect: { kind: 'instant_clear_own_mark' },
     visual: techVisual('klarspueler', 'area', 'sphere', 'self', 'y'),
   },
   {
@@ -122,7 +123,7 @@ export const V5_TECHNIQUES: TechniqueCardDef[] = [
     activationMode: 'prep_boost',
     effectText:
       'Der nächste Boost mit Zahlenwert erhält +1; ohne Zahlenwert ziehst du danach 1 und wirfst 1 ab.',
-    formulaEffect: { kind: 'prep_boost', valueBonus: 1 },
+    formulaEffect: { kind: 'prep_boost', valueBonus: 1, filterHandIfNoValue: true },
     visual: techVisual('fokuskurbel', 'projectile', 'sphere', 'hand', 'z'),
   },
   {
@@ -132,6 +133,7 @@ export const V5_TECHNIQUES: TechniqueCardDef[] = [
     stability: 4,
     activationMode: 'instant',
     effectText: 'Der nächste gegnerische Angriff erhält −1 Kampfwert.',
+    formulaEffect: { kind: 'enemy_next_attack_penalty', amount: 1 },
     visual: techVisual('sperrkreis', 'area', 'wall', 'self', 'y'),
   },
   {
@@ -142,6 +144,7 @@ export const V5_TECHNIQUES: TechniqueCardDef[] = [
     activationMode: 'instant',
     effectText:
       'Eine gegnerische Formelkomponente erhält bis zu deren nächster Startphase −1 Stabilität.',
+    formulaEffect: { kind: 'instant_enemy_stability', amount: -1 },
     visual: techVisual('soggriff', 'melee', 'slash', 'hand', 'z'),
   },
   {
@@ -152,6 +155,7 @@ export const V5_TECHNIQUES: TechniqueCardDef[] = [
     activationMode: 'instant',
     effectText:
       'Nimm eine Formelkarte aus dem Ablagestapel auf die Hand und wirf danach 1 Handkarte ab.',
+    formulaEffect: { kind: 'instant_retrieve_formula' },
     visual: techVisual('rueckrufzeichen', 'projectile', 'sphere', 'hand', 'z'),
   },
 ];
@@ -194,6 +198,11 @@ export const V5_ESSENCES: EssenceCardDef[] = [
     stability: 2,
     effectText:
       'Die erste durch diese Formel ausgelöste Reaktion verursacht +1 Schaden. Danach erhalten die verwendeten Formelkomponenten bis zur nächsten Startphase −1 Stabilität.',
+    formulaEffect: {
+      kind: 'reaction_bonus_then_stability',
+      reactionDamageBonus: 1,
+      stabilityDelta: -1,
+    },
     visual: essVisual('explosionspueree', 'fire', 'blast', 'embers', 'shock', 'burst'),
   },
   {
@@ -213,6 +222,7 @@ export const V5_ESSENCES: EssenceCardDef[] = [
     element: 'water',
     stability: 3,
     effectText: 'Heilt die Formel oder erzeugt Schild, erhöht sich der erste Zahlenwert um 1.',
+    formulaEffect: { kind: 'amplify_heal_or_shield', amount: 1 },
     visual: essVisual('tiefenwasserextrakt', 'water', 'deep', 'bubbles', 'current', 'soak'),
   },
   {
@@ -233,6 +243,7 @@ export const V5_ESSENCES: EssenceCardDef[] = [
     stability: 4,
     effectText:
       'Alle bei der Aktivierung verwendeten Formelkomponenten erhalten bis zur nächsten Startphase +1 Stabilität.',
+    formulaEffect: { kind: 'stability_buff_used', amount: 1 },
     visual: essVisual('betonkern', 'earth', 'stone', 'grit', 'quake', 'crack'),
   },
   {
@@ -253,6 +264,7 @@ export const V5_ESSENCES: EssenceCardDef[] = [
     stability: 3,
     effectText:
       'Der nächste zugehörige Angriff oder Block erhält +1 auf seinen W6-Bonus, maximal +2.',
+    formulaEffect: { kind: 'w6_bonus', amount: 1, max: 2 },
     visual: essVisual('druckluftkonzentrat', 'air', 'pressure', 'jets', 'stream', 'blast'),
   },
   {
@@ -273,6 +285,7 @@ export const V5_ESSENCES: EssenceCardDef[] = [
     stability: 3,
     effectText:
       'Entferne bei Aktivierung eine eigene Primärmarke. Gibt es keine, erhältst du 1 Schild.',
+    formulaEffect: { kind: 'clear_mark_or_shield' },
     visual: essVisual('reinlicht', 'light', 'pure', 'motes', 'glow', 'cleanse'),
   },
   {
@@ -292,6 +305,7 @@ export const V5_ESSENCES: EssenceCardDef[] = [
     element: 'shadow',
     stability: 3,
     effectText: 'Fügt die Formel Lebensschaden zu, heile 1. Maximal einmal pro Aktivierung.',
+    formulaEffect: { kind: 'lifesteal_on_hp', amount: 1 },
     visual: essVisual('sogschatten', 'shadow', 'void', 'wisps', 'drain', 'siphon'),
   },
 ];
@@ -312,7 +326,7 @@ export const V5_CATALYSTS: CatalystCardDef[] = [
     name: 'Echo',
     stability: 2,
     effectText: 'Wiederhole zu Beginn deines nächsten Zuges 1 Punkt des Primärwerts.',
-    formulaEffect: { kind: 'primary_bonus', amount: 0 },
+    formulaEffect: { kind: 'echo_next_start', amount: 1 },
     visual: catVisual('echo', 'delayed', 'duplicate', 'echo-ring'),
   },
   {
@@ -322,7 +336,7 @@ export const V5_CATALYSTS: CatalystCardDef[] = [
     stability: 2,
     effectText:
       'Wiederhole zu Beginn deines nächsten Zuges bis zu 2 Punkte des Primärwerts. Dieser Katalysator bleibt in deiner nächsten Startphase erschöpft.',
-    formulaEffect: { kind: 'primary_bonus', amount: 0 },
+    formulaEffect: { kind: 'echo_next_start', amount: 2, stayExhausted: true },
     visual: catVisual('doppelecho', 'delayed', 'duplicate', 'double-echo'),
   },
   {
@@ -341,7 +355,7 @@ export const V5_CATALYSTS: CatalystCardDef[] = [
     stability: 4,
     effectText:
       'Erhöhe den Primärwert um 1. Alle verwendeten Formelkomponenten erhalten bis zur nächsten Startphase +1 Stabilität.',
-    formulaEffect: { kind: 'primary_bonus', amount: 1 },
+    formulaEffect: { kind: 'primary_bonus', amount: 1, stabilityBuffUsed: 1 },
     visual: catVisual('verdichtung', 'instant', 'overcharge', 'compress'),
   },
   {
@@ -351,6 +365,7 @@ export const V5_CATALYSTS: CatalystCardDef[] = [
     stability: 3,
     effectText:
       'Ein gegnergerichteter Effekt berührt zusätzlich eine Formelkomponente: Sie erhält bis zur nächsten Startphase −1 Stabilität. Ein selbstgerichteter Effekt gibt zusätzlich einer eigenen Komponente +1 Stabilität.',
+    formulaEffect: { kind: 'spread_stability', amount: 1 },
     visual: catVisual('ausbreitung', 'instant', 'spread', 'spread-wave'),
   },
   {
@@ -360,6 +375,7 @@ export const V5_CATALYSTS: CatalystCardDef[] = [
     stability: 3,
     effectText:
       'Wird die vorbereitete Aktion erfolgreich, erhält deine nächste Aktion desselben Typs +1.',
+    formulaEffect: { kind: 'chain_same_action', amount: 1 },
     visual: catVisual('kettenkopplung', 'continuous', 'chain', 'chain-link'),
   },
   {
@@ -369,6 +385,7 @@ export const V5_CATALYSTS: CatalystCardDef[] = [
     stability: 3,
     effectText:
       'Der Primäreffekt geschieht nicht sofort, sondern zu Beginn deines nächsten Zuges und erhält +2 auf seinen Primärwert.',
+    formulaEffect: { kind: 'delay_primary', bonus: 2 },
     visual: catVisual('verzoegerung', 'delayed', 'duplicate', 'delay-clock'),
   },
   {
@@ -378,7 +395,7 @@ export const V5_CATALYSTS: CatalystCardDef[] = [
     stability: 2,
     effectText:
       'Reduziere den Primärwert um 1. Ziehe nach der Auflösung 1 Karte und wirf anschließend 1 Karte ab.',
-    formulaEffect: { kind: 'primary_bonus', amount: -1 },
+    formulaEffect: { kind: 'primary_bonus', amount: -1, drawDiscardAfter: true },
     visual: catVisual('sofortzuender', 'instant', 'overcharge', 'fuse'),
   },
   {
@@ -398,6 +415,7 @@ export const V5_CATALYSTS: CatalystCardDef[] = [
     stability: 2,
     effectText:
       'Wähle bei Aktivierung: Bis zu 2 Punkte Schaden werden zu Heilung oder bis zu 2 Punkte Heilung/Schild werden zu Schaden. Das Ziel muss legal bleiben.',
+    formulaEffect: { kind: 'invert_damage_heal', maxPoints: 2 },
     visual: catVisual('umkehrung', 'instant', 'reflect', 'invert'),
   },
   {
@@ -407,6 +425,7 @@ export const V5_CATALYSTS: CatalystCardDef[] = [
     stability: 3,
     effectText:
       'Du darfst bei Aktivierung 1 Handkarte abwerfen. Tust du dies, erhöht sich der Primärwert um 2.',
+    formulaEffect: { kind: 'offer_discard_for_bonus', amount: 2 },
     visual: catVisual('opfergabe', 'instant', 'overcharge', 'offering'),
   },
   {
@@ -416,6 +435,7 @@ export const V5_CATALYSTS: CatalystCardDef[] = [
     stability: 4,
     effectText:
       'Verhindere den ersten Selbstschaden oder Kartenabwurf, den die eigene Formel verursachen würde. Entferne danach eine eigene Primärmarke.',
+    formulaEffect: { kind: 'safety_valve' },
     visual: catVisual('sicherheitsventil', 'continuous', 'reflect', 'valve'),
   },
 ];
