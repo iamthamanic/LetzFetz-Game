@@ -37,6 +37,7 @@ import {
 } from './formulaResolve';
 import {
   applyGrossformelAftermath,
+  isFormulaResolvable,
   isFullFormulaActivatable,
 } from './formulaCharge';
 import {
@@ -744,11 +745,7 @@ function listFormulaPhaseActions(
     }
   }
 
-  const hasActivatable = (['technik', 'essenz', 'katalysator'] as const).some((slot) => {
-    const comp = formula[slot];
-    return Boolean(comp && !comp.exhausted && !comp.disturbed);
-  });
-  if (hasActivatable) {
+  if (isFormulaResolvable(formula)) {
     actions.push({ type: 'FORMULA_ACTIVATE' });
   }
 
@@ -1186,6 +1183,9 @@ function applyFormulaActivate(
   playerId: PlayerId,
   ruleset: RulesetConfig,
 ): GameState {
+  if (!isFormulaResolvable(state.players[playerId].formula)) {
+    throw new Error('Formula resolve requires at least two filled slots');
+  }
   const wasFull = isFullFormulaActivatable(state.players[playerId].formula);
   let next = resolveFormulaActivate(state, pack, playerId, ruleset);
   if (wasFull && isV5FormulaEnabled(ruleset)) {

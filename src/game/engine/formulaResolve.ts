@@ -11,6 +11,7 @@ import type {
 } from '../types';
 import { clampShield } from '../types';
 import { clampHp, cloneState } from './helpers';
+import { isFormulaResolvable } from './formulaCharge';
 import { findFormulaComponentDef } from './formulaSlots';
 
 export function emptyFormulaPrep(): FormulaPrepState {
@@ -40,6 +41,11 @@ export function resolveFormulaActivate(
   playerId: PlayerId,
   ruleset: RulesetConfig,
 ): GameState {
+  const formulaBoard = state.players[playerId].formula;
+  if (!isFormulaResolvable(formulaBoard)) {
+    throw new Error('Formula resolve requires at least two filled slots');
+  }
+
   const next = cloneState(state);
   const formula = next.players[playerId].formula;
   const prep = emptyFormulaPrep();

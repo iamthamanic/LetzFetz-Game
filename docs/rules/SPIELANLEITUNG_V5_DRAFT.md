@@ -60,7 +60,7 @@ Genau 1 Karte. Sofort-Glitch: ausführen, ablegen, keine Ersatzkarte (außer Tex
 ### Formelphase — genau eine Formelaktion
 - **Bauen:** Technik/Essenz/Katalysator in leeren Platz (wirksam ab nächstem Zug aktivierbar)  
 - **Ersetzen:** alte ablegen, neue desselben Typs  
-- **Aktivieren:** aufgerichtete, nicht gestörte Komponenten gemeinsam; danach erschöpft  
+- **Aktivieren:** mindestens **zwei** belegte Plätze; aufgerichtete, nicht gestörte Komponenten gemeinsam (fehlende Rolle = kein Effekt); danach erschöpft  
 - **Schnellmix:** Formelkarte aus Hand für Einzeleffekt abwerfen  
 - **Passen**
 
@@ -100,6 +100,8 @@ Visuell: Primär 60–70 %, Sekundär 30–40 %, Reaktion kurz dominant (siehe V
 ---
 
 ## 7. Formel & Fetzladung
+
+Teilformel (≥2 Plätze belegt) darf aktiviert werden; fehlende Rolle trägt nichts bei. Einzelplatz-Aktivierung ist nicht erlaubt.
 
 Volle Formel = Technik + Essenz + Katalysator.  
 Erfolgreiche Aktivierung der **vollen** Formel → **+1 Fetzladung** (max 3), wenn Effekt nicht vollständig verhindert.

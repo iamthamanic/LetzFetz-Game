@@ -66,8 +66,8 @@ const PACK: ContentPack = {
 };
 
 describe('resolveFormulaActivate', () => {
-  it('tech only: prep_attack sets combat bonus', () => {
-    let state = createGame({
+  it('rejects single-slot resolve', () => {
+    const state = createGame({
       pack: PACK,
       p1CharacterId: 'knuspergnom',
       p2CharacterId: 'schluckspecht',
@@ -83,9 +83,40 @@ describe('resolveFormulaActivate', () => {
       disturbed: false,
       stabilityBonus: 0,
     };
+    expect(() => resolveFormulaActivate(state, PACK, 'p1', V5_RULESET)).toThrow(
+      /at least two filled slots/i,
+    );
+  });
+
+  it('two slots without katalysator: prep from tech + mark from essenz', () => {
+    let state = createGame({
+      pack: PACK,
+      p1CharacterId: 'knuspergnom',
+      p2CharacterId: 'schluckspecht',
+      startingPlayer: 'p1',
+      seed: 11,
+      ruleset: V5_RULESET,
+    });
+    state.players.p1.formula.technik = {
+      instanceId: 't1',
+      defId: 'tech-slash',
+      slot: 'technik',
+      exhausted: false,
+      disturbed: false,
+      stabilityBonus: 0,
+    };
+    state.players.p1.formula.essenz = {
+      instanceId: 'e1',
+      defId: 'ess-fire',
+      slot: 'essenz',
+      exhausted: false,
+      disturbed: false,
+      stabilityBonus: 0,
+    };
     state = resolveFormulaActivate(state, PACK, 'p1', V5_RULESET);
-    expect(state.players.p1.formula.technik?.exhausted).toBe(true);
     expect(state.players.p1.formulaPrep?.attackCombatBonus).toBe(1);
+    expect(state.players.p1.formulaPrep?.markIfNoReaction).toBe('brennen');
+    expect(state.players.p1.formula.katalysator).toBeNull();
   });
 
   it('tech + essence: shield instant + mark prep', () => {
@@ -159,7 +190,7 @@ describe('resolveFormulaActivate', () => {
     expect(state.players.p1.formula.katalysator?.exhausted).toBe(true);
   });
 
-  it('FORMULA_ACTIVATE through applyAction sets prep', () => {
+  it('FORMULA_ACTIVATE through applyAction sets prep with two filled slots', () => {
     let state = createGame({
       pack: PACK,
       p1CharacterId: 'knuspergnom',
@@ -187,7 +218,14 @@ describe('resolveFormulaActivate', () => {
               disturbed: false,
               stabilityBonus: 0,
             },
-            essenz: null,
+            essenz: {
+              instanceId: 'e1',
+              defId: 'ess-fire',
+              slot: 'essenz',
+              exhausted: false,
+              disturbed: false,
+              stabilityBonus: 0,
+            },
             katalysator: null,
           },
         },
@@ -196,5 +234,45 @@ describe('resolveFormulaActivate', () => {
     state = applyAction(state, { type: 'FORMULA_ACTIVATE' }, 'p1', ctx);
     expect(state.phase).toBe('action');
     expect(state.players.p1.formulaPrep?.attackCombatBonus).toBe(1);
+    expect(state.players.p1.formulaPrep?.markIfNoReaction).toBe('brennen');
+  });
+
+  it('FORMULA_ACTIVATE rejects single filled slot via applyAction', () => {
+    let state = createGame({
+      pack: PACK,
+      p1CharacterId: 'knuspergnom',
+      p2CharacterId: 'schluckspecht',
+      startingPlayer: 'p1',
+      seed: 5,
+      ruleset: V5_RULESET,
+    });
+    const ctx = { pack: PACK, playerId: 'p1' as const };
+    state = {
+      ...state,
+      phase: 'build',
+      activePlayer: 'p1',
+      meta: { ...state.meta, v5FormulaEnabled: true, v3CombatEnabled: true },
+      players: {
+        ...state.players,
+        p1: {
+          ...state.players.p1,
+          formula: {
+            technik: {
+              instanceId: 't1',
+              defId: 'tech-slash',
+              slot: 'technik',
+              exhausted: false,
+              disturbed: false,
+              stabilityBonus: 0,
+            },
+            essenz: null,
+            katalysator: null,
+          },
+        },
+      },
+    };
+    expect(() => applyAction(state, { type: 'FORMULA_ACTIVATE' }, 'p1', ctx)).toThrow(
+      /at least two filled slots/i,
+    );
   });
 });

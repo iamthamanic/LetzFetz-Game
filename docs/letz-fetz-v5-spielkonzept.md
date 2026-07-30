@@ -183,6 +183,8 @@ Eine Technik, Essenz oder ein Katalysator wird aus der Hand in den passenden Pla
 
 ### C. Formel aktivieren
 
+- Mindestens **zwei** der drei Plätze müssen belegt sein; fehlende Rolle liefert keinen Effekt.
+- Einzelplatz-Aktivierung ist **nicht** erlaubt.
 - Die derzeit aufgerichteten Komponenten werden gemeinsam verwendet.
 - Alle dabei verwendeten Komponenten werden anschließend erschöpft.
 - Gestörte Komponenten werden ignoriert.
@@ -514,12 +516,12 @@ volle Formel
 
 | Vorhandene Karten | Ergebnis |
 |---|---|
-| nur Technik | schwacher Grundskill |
-| nur Essenz | nächste passende Elementkarte erhält diese Essenz |
-| nur Katalysator | nächster kompatibler Effekt erhält den Modifikator |
-| Technik + Essenz | elementarer Technikskill |
-| Technik + Katalysator | modifizierter Technikskill |
-| Essenz + Katalysator | flexible Infusion für die nächste passende Elementkarte |
+| nur Technik | **nicht** als Formel aktivierbar (nur Vorschau/Authoring) |
+| nur Essenz | **nicht** als Formel aktivierbar |
+| nur Katalysator | **nicht** als Formel aktivierbar |
+| Technik + Essenz | elementarer Technikskill (aktivierbar) |
+| Technik + Katalysator | modifizierter Technikskill (aktivierbar) |
+| Essenz + Katalysator | flexible Infusion (aktivierbar) |
 | alle drei | vollständige Formel mit Fetzladung |
 
 ## 11.6 Volle Formel und Fetzladung
