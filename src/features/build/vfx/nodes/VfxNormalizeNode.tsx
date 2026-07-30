@@ -1,15 +1,20 @@
 /**
- * VFX Asset Pipeline — Normalize stub node (identity pass-through).
+ * VFX Asset Pipeline — Normalize node (bounds, scale, pivot metadata).
  * Location: src/features/build/vfx/nodes/VfxNormalizeNode.tsx
  */
 import React from 'react';
 import { Handle, Position, type NodeProps } from '@xyflow/react';
 import { Scaling } from 'lucide-react';
+import { formatModelAssetStatusDe } from '../normalize/buildModelAsset';
 import { VfxNodeStatusBadge } from './VfxNodeStatusBadge';
 import type { VfxNormalizeNodeData } from './vfxNodeTypes';
 
 export function VfxNormalizeNode({ data, selected }: NodeProps) {
   const nodeData = data as VfxNormalizeNodeData;
+  const boundsSummary =
+    nodeData.modelAsset && nodeData.status === 'READY'
+      ? formatModelAssetStatusDe(nodeData.modelAsset)
+      : null;
 
   return (
     <div
@@ -26,7 +31,13 @@ export function VfxNormalizeNode({ data, selected }: NodeProps) {
         </div>
         <VfxNodeStatusBadge status={nodeData.status} />
       </div>
-      <p className="text-[10px] text-stone-500">Stub — GLB unverändert durchreichen</p>
+      {boundsSummary ? (
+        <p className="text-[10px] text-stone-400">{boundsSummary}</p>
+      ) : (
+        <p className="text-[10px] text-stone-500">
+          Skalierung vereinheitlichen · Boden zentrieren
+        </p>
+      )}
       {nodeData.statusMessage ? (
         <p className="mt-1 text-[10px] text-stone-400">{nodeData.statusMessage}</p>
       ) : null}

@@ -32,6 +32,9 @@ import {
   createMeshyTextTo3d,
   pollMeshyTaskUntilDone,
 } from './workerClient';
+import { buildModelAsset, formatModelAssetStatusDe } from './normalize/buildModelAsset';
+import { fallbackBoundsForGlb, loadGlbBounds } from './normalize/loadGlbBounds';
+import type { ModelAsset } from './types/wireTypes';
 
 let nodeCounter = 0;
 
@@ -88,6 +91,9 @@ function getGlbFromUpstream(
   edges: Edge[],
   nodeId: string,
 ): string | null {
+  const modelAsset = getModelAssetFromUpstream(nodes, edges, nodeId);
+  if (modelAsset?.glbUrl) return modelAsset.glbUrl;
+
   const visited = new Set<string>();
   const queue = [nodeId];
   while (queue.length > 0) {
@@ -99,11 +105,57 @@ function getGlbFromUpstream(
       const source = nodes.find((n) => n.id === edge.source);
       if (!source) continue;
       const data = source.data as VfxMeshyNodeData | VfxNormalizeNodeData | VfxSocketNodeData;
+      if ('modelAsset' in data && data.modelAsset?.glbUrl) {
+        return data.modelAsset.glbUrl;
+      }
       if ('glbUrl' in data && data.glbUrl) return data.glbUrl;
       queue.push(source.id);
     }
   }
   return null;
+}
+
+function getModelAssetFromUpstream(
+  nodes: Node[],
+  edges: Edge[],
+  nodeId: string,
+): ModelAsset | null {
+  const visited = new Set<string>();
+  const queue = [nodeId];
+  while (queue.length > 0) {
+    const current = queue.shift();
+    if (!current || visited.has(current)) continue;
+    visited.add(current);
+    const incoming = edges.filter((e) => e.target === current);
+    for (const edge of incoming) {
+      const source = nodes.find((n) => n.id === edge.source);
+      if (!source) continue;
+      if (source.type === VFX_PIPELINE_NODE_TYPES.vfxNormalize) {
+        const data = source.data as VfxNormalizeNodeData;
+        if (data.modelAsset) return data.modelAsset;
+      }
+      queue.push(source.id);
+    }
+  }
+  return null;
+}
+
+function patchDownstreamFromSource(
+  sourceNodeId: string,
+  patchNodeData: (nodeId: string, patch: Record<string, unknown>) => void,
+  nodes: Node[],
+  edges: Edge[],
+  patch: Record<string, unknown>,
+  targetTypes: VfxPipelineNodeType[],
+) {
+  const downstream = edges.filter((e) => e.source === sourceNodeId);
+  for (const edge of downstream) {
+    const target = nodes.find((n) => n.id === edge.target);
+    if (!target || !target.type) continue;
+    if (targetTypes.includes(target.type as VfxPipelineNodeType)) {
+      patchNodeData(edge.target, patch);
+    }
+  }
 }
 
 export interface CreditConfirmState {
@@ -139,6 +191,70 @@ export function useAssetPipelineGraph(enabled: boolean) {
       );
     },
     [setNodes],
+  );
+
+  const runNormalizeNode = useCallback(
+    async (normalizeNodeId: string) => {
+      const currentNodes = nodesRef.current;
+      const currentEdges = edgesRef.current;
+      const glbUrl = getGlbFromUpstream(currentNodes, currentEdges, normalizeNodeId);
+
+      if (!glbUrl) {
+        patchNodeData(normalizeNodeId, {
+          status: 'FAILED',
+          statusMessage: 'Kein GLB verbunden — zuerst Meshy ausführen.',
+          glbUrl: null,
+          modelAsset: null,
+        });
+        return;
+      }
+
+      patchNodeData(normalizeNodeId, {
+        status: 'GENERATING',
+        statusMessage: 'Bounds werden berechnet…',
+        glbUrl,
+        modelAsset: null,
+      });
+
+      try {
+        const measured = await loadGlbBounds(glbUrl);
+        const bounds = measured ?? fallbackBoundsForGlb(glbUrl);
+        const modelAsset = buildModelAsset({ glbUrl, bounds });
+        const statusMessage = formatModelAssetStatusDe(modelAsset);
+
+        patchNodeData(normalizeNodeId, {
+          status: 'READY',
+          glbUrl,
+          modelAsset,
+          statusMessage,
+        });
+
+        patchDownstreamFromSource(
+          normalizeNodeId,
+          patchNodeData,
+          currentNodes,
+          currentEdges,
+          {
+            glbUrl,
+            modelAsset,
+            status: 'READY',
+            statusMessage:
+              'Normalisiertes Modell bereit.',
+          },
+          [
+            VFX_PIPELINE_NODE_TYPES.vfxSocket,
+            VFX_PIPELINE_NODE_TYPES.vfxSaveTechnique,
+          ],
+        );
+      } catch {
+        patchNodeData(normalizeNodeId, {
+          status: 'FAILED',
+          statusMessage: 'Normalisierung fehlgeschlagen.',
+          modelAsset: null,
+        });
+      }
+    },
+    [patchNodeData],
   );
 
   const runMeshyGenerate = useCallback(
@@ -192,8 +308,11 @@ export function useAssetPipelineGraph(enabled: boolean) {
         for (const edge of downstream) {
           const target = currentNodes.find((n) => n.id === edge.target);
           if (!target) continue;
+          if (target.type === VFX_PIPELINE_NODE_TYPES.vfxNormalize) {
+            void runNormalizeNode(edge.target);
+            continue;
+          }
           if (
-            target.type === VFX_PIPELINE_NODE_TYPES.vfxNormalize ||
             target.type === VFX_PIPELINE_NODE_TYPES.vfxSocket ||
             target.type === VFX_PIPELINE_NODE_TYPES.vfxSaveTechnique
           ) {
@@ -201,11 +320,9 @@ export function useAssetPipelineGraph(enabled: boolean) {
               glbUrl: result.glbUrl,
               status: 'READY',
               statusMessage:
-                target.type === VFX_PIPELINE_NODE_TYPES.vfxNormalize
-                  ? 'Stub — GLB unverändert.'
-                  : target.type === VFX_PIPELINE_NODE_TYPES.vfxSocket
-                    ? 'Stub — Standard-Socket gesetzt.'
-                    : 'Bereit zum Speichern.',
+                target.type === VFX_PIPELINE_NODE_TYPES.vfxSocket
+                  ? 'Stub — Standard-Socket gesetzt.'
+                  : 'Bereit zum Speichern.',
             });
           }
         }
@@ -220,7 +337,7 @@ export function useAssetPipelineGraph(enabled: boolean) {
         });
       }
     },
-    [patchNodeData],
+    [patchNodeData, runNormalizeNode],
   );
 
   const requestMeshyGenerate = useCallback(
@@ -398,9 +515,29 @@ export function useAssetPipelineGraph(enabled: boolean) {
 
   const onConnect = useCallback(
     (connection: Connection) => {
-      setEdges((current) => addEdge(connection, current));
+      setEdges((current) => {
+        const next = addEdge(connection, current);
+        const targetNode = nodesRef.current.find((n) => n.id === connection.target);
+        if (
+          targetNode?.type === VFX_PIPELINE_NODE_TYPES.vfxNormalize &&
+          connection.source
+        ) {
+          const sourceNode = nodesRef.current.find((n) => n.id === connection.source);
+          const sourceData = sourceNode?.data as VfxMeshyNodeData | VfxNormalizeNodeData | undefined;
+          const upstreamGlb =
+            sourceData && 'modelAsset' in sourceData && sourceData.modelAsset?.glbUrl
+              ? sourceData.modelAsset.glbUrl
+              : sourceData && 'glbUrl' in sourceData
+                ? sourceData.glbUrl
+                : null;
+          if (upstreamGlb) {
+            void runNormalizeNode(connection.target);
+          }
+        }
+        return next;
+      });
     },
-    [setEdges],
+    [runNormalizeNode, setEdges],
   );
 
   const selectedNode = selectedNodeId

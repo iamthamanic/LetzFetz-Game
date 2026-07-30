@@ -3,6 +3,7 @@
  * Location: src/features/build/vfx/nodes/vfxNodeTypes.ts
  */
 import type { VfxAssetStatus } from '../types/status';
+import type { ModelAsset } from '../types/wireTypes';
 
 export const VFX_PIPELINE_NODE_TYPES = {
   vfxPrompt: 'vfxPrompt',
@@ -32,6 +33,7 @@ export interface VfxMeshyNodeData extends VfxNodeBaseData {
 
 export interface VfxNormalizeNodeData extends VfxNodeBaseData {
   glbUrl: string | null;
+  modelAsset: ModelAsset | null;
 }
 
 export interface VfxSocketNodeData extends VfxNodeBaseData {
@@ -81,7 +83,7 @@ export function defaultMeshyNodeData(): VfxMeshyNodeData {
 }
 
 export function defaultNormalizeNodeData(): VfxNormalizeNodeData {
-  return { glbUrl: null, status: 'DRAFT' };
+  return { glbUrl: null, modelAsset: null, status: 'DRAFT' };
 }
 
 export function defaultSocketNodeData(): VfxSocketNodeData {

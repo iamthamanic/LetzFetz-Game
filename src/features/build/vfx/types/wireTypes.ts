@@ -6,6 +6,7 @@
 import {
   assertObject,
   isNonEmptyString,
+  parseRequiredNumber,
   parseRequiredPositiveInt,
   parseRequiredString,
   parseOptionalString,
@@ -39,11 +40,25 @@ export interface ImageAsset {
   mimeType: string;
 }
 
+export interface Vec3 {
+  x: number;
+  y: number;
+  z: number;
+}
+
+export interface AabbBounds {
+  min: Vec3;
+  max: Vec3;
+}
+
 export interface ModelAsset {
   kind: 'model';
   id: string;
   glbUrl: string;
   sourceImageId: string | null;
+  scale: Vec3;
+  pivot: Vec3;
+  bounds: AabbBounds;
 }
 
 export interface TextureAsset {
@@ -82,6 +97,23 @@ export function isVfxEffectPresetCategory(
   );
 }
 
+function parseVec3(raw: unknown, label: string): Vec3 {
+  const record = assertObject(raw, label);
+  return {
+    x: parseRequiredNumber(record, 'x'),
+    y: parseRequiredNumber(record, 'y'),
+    z: parseRequiredNumber(record, 'z'),
+  };
+}
+
+function parseAabbBounds(raw: unknown, label: string): AabbBounds {
+  const record = assertObject(raw, label);
+  return {
+    min: parseVec3(record.min, `${label}.min`),
+    max: parseVec3(record.max, `${label}.max`),
+  };
+}
+
 export function parseImageAsset(raw: unknown): ImageAsset {
   const record = assertObject(raw, 'ImageAsset');
   if (record.kind !== 'image') {
@@ -107,6 +139,9 @@ export function parseModelAsset(raw: unknown): ModelAsset {
     id: parseRequiredString(record, 'id'),
     glbUrl: parseRequiredString(record, 'glbUrl'),
     sourceImageId: parseOptionalString(record, 'sourceImageId'),
+    scale: parseVec3(record.scale, 'ModelAsset.scale'),
+    pivot: parseVec3(record.pivot, 'ModelAsset.pivot'),
+    bounds: parseAabbBounds(record.bounds, 'ModelAsset.bounds'),
   };
 }
 
