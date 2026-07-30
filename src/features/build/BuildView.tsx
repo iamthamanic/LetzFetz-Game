@@ -1,12 +1,12 @@
 /**
- * Build workbench shell — sub-tabs Combinate | Development.
+ * Build workbench shell — sub-tabs Combinate | VFX Studio.
  * Location: src/features/build/BuildView.tsx
  */
 import React, { useEffect, useState } from 'react';
-import { Boxes, FlaskConical } from 'lucide-react';
+import { Boxes, Sparkles } from 'lucide-react';
 import { Tabs, type TabItem } from '../../components/ui/Tabs';
 import { BuildCombineView } from './BuildCombineView';
-import { BuildDevelopmentView } from './BuildDevelopmentView';
+import { VfxStudioView } from './vfx/VfxStudioView';
 
 export type BuildSubTab = 'combine' | 'development';
 
@@ -26,8 +26,8 @@ const BUILD_SUB_TABS: TabItem[] = [
   },
   {
     id: 'development',
-    label: 'Development',
-    icon: <FlaskConical className="h-4 w-4 shrink-0" />,
+    label: 'VFX Studio',
+    icon: <Sparkles className="h-4 w-4 shrink-0" />,
     tone: 'sandbox',
   },
 ];
@@ -73,7 +73,7 @@ export function BuildView({ active }: BuildViewProps) {
         {subTab === 'combine' ? (
           <BuildCombineView active={active} />
         ) : (
-          <BuildDevelopmentView />
+          <VfxStudioView />
         )}
       </div>
     </div>
