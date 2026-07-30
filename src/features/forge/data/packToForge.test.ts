@@ -1,11 +1,29 @@
-import { describe, it, expect } from 'vitest';
+import { describe, it, expect, vi, beforeEach, afterEach } from 'vitest';
 import { packToForgeCards } from './packToForge';
 import { BASE_PACK } from '../../../game/packs/base-pack';
 import { V5_PACK } from '../../../game/packs/v5';
 import { CARD_CATEGORIES } from '../model/categories';
 import { resolveFormulaCardArtPath } from '../../../services/cardArt/manifest';
+import { VFX_REGISTRY_STORAGE_KEY } from '../../../services/storage/vfxRegistryBridge';
+
+class MockStorage {
+  private map = new Map<string, string>();
+  getItem(key: string): string | null {
+    return this.map.get(key) ?? null;
+  }
+  setItem(key: string, value: string): void {
+    this.map.set(key, value);
+  }
+}
 
 describe('packToForgeCards', () => {
+  beforeEach(() => {
+    vi.stubGlobal('localStorage', new MockStorage());
+  });
+
+  afterEach(() => {
+    vi.unstubAllGlobals();
+  });
   it('exports V1 cards plus V5 Formelkomponenten with rulebook categories', () => {
     const cards = packToForgeCards(BASE_PACK);
     const formulaCount =
@@ -57,5 +75,48 @@ describe('packToForgeCards', () => {
     const katalysator = packToForgeCards().find((c) => c.id === 'v5-katalysator-echo');
     expect(katalysator?.type).toBe('Formula');
     expect(katalysator?.effects.some((e) => e === 'Rolle: Katalysator')).toBe(true);
+  });
+
+  it('includes saved Combinate Kombinationen with Kombination role', () => {
+    const TS = '2026-07-30T12:00:00.000Z';
+    localStorage.setItem(
+      VFX_REGISTRY_STORAGE_KEY,
+      JSON.stringify({
+        version: 1,
+        techniques: [],
+        formulaRecipes: [
+          {
+            kind: 'formulaRecipe',
+            id: 'kombi-forge-test',
+            name: 'Glut-Duo',
+            status: 'READY',
+            version: 1,
+            techniqueId: 'v5-technik-durchschuss',
+            essenceId: 'v5-essenz-eingekochte-glut',
+            catalystId: null,
+            techniqueVersion: 1,
+            essenceVersion: 1,
+            catalystVersion: null,
+            heroFrame: {
+              kind: 'renderOutput',
+              id: 'render-1',
+              url: 'data:image/png;base64,abc',
+              format: 'png',
+              width: 64,
+              height: 48,
+              capturedAt: TS,
+            },
+            createdAt: TS,
+            updatedAt: TS,
+          },
+        ],
+        updatedAt: TS,
+      }),
+    );
+
+    const kombi = packToForgeCards().find((c) => c.id === 'kombi-forge-test');
+    expect(kombi?.type).toBe('Formula');
+    expect(kombi?.effects.some((e) => e === 'Rolle: Kombination')).toBe(true);
+    expect(kombi?.image_asset).toBe('data:image/png;base64,abc');
   });
 });

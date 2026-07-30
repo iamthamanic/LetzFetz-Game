@@ -2,10 +2,10 @@
  * Center preview: shared VFX viewport for formula combinations (#257).
  * Location: src/features/build/BuildPreviewPane.tsx
  */
-import React, { useEffect, useState } from 'react';
+import React, { forwardRef, useEffect, useState } from 'react';
 import { Maximize2 } from 'lucide-react';
 import { Modal } from '../../components/ui/Modal';
-import { VfxSharedPreview } from './vfx/preview';
+import { VfxSharedPreview, type VfxSharedPreviewHandle } from './vfx/preview';
 
 interface BuildPreviewPaneProps {
   /** False while Build tab is hidden. */
@@ -19,13 +19,17 @@ interface BuildPreviewPaneProps {
   hasSlottedCards?: boolean;
 }
 
-export function BuildPreviewPane({
-  active,
-  focusImageUrl,
-  focusLabel,
-  combinationLabel,
-  hasSlottedCards = false,
-}: BuildPreviewPaneProps) {
+export const BuildPreviewPane = forwardRef<VfxSharedPreviewHandle, BuildPreviewPaneProps>(
+  function BuildPreviewPane(
+    {
+      active,
+      focusImageUrl,
+      focusLabel,
+      combinationLabel,
+      hasSlottedCards = false,
+    },
+    ref,
+  ) {
   const [fullscreen, setFullscreen] = useState(false);
 
   useEffect(() => {
@@ -76,6 +80,7 @@ export function BuildPreviewPane({
       <div className="flex h-full min-h-0 flex-col p-2 pt-9">
         {showPreview ? (
           <VfxSharedPreview
+            ref={ref}
             active={active}
             presetId="aura"
             className="min-h-0 flex-1"
@@ -104,6 +109,7 @@ export function BuildPreviewPane({
       >
         <div className="min-h-0 flex-1 w-full bg-stone-950 p-3">
           <VfxSharedPreview
+            ref={ref}
             active={active && fullscreen}
             presetId="aura"
             className="h-full min-h-0"
@@ -113,4 +119,5 @@ export function BuildPreviewPane({
       </Modal>
     </div>
   );
-}
+  },
+);

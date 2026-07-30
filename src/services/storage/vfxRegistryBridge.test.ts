@@ -5,6 +5,7 @@
 import { afterEach, beforeEach, describe, expect, it, vi } from 'vitest';
 import {
   VFX_REGISTRY_STORAGE_KEY,
+  readVfxRegistryFormulaRecipeSummaries,
   readVfxRegistryTechniqueSummaries,
 } from './vfxRegistryBridge';
 
@@ -75,5 +76,46 @@ describe('vfxRegistryBridge', () => {
       }),
     );
     expect(readVfxRegistryTechniqueSummaries()).toEqual([]);
+  });
+
+  it('reads valid formula recipe summaries', () => {
+    localStorage.setItem(
+      VFX_REGISTRY_STORAGE_KEY,
+      JSON.stringify({
+        version: 1,
+        techniques: [],
+        formulaRecipes: [
+          {
+            kind: 'formulaRecipe',
+            id: 'kombi-1',
+            name: 'Feuer-Duo',
+            status: 'READY',
+            version: 1,
+            techniqueId: 't1',
+            essenceId: 'e1',
+            catalystId: null,
+            techniqueVersion: 1,
+            essenceVersion: 1,
+            catalystVersion: null,
+            heroFrame: {
+              kind: 'renderOutput',
+              id: 'r1',
+              url: 'data:image/png;base64,xyz',
+              format: 'png',
+              width: 64,
+              height: 48,
+              capturedAt: TS,
+            },
+            createdAt: TS,
+            updatedAt: TS,
+          },
+        ],
+        updatedAt: TS,
+      }),
+    );
+    const summaries = readVfxRegistryFormulaRecipeSummaries();
+    expect(summaries).toHaveLength(1);
+    expect(summaries[0].name).toBe('Feuer-Duo');
+    expect(summaries[0].heroFrameUrl).toBe('data:image/png;base64,xyz');
   });
 });

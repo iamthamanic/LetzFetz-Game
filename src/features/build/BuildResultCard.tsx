@@ -4,6 +4,7 @@
  */
 import React from 'react';
 import { Input } from '../../components/ui/Input';
+import { Button } from '../../components/ui/Button';
 import {
   BUILD_SLOT_LABEL_DE,
   BUILD_SLOT_ORDER,
@@ -23,6 +24,11 @@ interface BuildResultCardProps {
   onNameChange: (name: string) => void;
   slots: BuildSlots;
   catalog: FormulaCatalogCard[];
+  /** Optional captured hero-frame URL from preview save. */
+  heroFrameUrl?: string | null;
+  onSave?: () => void;
+  saving?: boolean;
+  saveMessage?: string | null;
 }
 
 const ROLE_CHIP: Record<BuildSlotRole, string> = {
@@ -36,9 +42,14 @@ export function BuildResultCard({
   onNameChange,
   slots,
   catalog,
+  heroFrameUrl = null,
+  onSave,
+  saving = false,
+  saveMessage = null,
 }: BuildResultCardProps) {
   const filledCount = countFilledSlots(slots);
   const combinationLabel = buildCombinationLabel(slots);
+  const canSave = filledCount >= 2 && Boolean(onSave);
 
   if (filledCount < 2 || !combinationLabel) {
     return (
@@ -51,9 +62,21 @@ export function BuildResultCard({
             Kombination
           </h2>
         </header>
-        <div className="flex min-h-0 flex-1 flex-col items-center justify-center px-3 text-center">
+        <div className="flex min-h-0 flex-1 flex-col items-center justify-center gap-3 px-3 text-center">
           <p className="text-[11px] text-stone-500">
             Mindestens zwei Formelplätze belegen, um eine Kombination zu sehen.
+          </p>
+          <Button
+            type="button"
+            variant="secondary"
+            disabled
+            data-testid="build-result-save"
+            className="w-full text-xs"
+          >
+            Speichern
+          </Button>
+          <p className="text-[10px] text-stone-600" data-testid="build-result-save-hint">
+            Mindestens zwei Formelplätze belegen, um zu speichern.
           </p>
         </div>
       </aside>
@@ -61,9 +84,11 @@ export function BuildResultCard({
   }
 
   const hero =
-    findFormulaCard(catalog, slots.katalysator) ??
-    findFormulaCard(catalog, slots.essenz) ??
-    findFormulaCard(catalog, slots.technik);
+    heroFrameUrl ??
+    findFormulaCard(catalog, slots.katalysator)?.imageUrl ??
+    findFormulaCard(catalog, slots.essenz)?.imageUrl ??
+    findFormulaCard(catalog, slots.technik)?.imageUrl ??
+    null;
 
   return (
     <aside
@@ -74,7 +99,7 @@ export function BuildResultCard({
         <h2 className="font-brand text-xs uppercase tracking-wide text-amber-100 sm:text-sm">
           Kombination
         </h2>
-        <p className="mt-0.5 text-[10px] text-stone-500">Vorschau — Speichern folgt in #258</p>
+        <p className="mt-0.5 text-[10px] text-stone-500">Rezept + Hero-Frame speichern</p>
       </header>
 
       <div className="flex min-h-0 flex-1 flex-col overflow-hidden p-2 sm:p-2.5">
@@ -82,13 +107,13 @@ export function BuildResultCard({
           <div className="relative min-h-0 flex-[1.35] bg-stone-900">
             {hero ? (
               <ImageWithFallback
-                src={hero.imageUrl}
+                src={hero}
                 alt={name}
                 className="h-full w-full object-contain p-3"
               />
             ) : (
               <div className="flex h-full items-center justify-center px-3 text-center text-[11px] text-stone-500">
-                Hero-Frame folgt (#257)
+                Hero-Frame aus Vorschau
               </div>
             )}
             <div className="pointer-events-none absolute inset-x-0 bottom-0 bg-gradient-to-t from-stone-950 via-stone-950/85 to-transparent px-2.5 pb-2 pt-10">
@@ -133,6 +158,25 @@ export function BuildResultCard({
                 );
               })}
             </div>
+
+            <Button
+              type="button"
+              variant="primary"
+              disabled={!canSave || saving}
+              onClick={onSave}
+              data-testid="build-result-save"
+              className="w-full text-xs"
+            >
+              {saving ? 'Speichern…' : 'Speichern'}
+            </Button>
+            {saveMessage ? (
+              <p
+                className="text-center text-[10px] text-emerald-400/90"
+                data-testid="build-result-save-message"
+              >
+                {saveMessage}
+              </p>
+            ) : null}
           </div>
         </div>
       </div>

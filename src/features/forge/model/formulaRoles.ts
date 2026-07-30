@@ -29,11 +29,17 @@ export function formulaRoleFromCard(card: ForgeCardData): FormulaRoleLabel | nul
   return null;
 }
 
+export function isKombinationForgeCard(card: ForgeCardData): boolean {
+  if (card.type !== 'Formula') return false;
+  const line = card.effects?.find((e) => e.startsWith('Rolle:'));
+  return line?.includes('Kombination') ?? false;
+}
+
 export function cardMatchesFormulaRoleFilter(
   card: ForgeCardData,
   filter: FormulaRoleFilter,
 ): boolean {
   if (filter === 'All') return true;
-  if (filter === 'Kombination') return false;
+  if (filter === 'Kombination') return isKombinationForgeCard(card);
   return formulaRoleFromCard(card) === filter;
 }

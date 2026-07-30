@@ -1,11 +1,14 @@
 /**
- * Read-only bridge for VFX Studio technique registry (Forge Material Formeln).
+ * Read-only bridge for VFX Studio registry (Forge Material Formeln).
  * Location: src/services/storage/vfxRegistryBridge.ts
  *
  * Shared layer must not import feature modules — minimal parse only.
- * Full TechniqueAsset read/write lives in features/build/vfx/registry.ts.
+ * Full asset read/write lives in features/build/vfx/registry.ts.
  */
 export const VFX_REGISTRY_STORAGE_KEY = 'letz-fetz:vfx-registry';
+
+/** Dispatched on same-tab registry writes so Forge can refresh. */
+export const VFX_REGISTRY_UPDATED_EVENT = 'letz-fetz:vfx-registry-updated';
 
 export interface VfxRegistryTechniqueSummary {
   id: string;
@@ -16,11 +19,23 @@ export interface VfxRegistryTechniqueSummary {
   updatedAt: string;
 }
 
+export interface VfxRegistryFormulaRecipeSummary {
+  id: string;
+  name: string;
+  status: string;
+  techniqueId: string | null;
+  essenceId: string | null;
+  catalystId: string | null;
+  heroFrameUrl: string | null;
+  createdAt: string;
+  updatedAt: string;
+}
+
 function isRecord(value: unknown): value is Record<string, unknown> {
   return typeof value === 'object' && value !== null && !Array.isArray(value);
 }
 
-function parseSummary(raw: unknown): VfxRegistryTechniqueSummary | null {
+function parseTechniqueSummary(raw: unknown): VfxRegistryTechniqueSummary | null {
   if (!isRecord(raw)) return null;
   if (raw.kind !== 'technique' || raw.role !== 'technik') return null;
   const id = raw.id;
@@ -35,21 +50,76 @@ function parseSummary(raw: unknown): VfxRegistryTechniqueSummary | null {
   return { id, name, status, modelId, createdAt, updatedAt };
 }
 
-/** Load technique summaries for cross-feature UI (Forge Formeln tab). */
-export function readVfxRegistryTechniqueSummaries(): VfxRegistryTechniqueSummary[] {
-  if (typeof localStorage === 'undefined') return [];
+function parseFormulaRecipeSummary(raw: unknown): VfxRegistryFormulaRecipeSummary | null {
+  if (!isRecord(raw)) return null;
+  if (raw.kind !== 'formulaRecipe') return null;
+  const id = raw.id;
+  const name = raw.name;
+  if (typeof id !== 'string' || id.trim().length === 0) return null;
+  if (typeof name !== 'string' || name.trim().length === 0) return null;
+  const status = typeof raw.status === 'string' ? raw.status : 'DRAFT';
+  const techniqueId =
+    typeof raw.techniqueId === 'string' && raw.techniqueId.trim().length > 0
+      ? raw.techniqueId
+      : null;
+  const essenceId =
+    typeof raw.essenceId === 'string' && raw.essenceId.trim().length > 0 ? raw.essenceId : null;
+  const catalystId =
+    typeof raw.catalystId === 'string' && raw.catalystId.trim().length > 0
+      ? raw.catalystId
+      : null;
+  const heroFrame = raw.heroFrame;
+  let heroFrameUrl: string | null = null;
+  if (isRecord(heroFrame) && typeof heroFrame.url === 'string' && heroFrame.url.trim().length > 0) {
+    heroFrameUrl = heroFrame.url;
+  }
+  const createdAt = typeof raw.createdAt === 'string' ? raw.createdAt : '';
+  const updatedAt = typeof raw.updatedAt === 'string' ? raw.updatedAt : createdAt;
+  return {
+    id,
+    name,
+    status,
+    techniqueId,
+    essenceId,
+    catalystId,
+    heroFrameUrl,
+    createdAt,
+    updatedAt,
+  };
+}
+
+function readRegistryRecord(): Record<string, unknown> | null {
+  if (typeof localStorage === 'undefined') return null;
   try {
     const raw = localStorage.getItem(VFX_REGISTRY_STORAGE_KEY);
-    if (!raw) return [];
+    if (!raw) return null;
     const parsed: unknown = JSON.parse(raw);
-    if (!isRecord(parsed) || !Array.isArray(parsed.techniques)) return [];
-    const out: VfxRegistryTechniqueSummary[] = [];
-    for (const item of parsed.techniques) {
-      const summary = parseSummary(item);
-      if (summary) out.push(summary);
-    }
-    return out;
+    return isRecord(parsed) ? parsed : null;
   } catch {
-    return [];
+    return null;
   }
+}
+
+/** Load technique summaries for cross-feature UI (Forge Formeln tab). */
+export function readVfxRegistryTechniqueSummaries(): VfxRegistryTechniqueSummary[] {
+  const record = readRegistryRecord();
+  if (!record || !Array.isArray(record.techniques)) return [];
+  const out: VfxRegistryTechniqueSummary[] = [];
+  for (const item of record.techniques) {
+    const summary = parseTechniqueSummary(item);
+    if (summary) out.push(summary);
+  }
+  return out;
+}
+
+/** Load saved Combinate Kombinationen for Material Formeln tab. */
+export function readVfxRegistryFormulaRecipeSummaries(): VfxRegistryFormulaRecipeSummary[] {
+  const record = readRegistryRecord();
+  if (!record || !Array.isArray(record.formulaRecipes)) return [];
+  const out: VfxRegistryFormulaRecipeSummary[] = [];
+  for (const item of record.formulaRecipes) {
+    const summary = parseFormulaRecipeSummary(item);
+    if (summary) out.push(summary);
+  }
+  return out;
 }
