@@ -33,7 +33,12 @@ import {
   resolveFormulaActivate,
   takeAttackPrepBonus,
   takeBlockPrepBonus,
+  takeBoostPrepBonus,
   emptyFormulaPrep,
+  applyV5StartFormulaMeta,
+  takeEnemyAttackPenalty,
+  armChainSameAction,
+  takeChainSameActionBonus,
 } from './formulaResolve';
 import {
   applyGrossformelAftermath,
@@ -146,6 +151,7 @@ function runStartPhase(
   if (isV5FormulaEnabled(ruleset)) {
     next = cloneState(next);
     next.players[playerId].formula = restoreOwnerFormulaAtStart(next.players[playerId].formula);
+    next = applyV5StartFormulaMeta(next, playerId);
   }
   next.phase = 'draw';
   return next;
@@ -348,7 +354,7 @@ function resolveBoostAfterInterrupt(
   if (!boostDef) throw new Error('Boost card definition missing');
   let next = cloneState(state);
   next.pendingChoice = null;
-  next = applyElementEffect(next, pending.boosterId, boostDef.element, rng, ruleset, { pack });
+  next = applyBoostWithFormulaPrep(next, pending.boosterId, boostDef, pack, rng, ruleset);
   next = incrementBoostsPlayed(next, pending.boosterId);
   if (next.pendingChoice?.type === 'must-discard' && next.pendingChoice.source === 'air') {
     next.meta = { ...next.meta, awaitingPostBoostArena: true };
@@ -356,6 +362,41 @@ function resolveBoostAfterInterrupt(
   }
   next = queuePostBoostPending(next, pending.boosterId, pack, rng, ruleset);
   return finishMainAction(next);
+}
+
+/** Apply element boost including V5 Fokuskurbel / Kettenkopplung prep. */
+function applyBoostWithFormulaPrep(
+  state: GameState,
+  playerId: PlayerId,
+  def: ElementCardDef,
+  pack: ContentPack,
+  rng: () => number,
+  ruleset: RulesetConfig,
+): GameState {
+  let next = state;
+  const boostPrep = takeBoostPrepBonus(next, playerId);
+  next = boostPrep.state;
+  const chainBoost = takeChainSameActionBonus(next, playerId, 'boost');
+  next = chainBoost.state;
+  const amountBonus = boostPrep.valueBonus + chainBoost.bonus;
+  const hasNumericBoost =
+    def.element === 'fire' ||
+    def.element === 'water' ||
+    def.element === 'light' ||
+    def.element === 'earth';
+
+  next = applyElementEffect(next, playerId, def.element, rng, ruleset, {
+    pack,
+    amountBonus: hasNumericBoost ? amountBonus : 0,
+  });
+  if (!hasNumericBoost && boostPrep.filterHandIfNoValue) {
+    next = drawForPlayer(next, playerId, 1, rng, ruleset, { allowExtra: true });
+    if (next.players[playerId].hand.length > 0) {
+      const removed = next.players[playerId].hand.pop();
+      if (removed) next.piles.discard.push(removed);
+    }
+  }
+  return armChainSameAction(next, playerId, 'boost');
 }
 
 function applyPlayerAttackDamage(
@@ -415,7 +456,7 @@ function applyPlayerAttackDamage(
     p2: getStatus(next, 'p2', 'high')?.stacks ?? 0,
   };
 
-  if (isV3CombatEnabled(ruleset) && pipeline.isHit && hitImpulseElement) {
+  if (isV3CombatEnabled(ruleset) && hitImpulseElement && (pipeline.isHit || workingAttack === workingBlock)) {
     next = resolveImpulseReactions(
       next,
       defenderId,
@@ -425,7 +466,7 @@ function applyPlayerAttackDamage(
       pack,
     );
   }
-  if (isV3CombatEnabled(ruleset) && pipeline.isFullBlock && fullBlockImpulseElement) {
+  if (isV3CombatEnabled(ruleset) && pipeline.isFullBlock && fullBlockImpulseElement && workingAttack !== workingBlock) {
     next = resolveImpulseReactions(
       next,
       attackerId,
@@ -466,20 +507,48 @@ function applyPlayerAttackDamage(
     next = hitFx.state;
   }
 
-  // V5 Formelprep aftermath (Essenz-Marke / Spiegel-Schild).
-  if (isV5FormulaEnabled(ruleset) && pipeline.isHit) {
-    const prep = next.players[attackerId].formulaPrep;
-    if (prep) {
-      if (prep.mirrorShieldOnHit > 0) {
+  // V5 Formelprep aftermath (Essenz-Marke / Spiegel-Schild / Kettenhieb / …).
+  if (isV5FormulaEnabled(ruleset)) {
+    const atkPrep = next.players[attackerId].formulaPrep;
+    const tieWithImpulse =
+      Boolean(atkPrep?.impulseOnTie) && workingAttack === workingBlock;
+    if (atkPrep && (pipeline.isHit || tieWithImpulse)) {
+      if (pipeline.isHit && atkPrep.mirrorShieldOnHit > 0) {
         next.players[attackerId].shield = clampShield(
-          (next.players[attackerId].shield ?? 0) + prep.mirrorShieldOnHit,
+          (next.players[attackerId].shield ?? 0) + atkPrep.mirrorShieldOnHit,
         );
       }
       const reactions = next.meta.v3ReactionsThisAction ?? 0;
-      if (prep.markIfNoReaction && reactions === 0) {
-        next = applyStatus(next, defenderId, prep.markIfNoReaction, 1);
+      if (pipeline.isHit && atkPrep.markIfNoReaction && reactions === 0) {
+        next = applyStatus(next, defenderId, atkPrep.markIfNoReaction, 1);
+      }
+      if (pipeline.hpDamage > 0) {
+        if (atkPrep.stripShieldOnHpDamage > 0) {
+          next.players[defenderId].shield = clampShield(
+            Math.max(0, (next.players[defenderId].shield ?? 0) - atkPrep.stripShieldOnHpDamage),
+          );
+        }
+        if (atkPrep.lifestealOnHp > 0) {
+          next.players[attackerId].hp = clampHp(
+            next.players[attackerId].hp + atkPrep.lifestealOnHp,
+            ruleset,
+          );
+        }
+      }
+      if (pipeline.isHit) {
+        next = armChainSameAction(next, attackerId, 'attack');
       }
       next.players[attackerId].formulaPrep = null;
+    }
+
+    const defPrep = next.players[defenderId].formulaPrep;
+    if (defPrep && pipeline.isFullBlock) {
+      const thorns = defPrep.thornsOnFullBlock + defPrep.mirrorThornsOnFullBlock;
+      if (thorns > 0) {
+        next.players[attackerId].hp = clampHp(next.players[attackerId].hp - thorns, ruleset);
+      }
+      next = armChainSameAction(next, defenderId, 'block');
+      next.players[defenderId].formulaPrep = null;
     }
   }
 
@@ -553,6 +622,9 @@ function resolveCombat(
 
   const hitImpulse = impulseFromCard(pack, attackCardDefId, 'onHit');
   const fullBlockImpulse = impulseFromCard(pack, blockCardDefId ?? undefined, 'onFullBlock');
+  const isTie = attackValue === blockValue;
+  const fireHitOnTie =
+    isTie && Boolean(state.players[attackerId].formulaPrep?.impulseOnTie);
 
   if (damage > 0 && defenderHasRueckkopplung(state)) {
     const next = cloneState(state);
@@ -583,8 +655,8 @@ function resolveCombat(
     ruleset,
     pack,
     rng,
-    damage > 0 ? hitImpulse : null,
-    damage <= 0 ? fullBlockImpulse : null,
+    damage > 0 || fireHitOnTie ? hitImpulse : null,
+    damage <= 0 && !fireHitOnTie ? fullBlockImpulse : null,
   );
 }
 
@@ -1182,12 +1254,13 @@ function applyFormulaActivate(
   pack: ContentPack,
   playerId: PlayerId,
   ruleset: RulesetConfig,
+  rng: () => number,
 ): GameState {
   if (!isFormulaResolvable(state.players[playerId].formula)) {
     throw new Error('Formula resolve requires at least two filled slots');
   }
   const wasFull = isFullFormulaActivatable(state.players[playerId].formula);
-  let next = resolveFormulaActivate(state, pack, playerId, ruleset);
+  let next = resolveFormulaActivate(state, pack, playerId, ruleset, rng);
   if (wasFull && isV5FormulaEnabled(ruleset)) {
     const cap = maxFetzChargeFor(ruleset);
     next = gainFetzCharge(next, playerId, 1, cap);
@@ -1449,7 +1522,7 @@ export function applyAction(
     case 'FORMULA_ACTIVATE': {
       if (state.phase !== 'build') throw new Error('Not in build phase');
       if (!isV5FormulaEnabled(ruleset)) throw new Error('FORMULA_ACTIVATE requires v5Formula');
-      return applyFormulaActivate(state, pack, playerId, ruleset);
+      return applyFormulaActivate(state, pack, playerId, ruleset, rng);
     }
     case 'FORMULA_SCHNELLMIX': {
       if (state.phase !== 'build') throw new Error('Not in build phase');
@@ -1509,6 +1582,26 @@ export function applyAction(
       const attackPrep = takeAttackPrepBonus(working, playerId);
       working = attackPrep.state;
       attackValue += attackPrep.combatBonus;
+
+      const chainBonus = takeChainSameActionBonus(working, playerId, 'attack');
+      working = chainBonus.state;
+      attackValue += chainBonus.bonus;
+
+      const enemyPenalty = takeEnemyAttackPenalty(working, playerId);
+      working = enemyPenalty.state;
+      attackValue -= enemyPenalty.penalty;
+
+      const remainingPrep = working.players[playerId].formulaPrep;
+      if (remainingPrep && remainingPrep.w6Bonus > 0) {
+        const base = diceBonusFromRoll(diceRoll, ruleset);
+        const capped = Math.min(
+          remainingPrep.w6BonusMax || base + remainingPrep.w6Bonus,
+          base + remainingPrep.w6Bonus,
+        );
+        attackValue += Math.max(0, capped - base);
+        remainingPrep.w6Bonus = 0;
+        remainingPrep.w6BonusMax = 0;
+      }
 
       if (isV3CombatEnabled(ruleset)) {
         const announce = runFetzPassiveTrigger(
@@ -1688,7 +1781,6 @@ export function applyAction(
       if (!def || def.cardType !== 'boost') throw new Error('Not a boost card');
 
       next = discardFromHand(state, playerId, action.cardInstanceId);
-      const opp = opponentOf(playerId);
       if (opponentHasNeinBruder(next, playerId)) {
         next.pendingChoice = {
           type: 'boost-interrupt',
@@ -1700,7 +1792,7 @@ export function applyAction(
         return next;
       }
 
-      next = applyElementEffect(next, playerId, def.element, rng, ruleset, { pack });
+      next = applyBoostWithFormulaPrep(next, playerId, def, pack, rng, ruleset);
       next = incrementBoostsPlayed(next, playerId);
       if (next.pendingChoice?.type === 'must-discard' && next.pendingChoice.source === 'air') {
         next.meta = { ...next.meta, awaitingPostBoostArena: true };
@@ -1910,7 +2002,7 @@ function applyCombatResponse(
     const blockPrep = takeBlockPrepBonus(working, playerId);
     working = blockPrep.state;
 
-    const blockValue =
+    let blockValue =
       computeBlockValueForPlayer(
         pack,
         working,
@@ -1920,6 +2012,22 @@ function applyCombatResponse(
         attackDef.element,
         ruleset,
       ) + blockPrep.combatBonus;
+
+    const chainBlock = takeChainSameActionBonus(working, playerId, 'block');
+    working = chainBlock.state;
+    blockValue += chainBlock.bonus;
+
+    const remainingPrep = working.players[playerId].formulaPrep;
+    if (remainingPrep && remainingPrep.w6Bonus > 0) {
+      const base = diceBonusFromRoll(diceRoll, ruleset);
+      const capped = Math.min(
+        remainingPrep.w6BonusMax || base + remainingPrep.w6Bonus,
+        base + remainingPrep.w6Bonus,
+      );
+      blockValue += Math.max(0, capped - base);
+      remainingPrep.w6Bonus = 0;
+      remainingPrep.w6BonusMax = 0;
+    }
 
     let next = discardFromHand(working, playerId, action.cardInstanceId);
     if (state.combat.mode === 'challenge') {

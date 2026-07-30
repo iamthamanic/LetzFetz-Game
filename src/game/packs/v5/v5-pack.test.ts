@@ -38,6 +38,18 @@ describe('V5_PACK', () => {
     expect(V5_PACK_MAIN_DECK_SIZE).toBe(112);
   });
 
+  it('ships resolving formulaEffect on every formula card', () => {
+    for (const t of V5_PACK.techniques ?? []) {
+      expect(t.formulaEffect, t.id).toBeDefined();
+    }
+    for (const e of V5_PACK.essences ?? []) {
+      expect(e.formulaEffect, e.id).toBeDefined();
+    }
+    for (const c of V5_PACK.catalysts ?? []) {
+      expect(c.formulaEffect, c.id).toBeDefined();
+    }
+  });
+
   it('builds main deck including full formula + items', () => {
     const deck = buildMainDeckInstances(V5_PACK, createSeededRng(1));
     expect(deck).toHaveLength(V5_PACK_MAIN_DECK_SIZE);

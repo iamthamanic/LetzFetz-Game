@@ -69,6 +69,19 @@ export interface MatchMeta {
   v5PassiveUsed?: Record<PlayerId, string[]>;
   /** V5 Stiernackenkommando stored attack/challenge bonus (0–2). */
   v5RevengeBonus?: Record<PlayerId, number>;
+  /** V5 Echo/Doppelecho: primary bonus applied at owner's next start. */
+  v5EchoPrimary?: Record<PlayerId, number>;
+  /** V5 Sperrkreis: next attack by this player gets combat penalty. */
+  v5NextAttackPenalty?: Record<PlayerId, number>;
+  /** V5 Doppelecho: katalysator instanceIds that stay exhausted after restore. */
+  v5KeepExhaustedFormula?: Record<PlayerId, string[]>;
+  /** V5 Verzögerung: prep attack bonus deferred to next start. */
+  v5DelayedPrimary?: Record<PlayerId, number>;
+  /** V5 Kettenkopplung: next matching action type gets this combat/value bonus. */
+  v5ChainSameAction?: Record<
+    PlayerId,
+    { action: 'attack' | 'block' | 'boost'; bonus: number } | null
+  >;
 }
 
 export type PendingChoice =

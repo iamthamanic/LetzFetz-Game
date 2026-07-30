@@ -123,20 +123,21 @@ export function applyElementEffect(
   element: Element,
   rng: Rng,
   ruleset: RulesetConfig = DEFAULT_RULESET,
-  options?: { targetBoundId?: string; pack?: ContentPack },
+  options?: { targetBoundId?: string; pack?: ContentPack; amountBonus?: number },
 ): GameState {
   let next = cloneState(state);
   const opponent = opponentOf(playerId);
+  const amountBonus = options?.amountBonus ?? 0;
 
   switch (element) {
     case 'fire': {
-      const dmg = capBoostDamage(next, 2);
+      const dmg = capBoostDamage(next, 2 + amountBonus);
       next.players[opponent].hp = clampHp(next.players[opponent].hp - dmg, ruleset);
       next.lastEvent = `Feuer: ${dmg} Schaden.`;
       break;
     }
     case 'water': {
-      next = applyHealAmount(next, playerId, 2, ruleset);
+      next = applyHealAmount(next, playerId, 2 + amountBonus, ruleset);
       next.lastEvent = 'Wasser: geheilt.';
       break;
     }
@@ -144,7 +145,7 @@ export function applyElementEffect(
       const targetId = options?.targetBoundId ?? next.players[playerId].bound[0]?.instanceId;
       const bound = next.players[playerId].bound.find((b) => b.instanceId === targetId);
       if (bound) {
-        bound.resistanceBonus += 2;
+        bound.resistanceBonus += 2 + amountBonus;
         next.lastEvent = 'Erde: +2 Widerstand auf gebaute Karte.';
       } else {
         next.lastEvent = 'Erde: Keine gebaute Karte — kein Effekt.';
@@ -182,7 +183,7 @@ export function applyElementEffect(
     }
     case 'light': {
       next = drawForPlayer(next, playerId, 1, rng, ruleset);
-      next = applyHealAmount(next, playerId, 1, ruleset);
+      next = applyHealAmount(next, playerId, 1 + amountBonus, ruleset);
       next.lastEvent = 'Licht: 1 Karte gezogen, geheilt.';
       break;
     }
