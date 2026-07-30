@@ -1,0 +1,43 @@
+{
+  "status": "recorded",
+  "user_impact": {
+    "de": [
+      "SPIELUEBERSICHT nennt V5 Formel als Play-Default; V1 = Regression, V3 = Soft-Retire.",
+      "Match-Basics und Fazit spiegeln Cutover + Post-Cutover-Parity."
+    ],
+    "en": [
+      "SPIELUEBERSICHT states V5 formula as play default; V1 = regression, V3 = soft-retire.",
+      "Match basics and summary reflect cutover + post-cutover parity."
+    ]
+  },
+  "developer_impact": {
+    "de": [
+      "Living memory current-state auf V5 Default + Parity-Epic aktualisiert.",
+      "Link auf `.qa/design/v5-post-cutover-parity.md` in der Übersicht."
+    ],
+    "en": [
+      "Living memory current-state updated for V5 default + parity epic.",
+      "Overview links to `.qa/design/v5-post-cutover-parity.md`."
+    ]
+  },
+  "operational_impact": {
+    "de": [],
+    "en": []
+  },
+  "packages": [],
+  "affected_features": ["solo-duel-ui", "rules-engine-v1"],
+  "affected_components": [
+    "docs/SPIELUEBERSICHT_AKTUELL.md",
+    ".project-memory/current-state.json"
+  ],
+  "breaking_changes": [],
+  "migration_required": false,
+  "security_relevant": false,
+  "evidence": [],
+  "summary": {
+    "de": "Docs/Memory: V5 als Play-Default nach Post-Cutover-Parity dokumentiert.",
+    "en": "Docs/memory: V5 documented as play default after post-cutover parity."
+  },
+  "date": "2026-07-30",
+  "id": "2026-07-30-v5-docs-overview-refresh"
+}
