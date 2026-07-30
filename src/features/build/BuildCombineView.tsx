@@ -1,43 +1,43 @@
 /**
- * Build → Combinate: Meshy library, slots, live preview, result card.
+ * Build → Combinate: V5 Formel-Bausteine library, slots, preview, combination card.
  * Location: src/features/build/BuildCombineView.tsx
  */
 import React, { useEffect, useRef, useState } from 'react';
-import { PartLibraryPanel } from './PartLibraryPanel';
+import { FormulaLibraryPanel } from './FormulaLibraryPanel';
 import { BuildSlotsPanel } from './BuildSlotsPanel';
 import { BuildPreviewPane } from './BuildPreviewPane';
 import { BuildResultCard } from './BuildResultCard';
-import { findCatalogPart, loadMeshyPartCatalog } from './data/meshyPartCatalog';
-import { loadCombinateVisibleEngineParts } from './data/enginePartsCombinateCatalog';
+import { loadFormulaCardCatalog } from './data/formulaCardCatalog';
 import {
-  BUILD_SLOT_ORDER,
-  resolvePartAssets,
+  buildCombinationLabel,
+  findFormulaCard,
+  type FormulaCatalogCard,
+} from './model/combinateFormula';
+import {
   type BuildSession,
   type BuildSlotRole,
-  type MeshyCatalogPart,
-  type PartAssetPick,
 } from './model/buildTypes';
 import { loadBuildSession, saveBuildSession } from './storage/buildSessionStorage';
 
 interface BuildCombineViewProps {
-  /** True while Build → Combinate is visible (controls 3D canvas mount). */
+  /** True while Build → Combinate is visible. */
   active: boolean;
 }
 
-function assignPartToSession(
+function assignCardToSession(
   session: BuildSession,
-  catalog: MeshyCatalogPart[],
-  partId: string,
+  catalog: FormulaCatalogCard[],
+  cardId: string,
 ): BuildSession {
-  const part = findCatalogPart(catalog, partId);
-  if (!part) return session;
+  const card = findFormulaCard(catalog, cardId);
+  if (!card) return session;
   return {
     ...session,
     slots: {
       ...session.slots,
-      [part.role]: partId,
+      [card.role]: cardId,
     },
-    lastDroppedPartId: partId,
+    lastDroppedPartId: cardId,
   };
 }
 
@@ -52,16 +52,7 @@ function clearSlot(session: BuildSession, role: BuildSlotRole): BuildSession {
 }
 
 export function BuildCombineView({ active }: BuildCombineViewProps) {
-  const catalogRef = useRef(
-    (() => {
-      const meshy = loadMeshyPartCatalog();
-      const engine = loadCombinateVisibleEngineParts();
-      const byId = new Map<string, MeshyCatalogPart>();
-      for (const p of meshy) byId.set(p.id, p);
-      for (const p of engine) byId.set(p.id, p);
-      return [...byId.values()].sort((a, b) => a.name.localeCompare(b.name, 'de'));
-    })(),
-  );
+  const catalogRef = useRef(loadFormulaCardCatalog());
   const catalog = catalogRef.current;
   const [session, setSession] = useState<BuildSession>(() => loadBuildSession().session);
   const saveTimerRef = useRef<ReturnType<typeof setTimeout> | null>(null);
@@ -76,41 +67,21 @@ export function BuildCombineView({ active }: BuildCombineViewProps) {
     };
   }, [session]);
 
-  const setAssetPick = (partId: string, pick: PartAssetPick) => {
-    setSession((prev) => ({
-      ...prev,
-      assetPicks: { ...prev.assetPicks, [partId]: pick },
-    }));
-  };
+  const combinationLabel = buildCombinationLabel(session.slots);
 
-  const glbParts = BUILD_SLOT_ORDER.map((role) => {
-    const part = findCatalogPart(catalog, session.slots[role]);
-    if (!part) return null;
-    const assets = resolvePartAssets(part, session.assetPicks[part.id]);
-    if (assets.view !== '3d' || !assets.glbUrl) return null;
-    return { ...part, glbUrl: assets.glbUrl, masterUrl: assets.masterUrl };
-  }).filter((p): p is MeshyCatalogPart => p != null);
-
-  const lastDropped = findCatalogPart(catalog, session.lastDroppedPartId);
+  const lastDropped = findFormulaCard(catalog, session.lastDroppedPartId);
   const anySlotted =
-    findCatalogPart(catalog, session.slots.technik) ??
-    findCatalogPart(catalog, session.slots.essenz) ??
-    findCatalogPart(catalog, session.slots.katalysator);
-  const focusPart = lastDropped ?? anySlotted;
-  const focusAssets = focusPart
-    ? resolvePartAssets(focusPart, session.assetPicks[focusPart.id])
-    : null;
+    findFormulaCard(catalog, session.slots.technik) ??
+    findFormulaCard(catalog, session.slots.essenz) ??
+    findFormulaCard(catalog, session.slots.katalysator);
+  const focusCard = lastDropped ?? anySlotted;
 
   return (
     <div
       className="flex h-full min-h-0 flex-row overflow-hidden"
       data-testid="build-combine"
     >
-      <PartLibraryPanel
-        parts={catalog}
-        assetPicks={session.assetPicks}
-        onAssetPickChange={setAssetPick}
-      />
+      <FormulaLibraryPanel cards={catalog} />
 
       <section className="flex min-h-0 min-w-0 flex-1 flex-col gap-2 overflow-hidden p-2 sm:gap-2.5 sm:p-3">
         <header className="flex-none">
@@ -118,22 +89,16 @@ export function BuildCombineView({ active }: BuildCombineViewProps) {
             Combinate
           </h1>
           <p className="text-[10px] text-stone-500 sm:text-[11px]">
-            Live-Vorschau oben · drei Bauteil-Slots darunter
+            Formel-Bausteine kombinieren · Vorschau-Platzhalter bis Effekseer (#257)
           </p>
         </header>
 
         <div className="flex min-h-0 flex-col" style={{ flex: '0.75 1 0%' }}>
           <BuildPreviewPane
             active={active}
-            glbParts={glbParts}
-            fallbackMasterUrl={focusAssets?.masterUrl ?? null}
-            fallbackLabel={focusPart?.name ?? 'Vorschau'}
-            pairLabelDe={focusAssets?.statusLabelDe ?? focusPart?.pairLabelDe ?? null}
-            pairStatus={
-              focusPart?.models.length === 0
-                ? '2d-only'
-                : (focusPart?.pairStatus ?? null)
-            }
+            focusImageUrl={focusCard?.imageUrl ?? null}
+            focusLabel={focusCard?.name ?? 'Vorschau'}
+            combinationLabel={combinationLabel}
           />
         </div>
 
@@ -141,9 +106,8 @@ export function BuildCombineView({ active }: BuildCombineViewProps) {
           <BuildSlotsPanel
             slots={session.slots}
             catalog={catalog}
-            assetPicks={session.assetPicks}
-            onAssign={(partId) =>
-              setSession((prev) => assignPartToSession(prev, catalog, partId))
+            onAssign={(cardId) =>
+              setSession((prev) => assignCardToSession(prev, catalog, cardId))
             }
             onClear={(role) => setSession((prev) => clearSlot(prev, role))}
           />
@@ -155,7 +119,6 @@ export function BuildCombineView({ active }: BuildCombineViewProps) {
         onNameChange={(name) => setSession((prev) => ({ ...prev, name }))}
         slots={session.slots}
         catalog={catalog}
-        assetPicks={session.assetPicks}
       />
     </div>
   );

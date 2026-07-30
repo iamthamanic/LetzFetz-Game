@@ -61,16 +61,10 @@ describe('buildSessionStorage', () => {
     installStorage();
     const session = {
       ...createFreshBuildSession(),
-      slots: { technik: null, essenz: 'shadow-suction-chamber', katalysator: null },
-      name: 'Sog-Gerät',
-      lastDroppedPartId: 'shadow-suction-chamber',
-      assetPicks: {
-        'shadow-suction-chamber': {
-          masterVersion: 1,
-          modelVersion: 2,
-          view: '3d' as const,
-        },
-      },
+      slots: { technik: null, essenz: 'v5-essenz-sogschatten', katalysator: null },
+      name: 'Sog-Formel',
+      lastDroppedPartId: 'v5-essenz-sogschatten',
+      assetPicks: {},
     };
     expect(saveBuildSession(session).ok).toBe(true);
     const loaded = loadBuildSession();
