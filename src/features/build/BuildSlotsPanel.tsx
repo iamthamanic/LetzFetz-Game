@@ -1,22 +1,20 @@
 /**
- * Center slot row: three portrait card drop targets (reference proportions).
+ * Center slot row: three portrait card drop targets for Formel-Bausteine.
  * Location: src/features/build/BuildSlotsPanel.tsx
- * Fills assigned grid row — empty slots keep the same card size as filled.
  */
 import React, { useRef } from 'react';
 import { X } from 'lucide-react';
 import {
   BUILD_SLOT_LABEL_DE,
   BUILD_SLOT_ORDER,
-  defaultPartAssetPick,
-  partStillThumbUrl,
-  resolvePartAssets,
   type BuildSlotRole,
   type BuildSlots,
-  type MeshyCatalogPart,
-  type PartAssetPick,
 } from './model/buildTypes';
-import { BUILD_PART_DRAG_MIME, findCatalogPart } from './data/meshyPartCatalog';
+import {
+  FORMULA_CARD_DRAG_MIME,
+  findFormulaCard,
+  type FormulaCatalogCard,
+} from './model/combinateFormula';
 import { ImageWithFallback } from '../../components/figma/ImageWithFallback';
 
 const SLOT_DRAG_MIME = 'application/x-letz-fetz-build-slot';
@@ -41,14 +39,13 @@ const SLOT_FRAME: Record<BuildSlotRole, { empty: string; filled: string; label: 
 
 interface BuildSlotsPanelProps {
   slots: BuildSlots;
-  catalog: MeshyCatalogPart[];
-  assetPicks: Record<string, PartAssetPick>;
-  onAssign: (partId: string) => void;
+  catalog: FormulaCatalogCard[];
+  onAssign: (cardId: string) => void;
   onClear: (role: BuildSlotRole) => void;
 }
 
-function readPartId(dataTransfer: DataTransfer): string | null {
-  const typed = dataTransfer.getData(BUILD_PART_DRAG_MIME);
+function readCardId(dataTransfer: DataTransfer): string | null {
+  const typed = dataTransfer.getData(FORMULA_CARD_DRAG_MIME);
   if (typed) return typed;
   const plain = dataTransfer.getData('text/plain');
   return plain.length > 0 ? plain : null;
@@ -57,7 +54,6 @@ function readPartId(dataTransfer: DataTransfer): string | null {
 export function BuildSlotsPanel({
   slots,
   catalog,
-  assetPicks,
   onAssign,
   onClear,
 }: BuildSlotsPanelProps) {
@@ -66,22 +62,15 @@ export function BuildSlotsPanel({
   return (
     <div className="flex h-full min-h-0 flex-col overflow-hidden" data-testid="build-slots">
       <div className="mb-1 flex flex-none items-end justify-between gap-2 px-0.5">
-        <h2 className="font-brand text-xs uppercase tracking-wide text-amber-100">Slots</h2>
+        <h2 className="font-brand text-xs uppercase tracking-wide text-amber-100">Formelplätze</h2>
         <p className="text-[9px] text-stone-500">Falscher Slot → Auto-Route</p>
       </div>
 
-      {/* Three equal portrait cards spanning full center width */}
       <div className="grid min-h-0 flex-1 grid-cols-3 gap-2 sm:gap-3">
         {BUILD_SLOT_ORDER.map((role) => {
-          const partId = slots[role];
-          const part = findCatalogPart(catalog, partId);
+          const cardId = slots[role];
+          const card = findFormulaCard(catalog, cardId);
           const frame = SLOT_FRAME[role];
-          const assets = part
-            ? resolvePartAssets(part, assetPicks[part.id] ?? defaultPartAssetPick())
-            : null;
-          const thumbUrl = part
-            ? partStillThumbUrl(part, assetPicks[part.id] ?? defaultPartAssetPick())
-            : null;
           return (
             <div
               key={role}
@@ -95,18 +84,18 @@ export function BuildSlotsPanel({
                 droppedOnSlotRef.current = true;
                 const fromSlot = event.dataTransfer.getData(SLOT_DRAG_MIME);
                 if (fromSlot === role) return;
-                const id = readPartId(event.dataTransfer);
+                const id = readCardId(event.dataTransfer);
                 if (id) onAssign(id);
               }}
               className={`relative flex min-h-0 min-w-0 flex-col overflow-hidden rounded-xl border-2 border-dashed bg-stone-900/80 ${
-                part ? frame.filled : frame.empty
+                card ? frame.filled : frame.empty
               }`}
             >
               <div className="flex flex-none items-center justify-between border-b border-stone-800/80 px-2 py-1">
                 <span className={`text-[10px] font-bold uppercase tracking-wider ${frame.label}`}>
-                  {BUILD_SLOT_LABEL_DE[role]}-Slot
+                  {BUILD_SLOT_LABEL_DE[role]}
                 </span>
-                {part ? (
+                {card ? (
                   <button
                     type="button"
                     aria-label={`${BUILD_SLOT_LABEL_DE[role]} leeren`}
@@ -119,16 +108,16 @@ export function BuildSlotsPanel({
                 ) : null}
               </div>
 
-              {part ? (
+              {card ? (
                 <button
                   type="button"
                   draggable
                   className="flex min-h-0 flex-1 cursor-grab flex-col active:cursor-grabbing"
                   onDragStart={(event) => {
                     droppedOnSlotRef.current = false;
-                    event.dataTransfer.setData(BUILD_PART_DRAG_MIME, part.id);
+                    event.dataTransfer.setData(FORMULA_CARD_DRAG_MIME, card.id);
                     event.dataTransfer.setData(SLOT_DRAG_MIME, role);
-                    event.dataTransfer.setData('text/plain', part.id);
+                    event.dataTransfer.setData('text/plain', card.id);
                     event.dataTransfer.effectAllowed = 'move';
                   }}
                   onDragEnd={() => {
@@ -140,26 +129,24 @@ export function BuildSlotsPanel({
                 >
                   <div className="min-h-0 flex-1 bg-stone-950/80 p-2">
                     <ImageWithFallback
-                      src={thumbUrl ?? part.masterUrl}
-                      alt={part.name}
+                      src={card.imageUrl}
+                      alt={card.name}
                       className="h-full w-full object-contain"
                     />
                   </div>
                   <span className="flex-none truncate border-t border-stone-800 px-2 py-1.5 text-center text-[11px] font-semibold text-stone-100">
-                    {part.name}
+                    {card.name}
                   </span>
-                  {assets ? (
-                    <span className="flex-none truncate border-t border-stone-800/80 px-1 py-0.5 text-center text-[8px] text-stone-500">
-                      {assets.statusLabelDe}
-                    </span>
-                  ) : null}
+                  <span className="flex-none truncate border-t border-stone-800/80 px-1 py-0.5 text-center text-[8px] text-stone-500">
+                    Stabilität {card.stability}
+                  </span>
                 </button>
               ) : (
                 <div className="flex min-h-0 flex-1 flex-col items-center justify-center gap-1 bg-stone-950/40 px-2 text-center">
                   <span className="text-2xl leading-none text-stone-700" aria-hidden>
                     ▢
                   </span>
-                  <span className="text-[11px] font-medium text-stone-500">Ablegen</span>
+                  <span className="text-[11px] font-medium text-stone-500">Formelkarte ablegen</span>
                   <span className={`text-[9px] uppercase tracking-wide ${frame.label}`}>
                     {BUILD_SLOT_LABEL_DE[role]}
                   </span>

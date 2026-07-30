@@ -1,69 +1,36 @@
 /**
- * Center preview: 3D orbit when WebGL+GLB, else 2D master; fullscreen modal.
+ * Center preview: placeholder for formula combination (Effekseer/3D in #257).
  * Location: src/features/build/BuildPreviewPane.tsx
  */
 import React, { useEffect, useState } from 'react';
 import { Maximize2 } from 'lucide-react';
-import { detectWebGL } from '../../components/engine3d/EnginePreviewCanvas';
 import { ImageWithFallback } from '../../components/figma/ImageWithFallback';
 import { Modal } from '../../components/ui/Modal';
-import type { MeshyCatalogPart } from './model/buildTypes';
-import { BuildOrbitCanvas } from './BuildOrbitCanvas';
 
 interface BuildPreviewPaneProps {
-  /** False while Build tab is hidden — skip mounting Canvas. */
+  /** False while Build tab is hidden. */
   active: boolean;
-  glbParts: MeshyCatalogPart[];
-  fallbackMasterUrl: string | null;
-  fallbackLabel: string;
-  /** Version pairing badge from catalog (2D↔3D). */
-  pairLabelDe?: string | null;
-  pairStatus?: MeshyCatalogPart['pairStatus'] | null;
-}
-
-function pairTone(status: MeshyCatalogPart['pairStatus'] | null | undefined): string {
-  switch (status) {
-    case 'matched':
-      return 'border-emerald-700/50 bg-emerald-950/85 text-emerald-200';
-    case 'stale':
-      return 'border-amber-600/55 bg-amber-950/90 text-amber-100';
-    case '2d-only':
-      return 'border-stone-600/50 bg-stone-950/85 text-stone-400';
-    default:
-      return 'border-stone-600/50 bg-stone-950/85 text-stone-300';
-  }
+  /** Card art for the last focused slotted card, if any. */
+  focusImageUrl: string | null;
+  focusLabel: string;
+  /** Shown when ≥2 slots filled; null hides the badge. */
+  combinationLabel: string | null;
 }
 
 export function BuildPreviewPane({
   active,
-  glbParts,
-  fallbackMasterUrl,
-  fallbackLabel,
-  pairLabelDe,
-  pairStatus,
+  focusImageUrl,
+  focusLabel,
+  combinationLabel,
 }: BuildPreviewPaneProps) {
-  const [webgl, setWebgl] = useState(false);
   const [fullscreen, setFullscreen] = useState(false);
-
-  useEffect(() => {
-    setWebgl(detectWebGL());
-  }, []);
 
   useEffect(() => {
     if (!active) setFullscreen(false);
   }, [active]);
 
-  const orbitParts = glbParts.flatMap((p) =>
-    p.glbUrl ? [{ id: p.id, url: p.glbUrl }] : [],
-  );
-  const use3d = active && webgl && orbitParts.length > 0;
-  const mode: '2D' | '3D' = use3d ? '3D' : '2D';
-  const canExpand = use3d || Boolean(fallbackMasterUrl);
-  const modalTitle = use3d
-    ? glbParts.length === 1
-      ? `${glbParts[0].name} — 3D`
-      : '3D-Vorschau'
-    : `${fallbackLabel} — 2D`;
+  const canExpand = Boolean(focusImageUrl);
+  const modalTitle = combinationLabel ?? focusLabel;
 
   return (
     <div
@@ -89,49 +56,43 @@ export function BuildPreviewPane({
           className="rounded border border-amber-600/50 bg-stone-950/85 px-2 py-0.5 text-[10px] font-bold uppercase tracking-widest text-amber-200"
           data-testid="build-preview-mode"
         >
-          {mode}
+          Vorschau
         </span>
-        {pairLabelDe ? (
+        {combinationLabel ? (
           <span
-            className={`rounded border px-2 py-0.5 text-left text-[9px] font-semibold leading-snug ${pairTone(pairStatus)}`}
-            data-testid="build-preview-pair"
-            title={pairLabelDe}
+            className="rounded border border-violet-600/55 bg-violet-950/90 px-2 py-0.5 text-left text-[9px] font-semibold leading-snug text-violet-100"
+            data-testid="build-preview-combination"
+            title={combinationLabel}
           >
-            {pairLabelDe}
+            {combinationLabel}
           </span>
         ) : null}
       </div>
 
-      {use3d && !fullscreen ? (
-        <BuildOrbitCanvas
-          parts={orbitParts}
-          className="h-full w-full touch-none"
-          testId="build-preview-canvas"
-        />
-      ) : use3d && fullscreen ? (
-        <div
-          className="flex h-full items-center justify-center text-[11px] text-stone-500"
-          data-testid="build-preview-fullscreen-placeholder"
-        >
-          Vollbild geöffnet…
-        </div>
-      ) : fallbackMasterUrl ? (
+      {focusImageUrl ? (
         <ImageWithFallback
-          src={fallbackMasterUrl}
-          alt={fallbackLabel}
+          src={focusImageUrl}
+          alt={focusLabel}
           className="h-full w-full object-contain p-3"
-          data-testid="build-preview-2d"
+          data-testid="build-preview-card-art"
         />
       ) : (
         <div
-          className="flex h-full items-center justify-center p-4 text-center text-sm text-stone-500"
+          className="flex h-full flex-col items-center justify-center gap-2 p-4 text-center text-sm text-stone-500"
           data-testid="build-preview-empty"
         >
-          Live-Vorschau
-          <br />
-          <span className="mt-1 block text-xs text-stone-600">
-            Teile in die Slots legen
+          <span>Live-Vorschau</span>
+          <span className="text-xs text-stone-600">
+            Formel-Bausteine in die Formelplätze legen
           </span>
+          {combinationLabel ? (
+            <span
+              className="mt-1 text-[11px] font-semibold text-violet-300/90"
+              data-testid="build-preview-combination-empty-hint"
+            >
+              {combinationLabel}
+            </span>
+          ) : null}
         </div>
       )}
 
@@ -144,16 +105,10 @@ export function BuildPreviewPane({
         bodyClassName="flex min-h-0 flex-1 flex-col overflow-hidden p-0"
       >
         <div className="min-h-0 flex-1 w-full bg-stone-950">
-          {use3d ? (
-            <BuildOrbitCanvas
-              parts={orbitParts}
-              className="h-full w-full touch-none"
-              testId="build-preview-fullscreen-canvas"
-            />
-          ) : fallbackMasterUrl ? (
+          {focusImageUrl ? (
             <ImageWithFallback
-              src={fallbackMasterUrl}
-              alt={fallbackLabel}
+              src={focusImageUrl}
+              alt={focusLabel}
               className="h-full w-full object-contain p-6"
             />
           ) : null}

@@ -4,8 +4,8 @@
  */
 
 export const BUILD_SESSION_KEY = 'letz-fetz:build-session';
-/** v3: Formel slots (Technik/Essenz/Katalysator). v2 Fetzgerät sessions reset on load. */
-export const BUILD_SESSION_VERSION = 3 as const;
+/** v4: Combinate formula cards (V5 pack). v3 Meshy sessions reset on load. */
+export const BUILD_SESSION_VERSION = 4 as const;
 
 /** UI / storage slot ids — V5 Formelplätze. */
 export type BuildSlotRole = 'technik' | 'essenz' | 'katalysator';
