@@ -30,6 +30,12 @@ const sampleModel: ModelAsset = {
   id: 'mdl-1',
   glbUrl: '/vfx-workspace/mdl-1.glb',
   sourceImageId: 'img-1',
+  scale: { x: 1, y: 1, z: 1 },
+  pivot: { x: 0, y: 0, z: 0 },
+  bounds: {
+    min: { x: -0.5, y: 0, z: -0.5 },
+    max: { x: 0.5, y: 1, z: 0.5 },
+  },
 };
 
 const sampleTexture: TextureAsset = {
