@@ -252,6 +252,27 @@ export function packToPresentationCards(
     });
   }
 
+  const ITEM_TIMING_DE = {
+    action: 'Aktion',
+    reaction: 'Reaktion',
+  } as const;
+
+  for (const item of pack.items ?? []) {
+    cards.push({
+      id: item.id,
+      name: item.name,
+      type: 'Item',
+      element: 'Neutral',
+      stats_json: {},
+      effects: [
+        `Timing: ${ITEM_TIMING_DE[item.timing] ?? item.timing}`,
+        `Effekt: ${item.effectText}`,
+      ],
+      image_asset: resolveCardArtPath(item.id),
+      fromPack: true,
+    });
+  }
+
   return cards;
 }
 

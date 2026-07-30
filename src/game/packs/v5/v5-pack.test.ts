@@ -55,6 +55,25 @@ describe('V5_PACK', () => {
     }
   });
 
+  it('ships visual profiles on all 36 formula cards', () => {
+    for (const t of V5_PACK.techniques ?? []) {
+      expect(t.visual?.id, t.id).toBeTruthy();
+      expect(t.visual?.delivery, t.id).toBeTruthy();
+      expect(t.visual?.shape, t.id).toBeTruthy();
+    }
+    for (const e of V5_PACK.essences ?? []) {
+      expect(e.visual?.id, e.id).toBeTruthy();
+      expect(e.visual?.element, e.id).toBe(e.element);
+      expect(e.visual?.materialProfile, e.id).toBeTruthy();
+    }
+    for (const c of V5_PACK.catalysts ?? []) {
+      expect(c.visual?.id, c.id).toBeTruthy();
+      expect(c.visual?.timing, c.id).toBeTruthy();
+      expect(c.visual?.transformation, c.id).toBeTruthy();
+      expect(c.visual?.animationProfile, c.id).toBeTruthy();
+    }
+  });
+
   it('builds main deck including full formula + items', () => {
     const deck = buildMainDeckInstances(V5_PACK, createSeededRng(1));
     expect(deck).toHaveLength(V5_PACK_MAIN_DECK_SIZE);

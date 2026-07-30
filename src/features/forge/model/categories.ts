@@ -11,6 +11,7 @@ export const CARD_CATEGORIES = [
   { id: 'Arena', label: 'Arena', icon: '🏟️', expectedCount: 6 },
   { id: 'Glitch', label: 'Glitch', icon: '🌀', expectedCount: 10 },
   { id: 'Formula', label: 'Formeln', icon: '🧪', expectedCount: 36 },
+  { id: 'Item', label: 'Gegenstände', icon: '🎒', expectedCount: 6 },
 ] as const satisfies ReadonlyArray<{ id: CardKind; label: string; icon: string; expectedCount: number }>;
 
 export function categoryLabel(kind: string): string {

@@ -19,7 +19,8 @@ export type CardKind =
   | 'Element'
   | 'Arena'
   | 'Glitch'
-  | 'Formula';
+  | 'Formula'
+  | 'Item';
 
 export const CARD_KINDS: CardKind[] = [
   'Character',
@@ -28,6 +29,7 @@ export const CARD_KINDS: CardKind[] = [
   'Arena',
   'Glitch',
   'Formula',
+  'Item',
 ];
 
 export const CARD_ELEMENTS: CardElement[] = [
