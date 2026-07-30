@@ -11,6 +11,7 @@ import { VfxFlowCanvas } from './VfxFlowCanvas';
 import { VfxInspectorPanel } from './VfxInspectorPanel';
 import { VfxNodeLibrary, type VfxStudioMode } from './VfxNodeLibrary';
 import { useAssetPipelineGraph } from './useAssetPipelineGraph';
+import { VfxSharedPreview } from './preview';
 
 export type { VfxStudioMode };
 
@@ -103,16 +104,19 @@ export function VfxStudioView() {
                 onConnect={pipeline.onConnect}
                 onSelectNode={pipeline.setSelectedNodeId}
               />
+            ) : mode === 'formeln' ? (
+              <VfxSharedPreview
+                active
+                presetId="aura"
+                className="min-h-0 flex-1"
+                emptyMessage="Formel-Pipeline — Effekt auswählen"
+              />
             ) : (
               <div
                 className="flex flex-1 items-center justify-center rounded-lg border border-dashed border-stone-800 bg-stone-950/80 p-6 text-center"
                 data-testid="vfx-studio-mode-placeholder"
               >
-                <p className="text-xs text-stone-500">
-                  {mode === 'formeln'
-                    ? 'Formel-Pipeline — demnächst (#257).'
-                    : 'Batch-Render — demnächst (#261).'}
-                </p>
+                <p className="text-xs text-stone-500">Batch-Render — demnächst (#261).</p>
               </div>
             )}
           </main>
