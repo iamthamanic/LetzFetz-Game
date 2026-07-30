@@ -6,6 +6,7 @@ import React, { useEffect, useRef, useState } from 'react';
 import { FormulaLibraryPanel } from './FormulaLibraryPanel';
 import { BuildSlotsPanel } from './BuildSlotsPanel';
 import { BuildPreviewPane } from './BuildPreviewPane';
+import { mapCombinateSlotsToPresetLayers } from './vfx/preview/visualRecipePresetLayers';
 import { BuildResultCard } from './BuildResultCard';
 import { BuildSlotConnectionOverlay } from './BuildSlotConnectionOverlay';
 import { loadFormulaCardCatalog } from './data/formulaCardCatalog';
@@ -94,6 +95,7 @@ export function BuildCombineView({ active }: BuildCombineViewProps) {
   const combinationLabel = buildCombinationLabel(session.slots);
   const previewRoles = getFilledSlotRoles(session.slots);
   const filledSlotCount = countFilledSlots(session.slots);
+  const previewPreset = mapCombinateSlotsToPresetLayers(session.slots, catalog);
   const singleSlotted =
     previewRoles.length === 1
       ? findFormulaCard(catalog, session.slots[previewRoles[0]])
@@ -204,6 +206,7 @@ export function BuildCombineView({ active }: BuildCombineViewProps) {
               previewRoles={previewRoles}
               combinationLabel={combinationLabel}
               hasSlottedCards={filledSlotCount > 0}
+              presetId={previewPreset.primaryPresetId}
             />
           </div>
 

@@ -40,6 +40,8 @@ interface BuildPreviewPaneProps {
   combinationLabel: string | null;
   /** True when at least one formula slot is filled. */
   hasSlottedCards?: boolean;
+  /** Effekseer preset from VisualRecipe / MVP-9 mapper. */
+  presetId?: string;
   /** Bottom-edge anchor for Combinate connection overlay. */
   connectionTargetRef?: React.Ref<HTMLDivElement>;
 }
@@ -52,6 +54,7 @@ export const BuildPreviewPane = forwardRef<VfxSharedPreviewHandle, BuildPreviewP
       previewRoles,
       combinationLabel,
       hasSlottedCards = false,
+      presetId = 'aura',
       connectionTargetRef,
     },
     ref,
@@ -166,7 +169,7 @@ export const BuildPreviewPane = forwardRef<VfxSharedPreviewHandle, BuildPreviewP
             <VfxSharedPreview
               ref={ref}
               active={active}
-              presetId="aura"
+              presetId={presetId}
               className="h-full min-h-0 [&_[data-testid=vfx-shared-preview-preset-label]]:opacity-50"
               showTimeline={false}
               emptyMessage="Formel-Bausteine in die Formelplätze legen"
@@ -198,7 +201,7 @@ export const BuildPreviewPane = forwardRef<VfxSharedPreviewHandle, BuildPreviewP
             <VfxSharedPreview
               ref={ref}
               active={active && fullscreen}
-              presetId="aura"
+              presetId={presetId}
               className="h-full min-h-0"
               showTimeline={false}
               emptyMessage="Formel-Bausteine in die Formelplätze legen"
