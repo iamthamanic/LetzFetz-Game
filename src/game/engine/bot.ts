@@ -108,6 +108,44 @@ function bestBlockAction(
 }
 
 function pickBestBuild(state: GameState, pack: ContentPack, actions: GameAction[]): GameAction {
+  const v5 = isV5FormulaEnabled(rulesetFromState(state));
+
+  if (v5) {
+    const activate = actions.find((a) => a.type === 'FORMULA_ACTIVATE');
+    if (activate) {
+      const board = state.players[BOT_ID].formula;
+      const filled = [board.technik, board.essenz, board.katalysator].filter(Boolean).length;
+      if (filled >= 2) return activate;
+    }
+
+    const builds = actions.filter(
+      (a): a is Extract<
+        GameAction,
+        { type: 'FORMULA_BUILD' | 'FORMULA_REPLACE' | 'FORMULA_SCHNELLMIX' }
+      > =>
+        a.type === 'FORMULA_BUILD' ||
+        a.type === 'FORMULA_REPLACE' ||
+        a.type === 'FORMULA_SCHNELLMIX',
+    );
+    if (builds.length === 0) {
+      return actions.find((a) => a.type === 'FORMULA_ACTIVATE') ??
+        actions.find((a) => a.type === 'SKIP_BUILD') ??
+        { type: 'SKIP_BUILD' };
+    }
+
+    const prefer = (type: GameAction['type']) => builds.filter((a) => a.type === type);
+    for (const type of ['FORMULA_BUILD', 'FORMULA_REPLACE', 'FORMULA_SCHNELLMIX'] as const) {
+      const group = prefer(type);
+      if (group.length === 0) continue;
+      // Prefer essences when building (elemental), then any first legal.
+      const withEssence = group.find((a) => {
+        const card = state.players[BOT_ID].hand.find((c) => c.instanceId === a.cardInstanceId);
+        return card ? Boolean(pack.essences?.find((e) => e.id === card.defId)) : false;
+      });
+      return withEssence ?? group[0];
+    }
+  }
+
   const builds = actions.filter((a): a is Extract<GameAction, { type: 'BUILD_CARD' }> => a.type === 'BUILD_CARD');
   if (builds.length === 0) return { type: 'SKIP_BUILD' };
 
@@ -351,9 +389,23 @@ export function chooseBotAction(state: GameState, pack: ContentPack): GameAction
 
     if (state.players[BOT_ID].ultimateAvailable) {
       const ulti = actions.find((a) => a.type === 'PLAY_ULTIMATE');
-      if (ulti && (botHp <= 14 || humanHp <= 9 || (botHp <= 18 && humanHp >= 16))) {
+      const v5 = isV5FormulaEnabled(rulesetFromState(state));
+      const chargeOk =
+        !v5 || state.players[BOT_ID].fetzCharge >= 3;
+      if (
+        ulti &&
+        chargeOk &&
+        (botHp <= 14 || humanHp <= 9 || (botHp <= 18 && humanHp >= 16) || (v5 && state.players[BOT_ID].fetzCharge >= 3))
+      ) {
         return ulti;
       }
+    }
+
+    const items = actions.filter(
+      (a): a is Extract<GameAction, { type: 'PLAY_ITEM' }> => a.type === 'PLAY_ITEM',
+    );
+    if (items.length > 0 && botHp <= 16) {
+      return items[0];
     }
 
     const challenges = actions.filter(
