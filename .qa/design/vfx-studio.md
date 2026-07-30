@@ -21,7 +21,9 @@ Badges: immer `Formel` + Rolle (`Technik` \| `Essenz` \| `Katalysator` \| `Kombi
 ## Runtime
 
 - `tools/vfx-worker/` lokal, Port ~8787 (Meshy-Proxy, Jobs, Effekseer-CLI, Batch)
-- Preview: Browser Three.js + Effekseer WebGL
+- Preview: Browser Three.js + **real Effekseer WebGL** (`@zaniar/effekseer-webgl-wasm` via `effekseerAdapter.ts`)
+- Committed presets: `public/vfx/effects/*.efkefc` (+ `Parts/` / `Texture/`); runtime binary under `public/vfx/effekseer/`
+- **Wiring design:** [`effekseer-runtime-wiring.md`](./effekseer-runtime-wiring.md) (Desktop authors `.efkefc`; Studio loads/previews/binds; no in-app editor; no Play-board Effekseer V1)
 - CLI/Scripts teilen dieselbe Worker-API
 - WIP: lokal / gitignored `vfx-workspace/`
 - Approved: Repo `public/vfx/`, Card-Art `public/cards/formula/`
