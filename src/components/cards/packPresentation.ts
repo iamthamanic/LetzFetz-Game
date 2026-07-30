@@ -1,5 +1,5 @@
 /**
- * Neutral pack → card presentation records (shared by Forge and Sandbox).
+ * Neutral pack → card presentation records (shared by Forge and Play).
  * Location: src/components/cards/packPresentation.ts
  */
 import type { ContentPack, Element } from '../../game/types';
