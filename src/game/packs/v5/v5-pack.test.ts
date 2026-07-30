@@ -16,7 +16,7 @@ import {
 import { formulaSlotForDef } from '../../engine/formulaSlots';
 
 describe('V5_PACK', () => {
-  it('exports 12+12+12 formula + 6 items', () => {
+  it('exports 12+12+12 formula + 6 items and §3.1 deck size 106', () => {
     expect(V5_PACK.techniques).toHaveLength(12);
     expect(V5_PACK.essences).toHaveLength(12);
     expect(V5_PACK.catalysts).toHaveLength(12);
@@ -25,6 +25,11 @@ describe('V5_PACK', () => {
     expect(V5_MIX.essence).toBe(12);
     expect(V5_MIX.catalyst).toBe(12);
     expect(V5_MIX.item).toBe(6);
+    expect(V5_MIX.element).toBe(54);
+    expect(V5_PACK.elementCards).toHaveLength(54);
+    expect(V5_PACK.elementCards.filter((c) => c.cardType === 'attack')).toHaveLength(24);
+    expect(V5_PACK.elementCards.filter((c) => c.cardType === 'block')).toHaveLength(24);
+    expect(V5_PACK.elementCards.filter((c) => c.cardType === 'boost')).toHaveLength(6);
     expect(V5_PACK_MAIN_DECK_SIZE).toBe(
       V5_MIX.element +
         V5_MIX.technique +
@@ -33,9 +38,9 @@ describe('V5_PACK', () => {
         V5_MIX.item +
         V5_MIX.glitch,
     );
-    // Concept §3.1 target is 106 with 54 elements; BASE_PACK still contributes 60.
     expect(V5_TARGET_MAIN_DECK_SIZE).toBe(106);
-    expect(V5_PACK_MAIN_DECK_SIZE).toBe(112);
+    expect(V5_PACK_MAIN_DECK_SIZE).toBe(106);
+    expect(V5_PACK_RULESET.mainDeckSize).toBe(106);
   });
 
   it('ships resolving formulaEffect on every formula card', () => {
