@@ -3,8 +3,11 @@
  * Location: src/features/play/board/phaseCoachHint.ts
  */
 import type { GameState } from '../../../game';
+import { isV5FormulaEnabled } from '../../../game';
+import { rulesetFromState } from '../../../game/engine/rulesetFromState';
 import type { PendingIntent } from './gameActionHelpers';
 import type { GameViewModel } from './buildGameViewModel';
+import { formulaChallengeTargetIds } from './gameActionHelpers';
 
 export interface PhaseCoachContext {
   state: GameState;
@@ -38,21 +41,31 @@ export function buildPhaseCoachHint({
   }
 
   if (pending?.type === 'action-select') {
-    return 'Wähle eine Aktionskarte auf der Hand — Angriff, Boost oder Glitch.';
+    return 'Wähle eine Aktionskarte auf der Hand — Angriff, Boost, Glitch oder Gegenstand.';
   }
   if (pending?.type === 'attack') {
-    const hasTargets = view.botBoundSlots.some((s) => s.isTargetable);
+    const v5 = isV5FormulaEnabled(rulesetFromState(state));
+    const hasTargets = v5
+      ? formulaChallengeTargetIds(view.legalActions, pending.attackInstanceId).length > 0
+      : view.botBoundSlots.some((s) => s.isTargetable);
     if (hasTargets) {
       return pending.targetBoundInstanceId
         ? 'Ziel gewählt — unten „Herausfordern“ oder „Direkt angreifen“.'
-        : 'Gegner-Engine antippen als Ziel, dann unten „Herausfordern“ — oder „Direkt angreifen“.';
+        : v5
+          ? 'Gegner-Formelkomponente antippen als Ziel, dann unten „Herausfordern“ — oder „Direkt angreifen“.'
+          : 'Gegner-Engine antippen als Ziel, dann unten „Herausfordern“ — oder „Direkt angreifen“.';
     }
     return 'Kein Herausforderungsziel — unten „Direkt angreifen“ gegen die LP des Gegners.';
   }
   if (pending?.type === 'build-select') {
-    return 'Wähle eine baubare Handkarte — Glitch-Karten sind ausgegraut.';
+    return isV5FormulaEnabled(rulesetFromState(state))
+      ? 'Wähle eine Formelkarte zum Bauen, Ersetzen oder Schnellmix.'
+      : 'Wähle eine baubare Handkarte — Glitch-Karten sind ausgegraut.';
   }
   if (pending?.type === 'build') {
+    if (isV5FormulaEnabled(rulesetFromState(state))) {
+      return 'Formelkarte wird direkt gebaut oder ersetzt.';
+    }
     const hasFreeSlot = view.humanBoundSlots.some((s) => !s.instanceId);
     if (hasFreeSlot) {
       return 'Klicke auf einen freien Engine-Slot, um die Karte zu bauen.';
@@ -79,26 +92,45 @@ export function buildPhaseCoachHint({
         ? 'Ziehe eine Karte vom Nachziehstapel.'
         : 'Ziehphase — keine Karte verfügbar.';
     case 'build': {
-      const canBuild = legal.some((a) => a.type === 'BUILD_CARD');
+      const v5 = isV5FormulaEnabled(rulesetFromState(state));
+      const canBuild = legal.some(
+        (a) =>
+          a.type === 'BUILD_CARD' ||
+          a.type === 'FORMULA_BUILD' ||
+          a.type === 'FORMULA_REPLACE' ||
+          a.type === 'FORMULA_SCHNELLMIX',
+      );
+      const canActivate = legal.some((a) => a.type === 'FORMULA_ACTIVATE');
       if (canBuild) {
-        return 'Tippe „Engine bauen“, um eine Karte in die Engine zu legen — oder „Skip Bau-Phase“.';
+        return v5
+          ? 'Tippe „Formel bauen“, um eine Formelkarte zu legen — oder „Skip Formelphase“.'
+          : 'Tippe „Engine bauen“, um eine Karte in die Engine zu legen — oder „Skip Bau-Phase“.';
+      }
+      if (canActivate) {
+        return 'Tippe „Formel aktivieren“, um aufgerichtete Komponenten zu aktivieren — oder „Skip Formelphase“.';
       }
       if (legal.some((a) => a.type === 'SKIP_BUILD')) {
-        return 'Keine baubaren Karten — nur „Skip Bau-Phase“ möglich.';
+        return v5
+          ? 'Keine Formelkarten — nur „Skip Formelphase“ möglich.'
+          : 'Keine baubaren Karten — nur „Skip Bau-Phase“ möglich.';
       }
-      return 'Bau-Phase.';
+      return v5 ? 'Formelphase.' : 'Bau-Phase.';
     }
     case 'action': {
       const canAttack = legal.some((a) => a.type === 'PLAY_ATTACK');
       const canBoost = legal.some((a) => a.type === 'PLAY_BOOST');
       const canUlti = legal.some((a) => a.type === 'PLAY_ULTIMATE');
       const canGlitch = legal.some((a) => a.type === 'PLAY_GLITCH');
-      const canHandAction = canAttack || canBoost || canGlitch;
+      const canItem = legal.some((a) => a.type === 'PLAY_ITEM');
+      const v5 = isV5FormulaEnabled(rulesetFromState(state));
+      const canHandAction = canAttack || canBoost || canGlitch || canItem;
       if (canHandAction) {
         return 'Tippe „Aktion spielen“, um eine Handkarte als Aktion zu wählen — oder lasse die Hauptaktion aus.';
       }
       if (canUlti) {
-        return 'Keine Hand-Aktion möglich — spiele die Ultimativkarte oder lasse die Hauptaktion aus.';
+        return v5
+          ? 'Keine Hand-Aktion möglich — spiele die Großformel oder lasse die Hauptaktion aus.'
+          : 'Keine Hand-Aktion möglich — spiele die Ultimativkarte oder lasse die Hauptaktion aus.';
       }
       return 'Aktionsphase — beende die Hauptaktion.';
     }

@@ -52,7 +52,7 @@ export interface HandCardView {
   glitchName: string | null;
   glitchDef: GlitchCardDef | null;
   isPlayable: boolean;
-  interaction: 'attack' | 'boost' | 'build' | 'block' | 'discard-draw' | 'activate-discard' | 'play-glitch' | null;
+  interaction: 'attack' | 'boost' | 'build' | 'block' | 'discard-draw' | 'activate-discard' | 'play-glitch' | 'play-item' | null;
   buildNeedsReplace: boolean;
   isActivateDiscardOption: boolean;
 }
@@ -205,7 +205,19 @@ function handInteraction(
   if (legalActions.some((a) => a.type === 'PLAY_BOOST' && a.cardInstanceId === instanceId)) {
     return 'boost';
   }
-  if (legalActions.some((a) => a.type === 'BUILD_CARD' && a.cardInstanceId === instanceId)) {
+  if (legalActions.some((a) => a.type === 'PLAY_ITEM' && a.cardInstanceId === instanceId)) {
+    return 'play-item';
+  }
+  if (
+    legalActions.some(
+      (a) =>
+        (a.type === 'BUILD_CARD' ||
+          a.type === 'FORMULA_BUILD' ||
+          a.type === 'FORMULA_REPLACE' ||
+          a.type === 'FORMULA_SCHNELLMIX') &&
+        a.cardInstanceId === instanceId,
+    )
+  ) {
     return 'build';
   }
   if (legalActions.some((a) => a.type === 'PLAY_BLOCK' && a.cardInstanceId === instanceId)) {
@@ -307,7 +319,10 @@ export function buildGameViewModel(
     const buildModeOpen = pending?.type === 'build-select' || pending?.type === 'build';
     const actionModeOpen = pending?.type === 'action-select' || pending?.type === 'attack';
     const isActionHandPlay =
-      interaction === 'attack' || interaction === 'boost' || interaction === 'play-glitch';
+      interaction === 'attack' ||
+      interaction === 'boost' ||
+      interaction === 'play-glitch' ||
+      interaction === 'play-item';
 
     let isPlayable = false;
     if (state.phase === 'build' && isHumanTurn) {

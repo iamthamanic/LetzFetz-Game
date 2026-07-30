@@ -13,6 +13,7 @@ import {
   botNeedsToAct,
   rollD6,
   rulesetFromState,
+  isV5FormulaEnabled,
   type GameState,
   type GameAction,
   type PlayerId,
@@ -43,6 +44,7 @@ import { PlaymatBoard } from './board/PlaymatBoard';
 import { MatchIntro } from './setup/MatchIntro';
 import { buildGameViewModel } from './board/buildGameViewModel';
 import type { PendingIntent } from './board/gameActionHelpers';
+import { formulaChallengeTargetIds } from './board/gameActionHelpers';
 import { Button } from '../../components/ui/Button';
 import { Badge } from '../../components/ui/Badge';
 import { ScrollText } from 'lucide-react';
@@ -943,9 +945,19 @@ export function PlayView({ onBattleMusicActiveChange }: PlayViewProps) {
             <ActionPhaseBar
               phase={state.phase}
               pending={pendingIntent}
-              challengeTargetCount={view.botBoundSlots.filter((s) => s.isTargetable).length}
+              challengeTargetCount={
+                isV5FormulaEnabled(rulesetFromState(state))
+                  ? pendingIntent?.type === 'attack'
+                    ? formulaChallengeTargetIds(
+                        view.legalActions,
+                        pendingIntent.attackInstanceId,
+                      ).length
+                    : 0
+                  : view.botBoundSlots.filter((s) => s.isTargetable).length
+              }
               {...actionPhaseLegalFlags(view.legalActions)}
               inputLocked={presentation.isInputLocked || !coachFooterReveal}
+              v5Formula={isV5FormulaEnabled(rulesetFromState(state))}
               onStartAction={() => setPendingIntent({ type: 'action-select' })}
               onDirectAttack={() => {
                 if (pendingIntent?.type !== 'attack') return;
@@ -954,10 +966,19 @@ export function PlayView({ onBattleMusicActiveChange }: PlayViewProps) {
               onChallenge={() => {
                 if (pendingIntent?.type !== 'attack') return;
                 const selected = pendingIntent.targetBoundInstanceId;
-                const onlyTarget = view.botBoundSlots.filter((s) => s.isTargetable);
+                const v5 = isV5FormulaEnabled(rulesetFromState(state));
+                const formulaTargets = formulaChallengeTargetIds(
+                  view.legalActions,
+                  pendingIntent.attackInstanceId,
+                );
+                const onlyTarget = v5
+                  ? formulaTargets
+                  : view.botBoundSlots
+                      .filter((s) => s.isTargetable)
+                      .map((s) => s.instanceId)
+                      .filter((id): id is string => Boolean(id));
                 const targetId =
-                  selected ??
-                  (onlyTarget.length === 1 ? onlyTarget[0]?.instanceId : undefined);
+                  selected ?? (onlyTarget.length === 1 ? onlyTarget[0] : undefined);
                 if (!targetId) return;
                 playChallenge(pendingIntent.attackInstanceId, targetId);
               }}
@@ -973,12 +994,26 @@ export function PlayView({ onBattleMusicActiveChange }: PlayViewProps) {
             />
           ) : state.phase === 'build' && view.isHumanTurn ? (
             <BuildPhaseBar
-              canBuild={view.legalActions.some((a) => a.type === 'BUILD_CARD')}
+              canBuild={view.legalActions.some(
+                (a) =>
+                  a.type === 'BUILD_CARD' ||
+                  a.type === 'FORMULA_BUILD' ||
+                  a.type === 'FORMULA_REPLACE' ||
+                  a.type === 'FORMULA_SCHNELLMIX',
+              )}
+              canActivateFormula={view.legalActions.some(
+                (a) => a.type === 'FORMULA_ACTIVATE',
+              )}
               buildModeActive={
                 pendingIntent?.type === 'build-select' || pendingIntent?.type === 'build'
               }
               inputLocked={presentation.isInputLocked || !coachFooterReveal}
+              v5Formula={isV5FormulaEnabled(rulesetFromState(state))}
               onStartBuild={() => setPendingIntent({ type: 'build-select' })}
+              onActivateFormula={() => {
+                handleDispatch({ type: 'FORMULA_ACTIVATE' });
+                setPendingIntent(null);
+              }}
               onSkip={() => {
                 handleDispatch({ type: 'SKIP_BUILD' });
                 setPendingIntent(null);

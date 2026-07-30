@@ -21,6 +21,10 @@ interface FormulaRigProps {
   formula: FormulaBoard;
   pack: ContentPack;
   testId: string;
+  /** Opponent components that are legal CHALLENGE targets. */
+  targetableInstanceIds?: string[];
+  selectedTargetId?: string | null;
+  onComponentClick?: (instanceId: string) => void;
 }
 
 function SlotChip({
@@ -28,11 +32,17 @@ function SlotChip({
   comp,
   pack,
   emphasis,
+  targetable,
+  selected,
+  onClick,
 }: {
   role: keyof typeof SLOT_LABEL_DE;
   comp: FormulaComponentInstance | null;
   pack: ContentPack;
   emphasis: 'core' | 'ring' | 'vessel';
+  targetable: boolean;
+  selected: boolean;
+  onClick?: () => void;
 }) {
   const def = comp ? findFormulaComponentDef(pack, comp.defId) : undefined;
   const name = def?.name ?? '—';
@@ -47,11 +57,34 @@ function SlotChip({
     : comp?.exhausted
       ? 'erschöpft'
       : null;
+  const interactive = Boolean(onClick && targetable);
 
   return (
     <div
-      className={`flex min-w-[5.5rem] max-w-[7rem] flex-col items-center gap-0.5 rounded-lg border px-2 py-2 text-center ${tone}`}
+      className={`flex min-w-[5.5rem] max-w-[7rem] flex-col items-center gap-0.5 rounded-lg border px-2 py-2 text-center transition ${tone} ${
+        selected
+          ? 'ring-2 ring-amber-400 ring-offset-2 ring-offset-stone-950'
+          : targetable
+            ? 'cursor-pointer hover:ring-2 hover:ring-amber-500/60'
+            : ''
+      }`}
       data-formula-slot={role}
+      data-targetable={targetable ? 'true' : undefined}
+      data-challenge-selected={selected ? 'true' : undefined}
+      role={interactive ? 'button' : undefined}
+      tabIndex={interactive ? 0 : undefined}
+      onClick={interactive ? onClick : undefined}
+      onKeyDown={
+        interactive
+          ? (e) => {
+              if (e.key === 'Enter' || e.key === ' ') {
+                e.preventDefault();
+                onClick?.();
+              }
+            }
+          : undefined
+      }
+      title={targetable ? 'Als Herausforderungsziel wählen' : undefined}
     >
       <span className="text-[9px] font-bold uppercase tracking-wider text-stone-400">
         {SLOT_LABEL_DE[role]}
@@ -60,13 +93,49 @@ function SlotChip({
       {stateNote ? (
         <span className="text-[9px] uppercase tracking-wide text-rose-300">{stateNote}</span>
       ) : null}
+      {targetable ? (
+        <span className="text-[9px] font-medium text-amber-300">Ziel</span>
+      ) : null}
     </div>
   );
 }
 
-export function FormulaRig({ label, formula, pack, testId }: FormulaRigProps) {
+export function FormulaRig({
+  label,
+  formula,
+  pack,
+  testId,
+  targetableInstanceIds = [],
+  selectedTargetId = null,
+  onComponentClick,
+}: FormulaRigProps) {
   const recipe = buildVisualRecipe({ pack, formula });
   const summary = describeVisualRecipeDe(recipe);
+  const targetSet = new Set(targetableInstanceIds);
+
+  const chip = (
+    role: keyof typeof SLOT_LABEL_DE,
+    comp: FormulaComponentInstance | null,
+    emphasis: 'core' | 'ring' | 'vessel',
+  ) => {
+    const id = comp?.instanceId;
+    const targetable = Boolean(id && targetSet.has(id));
+    return (
+      <SlotChip
+        role={role}
+        comp={comp}
+        pack={pack}
+        emphasis={emphasis}
+        targetable={targetable}
+        selected={Boolean(id && selectedTargetId === id)}
+        onClick={
+          id && onComponentClick && targetable
+            ? () => onComponentClick(id)
+            : undefined
+        }
+      />
+    );
+  };
 
   return (
     <div className="flex flex-col gap-2" data-testid={testId}>
@@ -78,9 +147,9 @@ export function FormulaRig({ label, formula, pack, testId }: FormulaRigProps) {
         role="group"
         aria-label={summary}
       >
-        <SlotChip role="essenz" comp={formula.essenz} pack={pack} emphasis="vessel" />
-        <SlotChip role="technik" comp={formula.technik} pack={pack} emphasis="core" />
-        <SlotChip role="katalysator" comp={formula.katalysator} pack={pack} emphasis="ring" />
+        {chip('essenz', formula.essenz, 'vessel')}
+        {chip('technik', formula.technik, 'core')}
+        {chip('katalysator', formula.katalysator, 'ring')}
       </div>
       <p className="text-[11px] text-stone-400" data-testid={`${testId}-recipe`}>
         {summary}

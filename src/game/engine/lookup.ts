@@ -1,4 +1,10 @@
-import type { ContentPack, ElementCardDef, EnginePartCardDef, GlitchCardDef } from '../types';
+import type {
+  ContentPack,
+  ElementCardDef,
+  EnginePartCardDef,
+  GlitchCardDef,
+  ItemCardDef,
+} from '../types';
 
 export function findElementDef(
   pack: ContentPack,
@@ -16,4 +22,8 @@ export function findEnginePartDef(
 
 export function findGlitchDef(pack: ContentPack, defId: string): GlitchCardDef | undefined {
   return pack.glitches.find((g) => g.id === defId);
+}
+
+export function findItemDef(pack: ContentPack, defId: string): ItemCardDef | undefined {
+  return pack.items?.find((i) => i.id === defId);
 }

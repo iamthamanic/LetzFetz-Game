@@ -26,6 +26,14 @@ export function buildRequiresReplace(
   legalActions: GameAction[],
   handInstanceId: string,
 ): boolean {
+  if (
+    legalActions.some(
+      (a) => a.type === 'FORMULA_REPLACE' && a.cardInstanceId === handInstanceId,
+    )
+  ) {
+    // FORMULA_REPLACE does not need a slot pick — still flag for coach copy.
+    return false;
+  }
   const buildActions = legalActions.filter(
     (a) => a.type === 'BUILD_CARD' && a.cardInstanceId === handInstanceId,
   );
@@ -36,6 +44,18 @@ export function findDirectBuildAction(
   legalActions: GameAction[],
   handInstanceId: string,
 ): GameAction | null {
+  const formulaBuild =
+    legalActions.find(
+      (a) => a.type === 'FORMULA_BUILD' && a.cardInstanceId === handInstanceId,
+    ) ??
+    legalActions.find(
+      (a) => a.type === 'FORMULA_REPLACE' && a.cardInstanceId === handInstanceId,
+    ) ??
+    legalActions.find(
+      (a) => a.type === 'FORMULA_SCHNELLMIX' && a.cardInstanceId === handInstanceId,
+    );
+  if (formulaBuild) return formulaBuild;
+
   return (
     legalActions.find(
       (a) =>
@@ -45,6 +65,30 @@ export function findDirectBuildAction(
     ) ?? null
   );
 }
+
+export function findPlayItemAction(
+  legalActions: GameAction[],
+  cardInstanceId: string,
+): GameAction | null {
+  return (
+    legalActions.find(
+      (a) => a.type === 'PLAY_ITEM' && a.cardInstanceId === cardInstanceId,
+    ) ?? null
+  );
+}
+
+export function formulaChallengeTargetIds(
+  legalActions: GameAction[],
+  attackInstanceId: string,
+): string[] {
+  return legalActions
+    .filter(
+      (a): a is Extract<GameAction, { type: 'CHALLENGE' }> =>
+        a.type === 'CHALLENGE' && a.attackCardInstanceId === attackInstanceId,
+    )
+    .map((a) => a.targetBoundInstanceId);
+}
+
 
 export function findBuildReplaceAction(
   legalActions: GameAction[],

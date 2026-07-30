@@ -16,6 +16,8 @@ interface ActionPhaseBarProps {
   canUltimate: boolean;
   canSkipMain: boolean;
   inputLocked?: boolean;
+  /** When true, DE copy uses Großformel / Formel-Ziel wording. */
+  v5Formula?: boolean;
   onStartAction: () => void;
   onDirectAttack: () => void;
   onChallenge: () => void;
@@ -25,7 +27,7 @@ interface ActionPhaseBarProps {
 }
 
 const NO_ACTION_HINT =
-  'Keine Aktionskarten auf der Hand — Angriff, Boost oder Glitch nötig.';
+  'Keine Aktionskarten auf der Hand — Angriff, Boost, Glitch oder Gegenstand nötig.';
 
 export function ActionPhaseBar({
   phase,
@@ -35,6 +37,7 @@ export function ActionPhaseBar({
   canUltimate,
   canSkipMain,
   inputLocked = false,
+  v5Formula = false,
   onStartAction,
   onDirectAttack,
   onChallenge,
@@ -54,6 +57,16 @@ export function ActionPhaseBar({
     challengeTargetCount > 0 &&
     (Boolean(selectedTarget) || challengeTargetCount === 1);
 
+  const ultimateLabel = v5Formula ? 'Großformel spielen' : 'Ultimativkarte spielen';
+  const challengeHint =
+    challengeTargetCount === 0
+      ? 'Kein Herausforderungsziel verfügbar'
+      : selectedTarget
+        ? 'Herausforderung gegen das gewählte Ziel'
+        : v5Formula
+          ? 'Gegner-Formelkomponente als Ziel tippen'
+          : 'Gegner-Engine-Karte als Ziel tippen';
+
   return (
     <div
       data-testid="action-phase-bar"
@@ -71,7 +84,7 @@ export function ActionPhaseBar({
             title={
               !canPlayAction
                 ? NO_ACTION_HINT
-                : 'Wähle eine Handkarte als Aktion (Angriff, Boost oder Glitch)'
+                : 'Wähle eine Handkarte als Aktion (Angriff, Boost, Glitch oder Gegenstand)'
             }
           >
             Aktion spielen
@@ -93,13 +106,7 @@ export function ActionPhaseBar({
             variant="accent"
             size="sm"
             disabled={inputLocked || !canChallenge}
-            title={
-              challengeTargetCount === 0
-                ? 'Kein Herausforderungsziel verfügbar'
-                : selectedTarget
-                  ? 'Herausforderung gegen das gewählte Ziel'
-                  : 'Gegner-Engine-Karte als Ziel tippen'
-            }
+            title={challengeHint}
             onClick={onChallenge}
             data-testid="action-phase-challenge"
           >
@@ -134,7 +141,7 @@ export function ActionPhaseBar({
         onClick={onUltimate}
         data-testid="action-phase-ultimate"
       >
-        Ultimativkarte spielen
+        {ultimateLabel}
       </Button>
       <Button
         variant="secondary"
@@ -157,7 +164,10 @@ export function actionPhaseLegalFlags(legalActions: GameAction[]): {
   return {
     canPlayAction: legalActions.some(
       (a) =>
-        a.type === 'PLAY_ATTACK' || a.type === 'PLAY_BOOST' || a.type === 'PLAY_GLITCH',
+        a.type === 'PLAY_ATTACK' ||
+        a.type === 'PLAY_BOOST' ||
+        a.type === 'PLAY_GLITCH' ||
+        a.type === 'PLAY_ITEM',
     ),
     canUltimate: legalActions.some((a) => a.type === 'PLAY_ULTIMATE'),
     canSkipMain: legalActions.some((a) => a.type === 'END_TURN'),

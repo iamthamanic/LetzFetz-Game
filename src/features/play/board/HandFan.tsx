@@ -26,6 +26,7 @@ interface HandFanProps {
   onDiscardDraw: (instanceId: string) => void;
   onActivateDiscard: (instanceId: string) => void;
   onPlayGlitch: (instanceId: string) => void;
+  onPlayItem?: (instanceId: string) => void;
 }
 
 export function HandFan({
@@ -43,6 +44,7 @@ export function HandFan({
   onDiscardDraw,
   onActivateDiscard,
   onPlayGlitch,
+  onPlayItem,
 }: HandFanProps) {
   const scrollRef = useRef<HTMLDivElement>(null);
   const shown = (visibleCount !== undefined ? cards.slice(0, visibleCount) : cards).filter(
@@ -115,6 +117,9 @@ export function HandFan({
                   break;
                 case 'play-glitch':
                   onPlayGlitch(card.instanceId);
+                  break;
+                case 'play-item':
+                  onPlayItem?.(card.instanceId);
                   break;
                 default:
                   break;
