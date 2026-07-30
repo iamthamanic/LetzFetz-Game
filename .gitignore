@@ -3,7 +3,7 @@ node_modules/
 
 # Build / env
 dist/
-build/
+/build/
 .env
 .env.local
 .env.*.local
