@@ -6,9 +6,11 @@ import React, { useEffect, useState } from 'react';
 import { Boxes, Layers, Workflow } from 'lucide-react';
 import { ReactFlowProvider } from '@xyflow/react';
 import { Tabs, type TabItem } from '../../../components/ui/Tabs';
+import { VfxCreditConfirmModal } from './VfxCreditConfirmModal';
 import { VfxFlowCanvas } from './VfxFlowCanvas';
 import { VfxInspectorPanel } from './VfxInspectorPanel';
 import { VfxNodeLibrary, type VfxStudioMode } from './VfxNodeLibrary';
+import { useAssetPipelineGraph } from './useAssetPipelineGraph';
 
 export type { VfxStudioMode };
 
@@ -53,6 +55,7 @@ function readInitialMode(): VfxStudioMode {
 
 export function VfxStudioView() {
   const [mode, setMode] = useState<VfxStudioMode>(() => readInitialMode());
+  const pipeline = useAssetPipelineGraph(mode === 'assets');
 
   useEffect(() => {
     try {
@@ -85,13 +88,48 @@ export function VfxStudioView() {
 
       <ReactFlowProvider>
         <div className="flex min-h-0 flex-1 overflow-hidden">
-          <VfxNodeLibrary mode={mode} />
+          <VfxNodeLibrary
+            mode={mode}
+            onAddNode={pipeline.addPipelineNode}
+            savedTechniques={pipeline.savedTechniques}
+          />
           <main className="flex min-h-0 min-w-0 flex-1 flex-col p-2 sm:p-3">
-            <VfxFlowCanvas />
+            {mode === 'assets' ? (
+              <VfxFlowCanvas
+                nodes={pipeline.nodes}
+                edges={pipeline.edges}
+                onNodesChange={pipeline.onNodesChange}
+                onEdgesChange={pipeline.onEdgesChange}
+                onConnect={pipeline.onConnect}
+                onSelectNode={pipeline.setSelectedNodeId}
+              />
+            ) : (
+              <div
+                className="flex flex-1 items-center justify-center rounded-lg border border-dashed border-stone-800 bg-stone-950/80 p-6 text-center"
+                data-testid="vfx-studio-mode-placeholder"
+              >
+                <p className="text-xs text-stone-500">
+                  {mode === 'formeln'
+                    ? 'Formel-Pipeline — demnächst (#257).'
+                    : 'Batch-Render — demnächst (#261).'}
+                </p>
+              </div>
+            )}
           </main>
-          <VfxInspectorPanel />
+          <VfxInspectorPanel
+            selectedNode={pipeline.selectedNode}
+            onPromptChange={pipeline.updateSelectedPrompt}
+            onTechniqueNameChange={pipeline.updateSelectedTechniqueName}
+          />
         </div>
       </ReactFlowProvider>
+
+      <VfxCreditConfirmModal
+        open={pipeline.creditConfirm.open}
+        credits={pipeline.creditConfirm.credits}
+        onConfirm={pipeline.confirmCreditAndGenerate}
+        onCancel={pipeline.cancelCreditConfirm}
+      />
     </div>
   );
 }
