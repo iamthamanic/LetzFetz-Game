@@ -49,12 +49,12 @@ describe('card art manifest', () => {
     expect(illustrationKeyForCardId('shadow-block-4')).toBe('shadow-block');
   });
 
-  it('resolves public paths under /cards/{kind}/', () => {
-    expect(resolveCardArtPath('knuspergnom')).toBe('/cards/character/knuspergnom.png');
-    expect(resolveCardArtPath('fire-attack-2')).toBe('/cards/element/fire-attack.png');
-    expect(resolveCardArtPath('arena-spaeti')).toBe('/cards/arena/arena-spaeti.png');
-    expect(resolveCardArtPath('glitch-riss')).toBe('/cards/glitch/glitch-riss.png');
-    expect(resolveCardArtPath('ulti-knuspergnom')).toBe('/cards/ultimate/ulti-knuspergnom.png');
+  it('resolves V5 formula component art under /cards/formula/', () => {
+    expect(resolveCardArtPath('v5-technik-durchschuss')).toBe('/cards/formula/durchschuss.png');
+    expect(resolveCardArtPath('v5-essenz-wirbelluft')).toBe('/cards/formula/wirbelluft.png');
+    expect(resolveCardArtPath('v5-essenz-sogschatten')).toBe('/cards/formula/sogschatten.png');
+    expect(resolveCardArtPath('v5-katalysator-spiegelung')).toBe('/cards/formula/spiegelung.png');
+    expect(resolveCardArtPath('v5-item-rostiger-nagel')).toBe('');
   });
 
   it('resolves MVP trio engine PNGs when shipped; blanks others', () => {
