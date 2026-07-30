@@ -12,4 +12,11 @@ export {
   V5_PACK_MAIN_DECK_SIZE,
   V5_PACK_RULESET,
 } from './packs/v5';
+export { mergeFormulaPlayOverlay, countOverlayDeckExtras } from './packs/mergeFormulaPlayOverlay';
+export type {
+  DeckOptInEntry,
+  ActivatedRecipeEntry,
+  FormulaBausteinRole,
+  RecipeVersionSnapshot,
+} from './packs/formulaPlayOverlayTypes';
 export { formatCharacterElements, getUltimateForCharacter } from './packs/characterSetup';

@@ -12,6 +12,8 @@ import {
   type ContentPack,
   type RulesetConfig,
 } from '../../../game';
+import { mergeFormulaPlayOverlay } from '../../../game/packs/mergeFormulaPlayOverlay';
+import { loadFormulaPlayOptInStore } from '../../../services/storage/formulaPlayOptIn';
 
 /** Kartenset tile in Play setup. */
 export type GamePackChoice = 'base' | 'p100' | 'v3' | 'v5';
@@ -25,8 +27,11 @@ export interface ResolvedGamePackChoice {
 /** Resolve Kartenset tile to engine pack + optional ruleset / playtest HP cap. */
 export function resolveGamePackChoice(choice: GamePackChoice): ResolvedGamePackChoice {
   switch (choice) {
-    case 'v5':
-      return { pack: V5_PACK, ruleset: V5_PACK_RULESET, playtestHpCap: 20 };
+    case 'v5': {
+      const optIn = loadFormulaPlayOptInStore();
+      const pack = mergeFormulaPlayOverlay(V5_PACK, optIn.deckOptIns);
+      return { pack, ruleset: V5_PACK_RULESET, playtestHpCap: 20 };
+    }
     case 'p100':
       return { pack: V2_P100_PACK, ruleset: P100_RULESET, playtestHpCap: 30 };
     case 'v3':

@@ -14,6 +14,7 @@ export interface VfxRegistryTechniqueSummary {
   id: string;
   name: string;
   status: string;
+  version: number;
   modelId: string | null;
   createdAt: string;
   updatedAt: string;
@@ -23,9 +24,13 @@ export interface VfxRegistryFormulaRecipeSummary {
   id: string;
   name: string;
   status: string;
+  version: number;
   techniqueId: string | null;
   essenceId: string | null;
   catalystId: string | null;
+  techniqueVersion: number | null;
+  essenceVersion: number | null;
+  catalystVersion: number | null;
   heroFrameUrl: string | null;
   createdAt: string;
   updatedAt: string;
@@ -33,6 +38,16 @@ export interface VfxRegistryFormulaRecipeSummary {
 
 function isRecord(value: unknown): value is Record<string, unknown> {
   return typeof value === 'object' && value !== null && !Array.isArray(value);
+}
+
+function parsePositiveInt(raw: unknown, fallback: number): number {
+  if (typeof raw === 'number' && Number.isInteger(raw) && raw >= 1) return raw;
+  return fallback;
+}
+
+function parseOptionalPositiveInt(raw: unknown): number | null {
+  if (typeof raw === 'number' && Number.isInteger(raw) && raw >= 1) return raw;
+  return null;
 }
 
 function parseTechniqueSummary(raw: unknown): VfxRegistryTechniqueSummary | null {
@@ -43,11 +58,12 @@ function parseTechniqueSummary(raw: unknown): VfxRegistryTechniqueSummary | null
   if (typeof id !== 'string' || id.trim().length === 0) return null;
   if (typeof name !== 'string' || name.trim().length === 0) return null;
   const status = typeof raw.status === 'string' ? raw.status : 'DRAFT';
+  const version = parsePositiveInt(raw.version, 1);
   const modelId =
     typeof raw.modelId === 'string' && raw.modelId.trim().length > 0 ? raw.modelId : null;
   const createdAt = typeof raw.createdAt === 'string' ? raw.createdAt : '';
   const updatedAt = typeof raw.updatedAt === 'string' ? raw.updatedAt : createdAt;
-  return { id, name, status, modelId, createdAt, updatedAt };
+  return { id, name, status, version, modelId, createdAt, updatedAt };
 }
 
 function parseFormulaRecipeSummary(raw: unknown): VfxRegistryFormulaRecipeSummary | null {
@@ -58,6 +74,7 @@ function parseFormulaRecipeSummary(raw: unknown): VfxRegistryFormulaRecipeSummar
   if (typeof id !== 'string' || id.trim().length === 0) return null;
   if (typeof name !== 'string' || name.trim().length === 0) return null;
   const status = typeof raw.status === 'string' ? raw.status : 'DRAFT';
+  const version = parsePositiveInt(raw.version, 1);
   const techniqueId =
     typeof raw.techniqueId === 'string' && raw.techniqueId.trim().length > 0
       ? raw.techniqueId
@@ -79,9 +96,13 @@ function parseFormulaRecipeSummary(raw: unknown): VfxRegistryFormulaRecipeSummar
     id,
     name,
     status,
+    version,
     techniqueId,
     essenceId,
     catalystId,
+    techniqueVersion: parseOptionalPositiveInt(raw.techniqueVersion),
+    essenceVersion: parseOptionalPositiveInt(raw.essenceVersion),
+    catalystVersion: parseOptionalPositiveInt(raw.catalystVersion),
     heroFrameUrl,
     createdAt,
     updatedAt,
