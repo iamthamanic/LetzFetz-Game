@@ -14,7 +14,7 @@ export type GameAction =
   | { type: 'PASS_BLOCK' }
   | { type: 'PLAY_BOOST'; cardInstanceId: string }
   | { type: 'PLAY_ULTIMATE' }
-  /** V5 Gegenstand — action-timing item from hand (reaction items later). */
+  /** V5 Gegenstand — action-timing (own turn) or reaction-timing (combat defender). */
   | { type: 'PLAY_ITEM'; cardInstanceId: string; targetFormulaInstanceId?: string }
   | { type: 'DISCARD_DRAW'; discardInstanceId: string }
   | {

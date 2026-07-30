@@ -276,6 +276,9 @@ export function PlaymatBoard({
   const blockCards = view.isHumanDefender
     ? view.legalActions.filter((a) => a.type === 'PLAY_BLOCK')
     : [];
+  const reactionItemCards = view.isHumanDefender
+    ? view.legalActions.filter((a) => a.type === 'PLAY_ITEM')
+    : [];
 
   const topDiscard = state.piles.discard[state.piles.discard.length - 1];
   const topDiscardDef = topDiscard ? findElementDef(pack, topDiscard.defId) : undefined;
@@ -415,7 +418,11 @@ export function PlaymatBoard({
             isHumanDefender={view.isHumanDefender}
             botThinking={botThinking}
             blockActions={blockCards}
+            reactionItemActions={reactionItemCards}
             onPlayBlock={onPlayBlock}
+            onPlayReactionItem={(instanceId) =>
+              onDispatch({ type: 'PLAY_ITEM', cardInstanceId: instanceId })
+            }
             onPassBlock={() => onDispatch({ type: 'PASS_BLOCK' })}
           />
         )}

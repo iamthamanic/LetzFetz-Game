@@ -4,7 +4,7 @@
  */
 import React from 'react';
 import type { ContentPack, GameAction, GameState, PlayerId } from '../../../../game';
-import { findElementDef } from '../../../../game';
+import { findElementDef, findItemDef } from '../../../../game';
 import type { PendingCombat } from '../../../../game/types';
 import { BoardCard } from '../BoardCard';
 import { Button } from '../../../../components/ui/Button';
@@ -23,7 +23,9 @@ interface CombatStageProps {
   isHumanDefender: boolean;
   botThinking: boolean;
   blockActions: GameAction[];
+  reactionItemActions?: GameAction[];
   onPlayBlock: (instanceId: string) => void;
+  onPlayReactionItem?: (instanceId: string) => void;
   onPassBlock: () => void;
 }
 
@@ -35,7 +37,9 @@ export function CombatStage({
   isHumanDefender,
   botThinking,
   blockActions,
+  reactionItemActions = [],
   onPlayBlock,
+  onPlayReactionItem,
   onPassBlock,
 }: CombatStageProps) {
   const attackDef = findElementDef(pack, combat.attackCardDefId);
@@ -53,6 +57,7 @@ export function CombatStage({
   const attackTypeLine = buildCombatStageAttackTypeLine(attackDef);
   const impulseLine = buildCombatStageImpulseLine(attackDef);
   const canBlock = blockActions.some((a) => a.type === 'PLAY_BLOCK');
+  const reactionItems = reactionItemActions.filter((a) => a.type === 'PLAY_ITEM');
 
   return (
     <div
@@ -101,7 +106,6 @@ export function CombatStage({
                 )}
               </div>
             )}
-            {/* Values/dice stay hidden until both sides decided — see CombatResolveShow. */}
             <span data-testid="combat-stage-attack-value" className="sr-only">
               Angriffskarte gespielt — Würfel nach Block-Entscheidung
             </span>
@@ -150,6 +154,35 @@ export function CombatStage({
 
         {isHumanDefender && (
           <div className="flex-none space-y-3 border-t border-stone-700/80 pt-3">
+            {reactionItems.length > 0 && onPlayReactionItem && (
+              <div data-testid="combat-stage-reaction-items" className="space-y-2">
+                <p className="text-center text-sm font-medium text-violet-200/90">
+                  Reaktions-Gegenstände
+                </p>
+                <div className="flex flex-wrap items-center justify-center gap-2">
+                  {reactionItems.map((action) => {
+                    if (action.type !== 'PLAY_ITEM') return null;
+                    const card = state.players[humanId].hand.find(
+                      (c) => c.instanceId === action.cardInstanceId,
+                    );
+                    const item = card ? findItemDef(pack, card.defId) : undefined;
+                    if (!item) return null;
+                    return (
+                      <Button
+                        key={action.cardInstanceId}
+                        variant="secondary"
+                        size="sm"
+                        className="text-sm"
+                        data-testid={`combat-reaction-item-${item.id}`}
+                        onClick={() => onPlayReactionItem(action.cardInstanceId)}
+                      >
+                        {item.name} (−1 Angriff)
+                      </Button>
+                    );
+                  })}
+                </div>
+              </div>
+            )}
             <p className="text-center text-sm font-medium text-cyan-200/90">
               {canBlock
                 ? 'Block-Karten — höchster Wert zählt (Würfel erst danach)'

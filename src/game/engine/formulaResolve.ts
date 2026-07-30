@@ -4,6 +4,7 @@
  */
 import type {
   ContentPack,
+  Element,
   FormulaPrepState,
   GameState,
   PlayerId,
@@ -63,7 +64,8 @@ function prepHasValue(prep: FormulaPrepState): boolean {
     prep.boostFilterHandIfNoValue ||
     prep.mirrorThornsOnFullBlock !== 0 ||
     prep.chainSameActionBonus !== 0 ||
-    prep.preparedActionType != null
+    prep.preparedActionType != null ||
+    prep.extraHitImpulse != null
   );
 }
 
@@ -474,19 +476,22 @@ export function takeAttackPrepBonus(state: GameState, playerId: PlayerId): {
   state: GameState;
   combatBonus: number;
   ignoreShield: number;
+  extraHitImpulse: Element | null;
 } {
   const prep = state.players[playerId].formulaPrep;
-  if (!prep) return { state, combatBonus: 0, ignoreShield: 0 };
+  if (!prep) return { state, combatBonus: 0, ignoreShield: 0, extraHitImpulse: null };
   const combatBonus = prep.attackCombatBonus;
   const ignoreShield = prep.attackIgnoreShield;
+  const extraHitImpulse = prep.extraHitImpulse ?? null;
   const next = cloneState(state);
   const p = next.players[playerId].formulaPrep;
   if (p) {
     p.attackCombatBonus = 0;
     p.attackIgnoreShield = 0;
+    p.extraHitImpulse = undefined;
     next.players[playerId].formulaPrep = clearPrepIfEmpty(p);
   }
-  return { state: next, combatBonus, ignoreShield };
+  return { state: next, combatBonus, ignoreShield, extraHitImpulse };
 }
 
 export function takeBlockPrepBonus(state: GameState, playerId: PlayerId): {

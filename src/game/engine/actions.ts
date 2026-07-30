@@ -159,6 +159,17 @@ function runStartPhase(
     next = cloneState(next);
     next.players[playerId].formula = restoreOwnerFormulaAtStart(next.players[playerId].formula);
     next = applyV5StartFormulaMeta(next, playerId);
+    const hangover = next.meta.v5EnergyHangover?.[playerId] ?? 0;
+    if (hangover > 0) {
+      next.players[playerId].hp = clampHp(next.players[playerId].hp - hangover, ruleset);
+      next.meta = {
+        ...next.meta,
+        v5EnergyHangover: { ...(next.meta.v5EnergyHangover ?? { p1: 0, p2: 0 }), [playerId]: 0 },
+      };
+      next.lastEvent = `Halbe Dose Energy: −${hangover} Leben zu Zugbeginn.`;
+      next = checkWinner(next);
+      if (next.winner) return next;
+    }
   }
   next.phase = 'draw';
   return next;
@@ -486,6 +497,24 @@ function applyPlayerAttackDamage(
       pack,
     );
   }
+  // V5 Nasser Socken: additional water (etc.) impulse after primary card impulse.
+  const extraImpulse = state.combat?.extraHitImpulse;
+  if (
+    isV5FormulaEnabled(ruleset) &&
+    isV3CombatEnabled(ruleset) &&
+    extraImpulse &&
+    extraImpulse !== hitImpulseElement &&
+    (pipeline.isHit || workingAttack === workingBlock)
+  ) {
+    next = resolveImpulseReactions(
+      next,
+      defenderId,
+      extraImpulse,
+      ruleset,
+      attackerId,
+      pack,
+    );
+  }
   if (isV3CombatEnabled(ruleset) && pipeline.isFullBlock && fullBlockImpulseElement && workingAttack !== workingBlock) {
     next = resolveImpulseReactions(
       next,
@@ -569,6 +598,10 @@ function applyPlayerAttackDamage(
       }
       next = armChainSameAction(next, defenderId, 'block');
       next.players[defenderId].formulaPrep = null;
+    }
+
+    if (pipeline.isFullBlock && state.combat?.rueckspiegelArmed) {
+      next = applyStatus(next, attackerId, 'erleuchtet', 1);
     }
   }
 
@@ -966,6 +999,12 @@ export function getLegalActions(state: GameState, ctx: PackContext): GameAction[
       const def = findElementDef(ctx.pack, card.defId);
       if (def?.cardType === 'block') {
         actions.push({ type: 'PLAY_BLOCK', cardInstanceId: card.instanceId });
+      }
+      if (isV5FormulaEnabled(ruleset)) {
+        const item = findItemDef(ctx.pack, card.defId);
+        if (item?.timing === 'reaction' && !state.combat.rueckspiegelArmed) {
+          actions.push({ type: 'PLAY_ITEM', cardInstanceId: card.instanceId });
+        }
       }
     }
     return actions;
@@ -1702,6 +1741,7 @@ export function applyAction(
         attackValue,
         mode: 'player',
         ignoreShield: attackPrep.ignoreShield > 0 ? attackPrep.ignoreShield : undefined,
+        extraHitImpulse: attackPrep.extraHitImpulse ?? undefined,
       };
       next.lastEvent = `Angriff ${attackValue} (Würfel ${diceRoll}). Gegner darf blocken.`;
       return next;
@@ -1827,7 +1867,20 @@ export function applyAction(
         next.lastEvent = `${item.name}: +2 Schild und High.`;
       } else if (item.id === 'v5-item-halbe-dose-energy') {
         next = drawForPlayer(next, playerId, 2, rng, ruleset, { allowExtra: true });
-        next.lastEvent = `${item.name}: 2 Karten gezogen.`;
+        next.meta = {
+          ...next.meta,
+          v5EnergyHangover: {
+            ...(next.meta.v5EnergyHangover ?? { p1: 0, p2: 0 }),
+            [playerId]: (next.meta.v5EnergyHangover?.[playerId] ?? 0) + 1,
+          },
+        };
+        next.lastEvent = `${item.name}: 2 Karten gezogen (nächster Zug −1 Leben).`;
+      } else if (item.id === 'v5-item-nasser-socken') {
+        const prep = next.players[playerId].formulaPrep ?? emptyFormulaPrep();
+        prep.extraHitImpulse = 'water';
+        prep.markIfNoReaction = prep.markIfNoReaction ?? 'durchnaesst';
+        next.players[playerId].formulaPrep = prep;
+        next.lastEvent = `${item.name}: nächste Elementkarte +Wasser; Treffer → Durchnässt ohne Reaktion.`;
       } else if (item.id === 'v5-item-kabelbinder-deluxe') {
         const targetId = action.targetFormulaInstanceId;
         const target = targetId
@@ -2043,6 +2096,27 @@ function applyCombatResponse(
   const pack = ctx.pack;
   const ruleset = rulesetOf(ctx, state);
   const rng = rngOf(ctx);
+
+  if (action.type === 'PLAY_ITEM') {
+    if (!isV5FormulaEnabled(ruleset)) throw new Error('PLAY_ITEM requires v5Formula');
+    const handCard = state.players[playerId].hand.find(
+      (c) => c.instanceId === action.cardInstanceId,
+    );
+    const item = handCard ? findItemDef(pack, handCard.defId) : undefined;
+    if (!item || item.timing !== 'reaction') throw new Error('Not a reaction item');
+    if (state.combat.rueckspiegelArmed) throw new Error('Reaction item already used');
+
+    let next = discardFromHand(state, playerId, action.cardInstanceId);
+    if (!next.combat) throw new Error('Combat lost');
+    next.combat = {
+      ...next.combat,
+      attackValue: Math.max(0, next.combat.attackValue - 1),
+      rueckspiegelArmed: true,
+    };
+    next.lastEvent = `${item.name}: Angriffswert −1.`;
+    return next;
+  }
+
   const attackDef = findElementDef(pack, attackCardDefId);
   if (!attackDef) throw new Error('Attack card missing');
 
