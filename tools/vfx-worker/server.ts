@@ -1,6 +1,6 @@
 #!/usr/bin/env npx tsx
 /**
- * Local VFX Studio worker — Meshy proxy stub, job status placeholder.
+ * Local VFX Studio worker — Meshy proxy, mock demo mode, job status placeholder.
  * Location: tools/vfx-worker/server.ts
  *
  * Local authoring only. MESHY_API_KEY must never reach the Vite client.
@@ -10,9 +10,17 @@ import type { IncomingMessage, ServerResponse } from 'node:http';
 
 const DEFAULT_PORT = 8787;
 const MESHY_BASE = 'https://api.meshy.ai/openapi/v2/text-to-3d';
+const MOCK_GLB_URL = '/vfx/mock/demo-technique.glb';
 
 const MISSING_KEY_ERROR =
-  'MESHY_API_KEY missing — set in local .env (never in Vite client or browser bundles)';
+  'MESHY_API_KEY missing — set in local .env or use VFX_WORKER_MOCK=1 for offline demo';
+
+interface MockTask {
+  prompt: string;
+  createdAt: number;
+}
+
+const mockTasks = new Map<string, MockTask>();
 
 function portFromEnv(): number {
   const raw = process.env.VFX_WORKER_PORT?.trim();
@@ -22,6 +30,10 @@ function portFromEnv(): number {
     throw new Error(`Invalid VFX_WORKER_PORT: ${raw}`);
   }
   return parsed;
+}
+
+function isMockMode(): boolean {
+  return process.env.VFX_WORKER_MOCK === '1';
 }
 
 function meshyApiKey(): string | null {
@@ -56,6 +68,7 @@ function parsePath(url: string | undefined): { pathname: string; searchParams: U
 }
 
 function meshyKeyGuard(res: ServerResponse): string | null {
+  if (isMockMode()) return 'mock-key';
   const key = meshyApiKey();
   if (!key) {
     sendJson(res, 503, { ok: false, error: MISSING_KEY_ERROR });
@@ -64,21 +77,116 @@ function meshyKeyGuard(res: ServerResponse): string | null {
   return key;
 }
 
+function parseJsonBody(raw: string): Record<string, unknown> {
+  if (!raw.trim()) return {};
+  try {
+    const parsed: unknown = JSON.parse(raw);
+    if (parsed !== null && typeof parsed === 'object' && !Array.isArray(parsed)) {
+      return parsed as Record<string, unknown>;
+    }
+  } catch {
+    /* fall through */
+  }
+  return {};
+}
+
+function createMockTaskId(): string {
+  return `mock-${Date.now()}-${Math.random().toString(36).slice(2, 8)}`;
+}
+
+function mockTaskStatus(taskId: string): Record<string, unknown> {
+  const task = mockTasks.get(taskId);
+  if (!task) {
+    return { status: 'FAILED', error: 'Unknown mock task id' };
+  }
+  const elapsed = Date.now() - task.createdAt;
+  if (elapsed < 800) {
+    return { status: 'PENDING', progress: 10, mock: true };
+  }
+  if (elapsed < 1600) {
+    return { status: 'IN_PROGRESS', progress: 55, mock: true };
+  }
+  return {
+    status: 'SUCCEEDED',
+    progress: 100,
+    mock: true,
+    model_urls: { glb: MOCK_GLB_URL },
+    glbUrl: MOCK_GLB_URL,
+  };
+}
+
 async function handleHealth(_req: IncomingMessage, res: ServerResponse): Promise<void> {
-  sendJson(res, 200, { ok: true });
+  sendJson(res, 200, {
+    ok: true,
+    mock: isMockMode(),
+    meshyKeyConfigured: Boolean(meshyApiKey()) || isMockMode(),
+  });
 }
 
 async function handleMeshyTextTo3d(req: IncomingMessage, res: ServerResponse): Promise<void> {
   const key = meshyKeyGuard(res);
   if (!key) return;
 
-  await readBody(req);
+  const bodyRaw = await readBody(req);
+  const body = parseJsonBody(bodyRaw);
+  const prompt = typeof body.prompt === 'string' ? body.prompt.trim() : '';
 
-  sendJson(res, 501, {
-    ok: false,
-    stub: true,
-    error: 'Meshy text-to-3d not implemented yet — proxy skeleton only (#256)',
-  });
+  if (!prompt) {
+    sendJson(res, 400, { ok: false, error: 'prompt is required' });
+    return;
+  }
+
+  if (isMockMode()) {
+    const taskId = createMockTaskId();
+    mockTasks.set(taskId, { prompt, createdAt: Date.now() });
+    sendJson(res, 200, {
+      ok: true,
+      mock: true,
+      taskId,
+      message: `Mock text-to-3d queued — demo GLB at ${MOCK_GLB_URL}`,
+    });
+    return;
+  }
+
+  try {
+    const meshyRes = await fetch(MESHY_BASE, {
+      method: 'POST',
+      headers: {
+        Authorization: `Bearer ${key}`,
+        'Content-Type': 'application/json',
+      },
+      body: JSON.stringify({
+        mode: typeof body.mode === 'string' ? body.mode : 'preview',
+        prompt,
+        art_style: typeof body.art_style === 'string' ? body.art_style : 'sculpture',
+      }),
+    });
+
+    const meshyBody: unknown = await meshyRes.json().catch(() => ({}));
+    const record =
+      meshyBody !== null && typeof meshyBody === 'object' && !Array.isArray(meshyBody)
+        ? (meshyBody as Record<string, unknown>)
+        : {};
+
+    const taskIdRaw = record.result ?? record.task_id ?? record.id;
+    const taskId = typeof taskIdRaw === 'string' ? taskIdRaw : null;
+
+    if (!meshyRes.ok || !taskId) {
+      const error =
+        typeof record.message === 'string'
+          ? record.message
+          : typeof record.error === 'string'
+            ? record.error
+            : 'Meshy text-to-3d request failed';
+      sendJson(res, meshyRes.ok ? 502 : meshyRes.status, { ok: false, error, meshy: record });
+      return;
+    }
+
+    sendJson(res, 200, { ok: true, taskId, meshy: record });
+  } catch (err) {
+    const message = err instanceof Error ? err.message : 'Meshy proxy request failed';
+    sendJson(res, 502, { ok: false, error: message });
+  }
 }
 
 async function handleMeshyTaskStatus(
@@ -94,14 +202,25 @@ async function handleMeshyTaskStatus(
     return;
   }
 
+  if (isMockMode() || taskId.startsWith('mock-')) {
+    sendJson(res, 200, {
+      ok: true,
+      mock: true,
+      meshy: mockTaskStatus(taskId),
+    });
+    return;
+  }
+
   try {
     const meshyRes = await fetch(`${MESHY_BASE}/${taskId}`, {
       headers: { Authorization: `Bearer ${key}` },
     });
-    const body: unknown = await meshyRes.json().catch(() => ({}));
+    const meshyBody: unknown = await meshyRes.json().catch(() => ({}));
     const record =
-      typeof body === 'object' && body !== null ? (body as Record<string, unknown>) : { raw: body };
-    sendJson(res, meshyRes.status, { ok: meshyRes.ok, stub: true, meshy: record });
+      meshyBody !== null && typeof meshyBody === 'object' && !Array.isArray(meshyBody)
+        ? (meshyBody as Record<string, unknown>)
+        : { raw: meshyBody };
+    sendJson(res, meshyRes.ok ? 200 : meshyRes.status, { ok: meshyRes.ok, meshy: record });
   } catch (err) {
     const message = err instanceof Error ? err.message : 'Meshy proxy request failed';
     sendJson(res, 502, { ok: false, error: message });
@@ -185,7 +304,11 @@ function main(): void {
     console.error(
       `[vfx-worker] listening on http://127.0.0.1:${port} (local authoring only)`,
     );
-    if (!meshyApiKey()) {
+    if (isMockMode()) {
+      console.error(
+        `[vfx-worker] VFX_WORKER_MOCK=1 — Meshy routes return demo GLB at ${MOCK_GLB_URL}`,
+      );
+    } else if (!meshyApiKey()) {
       console.error('[vfx-worker] MESHY_API_KEY unset — /meshy/* routes will return 503');
     }
   });
