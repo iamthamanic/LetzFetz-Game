@@ -15,6 +15,7 @@ import {
   type FormulaRecipe,
   type TechniqueAsset,
 } from './assets';
+import { createDefaultSocketMap } from '../sockets/socketMapHelpers';
 import { parseRenderOutput, type RenderOutput } from './renderOutput';
 
 const TS = '2026-07-30T12:00:00.000Z';
@@ -32,6 +33,7 @@ const sampleTechnique: TechniqueAsset = {
   imageId: 'img-1',
   modelId: 'mdl-1',
   effectId: null,
+  sockets: createDefaultSocketMap(),
 };
 
 const sampleEssence: EssenceAsset = {
@@ -98,6 +100,12 @@ describe('VfxSavedAsset parsers', () => {
     const parsed = parseTechniqueAsset(JSON.parse(JSON.stringify(sampleTechnique)));
     expect(parsed).toEqual(sampleTechnique);
     expect(serializeVfxSavedAsset(sampleTechnique)).toEqual(sampleTechnique);
+  });
+
+  it('parses TechniqueAsset without sockets using defaults', () => {
+    const { sockets: _sockets, ...legacy } = sampleTechnique;
+    const parsed = parseTechniqueAsset(JSON.parse(JSON.stringify(legacy)));
+    expect(parsed.sockets).toEqual(createDefaultSocketMap());
   });
 
   it('round-trips EssenceAsset and CatalystAsset', () => {

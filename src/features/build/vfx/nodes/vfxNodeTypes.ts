@@ -4,6 +4,11 @@
  */
 import type { VfxAssetStatus } from '../types/status';
 import type { ModelAsset } from '../types/wireTypes';
+import {
+  createDefaultSocketMap,
+  type VfxTechniqueSocketMap,
+} from '../sockets/socketMapHelpers';
+import type { VfxTechniqueSocketName } from '../sockets/vfxSocketRoles';
 
 export const VFX_PIPELINE_NODE_TYPES = {
   vfxPrompt: 'vfxPrompt',
@@ -38,7 +43,9 @@ export interface VfxNormalizeNodeData extends VfxNodeBaseData {
 
 export interface VfxSocketNodeData extends VfxNodeBaseData {
   glbUrl: string | null;
-  socketName: string;
+  modelAsset: ModelAsset | null;
+  activeSocket: VfxTechniqueSocketName;
+  sockets: VfxTechniqueSocketMap;
 }
 
 export interface VfxSaveTechniqueNodeData extends VfxNodeBaseData {
@@ -87,7 +94,13 @@ export function defaultNormalizeNodeData(): VfxNormalizeNodeData {
 }
 
 export function defaultSocketNodeData(): VfxSocketNodeData {
-  return { glbUrl: null, socketName: 'SOCKET_VFX_CORE', status: 'DRAFT' };
+  return {
+    glbUrl: null,
+    modelAsset: null,
+    activeSocket: 'essenceOrigin',
+    sockets: createDefaultSocketMap(),
+    status: 'DRAFT',
+  };
 }
 
 export function defaultSaveTechniqueNodeData(): VfxSaveTechniqueNodeData {

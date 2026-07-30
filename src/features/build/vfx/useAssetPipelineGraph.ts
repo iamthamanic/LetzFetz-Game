@@ -35,6 +35,14 @@ import {
 import { buildModelAsset, formatModelAssetStatusDe } from './normalize/buildModelAsset';
 import { fallbackBoundsForGlb, loadGlbBounds } from './normalize/loadGlbBounds';
 import type { ModelAsset } from './types/wireTypes';
+import {
+  createDefaultSocketMap,
+  roundVec3,
+  updateSocketInMap,
+  type VfxTechniqueSocketMap,
+} from './sockets/socketMapHelpers';
+import type { VfxTechniqueSocketName } from './sockets/vfxSocketRoles';
+import type { Vec3 } from './types/wireTypes';
 
 let nodeCounter = 0;
 
@@ -140,6 +148,27 @@ function getModelAssetFromUpstream(
   return null;
 }
 
+function getSocketDataFromUpstream(
+  nodes: Node[],
+  edges: Edge[],
+  nodeId: string,
+): VfxSocketNodeData | null {
+  const socketNode = findUpstreamNode(
+    nodes,
+    edges,
+    nodeId,
+    VFX_PIPELINE_NODE_TYPES.vfxSocket,
+  );
+  if (!socketNode) return null;
+  return socketNode.data as VfxSocketNodeData;
+}
+
+function formatSocketStatusMessage(hasModel: boolean): string {
+  return hasModel
+    ? 'Modell verbunden — Sockets platzieren.'
+    : 'Kein Modell — Sockets als Entwurf bearbeitbar.';
+}
+
 function patchDownstreamFromSource(
   sourceNodeId: string,
   patchNodeData: (nodeId: string, patch: Record<string, unknown>) => void,
@@ -238,8 +267,7 @@ export function useAssetPipelineGraph(enabled: boolean) {
             glbUrl,
             modelAsset,
             status: 'READY',
-            statusMessage:
-              'Normalisiertes Modell bereit.',
+            statusMessage: formatSocketStatusMessage(true),
           },
           [
             VFX_PIPELINE_NODE_TYPES.vfxSocket,
@@ -321,7 +349,7 @@ export function useAssetPipelineGraph(enabled: boolean) {
               status: 'READY',
               statusMessage:
                 target.type === VFX_PIPELINE_NODE_TYPES.vfxSocket
-                  ? 'Stub — Standard-Socket gesetzt.'
+                  ? formatSocketStatusMessage(true)
                   : 'Bereit zum Speichern.',
             });
           }
@@ -387,6 +415,10 @@ export function useAssetPipelineGraph(enabled: boolean) {
         return;
       }
 
+      const upstreamSocket = getSocketDataFromUpstream(currentNodes, currentEdges, saveNodeId);
+      const sockets: VfxTechniqueSocketMap =
+        upstreamSocket?.sockets ?? createDefaultSocketMap();
+
       const slug = slugifyName(name) || 'technik';
       const id = `vfx-technik-${slug}-${Date.now()}`;
       const now = new Date().toISOString();
@@ -403,6 +435,7 @@ export function useAssetPipelineGraph(enabled: boolean) {
         imageId: null,
         modelId: glbUrl,
         effectId: null,
+        sockets,
       };
 
       try {
@@ -513,6 +546,42 @@ export function useAssetPipelineGraph(enabled: boolean) {
     [patchNodeData, selectedNodeId],
   );
 
+  const updateSelectedActiveSocket = useCallback(
+    (activeSocket: VfxTechniqueSocketName) => {
+      if (!selectedNodeId) return;
+      patchNodeData(selectedNodeId, { activeSocket });
+    },
+    [patchNodeData, selectedNodeId],
+  );
+
+  const updateSelectedSocketAxis = useCallback(
+    (name: VfxTechniqueSocketName, axis: keyof Vec3, value: number) => {
+      if (!selectedNodeId) return;
+      const node = nodesRef.current.find((n) => n.id === selectedNodeId);
+      if (!node || node.type !== VFX_PIPELINE_NODE_TYPES.vfxSocket) return;
+      const data = node.data as VfxSocketNodeData;
+      const current = data.sockets[name];
+      const nextPosition = roundVec3({ ...current, [axis]: value });
+      patchNodeData(selectedNodeId, {
+        sockets: updateSocketInMap(data.sockets, name, nextPosition),
+      });
+    },
+    [patchNodeData, selectedNodeId],
+  );
+
+  const updateSelectedSocketPosition = useCallback(
+    (name: VfxTechniqueSocketName, position: Vec3) => {
+      if (!selectedNodeId) return;
+      const node = nodesRef.current.find((n) => n.id === selectedNodeId);
+      if (!node || node.type !== VFX_PIPELINE_NODE_TYPES.vfxSocket) return;
+      const data = node.data as VfxSocketNodeData;
+      patchNodeData(selectedNodeId, {
+        sockets: updateSocketInMap(data.sockets, name, roundVec3(position)),
+      });
+    },
+    [patchNodeData, selectedNodeId],
+  );
+
   const onConnect = useCallback(
     (connection: Connection) => {
       setEdges((current) => {
@@ -534,10 +603,32 @@ export function useAssetPipelineGraph(enabled: boolean) {
             void runNormalizeNode(connection.target);
           }
         }
+        if (
+          targetNode?.type === VFX_PIPELINE_NODE_TYPES.vfxSocket &&
+          connection.source
+        ) {
+          const sourceNode = nodesRef.current.find((n) => n.id === connection.source);
+          const normalizeData = sourceNode?.data as VfxNormalizeNodeData | undefined;
+          const meshyData = sourceNode?.data as VfxMeshyNodeData | undefined;
+          const glbUrl =
+            normalizeData?.modelAsset?.glbUrl ??
+            normalizeData?.glbUrl ??
+            meshyData?.glbUrl ??
+            null;
+          const modelAsset = normalizeData?.modelAsset ?? null;
+          if (glbUrl) {
+            patchNodeData(connection.target, {
+              glbUrl,
+              modelAsset,
+              status: 'READY',
+              statusMessage: formatSocketStatusMessage(true),
+            });
+          }
+        }
         return next;
       });
     },
-    [runNormalizeNode, setEdges],
+    [patchNodeData, runNormalizeNode, setEdges],
   );
 
   const selectedNode = selectedNodeId
@@ -560,6 +651,9 @@ export function useAssetPipelineGraph(enabled: boolean) {
     addPipelineNode,
     updateSelectedPrompt,
     updateSelectedTechniqueName,
+    updateSelectedActiveSocket,
+    updateSelectedSocketAxis,
+    updateSelectedSocketPosition,
     savedTechniques,
     refreshSavedTechniques,
     creditConfirm,

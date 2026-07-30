@@ -41,7 +41,7 @@ const ASSET_PIPELINE_NODES: Array<{
   {
     type: VFX_PIPELINE_NODE_TYPES.vfxSocket,
     labelDe: 'Socket',
-    hint: 'Stub — Default-Koords',
+    hint: 'Attachment-Points · Gizmo',
     icon: <Crosshair className="h-3.5 w-3.5" />,
   },
   {
