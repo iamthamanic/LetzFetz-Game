@@ -55,7 +55,7 @@ const ASSET_PIPELINE_NODES: Array<{
 const MODE_HINT: Record<VfxStudioMode, string> = {
   assets: 'Nodes hinzufügen und im Graph verbinden.',
   formeln: 'Formel-Pipeline: T + E + K kombinieren (demnächst).',
-  batch: 'Batch-Render: gleiche Szene headless (demnächst).',
+  batch: 'Batch-Render: ausstehende Kombinationen headless rendern.',
 };
 
 interface VfxNodeLibraryProps {

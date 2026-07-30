@@ -227,3 +227,148 @@ export async function pollMeshyTaskUntilDone(
     mock: false,
   };
 }
+
+export type BatchRenderClientStatus = 'PENDING' | 'IN_PROGRESS' | 'SUCCEEDED' | 'FAILED';
+
+export interface BatchRenderClientResult {
+  jobId: string;
+  status: BatchRenderClientStatus;
+  method: 'playwright' | 'placeholder' | null;
+  error: string | null;
+  pngUrl: string | null;
+  metadataUrl: string | null;
+  renderOutput: {
+    kind: 'renderOutput';
+    id: string;
+    url: string;
+    format: 'png';
+    width: number;
+    height: number;
+    capturedAt: string;
+  } | null;
+}
+
+function batchStatusFromWorker(raw: unknown): BatchRenderClientStatus {
+  if (typeof raw !== 'string') return 'FAILED';
+  const normalized = raw.toUpperCase();
+  if (normalized === 'SUCCEEDED') return 'SUCCEEDED';
+  if (normalized === 'FAILED') return 'FAILED';
+  if (normalized === 'IN_PROGRESS') return 'IN_PROGRESS';
+  if (normalized === 'PENDING') return 'PENDING';
+  return 'FAILED';
+}
+
+function parseBatchRenderBody(body: unknown): BatchRenderClientResult {
+  const record = assertObject(body, 'BatchRenderResponse');
+  const jobIdRaw = record.jobId ?? record.id;
+  const jobId = typeof jobIdRaw === 'string' ? jobIdRaw : '';
+
+  const renderOutputRaw = record.renderOutput;
+  let renderOutput: BatchRenderClientResult['renderOutput'] = null;
+  if (renderOutputRaw !== null && typeof renderOutputRaw === 'object' && !Array.isArray(renderOutputRaw)) {
+    const ro = renderOutputRaw as Record<string, unknown>;
+    const url = ro.url;
+    const id = ro.id;
+    const width = ro.width;
+    const height = ro.height;
+    const capturedAt = ro.capturedAt;
+    if (
+      typeof url === 'string' &&
+      typeof id === 'string' &&
+      typeof width === 'number' &&
+      typeof height === 'number' &&
+      typeof capturedAt === 'string'
+    ) {
+      renderOutput = {
+        kind: 'renderOutput',
+        id,
+        url,
+        format: 'png',
+        width,
+        height,
+        capturedAt,
+      };
+    }
+  }
+
+  const pngUrlRaw = record.pngUrl ?? renderOutput?.url ?? null;
+  const metadataUrlRaw = record.metadataUrl ?? null;
+  const errorRaw = record.error;
+
+  return {
+    jobId,
+    status: batchStatusFromWorker(record.status),
+    method:
+      record.method === 'playwright' || record.method === 'placeholder'
+        ? record.method
+        : null,
+    error: typeof errorRaw === 'string' && errorRaw.trim().length > 0 ? errorRaw : null,
+    pngUrl: typeof pngUrlRaw === 'string' ? pngUrlRaw : null,
+    metadataUrl: typeof metadataUrlRaw === 'string' ? metadataUrlRaw : null,
+    renderOutput,
+  };
+}
+
+/** Render one formula hero frame via local vfx-worker batch endpoint. */
+export async function renderBatchHeroFrame(
+  recipeId: string,
+  options?: { presetId?: string; previewBaseUrl?: string; baseUrl?: string },
+): Promise<BatchRenderClientResult> {
+  const trimmed = recipeId.trim();
+  if (!trimmed) {
+    throw new VfxWorkerError('Rezept-ID fehlt.', 'API_ERROR');
+  }
+
+  const res = await workerFetch(
+    '/batch/render',
+    {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({
+        recipeId: trimmed,
+        presetId: options?.presetId,
+        previewBaseUrl: options?.previewBaseUrl,
+      }),
+    },
+    options?.baseUrl,
+  );
+
+  const body: unknown = await res.json().catch(() => ({}));
+  if (!res.ok) {
+    const record =
+      body !== null && typeof body === 'object' ? (body as Record<string, unknown>) : {};
+    const message =
+      typeof record.error === 'string'
+        ? record.error
+        : 'Batch-Render fehlgeschlagen.';
+    throw new VfxWorkerError(message, 'API_ERROR');
+  }
+
+  return parseBatchRenderBody(body);
+}
+
+/** Poll batch job status from worker (after async jobs). */
+export async function getBatchJobStatus(
+  jobId: string,
+  baseUrl?: string,
+): Promise<BatchRenderClientResult> {
+  const trimmed = jobId.trim();
+  if (!trimmed) {
+    throw new VfxWorkerError('Job-ID fehlt.', 'API_ERROR');
+  }
+
+  const res = await workerFetch(`/batch/jobs/${encodeURIComponent(trimmed)}`, undefined, baseUrl);
+  const body: unknown = await res.json().catch(() => ({}));
+
+  if (!res.ok) {
+    const record =
+      body !== null && typeof body === 'object' ? (body as Record<string, unknown>) : {};
+    const message =
+      typeof record.error === 'string'
+        ? record.error
+        : 'Batch-Job-Status konnte nicht geladen werden.';
+    throw new VfxWorkerError(message, 'API_ERROR');
+  }
+
+  return parseBatchRenderBody(body);
+}

@@ -9,6 +9,8 @@ import { AppNav, type AppView } from './features/shell/AppNav';
 import { MainMenu } from './features/shell/MainMenu';
 import { SettingsView } from './features/settings/SettingsView';
 import { isPlaymatPreview } from './features/play/services/playtest/isPlaymatPreview';
+import { isVfxBatchPreview } from './features/build/vfx/batch/isVfxBatchPreview';
+import { VfxBatchPreviewPage } from './features/build/vfx/batch/VfxBatchPreviewPage';
 import { AppHistoryProvider, useAppHistory } from './services/history/AppHistoryContext';
 import { AudioSettingsSync } from './services/audio/AudioSettingsSync';
 import { MusicBedSync, resolveMusicBed } from './services/audio/MusicBedSync';
@@ -125,6 +127,10 @@ function AppShell() {
 export default function App() {
   if (isPlaymatPreview()) {
     return <PlaymatZonePreview />;
+  }
+
+  if (isVfxBatchPreview()) {
+    return <VfxBatchPreviewPage />;
   }
 
   return (

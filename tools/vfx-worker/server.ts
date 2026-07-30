@@ -7,6 +7,7 @@
  */
 import http from 'node:http';
 import type { IncomingMessage, ServerResponse } from 'node:http';
+import { getBatchJob, runBatchRender } from './batchRender';
 
 const DEFAULT_PORT = 8787;
 const MESHY_BASE = 'https://api.meshy.ai/openapi/v2/text-to-3d';
@@ -227,6 +228,57 @@ async function handleMeshyTaskStatus(
   }
 }
 
+async function handleBatchRender(req: IncomingMessage, res: ServerResponse): Promise<void> {
+  const bodyRaw = await readBody(req);
+  const body = parseJsonBody(bodyRaw);
+  const recipeId = typeof body.recipeId === 'string' ? body.recipeId : '';
+  const presetId = typeof body.presetId === 'string' ? body.presetId : undefined;
+  const previewBaseUrl =
+    typeof body.previewBaseUrl === 'string' ? body.previewBaseUrl : undefined;
+
+  if (!recipeId.trim()) {
+    sendJson(res, 400, { ok: false, error: 'recipeId is required' });
+    return;
+  }
+
+  const result = await runBatchRender({ recipeId, presetId, previewBaseUrl });
+  const status = result.ok ? 200 : 422;
+  sendJson(res, status, {
+    ok: result.ok,
+    jobId: result.job.id,
+    status: result.job.status,
+    method: result.job.method,
+    error: result.job.error,
+    renderOutput: result.job.renderOutput,
+    pngUrl: result.job.pngPath,
+    metadataUrl: result.job.metadataPath,
+  });
+}
+
+function handleBatchJobStatus(_req: IncomingMessage, res: ServerResponse, jobId: string): void {
+  if (!/^[a-zA-Z0-9._-]{1,128}$/.test(jobId)) {
+    sendJson(res, 400, { ok: false, error: 'Invalid batch job id' });
+    return;
+  }
+
+  const job = getBatchJob(jobId);
+  if (!job) {
+    sendJson(res, 404, { ok: false, error: 'Batch job not found' });
+    return;
+  }
+
+  sendJson(res, 200, {
+    ok: job.status === 'SUCCEEDED',
+    jobId: job.id,
+    status: job.status,
+    method: job.method,
+    error: job.error,
+    renderOutput: job.renderOutput,
+    pngUrl: job.pngPath,
+    metadataUrl: job.metadataPath,
+  });
+}
+
 function handleJobStatus(_req: IncomingMessage, res: ServerResponse, jobId: string): void {
   if (!/^[a-zA-Z0-9._-]{1,128}$/.test(jobId)) {
     sendJson(res, 400, { ok: false, error: 'Invalid job id' });
@@ -277,6 +329,17 @@ async function route(req: IncomingMessage, res: ServerResponse): Promise<void> {
   const meshyTaskMatch = pathname.match(/^\/meshy\/tasks\/([^/]+)$/);
   if (method === 'GET' && meshyTaskMatch) {
     await handleMeshyTaskStatus(req, res, meshyTaskMatch[1]);
+    return;
+  }
+
+  if (method === 'POST' && pathname === '/batch/render') {
+    await handleBatchRender(req, res);
+    return;
+  }
+
+  const batchJobMatch = pathname.match(/^\/batch\/jobs\/([^/]+)$/);
+  if (method === 'GET' && batchJobMatch) {
+    handleBatchJobStatus(req, res, batchJobMatch[1]);
     return;
   }
 
