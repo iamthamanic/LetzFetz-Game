@@ -36,6 +36,7 @@
             "@react-three/fiber": "^8.17.14",
             "@supabase/supabase-js": "^2",
             "@xyflow/react": "^12.11.2",
+            "@zaniar/effekseer-webgl-wasm": "^1.62.5000",
             "class-variance-authority": "^0.7.1",
             "clsx": "*",
             "cmdk": "^1.1.1",

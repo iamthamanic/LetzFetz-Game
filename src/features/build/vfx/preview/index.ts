@@ -12,6 +12,7 @@ export {
 export {
   getEffekseerAdapter,
   setEffekseerAdapterForTests,
+  WasmEffekseerAdapter,
   type EffekseerAdapter,
   type EffekseerEffectInstance,
   type EffekseerLoadState,
