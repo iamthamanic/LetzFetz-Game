@@ -1,5 +1,5 @@
 /**
- * V5 MVP pack smoke tests (#225).
+ * V5 full formula pack smoke tests (#231).
  * Location: src/game/packs/v5/v5-pack.test.ts
  */
 import { describe, expect, it } from 'vitest';
@@ -11,15 +11,20 @@ import {
   V5_PACK,
   V5_PACK_MAIN_DECK_SIZE,
   V5_PACK_RULESET,
+  V5_TARGET_MAIN_DECK_SIZE,
 } from './v5-pack';
 import { formulaSlotForDef } from '../../engine/formulaSlots';
 
 describe('V5_PACK', () => {
-  it('exports MVP-9 formula + 6 items', () => {
-    expect(V5_PACK.techniques).toHaveLength(3);
-    expect(V5_PACK.essences).toHaveLength(3);
-    expect(V5_PACK.catalysts).toHaveLength(3);
+  it('exports 12+12+12 formula + 6 items', () => {
+    expect(V5_PACK.techniques).toHaveLength(12);
+    expect(V5_PACK.essences).toHaveLength(12);
+    expect(V5_PACK.catalysts).toHaveLength(12);
     expect(V5_PACK.items).toHaveLength(6);
+    expect(V5_MIX.technique).toBe(12);
+    expect(V5_MIX.essence).toBe(12);
+    expect(V5_MIX.catalyst).toBe(12);
+    expect(V5_MIX.item).toBe(6);
     expect(V5_PACK_MAIN_DECK_SIZE).toBe(
       V5_MIX.element +
         V5_MIX.technique +
@@ -28,13 +33,18 @@ describe('V5_PACK', () => {
         V5_MIX.item +
         V5_MIX.glitch,
     );
-    expect(V5_PACK_MAIN_DECK_SIZE).toBeLessThan(106);
+    // Concept §3.1 target is 106 with 54 elements; BASE_PACK still contributes 60.
+    expect(V5_TARGET_MAIN_DECK_SIZE).toBe(106);
+    expect(V5_PACK_MAIN_DECK_SIZE).toBe(112);
   });
 
-  it('builds main deck including formula + items', () => {
+  it('builds main deck including full formula + items', () => {
     const deck = buildMainDeckInstances(V5_PACK, createSeededRng(1));
     expect(deck).toHaveLength(V5_PACK_MAIN_DECK_SIZE);
     expect(deck.some((c) => c.defId === 'v5-technik-durchschuss')).toBe(true);
+    expect(deck.some((c) => c.defId === 'v5-technik-sperrkreis')).toBe(true);
+    expect(deck.some((c) => c.defId === 'v5-essenz-tiefenwasserextrakt')).toBe(true);
+    expect(deck.some((c) => c.defId === 'v5-katalysator-ueberladung')).toBe(true);
     expect(deck.some((c) => c.defId === 'v5-item-rostiger-nagel')).toBe(true);
   });
 
@@ -64,7 +74,6 @@ describe('V5_PACK', () => {
     );
     expect(state.phase).toBe('build');
 
-    // Inject a formula card if not drawn
     if (!state.players.p1.hand.some((c) => formulaSlotForDef(V5_PACK, c.defId))) {
       state = {
         ...state,

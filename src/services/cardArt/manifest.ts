@@ -101,6 +101,13 @@ export function illustrationKeyForCardId(cardId: string): string | null {
   return null;
 }
 
+/** Public path for a V5 Formelkomponente PNG under `/cards/formula/`. */
+export function resolveFormulaCardArtPath(cardId: string): string {
+  const match = cardId.match(/^v5-(?:technik|essenz|katalysator)-([a-z0-9-]+)$/);
+  if (!match) return '';
+  return publicAssetUrl(`/cards/formula/${match[1]}.png`);
+}
+
 /**
  * Prefer non-blank registry preview; otherwise `/cards/engine/{id}.png`.
  * Pure — Vitest covers blank preview without mocking the registry.
@@ -155,6 +162,8 @@ export function resolveCardArtPath(cardId: string): string {
     const def = manifestByKey.get(key);
     if (def) return illustrationPublicPath(key, def.kind);
   }
+  const formulaPath = resolveFormulaCardArtPath(cardId);
+  if (formulaPath) return formulaPath;
   return resolveEnginePartArtPath(cardId);
 }
 
