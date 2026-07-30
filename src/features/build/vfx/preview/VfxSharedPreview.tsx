@@ -3,7 +3,7 @@
  * Used by VFX Studio (Formeln) and Build → Combinate.
  * Location: src/features/build/vfx/preview/VfxSharedPreview.tsx
  */
-import React, { useEffect, useRef, useState } from 'react';
+import React, { forwardRef, useEffect, useImperativeHandle, useRef, useState } from 'react';
 import { Canvas } from '@react-three/fiber';
 import { getEffekseerAdapter, type EffekseerLoadState } from './effekseerAdapter';
 import {
@@ -12,6 +12,13 @@ import {
   type VfxEffectPresetDefinition,
 } from './effectPresets';
 import { VfxPreviewScene } from './VfxPreviewScene';
+import { captureCanvasHeroFrame } from '../../model/combinateSave';
+import type { RenderOutput } from '../types/renderOutput';
+
+export interface VfxSharedPreviewHandle {
+  /** Snapshot the WebGL canvas as a hero-frame PNG data URL. */
+  captureHeroFrame: () => RenderOutput | null;
+}
 
 export interface VfxSharedPreviewProps {
   /** When false, WebGL canvas is not mounted (hidden tab). */
@@ -47,16 +54,20 @@ function resolveStatusLabel(
   return `${preset.labelDe} — Platzhalter-Vorschau`;
 }
 
-export function VfxSharedPreview({
-  active = true,
-  presetId = 'aura',
-  modelUrls = [],
-  className = '',
-  emptyMessage = 'Kein Effekt ausgewählt',
-  showTimeline = true,
-  heroFrameMs: heroFrameMsProp,
-  onHeroFrameMsChange,
-}: VfxSharedPreviewProps) {
+export const VfxSharedPreview = forwardRef<VfxSharedPreviewHandle, VfxSharedPreviewProps>(
+  function VfxSharedPreview(
+    {
+      active = true,
+      presetId = 'aura',
+      modelUrls = [],
+      className = '',
+      emptyMessage = 'Kein Effekt ausgewählt',
+      showTimeline = true,
+      heroFrameMs: heroFrameMsProp,
+      onHeroFrameMsChange,
+    },
+    ref,
+  ) {
   const preset = resolveEffectPreset(presetId);
   const durationMs = preset?.durationMs ?? 3000;
 
@@ -67,9 +78,22 @@ export function VfxSharedPreview({
   const [loadState, setLoadState] = useState<EffekseerLoadState>('idle');
   const [filePresent, setFilePresent] = useState(false);
   const adapterRef = useRef(getEffekseerAdapter());
+  const previewRootRef = useRef<HTMLDivElement>(null);
 
   const heroFrameMs = heroFrameMsProp ?? heroFrameMsInternal;
   const setHeroFrameMs = onHeroFrameMsChange ?? setHeroFrameMsInternal;
+
+  useImperativeHandle(
+    ref,
+    () => ({
+      captureHeroFrame: () => {
+        const canvas = previewRootRef.current?.querySelector('canvas');
+        if (!(canvas instanceof HTMLCanvasElement)) return null;
+        return captureCanvasHeroFrame(canvas);
+      },
+    }),
+    [],
+  );
 
   useEffect(() => {
     if (!preset) return;
@@ -111,7 +135,7 @@ export function VfxSharedPreview({
       className={`flex min-h-0 flex-col overflow-hidden ${className}`}
       data-testid="vfx-shared-preview"
     >
-      <div className="relative min-h-0 flex-1 overflow-hidden rounded-lg border border-stone-800 bg-stone-950">
+      <div ref={previewRootRef} className="relative min-h-0 flex-1 overflow-hidden rounded-lg border border-stone-800 bg-stone-950">
         {!preset ? (
           <div
             className="flex h-full min-h-[12rem] flex-col items-center justify-center gap-2 p-4 text-center text-sm text-stone-500"
@@ -195,4 +219,5 @@ export function VfxSharedPreview({
       ) : null}
     </div>
   );
-}
+  },
+);

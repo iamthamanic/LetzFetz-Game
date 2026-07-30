@@ -2,7 +2,7 @@
  * Public exports for shared VFX preview slice.
  * Location: src/features/build/vfx/preview/index.ts
  */
-export { VfxSharedPreview, type VfxSharedPreviewProps } from './VfxSharedPreview';
+export { VfxSharedPreview, type VfxSharedPreviewHandle, type VfxSharedPreviewProps } from './VfxSharedPreview';
 export {
   VFX_EFFECT_PRESETS,
   probeEffectFile,

@@ -56,6 +56,18 @@ export function parseRequiredPositiveInt(
   return value;
 }
 
+export function parseOptionalPositiveInt(
+  record: Record<string, unknown>,
+  key: string,
+): number | null {
+  const value = record[key];
+  if (value === undefined || value === null) return null;
+  if (typeof value !== 'number' || !Number.isInteger(value) || value < 1) {
+    throw new Error(`${key} must be a positive integer when present`);
+  }
+  return value;
+}
+
 export function parseRequiredIsoTimestamp(
   record: Record<string, unknown>,
   key: string,

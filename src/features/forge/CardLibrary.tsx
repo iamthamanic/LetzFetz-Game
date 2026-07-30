@@ -23,6 +23,7 @@ import {
   FORMULA_ROLE_FILTERS,
   cardMatchesFormulaRoleFilter,
   formulaRoleFromCard,
+  isKombinationForgeCard,
   type FormulaRoleFilter,
 } from './model/formulaRoles';
 import { ElementEffectCard } from '../../components/cards/ElementEffectCard';
@@ -93,7 +94,11 @@ function LibraryCardFace({
         })
       : null;
   const formulaRole =
-    card.type === 'Formula' ? formulaRoleFromCard(card) ?? undefined : undefined;
+    card.type === 'Formula'
+      ? isKombinationForgeCard(card)
+        ? 'Kombination'
+        : formulaRoleFromCard(card) ?? undefined
+      : undefined;
 
   return (
     <LetzFetzCard
@@ -461,9 +466,7 @@ export function CardLibrary({
               const count =
                 filter.id === 'All'
                   ? formulaCards.length
-                  : filter.id === 'Kombination'
-                    ? 0
-                    : formulaCards.filter((c) => cardMatchesFormulaRoleFilter(c, filter.id)).length;
+                  : formulaCards.filter((c) => cardMatchesFormulaRoleFilter(c, filter.id)).length;
               const isActive = formulaRoleFilter === filter.id;
               return (
                 <button
@@ -534,7 +537,7 @@ export function CardLibrary({
             }
             subtitle={
               formulaRoleFilter === 'Kombination'
-                ? 'Gespeicherte T+E+K-Kombis kommen mit Combinate (#255).'
+                ? 'Kombinationen in Combinate speichern (Build → Combinate).'
                 : searchTerm
                   ? 'Andere Suchbegriffe ausprobieren'
                   : undefined

@@ -14,11 +14,14 @@ import {
   findFormulaCard,
   type FormulaCatalogCard,
 } from './model/combinateFormula';
+import { buildFormulaRecipeFromSlots } from './model/combinateSave';
 import {
   type BuildSession,
   type BuildSlotRole,
 } from './model/buildTypes';
 import { loadBuildSession, saveBuildSession } from './storage/buildSessionStorage';
+import { saveFormulaRecipe } from './vfx/registry';
+import type { VfxSharedPreviewHandle } from './vfx/preview';
 
 interface BuildCombineViewProps {
   /** True while Build → Combinate is visible. */
@@ -55,8 +58,13 @@ function clearSlot(session: BuildSession, role: BuildSlotRole): BuildSession {
 export function BuildCombineView({ active }: BuildCombineViewProps) {
   const catalogRef = useRef(loadFormulaCardCatalog());
   const catalog = catalogRef.current;
+  const previewRef = useRef<VfxSharedPreviewHandle>(null);
   const [session, setSession] = useState<BuildSession>(() => loadBuildSession().session);
+  const [savedHeroUrl, setSavedHeroUrl] = useState<string | null>(null);
+  const [saving, setSaving] = useState(false);
+  const [saveMessage, setSaveMessage] = useState<string | null>(null);
   const saveTimerRef = useRef<ReturnType<typeof setTimeout> | null>(null);
+  const saveFeedbackTimerRef = useRef<ReturnType<typeof setTimeout> | null>(null);
 
   useEffect(() => {
     if (saveTimerRef.current) clearTimeout(saveTimerRef.current);
@@ -68,6 +76,12 @@ export function BuildCombineView({ active }: BuildCombineViewProps) {
     };
   }, [session]);
 
+  useEffect(() => {
+    return () => {
+      if (saveFeedbackTimerRef.current) clearTimeout(saveFeedbackTimerRef.current);
+    };
+  }, []);
+
   const combinationLabel = buildCombinationLabel(session.slots);
   const filledSlotCount = countFilledSlots(session.slots);
 
@@ -77,6 +91,36 @@ export function BuildCombineView({ active }: BuildCombineViewProps) {
     findFormulaCard(catalog, session.slots.essenz) ??
     findFormulaCard(catalog, session.slots.katalysator);
   const focusCard = lastDropped ?? anySlotted;
+
+  const handleSaveCombination = () => {
+    if (filledSlotCount < 2) return;
+
+    setSaving(true);
+    setSaveMessage(null);
+
+    const heroFrame = previewRef.current?.captureHeroFrame() ?? null;
+    const recipe = buildFormulaRecipeFromSlots({
+      slots: session.slots,
+      name: session.name,
+      heroFrame,
+    });
+    if (!recipe) {
+      setSaving(false);
+      return;
+    }
+
+    saveFormulaRecipe(recipe);
+    if (heroFrame?.url) {
+      setSavedHeroUrl(heroFrame.url);
+    }
+    setSaving(false);
+    setSaveMessage('Kombination gespeichert — sichtbar unter Material → Formeln.');
+
+    if (saveFeedbackTimerRef.current) clearTimeout(saveFeedbackTimerRef.current);
+    saveFeedbackTimerRef.current = setTimeout(() => {
+      setSaveMessage(null);
+    }, 4000);
+  };
 
   return (
     <div
@@ -97,6 +141,7 @@ export function BuildCombineView({ active }: BuildCombineViewProps) {
 
         <div className="flex min-h-0 flex-col" style={{ flex: '0.75 1 0%' }}>
           <BuildPreviewPane
+            ref={previewRef}
             active={active}
             focusImageUrl={focusCard?.imageUrl ?? null}
             focusLabel={focusCard?.name ?? 'Vorschau'}
@@ -122,6 +167,10 @@ export function BuildCombineView({ active }: BuildCombineViewProps) {
         onNameChange={(name) => setSession((prev) => ({ ...prev, name }))}
         slots={session.slots}
         catalog={catalog}
+        heroFrameUrl={savedHeroUrl}
+        onSave={handleSaveCombination}
+        saving={saving}
+        saveMessage={saveMessage}
       />
     </div>
   );

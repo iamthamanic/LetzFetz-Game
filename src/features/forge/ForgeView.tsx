@@ -8,6 +8,7 @@ import { CardLibrary, type CardLibraryFilter } from './CardLibrary';
 import { projectId, publicAnonKey } from '../../utils/supabase/info';
 import { packToForgeCards, mergeForgeOverlays } from './data/packToForge';
 import { loadCardOverlays, saveCardOverlay } from '../../services/storage/cardOverlays';
+import { VFX_REGISTRY_UPDATED_EVENT } from '../../services/storage/vfxRegistryBridge';
 import type { ForgeCardData } from './model/types';
 import type { CardKind } from '../../components/cards/cardTypes';
 
@@ -83,6 +84,14 @@ export function ForgeView() {
 
   useEffect(() => {
     loadCards();
+  }, [loadCards]);
+
+  useEffect(() => {
+    const refreshFromRegistry = () => {
+      void loadCards();
+    };
+    window.addEventListener(VFX_REGISTRY_UPDATED_EVENT, refreshFromRegistry);
+    return () => window.removeEventListener(VFX_REGISTRY_UPDATED_EVENT, refreshFromRegistry);
   }, [loadCards]);
 
   const handleFilterChange = (filter: CardLibraryFilter) => {

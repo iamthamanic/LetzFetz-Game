@@ -9,7 +9,7 @@ import {
   mergePresentationOverlays,
   packToPresentationCards,
 } from '../../../components/cards/packPresentation';
-import { readVfxRegistryTechniqueSummaries } from '../../../services/storage/vfxRegistryBridge';
+import { readVfxRegistryFormulaRecipeSummaries, readVfxRegistryTechniqueSummaries } from '../../../services/storage/vfxRegistryBridge';
 import type { ForgeCardData } from '../model/types';
 
 function studioTechniquesToForgeCards(): ForgeCardData[] {
@@ -32,6 +32,34 @@ function studioTechniquesToForgeCards(): ForgeCardData[] {
   }));
 }
 
+function combinateRecipesToForgeCards(): ForgeCardData[] {
+  return readVfxRegistryFormulaRecipeSummaries().map((entry) => {
+    const slotLines = [
+      entry.techniqueId ? `Technik: ${entry.techniqueId}` : null,
+      entry.essenceId ? `Essenz: ${entry.essenceId}` : null,
+      entry.catalystId ? `Katalysator: ${entry.catalystId}` : null,
+    ].filter((line): line is string => line != null);
+
+    return {
+      id: entry.id,
+      name: entry.name,
+      type: 'Formula',
+      element: 'Neutral',
+      stats_json: { resistance: 1 },
+      effects: [
+        'Rolle: Kombination',
+        'Quelle: Combinate',
+        `Status: ${entry.status}`,
+        ...slotLines,
+      ],
+      image_asset: entry.heroFrameUrl ?? '',
+      fromPack: false,
+      created_at: entry.createdAt,
+      updated_at: entry.updatedAt,
+    };
+  });
+}
+
 /** Base pack + V5 Formelkomponenten when the pack has no formula defs of its own. */
 function packWithFormulaComponents(pack: ContentPack): ContentPack {
   const hasFormula =
@@ -51,6 +79,7 @@ export function packToForgeCards(pack: ContentPack = BASE_PACK): ForgeCardData[]
   return [
     ...packToPresentationCards(packWithFormulaComponents(pack)),
     ...studioTechniquesToForgeCards(),
+    ...combinateRecipesToForgeCards(),
   ];
 }
 

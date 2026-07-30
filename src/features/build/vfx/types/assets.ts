@@ -7,6 +7,7 @@
 import {
   assertObject,
   isNonEmptyString,
+  parseOptionalPositiveInt,
   parseOptionalString,
   parseRequiredIsoTimestamp,
   parseRequiredPositiveInt,
@@ -79,6 +80,10 @@ export interface FormulaRecipe {
   techniqueId: string | null;
   essenceId: string | null;
   catalystId: string | null;
+  /** Pinned V5 / Studio asset version when the slot is filled. */
+  techniqueVersion: number | null;
+  essenceVersion: number | null;
+  catalystVersion: number | null;
   heroFrame: RenderOutput | null;
   createdAt: string;
   updatedAt: string;
@@ -233,6 +238,9 @@ export function parseFormulaRecipe(raw: unknown): FormulaRecipe {
     techniqueId: parseOptionalString(record, 'techniqueId'),
     essenceId: parseOptionalString(record, 'essenceId'),
     catalystId: parseOptionalString(record, 'catalystId'),
+    techniqueVersion: parseOptionalPositiveInt(record, 'techniqueVersion'),
+    essenceVersion: parseOptionalPositiveInt(record, 'essenceVersion'),
+    catalystVersion: parseOptionalPositiveInt(record, 'catalystVersion'),
     heroFrame,
     createdAt: parseRequiredIsoTimestamp(record, 'createdAt'),
     updatedAt: parseRequiredIsoTimestamp(record, 'updatedAt'),
