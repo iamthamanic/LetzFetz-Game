@@ -65,6 +65,10 @@ export interface MatchMeta {
   v3FirstMarkPreservedThisAction?: boolean;
   /** V3: part defIds that already fired a once-per-turn trigger this turn. */
   v3FetzTriggerUsed?: Record<PlayerId, string[]>;
+  /** V5 character passives already used this turn (keys like `schluckspecht-fullblock`). */
+  v5PassiveUsed?: Record<PlayerId, string[]>;
+  /** V5 Stiernackenkommando stored attack/challenge bonus (0–2). */
+  v5RevengeBonus?: Record<PlayerId, number>;
 }
 
 export type PendingChoice =
@@ -149,6 +153,10 @@ export function resetTurnMeta(meta: MatchMeta, activePlayer: PlayerId): MatchMet
     v3FetzTriggerUsed: {
       p1: activePlayer === 'p1' ? [] : (meta.v3FetzTriggerUsed?.p1 ?? []),
       p2: activePlayer === 'p2' ? [] : (meta.v3FetzTriggerUsed?.p2 ?? []),
+    },
+    v5PassiveUsed: {
+      p1: activePlayer === 'p1' ? [] : (meta.v5PassiveUsed?.p1 ?? []),
+      p2: activePlayer === 'p2' ? [] : (meta.v5PassiveUsed?.p2 ?? []),
     },
   };
 }
