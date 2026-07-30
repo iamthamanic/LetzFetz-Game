@@ -122,7 +122,7 @@ Design: `.qa/design/vertical-slice-architecture.md`
 | [`docs/rules/SPIELANLEITUNG_V3_WIP.md`](docs/rules/SPIELANLEITUNG_V3_WIP.md) | V3 Vorgänger (Fetzgerät-Slots) — Soft-Retire zugunsten V5-Formel |
 | [`docs/letz-fetz-v3-überarbeitung.md`](docs/letz-fetz-v3-überarbeitung.md) | V3 Dump — historisch / Referenz |
 
-**Bei Unklarheit:** **Produktziel = V5.** Spielbarer Default bis Engine-Cutover: Base/V1 bzw. bestehende Flags. Explizit Base-Pack → V1-Regression. V3-Fetzgerät ist nicht das Zielmodell.
+**Bei Unklarheit:** **Produktziel = V5.** **Play-Default = V5 Formel** (`v5Formula`). Explizit Base-Pack → V1-Regression. V3-Fetzgerät / Bound-4 + Live-3D ist Soft-Retire (Legacy-Kachel), nicht das Zielmodell.
 
 **Pflege-Pflicht für Agenten:**
 

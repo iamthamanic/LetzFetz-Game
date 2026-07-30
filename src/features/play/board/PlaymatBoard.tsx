@@ -33,6 +33,7 @@ import { Button } from '../../../components/ui/Button';
 import { DndPlaymat } from './DndPlaymat';
 import { FetzChargeConfirmModal } from './FetzChargeConfirmModal';
 import { BoardEngineLiveZone } from '../engine3d/BoardEngineLiveZone';
+import { shouldShowBoardEngineLiveZone } from './boardEngineLive';
 
 interface PlaymatBoardProps {
   state: GameState;
@@ -533,10 +534,10 @@ export function PlaymatBoard({
               />
             )}
 
-            {!v5Formula ? (
+            {shouldShowBoardEngineLiveZone(v5Formula) ? (
               <BoardEngineLiveZone
                 recipe={liveEngineRecipe}
-                heading={liveEngineRecipe ? 'Fetzgerät Live-3D' : 'Live-3D'}
+                heading={liveEngineRecipe ? 'Fetzgerät Live-3D (Legacy)' : 'Live-3D (Legacy)'}
                 onSnapshotWarmed={onLiveEngineSnapshotWarmed}
               />
             ) : null}

@@ -1,9 +1,11 @@
 # Modular Fetzgerät 3D — Architecture ADR
 
-**Status:** Accepted for MVP  
-**Date:** 2026-07-28  
+**Status:** Soft-retire for default Play (legacy V3) — Accepted for MVP historically  
+**Date:** 2026-07-28 (updated 2026-07-30, #232)  
 **Issue:** #130  
-**Stack:** Vite 6 + React 18 + TypeScript (npm). No Three.js on `main` at ADR time.
+**Stack:** Vite 6 + React 18 + TypeScript (npm).
+
+> **Legacy V3:** Fetzgerät Live-3D (`BoardEngineLiveZone`) and Bound Träger/Antrieb/Aufsatz are **not** the Play default. Default matches use **V5 Formel** + `FormulaRig`. This folder documents the modular 3D pipeline for Forge/Build and for the explicit **V3 Playtest** tile. Do not treat Fetz-3D as the product visual target.
 
 ## 1. Goal
 

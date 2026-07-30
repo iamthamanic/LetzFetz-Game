@@ -576,18 +576,25 @@ export function PlayView({ onBattleMusicActiveChange }: PlayViewProps) {
     [state, pendingIntent, matchPack],
   );
 
+  const matchUsesV5Formula = state
+    ? isV5FormulaEnabled(rulesetFromState(state))
+    : false;
   const humanBoundRecipe = state ? boundToRecipe(state.players[HUMAN].bound) : null;
   const boundEnginePreviewEligible = Boolean(
-    humanBoundRecipe &&
+    !matchUsesV5Formula &&
+      humanBoundRecipe &&
       validateRecipe(humanBoundRecipe).active &&
       recipeHasRegistryAsset(humanBoundRecipe),
   );
-  /** Single Live-3D recipe for board Engine-Zone (MVP cheatbox wins). */
-  const liveEngineRecipe = enginePreviewMvp
-    ? MVP_DEMO_RECIPE
-    : boundEnginePreviewEligible && humanBoundRecipe
-      ? humanBoundRecipe
-      : null;
+  /** Live-3D recipe for legacy Bound matches only (soft-retire under V5). */
+  const liveEngineRecipe =
+    matchUsesV5Formula
+      ? null
+      : enginePreviewMvp
+        ? MVP_DEMO_RECIPE
+        : boundEnginePreviewEligible && humanBoundRecipe
+          ? humanBoundRecipe
+          : null;
 
   const announceDiceRoll = useCallback(() => {
     playDiceRoll();
@@ -918,6 +925,7 @@ export function PlayView({ onBattleMusicActiveChange }: PlayViewProps) {
             onEnginePreviewMvpChange={(enabled) => {
               setEnginePreviewMvp(enabled);
             }}
+            allowEnginePreviewMvp={!matchUsesV5Formula}
           />
         )}
 
