@@ -63,7 +63,7 @@ export function resolveCardElementMarks(input: {
     };
   }
 
-  if (input.type === 'Element' || input.type === 'Engine') {
+  if (input.type === 'Element' || input.type === 'Formula') {
     const gameEl = cardElementToGameElement(input.element);
     if (!gameEl) {
       return { icons: [], useMysteryIcon: false, elements: [], marks: [] };

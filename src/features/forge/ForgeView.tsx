@@ -64,7 +64,7 @@ export function ForgeView() {
             (c: ForgeCardData) =>
               c.id &&
               !packCards.some((p) => p.id === c.id) &&
-              ['Character', 'Ultimate', 'Element', 'Arena', 'Glitch', 'Engine'].includes(c.type),
+              ['Character', 'Ultimate', 'Element', 'Arena', 'Glitch', 'Formula'].includes(c.type),
           )
           .map((c: ForgeCardData) => ({
             ...c,

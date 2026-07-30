@@ -30,7 +30,7 @@ export const KIND_LABELS: Record<CardKind, string> = {
   Element: 'ELEMENT',
   Arena: 'ARENA',
   Glitch: 'GLITCH',
-  Engine: 'FETZGERÄT',
+  Formula: 'FORMEL',
 };
 
 export const ELEMENT_ACCENTS: Record<CardElement, { stripe: string; glow: string; badge: string }> = {

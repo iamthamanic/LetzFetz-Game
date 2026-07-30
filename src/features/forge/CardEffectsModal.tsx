@@ -10,7 +10,7 @@ interface CardEffectsModalProps {
 }
 
 const typeIcons: Record<string, string> = {
-  Character: '⚔️', Ultimate: '💫', Element: '🃏', Arena: '🏟️', Glitch: '🌀', Engine: '⚙️',
+  Character: '⚔️', Ultimate: '💫', Element: '🃏', Arena: '🏟️', Glitch: '🌀', Formula: '🧪',
 };
 
 export function CardEffectsModal({ isOpen, onClose, name, type, effects }: CardEffectsModalProps) {

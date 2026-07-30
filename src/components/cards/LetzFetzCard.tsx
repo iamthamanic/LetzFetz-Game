@@ -87,7 +87,7 @@ function typeIcon(type: CardKind): string {
     Element: '🃏',
     Arena: '🏟️',
     Glitch: '🌀',
-    Engine: '🔧',
+    Formula: '🧪',
   };
   return icons[type];
 }
@@ -264,14 +264,32 @@ export function LetzFetzCard({
         </div>
       )}
       <div className="pointer-events-none absolute inset-0 z-[2] bg-gradient-to-t from-[#5a5048]/90 via-transparent to-brand-beige-shadow/15" />
-      {portrait && presentation?.elementBadge && (
+      {portrait && (presentation?.typeBadge || presentation?.elementBadge) && (
         <div
-          className={`pointer-events-none absolute right-1 top-1 z-[3] rounded border border-amber-950/40 bg-stone-950/80 font-black uppercase tracking-wide text-amber-100 shadow ${
-            size === 'sm' ? 'px-1 py-px text-[7px]' : 'px-1.5 py-0.5 text-[9px]'
+          className={`pointer-events-none absolute right-1 top-1 z-[3] flex flex-col items-end gap-0.5 ${
+            size === 'sm' ? 'gap-px' : 'gap-0.5'
           }`}
-          data-testid="card-element-badge"
         >
-          {presentation.elementBadge}
+          {presentation.typeBadge ? (
+            <div
+              className={`rounded border border-amber-950/40 bg-stone-950/80 font-black uppercase tracking-wide text-amber-100 shadow ${
+                size === 'sm' ? 'px-1 py-px text-[7px]' : 'px-1.5 py-0.5 text-[9px]'
+              }`}
+              data-testid="card-type-badge"
+            >
+              {presentation.typeBadge}
+            </div>
+          ) : null}
+          {presentation.elementBadge ? (
+            <div
+              className={`rounded border border-amber-950/40 bg-stone-950/80 font-black uppercase tracking-wide text-amber-100 shadow ${
+                size === 'sm' ? 'px-1 py-px text-[7px]' : 'px-1.5 py-0.5 text-[9px]'
+              }`}
+              data-testid="card-element-badge"
+            >
+              {presentation.elementBadge}
+            </div>
+          ) : null}
         </div>
       )}
       {display.impulseKeywordChip && size !== 'sm' && (
