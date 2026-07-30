@@ -7,6 +7,8 @@ import { createGame } from './createGame';
 import { applyAction, getLegalActions } from './actions';
 import {
   applyGrossformelAftermath,
+  countFilledFormulaSlots,
+  isFormulaResolvable,
   isFullFormulaActivatable,
 } from './formulaCharge';
 import { clampFetzCharge, gainFetzCharge } from './status/fetzCharge';
@@ -96,6 +98,39 @@ describe('fetzCharge cap', () => {
   });
 });
 
+describe('isFormulaResolvable', () => {
+  it('requires at least two filled slots and one activatable component', () => {
+    const fullBoard: FormulaBoard = {
+      technik: comp('technik', 'test-technik', 't'),
+      essenz: comp('essenz', 'test-essenz', 'e'),
+      katalysator: comp('katalysator', 'test-katalysator', 'k'),
+    };
+    expect(countFilledFormulaSlots(fullBoard)).toBe(3);
+    expect(isFormulaResolvable(fullBoard)).toBe(true);
+
+    const twoSlot: FormulaBoard = {
+      technik: comp('technik', 'test-technik', 't'),
+      essenz: comp('essenz', 'test-essenz', 'e'),
+      katalysator: null,
+    };
+    expect(isFormulaResolvable(twoSlot)).toBe(true);
+
+    const oneSlot: FormulaBoard = {
+      technik: comp('technik', 'test-technik', 't'),
+      essenz: null,
+      katalysator: null,
+    };
+    expect(isFormulaResolvable(oneSlot)).toBe(false);
+
+    const twoFilledNoneActivatable: FormulaBoard = {
+      technik: { ...comp('technik', 'test-technik', 't'), exhausted: true },
+      essenz: { ...comp('essenz', 'test-essenz', 'e'), disturbed: true },
+      katalysator: null,
+    };
+    expect(isFormulaResolvable(twoFilledNoneActivatable)).toBe(false);
+  });
+});
+
 describe('isFullFormulaActivatable', () => {
   it('requires all three upright non-disturbed', () => {
     expect(
@@ -129,7 +164,7 @@ describe('full formula charge gain', () => {
     expect(state.players.p1.fetzCharge).toBe(1);
   });
 
-  it('does not gain on partial (technik only)', () => {
+  it('rejects technik-only activate', () => {
     let state = v5Game();
     state.phase = 'build';
     state.activePlayer = 'p1';
@@ -138,8 +173,24 @@ describe('full formula charge gain', () => {
       essenz: null,
       katalysator: null,
     };
+    expect(() =>
+      applyAction(state, { type: 'FORMULA_ACTIVATE' }, 'p1', V5_CTX),
+    ).toThrow(/at least two filled slots/i);
+    expect(state.players.p1.fetzCharge).toBe(0);
+  });
+
+  it('gains no charge on two-slot activate (missing katalysator)', () => {
+    let state = v5Game();
+    state.phase = 'build';
+    state.activePlayer = 'p1';
+    state.players.p1.formula = {
+      technik: comp('technik', 'test-technik', 't'),
+      essenz: comp('essenz', 'test-essenz', 'e'),
+      katalysator: null,
+    };
     state = applyAction(state, { type: 'FORMULA_ACTIVATE' }, 'p1', V5_CTX);
     expect(state.players.p1.fetzCharge).toBe(0);
+    expect(state.phase).toBe('action');
   });
 
   it('caps at 3 across repeated full activates', () => {

@@ -7,6 +7,23 @@ import { cloneState } from './helpers';
 
 const SLOTS = ['technik', 'essenz', 'katalysator'] as const;
 
+/** Occupied formula slots (any component, including exhausted/disturbed). */
+export function countFilledFormulaSlots(board: FormulaBoard): number {
+  return SLOTS.filter((slot) => board[slot] != null).length;
+}
+
+/**
+ * True when at least two slots are filled and ≥1 component is upright and activatable (#260).
+ * Missing role contributes no effect during resolve.
+ */
+export function isFormulaResolvable(board: FormulaBoard): boolean {
+  if (countFilledFormulaSlots(board) < 2) return false;
+  return SLOTS.some((slot) => {
+    const comp = board[slot];
+    return Boolean(comp && !comp.exhausted && !comp.disturbed);
+  });
+}
+
 /** True when all three slots hold upright, non-disturbed components. */
 export function isFullFormulaActivatable(board: FormulaBoard): boolean {
   return SLOTS.every((slot) => {

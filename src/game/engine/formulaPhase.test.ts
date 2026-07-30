@@ -121,7 +121,7 @@ describe('V5 Formelphase — getLegalActions', () => {
     expect(legal.some((a) => a.type === 'FORMULA_ACTIVATE')).toBe(false);
   });
 
-  it('offers REPLACE when slot occupied, not BUILD for that kind', () => {
+  it('offers ACTIVATE only with two or more filled slots', () => {
     let state = advanceToBuild(
       createGame({
         pack: V5_PACK,
@@ -163,6 +163,51 @@ describe('V5 Formelphase — getLegalActions', () => {
     expect(legal.some((a) => a.type === 'FORMULA_BUILD' && a.cardInstanceId === 'fh-0')).toBe(
       false,
     );
+    expect(legal.some((a) => a.type === 'FORMULA_ACTIVATE')).toBe(false);
+  });
+
+  it('offers ACTIVATE with two filled slots', () => {
+    let state = advanceToBuild(
+      createGame({
+        pack: V5_PACK,
+        p1CharacterId: 'knuspergnom',
+        p2CharacterId: 'schluckspecht',
+        startingPlayer: 'p1',
+        seed: 2211,
+        ruleset: V5_RULESET,
+      }),
+      V5_CTX,
+    );
+    state = {
+      ...state,
+      players: {
+        ...state.players,
+        p1: {
+          ...state.players.p1,
+          formula: {
+            technik: {
+              instanceId: 'old-t',
+              defId: 'test-technik',
+              slot: 'technik',
+              exhausted: false,
+              disturbed: false,
+              stabilityBonus: 0,
+            },
+            essenz: {
+              instanceId: 'old-e',
+              defId: 'test-essenz',
+              slot: 'essenz',
+              exhausted: false,
+              disturbed: false,
+              stabilityBonus: 0,
+            },
+            katalysator: null,
+          },
+        },
+      },
+    };
+
+    const legal = getLegalActions(state, V5_CTX);
     expect(legal.some((a) => a.type === 'FORMULA_ACTIVATE')).toBe(true);
   });
 });
