@@ -10,6 +10,13 @@ export {
   type VfxEffectPresetDefinition,
 } from './effectPresets';
 export {
+  mapCombinateSlotsToPresetLayers,
+  mapVisualRecipeToPresetLayers,
+  mapMvp9CardIdToPreset,
+  MVP9_CARD_PRESET_IDS,
+  type VfxPresetLayer,
+} from './visualRecipePresetLayers';
+export {
   getEffekseerAdapter,
   setEffekseerAdapterForTests,
   WasmEffekseerAdapter,
