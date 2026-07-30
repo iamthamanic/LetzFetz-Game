@@ -2082,3 +2082,57 @@ html[data-lf-reduced-motion='1'] *::after {
   }
 }
 
+
+/* Combinate: seamless flowing slot → preview dashes (period == dashoffset) */
+@keyframes build-connection-flow {
+  from {
+    stroke-dashoffset: 0;
+  }
+  to {
+    /* Must equal dasharray sum (12 + 16) for a seamless loop */
+    stroke-dashoffset: -28;
+  }
+}
+
+@keyframes build-connection-merge-pulse {
+  0%,
+  100% {
+    opacity: 0.9;
+    transform: scale(1);
+  }
+  50% {
+    opacity: 1;
+    transform: scale(1.08);
+  }
+}
+
+.build-connection-flow {
+  stroke-dasharray: 12 16;
+  stroke-dashoffset: 0;
+  animation: build-connection-flow 1.6s linear infinite;
+}
+
+.build-connection-flow--stem {
+  stroke-dasharray: 12 16;
+  animation-duration: 1.6s;
+}
+
+.build-connection-merge-pulse {
+  transform-box: fill-box;
+  transform-origin: center;
+  animation: build-connection-merge-pulse 2s ease-in-out infinite;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .build-connection-flow,
+  .build-connection-flow--stem,
+  .build-connection-merge-pulse {
+    animation: none;
+  }
+
+  .build-connection-flow,
+  .build-connection-flow--stem {
+    stroke-dasharray: none;
+    opacity: 0.95;
+  }
+}

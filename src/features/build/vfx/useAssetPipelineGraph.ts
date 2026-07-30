@@ -4,7 +4,6 @@
  */
 import { useCallback, useEffect, useRef, useState } from 'react';
 import {
-  addEdge,
   type Connection,
   type Edge,
   type Node,
@@ -15,15 +14,9 @@ import { saveTechniqueAsset, listTechniqueAssets } from './registry';
 import type { TechniqueAsset } from './types/assets';
 import {
   VFX_PIPELINE_NODE_TYPES,
-  defaultMeshyNodeData,
-  defaultNormalizeNodeData,
-  defaultPromptNodeData,
-  defaultSaveTechniqueNodeData,
-  defaultSocketNodeData,
   type VfxMeshyNodeData,
   type VfxNormalizeNodeData,
   type VfxPipelineNodeType,
-  type VfxPromptNodeData,
   type VfxSaveTechniqueNodeData,
   type VfxSocketNodeData,
 } from './nodes/vfxNodeTypes';
@@ -43,13 +36,14 @@ import {
 } from './sockets/socketMapHelpers';
 import type { VfxTechniqueSocketName } from './sockets/vfxSocketRoles';
 import type { Vec3 } from './types/wireTypes';
-
-let nodeCounter = 0;
-
-function nextNodeId(prefix: string): string {
-  nodeCounter += 1;
-  return `${prefix}-${nodeCounter}`;
-}
+import {
+  DEFAULT_PIPELINE_NODE_IDS,
+  PIPELINE_GRID,
+  applyPipelineGridLayout,
+  computePipelineGridMetrics,
+  createDefaultAssetPipeline,
+  type PipelineGridMetrics,
+} from './createDefaultAssetPipeline';
 
 function slugifyName(value: string): string {
   return value
@@ -83,15 +77,10 @@ function findUpstreamNode(
   return undefined;
 }
 
-function getPromptFromGraph(nodes: Node[], edges: Edge[], meshyNodeId: string): string {
-  const promptNode = findUpstreamNode(
-    nodes,
-    edges,
-    meshyNodeId,
-    VFX_PIPELINE_NODE_TYPES.vfxPrompt,
-  );
-  if (!promptNode) return '';
-  return (promptNode.data as VfxPromptNodeData).prompt.trim();
+function getPromptFromMeshyNode(nodes: Node[], meshyNodeId: string): string {
+  const meshy = nodes.find((n) => n.id === meshyNodeId);
+  if (!meshy || meshy.type !== VFX_PIPELINE_NODE_TYPES.vfxMeshy) return '';
+  return ((meshy.data as VfxMeshyNodeData).prompt ?? '').trim();
 }
 
 function getGlbFromUpstream(
@@ -289,12 +278,12 @@ export function useAssetPipelineGraph(enabled: boolean) {
     async (meshyNodeId: string) => {
       const currentNodes = nodesRef.current;
       const currentEdges = edgesRef.current;
-      const prompt = getPromptFromGraph(currentNodes, currentEdges, meshyNodeId);
+      const prompt = getPromptFromMeshyNode(currentNodes, meshyNodeId);
 
       if (!prompt) {
         patchNodeData(meshyNodeId, {
           status: 'FAILED',
-          statusMessage: 'Kein Prompt verbunden — bitte Prompt-Node verknüpfen.',
+          statusMessage: 'Bitte einen Prompt in der Meshy-Node eingeben.',
         });
         return;
       }
@@ -396,14 +385,14 @@ export function useAssetPipelineGraph(enabled: boolean) {
 
       const saveData = saveNode.data as VfxSaveTechniqueNodeData;
       const glbUrl = saveData.glbUrl ?? getGlbFromUpstream(currentNodes, currentEdges, saveNodeId);
-      const promptNode = findUpstreamNode(
+      const meshyNode = findUpstreamNode(
         currentNodes,
         currentEdges,
         saveNodeId,
-        VFX_PIPELINE_NODE_TYPES.vfxPrompt,
+        VFX_PIPELINE_NODE_TYPES.vfxMeshy,
       );
-      const promptText = promptNode
-        ? (promptNode.data as VfxPromptNodeData).prompt.trim()
+      const promptText = meshyNode
+        ? ((meshyNode.data as VfxMeshyNodeData).prompt ?? '').trim()
         : '';
 
       const name = saveData.techniqueName.trim() || promptText || 'Neue Technik';
@@ -467,6 +456,9 @@ export function useAssetPipelineGraph(enabled: boolean) {
             data: {
               ...node.data,
               onGenerate: () => requestMeshyGenerate(node.id),
+              onPromptChange: (prompt: string) => {
+                patchNodeData(node.id, { prompt });
+              },
             },
           };
         }
@@ -481,59 +473,73 @@ export function useAssetPipelineGraph(enabled: boolean) {
         }
         return node;
       }),
-    [requestMeshyGenerate, saveTechniqueFromNode],
+    [patchNodeData, requestMeshyGenerate, saveTechniqueFromNode],
   );
 
   useEffect(() => {
     setNodes((current) => bindNodeActions(current));
   }, [bindNodeActions, setNodes]);
 
-  const addPipelineNode = useCallback(
-    (type: VfxPipelineNodeType) => {
-      if (!enabled) return;
-      const id = nextNodeId(type);
-      const yOffset = nodesRef.current.length * 40;
+  /** Seed fixed Meshy → Normalize → Socket → Save graph once when Assets mode is active. */
+  useEffect(() => {
+    if (!enabled) return;
+    if (nodesRef.current.length > 0) return;
+    const seeded = createDefaultAssetPipeline();
+    setNodes(bindNodeActions(seeded.nodes));
+    setEdges(seeded.edges);
+    setSelectedNodeId(DEFAULT_PIPELINE_NODE_IDS.meshy);
+  }, [bindNodeActions, enabled, setEdges, setNodes]);
 
-      let data: Record<string, unknown>;
-      switch (type) {
-        case VFX_PIPELINE_NODE_TYPES.vfxPrompt:
-          data = defaultPromptNodeData();
-          break;
-        case VFX_PIPELINE_NODE_TYPES.vfxMeshy:
-          data = defaultMeshyNodeData();
-          break;
-        case VFX_PIPELINE_NODE_TYPES.vfxNormalize:
-          data = defaultNormalizeNodeData();
-          break;
-        case VFX_PIPELINE_NODE_TYPES.vfxSocket:
-          data = defaultSocketNodeData();
-          break;
-        case VFX_PIPELINE_NODE_TYPES.vfxSaveTechnique:
-          data = defaultSaveTechniqueNodeData();
-          break;
-        default:
-          data = { status: 'DRAFT' };
+  const [pipelineViewport, setPipelineViewport] = useState(PIPELINE_GRID.viewport);
+  const [pipelineViewportReady, setPipelineViewportReady] = useState(false);
+  const lastCanvasSizeRef = useRef({ width: 0, height: 0 });
+  /** After the first fit layout, never overwrite user-dragged node positions. */
+  const positionsLockedRef = useRef(false);
+
+  const reflowPipelineLayout = useCallback(
+    (canvasWidth: number, canvasHeight: number) => {
+      if (!enabled || canvasWidth <= 0 || canvasHeight <= 0) return;
+      const width = Math.round(canvasWidth);
+      const height = Math.round(canvasHeight);
+      if (
+        width === lastCanvasSizeRef.current.width &&
+        height === lastCanvasSizeRef.current.height &&
+        nodesRef.current.length > 0
+      ) {
+        return;
+      }
+      lastCanvasSizeRef.current = { width, height };
+      const metrics: PipelineGridMetrics = computePipelineGridMetrics(width, height);
+
+      if (nodesRef.current.length === 0) {
+        const seeded = createDefaultAssetPipeline(metrics);
+        setNodes(bindNodeActions(seeded.nodes));
+        setEdges(seeded.edges);
+        setSelectedNodeId(DEFAULT_PIPELINE_NODE_IDS.meshy);
+        setPipelineViewport(metrics.viewport);
+        setPipelineViewportReady(true);
+        positionsLockedRef.current = true;
+        return;
       }
 
-      const newNode: Node = {
-        id,
-        type,
-        position: { x: 80 + (nodesRef.current.length % 3) * 220, y: 60 + yOffset },
-        data,
-      };
-
-      setNodes((current) => bindNodeActions([...current, newNode]));
+      /** First real canvas measure: snap to the default grid once. */
+      if (!positionsLockedRef.current) {
+        setNodes((current) => bindNodeActions(applyPipelineGridLayout(current, metrics)));
+        setPipelineViewport(metrics.viewport);
+        setPipelineViewportReady(true);
+        positionsLockedRef.current = true;
+      }
+      /** Later resizes: keep dragged positions as-is. */
     },
-    [bindNodeActions, enabled, setNodes],
+    [bindNodeActions, enabled, setEdges, setNodes],
   );
 
   const updateSelectedPrompt = useCallback(
     (prompt: string) => {
       if (!selectedNodeId) return;
-      patchNodeData(selectedNodeId, {
-        prompt,
-        status: prompt.trim() ? 'DRAFT' : 'DRAFT',
-      });
+      const node = nodesRef.current.find((n) => n.id === selectedNodeId);
+      if (!node || node.type !== VFX_PIPELINE_NODE_TYPES.vfxMeshy) return;
+      patchNodeData(selectedNodeId, { prompt });
     },
     [patchNodeData, selectedNodeId],
   );
@@ -582,54 +588,9 @@ export function useAssetPipelineGraph(enabled: boolean) {
     [patchNodeData, selectedNodeId],
   );
 
-  const onConnect = useCallback(
-    (connection: Connection) => {
-      setEdges((current) => {
-        const next = addEdge(connection, current);
-        const targetNode = nodesRef.current.find((n) => n.id === connection.target);
-        if (
-          targetNode?.type === VFX_PIPELINE_NODE_TYPES.vfxNormalize &&
-          connection.source
-        ) {
-          const sourceNode = nodesRef.current.find((n) => n.id === connection.source);
-          const sourceData = sourceNode?.data as VfxMeshyNodeData | VfxNormalizeNodeData | undefined;
-          const upstreamGlb =
-            sourceData && 'modelAsset' in sourceData && sourceData.modelAsset?.glbUrl
-              ? sourceData.modelAsset.glbUrl
-              : sourceData && 'glbUrl' in sourceData
-                ? sourceData.glbUrl
-                : null;
-          if (upstreamGlb) {
-            void runNormalizeNode(connection.target);
-          }
-        }
-        if (
-          targetNode?.type === VFX_PIPELINE_NODE_TYPES.vfxSocket &&
-          connection.source
-        ) {
-          const sourceNode = nodesRef.current.find((n) => n.id === connection.source);
-          const normalizeData = sourceNode?.data as VfxNormalizeNodeData | undefined;
-          const meshyData = sourceNode?.data as VfxMeshyNodeData | undefined;
-          const glbUrl =
-            normalizeData?.modelAsset?.glbUrl ??
-            normalizeData?.glbUrl ??
-            meshyData?.glbUrl ??
-            null;
-          const modelAsset = normalizeData?.modelAsset ?? null;
-          if (glbUrl) {
-            patchNodeData(connection.target, {
-              glbUrl,
-              modelAsset,
-              status: 'READY',
-              statusMessage: formatSocketStatusMessage(true),
-            });
-          }
-        }
-        return next;
-      });
-    },
-    [patchNodeData, runNormalizeNode, setEdges],
-  );
+  const onConnect = useCallback((_connection: Connection) => {
+    /* Fixed pipeline — edges are pre-wired; ignore new connections. */
+  }, []);
 
   const selectedNode = selectedNodeId
     ? nodes.find((n) => n.id === selectedNodeId) ?? null
@@ -642,13 +603,15 @@ export function useAssetPipelineGraph(enabled: boolean) {
   return {
     nodes,
     edges,
+    pipelineViewport,
+    pipelineViewportReady,
     onNodesChange,
     onEdgesChange,
     onConnect,
+    reflowPipelineLayout,
     selectedNodeId,
     setSelectedNodeId,
     selectedNode,
-    addPipelineNode,
     updateSelectedPrompt,
     updateSelectedTechniqueName,
     updateSelectedActiveSocket,

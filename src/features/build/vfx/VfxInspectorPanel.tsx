@@ -7,7 +7,7 @@ import type { Node } from '@xyflow/react';
 import {
   VFX_PIPELINE_NODE_TYPES,
   VFX_STATUS_LABEL_DE,
-  type VfxPromptNodeData,
+  type VfxMeshyNodeData,
   type VfxSaveTechniqueNodeData,
   type VfxSocketNodeData,
 } from './nodes/vfxNodeTypes';
@@ -90,13 +90,13 @@ export function VfxInspectorPanel({
           ) : null}
         </dl>
 
-        {selectedNode.type === VFX_PIPELINE_NODE_TYPES.vfxPrompt ? (
+        {selectedNode.type === VFX_PIPELINE_NODE_TYPES.vfxMeshy ? (
           <label className="mt-4 block">
             <span className="text-[10px] uppercase text-stone-500">Prompt</span>
             <textarea
               className="mt-1 w-full resize-none rounded border border-stone-700 bg-stone-950 px-2 py-1.5 text-xs text-stone-200 focus:border-amber-600 focus:outline-none"
               rows={5}
-              value={(data as VfxPromptNodeData).prompt}
+              value={(data as VfxMeshyNodeData).prompt}
               onChange={(e) => onPromptChange(e.target.value)}
               placeholder="Beschreibe die Technik…"
               data-testid="vfx-inspector-prompt"

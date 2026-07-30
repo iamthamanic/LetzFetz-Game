@@ -69,7 +69,7 @@ export function BuildView({ active }: BuildViewProps) {
         />
       </div>
 
-      <div className="relative z-10 min-h-0 flex-1 overflow-hidden">
+      <div className="relative z-10 flex h-0 min-h-0 flex-1 flex-col overflow-hidden">
         {subTab === 'combine' ? (
           <BuildCombineView active={active} />
         ) : (

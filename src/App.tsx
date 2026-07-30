@@ -54,7 +54,7 @@ function AppShell() {
   };
 
   return (
-    <div className="flex min-h-screen flex-col bg-gray-950">
+    <div className="flex h-dvh max-h-dvh flex-col overflow-hidden bg-gray-950">
       <MusicBedSync bed={musicBed} />
       <header
         data-testid="app-header"
@@ -89,7 +89,7 @@ function AppShell() {
           <ForgeView />
         </div>
         <div
-          className={`flex min-h-0 flex-1 flex-col ${currentView === 'build' ? '' : 'hidden'}`}
+          className={`flex h-full min-h-0 flex-1 flex-col overflow-hidden ${currentView === 'build' ? '' : 'hidden'}`}
         >
           <BuildView active={currentView === 'build'} />
         </div>

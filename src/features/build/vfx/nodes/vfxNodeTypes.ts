@@ -11,7 +11,6 @@ import {
 import type { VfxTechniqueSocketName } from '../sockets/vfxSocketRoles';
 
 export const VFX_PIPELINE_NODE_TYPES = {
-  vfxPrompt: 'vfxPrompt',
   vfxMeshy: 'vfxMeshy',
   vfxNormalize: 'vfxNormalize',
   vfxSocket: 'vfxSocket',
@@ -27,11 +26,8 @@ export interface VfxNodeBaseData {
   [key: string]: unknown;
 }
 
-export interface VfxPromptNodeData extends VfxNodeBaseData {
-  prompt: string;
-}
-
 export interface VfxMeshyNodeData extends VfxNodeBaseData {
+  prompt: string;
   taskId: string | null;
   glbUrl: string | null;
 }
@@ -55,7 +51,6 @@ export interface VfxSaveTechniqueNodeData extends VfxNodeBaseData {
 }
 
 export type VfxPipelineNodeData =
-  | VfxPromptNodeData
   | VfxMeshyNodeData
   | VfxNormalizeNodeData
   | VfxSocketNodeData
@@ -81,12 +76,8 @@ export const VFX_STATUS_CLASS: Record<VfxAssetStatus, string> = {
   OUTDATED: 'bg-orange-900/80 text-orange-100',
 };
 
-export function defaultPromptNodeData(): VfxPromptNodeData {
-  return { prompt: '', status: 'DRAFT' };
-}
-
 export function defaultMeshyNodeData(): VfxMeshyNodeData {
-  return { taskId: null, glbUrl: null, status: 'DRAFT' };
+  return { prompt: '', taskId: null, glbUrl: null, status: 'DRAFT' };
 }
 
 export function defaultNormalizeNodeData(): VfxNormalizeNodeData {

@@ -1,5 +1,5 @@
 /**
- * VFX Studio shell — modes, node library, React Flow canvas, inspector.
+ * VFX Studio shell — fixed Asset Pipeline graph, preview, inspector.
  * Location: src/features/build/vfx/VfxStudioView.tsx
  */
 import React, { useEffect, useMemo, useState } from 'react';
@@ -9,17 +9,18 @@ import { Tabs, type TabItem } from '../../../components/ui/Tabs';
 import { VfxCreditConfirmModal } from './VfxCreditConfirmModal';
 import { VfxFlowCanvas } from './VfxFlowCanvas';
 import { VfxInspectorPanel } from './VfxInspectorPanel';
-import { VfxNodeLibrary, type VfxStudioMode } from './VfxNodeLibrary';
 import { useAssetPipelineGraph } from './useAssetPipelineGraph';
 import { VfxSharedPreview } from './preview';
 import { VfxBatchPanel } from './VfxBatchPanel';
 import {
   VFX_PIPELINE_NODE_TYPES,
+  VFX_STATUS_LABEL_DE,
   type VfxSocketNodeData,
 } from './nodes/vfxNodeTypes';
 import { VFX_TECHNIQUE_SOCKET_NAMES } from './sockets/vfxSocketRoles';
+import type { TechniqueAsset } from './types/assets';
 
-export type { VfxStudioMode };
+export type VfxStudioMode = 'assets' | 'formeln' | 'batch';
 
 const MODE_KEY = 'letz-fetz:vfx-studio-mode';
 
@@ -45,7 +46,7 @@ const MODE_TABS: TabItem[] = [
 ];
 
 const MODE_SUBTITLE: Record<VfxStudioMode, string> = {
-  assets: 'Meshy → Normalisieren → Sockets → Effekseer-Presets → Speichern',
+  assets: 'Meshy → Normalisieren → Sockets → Speichern (fest verdrahtet)',
   formeln: 'Technik + Essenz + Katalysator → Live-Vorschau → Hero-Frame',
   batch: 'Headless-Render mit gleicher Preview-Szene',
 };
@@ -60,8 +61,34 @@ function readInitialMode(): VfxStudioMode {
   return 'assets';
 }
 
+function SavedTechniquesStrip({ techniques }: { techniques: TechniqueAsset[] }) {
+  if (techniques.length === 0) return null;
+  return (
+    <div
+      className="flex flex-none gap-2 overflow-x-auto border-t border-stone-800 px-3 py-2"
+      data-testid="vfx-saved-techniques-strip"
+    >
+      {techniques.map((tech) => (
+        <div
+          key={tech.id}
+          className="shrink-0 rounded border border-stone-800 bg-stone-950/80 px-2 py-1"
+          data-testid={`vfx-saved-technique-${tech.id}`}
+        >
+          <p className="max-w-[10rem] truncate text-[11px] font-medium text-stone-200">
+            {tech.name}
+          </p>
+          <p className="text-[9px] text-stone-500">
+            {VFX_STATUS_LABEL_DE[tech.status]} · v{tech.version}
+          </p>
+        </div>
+      ))}
+    </div>
+  );
+}
+
 export function VfxStudioView() {
   const [mode, setMode] = useState<VfxStudioMode>(() => readInitialMode());
+  const [graphNodeDragging, setGraphNodeDragging] = useState(false);
   const pipeline = useAssetPipelineGraph(mode === 'assets');
 
   const selectedSocketData = useMemo(() => {
@@ -84,6 +111,11 @@ export function VfxStudioView() {
     } catch {
       /* ignore */
     }
+  }, [mode]);
+
+  // Leaving assets mode must clear drag pause so Formeln/Batch are not stuck inactive.
+  useEffect(() => {
+    if (mode !== 'assets') setGraphNodeDragging(false);
   }, [mode]);
 
   return (
@@ -109,25 +141,26 @@ export function VfxStudioView() {
 
       <ReactFlowProvider>
         <div className="flex min-h-0 flex-1 overflow-hidden">
-          <VfxNodeLibrary
-            mode={mode}
-            onAddNode={pipeline.addPipelineNode}
-            savedTechniques={pipeline.savedTechniques}
-          />
           <main className="flex min-h-0 min-w-0 flex-1 flex-col gap-2 p-2 sm:p-3">
             {mode === 'assets' ? (
               <>
                 <VfxFlowCanvas
                   nodes={pipeline.nodes}
                   edges={pipeline.edges}
+                  viewport={pipeline.pipelineViewport}
+                  viewportReady={pipeline.pipelineViewportReady}
                   onNodesChange={pipeline.onNodesChange}
                   onEdgesChange={pipeline.onEdgesChange}
                   onConnect={pipeline.onConnect}
                   onSelectNode={pipeline.setSelectedNodeId}
+                  onNodeDragActiveChange={setGraphNodeDragging}
+                  onCanvasSize={(width, height) =>
+                    pipeline.reflowPipelineLayout(width, height)
+                  }
                 />
                 {selectedSocketData ? (
                   <VfxSharedPreview
-                    active
+                    active={!graphNodeDragging}
                     presetId="aura"
                     className="min-h-[14rem] flex-none sm:min-h-[16rem]"
                     showTimeline={false}
@@ -140,6 +173,7 @@ export function VfxStudioView() {
                     emptyMessage="Socket-Vorschau"
                   />
                 ) : null}
+                <SavedTechniquesStrip techniques={pipeline.savedTechniques} />
               </>
             ) : mode === 'formeln' ? (
               <VfxSharedPreview

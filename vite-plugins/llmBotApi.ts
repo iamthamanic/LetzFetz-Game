@@ -1,5 +1,5 @@
 /**
- * Vite middleware: Ollama Cloud chat for LLM bot (API key server-side only).
+ * Vite middleware: Ollama Cloud chat for LLM bot + formula name suggestions.
  * Location: vite-plugins/llmBotApi.ts
  */
 import type { Plugin, Connect } from 'vite';
@@ -9,6 +9,7 @@ type Body = {
   system?: string;
   user?: string;
   actionCount?: number;
+  purpose?: 'bot' | 'formula-name';
 };
 
 function readBody(req: Connect.IncomingMessage): Promise<string> {
@@ -40,10 +41,21 @@ export function llmBotApiPlugin(env: Record<string, string>): Plugin {
             return;
           }
 
-          const model = (env.OLLAMA_BOT_MODEL || 'glm-5.2:cloud').trim();
           const raw = await readBody(req);
           const body = JSON.parse(raw) as Body;
-          if (!body.system || !body.user || typeof body.actionCount !== 'number') {
+          const isName = body.purpose === 'formula-name';
+          const model = (
+            isName
+              ? env.OLLAMA_NAME_MODEL || 'kimi-k2.7-code:cloud'
+              : env.OLLAMA_BOT_MODEL || 'glm-5.2:cloud'
+          ).trim();
+
+          if (!body.system || !body.user) {
+            res.statusCode = 400;
+            res.end(JSON.stringify({ error: 'Invalid body' }));
+            return;
+          }
+          if (!isName && typeof body.actionCount !== 'number') {
             res.statusCode = 400;
             res.end(JSON.stringify({ error: 'Invalid body' }));
             return;
@@ -83,8 +95,9 @@ export function llmBotApiPlugin(env: Record<string, string>): Plugin {
             message?: { content?: string };
           };
           const content = data.message?.content ?? '';
-          // Validate shape early so the client gets a clear error
-          parseLlmBotResponse(content, body.actionCount);
+          if (!isName) {
+            parseLlmBotResponse(content, body.actionCount as number);
+          }
 
           res.statusCode = 200;
           res.setHeader('Content-Type', 'application/json');

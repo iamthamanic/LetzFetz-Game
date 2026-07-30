@@ -5,6 +5,7 @@
 import React from 'react';
 import { Handle, Position, type NodeProps } from '@xyflow/react';
 import { Crosshair } from 'lucide-react';
+import { VfxNodeShell } from './VfxNodeShell';
 import { VfxNodeStatusBadge } from './VfxNodeStatusBadge';
 import type { VfxSocketNodeData } from './vfxNodeTypes';
 import { formatSocketPositionDe } from '../sockets/socketMapHelpers';
@@ -16,12 +17,7 @@ export function VfxSocketNode({ data, selected }: NodeProps) {
   const activePos = nodeData.sockets[nodeData.activeSocket];
 
   return (
-    <div
-      className={`min-w-[200px] rounded-lg border bg-stone-900/95 px-3 py-2 shadow-lg ${
-        selected ? 'border-amber-500/80' : 'border-stone-700'
-      }`}
-      data-testid="vfx-node-socket"
-    >
+    <VfxNodeShell selected={selected} status={nodeData.status} testId="vfx-node-socket">
       <Handle type="target" position={Position.Left} className="!h-2 !w-2 !bg-violet-400" />
       <div className="mb-1 flex items-center justify-between gap-2">
         <div className="flex items-center gap-1.5 text-xs font-semibold text-violet-100">
@@ -42,6 +38,6 @@ export function VfxSocketNode({ data, selected }: NodeProps) {
         <p className="mt-1 text-[10px] text-stone-500">{nodeData.statusMessage}</p>
       ) : null}
       <Handle type="source" position={Position.Right} className="!h-2 !w-2 !bg-violet-400" />
-    </div>
+    </VfxNodeShell>
   );
 }

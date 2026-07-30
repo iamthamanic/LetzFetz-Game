@@ -3,6 +3,7 @@
  * Location: src/features/build/FormulaLibraryPanel.tsx
  */
 import React, { useState } from 'react';
+import { ChevronDown, ChevronRight } from 'lucide-react';
 import {
   BUILD_SLOT_LABEL_DE,
   BUILD_SLOT_ORDER,
@@ -34,6 +35,18 @@ const ELEMENT_FILTER_OPTIONS = [
   { value: '', label: 'Alle Elemente' },
   ...ELEMENT_ORDER.map((el) => ({ value: el, label: ELEMENT_LABELS_DE[el] })),
 ];
+
+const ROLE_FILTER_OPTIONS = [
+  { value: '', label: 'Alle Typen' },
+  ...BUILD_SLOT_ORDER.map((role) => ({
+    value: role,
+    label: BUILD_SLOT_LABEL_DE[role],
+  })),
+];
+
+function isBuildSlotRole(value: string): value is BuildSlotRole {
+  return (BUILD_SLOT_ORDER as string[]).includes(value);
+}
 
 function cardMatchesQuery(card: FormulaCatalogCard, query: string): boolean {
   const q = query.trim().toLowerCase();
@@ -97,16 +110,29 @@ function FormulaCardTile({ card }: { card: FormulaCatalogCard }) {
   );
 }
 
+const DEFAULT_SECTION_OPEN: Record<BuildSlotRole, boolean> = {
+  technik: true,
+  essenz: true,
+  katalysator: true,
+};
+
 export function FormulaLibraryPanel({ cards }: FormulaLibraryPanelProps) {
   const [query, setQuery] = useState('');
   const [elementFilter, setElementFilter] = useState('');
+  const [roleFilter, setRoleFilter] = useState('');
+  const [sectionOpen, setSectionOpen] = useState(DEFAULT_SECTION_OPEN);
 
   const filtered = cards.filter((card) => {
     if (!cardMatchesQuery(card, query)) return false;
+    if (roleFilter && card.role !== roleFilter) return false;
     if (!elementFilter) return true;
-    if (card.role !== 'essenz') return elementFilter === '';
+    if (card.role !== 'essenz') return false;
     return card.element === elementFilter;
   });
+
+  const visibleRoles = roleFilter && isBuildSlotRole(roleFilter)
+    ? [roleFilter]
+    : BUILD_SLOT_ORDER;
 
   const byRole = BUILD_SLOT_ORDER.reduce(
     (acc, role) => {
@@ -118,7 +144,7 @@ export function FormulaLibraryPanel({ cards }: FormulaLibraryPanelProps) {
 
   return (
     <aside
-      className="flex h-full w-56 shrink-0 flex-col overflow-hidden border-r border-stone-800 bg-stone-950/95"
+      className="flex h-full max-h-full w-56 shrink-0 flex-col overflow-hidden border-r border-stone-800 bg-stone-950/95"
       data-testid="build-library"
     >
       <header className="flex-none space-y-1.5 border-b border-stone-800 px-2.5 py-2">
@@ -134,17 +160,31 @@ export function FormulaLibraryPanel({ cards }: FormulaLibraryPanelProps) {
           data-testid="build-library-search"
           className="[&_input]:py-1.5 [&_input]:text-xs [&_span]:mb-0.5 [&_span]:text-[9px]"
         />
-        <Select
-          label="Element"
-          value={elementFilter}
-          onChange={(event) => setElementFilter(event.target.value)}
-          options={ELEMENT_FILTER_OPTIONS}
-          data-testid="build-library-element-filter"
-          className="[&_select]:py-1.5 [&_select]:text-xs [&_span]:mb-0.5 [&_span]:text-[9px]"
-        />
+        <div className="flex gap-1.5">
+          <Select
+            label="Element"
+            value={elementFilter}
+            onChange={(event) => setElementFilter(event.target.value)}
+            options={ELEMENT_FILTER_OPTIONS}
+            data-testid="build-library-element-filter"
+            className="min-w-0 flex-1 [&_select]:px-2 [&_select]:py-1.5 [&_select]:pr-6 [&_select]:text-[10px] [&_span]:mb-0.5 [&_span]:text-[9px]"
+          />
+          <Select
+            label="Formel-Typ"
+            value={roleFilter}
+            onChange={(event) => setRoleFilter(event.target.value)}
+            options={ROLE_FILTER_OPTIONS}
+            data-testid="build-library-role-filter"
+            className="min-w-0 flex-1 [&_select]:px-2 [&_select]:py-1.5 [&_select]:pr-6 [&_select]:text-[10px] [&_span]:mb-0.5 [&_span]:text-[9px]"
+          />
+        </div>
       </header>
 
-      <div className="min-h-0 flex-1 overflow-x-hidden overflow-y-auto px-2 py-2">
+      {/* h-0 + flex-1: force scroll region to respect parent height (not content height). */}
+      <div
+        className="h-0 min-h-0 flex-1 overflow-x-hidden overflow-y-auto px-2 py-2"
+        data-testid="build-library-scroll"
+      >
         {cards.length === 0 ? (
           <p
             className="rounded-lg border border-dashed border-stone-700 bg-stone-900/50 px-2 py-4 text-center text-[11px] text-stone-400"
@@ -161,25 +201,45 @@ export function FormulaLibraryPanel({ cards }: FormulaLibraryPanelProps) {
           </p>
         ) : (
           <div className="flex flex-col gap-3">
-            {BUILD_SLOT_ORDER.map((role) => {
+            {visibleRoles.map((role) => {
               const group = byRole[role];
+              const open = sectionOpen[role];
+              const panelId = `build-library-section-${role}`;
               return (
                 <section key={role} aria-label={BUILD_SLOT_LABEL_DE[role]} className="min-w-0">
-                  <h3
-                    className={`mb-1.5 text-[9px] font-bold uppercase tracking-widest ${ROLE_ACCENT[role].split(' ').pop()}`}
+                  <button
+                    type="button"
+                    className={`mb-1.5 flex w-full items-center gap-1 rounded px-0.5 py-0.5 text-left hover:bg-stone-900/80 ${ROLE_ACCENT[role].split(' ').pop()}`}
+                    aria-expanded={open}
+                    aria-controls={panelId}
+                    data-testid={`build-library-toggle-${role}`}
+                    onClick={() =>
+                      setSectionOpen((prev) => ({ ...prev, [role]: !prev[role] }))
+                    }
                   >
-                    {BUILD_SLOT_LABEL_DE[role]}
-                    <span className="ml-1 font-normal text-stone-600">({group.length})</span>
-                  </h3>
-                  {group.length === 0 ? (
-                    <p className="text-[10px] text-stone-600">—</p>
-                  ) : (
-                    <div className="flex flex-wrap gap-1.5">
-                      {group.map((card) => (
-                        <FormulaCardTile key={card.id} card={card} />
-                      ))}
+                    {open ? (
+                      <ChevronDown className="h-3 w-3 shrink-0 opacity-80" aria-hidden />
+                    ) : (
+                      <ChevronRight className="h-3 w-3 shrink-0 opacity-80" aria-hidden />
+                    )}
+                    <span className="text-[9px] font-bold uppercase tracking-widest">
+                      {BUILD_SLOT_LABEL_DE[role]}
+                      <span className="ml-1 font-normal text-stone-600">({group.length})</span>
+                    </span>
+                  </button>
+                  {open ? (
+                    <div id={panelId}>
+                      {group.length === 0 ? (
+                        <p className="text-[10px] text-stone-600">—</p>
+                      ) : (
+                        <div className="flex flex-wrap gap-1.5">
+                          {group.map((card) => (
+                            <FormulaCardTile key={card.id} card={card} />
+                          ))}
+                        </div>
+                      )}
                     </div>
-                  )}
+                  ) : null}
                 </section>
               );
             })}

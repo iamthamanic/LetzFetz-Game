@@ -2,8 +2,9 @@
  * R3F scene content for shared VFX preview (model + effect stand-in).
  * Location: src/features/build/vfx/preview/VfxPreviewScene.tsx
  */
-import { Suspense, useMemo, useRef, useState } from 'react';
+import { Suspense, useEffect, useMemo, useRef, useState } from 'react';
 import { Bounds, Center, Grid, OrbitControls, useGLTF } from '@react-three/drei';
+import { useThree } from '@react-three/fiber';
 import type { OrbitControls as OrbitControlsImpl } from 'three-stdlib';
 import { AuraParticleStandIn } from './AuraParticleStandIn';
 import {
@@ -22,6 +23,23 @@ function LoadedGlb({ url }: LoadedGlbProps) {
   const { scene } = useGLTF(url);
   const cloned = useMemo(() => scene.clone(true), [scene]);
   return <primitive object={cloned} />;
+}
+
+/** Request a frame when demand-mode scene inputs change. */
+function DemandInvalidate({
+  playheadMs,
+  markersRevision,
+  activeSocket,
+}: {
+  playheadMs: number;
+  markersRevision: string;
+  activeSocket: string;
+}) {
+  const invalidate = useThree((s) => s.invalidate);
+  useEffect(() => {
+    invalidate();
+  }, [invalidate, playheadMs, markersRevision, activeSocket]);
+  return null;
 }
 
 export interface VfxPreviewSceneProps {
@@ -52,9 +70,24 @@ export function VfxPreviewScene({
   const showAuraStandIn = useStandIn && preset.category === 'aura';
   const orbitRef = useRef<OrbitControlsImpl>(null);
   const [orbitEnabled, setOrbitEnabled] = useState(true);
+  const safeMarkers = socketMarkers.filter(
+    (entry): entry is VfxSocketMarkerEntry =>
+      Boolean(entry?.name && entry.position),
+  );
+  const markersRevision = safeMarkers
+    .map(
+      (entry) =>
+        `${entry.name}:${entry.position.x.toFixed(3)},${entry.position.y.toFixed(3)},${entry.position.z.toFixed(3)}`,
+    )
+    .join('|');
 
   return (
     <>
+      <DemandInvalidate
+        playheadMs={playheadMs}
+        markersRevision={markersRevision}
+        activeSocket={activeSocket}
+      />
       <color attach="background" args={['#0c0a09']} />
       <ambientLight intensity={0.65} />
       <directionalLight position={[3, 4, 2]} intensity={1.1} />
@@ -86,9 +119,9 @@ export function VfxPreviewScene({
       {showAuraStandIn ? (
         <AuraParticleStandIn playheadMs={playheadMs} durationMs={durationMs} />
       ) : null}
-      {socketMarkers.length > 0 ? (
+      {safeMarkers.length > 0 ? (
         <VfxSocketMarkers
-          markers={socketMarkers}
+          markers={safeMarkers}
           activeSocket={activeSocket}
           editable={editableSockets}
           onPositionChange={onSocketPositionChange}

@@ -12,6 +12,7 @@ import {
   type VfxEffectPresetDefinition,
 } from './effectPresets';
 import { VfxPreviewScene } from './VfxPreviewScene';
+import { VfxPreviewErrorBoundary } from './VfxPreviewErrorBoundary';
 import { captureCanvasHeroFrame } from '../../model/combinateSave';
 import type { RenderOutput } from '../types/renderOutput';
 import type { VfxSocketMarkerEntry } from './VfxSocketMarkers';
@@ -24,7 +25,7 @@ export interface VfxSharedPreviewHandle {
 }
 
 export interface VfxSharedPreviewProps {
-  /** When false, WebGL canvas is not mounted (hidden tab). */
+  /** When false, WebGL canvas is not mounted (hidden tab / graph drag). */
   active?: boolean;
   /** Built-in preset id, e.g. `aura`. Defaults to aura. */
   presetId?: string;
@@ -91,6 +92,7 @@ export const VfxSharedPreview = forwardRef<VfxSharedPreviewHandle, VfxSharedPrev
   );
   const [loadState, setLoadState] = useState<EffekseerLoadState>('idle');
   const [filePresent, setFilePresent] = useState(false);
+  const [contextLost, setContextLost] = useState(false);
   const adapterRef = useRef(getEffekseerAdapter());
   const previewRootRef = useRef<HTMLDivElement>(null);
 
@@ -141,6 +143,11 @@ export const VfxSharedPreview = forwardRef<VfxSharedPreviewHandle, VfxSharedPrev
     };
   }, [active, preset?.efkefcPath]);
 
+  // Clear context-lost flag when the canvas is intentionally unmounted (e.g. graph drag).
+  useEffect(() => {
+    if (!active) setContextLost(false);
+  }, [active]);
+
   const useStandIn = Boolean(preset) && loadState !== 'loading';
   const statusLabel = resolveStatusLabel(preset, loadState, filePresent);
 
@@ -165,28 +172,55 @@ export const VfxSharedPreview = forwardRef<VfxSharedPreviewHandle, VfxSharedPrev
           >
             Vorschau pausiert
           </div>
+        ) : contextLost ? (
+          <div
+            className="flex h-full min-h-[12rem] flex-col items-center justify-center gap-2 p-4 text-center"
+            data-testid="vfx-shared-preview-context-lost"
+          >
+            <p className="text-sm text-stone-400">WebGL-Kontext verloren</p>
+            <button
+              type="button"
+              className="rounded border border-stone-700 bg-stone-900 px-3 py-1.5 text-xs text-stone-200 hover:bg-stone-800"
+              onClick={() => setContextLost(false)}
+            >
+              Vorschau neu laden
+            </button>
+          </div>
         ) : (
           <>
-            <Canvas
-              className="h-full w-full"
-              camera={{ position: [1.4, 0.9, 1.6], fov: 42 }}
-              dpr={[1, 1.75]}
-              gl={{ antialias: true, alpha: false }}
-              data-testid="vfx-shared-preview-canvas"
-            >
-              <VfxPreviewScene
-                preset={preset}
-                playheadMs={playheadMs}
-                durationMs={durationMs}
-                modelUrls={modelUrls}
-                useStandIn={useStandIn}
-                socketMarkers={socketMarkers}
-                activeSocket={activeSocket}
-                editableSockets={editableSockets}
-                onSocketPositionChange={onSocketPositionChange}
-                onSelectSocket={onSelectSocket}
-              />
-            </Canvas>
+            {/* testid on HTML wrapper only — never on R3F Canvas/primitives */}
+            <div className="h-full w-full" data-testid="vfx-shared-preview-canvas">
+              <VfxPreviewErrorBoundary resetKey={`${presetId}-${activeSocket}`}>
+                <Canvas
+                  className="h-full w-full"
+                  camera={{ position: [1.4, 0.9, 1.6], fov: 42 }}
+                  dpr={[1, 1.5]}
+                  frameloop="demand"
+                  gl={{ antialias: true, alpha: false, powerPreference: 'high-performance' }}
+                  onCreated={({ gl }) => {
+                    const canvas = gl.domElement;
+                    const onLost = (event: Event) => {
+                      event.preventDefault();
+                      setContextLost(true);
+                    };
+                    canvas.addEventListener('webglcontextlost', onLost, false);
+                  }}
+                >
+                  <VfxPreviewScene
+                    preset={preset}
+                    playheadMs={playheadMs}
+                    durationMs={durationMs}
+                    modelUrls={modelUrls}
+                    useStandIn={useStandIn}
+                    socketMarkers={socketMarkers}
+                    activeSocket={activeSocket}
+                    editableSockets={editableSockets}
+                    onSocketPositionChange={onSocketPositionChange}
+                    onSelectSocket={onSelectSocket}
+                  />
+                </Canvas>
+              </VfxPreviewErrorBoundary>
+            </div>
             <div className="pointer-events-none absolute inset-x-0 top-0 flex justify-between gap-2 p-2">
               <span
                 className="rounded border border-amber-600/50 bg-stone-950/90 px-2 py-0.5 text-[10px] font-semibold uppercase tracking-widest text-amber-200"

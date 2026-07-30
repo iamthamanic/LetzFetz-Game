@@ -21,6 +21,7 @@ function cardFromDef(
   stability: number,
   effectText: string,
   element: FormulaCatalogCard['element'],
+  activationMode: string | null = null,
 ): FormulaCatalogCard {
   return {
     id,
@@ -30,6 +31,7 @@ function cardFromDef(
     element,
     stability,
     effectText,
+    activationMode,
   };
 }
 
@@ -43,7 +45,7 @@ export function loadFormulaCardCatalog(): FormulaCatalogCard[] {
     const role = formulaSlotForDef(V5_PACK, t.id);
     if (role !== 'technik') continue;
     cards.push(
-      cardFromDef(t.id, t.name, 'technik', t.stability, t.effectText, null),
+      cardFromDef(t.id, t.name, 'technik', t.stability, t.effectText, null, t.activationMode),
     );
   }
 

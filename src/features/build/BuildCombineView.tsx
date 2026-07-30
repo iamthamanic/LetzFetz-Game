@@ -7,13 +7,16 @@ import { FormulaLibraryPanel } from './FormulaLibraryPanel';
 import { BuildSlotsPanel } from './BuildSlotsPanel';
 import { BuildPreviewPane } from './BuildPreviewPane';
 import { BuildResultCard } from './BuildResultCard';
+import { BuildSlotConnectionOverlay } from './BuildSlotConnectionOverlay';
 import { loadFormulaCardCatalog } from './data/formulaCardCatalog';
 import {
   buildCombinationLabel,
   countFilledSlots,
   findFormulaCard,
+  getFilledSlotRoles,
   type FormulaCatalogCard,
 } from './model/combinateFormula';
+import { suggestCombinationNameWithAi } from './model/combinateNameSuggest';
 import { buildFormulaRecipeFromSlots } from './model/combinateSave';
 import {
   type BuildSession,
@@ -59,12 +62,18 @@ export function BuildCombineView({ active }: BuildCombineViewProps) {
   const catalogRef = useRef(loadFormulaCardCatalog());
   const catalog = catalogRef.current;
   const previewRef = useRef<VfxSharedPreviewHandle>(null);
+  const combineStageRef = useRef<HTMLDivElement>(null);
+  const previewTargetRef = useRef<HTMLDivElement>(null);
+  const slotAnchorRefs = useRef<Partial<Record<BuildSlotRole, HTMLElement | null>>>({});
   const [session, setSession] = useState<BuildSession>(() => loadBuildSession().session);
   const [savedHeroUrl, setSavedHeroUrl] = useState<string | null>(null);
   const [saving, setSaving] = useState(false);
   const [saveMessage, setSaveMessage] = useState<string | null>(null);
+  const [suggestingName, setSuggestingName] = useState(false);
+  const [suggestNameError, setSuggestNameError] = useState<string | null>(null);
   const saveTimerRef = useRef<ReturnType<typeof setTimeout> | null>(null);
   const saveFeedbackTimerRef = useRef<ReturnType<typeof setTimeout> | null>(null);
+  const suggestRequestRef = useRef(0);
 
   useEffect(() => {
     if (saveTimerRef.current) clearTimeout(saveTimerRef.current);
@@ -83,14 +92,52 @@ export function BuildCombineView({ active }: BuildCombineViewProps) {
   }, []);
 
   const combinationLabel = buildCombinationLabel(session.slots);
+  const previewRoles = getFilledSlotRoles(session.slots);
   const filledSlotCount = countFilledSlots(session.slots);
+  const singleSlotted =
+    previewRoles.length === 1
+      ? findFormulaCard(catalog, session.slots[previewRoles[0]])
+      : null;
 
-  const lastDropped = findFormulaCard(catalog, session.lastDroppedPartId);
-  const anySlotted =
-    findFormulaCard(catalog, session.slots.technik) ??
-    findFormulaCard(catalog, session.slots.essenz) ??
-    findFormulaCard(catalog, session.slots.katalysator);
-  const focusCard = lastDropped ?? anySlotted;
+  const handleSuggestName = () => {
+    if (countFilledSlots(session.slots) < 2) {
+      setSuggestNameError('Mindestens zwei Formelplätze belegen.');
+      return;
+    }
+    if (suggestingName) return;
+
+    const requestId = suggestRequestRef.current + 1;
+    suggestRequestRef.current = requestId;
+    setSuggestingName(true);
+    setSuggestNameError(null);
+
+    const slotsSnapshot = {
+      technik: session.slots.technik,
+      essenz: session.slots.essenz,
+      katalysator: session.slots.katalysator,
+    };
+
+    void suggestCombinationNameWithAi(slotsSnapshot, catalog)
+      .then((aiName) => {
+        if (suggestRequestRef.current !== requestId) return;
+        if (!aiName) {
+          setSuggestNameError('Kein Name erhalten.');
+          return;
+        }
+        setSession((prev) => ({ ...prev, name: aiName }));
+      })
+      .catch((error: unknown) => {
+        if (suggestRequestRef.current !== requestId) return;
+        const message =
+          error instanceof Error ? error.message : 'Namen erzeugen fehlgeschlagen.';
+        setSuggestNameError(message.slice(0, 160));
+      })
+      .finally(() => {
+        if (suggestRequestRef.current === requestId) {
+          setSuggestingName(false);
+        }
+      });
+  };
 
   const handleSaveCombination = () => {
     if (filledSlotCount < 2) return;
@@ -124,41 +171,55 @@ export function BuildCombineView({ active }: BuildCombineViewProps) {
 
   return (
     <div
-      className="flex h-full min-h-0 flex-row overflow-hidden"
+      className="flex h-full max-h-full min-h-0 flex-row overflow-hidden"
       data-testid="build-combine"
     >
       <FormulaLibraryPanel cards={catalog} />
 
-      <section className="flex min-h-0 min-w-0 flex-1 flex-col gap-2 overflow-hidden p-2 sm:gap-2.5 sm:p-3">
+      <section className="flex h-full min-h-0 min-w-0 flex-1 flex-col gap-2 overflow-hidden p-2 sm:gap-2.5 sm:p-3">
         <header className="flex-none">
           <h1 className="font-brand text-base uppercase tracking-wide text-amber-100 sm:text-lg">
             Combinate
           </h1>
-          <p className="text-[10px] text-stone-500 sm:text-[11px]">
-            Formel-Bausteine kombinieren · Live-Vorschau mit Aura-Preset
-          </p>
         </header>
 
-        <div className="flex min-h-0 flex-col" style={{ flex: '0.75 1 0%' }}>
-          <BuildPreviewPane
-            ref={previewRef}
-            active={active}
-            focusImageUrl={focusCard?.imageUrl ?? null}
-            focusLabel={focusCard?.name ?? 'Vorschau'}
-            combinationLabel={combinationLabel}
-            hasSlottedCards={filledSlotCount > 0}
-          />
-        </div>
-
-        <div className="flex min-h-0 flex-col" style={{ flex: '1.35 1 0%' }}>
-          <BuildSlotsPanel
+        <div
+          ref={combineStageRef}
+          className="relative flex min-h-0 flex-1 flex-col gap-4 overflow-hidden sm:gap-5"
+          data-testid="build-combine-stage"
+        >
+          <BuildSlotConnectionOverlay
             slots={session.slots}
-            catalog={catalog}
-            onAssign={(cardId) =>
-              setSession((prev) => assignCardToSession(prev, catalog, cardId))
-            }
-            onClear={(role) => setSession((prev) => clearSlot(prev, role))}
+            containerRef={combineStageRef}
+            previewTargetRef={previewTargetRef}
+            slotAnchorRefs={slotAnchorRefs}
           />
+
+          <div className="relative z-[1] flex min-h-0 flex-[0.9] flex-col overflow-visible pb-1">
+            <BuildPreviewPane
+              ref={previewRef}
+              connectionTargetRef={previewTargetRef}
+              active={active}
+              focusLabel={singleSlotted?.name ?? 'Vorschau'}
+              previewRoles={previewRoles}
+              combinationLabel={combinationLabel}
+              hasSlottedCards={filledSlotCount > 0}
+            />
+          </div>
+
+          <div className="relative z-[1] flex min-h-0 flex-[1.1] flex-col overflow-visible pt-1">
+            <BuildSlotsPanel
+              slots={session.slots}
+              catalog={catalog}
+              onAssign={(cardId) =>
+                setSession((prev) => assignCardToSession(prev, catalog, cardId))
+              }
+              onClear={(role) => setSession((prev) => clearSlot(prev, role))}
+              onSlotAnchorRef={(role, el) => {
+                slotAnchorRefs.current[role] = el;
+              }}
+            />
+          </div>
         </div>
       </section>
 
@@ -171,6 +232,9 @@ export function BuildCombineView({ active }: BuildCombineViewProps) {
         onSave={handleSaveCombination}
         saving={saving}
         saveMessage={saveMessage}
+        onSuggestName={handleSuggestName}
+        suggestingName={suggestingName}
+        suggestNameError={suggestNameError}
       />
     </div>
   );
