@@ -101,6 +101,13 @@ import {
   tryKnuspergnomFormulaFilter,
   trySchluckspechtFullBlockHeal,
   tryStiernackenRevengeBonus,
+  tryKokabellStabilityOnHeal,
+  tryOpenPillendoktoraBoost,
+  resolvePillendoktoraBoost,
+  tryDripministerinFilter,
+  tryOpenMysteriumElement,
+  resolveMysteriumElement,
+  peekMysteriumElement,
 } from './characterPassives';
 import {
   getChallengeMargin,
@@ -196,12 +203,13 @@ function computeAttackValueForPlayer(
   const bound = state.players[playerId].bound;
   const passiveBonus = isV2Pack(pack) ? countPassiveBonus(pack, bound, 'p_atk') : 0;
   const monoBonus = isV2Pack(pack) ? monoAttackBonus(state, pack, bound) : 0;
+  const mysterium = peekMysteriumElement(state, playerId);
   return calculateCombatValue({
     cardValue: def.value,
     diceRoll,
     diceBonus: bonus,
     characterElements: getCharacterElements(pack, state.players[playerId].characterId),
-    cardElement: def.element,
+    cardElement: mysterium ?? def.element,
     extraBonus: passiveBonus + monoBonus,
   });
 }
@@ -219,14 +227,16 @@ function computeBlockValueForPlayer(
   const bound = state.players[playerId].bound;
   const passiveBonus = isV2Pack(pack) ? countPassiveBonus(pack, bound, 'p_block') : 0;
   const monoBonus = isV2Pack(pack) ? monoBlockBonus(state, pack, bound) : 0;
+  const mysterium = peekMysteriumElement(state, playerId);
+  const blockEl = mysterium ?? def.element;
   return calculateCombatValue({
     cardValue: def.value,
     diceRoll,
     diceBonus: bonus,
     characterElements: getCharacterElements(pack, state.players[playerId].characterId),
-    cardElement: def.element,
+    cardElement: blockEl,
     attackElement,
-    blockElement: def.element,
+    blockElement: blockEl,
     extraBonus: passiveBonus + monoBonus,
   });
 }
@@ -355,12 +365,22 @@ function resolveBoostAfterInterrupt(
   let next = cloneState(state);
   next.pendingChoice = null;
   next = applyBoostWithFormulaPrep(next, pending.boosterId, boostDef, pack, rng, ruleset);
+  const hpGained = Math.max(
+    0,
+    next.players[pending.boosterId].hp - state.players[pending.boosterId].hp,
+  );
+  if (hpGained > 0) {
+    next = tryKokabellStabilityOnHeal(next, pending.boosterId, hpGained, ruleset);
+  }
   next = incrementBoostsPlayed(next, pending.boosterId);
   if (next.pendingChoice?.type === 'must-discard' && next.pendingChoice.source === 'air') {
     next.meta = { ...next.meta, awaitingPostBoostArena: true };
     return finishMainAction(next);
   }
   next = queuePostBoostPending(next, pending.boosterId, pack, rng, ruleset);
+  if (!next.pendingChoice) {
+    next = tryOpenPillendoktoraBoost(next, pending.boosterId, ruleset);
+  }
   return finishMainAction(next);
 }
 
@@ -664,12 +684,14 @@ function resolveFormulaChallengeCombat(
   state: GameState,
   pack: ContentPack,
   blockValue: number,
+  ruleset: RulesetConfig,
+  rng: () => number,
 ): GameState {
   if (!state.combat || state.combat.mode !== 'challenge' || !state.combat.targetBoundInstanceId) {
     return state;
   }
-  const next = cloneState(state);
-  const { defenderId, attackValue, targetBoundInstanceId } = state.combat;
+  let next = cloneState(state);
+  const { attackerId, defenderId, attackValue, targetBoundInstanceId } = state.combat;
   const target = findFormulaComponent(next.players[defenderId].formula, targetBoundInstanceId);
   if (!target) throw new Error('Challenge formula target not found');
 
@@ -689,18 +711,22 @@ function resolveFormulaChallengeCombat(
       });
     }
     next.lastEvent = `Herausforderung — ${targetName} zerstört (${attackValue} vs ${defense}).`;
+    next = tryDripministerinFilter(next, attackerId, rng, ruleset);
   } else if (outcome === 'disturb') {
     next.players[defenderId].formula = disturbFormulaComponent(
       next.players[defenderId].formula,
       target.instanceId,
     );
     next.lastEvent = `Herausforderung — ${targetName} gestört (${attackValue} vs ${defense}).`;
+    next = tryDripministerinFilter(next, attackerId, rng, ruleset);
   } else {
     next.lastEvent = `Herausforderung wirkungslos (${attackValue} vs ${defense}).`;
   }
 
   next.combat = null;
-  next.phase = 'end';
+  if (!next.pendingChoice) {
+    next.phase = 'end';
+  }
   return checkWinner(next);
 }
 
@@ -709,6 +735,7 @@ function resolveChallengeCombat(
   pack: ContentPack,
   blockValue: number,
   ruleset: RulesetConfig,
+  rng: () => number = Math.random,
 ): GameState {
   if (!state.combat || state.combat.mode !== 'challenge') return state;
 
@@ -718,7 +745,7 @@ function resolveChallengeCombat(
       state.combat.targetBoundInstanceId,
     );
     if (formulaTarget) {
-      return resolveFormulaChallengeCombat(state, pack, blockValue);
+      return resolveFormulaChallengeCombat(state, pack, blockValue, ruleset, rng);
     }
   }
 
@@ -764,6 +791,8 @@ function pendingChoicePlayer(pending: PendingChoice): PlayerId {
     case 'optional-draw-discard':
     case 'must-discard':
     case 'spaeti-extra-build':
+    case 'pillendoktora-boost':
+    case 'mysterium-element':
       return pending.playerId;
     case 'pick-reaction':
       return pending.chooserId;
@@ -900,6 +929,18 @@ function getPendingLegalActions(state: GameState, ctx: PackContext): GameAction[
     case 'pick-reaction':
       for (const opt of pending.options) {
         actions.push({ type: 'PICK_REACTION', reactionId: opt.reactionId });
+      }
+      break;
+    case 'pillendoktora-boost':
+      actions.push(
+        { type: 'PICK_PILLENDOKTORA', option: 'draw-lose-hp' },
+        { type: 'PICK_PILLENDOKTORA', option: 'deal-1' },
+        { type: 'PICK_PILLENDOKTORA', option: 'heal-1' },
+      );
+      break;
+    case 'mysterium-element':
+      for (const element of ['fire', 'water', 'earth', 'air', 'shadow', 'light'] as const) {
+        actions.push({ type: 'PICK_MYSTERIUM_ELEMENT', element });
       }
       break;
   }
@@ -1339,6 +1380,8 @@ function applyPendingChoiceAction(
         case 'must-discard':
         case 'spaeti-extra-build':
         case 'pick-reaction':
+        case 'pillendoktora-boost':
+        case 'mysterium-element':
           throw new Error('Arena effect cannot be skipped');
       }
       break;
@@ -1346,6 +1389,21 @@ function applyPendingChoiceAction(
     case 'PICK_REACTION': {
       if (pending.type !== 'pick-reaction') throw new Error('Wrong pending type');
       return pickReaction(state, action.reactionId as ReactionId, ruleset, pack);
+    }
+    case 'PICK_PILLENDOKTORA': {
+      if (pending.type !== 'pillendoktora-boost') throw new Error('Wrong pending type');
+      let next = resolvePillendoktoraBoost(
+        state,
+        playerId,
+        action.option,
+        rng,
+        ruleset,
+      );
+      return finishMainAction(checkWinner(next));
+    }
+    case 'PICK_MYSTERIUM_ELEMENT': {
+      if (pending.type !== 'mysterium-element') throw new Error('Wrong pending type');
+      return resolveMysteriumElement(state, playerId, action.element);
     }
     case 'TAKE_OPTIONAL_DRAW': {
       if (pending.type !== 'optional-draw-discard') throw new Error('Wrong pending type');
@@ -1538,11 +1596,28 @@ export function applyAction(
     }
     case 'PLAY_ATTACK': {
       if (state.phase !== 'action') throw new Error('Not in action phase');
-      const def = findElementDef(
-        pack,
-        state.players[playerId].hand.find((c) => c.instanceId === action.cardInstanceId)?.defId ?? '',
+      const handAttack = state.players[playerId].hand.find(
+        (c) => c.instanceId === action.cardInstanceId,
       );
+      const def = findElementDef(pack, handAttack?.defId ?? '');
       if (!def || def.cardType !== 'attack') throw new Error('Not an attack card');
+
+      if (
+        isV5FormulaEnabled(ruleset) &&
+        state.players[playerId].characterId === 'mysterium' &&
+        peekMysteriumElement(state, playerId) == null
+      ) {
+        const opened = tryOpenMysteriumElement(
+          state,
+          playerId,
+          action.cardInstanceId,
+          'element-card',
+          ruleset,
+        );
+        if (opened.pendingChoice?.type === 'mysterium-element') {
+          return opened;
+        }
+      }
 
       let diceRoll = action.diceRoll ?? rollD6(rng);
       const vulkan = applyVulkanAttackRoll(state, playerId, diceRoll);
@@ -1793,12 +1868,19 @@ export function applyAction(
       }
 
       next = applyBoostWithFormulaPrep(next, playerId, def, pack, rng, ruleset);
+      const hpGained = Math.max(0, next.players[playerId].hp - (state.players[playerId].hp));
+      if (hpGained > 0) {
+        next = tryKokabellStabilityOnHeal(next, playerId, hpGained, ruleset);
+      }
       next = incrementBoostsPlayed(next, playerId);
       if (next.pendingChoice?.type === 'must-discard' && next.pendingChoice.source === 'air') {
         next.meta = { ...next.meta, awaitingPostBoostArena: true };
         return finishMainAction(next);
       }
       next = queuePostBoostPending(next, playerId, pack, rng, ruleset);
+      if (!next.pendingChoice) {
+        next = tryOpenPillendoktoraBoost(next, playerId, ruleset);
+      }
       return finishMainAction(next);
     }
     case 'DISCARD_DRAW': {
@@ -1966,7 +2048,7 @@ function applyCombatResponse(
 
   if (action.type === 'PASS_BLOCK') {
     if (state.combat.mode === 'challenge') {
-      return resolveChallengeCombat(state, pack, 0, ruleset);
+      return resolveChallengeCombat(state, pack, 0, ruleset, rng);
     }
     return resolveCombat(state, 0, ruleset, pack, rng, null);
   }
@@ -2031,7 +2113,7 @@ function applyCombatResponse(
 
     let next = discardFromHand(working, playerId, action.cardInstanceId);
     if (state.combat.mode === 'challenge') {
-      next = resolveChallengeCombat(next, pack, blockValue, ruleset);
+      next = resolveChallengeCombat(next, pack, blockValue, ruleset, rng);
     } else {
       next = resolveCombat(next, blockValue, ruleset, pack, rng, def.id);
     }

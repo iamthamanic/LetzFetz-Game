@@ -64,6 +64,14 @@ export type GameAction =
   | {
       type: 'PICK_REACTION';
       reactionId: string;
+    }
+  | {
+      type: 'PICK_PILLENDOKTORA';
+      option: 'draw-lose-hp' | 'deal-1' | 'heal-1';
+    }
+  | {
+      type: 'PICK_MYSTERIUM_ELEMENT';
+      element: import('./elements').Element;
     };
 
 export interface ActionContext {

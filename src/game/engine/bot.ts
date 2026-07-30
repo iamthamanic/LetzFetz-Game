@@ -362,6 +362,33 @@ export function chooseBotAction(state: GameState, pack: ContentPack): GameAction
     if (reactionPicks.length > 0) {
       return pickBestReaction(state, reactionPicks);
     }
+    const pill = actions.filter(
+      (a): a is Extract<GameAction, { type: 'PICK_PILLENDOKTORA' }> =>
+        a.type === 'PICK_PILLENDOKTORA',
+    );
+    if (pill.length > 0) {
+      const hp = state.players[BOT_ID].hp;
+      if (hp <= 12) {
+        return pill.find((a) => a.option === 'heal-1') ?? pill[0];
+      }
+      const oppHp = state.players[HUMAN_ID].hp;
+      if (oppHp <= 8) {
+        return pill.find((a) => a.option === 'deal-1') ?? pill[0];
+      }
+      return pill.find((a) => a.option === 'deal-1') ?? pill[0];
+    }
+    const myst = actions.filter(
+      (a): a is Extract<GameAction, { type: 'PICK_MYSTERIUM_ELEMENT' }> =>
+        a.type === 'PICK_MYSTERIUM_ELEMENT',
+    );
+    if (myst.length > 0) {
+      const preferred = ['light', 'shadow', 'fire', 'water', 'earth', 'air'] as const;
+      for (const el of preferred) {
+        const hit = myst.find((a) => a.element === el);
+        if (hit) return hit;
+      }
+      return myst[0];
+    }
     return (
       actions.find((a) => a.type === 'TAKE_OPTIONAL_DRAW') ??
       actions.find((a) => a.type === 'RESOLVE_DRAW_DISCARD') ??

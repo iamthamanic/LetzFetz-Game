@@ -1,7 +1,7 @@
 {
   "runMode": "loop",
   "paused": false,
-  "activeIssue": 280,
+  "activeIssue": 281,
   "phase": "commit",
   "completedIssues": [
     130,
@@ -50,7 +50,8 @@
     231,
     232,
     261,
-    262
+    262,
+    280
   ],
   "mergedIssues": [
     130,
@@ -99,7 +100,8 @@
     231,
     232,
     261,
-    262
+    262,
+    280
   ],
   "prUrls": {
     "130": "https://github.com/iamthamanic/LetzFetz-Game/pull/135",
@@ -148,7 +150,8 @@
     "231": "https://github.com/iamthamanic/LetzFetz-Game/pull/247",
     "232": "https://github.com/iamthamanic/LetzFetz-Game/pull/248",
     "261": "https://github.com/iamthamanic/LetzFetz-Game/pull/275",
-    "262": "https://github.com/iamthamanic/LetzFetz-Game/pull/274"
+    "262": "https://github.com/iamthamanic/LetzFetz-Game/pull/274",
+    "280": "https://github.com/iamthamanic/LetzFetz-Game/pull/291"
   },
   "retries": {
     "130": {
@@ -381,6 +384,13 @@
       "verifyUi": 0,
       "review": 0,
       "sameRootCause": 0
+    },
+    "281": {
+      "implement": 0,
+      "verifyTicket": 0,
+      "verifyUi": 0,
+      "review": 0,
+      "sameRootCause": 0
     }
   },
   "lastError": null,
@@ -395,6 +405,6 @@
     288,
     289
   ],
-  "updatedAt": "2026-07-30T17:58:19.000Z",
+  "updatedAt": "2026-07-30T18:08:00.000Z",
   "milestoneFilter": null
 }

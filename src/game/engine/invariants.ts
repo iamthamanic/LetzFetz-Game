@@ -16,6 +16,8 @@ function actingPlayerForStep(state: GameState): PlayerId {
       case 'optional-draw-discard':
       case 'must-discard':
       case 'spaeti-extra-build':
+      case 'pillendoktora-boost':
+      case 'mysterium-element':
         return state.pendingChoice.playerId;
       case 'pick-reaction':
         return state.pendingChoice.chooserId;

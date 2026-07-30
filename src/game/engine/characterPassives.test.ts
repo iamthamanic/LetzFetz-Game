@@ -11,6 +11,13 @@ import {
   tryKnuspergnomFormulaFilter,
   trySchluckspechtFullBlockHeal,
   tryStiernackenRevengeBonus,
+  tryKokabellStabilityOnHeal,
+  tryOpenPillendoktoraBoost,
+  resolvePillendoktoraBoost,
+  tryDripministerinFilter,
+  tryOpenMysteriumElement,
+  resolveMysteriumElement,
+  peekMysteriumElement,
 } from './characterPassives';
 import { createSeededRng } from './deck';
 
@@ -139,5 +146,144 @@ describe('V5 character passives', () => {
       { ...V5_PACK_RULESET, v5Formula: false },
     );
     expect(next.meta.v5PassiveUsed?.p1 ?? []).not.toContain('knuspergnom-filter');
+  });
+
+  it('Pillendoktora opens boost choice and heal-1 applies once', () => {
+    let state = createGame({
+      pack: V5_PACK,
+      p1CharacterId: 'pillendoktora',
+      p2CharacterId: 'knuspergnom',
+      startingPlayer: 'p1',
+      seed: 55,
+      ruleset: V5_PACK_RULESET,
+    });
+    state = tryOpenPillendoktoraBoost(state, 'p1', V5_PACK_RULESET);
+    expect(state.pendingChoice?.type).toBe('pillendoktora-boost');
+    state = {
+      ...state,
+      players: {
+        ...state.players,
+        p1: { ...state.players.p1, hp: 15 },
+      },
+    };
+    state = {
+      ...state,
+      pendingChoice: { type: 'pillendoktora-boost', playerId: 'p1' },
+    };
+    const hp = state.players.p1.hp;
+    state = resolvePillendoktoraBoost(state, 'p1', 'heal-1', createSeededRng(1), V5_PACK_RULESET);
+    expect(state.players.p1.hp).toBe(hp + 1);
+    expect(state.pendingChoice).toBeNull();
+    const again = tryOpenPillendoktoraBoost(state, 'p1', V5_PACK_RULESET);
+    expect(again.pendingChoice).toBeNull();
+  });
+
+  it('Pillendoktora deal-1 damages opponent; draw-lose-hp draws', () => {
+    let state = createGame({
+      pack: V5_PACK,
+      p1CharacterId: 'pillendoktora',
+      p2CharacterId: 'knuspergnom',
+      startingPlayer: 'p1',
+      seed: 56,
+      ruleset: V5_PACK_RULESET,
+    });
+    state = tryOpenPillendoktoraBoost(state, 'p1', V5_PACK_RULESET);
+    const oppHp = state.players.p2.hp;
+    state = resolvePillendoktoraBoost(state, 'p1', 'deal-1', createSeededRng(1), V5_PACK_RULESET);
+    expect(state.players.p2.hp).toBe(oppHp - 1);
+
+    state = createGame({
+      pack: V5_PACK,
+      p1CharacterId: 'pillendoktora',
+      p2CharacterId: 'knuspergnom',
+      startingPlayer: 'p1',
+      seed: 57,
+      ruleset: V5_PACK_RULESET,
+    });
+    state = tryOpenPillendoktoraBoost(state, 'p1', V5_PACK_RULESET);
+    const handBefore = state.players.p1.hand.length;
+    const hpBefore = state.players.p1.hp;
+    state = resolvePillendoktoraBoost(
+      state,
+      'p1',
+      'draw-lose-hp',
+      createSeededRng(2),
+      V5_PACK_RULESET,
+    );
+    expect(state.players.p1.hp).toBe(hpBefore - 1);
+    expect(state.players.p1.hand.length).toBe(handBefore + 1);
+  });
+
+  it('Kokabell gains formula stability once after heal', () => {
+    let state = createGame({
+      pack: V5_PACK,
+      p1CharacterId: 'kokabell',
+      p2CharacterId: 'knuspergnom',
+      startingPlayer: 'p1',
+      seed: 58,
+      ruleset: V5_PACK_RULESET,
+    });
+    state = {
+      ...state,
+      players: {
+        ...state.players,
+        p1: {
+          ...state.players.p1,
+          formula: {
+            technik: {
+              instanceId: 't1',
+              defId: 'v5-technik-rueckhandtechnik',
+              slot: 'technik',
+              exhausted: false,
+              disturbed: false,
+              stabilityBonus: 0,
+            },
+            essenz: null,
+            katalysator: null,
+          },
+        },
+      },
+    };
+    state = tryKokabellStabilityOnHeal(state, 'p1', 1, V5_PACK_RULESET);
+    expect(state.players.p1.formula.technik?.stabilityBonus).toBe(1);
+    const again = tryKokabellStabilityOnHeal(state, 'p1', 1, V5_PACK_RULESET);
+    expect(again.players.p1.formula.technik?.stabilityBonus).toBe(1);
+  });
+
+  it('Dripministerin draws then requires discard after disturb', () => {
+    let state = createGame({
+      pack: V5_PACK,
+      p1CharacterId: 'dripministerin',
+      p2CharacterId: 'knuspergnom',
+      startingPlayer: 'p1',
+      seed: 59,
+      ruleset: V5_PACK_RULESET,
+    });
+    state = tryDripministerinFilter(state, 'p1', createSeededRng(3), V5_PACK_RULESET);
+    expect(state.pendingChoice?.type).toBe('must-discard');
+    if (state.pendingChoice?.type === 'must-discard') {
+      expect(state.pendingChoice.source).toBe('dripministerin');
+    }
+    const again = tryDripministerinFilter(state, 'p1', createSeededRng(3), V5_PACK_RULESET);
+    expect(again.meta.v5PassiveUsed?.p1.filter((k) => k === 'dripministerin-filter')).toHaveLength(
+      1,
+    );
+  });
+
+  it('Mysterium stores chosen element override', () => {
+    let state = createGame({
+      pack: V5_PACK,
+      p1CharacterId: 'mysterium',
+      p2CharacterId: 'knuspergnom',
+      startingPlayer: 'p1',
+      seed: 60,
+      ruleset: V5_PACK_RULESET,
+    });
+    state = tryOpenMysteriumElement(state, 'p1', 'atk1', 'element-card', V5_PACK_RULESET);
+    expect(state.pendingChoice?.type).toBe('mysterium-element');
+    state = resolveMysteriumElement(state, 'p1', 'fire');
+    expect(peekMysteriumElement(state, 'p1')).toBe('fire');
+    const again = tryOpenMysteriumElement(state, 'p1', 'atk2', 'element-card', V5_PACK_RULESET);
+    expect(again.pendingChoice).toBeNull();
   });
 });

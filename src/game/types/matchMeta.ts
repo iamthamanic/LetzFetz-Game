@@ -82,6 +82,8 @@ export interface MatchMeta {
     PlayerId,
     { action: 'attack' | 'block' | 'boost'; bonus: number } | null
   >;
+  /** V5 Mysterium: chosen element override for affinity this turn. */
+  v5MysteriumElement?: Record<PlayerId, Element | null>;
 }
 
 export type PendingChoice =
@@ -115,7 +117,7 @@ export type PendingChoice =
       /** After draw(s) — must discard 1 (player chooses). */
       type: 'must-discard';
       playerId: PlayerId;
-      source: 'spaeti' | 'sumpf-full-block' | 'air';
+      source: 'spaeti' | 'sumpf-full-block' | 'air' | 'dripministerin';
     }
   | {
       type: 'spaeti-extra-build';
@@ -132,6 +134,18 @@ export type PendingChoice =
         markId: PrimaryMarkId;
         labelDe: string;
       }>;
+    }
+  | {
+      /** V5 Pillendoktora: choose boost aftermath once per turn. */
+      type: 'pillendoktora-boost';
+      playerId: PlayerId;
+    }
+  | {
+      /** V5 Mysterium: choose element for played card / essence once per turn. */
+      type: 'mysterium-element';
+      playerId: PlayerId;
+      subjectInstanceId: string;
+      subjectKind: 'element-card' | 'essence';
     };
 
 export function createEmptyMeta(): MatchMeta {
@@ -170,6 +184,10 @@ export function resetTurnMeta(meta: MatchMeta, activePlayer: PlayerId): MatchMet
     v5PassiveUsed: {
       p1: activePlayer === 'p1' ? [] : (meta.v5PassiveUsed?.p1 ?? []),
       p2: activePlayer === 'p2' ? [] : (meta.v5PassiveUsed?.p2 ?? []),
+    },
+    v5MysteriumElement: {
+      p1: activePlayer === 'p1' ? null : (meta.v5MysteriumElement?.p1 ?? null),
+      p2: activePlayer === 'p2' ? null : (meta.v5MysteriumElement?.p2 ?? null),
     },
   };
 }

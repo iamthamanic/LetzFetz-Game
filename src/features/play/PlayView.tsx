@@ -24,6 +24,7 @@ import {
 } from '../../game';
 import { chooseLlmBotAction } from './services/bot/chooseLlmBotAction';
 import { ReactionPickModal } from './board/ReactionPickModal';
+import { PassiveChoiceModal } from './board/PassiveChoiceModal';
 import { CombatFeedbackToasts } from './board/CombatFeedbackToasts';
 import type { BotDecisionSource } from './services/bot/chooseLlmBotAction';
 import {
@@ -1098,6 +1099,55 @@ export function PlayView({ onBattleMusicActiveChange }: PlayViewProps) {
             options={state.pendingChoice.options}
             onPick={(reactionId) => {
               handleDispatch({ type: 'PICK_REACTION', reactionId });
+            }}
+          />
+        )}
+      {state?.pendingChoice?.type === 'pillendoktora-boost' &&
+        state.pendingChoice.playerId === HUMAN && (
+          <PassiveChoiceModal
+            open
+            title="Pillendoktora"
+            description="Wähle den Boost-Effekt (einmal pro Zug)."
+            testId="pillendoktora-choice-modal"
+            options={[
+              { id: 'draw-lose-hp', labelDe: '1 ziehen, −1 Leben' },
+              { id: 'deal-1', labelDe: '1 Schaden' },
+              { id: 'heal-1', labelDe: 'Heile 1' },
+            ]}
+            onPick={(id) => {
+              handleDispatch({
+                type: 'PICK_PILLENDOKTORA',
+                option: id as 'draw-lose-hp' | 'deal-1' | 'heal-1',
+              });
+            }}
+          />
+        )}
+      {state?.pendingChoice?.type === 'mysterium-element' &&
+        state.pendingChoice.playerId === HUMAN && (
+          <PassiveChoiceModal
+            open
+            title="Das Mysterium"
+            description="Wähle ein Element für diese Aktion."
+            testId="mysterium-choice-modal"
+            options={[
+              { id: 'fire', labelDe: 'Feuer' },
+              { id: 'water', labelDe: 'Wasser' },
+              { id: 'earth', labelDe: 'Erde' },
+              { id: 'air', labelDe: 'Luft' },
+              { id: 'shadow', labelDe: 'Schatten' },
+              { id: 'light', labelDe: 'Licht' },
+            ]}
+            onPick={(id) => {
+              handleDispatch({
+                type: 'PICK_MYSTERIUM_ELEMENT',
+                element: id as
+                  | 'fire'
+                  | 'water'
+                  | 'earth'
+                  | 'air'
+                  | 'shadow'
+                  | 'light',
+              });
             }}
           />
         )}
