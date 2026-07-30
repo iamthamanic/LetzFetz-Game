@@ -3,11 +3,11 @@
  * Location: src/features/shell/AppNav.tsx
  */
 import React from 'react';
-import { ChevronLeft, ChevronRight, Gamepad2, Layers, Settings, Swords, StickyNote } from 'lucide-react';
+import { Boxes, ChevronLeft, ChevronRight, Gamepad2, Layers, Settings, StickyNote } from 'lucide-react';
 import { Tabs, type TabItem } from '../../components/ui/Tabs';
 import { Button } from '../../components/ui/Button';
 
-export type AppView = 'menu' | 'forge' | 'arena' | 'play';
+export type AppView = 'menu' | 'forge' | 'build' | 'play';
 
 interface AppNavProps {
   currentView: AppView;
@@ -24,7 +24,7 @@ interface AppNavProps {
 const NAV_ITEMS: TabItem[] = [
   { id: 'play', label: 'Play', icon: <Gamepad2 className="h-4 w-4 shrink-0" />, tone: 'play' },
   { id: 'forge', label: 'Material', icon: <Layers className="h-4 w-4 shrink-0" />, tone: 'editor' },
-  { id: 'arena', label: 'Sandbox', icon: <Swords className="h-4 w-4 shrink-0" />, tone: 'sandbox' },
+  { id: 'build', label: 'Build', icon: <Boxes className="h-4 w-4 shrink-0" />, tone: 'sandbox' },
   {
     id: 'settings',
     label: 'Settings',
@@ -47,7 +47,7 @@ export function AppNav({
   const tabActive =
     settingsOpen
       ? 'settings'
-      : currentView === 'play' || currentView === 'forge' || currentView === 'arena'
+      : currentView === 'play' || currentView === 'forge' || currentView === 'build'
         ? currentView
         : '';
 

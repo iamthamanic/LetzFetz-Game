@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
 import { ForgeView } from './features/forge/ForgeView';
-import { SandboxView } from './features/sandbox/SandboxView';
+import { BuildView } from './features/build/BuildView';
 import { Notes } from './features/shell/Notes';
 import { PlayView } from './features/play/PlayView';
 import { PlaymatZonePreview } from './features/play/board/PlaymatZonePreview';
@@ -20,7 +20,6 @@ function AppShell() {
   const [currentView, setCurrentView] = useState<AppView>('menu');
   const [notesOpen, setNotesOpen] = useState(false);
   const [settingsOpen, setSettingsOpen] = useState(false);
-  const [arenaKey, setArenaKey] = useState(0);
   const [playSessionKey, setPlaySessionKey] = useState(0);
   /** True only while Play has a live board after MatchIntro (from PlayView). */
   const [battleMusicActive, setBattleMusicActive] = useState(false);
@@ -34,9 +33,6 @@ function AppShell() {
     if (view === currentView) return;
     const from = currentView;
     const to = view;
-    if (to === 'arena') {
-      setArenaKey((prev) => prev + 1);
-    }
     if (to === 'play' && from !== 'play') {
       setPlaySessionKey((prev) => prev + 1);
     }
@@ -91,9 +87,9 @@ function AppShell() {
           <ForgeView />
         </div>
         <div
-          className={`flex min-h-0 flex-1 flex-col ${currentView === 'arena' ? '' : 'hidden'}`}
+          className={`flex min-h-0 flex-1 flex-col ${currentView === 'build' ? '' : 'hidden'}`}
         >
-          <SandboxView key={arenaKey} />
+          <BuildView active={currentView === 'build'} />
         </div>
         <div
           className={`flex min-h-0 flex-1 flex-col ${currentView === 'play' ? '' : 'hidden'}`}

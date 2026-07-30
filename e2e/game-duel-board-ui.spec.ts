@@ -103,7 +103,7 @@ test.describe('Game Duel Board UI — Sprint 1', () => {
     await expect(page.getByText(/V1-Karten|Character|Element/i).first()).toBeVisible({
       timeout: 10000,
     });
-    await page.getByRole('button', { name: 'Sandbox' }).click();
+    await page.getByRole('button', { name: 'Build' }).click();
     await page.waitForTimeout(400);
     await page.getByRole('button', { name: 'Play' }).click();
     await expect(page.getByTestId('game-mode-select')).toBeVisible();
