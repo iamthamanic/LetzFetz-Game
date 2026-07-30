@@ -3,6 +3,7 @@
  * Location: src/features/build/BuildResultCard.tsx
  */
 import React from 'react';
+import { Loader2, Sparkles } from 'lucide-react';
 import { Input } from '../../components/ui/Input';
 import { Button } from '../../components/ui/Button';
 import {
@@ -29,6 +30,10 @@ interface BuildResultCardProps {
   onSave?: () => void;
   saving?: boolean;
   saveMessage?: string | null;
+  /** Request a new KI combination name (Ollama). */
+  onSuggestName?: () => void;
+  suggestingName?: boolean;
+  suggestNameError?: string | null;
 }
 
 const ROLE_CHIP: Record<BuildSlotRole, string> = {
@@ -46,6 +51,9 @@ export function BuildResultCard({
   onSave,
   saving = false,
   saveMessage = null,
+  onSuggestName,
+  suggestingName = false,
+  suggestNameError = null,
 }: BuildResultCardProps) {
   const filledCount = countFilledSlots(slots);
   const combinationLabel = buildCombinationLabel(slots);
@@ -54,7 +62,7 @@ export function BuildResultCard({
   if (filledCount < 2 || !combinationLabel) {
     return (
       <aside
-        className="flex h-full w-56 shrink-0 flex-col overflow-hidden border-l border-stone-800 bg-stone-950/95"
+        className="flex h-full max-h-full w-56 shrink-0 flex-col overflow-hidden border-l border-stone-800 bg-stone-950/95"
         data-testid="build-result-empty"
       >
         <header className="flex-none border-b border-stone-800 px-2.5 py-2">
@@ -83,16 +91,12 @@ export function BuildResultCard({
     );
   }
 
-  const hero =
-    heroFrameUrl ??
-    findFormulaCard(catalog, slots.katalysator)?.imageUrl ??
-    findFormulaCard(catalog, slots.essenz)?.imageUrl ??
-    findFormulaCard(catalog, slots.technik)?.imageUrl ??
-    null;
+  /** Only the saved/captured combination hero — never a single Baustein as stand-in. */
+  const hero = heroFrameUrl ?? null;
 
   return (
     <aside
-      className="flex h-full w-56 shrink-0 flex-col overflow-hidden border-l border-stone-800 bg-stone-950/95"
+      className="flex h-full max-h-full w-56 shrink-0 flex-col overflow-hidden border-l border-stone-800 bg-stone-950/95"
       data-testid="build-result"
     >
       <header className="flex-none border-b border-stone-800 px-2.5 py-2">
@@ -104,7 +108,7 @@ export function BuildResultCard({
 
       <div className="flex min-h-0 flex-1 flex-col overflow-hidden p-2 sm:p-2.5">
         <div className="flex min-h-0 flex-1 flex-col overflow-hidden rounded-xl border border-amber-700/35 bg-gradient-to-b from-stone-800 to-stone-950 shadow-lg">
-          <div className="relative min-h-0 flex-[1.35] bg-stone-900">
+          <div className="relative min-h-0 flex-[1.35] bg-stone-900" data-testid="build-result-hero">
             {hero ? (
               <ImageWithFallback
                 src={hero}
@@ -112,8 +116,11 @@ export function BuildResultCard({
                 className="h-full w-full object-contain p-3"
               />
             ) : (
-              <div className="flex h-full items-center justify-center px-3 text-center text-[11px] text-stone-500">
-                Hero-Frame aus Vorschau
+              <div className="flex h-full flex-col items-center justify-center gap-1.5 px-3 text-center">
+                <p className="text-[11px] text-stone-500">Noch kein Ergebnisbild</p>
+                <p className="text-[10px] leading-snug text-stone-600">
+                  Beim Speichern wird das Hero-Frame aus der Live-Vorschau übernommen.
+                </p>
               </div>
             )}
             <div className="pointer-events-none absolute inset-x-0 bottom-0 bg-gradient-to-t from-stone-950 via-stone-950/85 to-transparent px-2.5 pb-2 pt-10">
@@ -137,8 +144,44 @@ export function BuildResultCard({
               maxLength={48}
               data-testid="build-result-name"
               placeholder="Meine Formel"
+              disabled={suggestingName}
               className="[&_input]:py-1.5 [&_span]:text-[9px]"
             />
+            <Button
+              type="button"
+              variant="accent"
+              size="sm"
+              disabled={!onSuggestName || suggestingName}
+              aria-busy={suggestingName}
+              onClick={() => onSuggestName?.()}
+              data-testid="build-result-suggest-name"
+              icon={
+                suggestingName ? (
+                  <Loader2 className="h-3.5 w-3.5 animate-spin" aria-hidden />
+                ) : (
+                  <Sparkles className="h-3.5 w-3.5" aria-hidden />
+                )
+              }
+              className="w-full text-[10px]"
+            >
+              {suggestingName ? 'KI erzeugt Namen…' : 'Namen erzeugen'}
+            </Button>
+            {suggestingName ? (
+              <p
+                className="text-center text-[10px] text-violet-300/90"
+                data-testid="build-result-suggest-pending"
+              >
+                Kimi denkt nach — kann ein paar Sekunden dauern.
+              </p>
+            ) : null}
+            {suggestNameError ? (
+              <p
+                className="text-center text-[10px] leading-snug text-red-400"
+                data-testid="build-result-suggest-error"
+              >
+                {suggestNameError}
+              </p>
+            ) : null}
 
             <div className="flex flex-wrap gap-1" data-testid="build-result-slots">
               {BUILD_SLOT_ORDER.map((role) => {
@@ -162,7 +205,7 @@ export function BuildResultCard({
             <Button
               type="button"
               variant="primary"
-              disabled={!canSave || saving}
+              disabled={!canSave || saving || suggestingName}
               onClick={onSave}
               data-testid="build-result-save"
               className="w-full text-xs"

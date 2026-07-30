@@ -6,6 +6,7 @@ import React from 'react';
 import { Handle, Position, type NodeProps } from '@xyflow/react';
 import { Save } from 'lucide-react';
 import { Button } from '../../../../components/ui/Button';
+import { VfxNodeShell } from './VfxNodeShell';
 import { VfxNodeStatusBadge } from './VfxNodeStatusBadge';
 import type { VfxSaveTechniqueNodeData } from './vfxNodeTypes';
 
@@ -16,13 +17,14 @@ export interface VfxSaveTechniqueNodeActions {
 export function VfxSaveTechniqueNode({ data, selected }: NodeProps) {
   const nodeData = data as VfxSaveTechniqueNodeData & VfxSaveTechniqueNodeActions;
   const saved = nodeData.status === 'READY' && nodeData.savedAssetId !== null;
+  const busy = nodeData.status === 'QUEUED' || nodeData.status === 'GENERATING';
 
   return (
-    <div
-      className={`min-w-[220px] rounded-lg border bg-stone-900/95 px-3 py-2 shadow-lg ${
-        selected ? 'border-amber-500/80' : 'border-stone-700'
-      }`}
-      data-testid="vfx-node-save-technique"
+    <VfxNodeShell
+      selected={selected}
+      status={nodeData.status}
+      testId="vfx-node-save-technique"
+      className="w-full min-w-0"
     >
       <Handle type="target" position={Position.Left} className="!h-2 !w-2 !bg-emerald-500" />
       <div className="mb-2 flex items-center justify-between gap-2">
@@ -42,12 +44,12 @@ export function VfxSaveTechniqueNode({ data, selected }: NodeProps) {
         variant="success"
         size="sm"
         className="nodrag nopan mt-2 w-full"
-        disabled={saved || !nodeData.onSave || !nodeData.glbUrl}
+        disabled={busy || saved || !nodeData.onSave || !nodeData.glbUrl}
         onClick={() => nodeData.onSave?.()}
         data-testid="vfx-save-technique-btn"
       >
         {saved ? 'Gespeichert' : 'Als Technik speichern'}
       </Button>
-    </div>
+    </VfxNodeShell>
   );
 }

@@ -137,6 +137,17 @@ function ActiveSocketGizmo({
   );
 }
 
+function isValidMarker(entry: VfxSocketMarkerEntry | null | undefined): entry is VfxSocketMarkerEntry {
+  return Boolean(
+    entry &&
+      entry.name &&
+      entry.position &&
+      typeof entry.position.x === 'number' &&
+      typeof entry.position.y === 'number' &&
+      typeof entry.position.z === 'number',
+  );
+}
+
 export function VfxSocketMarkers({
   markers,
   activeSocket,
@@ -145,11 +156,13 @@ export function VfxSocketMarkers({
   onSelectSocket,
   onDraggingChange,
 }: VfxSocketMarkersProps) {
-  const activeEntry = markers.find((entry) => entry.name === activeSocket);
+  // Never pass DOM attrs (e.g. data-testid) onto R3F <group>/<mesh> — applyProps crashes.
+  const safeMarkers = markers.filter(isValidMarker);
+  const activeEntry = safeMarkers.find((entry) => entry.name === activeSocket);
 
   return (
-    <group data-testid="vfx-socket-markers">
-      {markers
+    <group>
+      {safeMarkers
         .filter((entry) => entry.name !== activeSocket)
         .map((entry) => (
           <SocketMarker
