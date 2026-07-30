@@ -1,10 +1,8 @@
 /**
- * V5 playtest pack — full formula set (12+12+12) + Gegenstände + Base-Element/Glitch-Mix.
+ * V5 playtest pack — full formula set (12+12+12) + Gegenstände + V5 element mix (§3.1).
  * Location: src/game/packs/v5/v5-pack.ts
  *
  * Concept target main deck = 106 (24+24+6 elements + 36 formula + 6 items + 10 glitches).
- * Current element mix still comes from BASE_PACK (60) → actual size = 60+10+36+6 = 112
- * until a dedicated element rematch issue.
  */
 import type { ContentPack, RulesetConfig } from '../../types';
 import { DEFAULT_RULESET } from '../../types';
@@ -16,10 +14,11 @@ import {
   V5_TECHNIQUES,
 } from './formulaCards';
 import { V5_CHARACTERS, V5_ULTIMATES } from './characters';
+import { V5_ELEMENT_CARDS, V5_ELEMENT_MIX } from './elementCards';
 
 /** Documented mix — actual count = sum of included defs (one instance each). */
 export const V5_MIX = {
-  element: BASE_PACK.elementCards.length,
+  element: V5_ELEMENT_MIX.total,
   technique: V5_TECHNIQUES.length,
   essence: V5_ESSENCES.length,
   catalyst: V5_CATALYSTS.length,
@@ -52,11 +51,11 @@ export function buildV5Pack(): ContentPack {
   return {
     id: 'v5-mvp',
     name: 'V5 Formel',
-    version: '0.2.0',
+    version: '0.3.0',
     characters: V5_CHARACTERS,
     ultimates: V5_ULTIMATES,
     arenas: BASE_PACK.arenas,
-    elementCards: BASE_PACK.elementCards,
+    elementCards: V5_ELEMENT_CARDS,
     glitches: BASE_PACK.glitches,
     techniques: V5_TECHNIQUES,
     essences: V5_ESSENCES,
