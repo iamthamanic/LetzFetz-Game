@@ -10,7 +10,7 @@ Solo duel playable (rules engine **V1**). V2 phrase playtest and branch `feat/wi
 
 - V1 rules engine with Vitest / fast-check
 - Solo playmat with presentation/VFX
-- Card Forge, Card Library, sandbox arena
+- Card Forge, Card Library, Build workbench
 - Playtest cheatbox; optional LLM bot (Ollama Cloud, dev)
 - V2 P100 + phrase slots (draft — not V1 truth)
 

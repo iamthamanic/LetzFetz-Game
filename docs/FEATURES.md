@@ -5,7 +5,7 @@
 | rules-engine-v1 | active | Pure-TS V1 Engine |
 | solo-duel-ui | active | Spielbarer Playmat |
 | card-forge | active | Authoring + Legacy Supabase |
-| sandbox-arena | active | Freies Platzieren |
+| build-workbench | active | Engine-Werkbank (Meshy, Formel) |
 | card-library | active | Kartenbrowse |
 | playtest-cheatbox | active | Dev State-Jumps |
 | llm-bot-ollama | active | Optionaler FOW-LLM-Bot |

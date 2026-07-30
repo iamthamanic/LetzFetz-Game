@@ -54,7 +54,7 @@ function parseOverlayMap(raw: unknown): Record<string, CardOverlayFields> {
   const out: Record<string, CardOverlayFields> = {};
   for (const [id, value] of Object.entries(raw as Record<string, unknown>)) {
     if (!isNonEmptyString(id)) continue;
-    // Keep every non-empty string id; known-pack filtering happens in loadSandboxContent.
+    // Keep every non-empty string id; known-pack filtering happens in content loaders.
     const fields = parseOverlayFields(value);
     if (fields) out[id] = fields;
   }
