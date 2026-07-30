@@ -1,9 +1,14 @@
 import type { BoundCardInstance, ContentPack, GameState, PlayerId, RulesetConfig } from '../types';
-import { isV3CombatEnabled } from '../types';
+import { isV3CombatEnabled, isV5FormulaEnabled } from '../types';
 import { opponentOf, checkWinner } from './createGame';
 import { cloneState, drawForPlayer, clampHp } from './helpers';
 import { applyInstantGlitch } from './effects';
 import { findElementDef, findGlitchDef } from './lookup';
+import { findFormulaComponentDef, formulaSlotForDef } from './formulaSlots';
+import {
+  disturbFormulaComponent,
+  listFormulaComponents,
+} from './formulaChallenge';
 import type { Rng } from './deck';
 import { applyStatus } from './status/applyStatus';
 import { enableDoubleReactionThisAction } from './status/v3CombatHooks';
@@ -19,6 +24,32 @@ function buildFromHandAfterUlti(
   ruleset: RulesetConfig,
 ): GameState {
   const next = cloneState(state);
+
+  if (isV5FormulaEnabled(ruleset)) {
+    const handIdx = next.players[playerId].hand.findIndex((c) =>
+      Boolean(findFormulaComponentDef(pack, c.defId)),
+    );
+    if (handIdx === -1) return next;
+    const handCard = next.players[playerId].hand[handIdx];
+    const slot = formulaSlotForDef(pack, handCard.defId);
+    const def = findFormulaComponentDef(pack, handCard.defId);
+    if (!slot || !def) return next;
+    if (next.players[playerId].formula[slot] != null) {
+      const old = next.players[playerId].formula[slot]!;
+      next.piles.discard.push({ instanceId: old.instanceId, defId: old.defId });
+    }
+    const [card] = next.players[playerId].hand.splice(handIdx, 1);
+    next.players[playerId].formula[slot] = {
+      ...card,
+      slot,
+      exhausted: false,
+      disturbed: false,
+      stabilityBonus: 0,
+    };
+    next.lastEvent = `${next.lastEvent ?? ''} Formelkomponente gebaut.`.trim();
+    return next;
+  }
+
   const cardIdx = next.players[playerId].hand.findIndex((c) => findElementDef(pack, c.defId));
   if (cardIdx === -1) return next;
 
@@ -105,6 +136,10 @@ export function applyUltimateEffect(
     case 'ulti-stiernackenkommando': {
       next.players[playerId].doubleNextAttack = true;
       next.lastEvent = 'Rückhandbombe: Nächster Angriff doppelter Schaden.';
+      if (isV5FormulaEnabled(ruleset)) {
+        next.players[playerId].hp = clampHp(next.players[playerId].hp - 1, ruleset);
+        next.lastEvent += ' −1 Leben.';
+      }
       if (isV3CombatEnabled(ruleset)) {
         next = enableDoubleReactionThisAction(next);
         next.lastEvent += ' V3: Doppelreaktion.';
@@ -116,13 +151,32 @@ export function applyUltimateEffect(
         next.players[playerId].hp = 12;
       }
       let refreshed = 0;
-      for (const b of next.players[playerId].bound) {
-        if (b.exhausted && refreshed < 2) {
-          b.exhausted = false;
-          refreshed++;
+      if (isV5FormulaEnabled(ruleset)) {
+        for (const comp of listFormulaComponents(next.players[playerId].formula)) {
+          if (refreshed >= 2) break;
+          if (comp.exhausted || comp.disturbed) {
+            const slot = comp.slot;
+            const cur = next.players[playerId].formula[slot];
+            if (cur) {
+              next.players[playerId].formula[slot] = {
+                ...cur,
+                exhausted: false,
+                disturbed: false,
+              };
+              refreshed++;
+            }
+          }
         }
+        next.lastEvent = `Golden Shower: ${refreshed} Formelkomponente(n) aufgerichtet.`;
+      } else {
+        for (const b of next.players[playerId].bound) {
+          if (b.exhausted && refreshed < 2) {
+            b.exhausted = false;
+            refreshed++;
+          }
+        }
+        next.lastEvent = `Golden Shower: ${refreshed} Karte(n) aufgestellt.`;
       }
-      next.lastEvent = `Golden Shower: ${refreshed} Karte(n) aufgestellt.`;
       break;
     }
     case 'ulti-pillendoktora': {
@@ -145,9 +199,22 @@ export function applyUltimateEffect(
       }
       const missing = 2 - toDiscard;
       next.players[opponent].hp = clampHp(next.players[opponent].hp - 3 - missing, ruleset);
-      const oppBound = next.players[opponent].bound.find((b) => !b.exhausted)
-        ?? next.players[opponent].bound[0];
-      if (oppBound) oppBound.exhausted = true;
+      if (isV5FormulaEnabled(ruleset)) {
+        const target = listFormulaComponents(next.players[opponent].formula).find(
+          (c) => !c.disturbed,
+        );
+        if (target) {
+          next.players[opponent].formula = disturbFormulaComponent(
+            next.players[opponent].formula,
+            target.instanceId,
+          );
+        }
+      } else {
+        const oppBound =
+          next.players[opponent].bound.find((b) => !b.exhausted) ??
+          next.players[opponent].bound[0];
+        if (oppBound) oppBound.exhausted = true;
+      }
       next.lastEvent = 'Runway ins Schattenreich ausgeführt.';
       break;
     }

@@ -91,6 +91,12 @@ import {
 } from './phraseBonuses';
 import { applyUltimateEffect } from './ultimate';
 import {
+  consumeStiernackenRevengeBonus,
+  tryKnuspergnomFormulaFilter,
+  trySchluckspechtFullBlockHeal,
+  tryStiernackenRevengeBonus,
+} from './characterPassives';
+import {
   getChallengeMargin,
   applyVulkanAttackRoll,
   applySumpfBlockRoll,
@@ -394,6 +400,13 @@ function applyPlayerAttackDamage(
 
   if (isSumpf(next) && pipeline.isFullBlock) {
     next = applyMandatoryArenaDrawDiscard(next, defenderId, 'sumpf-full-block', pack, rng, ruleset);
+  }
+
+  if (pipeline.isFullBlock) {
+    next = trySchluckspechtFullBlockHeal(next, defenderId, ruleset);
+  }
+  if (pipeline.hpDamage > 0) {
+    next = tryStiernackenRevengeBonus(next, defenderId, pipeline.hpDamage, ruleset);
   }
 
   const highBefore: Record<PlayerId, number> = {
@@ -1412,12 +1425,26 @@ export function applyAction(
     case 'FORMULA_BUILD': {
       if (state.phase !== 'build') throw new Error('Not in build phase');
       if (!isV5FormulaEnabled(ruleset)) throw new Error('FORMULA_BUILD requires v5Formula');
-      return applyFormulaBuild(state, pack, playerId, action.cardInstanceId);
+      next = applyFormulaBuild(state, pack, playerId, action.cardInstanceId);
+      const builtId = listFormulaComponents(next.players[playerId].formula).find(
+        (c) => c.instanceId === action.cardInstanceId,
+      )?.instanceId;
+      if (builtId) {
+        next = tryKnuspergnomFormulaFilter(next, pack, playerId, builtId, rng, ruleset);
+      }
+      return next;
     }
     case 'FORMULA_REPLACE': {
       if (state.phase !== 'build') throw new Error('Not in build phase');
       if (!isV5FormulaEnabled(ruleset)) throw new Error('FORMULA_REPLACE requires v5Formula');
-      return applyFormulaReplace(state, pack, playerId, action.cardInstanceId);
+      next = applyFormulaReplace(state, pack, playerId, action.cardInstanceId);
+      const builtId = listFormulaComponents(next.players[playerId].formula).find(
+        (c) => c.instanceId === action.cardInstanceId,
+      )?.instanceId;
+      if (builtId) {
+        next = tryKnuspergnomFormulaFilter(next, pack, playerId, builtId, rng, ruleset);
+      }
+      return next;
     }
     case 'FORMULA_ACTIVATE': {
       if (state.phase !== 'build') throw new Error('Not in build phase');
@@ -1474,6 +1501,10 @@ export function applyAction(
       }
 
       let attackValue = computeAttackValueForPlayer(pack, working, playerId, def, diceRoll, ruleset);
+
+      const revenge = consumeStiernackenRevengeBonus(working, playerId);
+      working = revenge.state;
+      attackValue += revenge.bonus;
 
       const attackPrep = takeAttackPrepBonus(working, playerId);
       working = attackPrep.state;
@@ -1532,7 +1563,7 @@ export function applyAction(
       const vulkan = applyVulkanAttackRoll(state, playerId, diceRoll);
       let working = vulkan.state;
       diceRoll = vulkan.roll;
-      const attackValue = formulaTarget
+      let attackValue = formulaTarget
         ? computeFormulaChallengeAttackValue(
             pack,
             working,
@@ -1551,6 +1582,10 @@ export function applyAction(
             diceRoll,
             ruleset,
           );
+
+      const revenge = consumeStiernackenRevengeBonus(working, playerId);
+      working = revenge.state;
+      attackValue += revenge.bonus;
 
       next = discardFromHand(working, playerId, action.attackCardInstanceId);
       next = markAttackOrChallenge(next);

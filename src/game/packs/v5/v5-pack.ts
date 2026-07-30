@@ -13,6 +13,7 @@ import {
   V5_MVP_ITEMS,
   V5_MVP_TECHNIQUES,
 } from './mvpCards';
+import { V5_CHARACTERS, V5_ULTIMATES } from './characters';
 
 /** Documented mix — actual count = sum of included defs (one instance each). */
 export const V5_MIX = {
@@ -47,8 +48,8 @@ export function buildV5Pack(): ContentPack {
     id: 'v5-mvp',
     name: 'V5 Formel MVP',
     version: '0.1.0',
-    characters: BASE_PACK.characters,
-    ultimates: BASE_PACK.ultimates,
+    characters: V5_CHARACTERS,
+    ultimates: V5_ULTIMATES,
     arenas: BASE_PACK.arenas,
     elementCards: BASE_PACK.elementCards,
     glitches: BASE_PACK.glitches,

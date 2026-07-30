@@ -97,4 +97,13 @@ describe('V5_PACK', () => {
     const slot = formulaSlotForDef(V5_PACK, tech!.defId)!;
     expect(state.players.p1.formula[slot]?.defId).toBe(tech!.defId);
   });
+
+  it('ships V5 §25 character passive + Großformel copy', () => {
+    expect(V5_PACK.characters).toHaveLength(7);
+    expect(V5_PACK.ultimates).toHaveLength(7);
+    const knusp = V5_PACK.characters.find((c) => c.id === 'knuspergnom');
+    expect(knusp?.passiveText).toMatch(/Formel/);
+    const ulti = V5_PACK.ultimates.find((u) => u.id === 'ulti-kokabell');
+    expect(ulti?.effectText).toMatch(/Formelkomponenten/);
+  });
 });
