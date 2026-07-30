@@ -5,6 +5,7 @@
 import {
   findElementDef,
   findEnginePartDef,
+  findFormulaComponentDef,
   getLegalActions,
   isV2Pack,
   PHASE_LABELS,
@@ -307,6 +308,8 @@ export function buildGameViewModel(
   const handCards: HandCardView[] = state.players[humanId].hand.map((card) => {
     const def = findElementDef(pack, card.defId);
     const glitch = def ? null : (pack.glitches.find((g) => g.id === card.defId) ?? null);
+    const formula =
+      def || glitch ? null : (findFormulaComponentDef(pack, card.defId) ?? null);
     const interaction = handInteraction(card.instanceId, legalActions);
     const buildNeedsReplace =
       interaction === 'build' && buildRequiresReplace(legalActions, card.instanceId);
@@ -341,7 +344,7 @@ export function buildGameViewModel(
       instanceId: card.instanceId,
       defId: card.defId,
       def,
-      glitchName: glitch?.name ?? null,
+      glitchName: glitch?.name ?? formula?.name ?? null,
       glitchDef: glitch,
       isPlayable,
       interaction: activateDiscard ? 'activate-discard' : interaction,

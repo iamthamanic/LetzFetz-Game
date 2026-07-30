@@ -300,7 +300,11 @@ export function PlaymatBoard({
 
   return (
     <DndPlaymat state={state} pack={pack} view={view} humanId={humanId} onDispatch={onDispatch}>
-    <div className="flex min-h-0 flex-1 flex-col overflow-hidden">
+    <div
+      className="flex min-h-0 flex-1 flex-col overflow-hidden"
+      data-testid="playmat-board"
+      data-v5-formula={v5Formula ? 'true' : 'false'}
+    >
       {/* Mobile character badges — outside absolute playmat layer to avoid overlap */}
       <div className="flex flex-none items-stretch gap-2 border-b border-stone-800/80 bg-stone-950/90 px-2 py-1.5 sm:hidden">
         <CharacterDock
@@ -337,10 +341,7 @@ export function PlaymatBoard({
         </div>
       )}
 
-      <div
-        data-testid="playmat-board"
-        className="relative flex min-h-0 flex-1 overflow-hidden"
-      >
+      <div className="relative flex min-h-0 flex-1 overflow-hidden">
         {openingDealActive && (
           <div data-testid="opening-deal-in-progress" className="sr-only" aria-live="polite">
             Eröffnungskarten werden verteilt

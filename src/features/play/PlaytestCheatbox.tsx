@@ -12,7 +12,9 @@ import type {
   PlaytestHpCap,
 } from '../../game/types';
 import { TURN_PHASES, type TurnPhase } from '../../game/types';
+import { isV5FormulaEnabled } from '../../game/types';
 import { PHASE_LABELS } from '../../game/engine/helpers';
+import { rulesetFromState } from '../../game/engine/rulesetFromState';
 import {
   PLAYTEST_SCENARIOS,
   type PlaytestScenarioId,
@@ -65,6 +67,7 @@ export function PlaytestCheatbox({
 
   const hpCap = state.meta.playtestHpCap ?? 20;
   const monoMode = state.meta.monoBonusMode ?? 'mb1';
+  const v5On = isV5FormulaEnabled(rulesetFromState(state));
 
   useEffect(() => {
     setPatchPhase(state.phase);
@@ -130,6 +133,16 @@ export function PlaytestCheatbox({
     const result = applyAndValidatePlaytestPatch(state, { v3CombatEnabled: enabled });
     if (!result.ok || !result.state) {
       onError(result.error ?? 'V3-Flag ungültig.');
+      return;
+    }
+    onError(null);
+    onApplyState(result.state);
+  };
+
+  const demoV5FormulaReady = () => {
+    const result = applyAndValidatePlaytestPatch(state, { demoV5FormulaReady: true });
+    if (!result.ok || !result.state) {
+      onError(result.error ?? 'V5-Formel-Demo ungültig.');
       return;
     }
     onError(null);
@@ -295,6 +308,23 @@ export function PlaytestCheatbox({
                   Vollblock/Reaktion
                 </Button>
               </div>
+              {v5On ? (
+                <>
+                  <p className="mb-1 pt-2 text-[10px] font-semibold uppercase tracking-wider text-stone-500">
+                    V5 Formel
+                  </p>
+                  <div className="flex flex-wrap gap-1.5">
+                    <Button
+                      variant="accent"
+                      size="sm"
+                      onClick={demoV5FormulaReady}
+                      data-testid="playtest-v5-formula-ready"
+                    >
+                      Formel bereit
+                    </Button>
+                  </div>
+                </>
+              ) : null}
               <p className="text-[10px] text-stone-500">
                 Mono wirkt erst mit V2-Engine; Modus wird gespeichert.
               </p>

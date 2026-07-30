@@ -86,6 +86,7 @@
             "audio:test": "bash tools/audio-forge/bin/test.sh",
             "test:e2e": "playwright test",
             "test:e2e:ui": "playwright test --ui",
+            "test:e2e:v5": "playwright test e2e/v5-e2e-verify-ui.spec.ts",
             "test:e2e:visual-mvp": "playwright test e2e/fetz-3d-visual-regression-mvp.spec.ts",
             "test:e2e:visual-mvp:update": "playwright test e2e/fetz-3d-visual-regression-mvp.spec.ts --update-snapshots",
             "test:e2e:mobile-perf": "playwright test e2e/fetz-3d-mobile-perf.spec.ts",

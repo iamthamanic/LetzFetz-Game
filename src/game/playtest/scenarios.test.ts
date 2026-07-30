@@ -1,5 +1,7 @@
 import { describe, it, expect } from 'vitest';
 import { BASE_PACK } from '../packs/base-pack';
+import { V5_PACK, V5_PACK_RULESET } from '../packs/v5';
+import { createGame } from '../engine/createGame';
 import { getLegalActions } from '../engine/actions';
 import {
   PLAYTEST_SCENARIOS,
@@ -123,5 +125,24 @@ describe('playtest patches', () => {
     expect(result.state?.lastEvent).toContain('Vollblock');
     expect(result.state?.lastEvent).toContain('Auto-Reaktion');
     expect(result.state?.combat).toBeNull();
+  });
+
+  it('demoV5FormulaReady seeds Formelphase + Technik + Angriff', () => {
+    const state = createGame({
+      pack: V5_PACK,
+      p1CharacterId: 'knuspergnom',
+      p2CharacterId: 'schluckspecht',
+      startingPlayer: 'p1',
+      seed: 42,
+      ruleset: V5_PACK_RULESET,
+    });
+    const result = applyAndValidatePlaytestPatch(state, { demoV5FormulaReady: true });
+    expect(result.ok, result.error).toBe(true);
+    expect(result.state?.phase).toBe('build');
+    expect(result.state?.meta.v5FormulaEnabled).toBe(true);
+    expect(
+      result.state?.players.p1.hand.some((c) => c.defId === 'v5-technik-durchschuss'),
+    ).toBe(true);
+    expect(result.state?.players.p1.hand.some((c) => c.defId === 'fire-attack-6')).toBe(true);
   });
 });
