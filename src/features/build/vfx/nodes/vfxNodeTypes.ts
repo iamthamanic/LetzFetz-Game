@@ -14,6 +14,7 @@ export const VFX_PIPELINE_NODE_TYPES = {
   vfxMeshy: 'vfxMeshy',
   vfxNormalize: 'vfxNormalize',
   vfxSocket: 'vfxSocket',
+  vfxEffekseerPreset: 'vfxEffekseerPreset',
   vfxSaveTechnique: 'vfxSaveTechnique',
 } as const;
 
@@ -44,6 +45,11 @@ export interface VfxSocketNodeData extends VfxNodeBaseData {
   sockets: VfxTechniqueSocketMap;
 }
 
+export interface VfxEffekseerPresetNodeData extends VfxNodeBaseData {
+  /** Built-in preset id from `VFX_EFFECT_PRESETS`, or null when unset. */
+  presetId: string | null;
+}
+
 export interface VfxSaveTechniqueNodeData extends VfxNodeBaseData {
   techniqueName: string;
   glbUrl: string | null;
@@ -54,6 +60,7 @@ export type VfxPipelineNodeData =
   | VfxMeshyNodeData
   | VfxNormalizeNodeData
   | VfxSocketNodeData
+  | VfxEffekseerPresetNodeData
   | VfxSaveTechniqueNodeData;
 
 export const VFX_STATUS_LABEL_DE: Record<VfxAssetStatus, string> = {
@@ -91,6 +98,14 @@ export function defaultSocketNodeData(): VfxSocketNodeData {
     activeSocket: 'essenceOrigin',
     sockets: createDefaultSocketMap(),
     status: 'DRAFT',
+  };
+}
+
+export function defaultEffekseerPresetNodeData(): VfxEffekseerPresetNodeData {
+  return {
+    presetId: 'aura',
+    status: 'READY',
+    statusMessage: 'Aura-Preset gewählt',
   };
 }
 

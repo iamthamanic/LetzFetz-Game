@@ -46,7 +46,7 @@ const MODE_TABS: TabItem[] = [
 ];
 
 const MODE_SUBTITLE: Record<VfxStudioMode, string> = {
-  assets: 'Meshy → Normalisieren → Sockets → Speichern (fest verdrahtet)',
+  assets: 'Meshy → Normalize → Sockets → Effekseer → Speichern',
   formeln: 'Technik + Essenz + Katalysator → Live-Vorschau → Hero-Frame',
   batch: 'Headless-Render mit gleicher Preview-Szene',
 };
@@ -161,7 +161,7 @@ export function VfxStudioView() {
                 {selectedSocketData ? (
                   <VfxSharedPreview
                     active={!graphNodeDragging}
-                    presetId="aura"
+                    presetId={pipeline.selectedPresetId}
                     className="min-h-[14rem] flex-none sm:min-h-[16rem]"
                     showTimeline={false}
                     modelUrls={selectedSocketData.glbUrl ? [selectedSocketData.glbUrl] : []}

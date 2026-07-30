@@ -14,21 +14,29 @@ import {
 import { VFX_PIPELINE_NODE_TYPES } from './nodes/vfxNodeTypes';
 
 describe('createDefaultAssetPipeline', () => {
-  it('seeds four connected nodes without a Prompt node', () => {
+  it('seeds five connected nodes including Effekseer preset', () => {
     const { nodes, edges } = createDefaultAssetPipeline();
-    expect(nodes).toHaveLength(4);
+    expect(nodes).toHaveLength(5);
     expect(nodes.map((n) => n.type)).toEqual([
       VFX_PIPELINE_NODE_TYPES.vfxMeshy,
       VFX_PIPELINE_NODE_TYPES.vfxNormalize,
       VFX_PIPELINE_NODE_TYPES.vfxSocket,
+      VFX_PIPELINE_NODE_TYPES.vfxEffekseerPreset,
       VFX_PIPELINE_NODE_TYPES.vfxSaveTechnique,
     ]);
-    expect(edges).toHaveLength(3);
+    expect(edges).toHaveLength(4);
     expect(edges.map((e) => `${e.source}->${e.target}`)).toEqual([
       `${DEFAULT_PIPELINE_NODE_IDS.meshy}->${DEFAULT_PIPELINE_NODE_IDS.normalize}`,
       `${DEFAULT_PIPELINE_NODE_IDS.normalize}->${DEFAULT_PIPELINE_NODE_IDS.socket}`,
-      `${DEFAULT_PIPELINE_NODE_IDS.socket}->${DEFAULT_PIPELINE_NODE_IDS.save}`,
+      `${DEFAULT_PIPELINE_NODE_IDS.socket}->${DEFAULT_PIPELINE_NODE_IDS.preset}`,
+      `${DEFAULT_PIPELINE_NODE_IDS.preset}->${DEFAULT_PIPELINE_NODE_IDS.save}`,
     ]);
+  });
+
+  it('defaults Effekseer preset to aura', () => {
+    const { nodes } = createDefaultAssetPipeline();
+    const preset = nodes.find((n) => n.id === DEFAULT_PIPELINE_NODE_IDS.preset);
+    expect(preset?.data).toMatchObject({ presetId: 'aura', status: 'READY' });
   });
 
   it('lays out nodes 3-per-row then wraps', () => {
@@ -38,6 +46,7 @@ describe('createDefaultAssetPipeline', () => {
       pipelineGridPosition(1),
       pipelineGridPosition(2),
       pipelineGridPosition(3),
+      pipelineGridPosition(4),
     ]);
     expect(pipelineGridPosition(3)).toEqual({
       x: PIPELINE_GRID.originX,

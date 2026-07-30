@@ -19,7 +19,11 @@ import {
   type VfxPipelineNodeType,
   type VfxSaveTechniqueNodeData,
   type VfxSocketNodeData,
+  type VfxEffekseerPresetNodeData,
 } from './nodes/vfxNodeTypes';
+import {
+  resolveEffectPreset,
+} from './preview/effectPresets';
 import {
   VfxWorkerError,
   createMeshyTextTo3d,
@@ -152,6 +156,24 @@ function getSocketDataFromUpstream(
   return socketNode.data as VfxSocketNodeData;
 }
 
+function getPresetIdFromUpstream(
+  nodes: Node[],
+  edges: Edge[],
+  nodeId: string,
+): string | null {
+  const presetNode = findUpstreamNode(
+    nodes,
+    edges,
+    nodeId,
+    VFX_PIPELINE_NODE_TYPES.vfxEffekseerPreset,
+  );
+  if (!presetNode) return null;
+  const data = presetNode.data as VfxEffekseerPresetNodeData;
+  const presetId = data.presetId;
+  if (!presetId || !resolveEffectPreset(presetId)) return null;
+  return presetId;
+}
+
 function formatSocketStatusMessage(hasModel: boolean): string {
   return hasModel
     ? 'Modell verbunden — Sockets platzieren.'
@@ -260,6 +282,7 @@ export function useAssetPipelineGraph(enabled: boolean) {
           },
           [
             VFX_PIPELINE_NODE_TYPES.vfxSocket,
+            VFX_PIPELINE_NODE_TYPES.vfxEffekseerPreset,
             VFX_PIPELINE_NODE_TYPES.vfxSaveTechnique,
           ],
         );
@@ -407,6 +430,7 @@ export function useAssetPipelineGraph(enabled: boolean) {
       const upstreamSocket = getSocketDataFromUpstream(currentNodes, currentEdges, saveNodeId);
       const sockets: VfxTechniqueSocketMap =
         upstreamSocket?.sockets ?? createDefaultSocketMap();
+      const effectId = getPresetIdFromUpstream(currentNodes, currentEdges, saveNodeId);
 
       const slug = slugifyName(name) || 'technik';
       const id = `vfx-technik-${slug}-${Date.now()}`;
@@ -423,7 +447,7 @@ export function useAssetPipelineGraph(enabled: boolean) {
         updatedAt: now,
         imageId: null,
         modelId: glbUrl,
-        effectId: null,
+        effectId,
         sockets,
       };
 
@@ -468,6 +492,24 @@ export function useAssetPipelineGraph(enabled: boolean) {
             data: {
               ...node.data,
               onSave: () => saveTechniqueFromNode(node.id),
+            },
+          };
+        }
+        if (node.type === VFX_PIPELINE_NODE_TYPES.vfxEffekseerPreset) {
+          return {
+            ...node,
+            data: {
+              ...node.data,
+              onPresetChange: (presetId: string) => {
+                const preset = resolveEffectPreset(presetId);
+                patchNodeData(node.id, {
+                  presetId: preset ? preset.id : null,
+                  status: preset ? 'READY' : 'FAILED',
+                  statusMessage: preset
+                    ? `${preset.labelDe}-Preset gewählt`
+                    : 'Unbekanntes Preset',
+                });
+              },
             },
           };
         }
@@ -596,6 +638,15 @@ export function useAssetPipelineGraph(enabled: boolean) {
     ? nodes.find((n) => n.id === selectedNodeId) ?? null
     : null;
 
+  const selectedPresetId = (() => {
+    const presetNode = nodes.find(
+      (n) => n.type === VFX_PIPELINE_NODE_TYPES.vfxEffekseerPreset,
+    );
+    if (!presetNode) return 'aura';
+    const data = presetNode.data as VfxEffekseerPresetNodeData;
+    return data.presetId && resolveEffectPreset(data.presetId) ? data.presetId : 'aura';
+  })();
+
   const refreshSavedTechniques = useCallback(() => {
     setSavedTechniques(listTechniqueAssets());
   }, []);
@@ -610,6 +661,7 @@ export function useAssetPipelineGraph(enabled: boolean) {
     onConnect,
     reflowPipelineLayout,
     selectedNodeId,
+    selectedPresetId,
     setSelectedNodeId,
     selectedNode,
     updateSelectedPrompt,
