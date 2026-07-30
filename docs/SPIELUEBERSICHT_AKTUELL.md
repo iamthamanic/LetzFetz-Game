@@ -1,6 +1,6 @@
-# Letz Fetz — Spielprinzip & Überblick (Stand 2026-07-29)
+# Letz Fetz — Spielprinzip & Überblick (Stand 2026-07-30)
 
-> **Zweck:** Eine lesbare Übersicht, *wie das Spiel und die App gerade funktionieren* — und wohin V5 geht.  
+> **Zweck:** Eine lesbare Übersicht, *wie das Spiel und die App gerade funktionieren* — mit **V5 als Play-Default**.  
 > **Quellen:** `docs/letz-fetz-v5-spielkonzept.md`, `docs/rules/SPIELANLEITUNG_V5_DRAFT.md`, `docs/rules/SPIELANLEITUNG_V1.md` (Regression), Packs unter `src/game/packs/`.
 
 ---
@@ -37,21 +37,22 @@ Die App ist eine **digitale Playtest- und Authoring-Plattform** — kein fertige
 Meshy-Assets und V3-Pack-Code bleiben im Repo; sie sind nur nicht mehr der Default-Play-Pfad.
 ---
 
-## 3. Match-Basics (aktueller Regelkern)
+## 3. Match-Basics (Play-Default V5)
 
-Gemeinsam für V1 und V3-Playtest (Zahlen außer LP/Kampflayer):
-
-| Parameter | Wert |
+| Parameter | Wert (V5 Default) |
 |-----------|------|
 | Spieler | 2 (digital: Mensch vs Heuristik-Bot) |
+| Startleben | **20** |
+| Formelplätze | **3** (Technik · Essenz · Katalysator) |
+| Fetzladung | max **3** → Großformel |
 | Handlimit | **6** |
-| Max. gebundene Karten | **4** |
-| Zugphasen | 5 (siehe unten) |
+| Zugphasen | 5: Start → Ziehen → **Formel** → Aktion → Ende |
 | Würfelbonus (W6) | 1–2 → **+0**, 3–4 → **+1**, 5–6 → **+2** |
-| Startleben (App-Standard) | **20** |
-| Max. Leben | wie Start (V1: 20) |
+| Main Deck | **106** (Konzept §3.1) |
 
 **Elemente:** Feuer, Wasser, Erde, Luft, Schatten, Licht.
+
+> **Regression:** Basis-Pack (V1) nutzt weiter Bound-4 / klassische Bindungsphase — siehe `SPIELANLEITUNG_V1.md`. Die Phasenmatrix in §4 unten beschreibt den **V1-Kern** für Regression und als Vergleich; unter V5 ersetzt die **Formelphase** die Bindungsphase.
 
 ---
 
@@ -378,12 +379,13 @@ UI-Hinweise („was jetzt?“): Phase-Coach in Play zeigt legale Züge; Details 
 | Basis-Karten & Charaktere | `src/game/packs/base-pack.ts` |
 | V3 Elementmix + 36 Teile (legacy) | `src/game/packs/v3/` |
 | Play-Pack-Wahl | `src/features/play/setup/resolveGamePackChoice.ts` |
-| V5 Epic / Issues | `.qa/design/v5-formula-migration.md` |
+| V5 Epic / Cutover (historisch) | `.qa/design/v5-formula-migration.md` |
+| V5 Post-Cutover Parity | `.qa/design/v5-post-cutover-parity.md` |
 | Projekt-Architektur | `AGENTS.md` |
 
 ---
 
 ## 11. Ein-Satz-Fazit
 
-**Heute** spielst du digital vor allem das **V1-Basisduell**; **V5** ist das Produktziel (**Formel** Technik/Essenz/Katalysator, Formelgestell, Visual Recipe, 20 LP) — Epic #218–#233 setzt den Cutover um; V3-Fetzgerät wird soft-retired.
+**Heute** ist **V5 Formel** der Play-Default (20 LP, Formelgestell, Visual Recipe, Charge 3, Deck 106). **Basis-Pack (V1)** bleibt Regression; **V3-Fetzgerät / Live-3D** ist Soft-Retire. Post-Cutover-Parity: `.qa/design/v5-post-cutover-parity.md`.
 
