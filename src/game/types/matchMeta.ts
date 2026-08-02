@@ -40,6 +40,11 @@ export interface MatchMeta {
   v3CombatEnabled?: boolean;
   /** Match: enable V5 Formelboard (Technik/Essenz/Katalysator). */
   v5FormulaEnabled?: boolean;
+  /**
+   * Match: enable V6 Formel ruleset identity (INTERNAL).
+   * Mutually exclusive with `v5FormulaEnabled`.
+   */
+  v6FormulaEnabled?: boolean;
   /** V3: reactions resolved in the current main action (max 1 by default). */
   v3ReactionsThisAction?: number;
   /** V3 Finsternis: block new shield until current action ends. */

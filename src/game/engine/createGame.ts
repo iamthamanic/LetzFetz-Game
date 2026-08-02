@@ -1,5 +1,5 @@
 import type { CardInstance, ContentPack, GameState, PlayerId, RulesetConfig } from '../types';
-import { DEFAULT_RULESET, createEmptyMeta } from '../types';
+import { DEFAULT_RULESET, assertExclusiveFormulaRuleset, createEmptyMeta } from '../types';
 import {
   buildMainDeckInstances,
   shuffle,
@@ -100,6 +100,7 @@ function drawOpeningHand(
 /** Set up a new match per rulebook §5. */
 export function createGame(config: CreateGameConfig): GameState {
   const ruleset = config.ruleset ?? DEFAULT_RULESET;
+  assertExclusiveFormulaRuleset(ruleset);
   const rng = config.rng ?? createSeededRng(config.seed ?? Date.now());
   validateCharacter(config.pack, config.p1CharacterId);
   validateCharacter(config.pack, config.p2CharacterId);
@@ -167,6 +168,9 @@ export function createGame(config: CreateGameConfig): GameState {
   }
   if (ruleset.v5Formula === true) {
     state.meta.v5FormulaEnabled = true;
+  }
+  if (ruleset.v6Formula === true) {
+    state.meta.v6FormulaEnabled = true;
   }
 
   const skippedInstants: CardInstance[] = [];
