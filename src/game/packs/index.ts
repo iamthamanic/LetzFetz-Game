@@ -36,3 +36,4 @@ export {
   V5_MVP_CATALYSTS,
   V5_MVP_ITEMS,
 } from './v5';
+export { V6_CORE_PACK, buildV6CorePack, V6_PACK_RULESET } from './v6';
