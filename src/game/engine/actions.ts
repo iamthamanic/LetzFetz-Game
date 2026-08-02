@@ -10,7 +10,12 @@ import type {
   PlayerId,
   RulesetConfig,
 } from '../types';
-import { DEFAULT_RULESET, TURN_PHASES, type TurnPhase } from '../types';
+import {
+  DEFAULT_RULESET,
+  TURN_PHASES,
+  assertExclusiveFormulaRuleset,
+  type TurnPhase,
+} from '../types';
 import { calculateCombatValue, resolveDamage, challengeSucceeded, counterBonus } from './combat';
 import { diceBonusFromRoll, rollD6 } from './dice';
 import { opponentOf, checkWinner } from './createGame';
@@ -136,10 +141,13 @@ export interface PackContext {
 }
 
 function rulesetOf(ctx: PackContext, state?: GameState): RulesetConfig {
-  if (ctx.ruleset) return ctx.ruleset;
+  if (ctx.ruleset) {
+    assertExclusiveFormulaRuleset(ctx.ruleset);
+    return ctx.ruleset;
+  }
   if (state) {
     const fromState = rulesetFromState(state);
-    if (fromState.v5Formula || fromState.v3Combat) return fromState;
+    if (fromState.v6Formula || fromState.v5Formula || fromState.v3Combat) return fromState;
   }
   return DEFAULT_RULESET;
 }
