@@ -33,7 +33,7 @@ export const V6_PACK_RULESET: RulesetConfig = {
 export function buildV6CorePack(): ContentPack {
   return {
     id: 'v6-core',
-    name: 'V6 Core Slice-1 (INTERNAL) — 105-Rezept-Katalog',
+    name: 'V6 Core Slice-1 (INTERNAL) — 198-Rezept-Katalog',
     version: '0.1.5-slice1',
     characters: V6_CHARACTERS,
     ultimates: [],
@@ -42,7 +42,7 @@ export function buildV6CorePack(): ContentPack {
     glitches: V6_STANDARD_GLITCHES,
     techniques: V6_SLICE1_TECHNIQUES,
     essences: V6_SLICE1_ESSENCES,
-    /** Slice-1 locked set + Echo/Delay/Beschwörung playtest catalysts (not in 105 matrix). */
+    /** Slice-1 locked set + Echo/Delay/Beschwörung playtest catalysts (not in locked matrix). */
     catalysts: [
       ...V6_SLICE1_CATALYSTS,
       ...V6_PLAYTEST_ECHO_DELAY_CATALYSTS,

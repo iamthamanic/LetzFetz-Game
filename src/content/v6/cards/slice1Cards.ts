@@ -58,11 +58,35 @@ export const V6_SLICE1_ESSENCES: EssenceCardDef[] = [
   },
   {
     kind: 'essence',
+    id: 'v6-essenz-erde',
+    name: 'Erde',
+    element: 'earth',
+    stability: 4,
+    effectText: 'Stabilität: härtet Formeln; Rider stärkt Halt und Widerstand.',
+  },
+  {
+    kind: 'essence',
     id: 'v6-essenz-luft',
     name: 'Luft',
     element: 'air',
     stability: 2,
     effectText: 'Tempo und Würfel: bereitet Aktionsökonomie vor.',
+  },
+  {
+    kind: 'essence',
+    id: 'v6-essenz-licht',
+    name: 'Licht',
+    element: 'light',
+    stability: 3,
+    effectText: 'Schild und Reinigung: schützt und klärt Marken über Rider.',
+  },
+  {
+    kind: 'essence',
+    id: 'v6-essenz-schatten',
+    name: 'Schatten',
+    element: 'shadow',
+    stability: 2,
+    effectText: 'Fluch und Erschöpfung: schwächt gegnerische Formelkomponenten.',
   },
 ];
 

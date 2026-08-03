@@ -77,9 +77,9 @@ describe('V6_CORE_PACK Slice-1 (INTERNAL)', () => {
   });
 
   it('ships Slice-1 authoring + generated TE/TK/EK/TEK/overformula recipes', () => {
-    expect(V6_FORMULA_AUTHORING_SLICE1.teBases).toHaveLength(9);
-    expect(V6_GENERATED_RECIPE_COUNT).toBe(105);
-    expect(V6_GENERATED_FORMULA_RECIPES).toHaveLength(105);
+    expect(V6_FORMULA_AUTHORING_SLICE1.teBases).toHaveLength(18);
+    expect(V6_GENERATED_RECIPE_COUNT).toBe(198);
+    expect(V6_GENERATED_FORMULA_RECIPES).toHaveLength(198);
     const kinds = new Set(V6_GENERATED_FORMULA_RECIPES.map((r) => r.kind));
     expect(kinds).toEqual(new Set(['te', 'tk', 'ek', 'tek', 'overformula']));
     expect(V6_GENERATED_FORMULA_RECIPES.filter((r) => r.kind === 'tek').every((r) => r.grantsFetz)).toBe(
@@ -88,13 +88,13 @@ describe('V6_CORE_PACK Slice-1 (INTERNAL)', () => {
     expect(
       V6_GENERATED_FORMULA_RECIPES.filter((r) => r.catalystId).every((r) => r.catalystConsumed),
     ).toBe(true);
-    expect(V6_SLICE1_RECIPE_CATALOG.recipeCount).toBe(105);
+    expect(V6_SLICE1_RECIPE_CATALOG.recipeCount).toBe(198);
     expect(V6_SLICE1_RECIPE_CATALOG.breakdown).toEqual({
-      te: 9,
+      te: 18,
       tk: 12,
-      ek: 12,
-      tek: 36,
-      overformula: 36,
+      ek: 24,
+      tek: 72,
+      overformula: 72,
     });
     for (const recipe of V6_GENERATED_FORMULA_RECIPES) {
       expect(recipe.catalogSlice).toBe('slice1');

@@ -2,9 +2,9 @@
  * Binding Slice-1 card id set (V6 Rules Contract Slice 1).
  * Location: src/content/v6/slice1Ids.ts
  *
- * These 3T×3E×4K ids define the locked 105-recipe catalog in
- * `src/generated/v6/formulaRecipes.generated.ts`. Expanding the full matrix
- * later means adding new ids — do not remove or renumber these.
+ * These 3T×6E×4K ids define the locked recipe catalog in
+ * `src/generated/v6/formulaRecipes.generated.ts`. Full 10T×10K matrix
+ * later means adding new technique/catalyst ids — do not remove these.
  */
 
 export const V6_SLICE1_TECHNIQUE_IDS = [
@@ -16,7 +16,10 @@ export const V6_SLICE1_TECHNIQUE_IDS = [
 export const V6_SLICE1_ESSENCE_IDS = [
   'v6-essenz-feuer',
   'v6-essenz-wasser',
+  'v6-essenz-erde',
   'v6-essenz-luft',
+  'v6-essenz-licht',
+  'v6-essenz-schatten',
 ] as const;
 
 export const V6_SLICE1_CATALYST_IDS = [
@@ -26,7 +29,7 @@ export const V6_SLICE1_CATALYST_IDS = [
   'v6-katalysator-opfergabe',
 ] as const;
 
-/** V6 core arenas (#350) — full set under v6Formula; not tied to 105-recipe lock. */
+/** V6 core arenas (#350) — full set under v6Formula; not tied to recipe lock. */
 export const V6_SLICE1_ARENA_IDS = [
   'arena-spaeti',
   'arena-kristall',

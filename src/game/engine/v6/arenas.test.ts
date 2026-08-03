@@ -62,14 +62,22 @@ describe('V6 Club / Kristall / Sumpf helpers', () => {
     const state = freshV6('arena-kristall');
     const light: FormulaComponentInstance = {
       instanceId: 'e1',
+      defId: 'v6-essenz-licht',
+      slot: 'essenz',
+      exhausted: false,
+      disturbed: false,
+      stabilityBonus: 0,
+    };
+    expect(v6KristallEssenceStabilityBonus(state, V6_CORE_PACK, light, V6_PACK_RULESET)).toBe(1);
+    const water: FormulaComponentInstance = {
+      instanceId: 'e2',
       defId: 'v6-essenz-wasser',
       slot: 'essenz',
       exhausted: false,
       disturbed: false,
       stabilityBonus: 0,
     };
-    // Slice-1 has no light essence — bonus 0 for water.
-    expect(v6KristallEssenceStabilityBonus(state, V6_CORE_PACK, light, V6_PACK_RULESET)).toBe(0);
+    expect(v6KristallEssenceStabilityBonus(state, V6_CORE_PACK, water, V6_PACK_RULESET)).toBe(0);
   });
 
   it('Sumpf raises destroy threshold to 4', () => {

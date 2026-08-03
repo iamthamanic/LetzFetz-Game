@@ -2,9 +2,9 @@
  * Slice-1 formula authoring SoT (TE / TK / EK bases + catalyst transforms).
  * Location: src/content/v6/formulaAuthoring.slice1.ts
  *
- * Current catalog: 3 Techniken × 3 Essenzen × 4 Katalysatoren → 105 generated recipes.
+ * Current catalog: 3 Techniken × 6 Essenzen × 4 Katalysatoren → 198 generated recipes.
  * Generator expands TE×catalyst → TEK + Überformel. Missing required keys fail closed.
- * Do not expand beyond this Slice-1 card set here (full matrix / Echo = later issues).
+ * Full 10T×10K matrix is a later catalog-expansion issue — do not invent unsupported keys.
  */
 import type {
   V6CatalystTransformAuthoring,
@@ -41,19 +41,28 @@ const TE_PRIMARY: Record<TechId, Record<EssId, V6PrimaryEffectAuthoring>> = {
   'v6-technik-impulsgeschoss': {
     'v6-essenz-feuer': { kind: 'damage', value: 3, target: 'opponent', offensive: true },
     'v6-essenz-wasser': { kind: 'damage', value: 2, target: 'opponent', offensive: true },
+    'v6-essenz-erde': { kind: 'damage', value: 2, target: 'opponent', offensive: true },
     'v6-essenz-luft': { kind: 'damage', value: 2, target: 'opponent', offensive: true },
+    'v6-essenz-licht': { kind: 'damage', value: 2, target: 'opponent', offensive: true },
+    'v6-essenz-schatten': { kind: 'damage', value: 2, target: 'opponent', offensive: true },
   },
   'v6-technik-adrenalinschrei': {
     'v6-essenz-feuer': { kind: 'prep_attack', value: 2, target: 'self' },
     /** Base 2 so Sofortzünder (−1) still leaves prep 1. */
     'v6-essenz-wasser': { kind: 'prep_boost', value: 2, target: 'self' },
+    'v6-essenz-erde': { kind: 'prep_attack', value: 2, target: 'self' },
     'v6-essenz-luft': { kind: 'prep_attack', value: 2, target: 'self' },
+    'v6-essenz-licht': { kind: 'prep_boost', value: 2, target: 'self' },
+    'v6-essenz-schatten': { kind: 'prep_attack', value: 2, target: 'self' },
   },
   'v6-technik-magiepanzer': {
     /** Fessel TE — manual pick of occupied enemy formula slot (engine). Base 2 for Sofortzünder. */
     'v6-essenz-feuer': { kind: 'fessel', value: 2, target: 'opponent', offensive: true },
     'v6-essenz-wasser': { kind: 'heal', value: 2, target: 'self' },
+    'v6-essenz-erde': { kind: 'shield', value: 2, target: 'self' },
     'v6-essenz-luft': { kind: 'shield', value: 2, target: 'self' },
+    'v6-essenz-licht': { kind: 'shield', value: 2, target: 'self' },
+    'v6-essenz-schatten': { kind: 'fessel', value: 2, target: 'opponent', offensive: true },
   },
 };
 
@@ -61,17 +70,26 @@ const TE_NAMES: Record<TechId, Record<EssId, string>> = {
   'v6-technik-impulsgeschoss': {
     'v6-essenz-feuer': 'Glutimpuls',
     'v6-essenz-wasser': 'Spritzschuss',
+    'v6-essenz-erde': 'Felsnadel',
     'v6-essenz-luft': 'Luftnadel',
+    'v6-essenz-licht': 'Lichtstich',
+    'v6-essenz-schatten': 'Schattenstich',
   },
   'v6-technik-adrenalinschrei': {
     'v6-essenz-feuer': 'Kampfschrei',
     'v6-essenz-wasser': 'Klärschrei',
+    'v6-essenz-erde': 'Standschrei',
     'v6-essenz-luft': 'Tempeschrei',
+    'v6-essenz-licht': 'Klarschrei',
+    'v6-essenz-schatten': 'Fluchschrei',
   },
   'v6-technik-magiepanzer': {
     'v6-essenz-feuer': 'Glutfessel',
     'v6-essenz-wasser': 'Nasspanzer',
+    'v6-essenz-erde': 'Erdpanzer',
     'v6-essenz-luft': 'Windpanzer',
+    'v6-essenz-licht': 'Lichtpanzer',
+    'v6-essenz-schatten': 'Schattenfessel',
   },
 };
 
@@ -89,9 +107,24 @@ const ESSENCE_RIDERS: Record<
     summary: 'Bei Heilung oder Schildgewinn: entferne optional eine Marke von dir.',
     defenseSuppressible: false,
   },
+  'v6-essenz-erde': {
+    id: 'rider-stabilitaet',
+    summary: 'Verwendete Komponenten +1 Stabilität bis nächste Startphase.',
+    defenseSuppressible: false,
+  },
   'v6-essenz-luft': {
     id: 'rider-w6',
     summary: 'Nächster eigener Aktions-W6 +1 (max +2).',
+    defenseSuppressible: true,
+  },
+  'v6-essenz-licht': {
+    id: 'rider-reinigen-licht',
+    summary: 'Bei Schildgewinn: entferne optional eine Marke von dir.',
+    defenseSuppressible: false,
+  },
+  'v6-essenz-schatten': {
+    id: 'rider-fluch',
+    summary: 'Bei Treffer: erschöpfe optional 1 gegnerische Formelkomponente.',
     defenseSuppressible: true,
   },
 };
@@ -132,11 +165,29 @@ const EK_NAMES: Record<EssId, Record<CatId, string>> = {
     'v6-katalysator-sofortzuender': 'Spritzzünder',
     'v6-katalysator-opfergabe': 'Wellenopfer',
   },
+  'v6-essenz-erde': {
+    'v6-katalysator-ueberladung': 'Felsüberladung',
+    'v6-katalysator-verdichtung': 'Felsverdichtung',
+    'v6-katalysator-sofortzuender': 'Felszünder',
+    'v6-katalysator-opfergabe': 'Felsopfer',
+  },
   'v6-essenz-luft': {
     'v6-katalysator-ueberladung': 'Sturmüberladung',
     'v6-katalysator-verdichtung': 'Windverdichtung',
     'v6-katalysator-sofortzuender': 'Windzünder',
     'v6-katalysator-opfergabe': 'Luftopfer',
+  },
+  'v6-essenz-licht': {
+    'v6-katalysator-ueberladung': 'Lichtüberladung',
+    'v6-katalysator-verdichtung': 'Lichtverdichtung',
+    'v6-katalysator-sofortzuender': 'Lichtzünder',
+    'v6-katalysator-opfergabe': 'Lichtopfer',
+  },
+  'v6-essenz-schatten': {
+    'v6-katalysator-ueberladung': 'Schattenüberladung',
+    'v6-katalysator-verdichtung': 'Schattenverdichtung',
+    'v6-katalysator-sofortzuender': 'Schattenzünder',
+    'v6-katalysator-opfergabe': 'Schattenopfer',
   },
 };
 
@@ -211,7 +262,10 @@ function buildEkBases(): V6EkBaseAuthoring[] {
   const essPrimary: Record<EssId, V6PrimaryEffectAuthoring> = {
     'v6-essenz-feuer': { kind: 'damage', value: 2, target: 'opponent', offensive: true },
     'v6-essenz-wasser': { kind: 'heal', value: 2, target: 'self' },
+    'v6-essenz-erde': { kind: 'shield', value: 2, target: 'self' },
     'v6-essenz-luft': { kind: 'prep_boost', value: 2, target: 'self' },
+    'v6-essenz-licht': { kind: 'shield', value: 2, target: 'self' },
+    'v6-essenz-schatten': { kind: 'damage', value: 2, target: 'opponent', offensive: true },
   };
   for (const e of V6_SLICE1_ESSENCE_IDS) {
     for (const c of V6_SLICE1_CATALYST_IDS) {
@@ -262,8 +316,8 @@ function buildCatalystTransforms(): V6CatalystTransformAuthoring[] {
 }
 
 /**
- * Slice-1 authoring catalog — locked card set for the current 105-recipe matrix.
- * Later catalog expansion must keep these recipeIds stable.
+ * Slice-1 authoring catalog — locked card set for the current recipe matrix.
+ * Later catalog expansion must keep existing recipeIds stable.
  */
 export const V6_FORMULA_AUTHORING_SLICE1: V6FormulaAuthoringCatalog = {
   version: 1,

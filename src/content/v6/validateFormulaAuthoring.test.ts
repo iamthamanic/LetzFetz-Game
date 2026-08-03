@@ -47,9 +47,9 @@ describe('validateV6FormulaAuthoring', () => {
   });
 
   it('covers full Slice-1 TE/TK/EK matrix + 4 catalyst transforms', () => {
-    expect(V6_FORMULA_AUTHORING_SLICE1.teBases).toHaveLength(9);
+    expect(V6_FORMULA_AUTHORING_SLICE1.teBases).toHaveLength(18);
     expect(V6_FORMULA_AUTHORING_SLICE1.tkBases).toHaveLength(12);
-    expect(V6_FORMULA_AUTHORING_SLICE1.ekBases).toHaveLength(12);
+    expect(V6_FORMULA_AUTHORING_SLICE1.ekBases).toHaveLength(24);
     expect(V6_FORMULA_AUTHORING_SLICE1.catalystTransforms).toHaveLength(4);
     expect(validateV6Slice1Completeness(V6_FORMULA_AUTHORING_SLICE1)).toEqual([]);
   });

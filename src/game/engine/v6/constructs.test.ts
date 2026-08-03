@@ -212,9 +212,9 @@ describe('V6 Constructs (#346)', () => {
     expect(state.lastEvent).toMatch(/zerstört|gestört/);
   });
 
-  it('does not expand locked Slice-1 105 recipe count', async () => {
+  it('does not put Constructs into locked Slice-1 recipe catalog', async () => {
     const mod = await import('../../../generated/v6/formulaRecipes.generated');
-    expect(mod.V6_GENERATED_FORMULA_RECIPES).toHaveLength(105);
-    expect(mod.V6_SLICE1_RECIPE_CATALOG.recipeCount).toBe(105);
+    expect(mod.V6_GENERATED_FORMULA_RECIPES).toHaveLength(198);
+    expect(mod.V6_SLICE1_RECIPE_CATALOG.recipeCount).toBe(198);
   });
 });
