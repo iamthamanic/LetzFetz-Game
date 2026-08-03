@@ -15,6 +15,7 @@ import {
   V6_SLICE1_TECHNIQUES,
 } from '../../../content/v6/cards/slice1Cards';
 import { V6_PLAYTEST_ECHO_DELAY_CATALYSTS } from '../../../content/v6/cards/playtestEchoDelayCards';
+import { V6_PLAYTEST_BESCHWOERUNG_CATALYSTS } from '../../../content/v6/cards/playtestConstructCards';
 import { V6_CHARACTERS } from './characters';
 
 /** V6 pack ruleset identity — INTERNAL only until PLAYABLE cutover. */
@@ -30,7 +31,7 @@ export function buildV6CorePack(): ContentPack {
   return {
     id: 'v6-core',
     name: 'V6 Core Slice-1 (INTERNAL) — 105-Rezept-Katalog',
-    version: '0.1.1-slice1',
+    version: '0.1.2-slice1',
     characters: V6_CHARACTERS,
     ultimates: [],
     arenas: V6_SLICE1_ARENAS,
@@ -38,8 +39,12 @@ export function buildV6CorePack(): ContentPack {
     glitches: BASE_PACK.glitches.filter((g) => g.glitchType !== 'instant'),
     techniques: V6_SLICE1_TECHNIQUES,
     essences: V6_SLICE1_ESSENCES,
-    /** Slice-1 locked set + Echo/Delay playtest catalysts (#344; not in 105 matrix). */
-    catalysts: [...V6_SLICE1_CATALYSTS, ...V6_PLAYTEST_ECHO_DELAY_CATALYSTS],
+    /** Slice-1 locked set + Echo/Delay/Beschwörung playtest catalysts (not in 105 matrix). */
+    catalysts: [
+      ...V6_SLICE1_CATALYSTS,
+      ...V6_PLAYTEST_ECHO_DELAY_CATALYSTS,
+      ...V6_PLAYTEST_BESCHWOERUNG_CATALYSTS,
+    ],
     items: [],
   };
 }

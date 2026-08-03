@@ -22,6 +22,9 @@ import {
   V6_DELAY_DEFAULT_BONUS,
   V6_ECHO_DEFAULT_AMOUNT,
 } from './echoDelay';
+import { placeConstruct, constructDisplayName } from './constructs';
+import { V6_PLAYTEST_CONSTRUCT_DEF_ID } from './playtestConstructRecipes';
+import type { V6QueuedPrimaryKind } from '../../types/v6EchoDelay';
 
 function ensureV6Meta(state: GameState): GameState {
   const next = cloneState(state);
@@ -96,6 +99,10 @@ function applyPrimary(
       // Applied after plan in executeFormulaActivation (needs foe board).
       break;
     }
+    case 'summon_construct': {
+      // Applied after plan (needs defId from plan).
+      break;
+    }
     default:
       break;
   }
@@ -158,6 +165,24 @@ export function executeFormulaActivation(
     next = applyPrimary(next, validated, ruleset);
   }
 
+  let summonEventNote: string | null = null;
+  if (
+    !deferPrimary &&
+    validated.primary.kind === 'summon_construct' &&
+    validated.primary.value > 0
+  ) {
+    const defId = validated.summonConstructDefId ?? V6_PLAYTEST_CONSTRUCT_DEF_ID;
+    const hadPrior = Boolean(next.players[playerId].construct);
+    next = placeConstruct(next, playerId, defId, validated.primary.value);
+    const placed = next.players[playerId].construct;
+    if (placed) {
+      const name = constructDisplayName(placed.defId);
+      summonEventNote = hadPrior
+        ? `Konstrukt beschworen: ${name} (Haltbarkeit ${placed.haltbarkeit}) — vorheriges abgelegt.`
+        : `Konstrukt beschworen: ${name} (Haltbarkeit ${placed.haltbarkeit}).`;
+    }
+  }
+
   let pendingFessel:
     | { chooserId: PlayerId; targetPlayerId: PlayerId; intensity: number }
     | null = null;
@@ -203,6 +228,9 @@ export function executeFormulaActivation(
   void pack;
 
   if (timing === 'echo') {
+    if (validated.primary.kind === 'summon_construct') {
+      throw new Error('V6_ECHO_UNSUPPORTED_PRIMARY: summon_construct');
+    }
     const echoAmt = Math.min(
       validated.echoAmount || V6_ECHO_DEFAULT_AMOUNT,
       Math.max(0, validated.primary.value),
@@ -210,7 +238,7 @@ export function executeFormulaActivation(
     next = enqueueV6Echo(next, playerId, {
       recipeId: validated.recipeId,
       recipeName: validated.name,
-      kind: validated.primary.kind,
+      kind: validated.primary.kind as V6QueuedPrimaryKind,
       value: validated.primary.value,
       target: validated.primary.target,
       offensive: validated.primary.offensive,
@@ -218,11 +246,14 @@ export function executeFormulaActivation(
       echoAmount: echoAmt,
     });
   } else if (timing === 'delay') {
+    if (validated.primary.kind === 'summon_construct') {
+      throw new Error('V6_DELAY_UNSUPPORTED_PRIMARY: summon_construct');
+    }
     const bonus = validated.delayBonus || V6_DELAY_DEFAULT_BONUS;
     next = enqueueV6Delay(next, playerId, {
       recipeId: validated.recipeId,
       recipeName: validated.name,
-      kind: validated.primary.kind,
+      kind: validated.primary.kind as V6QueuedPrimaryKind,
       value: Math.max(0, validated.primary.value + bonus),
       target: validated.primary.target,
       offensive: validated.primary.offensive,
@@ -267,6 +298,8 @@ export function executeFormulaActivation(
   } else if (timing === 'delay') {
     const q = next.meta.v6DelayQueue?.[playerId] ?? [];
     next.lastEvent = `${validated.eventSummary} · Verzögerung in Warteschlange (${q.length}).`;
+  } else if (summonEventNote) {
+    next.lastEvent = `${validated.eventSummary} · ${summonEventNote}`;
   } else {
     next.lastEvent =
       validated.primary.kind === 'fessel' && validated.primary.value > 0

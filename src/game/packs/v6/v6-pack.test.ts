@@ -33,6 +33,7 @@ describe('V6_CORE_PACK Slice-1 (INTERNAL)', () => {
       ...V6_SLICE1_CATALYST_IDS,
       'v6-katalysator-echo',
       'v6-katalysator-verzoegerung',
+      'v6-katalysator-beschwoerung',
     ]);
     expect(V6_CORE_PACK.arenas.map((a) => a.id).sort()).toEqual([...V6_SLICE1_ARENA_IDS].sort());
     expect(V6_CORE_PACK.ultimates).toEqual([]);

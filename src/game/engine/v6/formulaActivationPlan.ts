@@ -13,7 +13,9 @@ export type V6PrimaryKind =
   | 'prep_attack'
   | 'prep_block'
   | 'prep_boost'
-  | 'fessel';
+  | 'fessel'
+  /** Playtest EK Beschwörung — places player.construct (#346). */
+  | 'summon_construct';
 
 export interface V6PlanPrimary {
   kind: V6PrimaryKind;
@@ -68,5 +70,7 @@ export interface FormulaActivationPlan {
   echoAmount: number;
   /** Delay: bonus added to deferred primary value. */
   delayBonus: number;
+  /** Playtest summon (#346); null when not a construct recipe. */
+  summonConstructDefId: string | null;
   eventSummary: string;
 }
