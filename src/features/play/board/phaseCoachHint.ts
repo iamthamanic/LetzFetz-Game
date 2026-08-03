@@ -44,6 +44,9 @@ export function buildPhaseCoachHint({
   if (pending?.type === 'action-select') {
     return 'Wähle eine Aktionskarte auf der Hand — Angriff, Boost, Glitch oder Gegenstand.';
   }
+  if (pending?.type === 'improvise') {
+    return 'Improvisieren: tippe eine Handkarte zum Abwerfen — du ziehst 2 und beendest die Hauptaktion.';
+  }
   if (pending?.type === 'attack') {
     const ruleset = rulesetFromState(state);
     const v5 = isV5FormulaEnabled(ruleset);
@@ -142,10 +145,16 @@ export function buildPhaseCoachHint({
       const canUlti = legal.some((a) => a.type === 'PLAY_ULTIMATE');
       const canGlitch = legal.some((a) => a.type === 'PLAY_GLITCH');
       const canItem = legal.some((a) => a.type === 'PLAY_ITEM');
+      const canImprovise = legal.some((a) => a.type === 'DISCARD_DRAW');
       const v5 = isV5FormulaEnabled(rulesetFromState(state));
       const canHandAction = canAttack || canBoost || canGlitch || canItem;
       if (canHandAction) {
-        return 'Tippe „Aktion spielen“, um eine Handkarte als Aktion zu wählen — oder lasse die Hauptaktion aus.';
+        return canImprovise
+          ? 'Tippe „Aktion spielen“ oder „Improvisieren“ (1 abwerfen → 2 ziehen) — oder lasse die Hauptaktion aus.'
+          : 'Tippe „Aktion spielen“, um eine Handkarte als Aktion zu wählen — oder lasse die Hauptaktion aus.';
+      }
+      if (canImprovise) {
+        return 'Tippe „Improvisieren“, um 1 Handkarte abzuwerfen und 2 zu ziehen — oder lasse die Hauptaktion aus.';
       }
       if (canUlti) {
         return v5

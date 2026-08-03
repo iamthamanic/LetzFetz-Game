@@ -310,7 +310,16 @@ export function buildGameViewModel(
     const glitch = def ? null : (pack.glitches.find((g) => g.id === card.defId) ?? null);
     const formula =
       def || glitch ? null : (findFormulaComponentDef(pack, card.defId) ?? null);
-    const interaction = handInteraction(card.instanceId, legalActions);
+    const baseInteraction = handInteraction(card.instanceId, legalActions);
+    const hasDiscardDraw = legalActions.some(
+      (a) =>
+        (a.type === 'DISCARD_DRAW' && a.discardInstanceId === card.instanceId) ||
+        (a.type === 'RESOLVE_DRAW_DISCARD' && a.discardInstanceId === card.instanceId),
+    );
+    // Improvisieren mode: prefer discard-draw even when attack/boost would win otherwise.
+    const improviseMode = pending?.type === 'improvise';
+    const interaction =
+      improviseMode && hasDiscardDraw ? ('discard-draw' as const) : baseInteraction;
     const buildNeedsReplace =
       interaction === 'build' && buildRequiresReplace(legalActions, card.instanceId);
     const activateDiscard =
@@ -319,6 +328,7 @@ export function buildGameViewModel(
 
     // Build phase: hand cards only become playable after "Engine bauen".
     // Action phase: hand action cards only after "Aktion spielen" (action-select / attack).
+    // Improvisieren: any card with legal DISCARD_DRAW after "Improvisieren".
     const buildModeOpen = pending?.type === 'build-select' || pending?.type === 'build';
     const actionModeOpen = pending?.type === 'action-select' || pending?.type === 'attack';
     const isActionHandPlay =
@@ -331,7 +341,11 @@ export function buildGameViewModel(
     if (state.phase === 'build' && isHumanTurn) {
       isPlayable = buildModeOpen && interaction === 'build';
     } else if (state.phase === 'action' && isHumanTurn && !isHumanDefender) {
-      isPlayable = actionModeOpen && isActionHandPlay;
+      if (improviseMode) {
+        isPlayable = hasDiscardDraw;
+      } else {
+        isPlayable = actionModeOpen && isActionHandPlay;
+      }
     } else {
       isPlayable = Boolean(
         interaction !== null ||

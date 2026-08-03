@@ -11,6 +11,8 @@ export type PendingIntent =
   | { type: 'build'; handInstanceId: string }
   /** Action phase: choosing a hand card to play as the main action. */
   | { type: 'action-select' }
+  /** Action phase: Improvisieren — pick any hand card to DISCARD_DRAW. */
+  | { type: 'improvise' }
   | { type: 'activate'; boundInstanceId: string };
 
 export function hasChallengeForAttack(

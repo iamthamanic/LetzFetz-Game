@@ -2491,7 +2491,7 @@ export function applyAction(
       if (state.phase !== 'action') throw new Error('Not in action phase');
       next = discardFromHand(state, playerId, action.discardInstanceId);
       next = drawForPlayer(next, playerId, 2, rng, ruleset);
-      next.lastEvent = '1 Karte abgeworfen, 2 gezogen.';
+      next.lastEvent = 'Improvisieren: 1 Karte abgeworfen, 2 gezogen.';
       return finishMainAction(checkWinner(next));
     }
     case 'ACTIVATE_BOUND': {
