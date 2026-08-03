@@ -1,14 +1,23 @@
 /**
- * Playable glitch resolution — Letz Fetz V1 §15.1.
+ * Playable glitch resolution — Letz Fetz V1 §15.1 + V6 Standard-Glitches (§9 / §37–40).
  * Location: src/game/engine/playableGlitches.ts
+ *
+ * Under v6Formula: Kurzschluss / Systemfehler / Download target Formelkomponenten
+ * (no bound element cards). Reactions keep Base defIds.
  */
 import type { ContentPack, GameAction, GameState, PlayerId, RulesetConfig } from '../types';
+import { isV6FormulaEnabled } from '../types';
 import { opponentOf, checkWinner } from './createGame';
-import { cloneState, discardFromHand, drawForPlayer } from './helpers';
+import { discardFromHand, drawForPlayer } from './helpers';
 import { findGlitchDef, findElementDef } from './lookup';
 import { applyElementEffect } from './effects';
 import { switchArena } from './arena';
 import { finishMainAction } from './effects';
+import {
+  disturbFormulaComponent,
+  exhaustFormulaComponent,
+  listFormulaComponents,
+} from './formulaChallenge';
 import type { Rng } from './deck';
 
 const OWN_TURN_GLITCHES = new Set([
@@ -19,17 +28,35 @@ const OWN_TURN_GLITCHES = new Set([
   'glitch-download',
 ]);
 
-export function listOwnTurnGlitchActions(state: GameState, playerId: PlayerId): GameAction[] {
+function opponentFormulaTargets(state: GameState, playerId: PlayerId) {
+  return listFormulaComponents(state.players[opponentOf(playerId)].formula);
+}
+
+function allFormulaTargets(state: GameState) {
+  return [
+    ...listFormulaComponents(state.players.p1.formula),
+    ...listFormulaComponents(state.players.p2.formula),
+  ];
+}
+
+export function listOwnTurnGlitchActions(
+  state: GameState,
+  playerId: PlayerId,
+  ruleset?: RulesetConfig,
+): GameAction[] {
   if (state.phase !== 'action' || state.pendingChoice || state.combat) return [];
+  const v6 = ruleset ? isV6FormulaEnabled(ruleset) : state.meta.v6FormulaEnabled === true;
   const actions: GameAction[] = [];
   for (const card of state.players[playerId].hand) {
     if (!OWN_TURN_GLITCHES.has(card.defId)) continue;
     if (card.defId === 'glitch-kurzschluss' || card.defId === 'glitch-systemfehler') {
-      const targets = state.players[opponentOf(playerId)].bound;
-      const pool =
-        card.defId === 'glitch-systemfehler'
+      const pool = v6
+        ? card.defId === 'glitch-systemfehler'
+          ? allFormulaTargets(state)
+          : opponentFormulaTargets(state, playerId)
+        : card.defId === 'glitch-systemfehler'
           ? [...state.players.p1.bound, ...state.players.p2.bound]
-          : targets;
+          : state.players[opponentOf(playerId)].bound;
       if (pool.length === 0) {
         actions.push({ type: 'PLAY_GLITCH', glitchInstanceId: card.instanceId });
       } else {
@@ -42,8 +69,10 @@ export function listOwnTurnGlitchActions(state: GameState, playerId: PlayerId): 
         }
       }
     } else if (card.defId === 'glitch-download') {
-      const oppBound = state.players[opponentOf(playerId)].bound;
-      for (const t of oppBound) {
+      const targets = v6
+        ? opponentFormulaTargets(state, playerId)
+        : state.players[opponentOf(playerId)].bound;
+      for (const t of targets) {
         for (const h of state.players[playerId].hand) {
           if (h.instanceId === card.instanceId) continue;
           actions.push({
@@ -73,6 +102,7 @@ export function applyPlayableGlitch(
   if (!card) throw new Error('Glitch not in hand');
   const def = findGlitchDef(pack, card.defId);
   if (!def || def.glitchType !== 'playable') throw new Error('Not a playable glitch');
+  const v6 = isV6FormulaEnabled(ruleset);
 
   // Reaction: Nein, Bruder
   if (def.id === 'glitch-nein') {
@@ -123,12 +153,28 @@ export function applyPlayableGlitch(
       next = switchArena(next, pack.arenas, rng);
       break;
     case 'glitch-kurzschluss': {
-      const opp = opponentOf(playerId);
-      const target =
-        next.players[opp].bound.find((b) => b.instanceId === action.targetBoundInstanceId) ??
-        next.players[opp].bound[0];
-      if (target) target.exhausted = true;
-      next.lastEvent = 'Kurzschluss: Gegnerische Karte erschöpft.';
+      if (v6) {
+        const opp = opponentOf(playerId);
+        const comps = listFormulaComponents(next.players[opp].formula);
+        const target =
+          comps.find((c) => c.instanceId === action.targetBoundInstanceId) ?? comps[0];
+        if (target) {
+          next.players[opp].formula = exhaustFormulaComponent(
+            next.players[opp].formula,
+            target.instanceId,
+          );
+          next.lastEvent = 'Kurzschluss: Formelkomponente erschöpft.';
+        } else {
+          next.lastEvent = 'Kurzschluss: keine Formelkomponente.';
+        }
+      } else {
+        const opp = opponentOf(playerId);
+        const target =
+          next.players[opp].bound.find((b) => b.instanceId === action.targetBoundInstanceId) ??
+          next.players[opp].bound[0];
+        if (target) target.exhausted = true;
+        next.lastEvent = 'Kurzschluss: Gegnerische Karte erschöpft.';
+      }
       break;
     }
     case 'glitch-empfang': {
@@ -141,19 +187,44 @@ export function applyPlayableGlitch(
       break;
     }
     case 'glitch-systemfehler': {
-      const allBound = [...next.players.p1.bound, ...next.players.p2.bound];
-      const target =
-        allBound.find((b) => b.instanceId === action.targetBoundInstanceId) ?? allBound[0];
-      if (target) {
-        const owner: PlayerId = next.players.p1.bound.some((b) => b.instanceId === target.instanceId)
-          ? 'p1'
-          : 'p2';
-        next.meta = {
-          ...next.meta,
-          activationLockedBoundId: target.instanceId,
-          activationLockOwner: owner,
-        };
-        next.lastEvent = 'Systemfehler: Aktivierung gesperrt.';
+      if (v6) {
+        const all = allFormulaTargets(next);
+        const target =
+          all.find((c) => c.instanceId === action.targetBoundInstanceId) ?? all[0];
+        if (target) {
+          const owner: PlayerId = listFormulaComponents(next.players.p1.formula).some(
+            (c) => c.instanceId === target.instanceId,
+          )
+            ? 'p1'
+            : 'p2';
+          next.players[owner].formula = disturbFormulaComponent(
+            next.players[owner].formula,
+            target.instanceId,
+          );
+          next.meta = {
+            ...next.meta,
+            activationLockedBoundId: target.instanceId,
+            activationLockOwner: owner,
+          };
+          next.lastEvent = 'Systemfehler: Formelkomponente gestört.';
+        } else {
+          next.lastEvent = 'Systemfehler: keine Formelkomponente.';
+        }
+      } else {
+        const allBound = [...next.players.p1.bound, ...next.players.p2.bound];
+        const target =
+          allBound.find((b) => b.instanceId === action.targetBoundInstanceId) ?? allBound[0];
+        if (target) {
+          const owner: PlayerId = next.players.p1.bound.some((b) => b.instanceId === target.instanceId)
+            ? 'p1'
+            : 'p2';
+          next.meta = {
+            ...next.meta,
+            activationLockedBoundId: target.instanceId,
+            activationLockOwner: owner,
+          };
+          next.lastEvent = 'Systemfehler: Aktivierung gesperrt.';
+        }
       }
       break;
     }
@@ -163,14 +234,27 @@ export function applyPlayableGlitch(
       }
       next = discardFromHand(next, playerId, action.discardHandInstanceId);
       const opp = opponentOf(playerId);
-      const target = next.players[opp].bound.find((b) => b.instanceId === action.targetBoundInstanceId);
-      if (!target) throw new Error('Download target missing');
-      const el = findElementDef(pack, target.defId);
-      if (!el) throw new Error('Invalid target');
-      next = applyElementEffect(next, playerId, el.element, rng, ruleset, {
-        targetBoundId: next.players[playerId].bound[0]?.instanceId,
-      });
-      next.lastEvent = `Illegaler Download: ${el.element}-Effekt kopiert.`;
+      if (v6) {
+        const target = listFormulaComponents(next.players[opp].formula).find(
+          (c) => c.instanceId === action.targetBoundInstanceId,
+        );
+        if (!target) throw new Error('Download target missing');
+        next.players[opp].formula = exhaustFormulaComponent(
+          next.players[opp].formula,
+          target.instanceId,
+        );
+        next = drawForPlayer(next, playerId, 1, rng, ruleset, { allowExtra: true });
+        next.lastEvent = 'Illegaler Download: Formelkomponente erschöpft, 1 Karte gezogen.';
+      } else {
+        const target = next.players[opp].bound.find((b) => b.instanceId === action.targetBoundInstanceId);
+        if (!target) throw new Error('Download target missing');
+        const el = findElementDef(pack, target.defId);
+        if (!el) throw new Error('Invalid target');
+        next = applyElementEffect(next, playerId, el.element, rng, ruleset, {
+          targetBoundId: next.players[playerId].bound[0]?.instanceId,
+        });
+        next.lastEvent = `Illegaler Download: ${el.element}-Effekt kopiert.`;
+      }
       break;
     }
     default:

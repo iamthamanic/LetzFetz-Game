@@ -17,7 +17,13 @@ export type PendingIntent =
   | { type: 'formula-paid-change'; cardInstanceId: string }
   /** Formelphase: Rückbau — pick formula component to return to hand. */
   | { type: 'formula-return' }
-  | { type: 'activate'; boundInstanceId: string };
+  | { type: 'activate'; boundInstanceId: string }
+  /** Action phase: playable glitch needing Formel-/Bound-Ziel (optional discard). */
+  | {
+      type: 'glitch';
+      glitchInstanceId: string;
+      targetBoundInstanceId?: string;
+    };
 
 export function hasChallengeForAttack(
   legalActions: GameAction[],
@@ -228,6 +234,75 @@ export function findPlayGlitchAction(
         !a.targetBoundInstanceId,
     ) ?? null
   );
+}
+
+/** True when glitch needs a board/formula target (not a simple one-click play). */
+export function glitchRequiresTarget(
+  legalActions: GameAction[],
+  glitchInstanceId: string,
+): boolean {
+  const matches = legalActions.filter(
+    (a): a is Extract<GameAction, { type: 'PLAY_GLITCH' }> =>
+      a.type === 'PLAY_GLITCH' && a.glitchInstanceId === glitchInstanceId,
+  );
+  if (matches.length === 0) return false;
+  return matches.every((a) => Boolean(a.targetBoundInstanceId));
+}
+
+export function glitchTargetIds(
+  legalActions: GameAction[],
+  glitchInstanceId: string,
+): string[] {
+  const ids = new Set<string>();
+  for (const a of legalActions) {
+    if (
+      a.type === 'PLAY_GLITCH' &&
+      a.glitchInstanceId === glitchInstanceId &&
+      a.targetBoundInstanceId
+    ) {
+      ids.add(a.targetBoundInstanceId);
+    }
+  }
+  return [...ids];
+}
+
+export function findTargetedPlayGlitchAction(
+  legalActions: GameAction[],
+  glitchInstanceId: string,
+  targetBoundInstanceId: string,
+  discardHandInstanceId?: string,
+): GameAction | null {
+  return (
+    legalActions.find((a) => {
+      if (a.type !== 'PLAY_GLITCH') return false;
+      if (a.glitchInstanceId !== glitchInstanceId) return false;
+      if (a.targetBoundInstanceId !== targetBoundInstanceId) return false;
+      if (discardHandInstanceId) {
+        return a.discardHandInstanceId === discardHandInstanceId;
+      }
+      return !a.discardHandInstanceId;
+    }) ?? null
+  );
+}
+
+/** Discard hand options once glitch + formula target are chosen (Illegaler Download). */
+export function glitchDiscardOptions(
+  legalActions: GameAction[],
+  glitchInstanceId: string,
+  targetBoundInstanceId: string,
+): string[] {
+  const ids: string[] = [];
+  for (const a of legalActions) {
+    if (
+      a.type === 'PLAY_GLITCH' &&
+      a.glitchInstanceId === glitchInstanceId &&
+      a.targetBoundInstanceId === targetBoundInstanceId &&
+      a.discardHandInstanceId
+    ) {
+      ids.push(a.discardHandInstanceId);
+    }
+  }
+  return ids;
 }
 
 export function isChallengeTargetForAttack(

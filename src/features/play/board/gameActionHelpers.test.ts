@@ -10,6 +10,8 @@ import {
   findPlayItemAction,
   findPoolActivateAction,
   formulaChallengeTargetIds,
+  glitchRequiresTarget,
+  glitchTargetIds,
   hasChallengeForAttack,
 } from './gameActionHelpers';
 
@@ -80,6 +82,8 @@ describe('gameActionHelpers', () => {
     expect(findDiscardDrawAction(pending, 'h5')?.type).toBe('RESOLVE_DRAW_DISCARD');
     expect(findPlayGlitchAction(pending, 'g1')?.type).toBe('PLAY_GLITCH');
     expect(findPlayGlitchAction(pending, 'g2')).toBeNull();
+    expect(glitchRequiresTarget(pending, 'g2')).toBe(true);
+    expect(glitchTargetIds(pending, 'g2')).toEqual(['b9']);
   });
 
   it('finds V3 pool activate without hand discard', () => {

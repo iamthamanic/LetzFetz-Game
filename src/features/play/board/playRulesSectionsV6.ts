@@ -88,6 +88,17 @@ export const V6_PLAY_RULE_SECTIONS: RulesSection[] = [
     ].join('\n'),
   ),
   section(
+    'v6-glitches',
+    'Standard-Glitches',
+    [
+      'Sieben spielbare Standard-Glitches mit klarem Timing: Aktionsphase (Hauptaktion) oder Reaktion.',
+      'Aktionsphase: Riss in der Realität · Kurzschluss · Schlechter Empfang · Systemfehler · Illegaler Download.',
+      'Reaktion: Nein, Bruder (gegen Boost) · Rückkopplung (gegen Angriffsschaden −2).',
+      'Kurzschluss / Systemfehler / Download zielen auf Formelkomponenten (kein Bound unter V6).',
+      'Keine negativen Sofort-Glitches im Core — Chaos später als Expansion (`V6_CHAOS_EXPANSION`).',
+    ].join('\n'),
+  ),
+  section(
     'v6-arenen',
     'Arenen (V6)',
     [
