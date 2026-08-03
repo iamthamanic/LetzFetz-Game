@@ -81,7 +81,7 @@ describe('card art manifest', () => {
     expect(resolveFormulaCombinationArtPath('../evil')).toBe('');
   });
 
-  it('resolves V5 item art under /cards/item/', () => {
+  it('resolves V5/V6 item art under /cards/item/', () => {
     expect(resolveCardArtPath('v5-item-rostiger-nagel')).toBe('/cards/item/rostiger-nagel.png');
     expect(resolveCardArtPath('v5-item-nasser-socken')).toBe('/cards/item/nasser-socken.png');
     expect(resolveCardArtPath('v5-item-kaputter-rueckspiegel')).toBe(
@@ -94,6 +94,8 @@ describe('card art manifest', () => {
     expect(resolveCardArtPath('v5-item-kabelbinder-deluxe')).toBe(
       '/cards/item/kabelbinder-deluxe.png',
     );
+    expect(resolveCardArtPath('v6-item-werkzeugkoffer')).toBe('/cards/item/werkzeugkoffer.png');
+    expect(resolveCardArtPath('v6-item-gezinkter-wuerfel')).toBe('/cards/item/gezinkter-wuerfel.png');
   });
 
   it('resolves MVP trio engine PNGs when shipped; blanks others', () => {

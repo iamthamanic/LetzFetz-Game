@@ -17,6 +17,7 @@ import {
 import { V6_PLAYTEST_ECHO_DELAY_CATALYSTS } from '../../../content/v6/cards/playtestEchoDelayCards';
 import { V6_PLAYTEST_BESCHWOERUNG_CATALYSTS } from '../../../content/v6/cards/playtestConstructCards';
 import { V6_ELEMENT_CARDS } from '../../../content/v6/cards/elementCards';
+import { V6_ITEMS } from '../../../content/v6/cards/itemCards';
 import { V6_CHARACTERS } from './characters';
 
 /** V6 pack ruleset identity — INTERNAL only until PLAYABLE cutover. */
@@ -32,7 +33,7 @@ export function buildV6CorePack(): ContentPack {
   return {
     id: 'v6-core',
     name: 'V6 Core Slice-1 (INTERNAL) — 105-Rezept-Katalog',
-    version: '0.1.3-slice1',
+    version: '0.1.4-slice1',
     characters: V6_CHARACTERS,
     ultimates: [],
     arenas: V6_SLICE1_ARENAS,
@@ -46,7 +47,7 @@ export function buildV6CorePack(): ContentPack {
       ...V6_PLAYTEST_ECHO_DELAY_CATALYSTS,
       ...V6_PLAYTEST_BESCHWOERUNG_CATALYSTS,
     ],
-    items: [],
+    items: V6_ITEMS,
   };
 }
 

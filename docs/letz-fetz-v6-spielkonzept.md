@@ -390,6 +390,7 @@ Wertrollen: 2 Starter · 3 Standard · 4 bedingter Payoff · 6 Rohwert mit Nacht
 
 - Ausrüstung: Kaputter Rückspiegel, Werkzeugkoffer, Gezinkter Würfel (2 Slots).  
 - Verbrauch: Halbe Dose Energy, Verdächtiger Pilz, Kabelbinder Deluxe, Rostiger Nagel, Nasser Socken — **kein** dauerhafter Ausrüstungsslot für Nagel/Socken.  
+- **Engine (#377):** `player.equipment` (max 2); Verbrauch max 1 / eigener Zug unter `v6Formula`; Core-Pack `items` aus `src/content/v6/cards/itemCards.ts`.  
 - Standard-Glitches mit klarem Timing; Sofort-Negativ → später Chaos-Expansion.  
 - Artefakt-Auktion: optional, **standard aus**, kein Kernbalancing.
 

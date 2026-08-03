@@ -128,9 +128,9 @@ export function resolveFormulaCombinationArtPath(slug: string): string {
   return publicAssetUrl(`/cards/formula/${normalized}.png`);
 }
 
-/** Public path for a V5 Gegenstand PNG under `/cards/item/`. */
+/** Public path for a V5/V6 Gegenstand PNG under `/cards/item/`. */
 export function resolveItemCardArtPath(cardId: string): string {
-  const match = cardId.match(/^v5-item-([a-z0-9-]+)$/);
+  const match = cardId.match(/^v[56]-item-([a-z0-9-]+)$/);
   if (!match) return '';
   return publicAssetUrl(`/cards/item/${match[1]}.png`);
 }

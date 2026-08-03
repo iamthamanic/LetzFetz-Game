@@ -41,6 +41,18 @@ import {
   tickV6ConstructAtStart,
 } from './v6/constructs';
 import {
+  consumablePlayedThisTurn,
+  equipItemFromHand,
+  equipmentActivatedThisTurn,
+  isConsumableItem,
+  isEquipmentItem,
+  itemEffectSlug,
+  markConsumablePlayed,
+  markEquipmentActivated,
+  playerEquipment,
+  V6_MAX_EQUIPMENT_SLOTS,
+} from './v6/items';
+import {
   applyV6BasarPayDestroy,
   applyV6SumpfFullBlockShield,
   applyV6VulkanFirstDamageBonus,
@@ -96,6 +108,10 @@ import {
 } from './formulaCharge';
 
 function isFormulaBoardEnabled(ruleset: RulesetConfig): boolean {
+  return isV5FormulaEnabled(ruleset) || isV6FormulaEnabled(ruleset);
+}
+
+function isItemPlayEnabled(ruleset: RulesetConfig): boolean {
   return isV5FormulaEnabled(ruleset) || isV6FormulaEnabled(ruleset);
 }
 import {
@@ -205,6 +221,23 @@ function rngOf(ctx: PackContext): () => number {
   return ctx.rng ?? Math.random;
 }
 
+function applyEnergyHangoverAtStart(
+  state: GameState,
+  playerId: PlayerId,
+  ruleset: RulesetConfig,
+): GameState {
+  const hangover = state.meta.v5EnergyHangover?.[playerId] ?? 0;
+  if (hangover <= 0) return state;
+  let next = cloneState(state);
+  next.players[playerId].hp = clampHp(next.players[playerId].hp - hangover, ruleset);
+  next.meta = {
+    ...next.meta,
+    v5EnergyHangover: { ...(next.meta.v5EnergyHangover ?? { p1: 0, p2: 0 }), [playerId]: 0 },
+  };
+  next.lastEvent = `Halbe Dose Energy: −${hangover} Leben zu Zugbeginn.`;
+  return checkWinner(next);
+}
+
 function runStartPhase(
   state: GameState,
   playerId: PlayerId,
@@ -216,17 +249,8 @@ function runStartPhase(
     next = cloneState(next);
     next.players[playerId].formula = restoreOwnerFormulaAtStart(next.players[playerId].formula);
     next = applyV5StartFormulaMeta(next, playerId);
-    const hangover = next.meta.v5EnergyHangover?.[playerId] ?? 0;
-    if (hangover > 0) {
-      next.players[playerId].hp = clampHp(next.players[playerId].hp - hangover, ruleset);
-      next.meta = {
-        ...next.meta,
-        v5EnergyHangover: { ...(next.meta.v5EnergyHangover ?? { p1: 0, p2: 0 }), [playerId]: 0 },
-      };
-      next.lastEvent = `Halbe Dose Energy: −${hangover} Leben zu Zugbeginn.`;
-      next = checkWinner(next);
-      if (next.winner) return next;
-    }
+    next = applyEnergyHangoverAtStart(next, playerId, ruleset);
+    if (next.winner) return next;
   } else if (isV6FormulaEnabled(ruleset)) {
     next = cloneState(next);
     // §8: Echo (3) → verzögerte Formeln (4) → Konstrukte (5) → Fessel/Aufrichten (6–7)
@@ -240,6 +264,8 @@ function runStartPhase(
       const prefix = next.lastEvent ? `${next.lastEvent} · ` : '';
       next.lastEvent = `${prefix}Fessel aktualisiert: ${fesselTick.notes.join('; ')}`;
     }
+    next = applyEnergyHangoverAtStart(next, playerId, ruleset);
+    if (next.winner) return next;
   }
   next.phase = 'draw';
   return next;
@@ -1372,6 +1398,29 @@ export function getLegalActions(state: GameState, ctx: PackContext): GameAction[
         }
       }
     }
+    if (isV6FormulaEnabled(ruleset)) {
+      for (const eq of playerEquipment(state, defenderId)) {
+        if (equipmentActivatedThisTurn(state, defenderId, eq.instanceId)) continue;
+        const item = findItemDef(ctx.pack, eq.defId);
+        if (!item || item.timing !== 'reaction') continue;
+        const slug = itemEffectSlug(item.id);
+        if (slug === 'kaputter-rueckspiegel') {
+          if (state.combat.rueckspiegelArmed) continue;
+          actions.push({ type: 'ACTIVATE_EQUIPMENT', equipmentInstanceId: eq.instanceId });
+        } else if (slug === 'gezinkter-wuerfel') {
+          actions.push({
+            type: 'ACTIVATE_EQUIPMENT',
+            equipmentInstanceId: eq.instanceId,
+            diceMod: 1,
+          });
+          actions.push({
+            type: 'ACTIVATE_EQUIPMENT',
+            equipmentInstanceId: eq.instanceId,
+            diceMod: -1,
+          });
+        }
+      }
+    }
     return actions;
   }
 
@@ -1482,11 +1531,43 @@ export function getLegalActions(state: GameState, ctx: PackContext): GameAction[
         actions.push({ type: 'PLAY_BOOST', cardInstanceId: card.instanceId });
       }
     }
-    if (isV5FormulaEnabled(ruleset)) {
+    if (isItemPlayEnabled(ruleset)) {
       for (const card of hand) {
         const item = findItemDef(ctx.pack, card.defId);
-        if (item?.timing === 'action') {
-          actions.push({ type: 'PLAY_ITEM', cardInstanceId: card.instanceId });
+        if (!item) continue;
+        if (v6 && isEquipmentItem(item)) {
+          const eq = playerEquipment(state, ctx.playerId);
+          if (eq.length >= V6_MAX_EQUIPMENT_SLOTS) {
+            for (const slot of eq) {
+              actions.push({
+                type: 'PLAY_ITEM',
+                cardInstanceId: card.instanceId,
+                replaceEquipmentInstanceId: slot.instanceId,
+              });
+            }
+          } else {
+            actions.push({ type: 'PLAY_ITEM', cardInstanceId: card.instanceId });
+          }
+          continue;
+        }
+        if (item.timing !== 'action') continue;
+        if (v6 && isConsumableItem(item) && consumablePlayedThisTurn(state, ctx.playerId)) {
+          continue;
+        }
+        actions.push({ type: 'PLAY_ITEM', cardInstanceId: card.instanceId });
+      }
+      if (v6) {
+        for (const eq of playerEquipment(state, ctx.playerId)) {
+          if (equipmentActivatedThisTurn(state, ctx.playerId, eq.instanceId)) continue;
+          const item = findItemDef(ctx.pack, eq.defId);
+          if (!item || itemEffectSlug(item.id) !== 'werkzeugkoffer') continue;
+          for (const handCard of hand) {
+            actions.push({
+              type: 'ACTIVATE_EQUIPMENT',
+              equipmentInstanceId: eq.instanceId,
+              discardHandInstanceId: handCard.instanceId,
+            });
+          }
         }
       }
     }
@@ -2529,28 +2610,64 @@ export function applyAction(
     }
     case 'PLAY_ITEM': {
       if (state.phase !== 'action') throw new Error('Not in action phase');
-      if (!isV5FormulaEnabled(ruleset)) throw new Error('PLAY_ITEM requires v5Formula');
+      if (!isItemPlayEnabled(ruleset)) throw new Error('PLAY_ITEM requires v5Formula or v6Formula');
       const handCard = state.players[playerId].hand.find(
         (c) => c.instanceId === action.cardInstanceId,
       );
       const item = handCard ? findItemDef(pack, handCard.defId) : undefined;
-      if (!item || item.timing !== 'action') throw new Error('Not an action item');
+      if (!item) throw new Error('Not an item');
+
+      const v6 = isV6FormulaEnabled(ruleset);
+
+      // V6 Ausrüstung: equip to board slots (main action), including reaction-timed defs.
+      if (v6 && isEquipmentItem(item)) {
+        next = cloneState(state);
+        const hand = next.players[playerId].hand;
+        const idx = hand.findIndex((c) => c.instanceId === action.cardInstanceId);
+        if (idx === -1) throw new Error('Card not in hand');
+        const [card] = hand.splice(idx, 1);
+        const equipped = equipItemFromHand(
+          playerEquipment(next, playerId),
+          card,
+          action.replaceEquipmentInstanceId,
+        );
+        next.players[playerId].equipment = equipped.equipment;
+        if (equipped.discarded) {
+          next.piles.discard.push(equipped.discarded);
+        }
+        next.lastEvent = equipped.discarded
+          ? `${item.name} ausgerüstet (Slot ersetzt).`
+          : `${item.name} ausgerüstet.`;
+        return finishMainAction(checkWinner(next));
+      }
+
+      if (item.timing !== 'action') throw new Error('Not an action item');
+
+      if (v6 && isConsumableItem(item)) {
+        if (consumablePlayedThisTurn(state, playerId)) {
+          throw new Error('Max 1 Verbrauch-Gegenstand pro Zug');
+        }
+      }
 
       next = discardFromHand(state, playerId, action.cardInstanceId);
+      if (v6 && isConsumableItem(item)) {
+        next = markConsumablePlayed(next, playerId);
+      }
       const opp = opponentOf(playerId);
+      const slug = itemEffectSlug(item.id);
 
-      if (item.id === 'v5-item-rostiger-nagel') {
+      if (slug === 'rostiger-nagel') {
         const prep = next.players[playerId].formulaPrep ?? emptyFormulaPrep();
         prep.attackIgnoreShield += 2;
         next.players[playerId].formulaPrep = prep;
         next.lastEvent = `${item.name}: nächster Angriff ignoriert 2 Schild.`;
-      } else if (item.id === 'v5-item-verdaechtiger-pilz') {
+      } else if (slug === 'verdaechtiger-pilz') {
         next.players[playerId].shield = clampShield(
           (next.players[playerId].shield ?? 0) + 2,
         );
         next = applyStatus(next, playerId, 'high', 1);
         next.lastEvent = `${item.name}: +2 Schild und High.`;
-      } else if (item.id === 'v5-item-halbe-dose-energy') {
+      } else if (slug === 'halbe-dose-energy') {
         next = drawForPlayer(next, playerId, 2, rng, ruleset, { allowExtra: true });
         next.meta = {
           ...next.meta,
@@ -2560,13 +2677,13 @@ export function applyAction(
           },
         };
         next.lastEvent = `${item.name}: 2 Karten gezogen (nächster Zug −1 Leben).`;
-      } else if (item.id === 'v5-item-nasser-socken') {
+      } else if (slug === 'nasser-socken') {
         const prep = next.players[playerId].formulaPrep ?? emptyFormulaPrep();
         prep.extraHitImpulse = 'water';
         prep.markIfNoReaction = prep.markIfNoReaction ?? 'durchnaesst';
         next.players[playerId].formulaPrep = prep;
         next.lastEvent = `${item.name}: nächste Elementkarte +Wasser; Treffer → Durchnässt ohne Reaktion.`;
-      } else if (item.id === 'v5-item-kabelbinder-deluxe') {
+      } else if (slug === 'kabelbinder-deluxe') {
         const targetId = action.targetFormulaInstanceId;
         const target = targetId
           ? findFormulaComponent(next.players[opp].formula, targetId)
@@ -2586,6 +2703,60 @@ export function applyAction(
         next.lastEvent = `${item.name} gespielt.`;
       }
       return finishMainAction(checkWinner(next));
+    }
+    case 'ACTIVATE_EQUIPMENT': {
+      if (!isV6FormulaEnabled(ruleset)) {
+        throw new Error('ACTIVATE_EQUIPMENT requires v6Formula');
+      }
+      const eqCard = playerEquipment(state, playerId).find(
+        (e) => e.instanceId === action.equipmentInstanceId,
+      );
+      const item = eqCard ? findItemDef(pack, eqCard.defId) : undefined;
+      if (!item || !isEquipmentItem(item)) throw new Error('Not equipped Ausrüstung');
+      if (equipmentActivatedThisTurn(state, playerId, action.equipmentInstanceId)) {
+        throw new Error('Ausrüstung bereits diesen Zug aktiviert');
+      }
+      const slug = itemEffectSlug(item.id);
+
+      if (state.combat) {
+        if (playerId !== state.combat.defenderId) {
+          throw new Error('Only defender can activate reaction equipment');
+        }
+        if (slug === 'kaputter-rueckspiegel') {
+          if (state.combat.rueckspiegelArmed) throw new Error('Reaction item already used');
+          next = markEquipmentActivated(cloneState(state), playerId, action.equipmentInstanceId);
+          if (!next.combat) throw new Error('Combat lost');
+          next.combat = {
+            ...next.combat,
+            attackValue: Math.max(0, next.combat.attackValue - 1),
+            rueckspiegelArmed: true,
+          };
+          next.lastEvent = `${item.name}: Angriffswert −1.`;
+          return next;
+        }
+        if (slug === 'gezinkter-wuerfel') {
+          const mod = action.diceMod;
+          if (mod !== 1 && mod !== -1) throw new Error('Gezinkter Würfel needs diceMod ±1');
+          next = markEquipmentActivated(cloneState(state), playerId, action.equipmentInstanceId);
+          if (!next.combat) throw new Error('Combat lost');
+          next.combat = {
+            ...next.combat,
+            attackValue: Math.max(0, next.combat.attackValue - mod),
+          };
+          next.lastEvent = `${item.name}: Angriffswert ${mod > 0 ? '−' : '+'}${Math.abs(mod)}.`;
+          return next;
+        }
+        throw new Error('Equipment not usable in combat');
+      }
+
+      if (state.phase !== 'action') throw new Error('Not in action phase');
+      if (slug !== 'werkzeugkoffer') throw new Error('Only Werkzeugkoffer activates in action');
+      if (!action.discardHandInstanceId) throw new Error('Werkzeugkoffer needs discard');
+      next = discardFromHand(state, playerId, action.discardHandInstanceId);
+      next = markEquipmentActivated(next, playerId, action.equipmentInstanceId);
+      next = drawForPlayer(next, playerId, 1, rng, ruleset, { allowExtra: true });
+      next.lastEvent = `${item.name}: 1 abgeworfen, 1 gezogen.`;
+      return checkWinner(next);
     }
     case 'PLAY_BOOST': {
       if (state.phase !== 'action') throw new Error('Not in action phase');
@@ -2818,6 +2989,46 @@ function applyCombatResponse(
     };
     next.lastEvent = `${item.name}: Angriffswert −1.`;
     return next;
+  }
+
+  if (action.type === 'ACTIVATE_EQUIPMENT') {
+    if (!isV6FormulaEnabled(ruleset)) {
+      throw new Error('ACTIVATE_EQUIPMENT requires v6Formula');
+    }
+    const eqCard = playerEquipment(state, playerId).find(
+      (e) => e.instanceId === action.equipmentInstanceId,
+    );
+    const item = eqCard ? findItemDef(pack, eqCard.defId) : undefined;
+    if (!item || !isEquipmentItem(item)) throw new Error('Not equipped Ausrüstung');
+    if (equipmentActivatedThisTurn(state, playerId, action.equipmentInstanceId)) {
+      throw new Error('Ausrüstung bereits diesen Zug aktiviert');
+    }
+    const slug = itemEffectSlug(item.id);
+    if (slug === 'kaputter-rueckspiegel') {
+      if (state.combat.rueckspiegelArmed) throw new Error('Reaction item already used');
+      let next = markEquipmentActivated(cloneState(state), playerId, action.equipmentInstanceId);
+      if (!next.combat) throw new Error('Combat lost');
+      next.combat = {
+        ...next.combat,
+        attackValue: Math.max(0, next.combat.attackValue - 1),
+        rueckspiegelArmed: true,
+      };
+      next.lastEvent = `${item.name}: Angriffswert −1.`;
+      return next;
+    }
+    if (slug === 'gezinkter-wuerfel') {
+      const mod = action.diceMod;
+      if (mod !== 1 && mod !== -1) throw new Error('Gezinkter Würfel needs diceMod ±1');
+      let next = markEquipmentActivated(cloneState(state), playerId, action.equipmentInstanceId);
+      if (!next.combat) throw new Error('Combat lost');
+      next.combat = {
+        ...next.combat,
+        attackValue: Math.max(0, next.combat.attackValue - mod),
+      };
+      next.lastEvent = `${item.name}: Angriffswert ${mod > 0 ? '−' : '+'}${Math.abs(mod)}.`;
+      return next;
+    }
+    throw new Error('Equipment not usable in combat');
   }
 
   const attackDef = findElementDef(pack, attackCardDefId);

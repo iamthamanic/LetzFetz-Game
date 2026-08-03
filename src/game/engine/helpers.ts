@@ -43,6 +43,7 @@ export function cloneState(state: GameState): GameState {
         shield: src.players.p1.shield ?? 0,
         fetzCharge: src.players.p1.fetzCharge ?? 0,
         construct: src.players.p1.construct ? { ...src.players.p1.construct } : null,
+        equipment: [...(src.players.p1.equipment ?? [])],
       },
       p2: {
         ...src.players.p2,
@@ -56,6 +57,7 @@ export function cloneState(state: GameState): GameState {
         shield: src.players.p2.shield ?? 0,
         fetzCharge: src.players.p2.fetzCharge ?? 0,
         construct: src.players.p2.construct ? { ...src.players.p2.construct } : null,
+        equipment: [...(src.players.p2.equipment ?? [])],
       },
     },
     piles: {

@@ -57,7 +57,9 @@ export function CombatStage({
   const attackTypeLine = buildCombatStageAttackTypeLine(attackDef);
   const impulseLine = buildCombatStageImpulseLine(attackDef);
   const canBlock = blockActions.some((a) => a.type === 'PLAY_BLOCK');
-  const reactionItems = reactionItemActions.filter((a) => a.type === 'PLAY_ITEM');
+  const reactionItems = reactionItemActions.filter(
+    (a) => a.type === 'PLAY_ITEM' || a.type === 'ACTIVATE_EQUIPMENT',
+  );
 
   return (
     <div
@@ -161,24 +163,51 @@ export function CombatStage({
                 </p>
                 <div className="flex flex-wrap items-center justify-center gap-2">
                   {reactionItems.map((action) => {
-                    if (action.type !== 'PLAY_ITEM') return null;
-                    const card = state.players[humanId].hand.find(
-                      (c) => c.instanceId === action.cardInstanceId,
-                    );
-                    const item = card ? findItemDef(pack, card.defId) : undefined;
-                    if (!item) return null;
-                    return (
-                      <Button
-                        key={action.cardInstanceId}
-                        variant="secondary"
-                        size="sm"
-                        className="text-sm"
-                        data-testid={`combat-reaction-item-${item.id}`}
-                        onClick={() => onPlayReactionItem(action.cardInstanceId)}
-                      >
-                        {item.name} (−1 Angriff)
-                      </Button>
-                    );
+                    if (action.type === 'PLAY_ITEM') {
+                      const card = state.players[humanId].hand.find(
+                        (c) => c.instanceId === action.cardInstanceId,
+                      );
+                      const item = card ? findItemDef(pack, card.defId) : undefined;
+                      if (!item) return null;
+                      return (
+                        <Button
+                          key={action.cardInstanceId}
+                          variant="secondary"
+                          size="sm"
+                          className="text-sm"
+                          data-testid={`combat-reaction-item-${item.id}`}
+                          onClick={() => onPlayReactionItem(action.cardInstanceId)}
+                        >
+                          {item.name} (−1 Angriff)
+                        </Button>
+                      );
+                    }
+                    if (action.type === 'ACTIVATE_EQUIPMENT') {
+                      const eq = state.players[humanId].equipment?.find(
+                        (c) => c.instanceId === action.equipmentInstanceId,
+                      );
+                      const item = eq ? findItemDef(pack, eq.defId) : undefined;
+                      if (!item) return null;
+                      const label =
+                        action.diceMod === 1
+                          ? `${item.name} (−1 Angriff)`
+                          : action.diceMod === -1
+                            ? `${item.name} (+1 Angriff)`
+                            : `${item.name} (−1 Angriff)`;
+                      return (
+                        <Button
+                          key={`${action.equipmentInstanceId}-${action.diceMod ?? 'x'}`}
+                          variant="secondary"
+                          size="sm"
+                          className="text-sm"
+                          data-testid={`combat-reaction-equip-${item.id}`}
+                          onClick={() => onPlayReactionItem(action.equipmentInstanceId)}
+                        >
+                          {label}
+                        </Button>
+                      );
+                    }
+                    return null;
                   })}
                 </div>
               </div>
