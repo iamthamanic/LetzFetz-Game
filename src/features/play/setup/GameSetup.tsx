@@ -32,7 +32,6 @@ import { Input } from '../../../components/ui/Input';
 import { useAppHistory } from '../../../services/history/AppHistoryContext';
 import { MenuGlitchBackdrop } from '../../../components/ui/MenuGlitchBackdrop';
 import type { GamePackChoice } from './resolveGamePackChoice';
-import { isV6PlayableEnabled } from './v6PlayableFlag';
 import {
   FORMULA_PLAY_OPTIN_UPDATED_EVENT,
   loadFormulaPlayOptInStore,
@@ -66,10 +65,10 @@ function prefersReducedMotion(): boolean {
   );
 }
 
-/** Initial pack selection — always V5 until PLAYABLE cutover (flag only reveals V6 tile). */
+/** Initial pack selection — V6 Play-Default after cutover (#353). */
 export function defaultPackChoice(_v6Playable?: boolean): GamePackChoice {
   void _v6Playable;
-  return 'v5';
+  return 'v6';
 }
 
 export interface BotMatchStart {
@@ -147,10 +146,7 @@ export function GameSetup({
   onStart,
 }: GameSetupProps) {
   const { push } = useAppHistory();
-  const v6Playable = isV6PlayableEnabled();
-  const [packChoice, setPackChoice] = useState<GamePackChoice>(() =>
-    defaultPackChoice(isV6PlayableEnabled()),
-  );
+  const [packChoice, setPackChoice] = useState<GamePackChoice>(() => defaultPackChoice());
   const [optInTick, setOptInTick] = useState(0);
   const [artifactAuction, setArtifactAuction] = useState(false);
   const [forceStartPlayer, setForceStartPlayer] = useState(false);
@@ -415,50 +411,40 @@ export function GameSetup({
                   </p>
                   <div className="grid grid-cols-1 gap-2">
                     <PackChoiceButton
+                      choice="v6"
+                      active={packChoice === 'v6'}
+                      onSelect={setPackChoice}
+                      testId="game-pack-v6"
+                      icon={<Sparkles className="h-4 w-4 text-amber-400" aria-hidden />}
+                      badge={
+                        packChoice === 'v6' ? <Badge variant="success">Standard</Badge> : null
+                      }
+                      title="V6 Formel"
+                      subtitle="Play-Default · Rezepte · Affinität · 30 Leben"
+                      activeClass="border-amber-500/60 bg-amber-950/30"
+                    />
+                    <PackChoiceButton
                       choice="v5"
                       active={packChoice === 'v5'}
                       onSelect={setPackChoice}
                       testId="game-pack-v5"
                       icon={<Sparkles className="h-4 w-4 text-emerald-400" aria-hidden />}
-                      badge={
-                        packChoice === 'v5' ? <Badge variant="success">Standard</Badge> : null
-                      }
+                      badge={<Badge variant="warning">Legacy</Badge>}
                       title="V5 Formel"
-                      subtitle="Play-Default · Formel · Gegenstände · 30 Leben"
+                      subtitle="Legacy / Regression · Großformel · Gegenstände"
                       activeClass="border-emerald-500/60 bg-emerald-950/30"
                     />
-                    {v6Playable ? (
-                      <PackChoiceButton
-                        choice="v6"
-                        active={packChoice === 'v6'}
-                        onSelect={setPackChoice}
-                        testId="game-pack-v6"
-                        icon={<Sparkles className="h-4 w-4 text-amber-400" aria-hidden />}
-                        badge={
-                          packChoice === 'v6' ? <Badge variant="accent">INTERNAL</Badge> : (
-                            <Badge variant="default">Opt-in</Badge>
-                          )
-                        }
-                        title="V6 Formel"
-                        subtitle="Slice-1 INTERNAL · Rezepte · nicht Play-Default"
-                        activeClass="border-amber-500/60 bg-amber-950/30"
-                      />
-                    ) : null}
                   </div>
-                  {v6Playable ? (
-                    <p className="text-xs text-stone-500" data-testid="game-setup-v6-flag-hint">
-                      V6-Kachel aktiv (Flag). Enable: <code className="text-stone-400">VITE_V6_PLAYABLE=true</code>{' '}
-                      oder localStorage <code className="text-stone-400">letz-fetz:v6-playable=1</code>. Standard
-                      bleibt V5 bis Cutover. Combo-Art = T+E+K-Komponentenbilder.
-                    </p>
-                  ) : null}
+                  <p className="text-xs text-stone-500" data-testid="game-setup-v6-default-hint">
+                    V6 ist Standard. V5 bleibt als Legacy/Regression wählbar (kein Hard-Delete).
+                  </p>
                   <button
                     type="button"
                     className="text-xs text-stone-400 underline-offset-2 hover:text-stone-200 hover:underline"
                     data-testid="game-setup-legacy-toggle"
                     onClick={() => setLegacyOpen((v) => !v)}
                   >
-                    {legacyOpen ? 'Legacy ausblenden' : 'Legacy-Packs (V1 / V2 / V3)'}
+                    {legacyOpen ? 'Legacy ausblenden' : 'Weitere Legacy-Packs (V1 / V2 / V3)'}
                   </button>
                   {legacyOpen ? (
                     <div className="grid grid-cols-1 gap-2 sm:grid-cols-3">

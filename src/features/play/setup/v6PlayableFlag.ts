@@ -1,18 +1,17 @@
 /**
- * INTERNAL / playtest gate for V6 Setup exposure.
+ * V6 Playable gate — post-cutover (#353) V6 is always available.
  * Location: src/features/play/setup/v6PlayableFlag.ts
  *
- * Default OFF — Play-Default remains V5 until explicit cutover.
- * Enable: `VITE_V6_PLAYABLE=true` or localStorage `letz-fetz:v6-playable=1`.
- * When enabled, Setup shows a V6 tile but initial selection stays V5.
+ * Legacy opt-in keys (`VITE_V6_PLAYABLE`, localStorage) are ignored for enablement.
+ * Test override remains for unit/e2e isolation (force off).
  */
 export const V6_PLAYABLE_STORAGE_KEY = 'letz-fetz:v6-playable';
 
-/** German one-liner for Setup hint / docs. */
+/** German one-liner — kept for docs; flag no longer required after cutover. */
 export const V6_PLAYABLE_ENABLE_HINT_DE =
-  'V6-Kachel: VITE_V6_PLAYABLE=true oder localStorage letz-fetz:v6-playable=1 (Standard bleibt V5).';
+  'V6 ist Play-Default. V5 bleibt als Legacy-Kachel wählbar.';
 
-/** Test-only override; null = consult env/storage. */
+/** Test-only override; null = V6 playable (cutover default). */
 let testOverride: boolean | null = null;
 
 export function setV6PlayableTestOverride(value: boolean | null): void {
@@ -21,17 +20,5 @@ export function setV6PlayableTestOverride(value: boolean | null): void {
 
 export function isV6PlayableEnabled(): boolean {
   if (testOverride !== null) return testOverride;
-  try {
-    if (import.meta.env.VITE_V6_PLAYABLE === 'true') return true;
-  } catch {
-    // non-vite test env
-  }
-  try {
-    if (typeof localStorage !== 'undefined' && localStorage.getItem(V6_PLAYABLE_STORAGE_KEY) === '1') {
-      return true;
-    }
-  } catch {
-    // SSR / restricted storage
-  }
-  return false;
+  return true;
 }

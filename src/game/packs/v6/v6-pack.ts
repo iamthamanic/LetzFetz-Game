@@ -1,5 +1,5 @@
 /**
- * V6 core pack — Slice-1 INTERNAL (not Play-Default).
+ * V6 core pack — Play-Default after cutover (#353).
  * Location: src/game/packs/v6/v6-pack.ts
  *
  * Content/recipes from `src/content/v6` → generator → `src/generated/v6`.

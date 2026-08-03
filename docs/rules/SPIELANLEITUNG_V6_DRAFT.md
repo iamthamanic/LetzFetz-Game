@@ -1,6 +1,6 @@
 # SPIELANLEITUNG V6 — Draft (spielbare Prosa)
 
-**Status:** Ziel-Engine-Prosa für `v6Formula` / `V6_CORE_PACK` (Play-Default Cutover → #353)  
+**Status:** Ziel-Engine-Prosa für `v6Formula` / `V6_CORE_PACK` (**Play-Default** nach Cutover #353)  
 **Stand:** 2026-08-03  
 **Vollkonzept:** [`docs/letz-fetz-v6-spielkonzept.md`](../letz-fetz-v6-spielkonzept.md)
 
@@ -175,7 +175,7 @@ Immer aktiv, symmetrisch: Späti · Kristall · Vulkan · Sumpf · Club · Schat
 |---------|--------|
 | V1 | Regression / physisches Kernspiel |
 | V3 | Soft-Retire (Fetzgerät) |
-| **V5** | Legacy/Regression (`v5Formula`) — bis Retirement spielbar |
-| **V6** | Produktziel (`v6Formula`); Play-Default nach Cutover (#353) |
+| **V5** | Legacy/Regression (`v5Formula`) — Setup-Kachel |
+| **V6** | Produktziel + Play-Default (`v6Formula`) |
 
 Bot-Prioritäten: [`V6_BOT_PLAYBOOK.md`](V6_BOT_PLAYBOOK.md).

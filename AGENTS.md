@@ -126,7 +126,7 @@ Design: `.qa/design/vertical-slice-architecture.md`
 | [`docs/rules/SPIELANLEITUNG_V3_WIP.md`](docs/rules/SPIELANLEITUNG_V3_WIP.md) | V3 Vorgänger (Fetzgerät-Slots) — Soft-Retire |
 | [`docs/letz-fetz-v3-überarbeitung.md`](docs/letz-fetz-v3-überarbeitung.md) | V3 Dump — historisch / Referenz |
 
-**Bei Unklarheit:** **Produktziel = V6.** **Play-Default bleibt V5 Formel** (`v5Formula`) bis explizitem Cutover (#353). V6 hinter `v6Formula` / optional Setup-Tile (`VITE_V6_PLAYABLE` oder `localStorage letz-fetz:v6-playable=1`). Explizit Base-Pack → V1-Regression. V3 Soft-Retire.
+**Bei Unklarheit:** **Produktziel = V6.** **Play-Default = V6 Formel** (`v6Formula` / `V6_CORE_PACK`). V5 bleibt Legacy/Regression (`v5Formula`). Explizit Base-Pack → V1-Regression. V3 Soft-Retire.
 
 **Pflege-Pflicht für Agenten:**
 
@@ -134,7 +134,7 @@ Design: `.qa/design/vertical-slice-architecture.md`
 2. V2-Historie → `SPIELANLEITUNG_V2_WIP.md` / `SPIELANLEITUNG_V2_DRAFT.md`.
 3. V3-Historie → `SPIELANLEITUNG_V3_WIP.md` + Dump (nur wenn Legacy-Pfad).
 4. **V5-Regeln** → `SPIELANLEITUNG_V5_DRAFT.md` + `letz-fetz-v5-spielkonzept.md` im selben Change.
-5. **V6-Regeln** → `SPIELANLEITUNG_V6_DRAFT.md` + `letz-fetz-v6-spielkonzept.md` im selben Change; Play-Default erst mit Cutover (#353).
+5. **V6-Regeln** → `SPIELANLEITUNG_V6_DRAFT.md` + `letz-fetz-v6-spielkonzept.md` im selben Change.
 6. Kurzreferenz hier und in `.cursor/rules/project-core.mdc` bei Regelbrüchen aktualisieren.
 
 ---
