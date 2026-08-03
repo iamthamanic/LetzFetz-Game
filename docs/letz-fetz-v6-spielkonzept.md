@@ -145,9 +145,9 @@ Startphase → Ziehphase → Formelphase → Aktionsphase → Endphase
 
 **Katalysatoren richten sich nicht auf.** Nach vollständiger Auflösung: abgelegt (Echo/Verzögerung: bis zu ihrer Auflösung, dann abgelegt).
 
-**Echo (Engine):** Primäreffekt sofort; Warteschlange wiederholt zu Beginn des nächsten eigenen Zuges typischerweise **1 Punkt** desselben Primär-Kinds. Keine zusätzliche Fetzladung. Katalysator bleibt bis Echo-Auflösung, dann Ablage.
+**Echo (Engine + Play-UI):** Primäreffekt sofort; Warteschlange wiederholt zu Beginn des nächsten eigenen Zuges fest **1 Punkt** desselben Primär-Kinds (kein per-Katalysator-Authoring in Slice-1). Keine zusätzliche Fetzladung. Katalysator bleibt bis Echo-Auflösung, dann Ablage — Play zeigt Warteschlange + Badge „bleibt bis Auflösung“.
 
-**Verzögerung (Engine):** Primäreffekt geschieht **nicht** sofort; zu Beginn des nächsten eigenen Zuges mit **+2** auf den (bereits abwehrreduzierten) Primärwert. Keine zusätzliche Fetzladung. Katalysator bleibt bis Auflösung, dann Ablage.
+**Verzögerung (Engine + Play-UI):** Primäreffekt geschieht **nicht** sofort; zu Beginn des nächsten eigenen Zuges mit festem **+2** auf den (bereits abwehrreduzierten) Primärwert. Keine zusätzliche Fetzladung. Katalysator bleibt bis Auflösung, dann Ablage — gleiche UI-Pattern wie Echo.
 
 ---
 
@@ -518,6 +518,7 @@ Bitte abhaken / korrigieren:
 - [x] Exact Start: Affinität „pro Runde“ = **einmal pro eigenem Zug/Durchlauf** (Reset eigene Startphase; Spend auf eigenen Angriff/Challenge **oder Formelaktivierung**; Block-Affinität **nur im eigenen Aktionszug**, nicht bei Verteidigung gegen den Gegner). Playtest-Default via #341 / #356.  
 - [x] Fessel / Kettenfessel **Zielwahl manuell**: Angreifer wählt einen **besetzten** gegnerischen Formelplatz (Technik / Essenz / Katalysator) via Pending-Choice (`PICK_V6_FESSEL_TARGET`); leere Plätze ungültig. Kein Auto Technik→Essenz→Katalysator. Bot-Heuristik: Katalysator → Essenz → Technik.  
 - [x] Echo/Delay Engine (#344): Warteschlangen in Meta; Startphase Echo → Verzögerung; Katalysator-Ablage nach Auflösung; Playtest-Hooks (volle Katalysator-Matrix später).
+- [x] Echo/Delay Play-UI (#345): Queue-Chips + Katalysator „bleibt bis Auflösung“; feste Echo-1 / Delay-+2.
 
 Nach deiner finalen Form: dieses Doc auf **verbindlich** setzen und `SPIELANLEITUNG_V6_DRAFT.md` + AGENTS-Kurzreferenz nachziehen.
 
@@ -535,3 +536,4 @@ Nach deiner finalen Form: dieses Doc auf **verbindlich** setzen und `SPIELANLEIT
 | 2026-08-03 | Fessel/Kettenfessel Zielwahl **manuell** (besetzte Formelplätze; Pending `PICK_V6_FESSEL_TARGET`; §99) |
 | 2026-08-03 | #343 retarget: Slice-1 **105**-Rezept-Katalog gehärtet (DE Namen + effectSummary); volle 60×K-Matrix deferred |
 | 2026-08-03 | #344 Echo/Delay Engine: Warteschlangen + Startphase §8 Schritte 3–4; Katalysator-Ablage nach Auflösung; 2 Playtest-Rezepte (kein Matrix-Expand) |
+| 2026-08-03 | #345 Echo/Delay Play-UI: Queue-Anzeige + Katalysator-Badge; feste Echo-1 / Delay-+2 |

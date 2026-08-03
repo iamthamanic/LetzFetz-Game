@@ -37,4 +37,9 @@ export interface FormulaSlotOccupant {
   elementalCharge?: boolean;
   /** V6 Fessel intensity 1–3 when present. */
   fesselIntensity?: number;
+  /**
+   * V6 Echo/Delay: catalyst still seated until Startphase resolve
+   * (engine deferred discard).
+   */
+  pendingTiming?: 'echo' | 'delay';
 }

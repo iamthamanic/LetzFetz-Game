@@ -25,6 +25,12 @@ function toneClass(kind: CombatFeedbackToastItem['kind']): string {
   if (kind === 'auto-reaction') {
     return 'border-amber-500/55 bg-amber-950/90 text-amber-100';
   }
+  if (kind === 'delay-resolve') {
+    return 'border-orange-500/55 bg-orange-950/90 text-orange-100';
+  }
+  if (kind === 'echo-resolve') {
+    return 'border-cyan-500/55 bg-cyan-950/90 text-cyan-100';
+  }
   return 'border-cyan-500/55 bg-cyan-950/90 text-cyan-100';
 }
 

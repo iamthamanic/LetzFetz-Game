@@ -8,6 +8,7 @@ export interface V6FormulaPreviewLines {
   title: string;
   primaryLine: string;
   catalystLine: string | null;
+  timingLine: string | null;
   fetzLine: string | null;
   lockLine: string | null;
   defenseLine: string | null;
@@ -29,12 +30,24 @@ export function formatV6FormulaPlanPreview(plan: FormulaActivationPlan): V6Formu
     plan.intensity != null && plan.intensity > 0
       ? ` · Intensität ${plan.intensity}`
       : '';
+  const timing = plan.timingMode ?? 'immediate';
+  const timingLine =
+    timing === 'echo'
+      ? `Echo: +${plan.echoAmount} in der nächsten Startphase (fester Betrag)`
+      : timing === 'delay'
+        ? `Verzögerung: Primär +${plan.delayBonus} in der nächsten Startphase (fester Bonus)`
+        : null;
+  const catalystLine =
+    timing === 'echo' || timing === 'delay'
+      ? 'Katalysator bleibt bis zur Auflösung (nächste Startphase).'
+      : plan.catalystConsumed
+        ? 'Dieser Katalysator wird verbraucht (Ablage).'
+        : null;
   return {
     title: plan.name,
     primaryLine: `${primaryKindDe[plan.primary.kind] ?? plan.primary.kind} ${plan.primary.value} → ${targetDe}${intensityNote}`,
-    catalystLine: plan.catalystConsumed
-      ? 'Dieser Katalysator wird verbraucht (Ablage).'
-      : null,
+    catalystLine,
+    timingLine,
     fetzLine:
       plan.fetzDelta > 0
         ? `+${plan.fetzDelta} Fetzladung`
@@ -64,7 +77,15 @@ export function assertPreviewMatchesPlan(
   if (!preview.primaryLine.includes(String(plan.primary.value))) {
     throw new Error('V6_PREVIEW_MISMATCH: primary value');
   }
-  if (plan.catalystConsumed && !preview.catalystLine) {
+  const timing = plan.timingMode ?? 'immediate';
+  if (timing === 'echo' || timing === 'delay') {
+    if (!preview.catalystLine?.includes('bleibt')) {
+      throw new Error('V6_PREVIEW_MISMATCH: deferred catalyst');
+    }
+    if (!preview.timingLine) {
+      throw new Error('V6_PREVIEW_MISMATCH: timing line');
+    }
+  } else if (plan.catalystConsumed && !preview.catalystLine) {
     throw new Error('V6_PREVIEW_MISMATCH: catalyst consumption');
   }
   if (plan.fetzDelta > 0 && !preview.fetzLine?.includes(String(plan.fetzDelta))) {
