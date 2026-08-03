@@ -560,3 +560,4 @@ Bitte abhaken / korrigieren:
 | 2026-08-03 | #354 V5 Legacy-Labels final (§99): Badge Legacy + Legacy/Regression; Pack-Summary „V5 Formel (Legacy)“ |
 | 2026-08-03 | Rest-Queue Issues #374–#388: P0 Improvisieren/Formelphase/Elemente · P1 Items/Glitches/Riss · P2 Content-Waves+Katalog · P3 Pool A/Überformel-Wahl/Chaos/Helden/V5-retire |
 | 2026-08-03 | #374 Improvisieren Play-UI: Button + pending-Modus; `DISCARD_DRAW` lastEvent „Improvisieren…“ |
+| 2026-08-03 | #375 Formelphase: max 2 Änderungen (2. kostet Abwurf); Rückbau beendet ohne Aktivierung; V6 bleibt in `build` |

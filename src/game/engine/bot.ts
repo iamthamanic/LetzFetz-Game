@@ -143,13 +143,18 @@ function pickBestBuild(state: GameState, pack: ContentPack, actions: GameAction[
         a.type === 'FORMULA_REPLACE' ||
         a.type === 'FORMULA_SCHNELLMIX',
     );
-    if (builds.length === 0) {
+    // Prefer free Formeländerung over paid 2nd change.
+    const freeBuilds = builds.filter(
+      (a) => a.type === 'FORMULA_SCHNELLMIX' || !a.discardHandInstanceId,
+    );
+    const pool = freeBuilds.length > 0 ? freeBuilds : builds;
+    if (pool.length === 0) {
       return actions.find((a) => a.type === 'FORMULA_ACTIVATE') ??
         actions.find((a) => a.type === 'SKIP_BUILD') ??
         { type: 'SKIP_BUILD' };
     }
 
-    const prefer = (type: GameAction['type']) => builds.filter((a) => a.type === type);
+    const prefer = (type: GameAction['type']) => pool.filter((a) => a.type === type);
     for (const type of ['FORMULA_BUILD', 'FORMULA_REPLACE', 'FORMULA_SCHNELLMIX'] as const) {
       const group = prefer(type);
       if (group.length === 0) continue;

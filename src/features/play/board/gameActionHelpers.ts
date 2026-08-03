@@ -13,6 +13,10 @@ export type PendingIntent =
   | { type: 'action-select' }
   /** Action phase: Improvisieren — pick any hand card to DISCARD_DRAW. */
   | { type: 'improvise' }
+  /** Formelphase: 2nd change — pick hand card to discard as cost. */
+  | { type: 'formula-paid-change'; cardInstanceId: string }
+  /** Formelphase: Rückbau — pick formula component to return to hand. */
+  | { type: 'formula-return' }
   | { type: 'activate'; boundInstanceId: string };
 
 export function hasChallengeForAttack(
@@ -46,12 +50,19 @@ export function findDirectBuildAction(
   legalActions: GameAction[],
   handInstanceId: string,
 ): GameAction | null {
+  // Prefer unpaid V6 Formeländerung; paid 2nd change needs explicit discard pick.
   const formulaBuild =
     legalActions.find(
-      (a) => a.type === 'FORMULA_BUILD' && a.cardInstanceId === handInstanceId,
+      (a) =>
+        a.type === 'FORMULA_BUILD' &&
+        a.cardInstanceId === handInstanceId &&
+        !a.discardHandInstanceId,
     ) ??
     legalActions.find(
-      (a) => a.type === 'FORMULA_REPLACE' && a.cardInstanceId === handInstanceId,
+      (a) =>
+        a.type === 'FORMULA_REPLACE' &&
+        a.cardInstanceId === handInstanceId &&
+        !a.discardHandInstanceId,
     ) ??
     legalActions.find(
       (a) => a.type === 'FORMULA_SCHNELLMIX' && a.cardInstanceId === handInstanceId,
@@ -64,6 +75,45 @@ export function findDirectBuildAction(
         a.type === 'BUILD_CARD' &&
         a.cardInstanceId === handInstanceId &&
         !a.discardBoundId,
+    ) ?? null
+  );
+}
+
+/** True when this hand card only has paid (2nd) Formeländerungen legal. */
+export function formulaChangeRequiresDiscard(
+  legalActions: GameAction[],
+  handInstanceId: string,
+): boolean {
+  const matches = legalActions.filter(
+    (a) =>
+      (a.type === 'FORMULA_BUILD' || a.type === 'FORMULA_REPLACE') &&
+      a.cardInstanceId === handInstanceId,
+  );
+  return matches.length > 0 && matches.every((a) => Boolean(a.discardHandInstanceId));
+}
+
+export function findPaidFormulaChangeAction(
+  legalActions: GameAction[],
+  handInstanceId: string,
+  discardHandInstanceId: string,
+): GameAction | null {
+  return (
+    legalActions.find(
+      (a) =>
+        (a.type === 'FORMULA_BUILD' || a.type === 'FORMULA_REPLACE') &&
+        a.cardInstanceId === handInstanceId &&
+        a.discardHandInstanceId === discardHandInstanceId,
+    ) ?? null
+  );
+}
+
+export function findFormulaReturnAction(
+  legalActions: GameAction[],
+  formulaInstanceId: string,
+): GameAction | null {
+  return (
+    legalActions.find(
+      (a) => a.type === 'FORMULA_RETURN' && a.formulaInstanceId === formulaInstanceId,
     ) ?? null
   );
 }

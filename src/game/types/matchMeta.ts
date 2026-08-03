@@ -62,6 +62,8 @@ export interface MatchMeta {
   v6MackeUsed?: Record<PlayerId, string[]>;
   /** V6 Formeländerungen this own turn (Resteverwertung fires on 2nd). */
   v6FormulaChangesThisTurn?: Record<PlayerId, number>;
+  /** V6: Rückbau used this turn — Formelphase already ended without activate. */
+  v6FormulaRueckbauThisTurn?: Record<PlayerId, boolean>;
   /**
    * V6 Falsche Farbe: Affinity spend this action used the Macke expand.
    * Cleared when pending affinity resolves / action ends.
@@ -287,6 +289,10 @@ export function resetTurnMeta(meta: MatchMeta, activePlayer: PlayerId): MatchMet
     v6FormulaChangesThisTurn: {
       p1: activePlayer === 'p1' ? 0 : (meta.v6FormulaChangesThisTurn?.p1 ?? 0),
       p2: activePlayer === 'p2' ? 0 : (meta.v6FormulaChangesThisTurn?.p2 ?? 0),
+    },
+    v6FormulaRueckbauThisTurn: {
+      p1: activePlayer === 'p1' ? false : (meta.v6FormulaRueckbauThisTurn?.p1 ?? false),
+      p2: activePlayer === 'p2' ? false : (meta.v6FormulaRueckbauThisTurn?.p2 ?? false),
     },
     v6FalscheFarbeArmed: {
       p1: activePlayer === 'p1' ? false : (meta.v6FalscheFarbeArmed?.p1 ?? false),

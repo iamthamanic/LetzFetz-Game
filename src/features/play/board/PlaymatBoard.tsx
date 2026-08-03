@@ -17,10 +17,13 @@ import {
   findBuildReplaceAction,
   findDirectBuildAction,
   findDiscardDrawAction,
+  findFormulaReturnAction,
+  findPaidFormulaChangeAction,
   findPlayGlitchAction,
   findPlayItemAction,
   findPoolActivateAction,
   formulaChallengeTargetIds,
+  formulaChangeRequiresDiscard,
 } from './gameActionHelpers';
 import { CharacterDock, CombatStage, DeckPile, DiscardPile } from './zones';
 import { BoundCardRow } from './BoundCardRow';
@@ -185,6 +188,10 @@ export function PlaymatBoard({
     if (action) {
       onDispatch(action);
       clearPending();
+      return;
+    }
+    if (formulaChangeRequiresDiscard(view.legalActions, handInstanceId)) {
+      onPendingChange({ type: 'formula-paid-change', cardInstanceId: handInstanceId });
     }
   };
 
@@ -250,6 +257,18 @@ export function PlaymatBoard({
   };
 
   const handleActivateDiscard = (handInstanceId: string) => {
+    if (pending?.type === 'formula-paid-change') {
+      const action = findPaidFormulaChangeAction(
+        view.legalActions,
+        pending.cardInstanceId,
+        handInstanceId,
+      );
+      if (action) {
+        onDispatch(action);
+        clearPending();
+      }
+      return;
+    }
     if (pending?.type !== 'activate') return;
     const action = findActivateAction(
       view.legalActions,
@@ -295,9 +314,25 @@ export function PlaymatBoard({
     });
   };
 
+  const handleFormulaReturnClick = (instanceId: string) => {
+    if (pending?.type !== 'formula-return') return;
+    const action = findFormulaReturnAction(view.legalActions, instanceId);
+    if (action) {
+      onDispatch(action);
+      clearPending();
+    }
+  };
+
   const formulaChallengeIds =
     pending?.type === 'attack'
       ? formulaChallengeTargetIds(view.legalActions, pending.attackInstanceId)
+      : [];
+
+  const formulaReturnIds =
+    pending?.type === 'formula-return'
+      ? view.legalActions
+          .filter((a): a is Extract<GameAction, { type: 'FORMULA_RETURN' }> => a.type === 'FORMULA_RETURN')
+          .map((a) => a.formulaInstanceId)
       : [];
 
   const hasChallengeTargets = v5Formula
@@ -329,6 +364,10 @@ export function PlaymatBoard({
       }
       case 'activate':
         return 'Wähle eine Handkarte zum Abwerfen für die Aktivierung.';
+      case 'formula-paid-change':
+        return '2. Formeländerung: tippe eine Handkarte zum Abwerfen als Kosten.';
+      case 'formula-return':
+        return 'Rückbau: tippe eine Formelkomponente, die zurück auf die Hand soll.';
       default:
         return null;
     }
@@ -637,6 +676,11 @@ export function PlaymatBoard({
                           a.type === 'FORMULA_REPLACE' ||
                           a.type === 'FORMULA_SCHNELLMIX',
                       )
+                    }
+                    targetableInstanceIds={formulaReturnIds}
+                    selectedTargetId={null}
+                    onComponentClick={
+                      pending?.type === 'formula-return' ? handleFormulaReturnClick : undefined
                     }
                     echoDelayChips={humanEchoDelayChips}
                     pendingCatalystTiming={humanPendingCatalyst}

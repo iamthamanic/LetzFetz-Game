@@ -1164,24 +1164,48 @@ function listBuildActionsForPlayer(
   return actions;
 }
 
-/** V5 Formelphase — exactly one of build / replace / activate / schnellmix / skip. */
+/** V5 Formelphase — exactly one of build / replace / activate / schnellmix / skip.
+ * V6: up to 2 Formeländerungen (2nd costs hand discard); stay in build until activate/skip/return.
+ */
 function listFormulaPhaseActions(
   state: GameState,
   pack: ContentPack,
   playerId: PlayerId,
+  ruleset: RulesetConfig,
 ): GameAction[] {
   const actions: GameAction[] = [{ type: 'SKIP_BUILD' }];
   const player = state.players[playerId];
   const formula = player.formula;
+  const v6 = isV6FormulaEnabled(ruleset);
+  const changes = state.meta.v6FormulaChangesThisTurn?.[playerId] ?? 0;
 
-  for (const card of player.hand) {
-    const slot = formulaSlotForDef(pack, card.defId);
-    if (!slot) continue;
-    actions.push({ type: 'FORMULA_SCHNELLMIX', cardInstanceId: card.instanceId });
-    if (formula[slot] == null) {
-      actions.push({ type: 'FORMULA_BUILD', cardInstanceId: card.instanceId });
-    } else {
-      actions.push({ type: 'FORMULA_REPLACE', cardInstanceId: card.instanceId });
+  if (v6) {
+    for (const comp of listFormulaComponents(formula)) {
+      actions.push({ type: 'FORMULA_RETURN', formulaInstanceId: comp.instanceId });
+    }
+  }
+
+  if (!v6 || changes < 2) {
+    for (const card of player.hand) {
+      const slot = formulaSlotForDef(pack, card.defId);
+      if (!slot) continue;
+      if (!v6) {
+        actions.push({ type: 'FORMULA_SCHNELLMIX', cardInstanceId: card.instanceId });
+      }
+      const baseType = formula[slot] == null ? ('FORMULA_BUILD' as const) : ('FORMULA_REPLACE' as const);
+      if (!v6 || changes === 0) {
+        actions.push({ type: baseType, cardInstanceId: card.instanceId });
+      } else {
+        // 2nd change: must discard a different hand card
+        for (const discard of player.hand) {
+          if (discard.instanceId === card.instanceId) continue;
+          actions.push({
+            type: baseType,
+            cardInstanceId: card.instanceId,
+            discardHandInstanceId: discard.instanceId,
+          });
+        }
+      }
     }
   }
 
@@ -1360,7 +1384,7 @@ export function getLegalActions(state: GameState, ctx: PackContext): GameAction[
 
   if (state.phase === 'build') {
     if (isFormulaBoardEnabled(ruleset)) {
-      actions.push(...listFormulaPhaseActions(state, ctx.pack, ctx.playerId));
+      actions.push(...listFormulaPhaseActions(state, ctx.pack, ctx.playerId, ruleset));
     } else {
       actions.push({ type: 'SKIP_BUILD' });
       const bound = state.players[ctx.playerId].bound;
@@ -1617,8 +1641,26 @@ function applyFormulaBuild(
   pack: ContentPack,
   playerId: PlayerId,
   cardInstanceId: string,
+  ruleset: RulesetConfig,
+  discardHandInstanceId?: string,
 ): GameState {
-  const next = cloneState(state);
+  const v6 = isV6FormulaEnabled(ruleset);
+  const changes = state.meta.v6FormulaChangesThisTurn?.[playerId] ?? 0;
+  if (v6 && changes >= 2) {
+    throw new Error('Max 2 Formeländerungen this turn');
+  }
+  if (v6 && changes >= 1) {
+    if (!discardHandInstanceId || discardHandInstanceId === cardInstanceId) {
+      throw new Error('2nd Formeländerung requires discarding a different hand card');
+    }
+  } else if (discardHandInstanceId) {
+    throw new Error('Free Formeländerung must not discard');
+  }
+
+  let next = cloneState(state);
+  if (v6 && discardHandInstanceId) {
+    next = discardFromHand(next, playerId, discardHandInstanceId);
+  }
   const handIdx = next.players[playerId].hand.findIndex((c) => c.instanceId === cardInstanceId);
   if (handIdx === -1) throw new Error('Card not in hand');
   const handCard = next.players[playerId].hand[handIdx];
@@ -1638,8 +1680,13 @@ function applyFormulaBuild(
     stabilityBonus: 0,
   };
   next.players[playerId].formula[slot] = component;
-  next.phase = 'action';
-  next.lastEvent = `${def.name} in Formelplatz ${slot} gebaut.`;
+  if (!v6) {
+    next.phase = 'action';
+  }
+  next.lastEvent =
+    v6 && discardHandInstanceId
+      ? `${def.name} in Formelplatz ${slot} gebaut (2. Änderung, 1 abgeworfen).`
+      : `${def.name} in Formelplatz ${slot} gebaut.`;
   return next;
 }
 
@@ -1648,8 +1695,26 @@ function applyFormulaReplace(
   pack: ContentPack,
   playerId: PlayerId,
   cardInstanceId: string,
+  ruleset: RulesetConfig,
+  discardHandInstanceId?: string,
 ): GameState {
-  const next = cloneState(state);
+  const v6 = isV6FormulaEnabled(ruleset);
+  const changes = state.meta.v6FormulaChangesThisTurn?.[playerId] ?? 0;
+  if (v6 && changes >= 2) {
+    throw new Error('Max 2 Formeländerungen this turn');
+  }
+  if (v6 && changes >= 1) {
+    if (!discardHandInstanceId || discardHandInstanceId === cardInstanceId) {
+      throw new Error('2nd Formeländerung requires discarding a different hand card');
+    }
+  } else if (discardHandInstanceId) {
+    throw new Error('Free Formeländerung must not discard');
+  }
+
+  let next = cloneState(state);
+  if (v6 && discardHandInstanceId) {
+    next = discardFromHand(next, playerId, discardHandInstanceId);
+  }
   const handIdx = next.players[playerId].hand.findIndex((c) => c.instanceId === cardInstanceId);
   if (handIdx === -1) throw new Error('Card not in hand');
   const handCard = next.players[playerId].hand[handIdx];
@@ -1672,8 +1737,48 @@ function applyFormulaReplace(
     stabilityBonus: 0,
   };
   next.players[playerId].formula[slot] = component;
+  if (!v6) {
+    next.phase = 'action';
+  }
+  next.lastEvent =
+    v6 && discardHandInstanceId
+      ? `${def.name} ersetzt Formelplatz ${slot} (2. Änderung, 1 abgeworfen).`
+      : `${def.name} ersetzt Formelplatz ${slot}.`;
+  return next;
+}
+
+function applyFormulaReturn(
+  state: GameState,
+  playerId: PlayerId,
+  formulaInstanceId: string,
+  ruleset: RulesetConfig,
+): GameState {
+  if (!isV6FormulaEnabled(ruleset)) {
+    throw new Error('FORMULA_RETURN requires v6Formula');
+  }
+  const next = cloneState(state);
+  const formula = next.players[playerId].formula;
+  const slots = ['technik', 'essenz', 'katalysator'] as const;
+  let found: FormulaComponentInstance | null = null;
+  for (const slot of slots) {
+    const comp = formula[slot];
+    if (comp?.instanceId === formulaInstanceId) {
+      found = comp;
+      formula[slot] = null;
+      break;
+    }
+  }
+  if (!found) throw new Error('Formula component not found');
+  next.players[playerId].hand.push({
+    instanceId: found.instanceId,
+    defId: found.defId,
+  });
   next.phase = 'action';
-  next.lastEvent = `${def.name} ersetzt Formelplatz ${slot}.`;
+  next.meta.v6FormulaRueckbauThisTurn = {
+    ...(next.meta.v6FormulaRueckbauThisTurn ?? { p1: false, p2: false }),
+    [playerId]: true,
+  };
+  next.lastEvent = 'Rückbau: Komponente auf die Hand — Formelphase beendet, keine Aktivierung.';
   return next;
 }
 
@@ -2057,7 +2162,14 @@ export function applyAction(
       if (!isFormulaBoardEnabled(ruleset)) {
         throw new Error('FORMULA_BUILD requires v5Formula or v6Formula');
       }
-      next = applyFormulaBuild(state, pack, playerId, action.cardInstanceId);
+      next = applyFormulaBuild(
+        state,
+        pack,
+        playerId,
+        action.cardInstanceId,
+        ruleset,
+        action.discardHandInstanceId,
+      );
       const builtId = listFormulaComponents(next.players[playerId].formula).find(
         (c) => c.instanceId === action.cardInstanceId,
       )?.instanceId;
@@ -2072,7 +2184,14 @@ export function applyAction(
       if (!isFormulaBoardEnabled(ruleset)) {
         throw new Error('FORMULA_REPLACE requires v5Formula or v6Formula');
       }
-      next = applyFormulaReplace(state, pack, playerId, action.cardInstanceId);
+      next = applyFormulaReplace(
+        state,
+        pack,
+        playerId,
+        action.cardInstanceId,
+        ruleset,
+        action.discardHandInstanceId,
+      );
       const builtId = listFormulaComponents(next.players[playerId].formula).find(
         (c) => c.instanceId === action.cardInstanceId,
       )?.instanceId;
@@ -2091,6 +2210,10 @@ export function applyAction(
         );
       }
       return next;
+    }
+    case 'FORMULA_RETURN': {
+      if (state.phase !== 'build') throw new Error('Not in build phase');
+      return applyFormulaReturn(state, playerId, action.formulaInstanceId, ruleset);
     }
     case 'FORMULA_ACTIVATE': {
       if (state.phase !== 'build') throw new Error('Not in build phase');

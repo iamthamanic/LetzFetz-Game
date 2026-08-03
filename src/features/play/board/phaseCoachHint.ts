@@ -68,7 +68,15 @@ export function buildPhaseCoachHint({
   if (pending?.type === 'build-select') {
     return isV5FormulaEnabled(rulesetFromState(state))
       ? 'Wähle eine Formelkarte zum Bauen, Ersetzen oder Schnellmix.'
-      : 'Wähle eine baubare Handkarte — Glitch-Karten sind ausgegraut.';
+      : isV6FormulaEnabled(rulesetFromState(state))
+        ? 'Wähle eine Formelkarte zum Bauen oder Ersetzen (1. gratis / 2. kostet Abwurf).'
+        : 'Wähle eine baubare Handkarte — Glitch-Karten sind ausgegraut.';
+  }
+  if (pending?.type === 'formula-paid-change') {
+    return '2. Formeländerung: tippe eine Handkarte zum Abwerfen als Kosten.';
+  }
+  if (pending?.type === 'formula-return') {
+    return 'Rückbau: tippe eine Formelkomponente auf dem Gestell — Phase endet ohne Aktivierung.';
   }
   if (pending?.type === 'build') {
     if (isV5FormulaEnabled(rulesetFromState(state))) {
@@ -112,9 +120,11 @@ export function buildPhaseCoachHint({
       );
       const canActivate = legal.some((a) => a.type === 'FORMULA_ACTIVATE');
       if (canBuild) {
-        return v5
-          ? 'Tippe „Formel bauen“, um eine Formelkarte zu legen — oder „Skip Formelphase“.'
-          : 'Tippe „Engine bauen“, um eine Karte in die Engine zu legen — oder „Skip Bau-Phase“.';
+        return v6
+          ? 'Tippe „Formel bauen“ (1. gratis, 2. kostet Abwurf) oder „Rückbau“ — oder aktivieren / Skip.'
+          : v5
+            ? 'Tippe „Formel bauen“, um eine Formelkarte zu legen — oder „Skip Formelphase“.'
+            : 'Tippe „Engine bauen“, um eine Karte in die Engine zu legen — oder „Skip Bau-Phase“.';
       }
       if (canActivate) {
         const katalysatorDefId = state.players[view.human].formula.katalysator?.defId;

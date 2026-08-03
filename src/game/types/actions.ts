@@ -26,10 +26,22 @@ export type GameAction =
     }
   | { type: 'BUILD_CARD'; cardInstanceId: string; discardBoundId?: string }
   | { type: 'SKIP_BUILD' }
-  /** V5 Formelphase: place Technik/Essenz/Katalysator into empty matching slot. */
-  | { type: 'FORMULA_BUILD'; cardInstanceId: string }
-  /** V5 Formelphase: discard occupied slot component, place new same-slot-type from hand. */
-  | { type: 'FORMULA_REPLACE'; cardInstanceId: string }
+  /** V5/V6 Formelphase: place Technik/Essenz/Katalysator into empty matching slot. */
+  | {
+      type: 'FORMULA_BUILD';
+      cardInstanceId: string;
+      /** V6: required for the 2nd Formeländerung this turn. */
+      discardHandInstanceId?: string;
+    }
+  /** V5/V6 Formelphase: discard occupied slot component, place new same-slot-type from hand. */
+  | {
+      type: 'FORMULA_REPLACE';
+      cardInstanceId: string;
+      /** V6: required for the 2nd Formeländerung this turn. */
+      discardHandInstanceId?: string;
+    }
+  /** V6 Formelphase: return a formula component to hand — ends Formelphase, no activate. */
+  | { type: 'FORMULA_RETURN'; formulaInstanceId: string }
   /** V5 Formelphase: activate upright non-disturbed components (exhaust; full resolve #221). */
   | { type: 'FORMULA_ACTIVATE' }
   /** V5 Formelphase: discard formula card from hand for one-shot (stub effect until #221). */

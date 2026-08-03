@@ -1131,8 +1131,23 @@ export function PlayView({
               canActivateFormula={view.legalActions.some(
                 (a) => a.type === 'FORMULA_ACTIVATE',
               )}
+              canRueckbau={view.legalActions.some((a) => a.type === 'FORMULA_RETURN')}
               buildModeActive={
-                pendingIntent?.type === 'build-select' || pendingIntent?.type === 'build'
+                pendingIntent?.type === 'build-select' ||
+                pendingIntent?.type === 'build' ||
+                pendingIntent?.type === 'formula-paid-change' ||
+                pendingIntent?.type === 'formula-return'
+              }
+              formulaChangeHint={
+                isV6FormulaEnabled(rulesetFromState(state))
+                  ? (() => {
+                      const n = state.meta.v6FormulaChangesThisTurn?.[HUMAN] ?? 0;
+                      if (n >= 2) return 'Formeländerungen verbraucht (max. 2) — aktivieren oder Skip.';
+                      if (n === 1)
+                        return '1. Änderung genutzt — 2. kostet 1 Handabwurf (oder aktivieren / Skip / Rückbau).';
+                      return '1. Formeländerung gratis; optional 2. gegen Handabwurf. Rückbau beendet ohne Aktivierung.';
+                    })()
+                  : null
               }
               inputLocked={presentation.isInputLocked || !coachFooterReveal}
               formulaBoard={
@@ -1171,6 +1186,7 @@ export function PlayView({
                 }
               })()}
               onStartBuild={() => setPendingIntent({ type: 'build-select' })}
+              onStartRueckbau={() => setPendingIntent({ type: 'formula-return' })}
               onActivateFormula={() => {
                 if (
                   isV6FormulaEnabled(rulesetFromState(state)) &&

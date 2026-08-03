@@ -84,6 +84,10 @@ export function GameBoard({
     if (action) {
       onDispatch(action);
       clearPending();
+      return;
+    }
+    if (formulaChangeRequiresDiscard(view.legalActions, handInstanceId)) {
+      onPendingChange({ type: 'formula-paid-change', cardInstanceId: handInstanceId });
     }
   };
 
