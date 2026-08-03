@@ -84,6 +84,30 @@ export function restoreOwnerFormulaAtStart(board: FormulaBoard): FormulaBoard {
   };
 }
 
+/**
+ * V6 startphase: upright Technik + Essenz only.
+ * Katalysatoren richten sich nicht auf (consumed ones are already discarded).
+ */
+export function restoreOwnerFormulaAtStartV6(board: FormulaBoard): FormulaBoard {
+  const mapSlot = (comp: FormulaComponentInstance | null): FormulaComponentInstance | null => {
+    if (!comp) return null;
+    return {
+      ...comp,
+      exhausted: false,
+      disturbed: false,
+      stabilityBonus: 0,
+    };
+  };
+  return {
+    technik: mapSlot(board.technik),
+    essenz: mapSlot(board.essenz),
+    // Catalyst never restores upright in V6.
+    katalysator: board.katalysator
+      ? { ...board.katalysator, exhausted: true, disturbed: false, stabilityBonus: 0 }
+      : null,
+  };
+}
+
 /** Mark component disturbed in place; returns updated board. */
 export function disturbFormulaComponent(
   board: FormulaBoard,

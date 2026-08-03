@@ -6,8 +6,15 @@ export interface RulesetConfig {
   maxHp: number;
   maxBoundCards: number;
   handLimit: number;
+  /** Cards kept after opening (start player). */
   p1StartingHand: number;
+  /** Cards kept after opening (second player). */
   p2SecondHand: number;
+  /**
+   * Cards drawn before keep (V6: 7). When omitted, equals the keep count
+   * (V5/legacy: draw = keep).
+   */
+  openingDrawCount?: number;
   mainDeckSize: number;
   diceBonusTable: { min: number; max: number; bonus: number }[];
   /**
@@ -81,6 +88,11 @@ export const V6_RULESET: RulesetConfig = {
   ...DEFAULT_RULESET,
   maxBoundCards: 3,
   mainDeckSize: 106,
+  startingHp: 30,
+  maxHp: 30,
+  openingDrawCount: 7,
+  p1StartingHand: 5,
+  p2SecondHand: 6,
   v3Combat: true,
   v5Formula: false,
   v6Formula: true,

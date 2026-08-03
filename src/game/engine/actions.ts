@@ -64,6 +64,7 @@ import {
   formulaComponentStability,
   listFormulaComponents,
   restoreOwnerFormulaAtStart,
+  restoreOwnerFormulaAtStartV6,
 } from './formulaChallenge';
 import { applyDamageThroughShield } from './status/shield';
 import { pickReaction, resolveImpulseReactions } from './status/reactionChoice';
@@ -183,6 +184,9 @@ function runStartPhase(
       next = checkWinner(next);
       if (next.winner) return next;
     }
+  } else if (isV6FormulaEnabled(ruleset)) {
+    next = cloneState(next);
+    next.players[playerId].formula = restoreOwnerFormulaAtStartV6(next.players[playerId].formula);
   }
   next.phase = 'draw';
   return next;
