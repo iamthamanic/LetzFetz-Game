@@ -1,5 +1,5 @@
 /**
- * Playtest V5 rules modal — Regel | Karten | Alles filter, sections, comments, copy.
+ * Playtest rules modal — Regel | Karten | Alles; V5 or V6 by active match variant.
  * Location: src/features/play/board/PlayRulesModal.tsx
  */
 import React, { useEffect, useRef, useState } from 'react';
@@ -11,6 +11,8 @@ import { Tabs } from '../../../components/ui/Tabs';
 import {
   PLAY_RULES_CARDS_SECTION_ID,
   V5_PLAY_RULES_CARD_SECTIONS,
+  V6_PLAY_RULES_CARD_SECTIONS,
+  type PlayRulesPackVariant,
 } from './playRulesCardCatalog';
 import {
   V5_PLAY_RULE_SECTIONS,
@@ -21,26 +23,36 @@ import {
   savePlayRulesComments,
   type RulesSection,
 } from './playRulesSections';
+import { V6_PLAY_RULE_SECTIONS } from './playRulesSectionsV6';
 
 const COPY_FEEDBACK_MS = 2000;
 
-/** Alles = V5 draft rules + full card catalog (elements, ultis, arenas, …). */
 type PlayRulesFilter = 'regeln' | 'karten' | 'alles';
-
-const ALL_PLAY_RULES_SECTIONS: RulesSection[] = [
-  ...V5_PLAY_RULE_SECTIONS,
-  ...V5_PLAY_RULES_CARD_SECTIONS,
-];
 
 interface PlayRulesModalProps {
   open: boolean;
   onClose: () => void;
+  /** Active match ruleset for catalog/rules; default V5 (Settings outside match). */
+  variant?: PlayRulesPackVariant;
 }
 
-function sectionsForFilter(filter: PlayRulesFilter): RulesSection[] {
-  if (filter === 'regeln') return V5_PLAY_RULE_SECTIONS;
-  if (filter === 'karten') return V5_PLAY_RULES_CARD_SECTIONS;
-  return ALL_PLAY_RULES_SECTIONS;
+function ruleSectionsFor(variant: PlayRulesPackVariant): RulesSection[] {
+  return variant === 'v6' ? V6_PLAY_RULE_SECTIONS : V5_PLAY_RULE_SECTIONS;
+}
+
+function cardSectionsFor(variant: PlayRulesPackVariant): RulesSection[] {
+  return variant === 'v6' ? V6_PLAY_RULES_CARD_SECTIONS : V5_PLAY_RULES_CARD_SECTIONS;
+}
+
+function sectionsForFilter(
+  filter: PlayRulesFilter,
+  variant: PlayRulesPackVariant,
+): RulesSection[] {
+  const rules = ruleSectionsFor(variant);
+  const cards = cardSectionsFor(variant);
+  if (filter === 'regeln') return rules;
+  if (filter === 'karten') return cards;
+  return [...rules, ...cards];
 }
 
 function copyAriaForFilter(filter: PlayRulesFilter): string {
@@ -96,9 +108,8 @@ function RulesSectionBlock({
   );
 }
 
-export function PlayRulesModal({ open, onClose }: PlayRulesModalProps) {
+export function PlayRulesModal({ open, onClose, variant = 'v5' }: PlayRulesModalProps) {
   const [comments, setComments] = useState<Record<string, string>>({});
-  /** `'all'` or a section id while showing „Kopiert!“. */
   const [copiedKey, setCopiedKey] = useState<string | null>(null);
   const [filter, setFilter] = useState<PlayRulesFilter>('regeln');
   const contentTopRef = useRef<HTMLDivElement>(null);
@@ -118,7 +129,7 @@ export function PlayRulesModal({ open, onClose }: PlayRulesModalProps) {
   useEffect(() => {
     if (!open) return;
     contentTopRef.current?.parentElement?.scrollTo({ top: 0 });
-  }, [filter, open]);
+  }, [filter, open, variant]);
 
   const setComment = (sectionId: string, value: string) => {
     setComments((prev) => {
@@ -128,7 +139,9 @@ export function PlayRulesModal({ open, onClose }: PlayRulesModalProps) {
     });
   };
 
-  const visibleSections = sectionsForFilter(filter);
+  const ruleSections = ruleSectionsFor(variant);
+  const cardSections = cardSectionsFor(variant);
+  const visibleSections = sectionsForFilter(filter, variant);
   const showRules = filter === 'regeln' || filter === 'alles';
   const showCards = filter === 'karten' || filter === 'alles';
 
@@ -160,11 +173,13 @@ export function PlayRulesModal({ open, onClose }: PlayRulesModalProps) {
       />
     ));
 
+  const packLabel = variant === 'v6' ? 'V6' : 'V5';
+
   return (
     <Modal
       open={open}
       onClose={onClose}
-      title="Spielregeln"
+      title={`Spielregeln (${packLabel})`}
       size="lg"
       testId="play-rules-modal"
       dismissible
@@ -195,23 +210,27 @@ export function PlayRulesModal({ open, onClose }: PlayRulesModalProps) {
         </div>
       }
     >
-      <div ref={contentTopRef} className="flex flex-col gap-6">
+      <div ref={contentTopRef} className="flex flex-col gap-6" data-testid={`play-rules-variant-${variant}`}>
         {filter === 'regeln' ? (
           <p className="text-xs text-stone-500">
-            V5 Playtest-Regeln (SPIELANLEITUNG_V5_DRAFT). Kommentare bleiben in diesem Browser
-            gespeichert. Kopieren übernimmt die aktuelle Filteransicht (Regel).
+            {variant === 'v6'
+              ? 'V6 Playtest-Kurzregeln (Spielkonzept Slice-1). Kommentare bleiben in diesem Browser gespeichert.'
+              : 'V5 Playtest-Regeln (SPIELANLEITUNG_V5_DRAFT). Kommentare bleiben in diesem Browser gespeichert.'}{' '}
+            Kopieren übernimmt die aktuelle Filteransicht (Regel).
           </p>
         ) : null}
         {filter === 'karten' ? (
           <p className="text-xs text-stone-500">
-            Karten & Effekte aus dem V5-Pack (Element, Glitch, Charakter, Ulti, Formel, Kombos,
-            Gegenstand, Arena, Artefakt). Kopieren übernimmt nur diesen Katalog inkl. Kommentare.
+            {variant === 'v6'
+              ? 'Karten & Effekte aus dem V6-Core-Pack (Slice-1 Formel, keine Ultis).'
+              : 'Karten & Effekte aus dem V5-Pack (Element, Glitch, Charakter, Ulti, Formel, Gegenstand, Arena).'}{' '}
+            Kopieren übernimmt nur diesen Katalog inkl. Kommentare.
           </p>
         ) : null}
         {filter === 'alles' ? (
           <p className="text-xs text-stone-500" data-testid="play-rules-alles-intro">
-            Gesamtansicht: V5-Regeln plus voller Kartenkatalog (Effekte, Elemente, Ultis,
-            Formel-Kombinationen, Arenen, …). Kopieren übernimmt beides inkl. Kommentare.
+            Gesamtansicht: {packLabel}-Regeln plus Kartenkatalog. Kopieren übernimmt beides inkl.
+            Kommentare.
           </p>
         ) : null}
 
@@ -222,7 +241,7 @@ export function PlayRulesModal({ open, onClose }: PlayRulesModalProps) {
                 Regeln
               </h3>
             ) : null}
-            {renderSectionBlocks(V5_PLAY_RULE_SECTIONS)}
+            {renderSectionBlocks(ruleSections)}
           </div>
         ) : null}
 
@@ -237,7 +256,7 @@ export function PlayRulesModal({ open, onClose }: PlayRulesModalProps) {
                 Karten, Effekte & Katalog
               </h3>
             ) : null}
-            {renderSectionBlocks(V5_PLAY_RULES_CARD_SECTIONS)}
+            {renderSectionBlocks(cardSections)}
           </div>
         ) : null}
       </div>

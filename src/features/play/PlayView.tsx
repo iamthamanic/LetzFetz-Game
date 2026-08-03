@@ -124,6 +124,8 @@ interface PlayViewProps {
   onBattleMusicActiveChange?: (active: boolean) => void;
   /** Opens shared Spielregeln modal (composition root). */
   onOpenRules?: () => void;
+  /** Active match rules catalog variant for Spielregeln modal (v5 default outside match). */
+  onPlayRulesVariantChange?: (variant: 'v5' | 'v6') => void;
   /** Live board after MatchIntro — enables AppNav pause / quit / restart. */
   onMatchActiveChange?: (active: boolean) => void;
   /** Soft pause from AppNav (stops bot auto-play). */
@@ -136,6 +138,7 @@ interface PlayViewProps {
 export function PlayView({
   onBattleMusicActiveChange,
   onOpenRules,
+  onPlayRulesVariantChange,
   onMatchActiveChange,
   matchPaused = false,
   onMatchPausedChange,
@@ -705,6 +708,16 @@ export function PlayView({
     ? isV5FormulaEnabled(rulesetFromState(state)) ||
       isV6FormulaEnabled(rulesetFromState(state))
     : false;
+
+  useEffect(() => {
+    if (!onPlayRulesVariantChange) return;
+    if (!state) {
+      onPlayRulesVariantChange('v5');
+      return;
+    }
+    onPlayRulesVariantChange(isV6FormulaEnabled(rulesetFromState(state)) ? 'v6' : 'v5');
+  }, [state, onPlayRulesVariantChange]);
+
   const humanBoundRecipe = state ? boundToRecipe(state.players[HUMAN].bound) : null;
   const boundEnginePreviewEligible = Boolean(
     !matchUsesFormulaBoard &&
