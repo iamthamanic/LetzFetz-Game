@@ -161,6 +161,7 @@ export function createGame(config: CreateGameConfig): GameState {
     shield: 0,
     fetzCharge: 0,
     construct: null,
+    equipment: [],
   });
 
   const state: GameState = {

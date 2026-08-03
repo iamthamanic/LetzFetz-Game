@@ -14,8 +14,24 @@ export type GameAction =
   | { type: 'PASS_BLOCK' }
   | { type: 'PLAY_BOOST'; cardInstanceId: string }
   | { type: 'PLAY_ULTIMATE' }
-  /** V5 Gegenstand — action-timing (own turn) or reaction-timing (combat defender). */
-  | { type: 'PLAY_ITEM'; cardInstanceId: string; targetFormulaInstanceId?: string }
+  /** V5/V6 Gegenstand — action-timing (own turn) or reaction-timing (combat defender, V5 hand). */
+  | {
+      type: 'PLAY_ITEM';
+      cardInstanceId: string;
+      targetFormulaInstanceId?: string;
+      /** V6: when equipment slots full, discard this equipped instance. */
+      replaceEquipmentInstanceId?: string;
+    }
+  /**
+   * V6: activate equipped Ausrüstung (Werkzeugkoffer / Rückspiegel / Gezinkter Würfel).
+   * Combat: diceMod ±1 for Gezinkter; Rückspiegel ignores diceMod.
+   */
+  | {
+      type: 'ACTIVATE_EQUIPMENT';
+      equipmentInstanceId: string;
+      discardHandInstanceId?: string;
+      diceMod?: 1 | -1;
+    }
   | { type: 'DISCARD_DRAW'; discardInstanceId: string }
   | {
       type: 'ACTIVATE_BOUND';

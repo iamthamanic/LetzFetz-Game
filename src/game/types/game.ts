@@ -47,6 +47,11 @@ export interface PlayerState {
    * Null when empty. Startphase Haltbarkeit tick; herausforderbar.
    */
   construct: ConstructInstance | null;
+  /**
+   * V6 Ausrüstung — max 2 public board slots (not formula).
+   * Empty array when none. Consumables never land here.
+   */
+  equipment: CardInstance[];
 }
 
 export interface SharedPiles {

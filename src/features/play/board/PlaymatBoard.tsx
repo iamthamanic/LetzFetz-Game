@@ -44,10 +44,9 @@ import {
   pendingCatalystTiming,
 } from './v6EchoDelaySurface';
 
-/** Read optional V5 equipment slots until engine PlayerState carries them natively. */
+/** Read player equipment slots (native PlayerState.equipment). */
 function readPlayerEquipment(player: PlayerState): CardInstance[] {
-  const ext = player as PlayerState & { equipment?: CardInstance[] };
-  return ext.equipment ?? [];
+  return player.equipment ?? [];
 }
 
 interface PlaymatBoardProps {
@@ -377,8 +376,51 @@ export function PlaymatBoard({
     ? view.legalActions.filter((a) => a.type === 'PLAY_BLOCK')
     : [];
   const reactionItemCards = view.isHumanDefender
-    ? view.legalActions.filter((a) => a.type === 'PLAY_ITEM')
+    ? view.legalActions.filter(
+        (a) =>
+          a.type === 'PLAY_ITEM' ||
+          (a.type === 'ACTIVATE_EQUIPMENT' && (a.diceMod == null || a.diceMod === 1)),
+      )
     : [];
+
+  const equipmentActivatableIds = view.isHumanTurn
+    ? [
+        ...new Set(
+          view.legalActions
+            .filter(
+              (a): a is Extract<GameAction, { type: 'ACTIVATE_EQUIPMENT' }> =>
+                a.type === 'ACTIVATE_EQUIPMENT' && Boolean(a.discardHandInstanceId),
+            )
+            .map((a) => a.equipmentInstanceId),
+        ),
+      ]
+    : [];
+  const equipmentReplaceTargetIds = view.isHumanTurn
+    ? [
+        ...new Set(
+          view.legalActions
+            .filter(
+              (a): a is Extract<GameAction, { type: 'PLAY_ITEM' }> =>
+                a.type === 'PLAY_ITEM' && Boolean(a.replaceEquipmentInstanceId),
+            )
+            .map((a) => a.replaceEquipmentInstanceId!)
+        ),
+      ]
+    : [];
+
+  const handleEquipmentClick = (item: { instanceId: string }) => {
+    const activate = view.legalActions.find(
+      (a): a is Extract<GameAction, { type: 'ACTIVATE_EQUIPMENT' }> =>
+        a.type === 'ACTIVATE_EQUIPMENT' &&
+        a.equipmentInstanceId === item.instanceId &&
+        Boolean(a.discardHandInstanceId),
+    );
+    if (activate) {
+      onDispatch(activate);
+      return;
+    }
+    // Replace target while equipping from hand (pending card play uses first matching PLAY_ITEM).
+  };
 
   const topDiscard = state.piles.discard[state.piles.discard.length - 1];
   const topDiscardDef = topDiscard ? findElementDef(pack, topDiscard.defId) : undefined;
@@ -521,9 +563,19 @@ export function PlaymatBoard({
             blockActions={blockCards}
             reactionItemActions={reactionItemCards}
             onPlayBlock={onPlayBlock}
-            onPlayReactionItem={(instanceId) =>
-              onDispatch({ type: 'PLAY_ITEM', cardInstanceId: instanceId })
-            }
+            onPlayReactionItem={(instanceId) => {
+              const activate = view.legalActions.find(
+                (a): a is Extract<GameAction, { type: 'ACTIVATE_EQUIPMENT' }> =>
+                  a.type === 'ACTIVATE_EQUIPMENT' &&
+                  a.equipmentInstanceId === instanceId &&
+                  (a.diceMod == null || a.diceMod === 1),
+              );
+              if (activate) {
+                onDispatch(activate);
+                return;
+              }
+              onDispatch({ type: 'PLAY_ITEM', cardInstanceId: instanceId });
+            }}
             onPassBlock={() => onDispatch({ type: 'PASS_BLOCK' })}
           />
         )}
@@ -667,6 +719,9 @@ export function PlaymatBoard({
                     pack={pack}
                     equipment={readPlayerEquipment(state.players[humanId])}
                     testId="human-formula-rig"
+                    equipmentActivatableIds={equipmentActivatableIds}
+                    equipmentReplaceTargetIds={equipmentReplaceTargetIds}
+                    onEquipmentClick={handleEquipmentClick}
                     formulaDropEnabled={
                       state.phase === 'build' &&
                       view.isHumanTurn &&

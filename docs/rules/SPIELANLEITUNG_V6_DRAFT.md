@@ -97,6 +97,8 @@ Nach **offensiver TEK** in derselben Aktionsphase: **kein** Angriff und **keine*
 
 Angriff · Boost · Gegenstand · Aktions-Glitch · Herausforderung · Improvisieren (1 abwerfen / 2 ziehen) · ausdrücklich erlaubte Sonderaktion.
 
+**Gegenstände (§37–40):** Ausrüstung (Kaputter Rückspiegel, Werkzeugkoffer, Gezinkter Würfel) belegt bis zu **2 Slots** neben dem Formelgestell. Verbrauch (Energy, Pilz, Kabelbinder, Rostiger Nagel, Nasser Socken) von der Hand — **max 1 Verbrauch / eigener Zug**; Nagel/Socken belegen **keinen** dauerhaften Slot.
+
 **Kein** Charakter-Ulti / V5-Großformel. **Überformel** = TEK bei Fetz=3 (fest +2 Primär).
 
 ### Elementkarten (Hand-only)

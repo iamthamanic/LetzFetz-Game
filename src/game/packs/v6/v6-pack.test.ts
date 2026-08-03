@@ -40,6 +40,8 @@ describe('V6_CORE_PACK Slice-1 (INTERNAL)', () => {
     expect(V6_CORE_PACK.ultimates).toEqual([]);
     expect(V6_CORE_PACK.elementCards.every((c) => c.id.startsWith('v6-'))).toBe(true);
     expect(V6_CORE_PACK.elementCards.every((c) => c.boundText == null)).toBe(true);
+    expect(V6_CORE_PACK.items?.length).toBe(8);
+    expect(V6_CORE_PACK.items?.every((i) => i.id.startsWith('v6-item-'))).toBe(true);
     expect(isV6FormulaEnabled(V6_PACK_RULESET)).toBe(true);
     expect(V6_PACK_RULESET.v5Formula).toBe(false);
     expect(buildV6CorePack().version).toBe(V6_CORE_PACK.version);

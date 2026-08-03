@@ -117,8 +117,12 @@ export interface MatchMeta {
   >;
   /** V5 Mysterium: chosen element override for affinity this turn. */
   v5MysteriumElement?: Record<PlayerId, Element | null>;
-  /** V5 Halbe Dose Energy: HP to lose at start of that player's next turn. */
+  /** V5/V6 Halbe Dose Energy: HP to lose at start of that player's next turn. */
   v5EnergyHangover?: Record<PlayerId, number>;
+  /** V6: consumable Gegenstand already played this turn (max 1). */
+  v6ConsumablePlayed?: Record<PlayerId, boolean>;
+  /** V6: equipment instanceIds activated this turn (once each). */
+  v6EquipmentActivated?: Record<PlayerId, string[]>;
   /** Match end: standard (0 LP) or timed wall-clock. Default / omit = standard. */
   matchEndMode?: MatchEndMode;
   /** Timed mode: wall-clock duration in ms (from matchStartedAtMs). */
@@ -297,6 +301,14 @@ export function resetTurnMeta(meta: MatchMeta, activePlayer: PlayerId): MatchMet
     v6FalscheFarbeArmed: {
       p1: activePlayer === 'p1' ? false : (meta.v6FalscheFarbeArmed?.p1 ?? false),
       p2: activePlayer === 'p2' ? false : (meta.v6FalscheFarbeArmed?.p2 ?? false),
+    },
+    v6ConsumablePlayed: {
+      p1: activePlayer === 'p1' ? false : (meta.v6ConsumablePlayed?.p1 ?? false),
+      p2: activePlayer === 'p2' ? false : (meta.v6ConsumablePlayed?.p2 ?? false),
+    },
+    v6EquipmentActivated: {
+      p1: activePlayer === 'p1' ? [] : (meta.v6EquipmentActivated?.p1 ?? []),
+      p2: activePlayer === 'p2' ? [] : (meta.v6EquipmentActivated?.p2 ?? []),
     },
   };
 }

@@ -23,5 +23,7 @@ describe('V6_PLAY_RULE_SECTIONS', () => {
     expect(blob).toMatch(/Arenen/);
     expect(blob).toMatch(/Vulkan/);
     expect(blob).toMatch(/max 1 pro Timing/);
+    expect(blob).toMatch(/Ausrüstung/);
+    expect(blob).toMatch(/Verbrauch/);
   });
 });

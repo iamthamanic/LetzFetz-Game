@@ -79,6 +79,15 @@ export const V6_PLAY_RULE_SECTIONS: RulesSection[] = [
     ].join('\n'),
   ),
   section(
+    'v6-gegenstaende',
+    'Gegenstände & Ausrüstung',
+    [
+      'Ausrüstung (max 2 Slots): Kaputter Rückspiegel · Werkzeugkoffer · Gezinkter Würfel — öffentlich neben dem Formelgestell.',
+      'Verbrauch (max 1 / eigener Zug): Halbe Dose Energy · Verdächtiger Pilz · Kabelbinder Deluxe · Rostiger Nagel · Nasser Socken — kein dauerhafter Slot für Nagel/Socken.',
+      'Rückspiegel / Gezinkter Würfel: im Kampf aus dem Slot aktivieren. Werkzeugkoffer: 1 abwerfen / 1 ziehen (1× / eigener Zug).',
+    ].join('\n'),
+  ),
+  section(
     'v6-arenen',
     'Arenen (V6)',
     [

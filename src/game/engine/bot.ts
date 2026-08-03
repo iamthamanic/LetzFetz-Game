@@ -83,6 +83,20 @@ function bestBlockAction(
   if (reactionItem && state.combat.attackValue >= 2 && !state.combat.rueckspiegelArmed) {
     return reactionItem;
   }
+  const equipReaction = actions.find(
+    (a): a is Extract<GameAction, { type: 'ACTIVATE_EQUIPMENT' }> =>
+      a.type === 'ACTIVATE_EQUIPMENT' && a.diceMod == null,
+  );
+  if (equipReaction && state.combat.attackValue >= 2 && !state.combat.rueckspiegelArmed) {
+    return equipReaction;
+  }
+  const gezinktHelp = actions.find(
+    (a): a is Extract<GameAction, { type: 'ACTIVATE_EQUIPMENT' }> =>
+      a.type === 'ACTIVATE_EQUIPMENT' && a.diceMod === 1,
+  );
+  if (gezinktHelp && state.combat.attackValue >= 3) {
+    return gezinktHelp;
+  }
 
   const { attackValue: atkVal, attackCardDefId } = state.combat;
   const attackDef = findElementDef(pack, attackCardDefId);
