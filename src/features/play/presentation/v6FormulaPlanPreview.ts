@@ -10,6 +10,8 @@ export interface V6FormulaPreviewLines {
   catalystLine: string | null;
   timingLine: string | null;
   fetzLine: string | null;
+  /** Überformel bonus line (+2 Primär locked default). */
+  overformulaLine: string | null;
   lockLine: string | null;
   defenseLine: string | null;
   eventSummary: string;
@@ -44,6 +46,14 @@ export function formatV6FormulaPlanPreview(plan: FormulaActivationPlan): V6Formu
       : plan.catalystConsumed
         ? 'Dieser Katalysator wird verbraucht (Ablage).'
         : null;
+  const overformulaLine =
+    plan.kind === 'overformula'
+      ? plan.overformulaPrimaryBonus != null && plan.overformulaPrimaryBonus > 0
+        ? `Überformel-Bonus: +${plan.overformulaPrimaryBonus} Primär`
+        : plan.overformulaIntensityBonus != null && plan.overformulaIntensityBonus > 0
+          ? `Überformel-Bonus: +${plan.overformulaIntensityBonus} Intensität`
+          : 'Überformel: verstärkte Fusion'
+      : null;
   return {
     title: plan.name,
     primaryLine: `${primaryKindDe[plan.primary.kind] ?? plan.primary.kind} ${plan.primary.value} → ${targetDe}${intensityNote}`,
@@ -55,6 +65,7 @@ export function formatV6FormulaPlanPreview(plan: FormulaActivationPlan): V6Formu
         : plan.spendAllFetz
           ? 'Überformel: Fetzladung wird auf 0 gesetzt'
           : null,
+    overformulaLine,
     lockLine:
       plan.postFormulaActionLock === 'attack_and_challenge'
         ? 'Danach: Angriff und Herausfordern gesperrt'
@@ -91,6 +102,21 @@ export function assertPreviewMatchesPlan(
   }
   if (plan.fetzDelta > 0 && !preview.fetzLine?.includes(String(plan.fetzDelta))) {
     throw new Error('V6_PREVIEW_MISMATCH: fetz');
+  }
+  if (plan.kind === 'overformula') {
+    if (!preview.overformulaLine) {
+      throw new Error('V6_PREVIEW_MISMATCH: overformula line');
+    }
+    if (
+      plan.overformulaPrimaryBonus != null &&
+      plan.overformulaPrimaryBonus > 0 &&
+      !preview.overformulaLine.includes(String(plan.overformulaPrimaryBonus))
+    ) {
+      throw new Error('V6_PREVIEW_MISMATCH: overformula primary bonus');
+    }
+    if (plan.spendAllFetz && !preview.fetzLine?.includes('0')) {
+      throw new Error('V6_PREVIEW_MISMATCH: overformula fetz spend');
+    }
   }
   if (
     plan.postFormulaActionLock === 'attack_and_challenge' &&

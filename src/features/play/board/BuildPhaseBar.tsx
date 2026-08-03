@@ -14,6 +14,8 @@ interface BuildPhaseBarProps {
   formulaBoard?: boolean;
   /** @deprecated use formulaBoard */
   v5Formula?: boolean;
+  /** Override activate button label (e.g. Überformel). */
+  activateLabel?: string;
   onStartBuild: () => void;
   onActivateFormula?: () => void;
   onSkip: () => void;
@@ -28,6 +30,7 @@ export function BuildPhaseBar({
   inputLocked = false,
   formulaBoard,
   v5Formula = false,
+  activateLabel,
   onStartBuild,
   onActivateFormula,
   onSkip,
@@ -44,6 +47,8 @@ export function BuildPhaseBar({
     ? 'Wähle eine Formelkarte zum Bauen / Ersetzen / Schnellmix'
     : 'Wähle eine Handkarte zum Bauen in die Engine';
   const skipLabel = formulaMode ? 'Skip Formelphase' : 'Skip Bau-Phase';
+  const activateText = activateLabel ?? 'Formel aktivieren';
+  const isOverformula = activateLabel === 'Überformel aktivieren';
 
   return (
     <div data-testid="build-phase-bar" className="flex flex-col gap-2">
@@ -80,14 +85,18 @@ export function BuildPhaseBar({
           size="sm"
           disabled={inputLocked || !canActivateFormula || buildModeActive}
           onClick={onActivateFormula}
-          data-testid="build-phase-activate-formula"
+          data-testid={
+            isOverformula ? 'build-phase-activate-overformula' : 'build-phase-activate-formula'
+          }
           title={
             canActivateFormula
-              ? 'Aktiviert aufgerichtete, nicht gestörte Formelkomponenten'
+              ? isOverformula
+                ? 'Verstärkte Fusion bei voller Fetzladung — bestätigt im Dialog'
+                : 'Aktiviert aufgerichtete, nicht gestörte Formelkomponenten'
               : 'Keine aktivierbaren Formelkomponenten'
           }
         >
-          Formel aktivieren
+          {activateText}
         </Button>
       ) : null}
       <Button

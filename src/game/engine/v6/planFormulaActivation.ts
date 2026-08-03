@@ -240,6 +240,8 @@ export function planFormulaActivation(input: PlanFormulaActivationInput): Formul
     grantsFetz,
     fetzDelta,
     spendAllFetz: recipe.kind === 'overformula',
+    overformulaPrimaryBonus: recipe.overformulaPrimaryBonus ?? null,
+    overformulaIntensityBonus: recipe.overformulaIntensityBonus ?? null,
     postFormulaActionLock: lock,
     formulaDefense:
       defenseRoll == null

@@ -212,7 +212,7 @@ export function buildPlayRulesCardSections(
       section(
         'karten-ulti',
         'Ultikarten / Großformel (0)',
-        'V6 Core: keine charaktergebundenen Ultis. Überformel kommt später aus der aktuellen TEK.',
+        'V6 Core: keine charaktergebundenen Ultis. Bei 3 Fetz + TEK: Überformel aus aktueller Fusion (+2 Primär).',
       ),
     );
   }

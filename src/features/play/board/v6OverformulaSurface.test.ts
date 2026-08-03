@@ -1,16 +1,12 @@
 /**
- * Hard-gate tests: V6 formula preview is engine-plan-only (#321).
- * Location: src/features/play/presentation/v6FormulaPlanPreview.test.ts
+ * Surface tests for V6 Überformel offer gate (#348).
+ * Location: src/features/play/board/v6OverformulaSurface.test.ts
  */
 import { describe, expect, it } from 'vitest';
 import { createGame } from '../../../game/engine/createGame';
-import { planFormulaActivation } from '../../../game/engine/v6';
 import { V6_CORE_PACK, V6_PACK_RULESET } from '../../../game/packs/v6';
 import type { FormulaComponentInstance, GameState } from '../../../game/types';
-import {
-  assertPreviewMatchesPlan,
-  formatV6FormulaPlanPreview,
-} from './v6FormulaPlanPreview';
+import { canOfferV6Overformula } from './v6OverformulaSurface';
 
 function place(
   state: GameState,
@@ -33,62 +29,51 @@ function place(
   return next;
 }
 
-describe('v6FormulaPlanPreview hard-gate', () => {
-  it('preview lines match plan primary / catalyst / fetz / lock', () => {
+describe('canOfferV6Overformula', () => {
+  it('is false below full Fetz even with TEK', () => {
     let state = createGame({
       pack: V6_CORE_PACK,
       p1CharacterId: V6_CORE_PACK.characters[0].id,
       p2CharacterId: V6_CORE_PACK.characters[1]?.id ?? V6_CORE_PACK.characters[0].id,
       ruleset: V6_PACK_RULESET,
-      seed: 5,
+      seed: 1,
     });
     state = place(state, 'technik', 'v6-technik-impulsgeschoss', 't1');
     state = place(state, 'essenz', 'v6-essenz-feuer', 'e1');
     state = place(state, 'katalysator', 'v6-katalysator-verdichtung', 'k1');
-
-    const plan = planFormulaActivation({
-      state,
-      pack: V6_CORE_PACK,
-      playerId: 'p1',
-      ruleset: V6_PACK_RULESET,
-      rng: () => 0.01,
-      defenseRoll: 1,
-      asOverformula: false,
-    });
-    const preview = formatV6FormulaPlanPreview(plan);
-    expect(() => assertPreviewMatchesPlan(plan, preview)).not.toThrow();
-    expect(preview.catalystLine).toMatch(/verbraucht/);
-    expect(preview.fetzLine).toMatch(/\+1/);
-    expect(preview.lockLine).toMatch(/gesperrt/);
-    expect(preview.primaryLine).toContain(String(plan.primary.value));
+    state.players.p1.fetzCharge = 2;
+    expect(canOfferV6Overformula(state, 'p1', V6_PACK_RULESET)).toBe(false);
   });
 
-  it('Überformel preview shows +2 Primär and Fetz → 0', () => {
+  it('is true at Fetz=3 with upright TEK', () => {
     let state = createGame({
       pack: V6_CORE_PACK,
       p1CharacterId: V6_CORE_PACK.characters[0].id,
       p2CharacterId: V6_CORE_PACK.characters[1]?.id ?? V6_CORE_PACK.characters[0].id,
       ruleset: V6_PACK_RULESET,
-      seed: 8,
+      seed: 2,
     });
     state = place(state, 'technik', 'v6-technik-impulsgeschoss', 't1');
     state = place(state, 'essenz', 'v6-essenz-feuer', 'e1');
     state = place(state, 'katalysator', 'v6-katalysator-verdichtung', 'k1');
     state.players.p1.fetzCharge = 3;
+    expect(canOfferV6Overformula(state, 'p1', V6_PACK_RULESET)).toBe(true);
+  });
 
-    const plan = planFormulaActivation({
-      state,
+  it('is false when a slot is disturbed', () => {
+    let state = createGame({
       pack: V6_CORE_PACK,
-      playerId: 'p1',
+      p1CharacterId: V6_CORE_PACK.characters[0].id,
+      p2CharacterId: V6_CORE_PACK.characters[1]?.id ?? V6_CORE_PACK.characters[0].id,
       ruleset: V6_PACK_RULESET,
-      rng: () => 0.01,
-      defenseRoll: 1,
+      seed: 3,
     });
-    expect(plan.kind).toBe('overformula');
-    const preview = formatV6FormulaPlanPreview(plan);
-    expect(() => assertPreviewMatchesPlan(plan, preview)).not.toThrow();
-    expect(preview.overformulaLine).toMatch(/\+2 Primär/);
-    expect(preview.fetzLine).toMatch(/0/);
-    expect(preview.title).toMatch(/Überformel/);
+    state = place(state, 'technik', 'v6-technik-impulsgeschoss', 't1');
+    state = place(state, 'essenz', 'v6-essenz-feuer', 'e1');
+    state = place(state, 'katalysator', 'v6-katalysator-verdichtung', 'k1');
+    state.players.p1.fetzCharge = 3;
+    const kat = state.players.p1.formula.katalysator;
+    if (kat) kat.disturbed = true;
+    expect(canOfferV6Overformula(state, 'p1', V6_PACK_RULESET)).toBe(false);
   });
 });

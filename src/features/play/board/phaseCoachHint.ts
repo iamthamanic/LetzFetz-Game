@@ -118,6 +118,15 @@ export function buildPhaseCoachHint({
         if (v6 && katalysatorDefId === V6_PLAYTEST_BESCHWOERUNG_CATALYST_ID) {
           return 'Tippe „Formel aktivieren“ — Beschwörung stellt ein Konstrukt auf (ersetzt ggf. das alte).';
         }
+        if (
+          v6 &&
+          state.players[view.human].fetzCharge >= 3 &&
+          state.players[view.human].formula.technik &&
+          state.players[view.human].formula.essenz &&
+          state.players[view.human].formula.katalysator
+        ) {
+          return 'Fetzladung voll — tippe „Überformel aktivieren“, bestätige den Dialog, dann feuert die verstärkte Fusion.';
+        }
         return 'Tippe „Formel aktivieren“, um aufgerichtete Komponenten zu aktivieren — oder „Skip Formelphase“.';
       }
       if (legal.some((a) => a.type === 'SKIP_BUILD')) {

@@ -47,6 +47,8 @@ import { ActionBar } from './board/ActionBar';
 import { ActionPhaseBar, actionPhaseLegalFlags } from './board/ActionPhaseBar';
 import { BuildPhaseBar } from './board/BuildPhaseBar';
 import { V6FormulaActivationPreview } from './board/V6FormulaActivationPreview';
+import { UeberformelConfirmModal } from './board/UeberformelConfirmModal';
+import { canOfferV6Overformula } from './board/v6OverformulaSurface';
 import { formatV6FormulaPlanPreview } from './presentation/v6FormulaPlanPreview';
 import { PlaymatBoard } from './board/PlaymatBoard';
 import { MatchIntro } from './setup/MatchIntro';
@@ -186,6 +188,7 @@ export function PlayView({
   const [turnStartAnnounceDone, setTurnStartAnnounceDone] = useState(false);
   /** Bumped when PhaseCoachFooter docks — PlaymatBoard scrolls hand into view. */
   const [footerDockSignal, setFooterDockSignal] = useState(0);
+  const [ueberformelConfirmOpen, setUeberformelConfirmOpen] = useState(false);
   const coachFooterReveal = turnStartAnnounceDone;
 
   const presentation = usePresentationQueue({
@@ -1135,17 +1138,29 @@ export function PlayView({
                 isV5FormulaEnabled(rulesetFromState(state)) ||
                 isV6FormulaEnabled(rulesetFromState(state))
               }
+              activateLabel={
+                isV6FormulaEnabled(rulesetFromState(state)) &&
+                canOfferV6Overformula(state, HUMAN, rulesetFromState(state))
+                  ? 'Überformel aktivieren'
+                  : undefined
+              }
               previewSlot={(() => {
                 if (!isV6FormulaEnabled(rulesetFromState(state))) return null;
                 if (!view.legalActions.some((a) => a.type === 'FORMULA_ACTIVATE')) return null;
                 try {
+                  const offerOver = canOfferV6Overformula(
+                    state,
+                    HUMAN,
+                    rulesetFromState(state),
+                  );
                   const plan = planFormulaActivation({
                     state,
                     pack: matchPack,
                     playerId: HUMAN,
                     ruleset: rulesetFromState(state),
                     rng: () => 0.5,
-                    asOverformula: false,
+                    // Match engine: omit flag so full Fetz auto-plans Überformel.
+                    asOverformula: offerOver ? undefined : false,
                   });
                   return (
                     <V6FormulaActivationPreview lines={formatV6FormulaPlanPreview(plan)} />
@@ -1156,6 +1171,13 @@ export function PlayView({
               })()}
               onStartBuild={() => setPendingIntent({ type: 'build-select' })}
               onActivateFormula={() => {
+                if (
+                  isV6FormulaEnabled(rulesetFromState(state)) &&
+                  canOfferV6Overformula(state, HUMAN, rulesetFromState(state))
+                ) {
+                  setUeberformelConfirmOpen(true);
+                  return;
+                }
                 handleDispatch({ type: 'FORMULA_ACTIVATE' });
                 setPendingIntent(null);
               }}
@@ -1241,6 +1263,34 @@ export function PlayView({
             options={state.pendingChoice.options}
             onPick={(reactionId) => {
               handleDispatch({ type: 'PICK_REACTION', reactionId });
+            }}
+          />
+        )}
+      {state &&
+        isV6FormulaEnabled(rulesetFromState(state)) && (
+          <UeberformelConfirmModal
+            open={ueberformelConfirmOpen}
+            chargeBefore={state.players[HUMAN].fetzCharge}
+            preview={(() => {
+              if (!ueberformelConfirmOpen) return null;
+              try {
+                const plan = planFormulaActivation({
+                  state,
+                  pack: matchPack,
+                  playerId: HUMAN,
+                  ruleset: rulesetFromState(state),
+                  rng: () => 0.5,
+                });
+                return formatV6FormulaPlanPreview(plan);
+              } catch {
+                return null;
+              }
+            })()}
+            onCancel={() => setUeberformelConfirmOpen(false)}
+            onConfirm={() => {
+              setUeberformelConfirmOpen(false);
+              handleDispatch({ type: 'FORMULA_ACTIVATE' });
+              setPendingIntent(null);
             }}
           />
         )}
