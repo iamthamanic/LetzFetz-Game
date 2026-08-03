@@ -1135,7 +1135,8 @@ export function getLegalActions(state: GameState, ctx: PackContext): GameAction[
         }
       }
     }
-    if (state.players[ctx.playerId].ultimateAvailable) {
+    // V6: no character ultimates / Großformel — Überformel is recipe-based later.
+    if (!isV6FormulaEnabled(ruleset) && state.players[ctx.playerId].ultimateAvailable) {
       if (
         !isV5FormulaEnabled(ruleset) ||
         state.players[ctx.playerId].fetzCharge >= maxFetzChargeFor(ruleset)
@@ -1846,6 +1847,9 @@ export function applyAction(
     }
     case 'PLAY_ULTIMATE': {
       if (state.phase !== 'action') throw new Error('Not in action phase');
+      if (isV6FormulaEnabled(ruleset)) {
+        throw new Error('PLAY_ULTIMATE is not available under v6Formula');
+      }
       if (!state.players[playerId].ultimateAvailable) throw new Error('Ultimate already used');
       if (isV5FormulaEnabled(ruleset)) {
         const need = maxFetzChargeFor(ruleset);

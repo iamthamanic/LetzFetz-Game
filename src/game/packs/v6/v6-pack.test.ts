@@ -36,6 +36,17 @@ describe('V6_CORE_PACK Slice-1 (INTERNAL)', () => {
     expect(buildV6CorePack().version).toBe(V6_CORE_PACK.version);
   });
 
+  it('ships V6 characters with affinity scaffold and no V5 passives/ultis', () => {
+    expect(V6_CORE_PACK.characters.length).toBeGreaterThanOrEqual(2);
+    for (const ch of V6_CORE_PACK.characters) {
+      expect(ch.elements).toHaveLength(2);
+      expect(ch.ultimateId).toBe('');
+      expect(ch.passiveText).toMatch(/Affinität/);
+      expect(ch.passiveText).not.toMatch(/Einmal pro Zug, wenn du Feuer oder Erde baust/);
+      expect(ch.passiveText).toMatch(/Keine V5-Passive/);
+    }
+  });
+
   it('createGame with V6 pack/ruleset stays INTERNAL (meta flag only)', () => {
     const state = createGame({
       pack: V6_CORE_PACK,
@@ -46,6 +57,8 @@ describe('V6_CORE_PACK Slice-1 (INTERNAL)', () => {
     });
     expect(state.meta.v6FormulaEnabled).toBe(true);
     expect(state.meta.v5FormulaEnabled).toBeUndefined();
+    expect(state.players.p1.ultimateAvailable).toBe(false);
+    expect(state.players.p2.ultimateAvailable).toBe(false);
   });
 
   it('ships Slice-1 authoring + generated TE/TK/EK/TEK/overformula recipes', () => {
