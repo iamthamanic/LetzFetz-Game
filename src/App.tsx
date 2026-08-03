@@ -72,6 +72,12 @@ function AppShell() {
     setRulesOpen(true);
   };
 
+  const openNotes = () => {
+    closeSettings();
+    setRulesOpen(false);
+    setNotesOpen(true);
+  };
+
   const resetPlaySession = () => {
     setPlaySessionKey((prev) => prev + 1);
     setMatchPaused(false);
@@ -159,7 +165,6 @@ function AppShell() {
             onViewChange={handleViewChange}
             onOpenSettings={openSettings}
             settingsOpen={settingsOpen}
-            onOpenNotes={() => setNotesOpen(true)}
             canGoBack={canGoBack}
             canGoForward={canGoForward}
             onGoBack={goBack}
@@ -214,15 +219,16 @@ function AppShell() {
       >
         <SettingsView
           embedded
-          onOpenNotes={() => {
-            closeSettings();
-            setNotesOpen(true);
-          }}
+          onOpenNotes={openNotes}
           onOpenRules={openRules}
         />
       </Modal>
 
-      <Notes isOpen={notesOpen} onClose={() => setNotesOpen(false)} />
+      <Notes
+        isOpen={notesOpen}
+        onClose={() => setNotesOpen(false)}
+        onOpenRules={openRules}
+      />
       <PlayRulesModal open={rulesOpen} onClose={() => setRulesOpen(false)} />
     </div>
   );
