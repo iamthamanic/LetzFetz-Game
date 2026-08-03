@@ -529,6 +529,7 @@ Bitte abhaken / korrigieren:
 - [x] Arenen V6 Core (#350): 6 Kern-Arenen + Reaktions-Cap unter `v6Formula`.
 - [x] Passives / Macken (#349): **Option B feste Macken** end-to-end (Daten + Engine-Hooks + DE-UI); Pool A deferred.
 - [x] Bot Affinity / V6 priorities (#351): Playbook + Digest; Heuristik spendet Affinität nur bei Wertgewinn; LLM-Prompt unter `v6Formula`.
+- [x] SPIELANLEITUNG_V6_DRAFT + AGENTS Kurzreferenz (#352).
 
 Nach deiner finalen Form: dieses Doc auf **verbindlich** setzen und `SPIELANLEITUNG_V6_DRAFT.md` + AGENTS-Kurzreferenz nachziehen.
 
@@ -553,3 +554,4 @@ Nach deiner finalen Form: dieses Doc auf **verbindlich** setzen und `SPIELANLEIT
 | 2026-08-03 | #350 V6 Core-Arenen + Reaktions-Cap unter `v6Formula` |
 | 2026-08-03 | #349 Passives: **Option B feste Macken** gelockt; Engine-Hooks + DE-UI; Pool A deferred |
 | 2026-08-03 | #351 Solo-Bot: Affinität beneficial + V6 Playbook Digest (`V6_BOT_PLAYBOOK.md`) |
+| 2026-08-03 | #352 `SPIELANLEITUNG_V6_DRAFT.md` + AGENTS / `.cursor/rules` Kurzreferenz |
