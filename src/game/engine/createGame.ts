@@ -194,6 +194,7 @@ export function createGame(config: CreateGameConfig): GameState {
   }
   if (ruleset.v6Formula === true) {
     state.meta.v6FormulaEnabled = true;
+    state.meta.v6AffinityAvailable = { p1: true, p2: true };
   }
   if (
     config.enableArtifactAuction === true &&

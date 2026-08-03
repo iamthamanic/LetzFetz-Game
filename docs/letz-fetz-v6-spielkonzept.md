@@ -8,7 +8,9 @@
 
 **Slice 1 tracking (GitHub):** #318 authoring/recipes · #319 engine plan/execute · #320 match lifecycle · #321 UI preview=plan · #322 Setup INTERNAL smoke (flag). Play-Default remains **V5** (no AGENTS cutover in Slice 1).
 
-**PLAYABLE-Prep tracking (GitHub):** #333 characters/affinity scaffold · #334 recipe authoring harden · #335 Spielregeln/Katalog V6 · #336 setup flag polish. Play-Default remains **V5**. Affinity ±1 engine deferred.
+**PLAYABLE-Prep tracking (GitHub):** #333 characters/affinity scaffold · #334 recipe authoring harden · #335 Spielregeln/Katalog V6 · #336 setup flag polish. Play-Default remains **V5**.
+
+**Full integration (GitHub):** #341 Affinität ±1 Engine · #342 Fessel-UI · #343 recipe catalog · #344 Echo/Delay · #345 Echo UI · #346 Konstrukte · #347 Konstrukt UI · #348 Überformel · #349 Passives (A/B) · #350 Arenas · #351 Bot · #352 SPIELANLEITUNG · #353 Default cutover · #354 V5 Legacy.
 
 **V6_PLAYABLE:** Setup tile `v6` only when `VITE_V6_PLAYABLE=true` or `localStorage['letz-fetz:v6-playable']='1'`. Default pack choice stays **V5** even when the tile is visible (flag ≠ cutover). Combo visual = T+E+K component arts (not a blocker).
 
@@ -508,7 +510,7 @@ Bitte abhaken / korrigieren:
 - [ ] Generator-Output: JSON vs TS  
 - [ ] Heldenmodus: nur Notiz oder schon Flag-Name reservieren  
 - [ ] Ob V5-Menü-Kachel sofort „Legacy“ heißt oder „V5 Regression“  
-- [ ] Exact Start: Affinität „pro Runde“ = beide Spieler-Züge oder nur eigener Durchlauf  
+- [x] Exact Start: Affinität „pro Runde“ = **einmal pro eigenem Zug/Durchlauf** (Reset eigene Startphase; Spend auf eigenen Angriff/Challenge oder eigenen Block). Playtest-Default via #341 — nicht beide Halbzüge als eine gemeinsame Runde. 
 
 Nach deiner finalen Form: dieses Doc auf **verbindlich** setzen und `SPIELANLEITUNG_V6_DRAFT.md` + AGENTS-Kurzreferenz nachziehen.
 
@@ -521,3 +523,4 @@ Nach deiner finalen Form: dieses Doc auf **verbindlich** setzen und `SPIELANLEIT
 | 2026-08-03 | Erster DRAFT aus V6-Vollkonzept + Grill-Antworten 1b/2/3/4/5/6 + Passive-Pool-Empfehlung |
 | 2026-08-03 | Slice 0 Issues #310–#313 getrackt; Play-Default bleibt V5 bis PLAYABLE |
 | 2026-08-03 | Slice 1 Issues #318–#322 getrackt; Play-Default bleibt V5 |
+| 2026-08-03 | #341 Affinität ±1 Engine: „pro Runde“ = eigener Zug/Durchlauf (§99 locked playtest default) |

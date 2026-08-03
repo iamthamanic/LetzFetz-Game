@@ -72,6 +72,11 @@ export type GameAction =
   | {
       type: 'PICK_MYSTERIUM_ELEMENT';
       element: import('./elements').Element;
+    }
+  | {
+      /** V6 Affinity after W6: skip or spend ±1. */
+      type: 'PICK_V6_AFFINITY';
+      mode: 'none' | 'value-plus' | 'dice-plus' | 'dice-minus';
     };
 
 export interface ActionContext {

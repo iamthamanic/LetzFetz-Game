@@ -52,6 +52,11 @@ export interface MatchMeta {
   v6FetzGainedThisTurn?: Record<PlayerId, boolean>;
   /** V6 Post-Formula-Action-Policy after last formula activate. */
   v6PostFormulaActionLock?: Record<PlayerId, 'none' | 'attack_and_challenge'>;
+  /**
+   * V6 Affinity §28.1: available for one spend until next own Startphase.
+   * Missing / true = available; false = already spent this cycle.
+   */
+  v6AffinityAvailable?: Record<PlayerId, boolean>;
   /** V3: reactions resolved in the current main action (max 1 by default). */
   v3ReactionsThisAction?: number;
   /** V3 Finsternis: block new shield until current action ends. */
@@ -172,6 +177,20 @@ export type PendingChoice =
       playerId: PlayerId;
       subjectInstanceId: string;
       subjectKind: 'element-card' | 'essence';
+    }
+  | {
+      /** V6 Affinity: choose spend after W6 on matching-element attack/block/challenge. */
+      type: 'v6-affinity';
+      playerId: PlayerId;
+      kind: 'attack' | 'block' | 'challenge';
+      cardInstanceId: string;
+      cardDefId: string;
+      cardElement: Element;
+      diceRoll: number;
+      baseValue: number;
+      targetBoundInstanceId?: string;
+      ignoreShield?: number;
+      extraHitImpulse?: Element;
     };
 
 export function createEmptyMeta(): MatchMeta {
@@ -214,6 +233,10 @@ export function resetTurnMeta(meta: MatchMeta, activePlayer: PlayerId): MatchMet
     v5MysteriumElement: {
       p1: activePlayer === 'p1' ? null : (meta.v5MysteriumElement?.p1 ?? null),
       p2: activePlayer === 'p2' ? null : (meta.v5MysteriumElement?.p2 ?? null),
+    },
+    v6AffinityAvailable: {
+      p1: activePlayer === 'p1' ? true : (meta.v6AffinityAvailable?.p1 ?? true),
+      p2: activePlayer === 'p2' ? true : (meta.v6AffinityAvailable?.p2 ?? true),
     },
   };
 }

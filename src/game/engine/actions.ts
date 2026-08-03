@@ -21,12 +21,18 @@ import { diceBonusFromRoll, rollD6 } from './dice';
 import { opponentOf, checkWinner } from './createGame';
 import { resolveTimedMatchExpiry } from './timedMatch';
 import {
+  applyV6AffinityMode,
+  characterElementsForCombat,
+  markV6AffinitySpent,
+  shouldOfferV6Affinity,
+  type V6AffinityMode,
+} from './v6/affinity';
+import {
   cloneState,
   discardFromHand,
   drawForPlayer,
   enforceHandLimit,
   ensureMeta,
-  getCharacterElements,
   clampHp,
 } from './helpers';
 import { applyElementEffect, applyBoundActivation, finishMainAction, applyInstantGlitch } from './effects';
@@ -237,7 +243,12 @@ function computeAttackValueForPlayer(
     cardValue: def.value,
     diceRoll,
     diceBonus: bonus,
-    characterElements: getCharacterElements(pack, state.players[playerId].characterId),
+    characterElements: characterElementsForCombat(
+      pack,
+      state.players[playerId].characterId,
+      ruleset,
+      state.meta.v6FormulaEnabled,
+    ),
     cardElement: mysterium ?? def.element,
     extraBonus: passiveBonus + monoBonus,
   });
@@ -262,7 +273,12 @@ function computeBlockValueForPlayer(
     cardValue: def.value,
     diceRoll,
     diceBonus: bonus,
-    characterElements: getCharacterElements(pack, state.players[playerId].characterId),
+    characterElements: characterElementsForCombat(
+      pack,
+      state.players[playerId].characterId,
+      ruleset,
+      state.meta.v6FormulaEnabled,
+    ),
     cardElement: blockEl,
     attackElement,
     blockElement: blockEl,
@@ -298,6 +314,96 @@ function computeFormulaChallengeAttackValue(
   const targetElement = formulaComponentElement(pack, targetComp);
   if (!targetElement) return base;
   return base + counterBonus(attackDef.element, targetElement);
+}
+
+function openV6AffinityPending(
+  state: GameState,
+  playerId: PlayerId,
+  draft: Extract<PendingChoice, { type: 'v6-affinity' }>,
+): GameState {
+  const next = cloneState(state);
+  next.pendingChoice = draft;
+  next.lastEvent = `Würfel ${draft.diceRoll} — Affinität wählen (Wert +1 oder W6 ±1, oder überspringen).`;
+  return next;
+}
+
+function finalizeV6AffinityAttack(
+  state: GameState,
+  _pack: ContentPack,
+  playerId: PlayerId,
+  pending: Extract<PendingChoice, { type: 'v6-affinity' }>,
+  mode: V6AffinityMode,
+  ruleset: RulesetConfig,
+  _rng: () => number,
+): GameState {
+  const applied = applyV6AffinityMode(pending.diceRoll, pending.baseValue, mode, ruleset);
+  let next = cloneState(state);
+  next.pendingChoice = null;
+  if (applied.spent) {
+    next = markV6AffinitySpent(next, playerId);
+  }
+  next = discardFromHand(next, playerId, pending.cardInstanceId);
+  next = markAttackOrChallenge(next);
+  const defenderId = opponentOf(playerId);
+  if (pending.kind === 'challenge') {
+    next.combat = {
+      attackerId: playerId,
+      defenderId,
+      attackCardDefId: pending.cardDefId,
+      attackRoll: applied.diceRoll,
+      attackValue: applied.value,
+      mode: 'challenge',
+      targetBoundInstanceId: pending.targetBoundInstanceId,
+    };
+    next.lastEvent = `Herausforderung ${applied.value} (Würfel ${applied.diceRoll})${
+      applied.spent ? ' [Affinität]' : ''
+    }. Gegner darf blocken.`;
+    return next;
+  }
+  next.combat = {
+    attackerId: playerId,
+    defenderId,
+    attackCardDefId: pending.cardDefId,
+    attackRoll: applied.diceRoll,
+    attackValue: applied.value,
+    mode: 'player',
+    ignoreShield: pending.ignoreShield,
+    extraHitImpulse: pending.extraHitImpulse,
+  };
+  next.lastEvent = `Angriff ${applied.value} (Würfel ${applied.diceRoll})${
+    applied.spent ? ' [Affinität]' : ''
+  }. Gegner darf blocken.`;
+  return next;
+}
+
+function finalizeV6AffinityBlock(
+  state: GameState,
+  pack: ContentPack,
+  playerId: PlayerId,
+  pending: Extract<PendingChoice, { type: 'v6-affinity' }>,
+  mode: V6AffinityMode,
+  ruleset: RulesetConfig,
+  rng: () => number,
+): GameState {
+  if (!state.combat) throw new Error('No pending combat for affinity block');
+  const applied = applyV6AffinityMode(pending.diceRoll, pending.baseValue, mode, ruleset);
+  let next = cloneState(state);
+  next.pendingChoice = null;
+  if (applied.spent) {
+    next = markV6AffinitySpent(next, playerId);
+  }
+  next = discardFromHand(next, playerId, pending.cardInstanceId);
+  if (next.combat?.mode === 'challenge') {
+    next = resolveChallengeCombat(next, pack, applied.value, ruleset, rng);
+  } else {
+    next = resolveCombat(next, applied.value, ruleset, pack, rng, pending.cardDefId);
+  }
+  if (next.lastEvent) {
+    next.lastEvent = `Block ${applied.value} (Würfel ${applied.diceRoll})${
+      applied.spent ? ' [Affinität]' : ''
+    }. ${next.lastEvent}`;
+  }
+  return next;
 }
 
 function defenderHasRueckkopplung(state: GameState): boolean {
@@ -845,6 +951,8 @@ function pendingChoicePlayer(pending: PendingChoice): PlayerId {
     case 'pillendoktora-boost':
     case 'mysterium-element':
       return pending.playerId;
+    case 'v6-affinity':
+      return pending.playerId;
     case 'pick-reaction':
       return pending.chooserId;
   }
@@ -993,6 +1101,14 @@ function getPendingLegalActions(state: GameState, ctx: PackContext): GameAction[
       for (const element of ['fire', 'water', 'earth', 'air', 'shadow', 'light'] as const) {
         actions.push({ type: 'PICK_MYSTERIUM_ELEMENT', element });
       }
+      break;
+    case 'v6-affinity':
+      actions.push(
+        { type: 'PICK_V6_AFFINITY', mode: 'none' },
+        { type: 'PICK_V6_AFFINITY', mode: 'value-plus' },
+        { type: 'PICK_V6_AFFINITY', mode: 'dice-plus' },
+        { type: 'PICK_V6_AFFINITY', mode: 'dice-minus' },
+      );
       break;
   }
 
@@ -1450,6 +1566,7 @@ function applyPendingChoiceAction(
         case 'pick-reaction':
         case 'pillendoktora-boost':
         case 'mysterium-element':
+        case 'v6-affinity':
           throw new Error('Arena effect cannot be skipped');
       }
       break;
@@ -1472,6 +1589,29 @@ function applyPendingChoiceAction(
     case 'PICK_MYSTERIUM_ELEMENT': {
       if (pending.type !== 'mysterium-element') throw new Error('Wrong pending type');
       return resolveMysteriumElement(state, playerId, action.element);
+    }
+    case 'PICK_V6_AFFINITY': {
+      if (pending.type !== 'v6-affinity') throw new Error('Wrong pending type');
+      if (pending.kind === 'block') {
+        return finalizeV6AffinityBlock(
+          state,
+          pack,
+          playerId,
+          pending,
+          action.mode,
+          ruleset,
+          rng,
+        );
+      }
+      return finalizeV6AffinityAttack(
+        state,
+        pack,
+        playerId,
+        pending,
+        action.mode,
+        ruleset,
+        rng,
+      );
     }
     case 'TAKE_OPTIONAL_DRAW': {
       if (pending.type !== 'optional-draw-discard') throw new Error('Wrong pending type');
@@ -1766,6 +1906,22 @@ export function applyAction(
         attackValue = announce.attackValue ?? attackValue;
       }
 
+      const cardElement = peekMysteriumElement(working, playerId) ?? def.element;
+      if (shouldOfferV6Affinity(working, pack, playerId, cardElement, ruleset)) {
+        return openV6AffinityPending(working, playerId, {
+          type: 'v6-affinity',
+          playerId,
+          kind: 'attack',
+          cardInstanceId: action.cardInstanceId,
+          cardDefId: def.id,
+          cardElement,
+          diceRoll,
+          baseValue: attackValue,
+          ignoreShield: attackPrep.ignoreShield > 0 ? attackPrep.ignoreShield : undefined,
+          extraHitImpulse: attackPrep.extraHitImpulse ?? undefined,
+        });
+      }
+
       next = discardFromHand(working, playerId, action.cardInstanceId);
       next = markAttackOrChallenge(next);
       const defenderId = opponentOf(playerId);
@@ -1830,6 +1986,20 @@ export function applyAction(
       const revenge = consumeStiernackenRevengeBonus(working, playerId);
       working = revenge.state;
       attackValue += revenge.bonus;
+
+      if (shouldOfferV6Affinity(working, pack, playerId, def.element, ruleset)) {
+        return openV6AffinityPending(working, playerId, {
+          type: 'v6-affinity',
+          playerId,
+          kind: 'challenge',
+          cardInstanceId: action.attackCardInstanceId,
+          cardDefId: def.id,
+          cardElement: def.element,
+          diceRoll,
+          baseValue: attackValue,
+          targetBoundInstanceId: action.targetBoundInstanceId,
+        });
+      }
 
       next = discardFromHand(working, playerId, action.attackCardInstanceId);
       next = markAttackOrChallenge(next);
@@ -2233,6 +2403,20 @@ function applyCombatResponse(
       blockValue += Math.max(0, capped - base);
       remainingPrep.w6Bonus = 0;
       remainingPrep.w6BonusMax = 0;
+    }
+
+    const blockElement = peekMysteriumElement(working, playerId) ?? def.element;
+    if (shouldOfferV6Affinity(working, pack, playerId, blockElement, ruleset)) {
+      return openV6AffinityPending(working, playerId, {
+        type: 'v6-affinity',
+        playerId,
+        kind: 'block',
+        cardInstanceId: action.cardInstanceId,
+        cardDefId: def.id,
+        cardElement: blockElement,
+        diceRoll,
+        baseValue: blockValue,
+      });
     }
 
     let next = discardFromHand(working, playerId, action.cardInstanceId);

@@ -164,7 +164,7 @@ export function buildPlayRulesCardSections(
   const ultiById = new Map(pack.ultimates.map((u) => [u.id, u]));
   const charIntro =
     variant === 'v6'
-      ? 'Affinität-Scaffold (zwei Elemente). Keine V5-Passiven, keine Ultis.'
+      ? 'Affinität (zwei Elemente): 1× pro eigenem Zug ±1 Wert oder W6. Keine V5-Passiven, keine Ultis.'
       : 'Passive einmal pro Zug / Trigger laut Text. Großformel bei 3 Fetzladung.';
 
   const sections: RulesSection[] = [
