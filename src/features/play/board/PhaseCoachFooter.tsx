@@ -26,6 +26,8 @@ interface PhaseCoachFooterProps {
   tools?: React.ReactNode;
   /** Second row: truncated bot reason (beside tools). */
   status?: React.ReactNode;
+  /** Fired once when the footer reaches the docked phase. */
+  onDocked?: () => void;
 }
 
 export function PhaseCoachFooter({
@@ -34,6 +36,7 @@ export function PhaseCoachFooter({
   actions,
   tools,
   status,
+  onDocked,
 }: PhaseCoachFooterProps) {
   const [phase, setPhase] = useState<FooterReveal>('hidden');
 
@@ -42,6 +45,11 @@ export function PhaseCoachFooter({
       setPhase('hidden');
     }
   }, [reveal]);
+
+  useEffect(() => {
+    if (phase !== 'docked') return;
+    onDocked?.();
+  }, [phase, onDocked]);
 
   useEffect(() => {
     if (!reveal || phase !== 'hidden') return;

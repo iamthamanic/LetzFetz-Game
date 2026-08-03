@@ -1,11 +1,12 @@
 /**
- * App shell navigation — view tabs, history back/forward, notes action.
+ * App shell navigation — view tabs, history back/forward, match pause / quit / restart.
  * Location: src/features/shell/AppNav.tsx
  */
 import React from 'react';
 import { Boxes, ChevronLeft, ChevronRight, Gamepad2, Layers, Settings, StickyNote } from 'lucide-react';
 import { Tabs, type TabItem } from '../../components/ui/Tabs';
 import { Button } from '../../components/ui/Button';
+import { AppNavMatchControls } from './AppNavMatchControls';
 
 export type AppView = 'menu' | 'forge' | 'build' | 'play';
 
@@ -19,6 +20,16 @@ interface AppNavProps {
   canGoForward: boolean;
   onGoBack: () => void;
   onGoForward: () => void;
+  /** True on Play route (setup or match) — pause control visible in history cluster. */
+  showMatchPause?: boolean;
+  /** True while Play has a live match board after MatchIntro (pause / quit / restart enabled). */
+  matchActive?: boolean;
+  matchPaused?: boolean;
+  onToggleMatchPause?: () => void;
+  /** Explicit end-match → Hauptmenü (only shown while matchActive). */
+  onQuitMatch?: () => void;
+  /** Explicit rematch with same setup (only shown while matchActive). */
+  onRestartMatch?: () => void;
 }
 
 const NAV_ITEMS: TabItem[] = [
@@ -43,6 +54,12 @@ export function AppNav({
   canGoForward,
   onGoBack,
   onGoForward,
+  showMatchPause = false,
+  matchActive = false,
+  matchPaused = false,
+  onToggleMatchPause,
+  onQuitMatch,
+  onRestartMatch,
 }: AppNavProps) {
   const tabActive =
     settingsOpen
@@ -79,6 +96,14 @@ export function AppNav({
           className="shrink-0 px-2 text-stone-400 hover:bg-stone-800 hover:text-stone-200 disabled:opacity-30"
           data-testid="app-nav-forward"
         />
+        <AppNavMatchControls
+          showMatchPause={showMatchPause}
+          matchActive={matchActive}
+          matchPaused={matchPaused}
+          onToggleMatchPause={onToggleMatchPause}
+          onQuitMatch={onQuitMatch}
+          onRestartMatch={onRestartMatch}
+        />
       </div>
       <div className="min-w-0 overflow-x-auto">
         <Tabs
@@ -98,10 +123,11 @@ export function AppNav({
         variant="ghost"
         size="sm"
         icon={<StickyNote className="h-4 w-4" />}
-        aria-label="Notizen öffnen"
+        aria-label="Notizen"
         title="Notizen"
         onClick={onOpenNotes}
-        className="shrink-0 text-amber-400/90 hover:bg-stone-800 hover:text-amber-300"
+        className="shrink-0 px-2 text-stone-400 hover:bg-stone-800 hover:text-stone-200"
+        data-testid="app-nav-notes"
       />
     </div>
   );

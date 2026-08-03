@@ -1,5 +1,5 @@
 /**
- * Shared Formel presentation helpers (Build Combinate + detail modal).
+ * Shared Formelgestell presentation (Build Combinate visuals + Play board rack).
  * Location: src/components/cards/formula/index.ts
  */
 export {
@@ -8,10 +8,24 @@ export {
   FORMULA_SLOT_THEME,
   type FormulaSlotRole,
 } from './formulaSlotMeta';
-export type { FormulaDisplayCard } from './formulaDisplayCard';
+export type { EquipmentDisplayCard, FormulaDisplayCard } from './formulaDisplayCard';
+export { FormulaBoardRack } from './FormulaBoardRack';
 export {
   FormulaCardDetailModal,
   type FormulaDetailSubject,
-  type FormulaCardDetailPrimaryAction,
 } from './FormulaCardDetailModal';
-export { FormulaTypeBadges, type FormulaTypeBadgesProps } from './FormulaTypeBadges';
+export { FormulaTypeBadges } from './FormulaTypeBadges';
+export { FormulaSlotFace } from './FormulaSlotFace';
+export { FormulaComboPreview } from './FormulaComboPreview';
+export {
+  FormulaComboArt,
+  FormulaComboArtPlaceholder,
+} from './FormulaComboArt';
+export { FormulaSlotConnectionOverlay } from './FormulaSlotConnectionOverlay';
+export { EquipmentSlotStrip } from './EquipmentSlotStrip';
+export {
+  findComboForFilledSlots,
+  mapEquipmentForDisplay,
+  mapFormulaSlotsForDisplay,
+  formulaDefToDisplayCard,
+} from './mapFormulaBoardDisplay';

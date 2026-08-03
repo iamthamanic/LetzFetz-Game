@@ -2,8 +2,8 @@
  * Duel board on full-bleed playmat — replaces vertical tableau + arena sidebar.
  * Location: src/features/play/board/PlaymatBoard.tsx
  */
-import React, { useState } from 'react';
-import type { ContentPack, GameAction, GameState, PlayerId } from '../../../game';
+import React, { useState, useRef, useEffect } from 'react';
+import type { CardInstance, ContentPack, GameAction, GameState, PlayerId, PlayerState } from '../../../game';
 import { findElementDef, findEnginePartDef, isV2Pack, isV5FormulaEnabled, isV6FormulaEnabled } from '../../../game';
 import { rulesetFromState } from '../../../game/engine/rulesetFromState';
 import { partActivateCost, peekCharge } from '../../../game/engine/status';
@@ -34,6 +34,13 @@ import { DndPlaymat } from './DndPlaymat';
 import { FetzChargeConfirmModal } from './FetzChargeConfirmModal';
 import { BoardEngineLiveZone } from '../engine3d/BoardEngineLiveZone';
 import { shouldShowBoardEngineLiveZone, shouldShowFormulaGestellCompose } from './boardEngineLive';
+import { prefersReducedMotion } from '../presentation/prefersReducedMotion';
+
+/** Read optional V5 equipment slots until engine PlayerState carries them natively. */
+function readPlayerEquipment(player: PlayerState): CardInstance[] {
+  const ext = player as PlayerState & { equipment?: CardInstance[] };
+  return ext.equipment ?? [];
+}
 
 interface PlaymatBoardProps {
   state: GameState;
@@ -65,6 +72,8 @@ interface PlaymatBoardProps {
   onPlayBlock: (instanceId: string) => void;
   onPendingChange: (pending: PendingIntent | null) => void;
   onNewGame: () => void;
+  /** Bumped when PhaseCoachFooter docks — scrolls hand into the shortened viewport. */
+  footerDockSignal?: number;
 }
 
 export function PlaymatBoard({
@@ -94,16 +103,39 @@ export function PlaymatBoard({
   onPlayBlock,
   onPendingChange,
   onNewGame,
+  footerDockSignal = 0,
 }: PlaymatBoardProps) {
   const humanId = view.human;
   const v5Formula = isV5FormulaEnabled(rulesetFromState(state));
   const formulaBoard =
     v5Formula || isV6FormulaEnabled(rulesetFromState(state));
+  const duelTableauRef = useRef<HTMLDivElement>(null);
   const [chargeConfirm, setChargeConfirm] = useState<{
     boundInstanceId: string;
     partName: string;
     cost: number;
   } | null>(null);
+  useEffect(() => {
+    if (footerDockSignal <= 0) return;
+    const tableau = duelTableauRef.current;
+    if (!tableau) return;
+
+    const scrollToPlayArea = () => {
+      const maxScroll = tableau.scrollHeight - tableau.clientHeight;
+      if (maxScroll <= 0) return;
+      const behavior: ScrollBehavior = prefersReducedMotion() ? 'auto' : 'smooth';
+      tableau.scrollTo({ top: maxScroll, behavior });
+    };
+
+    let raf2 = 0;
+    const raf1 = window.requestAnimationFrame(() => {
+      raf2 = window.requestAnimationFrame(scrollToPlayArea);
+    });
+    return () => {
+      window.cancelAnimationFrame(raf1);
+      window.cancelAnimationFrame(raf2);
+    };
+  }, [footerDockSignal]);
   const botId = view.bot;
   const damageFreezeHp =
     activePresentationStep && isDamageHitStep(activePresentationStep)
@@ -433,7 +465,7 @@ export function PlaymatBoard({
         <div className="relative z-10 flex min-h-0 w-full flex-1">
           <aside
             data-testid="human-dock-sidebar"
-            className="z-20 flex w-[4.85rem] shrink-0 flex-col justify-center gap-2 p-1 sm:w-36 sm:justify-end sm:gap-3 sm:p-2 sm:pb-3 md:w-44 lg:w-48"
+            className="z-20 flex w-[4.85rem] shrink-0 flex-col justify-start gap-2 overflow-y-auto p-1 sm:w-36 sm:gap-3 sm:p-2 sm:pt-3 md:w-44 lg:w-48"
           >
             <div
               data-testid="pile-column"
@@ -460,6 +492,7 @@ export function PlaymatBoard({
           </aside>
 
           <div
+            ref={duelTableauRef}
             data-testid="duel-tableau"
             className="relative flex min-h-0 w-full min-w-0 flex-1 flex-col gap-3 overflow-y-auto overflow-x-hidden px-2 py-2 sm:px-3 sm:py-3 md:px-4"
           >
@@ -478,6 +511,7 @@ export function PlaymatBoard({
                 label="Gegner-Formel"
                 formula={state.players[botId].formula}
                 pack={pack}
+                equipment={readPlayerEquipment(state.players[botId])}
                 testId="opponent-formula-rig"
                 targetableInstanceIds={formulaChallengeIds}
                 selectedTargetId={
@@ -503,9 +537,15 @@ export function PlaymatBoard({
           <section className="flex min-h-[100px] flex-1 items-center justify-center py-1">
             {state.winner ? (
               <Panel className="max-w-sm space-y-4 text-center">
-                <div className="text-4xl">{state.winner === humanId ? '🎉' : '😵'}</div>
+                <div className="text-4xl">
+                  {state.winner === 'draw' ? '🤝' : state.winner === humanId ? '🎉' : '😵'}
+                </div>
                 <h2 className="text-xl font-bold text-stone-100">
-                  {state.winner === humanId ? 'Du gewinnst!' : 'Bot gewinnt!'}
+                  {state.winner === 'draw'
+                    ? 'Unentschieden!'
+                    : state.winner === humanId
+                      ? 'Du gewinnst!'
+                      : 'Bot gewinnt!'}
                 </h2>
                 <p className="text-sm text-stone-400">Runde {state.turnNumber}</p>
                 <Button variant="accent" onClick={onNewGame} className="w-full">
@@ -525,7 +565,18 @@ export function PlaymatBoard({
                 label="Deine Formel"
                 formula={state.players[humanId].formula}
                 pack={pack}
+                equipment={readPlayerEquipment(state.players[humanId])}
                 testId="human-formula-rig"
+                formulaDropEnabled={
+                  state.phase === 'build' &&
+                  view.isHumanTurn &&
+                  view.legalActions.some(
+                    (a) =>
+                      a.type === 'FORMULA_BUILD' ||
+                      a.type === 'FORMULA_REPLACE' ||
+                      a.type === 'FORMULA_SCHNELLMIX',
+                  )
+                }
               />
             ) : (
               <BoundCardRow
@@ -596,7 +647,7 @@ export function PlaymatBoard({
 
           <aside
             data-testid="bot-dock-sidebar"
-            className="hidden shrink-0 flex-col justify-start gap-2 p-2 pt-3 sm:flex sm:w-36 md:w-44 lg:w-48"
+            className="hidden shrink-0 flex-col justify-start gap-2 overflow-y-auto p-2 pt-3 sm:flex sm:w-36 md:w-44 lg:w-48"
           >
             <CharacterDock
               state={state}

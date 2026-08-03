@@ -3,14 +3,32 @@
  * Location: src/features/play/setup/GameSetup.tsx
  */
 import React, { useEffect, useRef, useState } from 'react';
-import { ArrowLeft, Bot, Globe, Layers, Package, Sparkles, WifiOff, AlertTriangle } from 'lucide-react';
-import { BASE_PACK } from '../../../game';
+import {
+  ArrowLeft,
+  Bot,
+  Globe,
+  Layers,
+  Package,
+  Settings,
+  Sparkles,
+  WifiOff,
+  AlertTriangle,
+} from 'lucide-react';
+import {
+  BASE_PACK,
+  DEFAULT_TIMED_MATCH_MINUTES,
+  MAX_TIMED_MATCH_MINUTES,
+  MIN_TIMED_MATCH_MINUTES,
+  clampTimedMatchMinutes,
+} from '../../../game';
 import { Button } from '../../../components/ui/Button';
 import { BrandLogoText } from '../../../components/ui/BrandLogoText';
 import { CharacterCarousel } from './CharacterCarousel';
 import { CharacterRandomSpin } from './CharacterRandomSpin';
 import { Badge } from '../../../components/ui/Badge';
+import { Modal } from '../../../components/ui/Modal';
 import { Panel } from '../../../components/ui/Panel';
+import { Input } from '../../../components/ui/Input';
 import { useAppHistory } from '../../../services/history/AppHistoryContext';
 import { MenuGlitchBackdrop } from '../../../components/ui/MenuGlitchBackdrop';
 import type { GamePackChoice } from './resolveGamePackChoice';
@@ -48,10 +66,26 @@ function prefersReducedMotion(): boolean {
   );
 }
 
+function defaultPackChoice(v6Playable: boolean): GamePackChoice {
+  return v6Playable ? 'v6' : 'v5';
+}
+
 export interface BotMatchStart {
   mode: 'bot';
   humanCharacterId: string;
   packChoice: GamePackChoice;
+  /** V5: artifact auction playtest (default false / off). */
+  enableArtifactAuction?: boolean;
+  /**
+   * Forced starter for createGame / MatchIntro.
+   * Omit when neither Spieleinstellungen checkbox is set (initiative default).
+   * Solo: human = p1, bot = p2.
+   */
+  startingPlayer?: 'p1' | 'p2';
+  /** Match end: standard (0 LP) or timed wall-clock. Default standard. */
+  matchEndMode?: 'standard' | 'timed';
+  /** Timed mode duration in minutes (clamped 1–60). Used when matchEndMode is timed. */
+  timedMatchMinutes?: number;
 }
 
 interface GameSetupProps {
@@ -62,6 +96,47 @@ interface GameSetupProps {
   onStart: (options: BotMatchStart) => void;
 }
 
+function PackChoiceButton({
+  choice,
+  active,
+  onSelect,
+  icon,
+  title,
+  subtitle,
+  badge,
+  testId,
+  activeClass,
+}: {
+  choice: GamePackChoice;
+  active: boolean;
+  onSelect: (c: GamePackChoice) => void;
+  icon: React.ReactNode;
+  title: string;
+  subtitle: string;
+  badge?: React.ReactNode;
+  testId: string;
+  activeClass: string;
+}) {
+  return (
+    <button
+      type="button"
+      data-testid={testId}
+      aria-pressed={active}
+      onClick={() => onSelect(choice)}
+      className={`flex flex-col items-start gap-1 rounded-lg border p-3 text-left transition-all focus:outline-none focus-visible:ring-2 focus-visible:ring-purple-500 ${
+        active ? activeClass : 'border-stone-800 bg-stone-900/40 hover:border-stone-600'
+      }`}
+    >
+      <div className="flex w-full items-center justify-between gap-2">
+        {icon}
+        {badge}
+      </div>
+      <span className="text-sm font-semibold text-stone-100">{title}</span>
+      <span className="text-xs text-stone-400">{subtitle}</span>
+    </button>
+  );
+}
+
 export function GameSetup({
   phase,
   selectedId,
@@ -70,9 +145,18 @@ export function GameSetup({
   onStart,
 }: GameSetupProps) {
   const { push } = useAppHistory();
-  const [packChoice, setPackChoice] = useState<GamePackChoice>('v5');
-  const [optInTick, setOptInTick] = useState(0);
   const v6Playable = isV6PlayableEnabled();
+  const [packChoice, setPackChoice] = useState<GamePackChoice>(() =>
+    defaultPackChoice(isV6PlayableEnabled()),
+  );
+  const [optInTick, setOptInTick] = useState(0);
+  const [artifactAuction, setArtifactAuction] = useState(false);
+  const [forceStartPlayer, setForceStartPlayer] = useState(false);
+  const [forceStartOpponent, setForceStartOpponent] = useState(false);
+  const [matchEndMode, setMatchEndMode] = useState<'standard' | 'timed'>('standard');
+  const [timedMinutes, setTimedMinutes] = useState(DEFAULT_TIMED_MATCH_MINUTES);
+  const [settingsOpen, setSettingsOpen] = useState(false);
+  const [legacyOpen, setLegacyOpen] = useState(false);
   const [spinTargetId, setSpinTargetId] = useState<string | null>(null);
   const spinning = spinTargetId !== null;
   const spinLockRef = useRef(false);
@@ -147,6 +231,17 @@ export function GameSetup({
     spinLockRef.current = false;
     scrollStartMatchIntoView();
   };
+
+  const packLabel =
+    packChoice === 'v6'
+      ? 'V6 Formel (Standard)'
+      : packChoice === 'v5'
+        ? 'V5 Formel'
+        : packChoice === 'p100'
+          ? 'V2 P100 (Legacy)'
+          : packChoice === 'v3'
+            ? 'V3 (Legacy)'
+            : 'Basis V1 (Legacy)';
 
   if (phase === 'mode') {
     return (
@@ -256,139 +351,278 @@ export function GameSetup({
               </h2>
             </div>
 
-            <Panel className="mx-auto max-w-2xl space-y-3" tone="game" data-testid="game-pack-select">
-              <div className="flex items-center gap-2 text-sm font-medium text-stone-200">
-                <Layers className="h-4 w-4 text-purple-400" aria-hidden />
-                Kartenset
-              </div>
-              <div className="grid grid-cols-1 gap-2 sm:grid-cols-2 lg:grid-cols-4" role="group" aria-label="Kartenset wählen">
-                <button
-                  type="button"
-                  data-testid="game-pack-v5"
-                  aria-pressed={packChoice === 'v5'}
-                  onClick={() => setPackChoice('v5')}
-                  className={`flex flex-col items-start gap-1 rounded-lg border p-3 text-left transition-all focus:outline-none focus-visible:ring-2 focus-visible:ring-purple-500 ${
-                    packChoice === 'v5'
-                      ? 'border-emerald-500/60 bg-emerald-950/30'
-                      : 'border-stone-800 bg-stone-900/40 hover:border-stone-600'
-                  }`}
-                >
-                  <div className="flex w-full items-center justify-between gap-2">
-                    <Sparkles className="h-4 w-4 text-emerald-400" aria-hidden />
-                    {packChoice === 'v5' ? <Badge variant="success">Standard</Badge> : null}
-                  </div>
-                  <span className="text-sm font-semibold text-stone-100">V5 Formel</span>
-                  <span className="text-xs text-stone-400">
-                    12+12+12 Formel · Gegenstände · 20 Leben
-                  </span>
-                </button>
+            <div
+              className="mx-auto flex max-w-2xl flex-wrap items-center justify-center gap-2"
+              data-testid="game-pack-select"
+            >
+              <Button
+                variant="secondary"
+                size="sm"
+                icon={<Settings className="h-4 w-4" aria-hidden />}
+                data-testid="game-setup-settings"
+                onClick={() => setSettingsOpen(true)}
+              >
+                Spieleinstellungen
+              </Button>
+              <span className="text-xs text-stone-400" data-testid="game-setup-pack-summary">
+                Kartenset: {packLabel}
+              </span>
+            </div>
 
-                {v6Playable ? (
+            {outdatedSummary.hasOutdated ? (
+              <div
+                className="mx-auto flex max-w-2xl items-start gap-2 px-3 py-2 text-xs text-amber-100/90"
+                data-testid="game-setup-formula-outdated-warning"
+                role="status"
+              >
+                <AlertTriangle className="mt-0.5 h-4 w-4 shrink-0 text-amber-400" aria-hidden />
+                <p>
+                  {outdatedSummary.outdatedDeckCount > 0 && outdatedSummary.outdatedRecipeCount > 0
+                    ? `${outdatedSummary.outdatedDeckCount} Spieldeck-Einträge und ${outdatedSummary.outdatedRecipeCount} Feld-Rezepte sind OUTDATED — in Material → Formeln erneut hinzufügen oder aktivieren.`
+                    : outdatedSummary.outdatedDeckCount > 0
+                      ? `${outdatedSummary.outdatedDeckCount} Spieldeck-Einträge sind OUTDATED — in Material → Formeln erneut zum Spieldeck hinzufügen.`
+                      : `${outdatedSummary.outdatedRecipeCount} Feld-Rezepte sind OUTDATED — in Material → Formeln erneut aktivieren.`}
+                </p>
+              </div>
+            ) : null}
+
+            <Modal
+              open={settingsOpen}
+              onClose={() => setSettingsOpen(false)}
+              title="Spieleinstellungen"
+              size="sm"
+              testId="game-setup-settings-modal"
+              dismissible
+              footer={
+                <div className="flex justify-end">
+                  <Button
+                    variant="primary"
+                    type="button"
+                    data-testid="game-settings-apply"
+                    onClick={() => setSettingsOpen(false)}
+                  >
+                    Übernehmen
+                  </Button>
+                </div>
+              }
+            >
+              <div className="space-y-4">
+                <div className="space-y-2" data-testid="game-setup-pack-options" role="group" aria-label="Kartenset">
+                  <p className="text-xs font-semibold uppercase tracking-wider text-stone-400">
+                    Kartenset
+                  </p>
+                  <div className="grid grid-cols-1 gap-2">
+                    {v6Playable ? (
+                      <PackChoiceButton
+                        choice="v6"
+                        active={packChoice === 'v6'}
+                        onSelect={setPackChoice}
+                        testId="game-pack-v6"
+                        icon={<Sparkles className="h-4 w-4 text-amber-400" aria-hidden />}
+                        badge={
+                          packChoice === 'v6' ? <Badge variant="success">Standard</Badge> : null
+                        }
+                        title="V6 Formel"
+                        subtitle="Play-Default · Formelkern · 30 Leben"
+                        activeClass="border-amber-500/60 bg-amber-950/30"
+                      />
+                    ) : null}
+                    <PackChoiceButton
+                      choice="v5"
+                      active={packChoice === 'v5'}
+                      onSelect={setPackChoice}
+                      testId="game-pack-v5"
+                      icon={<Sparkles className="h-4 w-4 text-emerald-400" aria-hidden />}
+                      badge={
+                        packChoice === 'v5' ? (
+                          <Badge variant={v6Playable ? 'accent' : 'success'}>
+                            {v6Playable ? 'Alternative' : 'Standard'}
+                          </Badge>
+                        ) : null
+                      }
+                      title="V5 Formel"
+                      subtitle="Formel · Gegenstände · 30 Leben"
+                      activeClass="border-emerald-500/60 bg-emerald-950/30"
+                    />
+                  </div>
                   <button
                     type="button"
-                    data-testid="game-pack-v6"
-                    aria-pressed={packChoice === 'v6'}
-                    onClick={() => setPackChoice('v6')}
-                    className={`flex flex-col items-start gap-1 rounded-lg border p-3 text-left transition-all focus:outline-none focus-visible:ring-2 focus-visible:ring-purple-500 ${
-                      packChoice === 'v6'
-                        ? 'border-amber-500/60 bg-amber-950/30'
-                        : 'border-stone-800 bg-stone-900/40 hover:border-stone-600'
-                    }`}
+                    className="text-xs text-stone-400 underline-offset-2 hover:text-stone-200 hover:underline"
+                    data-testid="game-setup-legacy-toggle"
+                    onClick={() => setLegacyOpen((v) => !v)}
                   >
-                    <div className="flex w-full items-center justify-between gap-2">
-                      <Sparkles className="h-4 w-4 text-amber-400" aria-hidden />
-                      {packChoice === 'v6' ? <Badge variant="accent">INTERNAL</Badge> : null}
-                    </div>
-                    <span className="text-sm font-semibold text-stone-100">V6 Slice-1</span>
-                    <span className="text-xs text-stone-400">
-                      Playtest · 3×3×4 Formelkern · 30 Leben (Flag)
-                    </span>
+                    {legacyOpen ? 'Legacy ausblenden' : 'Legacy-Packs (V1 / V2 / V3)'}
                   </button>
-                ) : null}
-
-                <button
-                  type="button"
-                  data-testid="game-pack-base"
-                  aria-pressed={packChoice === 'base'}
-                  onClick={() => setPackChoice('base')}
-                  className={`flex flex-col items-start gap-1 rounded-lg border p-3 text-left transition-all focus:outline-none focus-visible:ring-2 focus-visible:ring-purple-500 ${
-                    packChoice === 'base'
-                      ? 'border-stone-500/60 bg-stone-900/60'
-                      : 'border-stone-800 bg-stone-900/40 hover:border-stone-600'
-                  }`}
-                >
-                  <div className="flex w-full items-center justify-between gap-2">
-                    <Package className="h-4 w-4 text-stone-400" aria-hidden />
-                    {packChoice === 'base' ? <Badge variant="default">V1</Badge> : null}
-                  </div>
-                  <span className="text-sm font-semibold text-stone-100">Basis-Pack (V1)</span>
-                  <span className="text-xs text-stone-400">Regression · Bound-4 · 20 Leben</span>
-                </button>
-
-                <button
-                  type="button"
-                  data-testid="game-pack-p100"
-                  aria-pressed={packChoice === 'p100'}
-                  onClick={() => setPackChoice('p100')}
-                  className={`flex flex-col items-start gap-1 rounded-lg border p-3 text-left transition-all focus:outline-none focus-visible:ring-2 focus-visible:ring-purple-500 ${
-                    packChoice === 'p100'
-                      ? 'border-purple-500/60 bg-purple-950/30'
-                      : 'border-stone-800 bg-stone-900/40 hover:border-stone-600'
-                  }`}
-                >
-                  <div className="flex w-full items-center justify-between gap-2">
-                    <Layers className="h-4 w-4 text-purple-400" aria-hidden />
-                    {packChoice === 'p100' ? <Badge variant="accent">Playtest</Badge> : null}
-                  </div>
-                  <span className="text-sm font-semibold text-stone-100">V2 P100 Playtest</span>
-                  <span className="text-xs text-stone-400">Historisch · Phrase · 30 Leben</span>
-                </button>
-
-                <button
-                  type="button"
-                  data-testid="game-pack-v3"
-                  aria-pressed={packChoice === 'v3'}
-                  onClick={() => setPackChoice('v3')}
-                  className={`flex flex-col items-start gap-1 rounded-lg border p-3 text-left transition-all focus:outline-none focus-visible:ring-2 focus-visible:ring-purple-500 ${
-                    packChoice === 'v3'
-                      ? 'border-amber-500/60 bg-amber-950/30'
-                      : 'border-stone-800 bg-stone-900/40 hover:border-stone-600'
-                  }`}
-                >
-                  <div className="flex w-full items-center justify-between gap-2">
-                    <Sparkles className="h-4 w-4 text-amber-400" aria-hidden />
-                    <Badge variant="warning">Legacy</Badge>
-                  </div>
-                  <span className="text-sm font-semibold text-stone-100">V3 Playtest</span>
-                  <span className="text-xs text-stone-400">
-                    Soft-Retire · Fetzgerät-3D · Bound-Slots
-                  </span>
-                </button>
-              </div>
-              {outdatedSummary.hasOutdated ? (
-                <div
-                  className="flex items-start gap-2 rounded-lg border border-amber-700/50 bg-amber-950/30 px-3 py-2 text-xs text-amber-100/90"
-                  data-testid="game-setup-formula-outdated-warning"
-                  role="status"
-                >
-                  <AlertTriangle className="mt-0.5 h-4 w-4 shrink-0 text-amber-400" aria-hidden />
-                  <p>
-                    {outdatedSummary.outdatedDeckCount > 0 && outdatedSummary.outdatedRecipeCount > 0
-                      ? `${outdatedSummary.outdatedDeckCount} Spieldeck-Einträge und ${outdatedSummary.outdatedRecipeCount} Feld-Rezepte sind OUTDATED — in Material → Formeln erneut hinzufügen oder aktivieren.`
-                      : outdatedSummary.outdatedDeckCount > 0
-                        ? `${outdatedSummary.outdatedDeckCount} Spieldeck-Einträge sind OUTDATED — in Material → Formeln erneut zum Spieldeck hinzufügen.`
-                        : `${outdatedSummary.outdatedRecipeCount} Feld-Rezepte sind OUTDATED — in Material → Formeln erneut aktivieren.`}
-                  </p>
+                  {legacyOpen ? (
+                    <div className="grid grid-cols-1 gap-2 sm:grid-cols-3">
+                      <PackChoiceButton
+                        choice="base"
+                        active={packChoice === 'base'}
+                        onSelect={setPackChoice}
+                        testId="game-pack-base"
+                        icon={<Package className="h-4 w-4 text-stone-400" aria-hidden />}
+                        badge={packChoice === 'base' ? <Badge variant="default">V1</Badge> : null}
+                        title="Basis V1"
+                        subtitle="Regression · Bound-4"
+                        activeClass="border-stone-500/60 bg-stone-900/60"
+                      />
+                      <PackChoiceButton
+                        choice="p100"
+                        active={packChoice === 'p100'}
+                        onSelect={setPackChoice}
+                        testId="game-pack-p100"
+                        icon={<Layers className="h-4 w-4 text-purple-400" aria-hidden />}
+                        badge={
+                          packChoice === 'p100' ? <Badge variant="accent">Playtest</Badge> : null
+                        }
+                        title="V2 P100"
+                        subtitle="Historisch · Phrase"
+                        activeClass="border-purple-500/60 bg-purple-950/30"
+                      />
+                      <PackChoiceButton
+                        choice="v3"
+                        active={packChoice === 'v3'}
+                        onSelect={setPackChoice}
+                        testId="game-pack-v3"
+                        icon={<Sparkles className="h-4 w-4 text-amber-400" aria-hidden />}
+                        badge={<Badge variant="warning">Legacy</Badge>}
+                        title="V3 Playtest"
+                        subtitle="Soft-Retire · Fetzgerät"
+                        activeClass="border-amber-500/60 bg-amber-950/30"
+                      />
+                    </div>
+                  ) : null}
                 </div>
-              ) : null}
-            </Panel>
+
+                <div
+                  data-testid="game-setup-match-mode"
+                  role="radiogroup"
+                  aria-label="Partie-Ende"
+                  className="space-y-2"
+                >
+                  <p className="text-xs font-semibold uppercase tracking-wider text-stone-400">
+                    Partie-Ende
+                  </p>
+                  <label className="flex cursor-pointer items-start gap-3 text-sm text-stone-200">
+                    <input
+                      type="radio"
+                      name="match-end-mode"
+                      className="mt-0.5 h-4 w-4 shrink-0 border-stone-600 bg-stone-800"
+                      checked={matchEndMode === 'standard'}
+                      onChange={() => setMatchEndMode('standard')}
+                      data-testid="game-setup-match-mode-standard"
+                    />
+                    <span>
+                      <span className="font-medium">Standard</span>
+                      <span className="mt-0.5 block text-xs text-stone-400">
+                        Bis ein Spieler 0 Leben hat
+                      </span>
+                    </span>
+                  </label>
+                  <label className="flex cursor-pointer items-start gap-3 text-sm text-stone-200">
+                    <input
+                      type="radio"
+                      name="match-end-mode"
+                      className="mt-0.5 h-4 w-4 shrink-0 border-stone-600 bg-stone-800"
+                      checked={matchEndMode === 'timed'}
+                      onChange={() => setMatchEndMode('timed')}
+                      data-testid="game-setup-match-mode-timed"
+                    />
+                    <span>
+                      <span className="font-medium">Zeit</span>
+                      <span className="mt-0.5 block text-xs text-stone-400">
+                        Nach Ablauf gewinnt, wer mehr Leben hat (Gleichstand = Unentschieden)
+                      </span>
+                    </span>
+                  </label>
+                  {matchEndMode === 'timed' ? (
+                    <Input
+                      label="Minuten"
+                      type="number"
+                      min={MIN_TIMED_MATCH_MINUTES}
+                      max={MAX_TIMED_MATCH_MINUTES}
+                      value={timedMinutes}
+                      onChange={(e) => {
+                        const raw = Number(e.target.value);
+                        setTimedMinutes(
+                          Number.isFinite(raw)
+                            ? clampTimedMatchMinutes(raw)
+                            : DEFAULT_TIMED_MATCH_MINUTES,
+                        );
+                      }}
+                      data-testid="game-setup-timed-minutes"
+                      className="pl-7"
+                    />
+                  ) : null}
+                </div>
+
+                <label className="flex cursor-pointer items-start gap-3 text-sm text-stone-200">
+                  <input
+                    type="checkbox"
+                    className="mt-0.5 h-4 w-4 shrink-0 rounded border-stone-600 bg-stone-800"
+                    checked={artifactAuction}
+                    onChange={(e) => setArtifactAuction(e.target.checked)}
+                    data-testid="game-setup-artifact-auction"
+                  />
+                  <span>
+                    <span className="font-medium">Artefakt-Auktion</span>
+                    <span className="mt-0.5 block text-xs text-stone-400">
+                      Playtest — Flag für Auktion (Engine folgt)
+                    </span>
+                  </span>
+                </label>
+
+                <label className="flex cursor-pointer items-start gap-3 text-sm text-stone-200">
+                  <input
+                    type="checkbox"
+                    className="mt-0.5 h-4 w-4 shrink-0 rounded border-stone-600 bg-stone-800"
+                    checked={forceStartPlayer}
+                    onChange={(e) => {
+                      const on = e.target.checked;
+                      setForceStartPlayer(on);
+                      if (on) setForceStartOpponent(false);
+                    }}
+                    data-testid="game-setup-start-player"
+                  />
+                  <span>
+                    <span className="font-medium">Immer Spieler beginnt</span>
+                    <span className="mt-0.5 block text-xs text-stone-400">
+                      Keine Initiative — du startest die Partie
+                    </span>
+                  </span>
+                </label>
+
+                <label className="flex cursor-pointer items-start gap-3 text-sm text-stone-200">
+                  <input
+                    type="checkbox"
+                    className="mt-0.5 h-4 w-4 shrink-0 rounded border-stone-600 bg-stone-800"
+                    checked={forceStartOpponent}
+                    onChange={(e) => {
+                      const on = e.target.checked;
+                      setForceStartOpponent(on);
+                      if (on) setForceStartPlayer(false);
+                    }}
+                    data-testid="game-setup-start-opponent"
+                  />
+                  <span>
+                    <span className="font-medium">Immer Gegner beginnt</span>
+                    <span className="mt-0.5 block text-xs text-stone-400">
+                      Keine Initiative — der Bot startet die Partie
+                    </span>
+                  </span>
+                </label>
+              </div>
+            </Modal>
 
             <div
               className="relative"
               aria-busy={spinning}
               data-testid="game-setup-character-picker"
             >
-              <div className={spinning ? 'pointer-events-none select-none' : undefined} aria-hidden={spinning}>
+              <div
+                className={spinning ? 'pointer-events-none select-none' : undefined}
+                aria-hidden={spinning}
+              >
                 <CharacterCarousel
                   characters={BASE_PACK.characters}
                   selectedId={selectedId}
@@ -414,7 +648,21 @@ export function GameSetup({
                 data-testid="start-bot-match"
                 disabled={spinning}
                 onClick={() =>
-                  onStart({ mode: 'bot', humanCharacterId: selectedId, packChoice })
+                  onStart({
+                    mode: 'bot',
+                    humanCharacterId: selectedId,
+                    packChoice,
+                    enableArtifactAuction: artifactAuction,
+                    matchEndMode,
+                    ...(matchEndMode === 'timed'
+                      ? { timedMatchMinutes: clampTimedMatchMinutes(timedMinutes) }
+                      : {}),
+                    ...(forceStartPlayer
+                      ? { startingPlayer: 'p1' as const }
+                      : forceStartOpponent
+                        ? { startingPlayer: 'p2' as const }
+                        : {}),
+                  })
                 }
               >
                 <span className="btn-brand-shimmer__shine" aria-hidden="true" />
