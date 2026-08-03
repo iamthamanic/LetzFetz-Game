@@ -32,8 +32,11 @@ test.describe('V5 E2E — Formel match smoke', () => {
     await expect(page.getByTestId('game-mode-select')).toBeVisible();
     await selectBotMode(page);
 
+    await page.getByTestId('game-setup-settings').click();
+    await expect(page.getByTestId('game-setup-settings-modal')).toBeVisible();
     await page.getByTestId('game-pack-v5').click();
     await expect(page.getByTestId('game-pack-v5')).toHaveAttribute('aria-pressed', 'true');
+    await page.getByTestId('game-settings-apply').click();
     await shot(page, '01-setup-v5.png');
 
     await page.getByRole('button', { name: 'Partie starten' }).click();
