@@ -9,14 +9,17 @@ import {
   V3_RULESET,
   V5_PACK,
   V5_PACK_RULESET,
+  V6_CORE_PACK,
+  V6_PACK_RULESET,
   type ContentPack,
   type RulesetConfig,
 } from '../../../game';
 import { mergeFormulaPlayOverlay } from '../../../game/packs/mergeFormulaPlayOverlay';
 import { loadFormulaPlayOptInStore } from '../../../services/storage/formulaPlayOptIn';
+import { isV6PlayableEnabled } from './v6PlayableFlag';
 
 /** Kartenset tile in Play setup. */
-export type GamePackChoice = 'base' | 'p100' | 'v3' | 'v5';
+export type GamePackChoice = 'base' | 'p100' | 'v3' | 'v5' | 'v6';
 
 export interface ResolvedGamePackChoice {
   pack: ContentPack;
@@ -27,6 +30,12 @@ export interface ResolvedGamePackChoice {
 /** Resolve Kartenset tile to engine pack + optional ruleset / playtest HP cap. */
 export function resolveGamePackChoice(choice: GamePackChoice): ResolvedGamePackChoice {
   switch (choice) {
+    case 'v6': {
+      if (!isV6PlayableEnabled()) {
+        throw new Error('V6_PLAYABLE required for pack choice v6');
+      }
+      return { pack: V6_CORE_PACK, ruleset: V6_PACK_RULESET, playtestHpCap: 30 };
+    }
     case 'v5': {
       const optIn = loadFormulaPlayOptInStore();
       const pack = mergeFormulaPlayOverlay(V5_PACK, optIn.deckOptIns);

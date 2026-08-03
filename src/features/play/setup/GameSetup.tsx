@@ -13,6 +13,7 @@ import { Panel } from '../../../components/ui/Panel';
 import { useAppHistory } from '../../../services/history/AppHistoryContext';
 import { MenuGlitchBackdrop } from '../../../components/ui/MenuGlitchBackdrop';
 import type { GamePackChoice } from './resolveGamePackChoice';
+import { isV6PlayableEnabled } from './v6PlayableFlag';
 import {
   FORMULA_PLAY_OPTIN_UPDATED_EVENT,
   loadFormulaPlayOptInStore,
@@ -48,6 +49,7 @@ export function GameSetup({
   const { push } = useAppHistory();
   const [packChoice, setPackChoice] = useState<GamePackChoice>('v5');
   const [optInTick, setOptInTick] = useState(0);
+  const v6Playable = isV6PlayableEnabled();
 
   useEffect(() => {
     const refresh = () => setOptInTick((n) => n + 1);
@@ -223,6 +225,29 @@ export function GameSetup({
                     12+12+12 Formel · Gegenstände · 20 Leben
                   </span>
                 </button>
+
+                {v6Playable ? (
+                  <button
+                    type="button"
+                    data-testid="game-pack-v6"
+                    aria-pressed={packChoice === 'v6'}
+                    onClick={() => setPackChoice('v6')}
+                    className={`flex flex-col items-start gap-1 rounded-lg border p-3 text-left transition-all focus:outline-none focus-visible:ring-2 focus-visible:ring-purple-500 ${
+                      packChoice === 'v6'
+                        ? 'border-amber-500/60 bg-amber-950/30'
+                        : 'border-stone-800 bg-stone-900/40 hover:border-stone-600'
+                    }`}
+                  >
+                    <div className="flex w-full items-center justify-between gap-2">
+                      <Sparkles className="h-4 w-4 text-amber-400" aria-hidden />
+                      {packChoice === 'v6' ? <Badge variant="accent">INTERNAL</Badge> : null}
+                    </div>
+                    <span className="text-sm font-semibold text-stone-100">V6 Slice-1</span>
+                    <span className="text-xs text-stone-400">
+                      Playtest · 3×3×4 Formelkern · 30 Leben (Flag)
+                    </span>
+                  </button>
+                ) : null}
 
                 <button
                   type="button"

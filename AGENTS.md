@@ -116,14 +116,14 @@ Design: `.qa/design/vertical-slice-architecture.md`
 |----------|--------|
 | [`docs/letz-fetz-v5-spielkonzept.md`](docs/letz-fetz-v5-spielkonzept.md) | **V5 Vollkonzept** (verbindlich für Cutover) |
 | [`docs/rules/SPIELANLEITUNG_V5_DRAFT.md`](docs/rules/SPIELANLEITUNG_V5_DRAFT.md) | **Ziel-Engine-Prosa V5** — Phasen, Formel, Kampfkern |
-| [`docs/letz-fetz-v6-spielkonzept.md`](docs/letz-fetz-v6-spielkonzept.md) | **V6 Konzept + Integrationsvertrag** — Slice 0 INTERNAL foundation; not Play-Default yet |
+| [`docs/letz-fetz-v6-spielkonzept.md`](docs/letz-fetz-v6-spielkonzept.md) | **V6 Konzept + Integrationsvertrag** — Slice 0–1 INTERNAL; Setup `v6` only behind `V6_PLAYABLE` / `VITE_V6_PLAYABLE`; not Play-Default yet |
 | [`docs/rules/SPIELANLEITUNG_V1.md`](docs/rules/SPIELANLEITUNG_V1.md) | **Regression** — physisches V1 + spielbarer Base-Pfad bis Cutover |
 | [`docs/rules/SPIELANLEITUNG_V2_DRAFT.md`](docs/rules/SPIELANLEITUNG_V2_DRAFT.md) | V2 Draft — historisch |
 | [`docs/rules/SPIELANLEITUNG_V2_WIP.md`](docs/rules/SPIELANLEITUNG_V2_WIP.md) | V2 Grill-Log — historisch |
 | [`docs/rules/SPIELANLEITUNG_V3_WIP.md`](docs/rules/SPIELANLEITUNG_V3_WIP.md) | V3 Vorgänger (Fetzgerät-Slots) — Soft-Retire zugunsten V5-Formel |
 | [`docs/letz-fetz-v3-überarbeitung.md`](docs/letz-fetz-v3-überarbeitung.md) | V3 Dump — historisch / Referenz |
 
-**Bei Unklarheit:** **Play-Default = V5 Formel** (`v5Formula`) until an explicit **PLAYABLE** V6 cutover. V6 Slice 0 may exist as **INTERNAL** foundation (`v6Formula` / `V6_CORE_PACK` / `src/content/v6` + `src/generated/v6`) — **no** setup-menu default flip yet. Explizit Base-Pack → V1-Regression. V3-Fetzgerät / Bound-4 + Live-3D ist Soft-Retire (Legacy-Kachel).
+**Bei Unklarheit:** **Play-Default = V5 Formel** (`v5Formula`) until an explicit **PLAYABLE** V6 cutover. V6 Slice 1 may exist as **INTERNAL** (`v6Formula` / `V6_CORE_PACK` / recipes) with optional Setup tile behind `VITE_V6_PLAYABLE` or `localStorage letz-fetz:v6-playable=1` — **default pack choice stays V5**. Explizit Base-Pack → V1-Regression. V3-Fetzgerät / Bound-4 + Live-3D ist Soft-Retire (Legacy-Kachel).
 
 **Pflege-Pflicht für Agenten:**
 
