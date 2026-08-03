@@ -63,12 +63,12 @@ describe('packToForgeCards', () => {
   });
 
   it('includes V5 formula cards as Formula kind with role badges', () => {
-    const technik = packToForgeCards().find((c) => c.id === 'v5-technik-durchschuss');
+    const technik = packToForgeCards().find((c) => c.id === 'v5-technik-impulsgeschoss');
     expect(technik?.type).toBe('Formula');
     expect(technik?.effects.some((e) => e === 'Rolle: Technik')).toBe(true);
-    expect(technik?.image_asset).toBe(resolveFormulaCardArtPath('v5-technik-durchschuss'));
+    expect(technik?.image_asset).toBe(resolveFormulaCardArtPath('v5-technik-impulsgeschoss'));
 
-    const essenz = packToForgeCards().find((c) => c.id === 'v5-essenz-eingekochte-glut');
+    const essenz = packToForgeCards().find((c) => c.id === 'v5-essenz-feuer');
     expect(essenz?.type).toBe('Formula');
     expect(essenz?.effects.some((e) => e === 'Rolle: Essenz')).toBe(true);
     expect(essenz?.element).toBe('Fire');
@@ -99,8 +99,8 @@ describe('packToForgeCards', () => {
             name: 'Glut-Duo',
             status: 'READY',
             version: 1,
-            techniqueId: 'v5-technik-durchschuss',
-            essenceId: 'v5-essenz-eingekochte-glut',
+            techniqueId: 'v5-technik-impulsgeschoss',
+            essenceId: 'v5-essenz-feuer',
             catalystId: null,
             techniqueVersion: 1,
             essenceVersion: 1,

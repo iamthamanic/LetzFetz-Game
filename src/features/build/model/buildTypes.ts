@@ -2,20 +2,23 @@
  * Build workbench session + slot roles + per-part asset picks.
  * Location: src/features/build/model/buildTypes.ts
  */
+import {
+  FORMULA_SLOT_LABEL_DE,
+  FORMULA_SLOT_ORDER,
+  type FormulaSlotRole,
+} from '../../../components/cards/formula';
 
 export const BUILD_SESSION_KEY = 'letz-fetz:build-session';
 /** v4: Combinate formula cards (V5 pack). v3 Meshy sessions reset on load. */
 export const BUILD_SESSION_VERSION = 4 as const;
 
-/** UI / storage slot ids — V5 Formelplätze. */
-export type BuildSlotRole = 'technik' | 'essenz' | 'katalysator';
+/** UI / storage slot ids — V5 Formelplätze (shared with Play rack). */
+export type BuildSlotRole = FormulaSlotRole;
 
-export const BUILD_SLOT_ORDER: BuildSlotRole[] = ['technik', 'essenz', 'katalysator'];
+export const BUILD_SLOT_ORDER: BuildSlotRole[] = [...FORMULA_SLOT_ORDER];
 
 export const BUILD_SLOT_LABEL_DE: Record<BuildSlotRole, string> = {
-  technik: 'Technik',
-  essenz: 'Essenz',
-  katalysator: 'Katalysator',
+  ...FORMULA_SLOT_LABEL_DE,
 };
 
 export interface BuildSlots {

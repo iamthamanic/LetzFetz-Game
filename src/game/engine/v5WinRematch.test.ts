@@ -62,6 +62,15 @@ describe('V5 win + rematch', () => {
       });
     }
 
+    // Rückkopplung window (damage-reduce) — pass to apply lethal damage.
+    while (state.pendingChoice?.type === 'damage-reduce') {
+      state = applyAction(state, { type: 'PASS_PENDING' }, state.pendingChoice.defenderId, {
+        pack: V5_PACK,
+        playerId: state.pendingChoice.defenderId,
+        ruleset: V5_PACK_RULESET,
+      });
+    }
+
     state = checkWinner(state);
     expect(state.winner).toBe('p1');
     expect(state.players.p2.hp).toBeLessThanOrEqual(0);
@@ -82,8 +91,8 @@ describe('V5 win + rematch', () => {
     const rematch = createGame({ ...CREATE, seed: 100 });
     expect(rematch.winner).toBeNull();
     expect(rematch.meta.v5FormulaEnabled).toBe(true);
-    expect(rematch.players.p1.hp).toBe(20);
-    expect(rematch.players.p2.hp).toBe(20);
+    expect(rematch.players.p1.hp).toBe(30);
+    expect(rematch.players.p2.hp).toBe(30);
     expect(rematch.phase).toBe('start');
     expect(rematch.combat).toBeNull();
 

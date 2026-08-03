@@ -108,11 +108,28 @@ export function resolveFormulaCardArtPath(cardId: string): string {
   return publicAssetUrl(`/cards/formula/${match[1]}.png`);
 }
 
+/**
+ * Public path for a V5 Formel-Kombination PNG under `/cards/formula/`.
+ * Uses the catalog combination slug (e.g. `raubhiebsirenen` → `…/raubhiebsirenen.png`).
+ */
+export function resolveFormulaCombinationArtPath(slug: string): string {
+  const normalized = slug.trim().toLowerCase();
+  if (!normalized || !/^[a-z0-9-]+$/.test(normalized)) return '';
+  return publicAssetUrl(`/cards/formula/${normalized}.png`);
+}
+
 /** Public path for a V5 Gegenstand PNG under `/cards/item/`. */
 export function resolveItemCardArtPath(cardId: string): string {
   const match = cardId.match(/^v5-item-([a-z0-9-]+)$/);
   if (!match) return '';
   return publicAssetUrl(`/cards/item/${match[1]}.png`);
+}
+
+/** Public path for a V5 Artefakt PNG under `/cards/artifact/`. */
+export function resolveArtifactCardArtPath(cardId: string): string {
+  const match = cardId.match(/^v5-artifact-([a-z0-9-]+)$/);
+  if (!match) return '';
+  return publicAssetUrl(`/cards/artifact/${match[1]}.png`);
 }
 
 /**
@@ -173,6 +190,8 @@ export function resolveCardArtPath(cardId: string): string {
   if (formulaPath) return formulaPath;
   const itemPath = resolveItemCardArtPath(cardId);
   if (itemPath) return itemPath;
+  const artifactPath = resolveArtifactCardArtPath(cardId);
+  if (artifactPath) return artifactPath;
   return resolveEnginePartArtPath(cardId);
 }
 

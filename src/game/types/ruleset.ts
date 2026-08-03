@@ -36,6 +36,11 @@ export interface RulesetConfig {
   v6Formula?: boolean;
   /** V5/V6 Fetzladung cap (default 3 when formula ruleset). Ignored when unset under legacy. */
   maxFetzCharge?: number;
+  /**
+   * V5 optional artifact auction (playtest). When true, auction may run if
+   * createGame({ enableArtifactAuction: true }) — Play setup defaults OFF.
+   */
+  v5ArtifactAuction?: boolean;
 }
 
 /** Canonical match ruleset identity flags (never mix V5 + V6 formula). */
@@ -72,6 +77,8 @@ export const V3_RULESET: RulesetConfig = {
 /** V5 formula playtest defaults (20 LP, combat + formula, charge max 3). */
 export const V5_RULESET: RulesetConfig = {
   ...DEFAULT_RULESET,
+  startingHp: 30,
+  maxHp: 30,
   maxBoundCards: 3,
   mainDeckSize: 106,
   v3Combat: true,

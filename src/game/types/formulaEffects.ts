@@ -11,7 +11,23 @@ export type FormulaTechniqueEffect =
   | { kind: 'instant_clear_own_mark' }
   | { kind: 'instant_enemy_stability'; amount: number }
   | { kind: 'instant_retrieve_formula' }
+  /** Draw N, then pending `draw-keep-one` so the player keeps 1 and discards the rest. */
+  | { kind: 'instant_draw_keep_one'; draw: number }
   | { kind: 'enemy_next_attack_penalty'; amount: number }
+  /** Reduce next enemy-targeted formula primary (damage) against you. */
+  | { kind: 'enemy_next_formula_mitigation'; amount: number }
+  /**
+   * Direct formula offense (V5 cutover). Opponent defends with W6 only.
+   * stripShield: remove shield after a non-blocked hit; defendPenalty: −N on defend roll.
+   */
+  | {
+      kind: 'formula_damage';
+      amount: number;
+      stripShield?: number;
+      defendPenalty?: number;
+    }
+  /** Lock one enemy formula component for their next Formelphase. */
+  | { kind: 'lock_enemy_formula_component' }
   | {
       kind: 'prep_attack';
       combatBonus?: number;
@@ -30,7 +46,11 @@ export type FormulaTechniqueEffect =
   | {
       kind: 'prep_boost';
       valueBonus?: number;
-      /** Fokuskurbel: after non-numeric boost, draw 1 and discard 1. */
+      /**
+       * Adrenalinschrei / Fokuskurbel: after a non-numeric boost (Luft/Schatten),
+       * draw 1 and discard 1. Value bonus applies to the next action card
+       * (attack / block / numeric boost) when preparedActionType is `boost`.
+       */
       filterHandIfNoValue?: boolean;
     };
 
@@ -54,6 +74,11 @@ export type FormulaCatalystEffect =
       selfDamage?: number;
       /** Verdichtung: also buff used components' stability. */
       stabilityBuffUsed?: number;
+      /**
+       * Verdichtung: also arm Adrenalinschrei-style prep_boost for the next
+       * numbered elemental action card (attack / block / boost).
+       */
+      nextActionValueBonus?: number;
       /** Sofortzünder: draw 1 then discard 1 after resolve. */
       drawDiscardAfter?: boolean;
     }
@@ -81,7 +106,7 @@ export interface FormulaPrepState {
   markIfNoReaction?: PrimaryMarkId;
   /** Katalysator: grant shield to attacker on successful hit. */
   mirrorShieldOnHit: number;
-  /** Applied immediately after activate (Überladung). */
+  /** Applied immediately after activate (Überspannung). */
   pendingSelfDamage: number;
   /** Kettenhieb */
   stripShieldOnHpDamage: number;

@@ -2,7 +2,7 @@
  * Combinate formula card model + combination label helpers.
  * Location: src/features/build/model/combinateFormula.ts
  */
-import type { Element } from '../../../game/types';
+import type { FormulaDisplayCard } from '../../../components/cards/formula';
 import {
   BUILD_SLOT_LABEL_DE,
   BUILD_SLOT_ORDER,
@@ -10,18 +10,8 @@ import {
   type BuildSlots,
 } from './buildTypes';
 
-export interface FormulaCatalogCard {
-  id: string;
-  name: string;
-  role: BuildSlotRole;
-  imageUrl: string;
-  /** Set for Essenz cards; null for Technik/Katalysator. */
-  element: Element | null;
-  stability: number;
-  effectText: string;
-  /** Technik activation mode key; null for Essenz/Katalysator. */
-  activationMode: string | null;
-}
+/** Build catalog card — same shape as shared FormulaDisplayCard. */
+export type FormulaCatalogCard = FormulaDisplayCard;
 
 /** Drag MIME for formula cards in Combinate. */
 export const FORMULA_CARD_DRAG_MIME = 'application/x-letz-fetz-formula-card';

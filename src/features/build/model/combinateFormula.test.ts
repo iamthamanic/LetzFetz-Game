@@ -51,7 +51,7 @@ describe('combinateFormula helpers', () => {
     ).toBeNull();
     expect(
       buildCombinationLabel({
-        technik: 'v5-technik-durchschuss',
+        technik: 'v5-technik-impulsgeschoss',
         essenz: null,
         katalysator: null,
       }),

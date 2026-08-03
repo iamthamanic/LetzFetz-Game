@@ -136,7 +136,7 @@ export function applyPlaytestPatch(state: GameState, patch: PlaytestPatch): Game
       }
     };
 
-    pullIntoHand('v5-technik-durchschuss');
+    pullIntoHand('v5-technik-impulsgeschoss');
     pullIntoHand('fire-attack-6');
     next.players = {
       ...next.players,

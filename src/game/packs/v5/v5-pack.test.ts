@@ -16,15 +16,15 @@ import {
 import { formulaSlotForDef } from '../../engine/formulaSlots';
 
 describe('V5_PACK', () => {
-  it('exports 12+12+12 formula + 6 items and §3.1 deck size 106', () => {
-    expect(V5_PACK.techniques).toHaveLength(12);
-    expect(V5_PACK.essences).toHaveLength(12);
-    expect(V5_PACK.catalysts).toHaveLength(12);
-    expect(V5_PACK.items).toHaveLength(6);
-    expect(V5_MIX.technique).toBe(12);
-    expect(V5_MIX.essence).toBe(12);
-    expect(V5_MIX.catalyst).toBe(12);
-    expect(V5_MIX.item).toBe(6);
+  it('exports 9+6+10 formula + 8 items and deck size 97', () => {
+    expect(V5_PACK.techniques).toHaveLength(9);
+    expect(V5_PACK.essences).toHaveLength(6);
+    expect(V5_PACK.catalysts).toHaveLength(10);
+    expect(V5_PACK.items).toHaveLength(8);
+    expect(V5_MIX.technique).toBe(9);
+    expect(V5_MIX.essence).toBe(6);
+    expect(V5_MIX.catalyst).toBe(10);
+    expect(V5_MIX.item).toBe(8);
     expect(V5_MIX.element).toBe(54);
     expect(V5_PACK.elementCards).toHaveLength(54);
     expect(V5_PACK.elementCards.filter((c) => c.cardType === 'attack')).toHaveLength(24);
@@ -38,9 +38,11 @@ describe('V5_PACK', () => {
         V5_MIX.item +
         V5_MIX.glitch,
     );
-    expect(V5_TARGET_MAIN_DECK_SIZE).toBe(106);
-    expect(V5_PACK_MAIN_DECK_SIZE).toBe(106);
-    expect(V5_PACK_RULESET.mainDeckSize).toBe(106);
+    expect(V5_TARGET_MAIN_DECK_SIZE).toBe(97);
+    expect(V5_PACK_MAIN_DECK_SIZE).toBe(97);
+    expect(V5_PACK_RULESET.mainDeckSize).toBe(97);
+    expect(V5_PACK.arenas).toHaveLength(6);
+    expect(V5_PACK.arenas.every((a) => !a.d6Variants)).toBe(true);
   });
 
   it('ships resolving formulaEffect on every formula card', () => {
@@ -55,7 +57,22 @@ describe('V5_PACK', () => {
     }
   });
 
-  it('ships visual profiles on all 36 formula cards', () => {
+  it('Verdichtung effectText mentions elemental Angriff/Block/Boost +1', () => {
+    const cat = V5_PACK.catalysts?.find((c) => c.id === 'v5-katalysator-verdichtung');
+    expect(cat).toBeDefined();
+    expect(cat?.effectText).toMatch(/Elementarkarte/);
+    expect(cat?.effectText).toMatch(/Angriff/);
+    expect(cat?.effectText).toMatch(/Block/);
+    expect(cat?.effectText).toMatch(/Boost/);
+    expect(cat?.formulaEffect).toMatchObject({
+      kind: 'primary_bonus',
+      amount: 1,
+      stabilityBuffUsed: 1,
+      nextActionValueBonus: 1,
+    });
+  });
+
+  it('ships visual profiles on all formula cards', () => {
     for (const t of V5_PACK.techniques ?? []) {
       expect(t.visual?.id, t.id).toBeTruthy();
       expect(t.visual?.delivery, t.id).toBeTruthy();
@@ -77,11 +94,28 @@ describe('V5_PACK', () => {
   it('builds main deck including full formula + items', () => {
     const deck = buildMainDeckInstances(V5_PACK, createSeededRng(1));
     expect(deck).toHaveLength(V5_PACK_MAIN_DECK_SIZE);
-    expect(deck.some((c) => c.defId === 'v5-technik-durchschuss')).toBe(true);
-    expect(deck.some((c) => c.defId === 'v5-technik-sperrkreis')).toBe(true);
-    expect(deck.some((c) => c.defId === 'v5-essenz-tiefenwasserextrakt')).toBe(true);
-    expect(deck.some((c) => c.defId === 'v5-katalysator-ueberladung')).toBe(true);
+    expect(deck.some((c) => c.defId === 'v5-technik-impulsgeschoss')).toBe(true);
+    expect(deck.some((c) => c.defId === 'v5-technik-bannkreis')).toBe(true);
+    expect(deck.some((c) => c.defId === 'v5-essenz-wasser')).toBe(true);
+    expect(deck.some((c) => c.defId === 'v5-katalysator-ueberspannung')).toBe(true);
     expect(deck.some((c) => c.defId === 'v5-item-rostiger-nagel')).toBe(true);
+  });
+
+  it('includes every shipped Technik / Essenz / Katalysator def in the main deck', () => {
+    const deck = buildMainDeckInstances(V5_PACK, createSeededRng(7));
+    const deckIds = new Set(deck.map((c) => c.defId));
+    for (const t of V5_PACK.techniques ?? []) {
+      expect(deckIds.has(t.id), `missing Technik ${t.id}`).toBe(true);
+    }
+    for (const e of V5_PACK.essences ?? []) {
+      expect(deckIds.has(e.id), `missing Essenz ${e.id}`).toBe(true);
+    }
+    for (const c of V5_PACK.catalysts ?? []) {
+      expect(deckIds.has(c.id), `missing Katalysator ${c.id}`).toBe(true);
+    }
+    expect(V5_PACK.techniques).toHaveLength(9);
+    expect(V5_PACK.essences).toHaveLength(6);
+    expect(V5_PACK.catalysts).toHaveLength(10);
   });
 
   it('createGame smoke: draw + formula build', () => {
@@ -94,7 +128,7 @@ describe('V5_PACK', () => {
       ruleset: V5_PACK_RULESET,
     });
     expect(state.meta.v5FormulaEnabled).toBe(true);
-    expect(state.players.p1.hp).toBe(20);
+    expect(state.players.p1.hp).toBe(30);
 
     state = applyAction(
       state,
@@ -119,7 +153,7 @@ describe('V5_PACK', () => {
             ...state.players.p1,
             hand: [
               ...state.players.p1.hand,
-              { instanceId: 'force-tech', defId: 'v5-technik-durchschuss' },
+              { instanceId: 'force-tech', defId: 'v5-technik-impulsgeschoss' },
             ],
           },
         },

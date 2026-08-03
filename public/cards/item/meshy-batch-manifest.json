@@ -1,0 +1,96 @@
+{
+  "model": "nano-banana-pro",
+  "aspect_ratio": "3:4",
+  "credits_per_image": 9,
+  "credits_total": 81,
+  "retries": 0,
+  "created_at": "2026-08-02",
+  "style_note": "Full-bleed dunkles Pergament (#1a1510–#2a2218), paper grain, ink blotches, soot; bold ink outlines; muddy palette + one neon accent; art only, no text/frame",
+  "succeeded": 8,
+  "failed": 0,
+  "failed_ids": [],
+  "cards": {
+    "werkzeugkoffer": {
+      "card_id": "v5-item-werkzeugkoffer",
+      "name": "Werkzeugkoffer",
+      "task_id": "019fc1e2-d83a-7b7c-98dc-28b06c7a331e",
+      "status": "SUCCEEDED",
+      "path": "public/cards/item/werkzeugkoffer.png",
+      "credits": 9,
+      "retries": 0,
+      "prompt": "Full-bleed dark parchment paper background (#1a1510 to #2a2218), warm brown paper grain, ink blotches, soot stains. Centred ritual street prop on dunkles Pergament, one chunky object ~70% frame, bold black ink outlines, moody satirical cartoon (not cute/chibi), muddy palette + one neon accent. Inventory icon on parchment only — no text, logos, card frame, human, hands, alley/city, navy bg, glossy toy. SUBJECT: Battered open metal toolbox overflowing scrap tools, amber neon accent."
+    },
+    "gezinkter-wuerfel": {
+      "card_id": "v5-item-gezinkter-wuerfel",
+      "name": "Gezinkter Würfel",
+      "task_id": "019fc1e2-d892-78fa-80a3-1ed4484659a5",
+      "status": "SUCCEEDED",
+      "path": "public/cards/item/gezinkter-wuerfel.png",
+      "credits": 9,
+      "retries": 0,
+      "prompt": "Full-bleed dark parchment paper background (#1a1510 to #2a2218), warm brown paper grain, ink blotches, soot stains. Centred ritual street prop on dunkles Pergament, one chunky object ~70% frame, bold black ink outlines, moody satirical cartoon (not cute/chibi), muddy palette + one neon accent. Inventory icon on parchment only — no text, logos, card frame, human, hands, alley/city, navy bg, glossy toy. SUBJECT: Loaded six-sided dice with filed corner, lucky neon green pip accent, street cheat vibe."
+    },
+    "nasser-socken": {
+      "card_id": "v5-item-nasser-socken",
+      "name": "Nasser Socken",
+      "task_id": "019fc1e2-ef37-7b7e-a7db-96a202c663fe",
+      "status": "SUCCEEDED",
+      "path": "public/cards/item/nasser-socken.png",
+      "credits": 9,
+      "retries": 0,
+      "prompt": "Full-bleed dark parchment paper background (#1a1510 to #2a2218), warm brown paper grain, ink blotches, soot stains. Centred ritual street prop on dunkles Pergament, one chunky object ~70% frame, bold black ink outlines, moody satirical cartoon (not cute/chibi), muddy palette + one neon accent. Inventory icon on parchment only — no text, logos, card frame, human, hands, alley/city, navy bg, glossy toy. SUBJECT: Soggy mismatched wet sock dripping water, blue neon drip accent, street laundry grit."
+    },
+    "kaputter-rueckspiegel": {
+      "card_id": "v5-item-kaputter-rueckspiegel",
+      "name": "Kaputter Rückspiegel",
+      "task_id": "019fc1e2-f340-7a74-8101-8ed793501cfb",
+      "status": "SUCCEEDED",
+      "path": "public/cards/item/kaputter-rueckspiegel.png",
+      "credits": 9,
+      "retries": 0,
+      "prompt": "Full-bleed dark parchment paper background (#1a1510 to #2a2218), warm brown paper grain, ink blotches, soot stains. Centred ritual street prop on dunkles Pergament, one chunky object ~70% frame, bold black ink outlines, moody satirical cartoon (not cute/chibi), muddy palette + one neon accent. Inventory icon on parchment only — no text, logos, card frame, human, hands, alley/city, navy bg, glossy toy. SUBJECT: Cracked car rear-view mirror shard, fractured glass, cyan neon glitch accent."
+    },
+    "halbe-dose-energy": {
+      "card_id": "v5-item-halbe-dose-energy",
+      "name": "Halbe Dose Energy",
+      "task_id": "019fc1f3-0d12-7cc0-8571-924eb03bf0bf",
+      "status": "SUCCEEDED",
+      "path": "public/cards/item/halbe-dose-energy.png",
+      "credits": 9,
+      "retries": 1,
+      "prompt": "Full-bleed dark parchment (#1a1510–#2a2218), paper grain, ink blotches, soot. Centred street prop ~70% frame, bold ink outlines, moody satirical cartoon, muddy palette + neon accent. Inventory icon only — no card frame, human, hands, alley, navy bg. SUBJECT: Half-drunk crushed neon-green energy can labelled ENERGY in plain bold letters only; acid-green drip, sticky residue. FORBIDDEN: Monster claw-M logo, stylized M mark, brand logos, trademarks.",
+      "previous_task_id": "019fc1e2-f7fb-7b7f-a08e-256eac5c26df",
+      "regen_note": "Replaced Monster claw-M with generic ENERGY lettering (2026-08-02)"
+    },
+    "rostiger-nagel": {
+      "card_id": "v5-item-rostiger-nagel",
+      "name": "Rostiger Nagel",
+      "task_id": "019fc1e2-fc95-7905-ad16-03633bc4b6dc",
+      "status": "SUCCEEDED",
+      "path": "public/cards/item/rostiger-nagel.png",
+      "credits": 9,
+      "retries": 0,
+      "prompt": "Full-bleed dark parchment paper background (#1a1510 to #2a2218), warm brown paper grain, ink blotches, soot stains. Centred ritual street prop on dunkles Pergament, one chunky object ~70% frame, bold black ink outlines, moody satirical cartoon (not cute/chibi), muddy palette + one neon accent. Inventory icon on parchment only — no text, logos, card frame, human, hands, alley/city, navy bg, glossy toy. SUBJECT: Huge rusty iron nail, orange rust flakes, amber spark accent, scrap metal grit."
+    },
+    "verdaechtiger-pilz": {
+      "card_id": "v5-item-verdaechtiger-pilz",
+      "name": "Verdächtiger Pilz",
+      "task_id": "019fc1e3-00b0-7a74-9606-9ea9490d0728",
+      "status": "SUCCEEDED",
+      "path": "public/cards/item/verdaechtiger-pilz.png",
+      "credits": 9,
+      "retries": 0,
+      "prompt": "Full-bleed dark parchment paper background (#1a1510 to #2a2218), warm brown paper grain, ink blotches, soot stains. Centred ritual street prop on dunkles Pergament, one chunky object ~70% frame, bold black ink outlines, moody satirical cartoon (not cute/chibi), muddy palette + one neon accent. Inventory icon on parchment only — no text, logos, card frame, human, hands, alley/city, navy bg, glossy toy. SUBJECT: Suspicious spotted toadstool, purple cap green dots, toxic neon accent."
+    },
+    "kabelbinder-deluxe": {
+      "card_id": "v5-item-kabelbinder-deluxe",
+      "name": "Kabelbinder Deluxe",
+      "task_id": "019fc1e3-01f3-7906-8585-02efe8283547",
+      "status": "SUCCEEDED",
+      "path": "public/cards/item/kabelbinder-deluxe.png",
+      "credits": 9,
+      "retries": 0,
+      "prompt": "Full-bleed dark parchment paper background (#1a1510 to #2a2218), warm brown paper grain, ink blotches, soot stains. Centred ritual street prop on dunkles Pergament, one chunky object ~70% frame, bold black ink outlines, moody satirical cartoon (not cute/chibi), muddy palette + one neon accent. Inventory icon on parchment only — no text, logos, card frame, human, hands, alley/city, navy bg, glossy toy. SUBJECT: Thick black cable-tie zip-lock bundle deluxe, neon magenta accent, plastic grit."
+    }
+  }
+}

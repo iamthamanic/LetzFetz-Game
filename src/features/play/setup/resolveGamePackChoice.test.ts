@@ -45,8 +45,8 @@ describe('resolveGamePackChoice', () => {
     expect(resolved.pack).toEqual(mergeFormulaPlayOverlay(V5_PACK, []));
     expect(resolved.ruleset).toBe(V5_PACK_RULESET);
     expect(resolved.ruleset?.v5Formula).toBe(true);
-    expect(resolved.ruleset?.startingHp).toBe(20);
-    expect(resolved.playtestHpCap).toBe(20);
+    expect(resolved.ruleset?.startingHp).toBe(30);
+    expect(resolved.playtestHpCap).toBe(30);
   });
 
   it('merges deck opt-ins from localStorage for v5', () => {

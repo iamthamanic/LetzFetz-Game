@@ -28,10 +28,10 @@ function baseState() {
 }
 
 describe('V5 items §21', () => {
-  it('ships all 6 items with action or reaction timing', () => {
-    expect(V5_ITEMS).toHaveLength(6);
-    expect(V5_ITEMS.filter((i) => i.timing === 'action')).toHaveLength(5);
-    expect(V5_ITEMS.filter((i) => i.timing === 'reaction')).toHaveLength(1);
+  it('ships all 8 items with action or reaction timing', () => {
+    expect(V5_ITEMS).toHaveLength(8);
+    expect(V5_ITEMS.filter((i) => i.timing === 'action')).toHaveLength(6);
+    expect(V5_ITEMS.filter((i) => i.timing === 'reaction')).toHaveLength(2);
   });
 
   it('Rostiger Nagel arms ignore-shield prep', () => {

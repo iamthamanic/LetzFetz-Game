@@ -1,14 +1,14 @@
 /**
- * Build workbench shell — sub-tabs Combinate | VFX Studio.
+ * Build workbench shell — Combinate only.
+ * VFX Studio remains on disk but is unwired from nav (product decision).
  * Location: src/features/build/BuildView.tsx
  */
 import React, { useEffect, useState } from 'react';
-import { Boxes, Sparkles } from 'lucide-react';
+import { Boxes } from 'lucide-react';
 import { Tabs, type TabItem } from '../../components/ui/Tabs';
 import { BuildCombineView } from './BuildCombineView';
-import { VfxStudioView } from './vfx/VfxStudioView';
 
-export type BuildSubTab = 'combine' | 'development';
+export type BuildSubTab = 'combine';
 
 const BUILD_SUBTAB_KEY = 'letz-fetz:build-subtab';
 
@@ -24,18 +24,13 @@ const BUILD_SUB_TABS: TabItem[] = [
     icon: <Boxes className="h-4 w-4 shrink-0" />,
     tone: 'sandbox',
   },
-  {
-    id: 'development',
-    label: 'VFX Studio',
-    icon: <Sparkles className="h-4 w-4 shrink-0" />,
-    tone: 'sandbox',
-  },
 ];
 
 function readInitialSubTab(): BuildSubTab {
   try {
     const v = sessionStorage.getItem(BUILD_SUBTAB_KEY);
-    if (v === 'development' || v === 'combine') return v;
+    // Legacy: VFX Studio / Playtest sub-tab ids → Combinate
+    if (v === 'combine' || v === 'development' || v === 'playtest') return 'combine';
   } catch {
     /* ignore */
   }
@@ -70,11 +65,7 @@ export function BuildView({ active }: BuildViewProps) {
       </div>
 
       <div className="relative z-10 flex h-0 min-h-0 flex-1 flex-col overflow-hidden">
-        {subTab === 'combine' ? (
-          <BuildCombineView active={active} />
-        ) : (
-          <VfxStudioView />
-        )}
+        <BuildCombineView active={active} />
       </div>
     </div>
   );

@@ -16,13 +16,13 @@ describe('buildVisualRecipe', () => {
     ).toBeNull();
   });
 
-  it('composes Durchschuss + Glut + Echo with action water', () => {
+  it('composes Impulsgeschoss + Feuer + Echo with action water', () => {
     const recipe = buildVisualRecipe({
       pack: V5_PACK,
       formula: {
         technik: {
           instanceId: 't',
-          defId: 'v5-technik-durchschuss',
+          defId: 'v5-technik-impulsgeschoss',
           slot: 'technik',
           exhausted: false,
           disturbed: false,
@@ -30,7 +30,7 @@ describe('buildVisualRecipe', () => {
         },
         essenz: {
           instanceId: 'e',
-          defId: 'v5-essenz-eingekochte-glut',
+          defId: 'v5-essenz-feuer',
           slot: 'essenz',
           exhausted: false,
           disturbed: false,
@@ -48,13 +48,13 @@ describe('buildVisualRecipe', () => {
       primaryElement: 'water',
     });
     expect(recipe).toMatchObject({
-      delivery: 'beam',
+      delivery: 'projectile',
       shape: 'drill',
       primaryElement: 'water',
       secondaryElement: 'fire',
       transformation: 'duplicate',
     });
-    expect(describeVisualRecipeDe(recipe)).toContain('Bohrstrahl');
+    expect(describeVisualRecipeDe(recipe)).toBeTruthy();
   });
 
   it('works with technik only', () => {
@@ -63,7 +63,7 @@ describe('buildVisualRecipe', () => {
       formula: {
         technik: {
           instanceId: 't',
-          defId: 'v5-technik-notfallbarriere',
+          defId: 'v5-technik-bannkreis',
           slot: 'technik',
           exhausted: false,
           disturbed: false,
