@@ -6,7 +6,16 @@
 
 **Slice 0–1 / Prep (historisch):** #310–#336 INTERNAL scaffolding; Play-Default war V5 bis Cutover.
 
-**Full integration (GitHub):** #341 Affinität ±1 Engine · #342 Fessel-UI · #343 recipe catalog · #344 Echo/Delay · #345 Echo UI · #346 Konstrukte · #347 Konstrukt UI · #348 Überformel · #349 Passives (A/B) · #350 Arenas · #351 Bot · #352 SPIELANLEITUNG · #353 Default cutover · #354 V5 Legacy.
+**Full integration (GitHub, closed):** #341 Affinität ±1 Engine · #342 Fessel-UI · #343 recipe catalog (Slice-1) · #344 Echo/Delay · #345 Echo UI · #346 Konstrukte · #347 Konstrukt UI · #348 Überformel · #349 Passives (A/B) · #350 Arenas · #351 Bot · #352 SPIELANLEITUNG · #353 Default cutover · #354 V5 Legacy.
+
+**Playtest-Slice-1:** done (Default V6, ~105 Rezepte, Kern-Mechaniken). **Noch offen bis Konzept-Vollständigkeit** (priorisierte Queue):
+
+| Prio | Issues |
+|------|--------|
+| P0 | #374 Improvisieren · #375 2. Formeländerung/Rückbau · #376 Elementkarten Hand-only |
+| P1 | #377 Gegenstände/Ausrüstung · #378 Standard-Glitches · #379 Arena-Riss |
+| P2 | #380 Essenzen-Wave · #381 Techniken-Wave · #382 Katalysatoren-Wave · #383 Katalog-Expansion Epic |
+| P3 | #384 Passive-Pool A · #385 Überformel-Wahl · #386 Chaos · #387 Heldenmodus · #388 V5 hard-retire |
 
 **Play-Default (#353):** Neue Matches starten auf **V6** (`defaultPackChoice` → `v6`). V5 bleibt als Legacy-Kachel. `VITE_V6_PLAYABLE` / localStorage-Flag nicht mehr nötig für die V6-Kachel (Test-Override bleibt für Isolation).
 
@@ -508,27 +517,22 @@ Arena immer · kein Schrott · Improvisieren 1→2
 
 Bitte abhaken / korrigieren:
 
-- [x] Passive-Modell: **B feste Charakter-Mikro-Passiven** (Playtest-Default #349). A Pool deferred — einfacher für first playable (keine Draft-UI; 1 feste Macke pro Charakter).  
-- [ ] Ob Passive-Pool **vor** Charakterwahl, **danach**, oder parallel zur Arena-Reveal *(nur relevant wenn A später)*  
-- [ ] Ob erste playable Version Überformel schon enthält oder Slice-1 ohne  
-- [ ] Ob `V6_PACK` physisch unter `src/content/v6` + `src/generated/v6` liegt (Pfad ok?)  
-- [ ] Generator-Output: JSON vs TS  
-- [ ] Heldenmodus: nur Notiz oder schon Flag-Name reservieren  
-- [x] V5-Menü-Kachel (#354): Badge **„Legacy“**; Subtitle **„Legacy / Regression“**; Pack-Summary **„V5 Formel (Legacy)“** — nicht nur Titel „V5 Regression“.  
-- [x] Exact Start: Affinität „pro Runde“ = **einmal pro eigenem Zug/Durchlauf** (Reset eigene Startphase; Spend auf eigenen Angriff/Challenge **oder Formelaktivierung**; Block-Affinität **nur im eigenen Aktionszug**, nicht bei Verteidigung gegen den Gegner). Playtest-Default via #341 / #356.  
-- [x] Fessel / Kettenfessel **Zielwahl manuell**: Angreifer wählt einen **besetzten** gegnerischen Formelplatz (Technik / Essenz / Katalysator) via Pending-Choice (`PICK_V6_FESSEL_TARGET`); leere Plätze ungültig. Kein Auto Technik→Essenz→Katalysator. Bot-Heuristik: Katalysator → Essenz → Technik.  
-- [x] Echo/Delay Engine (#344): Warteschlangen in Meta; Startphase Echo → Verzögerung; Katalysator-Ablage nach Auflösung; Playtest-Hooks (volle Katalysator-Matrix später).
-- [x] Echo/Delay Play-UI (#345): Queue-Chips + Katalysator „bleibt bis Auflösung“; feste Echo-1 / Delay-+2.
-- [x] Konstrukte Engine (#346): `player.construct`; Startphase Haltbarkeit −1; Playtest-EK Beschwörung; Herausfordern stören/zerstören; 105-Katalog unverändert.
-- [x] Konstrukt Play-UI (#347): Zone am Playmat; Haltbarkeit sichtbar; gestört-Overlay; Ziel-Button; Toast bei Ersetzen; Aktivierung über Formel aktivieren.
-- [x] Überformel Play-UI (#348): Button/Confirm/Preview bei Fetz=3 + TEK; fester +2 Primär; generische Overlay-Texte; resolve via Engine.
-- [x] Arenen V6 Core (#350): 6 Kern-Arenen + Reaktions-Cap unter `v6Formula`.
-- [x] Passives / Macken (#349): **Option B feste Macken** end-to-end (Daten + Engine-Hooks + DE-UI); Pool A deferred.
-- [x] Bot Affinity / V6 priorities (#351): Playbook + Digest; Heuristik spendet Affinität nur bei Wertgewinn; LLM-Prompt unter `v6Formula`.
-- [x] SPIELANLEITUNG_V6_DRAFT + AGENTS Kurzreferenz (#352).
-- [x] Play-Default cutover (#353): `defaultPackChoice` → `v6`; V5 Legacy-Kachel; Flag nicht mehr required.
+- [x] Passive-Modell: **B feste Charakter-Mikro-Passiven** (Playtest-Default #349). A Pool deferred → Issue **#384**.  
+- [ ] Ob Passive-Pool **vor** Charakterwahl, **danach**, oder parallel zur Arena-Reveal *(nur relevant für #384)*  
+- [x] Erste playable Version **enthält Überformel** (#348); fest +2 Primär. Spielerwahl → Issue **#385**.  
+- [x] `V6_PACK` unter `src/content/v6` + `src/generated/v6` (Pfad ok).  
+- [x] Generator-Output: **TS** (`formulaRecipes.generated.ts`).  
+- [ ] Heldenmodus: nur Notiz oder Flag → Issue **#387**  
+- [x] V5-Menü-Kachel (#354): Badge **„Legacy“**; Subtitle **„Legacy / Regression“**; Pack-Summary **„V5 Formel (Legacy)“**.  
+- [x] Exact Start: Affinität „pro Runde“ = **einmal pro eigenem Zug/Durchlauf** (#341 / #356).  
+- [x] Fessel / Kettenfessel **Zielwahl manuell** (`PICK_V6_FESSEL_TARGET`).  
+- [x] Echo/Delay Engine + Play-UI (#344 / #345).  
+- [x] Konstrukte Engine + Play-UI (#346 / #347).  
+- [x] Überformel Play-UI (#348).  
+- [x] Arenen V6 Core (#350).  
+- [x] Passives B (#349); Bot (#351); SPIELANLEITUNG (#352); Cutover (#353).  
 
-Nach deiner finalen Form: dieses Doc auf **verbindlich** setzen und `SPIELANLEITUNG_V6_DRAFT.md` + AGENTS-Kurzreferenz nachziehen.
+**Rest-Queue (Playtest-Slice-1 done; Konzept-Vollständigkeit open):** #374–#388 — siehe Tabelle oben. Start empfohlen: **#374 → #375 → #376**.
 
 ---
 
@@ -554,3 +558,4 @@ Nach deiner finalen Form: dieses Doc auf **verbindlich** setzen und `SPIELANLEIT
 | 2026-08-03 | #352 `SPIELANLEITUNG_V6_DRAFT.md` + AGENTS / `.cursor/rules` Kurzreferenz |
 | 2026-08-03 | #353 Play-Default → V6; V5 Legacy-Kachel; `VITE_V6_PLAYABLE` relaxed |
 | 2026-08-03 | #354 V5 Legacy-Labels final (§99): Badge Legacy + Legacy/Regression; Pack-Summary „V5 Formel (Legacy)“ |
+| 2026-08-03 | Rest-Queue Issues #374–#388: P0 Improvisieren/Formelphase/Elemente · P1 Items/Glitches/Riss · P2 Content-Waves+Katalog · P3 Pool A/Überformel-Wahl/Chaos/Helden/V5-retire |

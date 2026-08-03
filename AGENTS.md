@@ -128,6 +128,8 @@ Design: `.qa/design/vertical-slice-architecture.md`
 
 **Bei Unklarheit:** **Produktziel = V6.** **Play-Default = V6 Formel** (`v6Formula` / `V6_CORE_PACK`). V5 bleibt Legacy/Regression (`v5Formula`). Explizit Base-Pack → V1-Regression. V3 Soft-Retire.
 
+**V6 Rest-Queue (Konzept-Vollständigkeit):** Issues **#374–#388** — P0 Improvisieren / 2. Formeländerung / Elementkarten → P1 Items/Glitches/Arena-Riss → P2 Content-Waves + Katalog-Expansion → P3 deferred. Details: [`docs/letz-fetz-v6-spielkonzept.md`](docs/letz-fetz-v6-spielkonzept.md) (Kopf-Tabelle + §99).
+
 **Pflege-Pflicht für Agenten:**
 
 1. Regel- oder Kartentext-Änderungen an **V1** → `SPIELANLEITUNG_V1.md` sofort mitziehen.
