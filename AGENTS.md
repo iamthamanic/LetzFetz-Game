@@ -105,25 +105,28 @@ Design: `.qa/design/vertical-slice-architecture.md`
 
 ## Produkt- & Spielregeln (Kurzreferenz)
 
-- 1v1, **20** Leben (V5 Playtest), 5 Zugphasen, **3 Formelplätze**, Handlimit 6
+- 1v1, **30** Leben (V6 Playtest), 5 Zugphasen, **3 Formelplätze**, Handlimit 6
 - Elemente: Feuer, Wasser, Erde, Luft, Schatten, Licht
 - W6-Würfelbonus: 1–2 → +0, 3–4 → +1, 5–6 → +2
-- V5: Formel Technik/Essenz/Katalysator · Fetzladung max 3 · Großformel · Schild/Impulse/Marken/Reaktionen
+- V6: Formel TE/TK/EK/TEK · Affinität ±1 · Fetz nur TEK · Überformel · Fessel/Echo/Delay/Konstrukte
+- V5: Legacy/Regression — Formel + Großformel (`v5Formula`)
 
 ### Regelquellen (verbindlich)
 
 | Dokument | Rolle |
 |----------|--------|
-| [`docs/letz-fetz-v5-spielkonzept.md`](docs/letz-fetz-v5-spielkonzept.md) | **V5 Vollkonzept** (verbindlich für Cutover) |
-| [`docs/rules/SPIELANLEITUNG_V5_DRAFT.md`](docs/rules/SPIELANLEITUNG_V5_DRAFT.md) | **Ziel-Engine-Prosa V5** — Phasen, Formel, Kampfkern |
-| [`docs/letz-fetz-v6-spielkonzept.md`](docs/letz-fetz-v6-spielkonzept.md) | **V6 Konzept + Integrationsvertrag** — Slice 0–1 INTERNAL; Setup `v6` only behind `V6_PLAYABLE` / `VITE_V6_PLAYABLE`; not Play-Default yet |
-| [`docs/rules/SPIELANLEITUNG_V1.md`](docs/rules/SPIELANLEITUNG_V1.md) | **Regression** — physisches V1 + spielbarer Base-Pfad bis Cutover |
+| [`docs/letz-fetz-v6-spielkonzept.md`](docs/letz-fetz-v6-spielkonzept.md) | **V6 Vollkonzept + Integrationsvertrag** (Produktziel) |
+| [`docs/rules/SPIELANLEITUNG_V6_DRAFT.md`](docs/rules/SPIELANLEITUNG_V6_DRAFT.md) | **Ziel-Engine-Prosa V6** |
+| [`docs/rules/V6_BOT_PLAYBOOK.md`](docs/rules/V6_BOT_PLAYBOOK.md) | Solo-Bot / LLM Prioritäten (Digest in `v6BotPlaybook.ts`) |
+| [`docs/letz-fetz-v5-spielkonzept.md`](docs/letz-fetz-v5-spielkonzept.md) | **V5 Vollkonzept** (Legacy / Regression) |
+| [`docs/rules/SPIELANLEITUNG_V5_DRAFT.md`](docs/rules/SPIELANLEITUNG_V5_DRAFT.md) | Engine-Prosa V5 (Legacy) |
+| [`docs/rules/SPIELANLEITUNG_V1.md`](docs/rules/SPIELANLEITUNG_V1.md) | **Regression** — physisches V1 + spielbarer Base-Pfad |
 | [`docs/rules/SPIELANLEITUNG_V2_DRAFT.md`](docs/rules/SPIELANLEITUNG_V2_DRAFT.md) | V2 Draft — historisch |
 | [`docs/rules/SPIELANLEITUNG_V2_WIP.md`](docs/rules/SPIELANLEITUNG_V2_WIP.md) | V2 Grill-Log — historisch |
-| [`docs/rules/SPIELANLEITUNG_V3_WIP.md`](docs/rules/SPIELANLEITUNG_V3_WIP.md) | V3 Vorgänger (Fetzgerät-Slots) — Soft-Retire zugunsten V5-Formel |
+| [`docs/rules/SPIELANLEITUNG_V3_WIP.md`](docs/rules/SPIELANLEITUNG_V3_WIP.md) | V3 Vorgänger (Fetzgerät-Slots) — Soft-Retire |
 | [`docs/letz-fetz-v3-überarbeitung.md`](docs/letz-fetz-v3-überarbeitung.md) | V3 Dump — historisch / Referenz |
 
-**Bei Unklarheit:** **Play-Default = V5 Formel** (`v5Formula`) until an explicit **PLAYABLE** V6 cutover. V6 Slice 1 may exist as **INTERNAL** (`v6Formula` / `V6_CORE_PACK` / recipes) with optional Setup tile behind `VITE_V6_PLAYABLE` or `localStorage letz-fetz:v6-playable=1` — **default pack choice stays V5**. Explizit Base-Pack → V1-Regression. V3-Fetzgerät / Bound-4 + Live-3D ist Soft-Retire (Legacy-Kachel).
+**Bei Unklarheit:** **Produktziel = V6.** **Play-Default bleibt V5 Formel** (`v5Formula`) bis explizitem Cutover (#353). V6 hinter `v6Formula` / optional Setup-Tile (`VITE_V6_PLAYABLE` oder `localStorage letz-fetz:v6-playable=1`). Explizit Base-Pack → V1-Regression. V3 Soft-Retire.
 
 **Pflege-Pflicht für Agenten:**
 
@@ -131,7 +134,7 @@ Design: `.qa/design/vertical-slice-architecture.md`
 2. V2-Historie → `SPIELANLEITUNG_V2_WIP.md` / `SPIELANLEITUNG_V2_DRAFT.md`.
 3. V3-Historie → `SPIELANLEITUNG_V3_WIP.md` + Dump (nur wenn Legacy-Pfad).
 4. **V5-Regeln** → `SPIELANLEITUNG_V5_DRAFT.md` + `letz-fetz-v5-spielkonzept.md` im selben Change.
-5. **V6-Regeln / Integrationsvertrag** → `letz-fetz-v6-spielkonzept.md` (+ spätere `SPIELANLEITUNG_V6_*`) im selben Change; do not mark V6 Play-Default until PLAYABLE cutover.
+5. **V6-Regeln** → `SPIELANLEITUNG_V6_DRAFT.md` + `letz-fetz-v6-spielkonzept.md` im selben Change; Play-Default erst mit Cutover (#353).
 6. Kurzreferenz hier und in `.cursor/rules/project-core.mdc` bei Regelbrüchen aktualisieren.
 
 ---
@@ -299,8 +302,11 @@ Globale Agent-Skills (Pipeline + ECC-Helfer): siehe **Agent-Workflows** oben; in
 
 | Dokument | Inhalt |
 |----------|--------|
-| [letz-fetz-v5-spielkonzept.md](docs/letz-fetz-v5-spielkonzept.md) | V5 Vollkonzept (Produktziel) |
-| [SPIELANLEITUNG_V5_DRAFT.md](docs/rules/SPIELANLEITUNG_V5_DRAFT.md) | V5 spielbare Prosa |
+| [letz-fetz-v6-spielkonzept.md](docs/letz-fetz-v6-spielkonzept.md) | V6 Vollkonzept (Produktziel) |
+| [SPIELANLEITUNG_V6_DRAFT.md](docs/rules/SPIELANLEITUNG_V6_DRAFT.md) | V6 spielbare Prosa |
+| [V6_BOT_PLAYBOOK.md](docs/rules/V6_BOT_PLAYBOOK.md) | V6 Solo-Bot Prioritäten |
+| [letz-fetz-v5-spielkonzept.md](docs/letz-fetz-v5-spielkonzept.md) | V5 Vollkonzept (Legacy) |
+| [SPIELANLEITUNG_V5_DRAFT.md](docs/rules/SPIELANLEITUNG_V5_DRAFT.md) | V5 spielbare Prosa (Legacy) |
 | [SPIELANLEITUNG_V1.md](docs/rules/SPIELANLEITUNG_V1.md) | V1 Regression + physisch |
 | [SPIELANLEITUNG_V2_DRAFT.md](docs/rules/SPIELANLEITUNG_V2_DRAFT.md) | V2 Draft (historisch) |
 | [SPIELANLEITUNG_V2_WIP.md](docs/rules/SPIELANLEITUNG_V2_WIP.md) | V2 Grill-Log (historisch) |

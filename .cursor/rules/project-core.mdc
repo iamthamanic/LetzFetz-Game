@@ -31,9 +31,10 @@ Lies `AGENTS.md` im Repo-Root zuerst.
 3. Appwrite später (nicht Supabase ausbauen)
 
 ## Regeln
-- **Produktziel V5:** `docs/letz-fetz-v5-spielkonzept.md` + `docs/rules/SPIELANLEITUNG_V5_DRAFT.md` (Formel Technik/Essenz/Katalysator)
-- Play-Default: V5 Formel (`SPIELANLEITUNG_V5_DRAFT.md` + Spielkonzept); Base = V1-Regression
-- V2/V3: historisch / Soft-Retire (`SPIELANLEITUNG_V2_*`, `SPIELANLEITUNG_V3_WIP.md`, V3-Dump)
+- **Produktziel V6:** `docs/letz-fetz-v6-spielkonzept.md` + `docs/rules/SPIELANLEITUNG_V6_DRAFT.md`
+- Play-Default bis Cutover (#353): V5 Formel; V6 hinter Flag / Setup-Tile
+- V5 Legacy: `docs/rules/SPIELANLEITUNG_V5_DRAFT.md` + Spielkonzept
+- Base = V1-Regression (`SPIELANLEITUNG_V1.md`); V2/V3 historisch / Soft-Retire
 - Regeländerungen → passende Anleitung im selben Change mitziehen (siehe AGENTS.md)
 
 ## Validierung

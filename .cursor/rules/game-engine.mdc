@@ -10,9 +10,11 @@ alwaysApply: false
 - State ist immutable: `applyAction(state, action) → newState`
 - `getLegalActions(state, playerId)` für Bot und UI
 - Würfel: injizierbarer RNG für Tests (`() => number`)
-- Engine-Default: `docs/rules/SPIELANLEITUNG_V1.md` — schlägt Legacy-Prototyp-Code
-- V3 Zielmodell (Flag/Slices): `docs/rules/SPIELANLEITUNG_V3_WIP.md` + `docs/letz-fetz-v3-überarbeitung.md`
+- Produktziel-Prosa: `docs/rules/SPIELANLEITUNG_V6_DRAFT.md` — schlägt ältere Drafts bei V6-Fragen
+- V5 Legacy: `docs/rules/SPIELANLEITUNG_V5_DRAFT.md`
+- Engine-Default / Base-Regression: `docs/rules/SPIELANLEITUNG_V1.md` — schlägt Legacy-Prototyp-Code
+- V3 Soft-Retire: `docs/rules/SPIELANLEITUNG_V3_WIP.md` + `docs/letz-fetz-v3-überarbeitung.md`
 - V2 WIP historisch (Phrase): `docs/rules/SPIELANLEITUNG_V2_WIP.md` — nicht gegen V3-Slots verteidigen
 - Neue Logik braucht Unit-Tests (Vitest)
-- Edge Cases: V1 §17; unter V3-Flag zusätzlich V3 §17–§19
-- Regeländerungen → V1 und/oder V3-WIP (+ Dump) **im selben Change** mitziehen
+- Edge Cases: V1 §17; unter V6 zusätzlich spielkonzept §99 / V6-Draft
+- Regeländerungen → passende Anleitung im selben Change mitziehen
