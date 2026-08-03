@@ -1,12 +1,13 @@
 /**
- * Data-driven V5 card & effects catalog for the Play rules modal.
- * Source of truth: V5_PACK (elements, formula, items, arenas, glitches, characters).
+ * Data-driven card & effects catalog for the Play rules modal.
+ * Source of truth: active ContentPack (V5_PACK or V6_CORE_PACK).
  * Location: src/features/play/board/playRulesCardCatalog.ts
  */
 import type {
   ArenaCardDef,
   CatalystCardDef,
   CharacterCardDef,
+  ContentPack,
   ElementCardDef,
   EssenceCardDef,
   GlitchCardDef,
@@ -15,10 +16,13 @@ import type {
   UltimateCardDef,
 } from '../../../game/types';
 import { V5_PACK } from '../../../game/packs/v5';
+import { V6_CORE_PACK } from '../../../game/packs/v6';
 import type { Element } from '../../../game/types/elements';
 import type { RulesSection } from './playRulesSections';
 
 export const PLAY_RULES_CARDS_SECTION_ID = 'play-rules-cards';
+
+export type PlayRulesPackVariant = 'v5' | 'v6';
 
 const ELEMENT_LABEL_DE: Record<Element, string> = {
   fire: 'Feuer',
@@ -134,7 +138,15 @@ function section(id: string, title: string, body: string): RulesSection {
   return { id, title, body: body.trim() };
 }
 
-function formulaActivationIntro(): string {
+function formulaActivationIntro(variant: PlayRulesPackVariant): string {
+  if (variant === 'v6') {
+    return joinBlocks([
+      'Quelle: V6-Core Slice-1 (`v6-core`) — Kartentexte aus dem Pack; Formel-Effekte aus Rezepten.',
+      'Formelplätze: Technik · Essenz · Katalysator. Katalysator bei Aktivierung verbraucht.',
+      'TE / TK / EK / TEK über Authoring-Rezepte. Fetz nur durch TEK. Keine Ultis / Großformeln.',
+      'Gegnergerichteter Formelschaden → Formelabwehr-W6. Selbstbuff/Heilung/Schild → keine Formelabwehr.',
+    ]);
+  }
   return joinBlocks([
     'Quelle: V5-Pack (`v5-mvp`) — Effekttexte aus den Kartendefinitionen.',
     'Formelplätze: Technik · Essenz · Katalysator. In der Formelphase optional bauen/ersetzen/rückbauen, danach genau eine Aktivierung (oder Passen/Rückbau).',
@@ -145,11 +157,18 @@ function formulaActivationIntro(): string {
 }
 
 /** Catalog categories as copyable rules-style sections (comments reuse same storage). */
-export function buildPlayRulesCardSections(pack: typeof V5_PACK = V5_PACK): RulesSection[] {
+export function buildPlayRulesCardSections(
+  pack: ContentPack = V5_PACK,
+  variant: PlayRulesPackVariant = 'v5',
+): RulesSection[] {
   const ultiById = new Map(pack.ultimates.map((u) => [u.id, u]));
+  const charIntro =
+    variant === 'v6'
+      ? 'Affinität-Scaffold (zwei Elemente). Keine V5-Passiven, keine Ultis.'
+      : 'Passive einmal pro Zug / Trigger laut Text. Großformel bei 3 Fetzladung.';
 
-  return [
-    section('karten-katalog-intro', 'Karten & Effekte — Überblick', formulaActivationIntro()),
+  const sections: RulesSection[] = [
+    section('karten-katalog-intro', 'Karten & Effekte — Überblick', formulaActivationIntro(variant)),
     section(
       'karten-element',
       `Elementkarten (${pack.elementCards.length})`,
@@ -162,26 +181,43 @@ export function buildPlayRulesCardSections(pack: typeof V5_PACK = V5_PACK): Rule
       'karten-glitch',
       `Glitchkarten (${pack.glitches.length})`,
       joinBlocks([
-        'Spielbare Glitches in der Aktionsphase bzw. als Reaktion laut Timing; Sofort-Glitches lösen beim Ziehen aus (keine Ersatzkarte außer laut Text).',
+        variant === 'v6'
+          ? 'Spielbare Glitches laut Timing. Sofort-Glitches sind im V6-Core nicht enthalten.'
+          : 'Spielbare Glitches in der Aktionsphase bzw. als Reaktion laut Timing; Sofort-Glitches lösen beim Ziehen aus (keine Ersatzkarte außer laut Text).',
         ...pack.glitches.map(formatGlitch),
       ]),
     ),
     section(
       'karten-charakter',
       `Charakterkarten (${pack.characters.length})`,
-      joinBlocks([
-        'Passive einmal pro Zug / Trigger laut Text. Großformel bei 3 Fetzladung.',
-        ...pack.characters.map((c) => formatCharacter(c, ultiById.get(c.ultimateId))),
-      ]),
+      joinBlocks([charIntro, ...pack.characters.map((c) => formatCharacter(c, ultiById.get(c.ultimateId)))]),
     ),
-    section(
-      'karten-ulti',
-      `Ultikarten / Großformel (${pack.ultimates.length})`,
-      joinBlocks([
-        'Großformel verbraucht die Fetzladung (danach 0). Katalysator wird abgelegt; Technik/Essenz erschöpft.',
-        ...pack.ultimates.map(formatUltimate),
-      ]),
-    ),
+  ];
+
+  if (variant === 'v5' || pack.ultimates.length > 0) {
+    sections.push(
+      section(
+        'karten-ulti',
+        `Ultikarten / Großformel (${pack.ultimates.length})`,
+        joinBlocks([
+          pack.ultimates.length === 0
+            ? 'V6: keine Ultikarten im Pack.'
+            : 'Großformel verbraucht die Fetzladung (danach 0). Katalysator wird abgelegt; Technik/Essenz erschöpft.',
+          ...pack.ultimates.map(formatUltimate),
+        ]),
+      ),
+    );
+  } else {
+    sections.push(
+      section(
+        'karten-ulti',
+        'Ultikarten / Großformel (0)',
+        'V6 Core: keine charaktergebundenen Ultis. Überformel kommt später aus der aktuellen TEK.',
+      ),
+    );
+  }
+
+  sections.push(
     section(
       'karten-technik',
       `Formelkarten — Technik (${pack.techniques?.length ?? 0})`,
@@ -202,7 +238,9 @@ export function buildPlayRulesCardSections(pack: typeof V5_PACK = V5_PACK): Rule
       'karten-katalysator',
       `Formelkarten — Katalysator (${pack.catalysts?.length ?? 0})`,
       joinBlocks([
-        'Timing / Transformation. Bei TEK transformiert der Katalysator die TE-Basis.',
+        variant === 'v6'
+          ? 'V6: Katalysator transformiert und wird bei Verwendung abgelegt.'
+          : 'Timing / Transformation. Bei TEK transformiert der Katalysator die TE-Basis.',
         ...(pack.catalysts ?? []).map(formatCatalyst),
       ]),
     ),
@@ -222,8 +260,16 @@ export function buildPlayRulesCardSections(pack: typeof V5_PACK = V5_PACK): Rule
         ...pack.arenas.map(formatArena),
       ]),
     ),
-  ];
+  );
+
+  return sections;
 }
 
 /** Cached catalog for the Play rules modal. */
-export const V5_PLAY_RULES_CARD_SECTIONS: RulesSection[] = buildPlayRulesCardSections();
+export const V5_PLAY_RULES_CARD_SECTIONS: RulesSection[] = buildPlayRulesCardSections(V5_PACK, 'v5');
+
+/** Cached V6 Slice-1 catalog. */
+export const V6_PLAY_RULES_CARD_SECTIONS: RulesSection[] = buildPlayRulesCardSections(
+  V6_CORE_PACK,
+  'v6',
+);

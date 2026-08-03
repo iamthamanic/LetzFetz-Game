@@ -4,6 +4,7 @@
  */
 import { describe, it, expect } from 'vitest';
 import { V5_PACK } from '../../../game/packs/v5';
+import { V6_CORE_PACK } from '../../../game/packs/v6';
 import {
   PLAY_RULES_CARDS_SECTION_ID,
   V5_PLAY_RULES_CARD_SECTIONS,
@@ -73,5 +74,20 @@ describe('buildPlayRulesCardSections', () => {
     const b = buildPlayRulesCardSections(V5_PACK);
     expect(a.map((s) => s.id)).toEqual(b.map((s) => s.id));
     expect(a[0]?.body).toBe(b[0]?.body);
+  });
+
+  it('builds V6 catalog without ulti card bodies and with affinity scaffold characters', () => {
+    const v6 = buildPlayRulesCardSections(V6_CORE_PACK, 'v6');
+    const byId = Object.fromEntries(v6.map((s) => [s.id, s]));
+    expect(byId['karten-katalog-intro']!.body).toMatch(/V6-Core/);
+    expect(byId['karten-katalog-intro']!.body).not.toMatch(/v5-mvp/);
+    expect(byId['karten-ulti']!.body).toMatch(/keine.*Ultis/i);
+    for (const card of V6_CORE_PACK.characters) {
+      expect(byId['karten-charakter']!.body).toContain(card.name);
+      expect(byId['karten-charakter']!.body).toContain(card.passiveText);
+    }
+    for (const card of V6_CORE_PACK.techniques ?? []) {
+      expect(byId['karten-technik']!.body).toContain(card.name);
+    }
   });
 });

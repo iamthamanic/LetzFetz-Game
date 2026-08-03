@@ -45,6 +45,7 @@ function AppShell() {
   const [matchPaused, setMatchPaused] = useState(false);
   /** Bumped to ask PlayView to rematch with the same setup. */
   const [matchRestartNonce, setMatchRestartNonce] = useState(0);
+  const [playRulesVariant, setPlayRulesVariant] = useState<'v5' | 'v6'>('v5');
   const { push, canGoBack, canGoForward, goBack, goForward, clear } = useAppHistory();
   const musicBed = resolveMusicBed(currentView === 'play', battleMusicActive);
 
@@ -206,6 +207,7 @@ function AppShell() {
             onMatchPausedChange={setMatchPaused}
             matchRestartNonce={matchRestartNonce}
             onOpenRules={openRules}
+            onPlayRulesVariantChange={setPlayRulesVariant}
           />
         </div>
       </main>
@@ -229,7 +231,11 @@ function AppShell() {
         onClose={() => setNotesOpen(false)}
         onOpenRules={openRules}
       />
-      <PlayRulesModal open={rulesOpen} onClose={() => setRulesOpen(false)} />
+      <PlayRulesModal
+        open={rulesOpen}
+        onClose={() => setRulesOpen(false)}
+        variant={playRulesVariant}
+      />
     </div>
   );
 }
