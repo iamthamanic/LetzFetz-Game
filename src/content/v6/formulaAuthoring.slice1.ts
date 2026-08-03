@@ -2,7 +2,9 @@
  * Slice-1 formula authoring SoT (TE / TK / EK bases + catalyst transforms).
  * Location: src/content/v6/formulaAuthoring.slice1.ts
  *
+ * Current catalog: 3 Techniken × 3 Essenzen × 4 Katalysatoren → 105 generated recipes.
  * Generator expands TE×catalyst → TEK + Überformel. Missing required keys fail closed.
+ * Do not expand beyond this Slice-1 card set here (full matrix / Echo = later issues).
  */
 import type {
   V6CatalystTransformAuthoring,
@@ -43,12 +45,13 @@ const TE_PRIMARY: Record<TechId, Record<EssId, V6PrimaryEffectAuthoring>> = {
   },
   'v6-technik-adrenalinschrei': {
     'v6-essenz-feuer': { kind: 'prep_attack', value: 2, target: 'self' },
-    'v6-essenz-wasser': { kind: 'prep_boost', value: 1, target: 'self' },
-    'v6-essenz-luft': { kind: 'prep_attack', value: 1, target: 'self' },
+    /** Base 2 so Sofortzünder (−1) still leaves prep 1. */
+    'v6-essenz-wasser': { kind: 'prep_boost', value: 2, target: 'self' },
+    'v6-essenz-luft': { kind: 'prep_attack', value: 2, target: 'self' },
   },
   'v6-technik-magiepanzer': {
-    /** Playtest Fessel TE (Slice-2) — Kettenfessel stand-in until full catalog. */
-    'v6-essenz-feuer': { kind: 'fessel', value: 1, target: 'opponent', offensive: true },
+    /** Fessel TE — manual pick of occupied enemy formula slot (engine). Base 2 for Sofortzünder. */
+    'v6-essenz-feuer': { kind: 'fessel', value: 2, target: 'opponent', offensive: true },
     'v6-essenz-wasser': { kind: 'heal', value: 2, target: 'self' },
     'v6-essenz-luft': { kind: 'shield', value: 2, target: 'self' },
   },
@@ -93,16 +96,48 @@ const ESSENCE_RIDERS: Record<
   },
 };
 
-const TECH_SHORT: Record<TechId, string> = {
-  'v6-technik-impulsgeschoss': 'Impuls',
-  'v6-technik-adrenalinschrei': 'Schrei',
-  'v6-technik-magiepanzer': 'Panzer',
+/** Proper German TK display names (not machine Tech·Cat labels). */
+const TK_NAMES: Record<TechId, Record<CatId, string>> = {
+  'v6-technik-impulsgeschoss': {
+    'v6-katalysator-ueberladung': 'Überimpuls',
+    'v6-katalysator-verdichtung': 'Dichtimpuls',
+    'v6-katalysator-sofortzuender': 'Zündimpuls',
+    'v6-katalysator-opfergabe': 'Opferimpuls',
+  },
+  'v6-technik-adrenalinschrei': {
+    'v6-katalysator-ueberladung': 'Überschrei',
+    'v6-katalysator-verdichtung': 'Dichtschrei',
+    'v6-katalysator-sofortzuender': 'Zündschrei',
+    'v6-katalysator-opfergabe': 'Opferschrei',
+  },
+  'v6-technik-magiepanzer': {
+    'v6-katalysator-ueberladung': 'Überpanzer',
+    'v6-katalysator-verdichtung': 'Dichtpanzer',
+    'v6-katalysator-sofortzuender': 'Zündpanzer',
+    'v6-katalysator-opfergabe': 'Opferpanzer',
+  },
 };
 
-const ESS_SHORT: Record<EssId, string> = {
-  'v6-essenz-feuer': 'Feuer',
-  'v6-essenz-wasser': 'Wasser',
-  'v6-essenz-luft': 'Luft',
+/** Proper German EK display names (not Ritual·Cat compounds). */
+const EK_NAMES: Record<EssId, Record<CatId, string>> = {
+  'v6-essenz-feuer': {
+    'v6-katalysator-ueberladung': 'Glutüberladung',
+    'v6-katalysator-verdichtung': 'Glutverdichtung',
+    'v6-katalysator-sofortzuender': 'Funkenzünder',
+    'v6-katalysator-opfergabe': 'Brandopfer',
+  },
+  'v6-essenz-wasser': {
+    'v6-katalysator-ueberladung': 'Flutüberladung',
+    'v6-katalysator-verdichtung': 'Quellverdichtung',
+    'v6-katalysator-sofortzuender': 'Spritzzünder',
+    'v6-katalysator-opfergabe': 'Wellenopfer',
+  },
+  'v6-essenz-luft': {
+    'v6-katalysator-ueberladung': 'Sturmüberladung',
+    'v6-katalysator-verdichtung': 'Windverdichtung',
+    'v6-katalysator-sofortzuender': 'Windzünder',
+    'v6-katalysator-opfergabe': 'Luftopfer',
+  },
 };
 
 const CAT_SHORT: Record<CatId, string> = {
@@ -111,6 +146,13 @@ const CAT_SHORT: Record<CatId, string> = {
   'v6-katalysator-sofortzuender': 'Sofortzünder',
   'v6-katalysator-opfergabe': 'Opfergabe',
 };
+
+export function v6Slice1CatalystShortName(catalystId: string): string {
+  if (catalystId in CAT_SHORT) {
+    return CAT_SHORT[catalystId as CatId];
+  }
+  return catalystId;
+}
 
 function buildTeBases(): V6TeBaseAuthoring[] {
   const rows: V6TeBaseAuthoring[] = [];
@@ -123,7 +165,7 @@ function buildTeBases(): V6TeBaseAuthoring[] {
         essenceId: e,
         name: TE_NAMES[t][e],
         primary,
-        rider: primary.target === 'opponent' ? ESSENCE_RIDERS[e] : ESSENCE_RIDERS[e],
+        rider: ESSENCE_RIDERS[e],
         intensity:
           primary.kind === 'damage'
             ? undefined
@@ -138,15 +180,16 @@ function buildTeBases(): V6TeBaseAuthoring[] {
 
 function buildTkBases(): V6TkBaseAuthoring[] {
   const rows: V6TkBaseAuthoring[] = [];
+  /** Base 2 so Sofortzünder (−1) still leaves a playable primary of 1. */
   const techPrimary: Record<TechId, V6PrimaryEffectAuthoring> = {
     'v6-technik-impulsgeschoss': {
       kind: 'damage',
-      value: 1,
+      value: 2,
       target: 'opponent',
       offensive: true,
     },
-    'v6-technik-adrenalinschrei': { kind: 'prep_attack', value: 1, target: 'self' },
-    'v6-technik-magiepanzer': { kind: 'shield', value: 1, target: 'self' },
+    'v6-technik-adrenalinschrei': { kind: 'prep_attack', value: 2, target: 'self' },
+    'v6-technik-magiepanzer': { kind: 'shield', value: 2, target: 'self' },
   };
   for (const t of V6_SLICE1_TECHNIQUE_IDS) {
     for (const c of V6_SLICE1_CATALYST_IDS) {
@@ -154,7 +197,7 @@ function buildTkBases(): V6TkBaseAuthoring[] {
         recipeId: tkId(t, c),
         techniqueId: t,
         catalystId: c,
-        name: `${TECH_SHORT[t]} · ${CAT_SHORT[c]}`,
+        name: TK_NAMES[t][c],
         primary: { ...techPrimary[t] },
       });
     }
@@ -164,10 +207,11 @@ function buildTkBases(): V6TkBaseAuthoring[] {
 
 function buildEkBases(): V6EkBaseAuthoring[] {
   const rows: V6EkBaseAuthoring[] = [];
+  /** Base 2 so Sofortzünder (−1) still leaves a playable primary of 1. */
   const essPrimary: Record<EssId, V6PrimaryEffectAuthoring> = {
-    'v6-essenz-feuer': { kind: 'damage', value: 1, target: 'opponent', offensive: true },
-    'v6-essenz-wasser': { kind: 'heal', value: 1, target: 'self' },
-    'v6-essenz-luft': { kind: 'prep_boost', value: 1, target: 'self' },
+    'v6-essenz-feuer': { kind: 'damage', value: 2, target: 'opponent', offensive: true },
+    'v6-essenz-wasser': { kind: 'heal', value: 2, target: 'self' },
+    'v6-essenz-luft': { kind: 'prep_boost', value: 2, target: 'self' },
   };
   for (const e of V6_SLICE1_ESSENCE_IDS) {
     for (const c of V6_SLICE1_CATALYST_IDS) {
@@ -175,7 +219,7 @@ function buildEkBases(): V6EkBaseAuthoring[] {
         recipeId: ekId(e, c),
         essenceId: e,
         catalystId: c,
-        name: `${ESS_SHORT[e]}-Ritual · ${CAT_SHORT[c]}`,
+        name: EK_NAMES[e][c],
         primary: { ...essPrimary[e] },
         rider: ESSENCE_RIDERS[e],
       });
@@ -217,6 +261,10 @@ function buildCatalystTransforms(): V6CatalystTransformAuthoring[] {
   ];
 }
 
+/**
+ * Slice-1 authoring catalog — locked card set for the current 105-recipe matrix.
+ * Later catalog expansion must keep these recipeIds stable.
+ */
 export const V6_FORMULA_AUTHORING_SLICE1: V6FormulaAuthoringCatalog = {
   version: 1,
   slice: 'slice1',

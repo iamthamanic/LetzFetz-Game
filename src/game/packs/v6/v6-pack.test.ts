@@ -11,6 +11,7 @@ import { isV6FormulaEnabled } from '../../types';
 import {
   V6_GENERATED_FORMULA_RECIPES,
   V6_GENERATED_RECIPE_COUNT,
+  V6_SLICE1_RECIPE_CATALOG,
 } from '../../../generated/v6/formulaRecipes.generated';
 import { V6_FORMULA_AUTHORING_SLICE1 } from '../../../content/v6/formulaAuthoring.slice1';
 import {
@@ -73,6 +74,29 @@ describe('V6_CORE_PACK Slice-1 (INTERNAL)', () => {
     expect(
       V6_GENERATED_FORMULA_RECIPES.filter((r) => r.catalystId).every((r) => r.catalystConsumed),
     ).toBe(true);
+    expect(V6_SLICE1_RECIPE_CATALOG.recipeCount).toBe(105);
+    expect(V6_SLICE1_RECIPE_CATALOG.breakdown).toEqual({
+      te: 9,
+      tk: 12,
+      ek: 12,
+      tek: 36,
+      overformula: 36,
+    });
+    for (const recipe of V6_GENERATED_FORMULA_RECIPES) {
+      expect(recipe.catalogSlice).toBe('slice1');
+      expect(recipe.name.trim().length).toBeGreaterThan(2);
+      expect(recipe.name).not.toMatch(/stub/i);
+      expect(recipe.effectSummary.trim().length).toBeGreaterThan(10);
+      expect(recipe.effectSummary).not.toMatch(/stub/i);
+    }
+    const fessel = V6_GENERATED_FORMULA_RECIPES.filter((r) => r.primary.kind === 'fessel');
+    expect(fessel.length).toBeGreaterThan(0);
+    for (const recipe of fessel) {
+      expect(recipe.intensity).toBe(recipe.primary.value);
+      expect(recipe.effectSummary).toMatch(/manuelle Wahl/);
+    }
+    const zeroPrimary = V6_GENERATED_FORMULA_RECIPES.filter((r) => r.primary.value === 0);
+    expect(zeroPrimary).toEqual([]);
   });
 
   it('does not import V5 formulaCombinations from v6 pack/content/generated sources', () => {

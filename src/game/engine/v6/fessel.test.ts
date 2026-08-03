@@ -112,7 +112,7 @@ describe('Fessel apply + start tick', () => {
     });
     expect(next.pendingChoice?.type).toBe('v6-fessel-target');
     if (next.pendingChoice?.type !== 'v6-fessel-target') throw new Error('expected pending');
-    expect(next.pendingChoice.intensity).toBe(1);
+    expect(next.pendingChoice.intensity).toBe(2);
     expect(next.players.p2.formula.technik?.fesselIntensity).toBeUndefined();
 
     const legal = getLegalActions(next, {
@@ -134,7 +134,7 @@ describe('Fessel apply + start tick', () => {
       { pack: V6_CORE_PACK, ruleset: V6_PACK_RULESET, rng: () => 0.01, playerId: 'p1' },
     );
     expect(applied.pendingChoice).toBeNull();
-    expect(applied.players.p2.formula.essenz?.fesselIntensity).toBe(1);
+    expect(applied.players.p2.formula.essenz?.fesselIntensity).toBe(2);
     expect(applied.players.p2.formula.technik?.fesselIntensity).toBeUndefined();
     expect(applied.lastEvent ?? '').toMatch(/Fessel/);
   });

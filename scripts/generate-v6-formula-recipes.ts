@@ -5,16 +5,22 @@
  *   npx tsx scripts/generate-v6-formula-recipes.ts
  *   npm run generate:v6-formula-recipes
  *
- * Slice-1: expands TE/TK/EK + TE×catalyst TEK + Überformel. Missing keys → exit 1.
+ * Slice-1 catalog (current): expands TE/TK/EK + TE×catalyst TEK + Überformel.
+ * Missing keys → exit 1. Do not hand-edit the generated file.
  */
 import { writeFileSync } from 'node:fs';
 import { dirname, join } from 'node:path';
 import { fileURLToPath } from 'node:url';
-import { V6_FORMULA_AUTHORING_SLICE1 } from '../src/content/v6/formulaAuthoring.slice1';
+import {
+  V6_FORMULA_AUTHORING_SLICE1,
+  v6Slice1CatalystShortName,
+} from '../src/content/v6/formulaAuthoring.slice1';
 import { assertV6FormulaAuthoring } from '../src/content/v6/validateFormulaAuthoring';
 import type {
+  V6CatalystTransformAuthoring,
   V6PrimaryEffectAuthoring,
   V6RiderAuthoring,
+  V6TeBaseAuthoring,
 } from '../src/content/v6/schemas/formulaRecipeAuthoring';
 
 const root = join(dirname(fileURLToPath(import.meta.url)), '..');
@@ -23,10 +29,14 @@ const outPath = join(root, 'src/generated/v6/formulaRecipes.generated.ts');
 interface GeneratedRecipe {
   recipeId: string;
   kind: 'te' | 'tk' | 'ek' | 'tek' | 'overformula';
+  /** Locked Slice-1 catalog marker for later expansion diffs. */
+  catalogSlice: 'slice1';
   techniqueId: string | null;
   essenceId: string | null;
   catalystId: string | null;
   name: string;
+  /** German player-facing effect summary (no stubs). */
+  effectSummary: string;
   primary: V6PrimaryEffectAuthoring;
   rider: V6RiderAuthoring | null;
   intensity: number | null;
@@ -42,22 +52,135 @@ function clampPrimary(p: V6PrimaryEffectAuthoring): V6PrimaryEffectAuthoring {
   return { ...p, value: Math.max(0, p.value) };
 }
 
+function formatPrimaryDe(primary: V6PrimaryEffectAuthoring, intensity: number | null): string {
+  const target = primary.target === 'opponent' ? 'Gegner' : 'dich';
+  switch (primary.kind) {
+    case 'damage':
+      return `Verursache ${primary.value} Schaden am ${target}.`;
+    case 'heal':
+      return `Heile ${primary.value} Leben.`;
+    case 'shield':
+      return `Gewinne ${primary.value} Schild.`;
+    case 'prep_attack':
+      return `Bereite Angriff +${primary.value} vor.`;
+    case 'prep_block':
+      return `Bereite Block +${primary.value} vor.`;
+    case 'prep_boost':
+      return `Bereite Boost +${primary.value} vor.`;
+    case 'fessel': {
+      const n = intensity ?? primary.value;
+      return `Fessel Intensität ${n} auf einen besetzten gegnerischen Formelplatz (manuelle Wahl).`;
+    }
+    default:
+      return `${primary.kind} ${primary.value} → ${target}.`;
+  }
+}
+
+function buildEffectSummary(parts: {
+  primary: V6PrimaryEffectAuthoring;
+  intensity: number | null;
+  rider: V6RiderAuthoring | null;
+  transformSummary?: string | null;
+  extras?: string[];
+}): string {
+  const chunks: string[] = [formatPrimaryDe(parts.primary, parts.intensity)];
+  if (parts.rider?.summary) chunks.push(parts.rider.summary);
+  if (parts.transformSummary) chunks.push(parts.transformSummary);
+  if (parts.extras) chunks.push(...parts.extras.filter(Boolean));
+  const summary = chunks.join(' ').replace(/\s+/g, ' ').trim();
+  if (!summary) {
+    throw new Error('V6_AUTHORING_INVALID: empty effectSummary');
+  }
+  if (/\bstub\b/i.test(summary)) {
+    throw new Error(`V6_AUTHORING_INVALID: effectSummary contains stub: ${summary}`);
+  }
+  return summary;
+}
+
+/**
+ * Apply catalyst delta. For Fessel, intensity is authoritative and tracks the delta.
+ */
+function applyCatalystToTe(
+  te: V6TeBaseAuthoring,
+  xform: V6CatalystTransformAuthoring,
+): { primary: V6PrimaryEffectAuthoring; intensity: number | null } {
+  if (te.primary.kind === 'fessel') {
+    const baseInt = te.intensity ?? te.primary.value;
+    const intensity = Math.max(0, baseInt + xform.primaryDelta);
+    return {
+      primary: { ...te.primary, value: intensity },
+      intensity,
+    };
+  }
+  return {
+    primary: clampPrimary({
+      ...te.primary,
+      value: te.primary.value + xform.primaryDelta,
+    }),
+    intensity: te.intensity ?? null,
+  };
+}
+
+function applyOverformulaBonus(
+  primary: V6PrimaryEffectAuthoring,
+  intensity: number | null,
+): {
+  primary: V6PrimaryEffectAuthoring;
+  intensity: number | null;
+  overformulaPrimaryBonus: number;
+  overformulaIntensityBonus: number;
+} {
+  if (primary.kind === 'damage' || primary.kind === 'heal' || primary.kind === 'shield') {
+    const bonus = 2;
+    return {
+      primary: clampPrimary({ ...primary, value: primary.value + bonus }),
+      intensity,
+      overformulaPrimaryBonus: bonus,
+      overformulaIntensityBonus: 0,
+    };
+  }
+  if (primary.kind === 'fessel') {
+    const baseInt = intensity ?? primary.value;
+    const next = Math.max(0, baseInt + 1);
+    return {
+      primary: { ...primary, value: next },
+      intensity: next,
+      overformulaPrimaryBonus: 0,
+      overformulaIntensityBonus: 1,
+    };
+  }
+  const nextIntensity = (intensity ?? 0) + 1;
+  return {
+    primary,
+    intensity: nextIntensity,
+    overformulaPrimaryBonus: 0,
+    overformulaIntensityBonus: 1,
+  };
+}
+
 function main(): void {
   assertV6FormulaAuthoring(V6_FORMULA_AUTHORING_SLICE1);
   const auth = V6_FORMULA_AUTHORING_SLICE1;
   const recipes: GeneratedRecipe[] = [];
 
   for (const te of auth.teBases) {
+    const intensity = te.intensity ?? null;
     recipes.push({
       recipeId: te.recipeId,
       kind: 'te',
+      catalogSlice: 'slice1',
       techniqueId: te.techniqueId,
       essenceId: te.essenceId,
       catalystId: null,
       name: te.name,
+      effectSummary: buildEffectSummary({
+        primary: te.primary,
+        intensity,
+        rider: te.rider ?? null,
+      }),
       primary: te.primary,
       rider: te.rider ?? null,
-      intensity: te.intensity ?? null,
+      intensity,
       transformId: null,
       grantsFetz: false,
       catalystConsumed: false,
@@ -72,17 +195,25 @@ function main(): void {
     if (!xform) {
       throw new Error(`V6_AUTHORING_INVALID: no transform for TK catalyst ${tk.catalystId}`);
     }
+    const primary = clampPrimary({
+      ...tk.primary,
+      value: tk.primary.value + xform.primaryDelta,
+    });
     recipes.push({
       recipeId: tk.recipeId,
       kind: 'tk',
+      catalogSlice: 'slice1',
       techniqueId: tk.techniqueId,
       essenceId: null,
       catalystId: tk.catalystId,
       name: tk.name,
-      primary: clampPrimary({
-        ...tk.primary,
-        value: tk.primary.value + xform.primaryDelta,
+      effectSummary: buildEffectSummary({
+        primary,
+        intensity: null,
+        rider: null,
+        transformSummary: xform.summary,
       }),
+      primary,
       rider: null,
       intensity: null,
       transformId: xform.transformId,
@@ -99,17 +230,25 @@ function main(): void {
     if (!xform) {
       throw new Error(`V6_AUTHORING_INVALID: no transform for EK catalyst ${ek.catalystId}`);
     }
+    const primary = clampPrimary({
+      ...ek.primary,
+      value: ek.primary.value + xform.primaryDelta,
+    });
     recipes.push({
       recipeId: ek.recipeId,
       kind: 'ek',
+      catalogSlice: 'slice1',
       techniqueId: null,
       essenceId: ek.essenceId,
       catalystId: ek.catalystId,
       name: ek.name,
-      primary: clampPrimary({
-        ...ek.primary,
-        value: ek.primary.value + xform.primaryDelta,
+      effectSummary: buildEffectSummary({
+        primary,
+        intensity: null,
+        rider: ek.rider ?? null,
+        transformSummary: xform.summary,
       }),
+      primary,
       rider: ek.rider ?? null,
       intensity: null,
       transformId: xform.transformId,
@@ -123,24 +262,30 @@ function main(): void {
 
   for (const te of auth.teBases) {
     for (const xform of auth.catalystTransforms) {
+      const catShort = v6Slice1CatalystShortName(xform.catalystId);
+      const applied = applyCatalystToTe(te, xform);
       const tekId = `v6-tek-${te.recipeId.replace(/^v6-te-/, '')}-${xform.catalystId.replace(
         'v6-katalysator-',
         '',
       )}`;
-      const primary = clampPrimary({
-        ...te.primary,
-        value: te.primary.value + xform.primaryDelta,
-      });
       const tek: GeneratedRecipe = {
         recipeId: tekId,
         kind: 'tek',
+        catalogSlice: 'slice1',
         techniqueId: te.techniqueId,
         essenceId: te.essenceId,
         catalystId: xform.catalystId,
-        name: `${te.name} · Fusion`,
-        primary,
+        name: `${te.name} · ${catShort}`,
+        effectSummary: buildEffectSummary({
+          primary: applied.primary,
+          intensity: applied.intensity,
+          rider: te.rider ?? null,
+          transformSummary: xform.summary,
+          extras: ['TEK: +1 Fetzladung (max 1×/Zug).'],
+        }),
+        primary: applied.primary,
         rider: te.rider ?? null,
-        intensity: te.intensity ?? null,
+        intensity: applied.intensity,
         transformId: xform.transformId,
         grantsFetz: true,
         catalystConsumed: true,
@@ -150,34 +295,37 @@ function main(): void {
       };
       recipes.push(tek);
 
+      const over = applyOverformulaBonus(applied.primary, applied.intensity);
       const overId = `v6-over-${tekId.replace(/^v6-tek-/, '')}`;
-      const overPrimaryBonus = primary.kind === 'damage' || primary.kind === 'heal' || primary.kind === 'shield'
-        ? 2
-        : 0;
-      const overIntensityBonus = overPrimaryBonus === 0 ? 1 : 0;
+      const overRider = te.rider
+        ? { ...te.rider, summary: `${te.rider.summary} (verstärkt)` }
+        : null;
       recipes.push({
         recipeId: overId,
         kind: 'overformula',
+        catalogSlice: 'slice1',
         techniqueId: te.techniqueId,
         essenceId: te.essenceId,
         catalystId: xform.catalystId,
-        name: `${te.name} · Überformel`,
-        primary: clampPrimary({
-          ...primary,
-          value: primary.value + overPrimaryBonus,
+        name: `Überformel ${te.name} · ${catShort}`,
+        effectSummary: buildEffectSummary({
+          primary: over.primary,
+          intensity: over.intensity,
+          rider: overRider,
+          transformSummary: xform.summary,
+          extras: [
+            'Überformel: Fetzladung wird verbraucht.',
+            'Formelabwehr −1.',
+          ],
         }),
-        rider: te.rider
-          ? { ...te.rider, summary: `${te.rider.summary} (verstärkt)` }
-          : null,
-        intensity:
-          te.intensity !== undefined
-            ? te.intensity + overIntensityBonus
-            : overIntensityBonus || null,
+        primary: over.primary,
+        rider: overRider,
+        intensity: over.intensity,
         transformId: xform.transformId,
         grantsFetz: false,
         catalystConsumed: true,
-        overformulaPrimaryBonus: overPrimaryBonus || null,
-        overformulaIntensityBonus: overIntensityBonus || null,
+        overformulaPrimaryBonus: over.overformulaPrimaryBonus || null,
+        overformulaIntensityBonus: over.overformulaIntensityBonus || null,
         formulaDefensePenalty: -1,
       });
     }
@@ -189,6 +337,12 @@ function main(): void {
       throw new Error(`V6_AUTHORING_INVALID: duplicate recipeId ${r.recipeId}`);
     }
     ids.add(r.recipeId);
+    if (!r.effectSummary.trim()) {
+      throw new Error(`V6_AUTHORING_INVALID: missing effectSummary for ${r.recipeId}`);
+    }
+    if (!r.name.trim() || /\bstub\b/i.test(r.name)) {
+      throw new Error(`V6_AUTHORING_INVALID: bad name for ${r.recipeId}`);
+    }
   }
 
   const expectedTek = auth.teBases.length * auth.catalystTransforms.length;
@@ -205,10 +359,22 @@ function main(): void {
     );
   }
 
+  const byKind = {
+    te: recipes.filter((r) => r.kind === 'te').length,
+    tk: recipes.filter((r) => r.kind === 'tk').length,
+    ek: recipes.filter((r) => r.kind === 'ek').length,
+    tek: recipes.filter((r) => r.kind === 'tek').length,
+    overformula: recipes.filter((r) => r.kind === 'overformula').length,
+  };
+
   const body = `/**
  * GENERATED FILE — DO NOT HAND-EDIT.
  * Produced by scripts/generate-v6-formula-recipes.ts
  * Location: src/generated/v6/formulaRecipes.generated.ts
+ *
+ * Catalog: V6 Slice-1 (3 Techniken × 3 Essenzen × 4 Katalysatoren).
+ * These ${recipes.length} recipes are the locked current set — later expansion
+ * adds new ids; do not renumber or replace Slice-1 recipeIds.
  */
 
 export type V6GeneratedRecipeKind = 'te' | 'tk' | 'ek' | 'tek' | 'overformula';
@@ -229,10 +395,12 @@ export interface V6GeneratedRider {
 export interface V6GeneratedFormulaRecipe {
   recipeId: string;
   kind: V6GeneratedRecipeKind;
+  catalogSlice: 'slice1';
   techniqueId: string | null;
   essenceId: string | null;
   catalystId: string | null;
   name: string;
+  effectSummary: string;
   primary: V6GeneratedPrimaryEffect;
   rider: V6GeneratedRider | null;
   intensity: number | null;
@@ -243,6 +411,14 @@ export interface V6GeneratedFormulaRecipe {
   overformulaIntensityBonus: number | null;
   formulaDefensePenalty: number | null;
 }
+
+/** Meta for the locked Slice-1 recipe catalog (not the future 60×K matrix). */
+export const V6_SLICE1_RECIPE_CATALOG = {
+  id: 'v6-slice1',
+  label: 'V6 Slice-1 Formelkatalog (3T×3E×4K)',
+  recipeCount: ${recipes.length},
+  breakdown: ${JSON.stringify(byKind)},
+} as const;
 
 export const V6_GENERATED_FORMULA_RECIPES: readonly V6GeneratedFormulaRecipe[] = ${JSON.stringify(
     recipes,
@@ -256,7 +432,7 @@ export const V6_GENERATED_RECIPE_COUNT = ${recipes.length} as const;
 `;
 
   writeFileSync(outPath, body, 'utf8');
-  console.log(`Wrote ${outPath} (${recipes.length} recipes)`);
+  console.log(`Wrote ${outPath} (${recipes.length} recipes, Slice-1 catalog)`);
 }
 
 try {

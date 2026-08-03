@@ -1,6 +1,10 @@
 /**
  * Binding Slice-1 card id set (V6 Rules Contract Slice 1).
  * Location: src/content/v6/slice1Ids.ts
+ *
+ * These 3T×3E×4K ids define the locked 105-recipe catalog in
+ * `src/generated/v6/formulaRecipes.generated.ts`. Expanding the full matrix
+ * later means adding new ids — do not remove or renumber these.
  */
 
 export const V6_SLICE1_TECHNIQUE_IDS = [
