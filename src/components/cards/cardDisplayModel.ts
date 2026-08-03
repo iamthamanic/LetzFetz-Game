@@ -180,7 +180,11 @@ export function elementDefToCardProps(def: ElementCardDef) {
     },
     effects: [
       `Sofort: ${def.instantText}`,
-      `Gebaut: ${def.boundText}`,
+      ...(def.boundText
+        ? [`Gebaut: ${def.boundText}`]
+        : def.valueRole
+          ? ['Handaktion (V6) — nicht baubar']
+          : []),
     ],
     image_asset: resolveCardArtPath(def.id),
     elementImpulse: def.elementImpulse,

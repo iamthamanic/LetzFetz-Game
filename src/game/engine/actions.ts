@@ -32,6 +32,7 @@ import {
 import { planFormulaActivation } from './v6/planFormulaActivation';
 import { applyV6FormulaActivate } from './v6/executeFormulaActivation';
 import { applyFesselToPlayer, occupiedFesselSlots, tickFesselAndRestoreOwnerFormulaV6 } from './v6/fessel';
+import { applyV6DrawbackAfterCombat, v6PayoffCombatBonus } from './v6/elementValueRoles';
 import { tickV6EchoAndDelayAtStart } from './v6/echoDelay';
 import {
   applyConstructChallengeOutcome,
@@ -284,6 +285,7 @@ function computeAttackValueForPlayer(
   const passiveBonus = isV2Pack(pack) ? countPassiveBonus(pack, bound, 'p_atk') : 0;
   const monoBonus = isV2Pack(pack) ? monoAttackBonus(state, pack, bound) : 0;
   const mysterium = peekMysteriumElement(state, playerId);
+  const payoff = v6PayoffCombatBonus(state, playerId, def, ruleset);
   return calculateCombatValue({
     cardValue: def.value,
     diceRoll,
@@ -295,7 +297,7 @@ function computeAttackValueForPlayer(
       state.meta.v6FormulaEnabled,
     ),
     cardElement: mysterium ?? def.element,
-    extraBonus: passiveBonus + monoBonus,
+    extraBonus: passiveBonus + monoBonus + payoff,
   });
 }
 
@@ -314,6 +316,7 @@ function computeBlockValueForPlayer(
   const monoBonus = isV2Pack(pack) ? monoBlockBonus(state, pack, bound) : 0;
   const mysterium = peekMysteriumElement(state, playerId);
   const blockEl = mysterium ?? def.element;
+  const payoff = v6PayoffCombatBonus(state, playerId, def, ruleset);
   return calculateCombatValue({
     cardValue: def.value,
     diceRoll,
@@ -327,7 +330,7 @@ function computeBlockValueForPlayer(
     cardElement: blockEl,
     attackElement,
     blockElement: blockEl,
-    extraBonus: passiveBonus + monoBonus,
+    extraBonus: passiveBonus + monoBonus + payoff,
   });
 }
 
@@ -666,6 +669,7 @@ function applyPlayerAttackDamage(
   rng: () => number,
   hitImpulseElement?: Element | null,
   fullBlockImpulseElement?: Element | null,
+  attackCardDefId?: string,
 ): GameState {
   let workingDamage = damage;
   let workingAttack = attackValue;
@@ -876,6 +880,7 @@ function applyPlayerAttackDamage(
       }).state;
     }
   }
+  next = applyV6DrawbackAfterCombat(next, attackerId, attackCardDefId, pack, ruleset);
   return checkWinner(next);
 }
 
@@ -952,6 +957,7 @@ function resolveCombat(
     rng,
     damage > 0 || fireHitOnTie ? hitImpulse : null,
     damage <= 0 && !fireHitOnTie ? fullBlockImpulse : null,
+    attackCardDefId,
   );
 }
 
@@ -1501,22 +1507,24 @@ export function getLegalActions(state: GameState, ctx: PackContext): GameAction[
     const player = state.players[ctx.playerId];
     const lockedId = state.meta.activationLockedBoundId;
     const v3 = isV3CombatEnabled(rulesetOf(ctx, state));
-    for (const bound of player.bound) {
-      if (bound.exhausted || bound.instanceId === lockedId) continue;
-      const enginePart = findEnginePartDef(ctx.pack, bound.defId);
-      if (v3 && enginePart && hasPoolActivate(enginePart)) {
-        const cost = partActivateCost(enginePart);
-        if (cost != null && canSpendFetzCharge(state, ctx.playerId, cost)) {
-          actions.push({ type: 'ACTIVATE_BOUND', boundInstanceId: bound.instanceId });
+    if (!isV6FormulaEnabled(ruleset)) {
+      for (const bound of player.bound) {
+        if (bound.exhausted || bound.instanceId === lockedId) continue;
+        const enginePart = findEnginePartDef(ctx.pack, bound.defId);
+        if (v3 && enginePart && hasPoolActivate(enginePart)) {
+          const cost = partActivateCost(enginePart);
+          if (cost != null && canSpendFetzCharge(state, ctx.playerId, cost)) {
+            actions.push({ type: 'ACTIVATE_BOUND', boundInstanceId: bound.instanceId });
+          }
+          continue;
         }
-        continue;
-      }
-      for (const handCard of hand) {
-        actions.push({
-          type: 'ACTIVATE_BOUND',
-          boundInstanceId: bound.instanceId,
-          discardHandInstanceId: handCard.instanceId,
-        });
+        for (const handCard of hand) {
+          actions.push({
+            type: 'ACTIVATE_BOUND',
+            boundInstanceId: bound.instanceId,
+            discardHandInstanceId: handCard.instanceId,
+          });
+        }
       }
     }
     actions.push(...listOwnTurnGlitchActions(state, ctx.playerId));
@@ -1551,6 +1559,9 @@ function applyBuildCard(
 ): GameState {
   if (isV5FormulaEnabled(ruleset)) {
     throw new Error('BUILD_CARD not used under v5Formula — use FORMULA_* actions');
+  }
+  if (isV6FormulaEnabled(ruleset)) {
+    throw new Error('BUILD_CARD illegal under v6Formula — element cards are hand-only');
   }
   let next = cloneState(state);
   const handIdx = next.players[playerId].hand.findIndex((c) => c.instanceId === action.cardInstanceId);
@@ -1898,6 +1909,7 @@ function applyPendingChoiceAction(
             rng,
             pending.damage > 0 ? hitImpulse : null,
             pending.damage <= 0 ? fullBlockImpulse : null,
+            pending.attackCardDefId,
           );
           return next;
         }
@@ -2231,6 +2243,9 @@ export function applyAction(
       if (state.phase !== 'build') throw new Error('Not in build phase');
       if (isV5FormulaEnabled(ruleset)) {
         throw new Error('BUILD_CARD illegal under v5Formula');
+      }
+      if (isV6FormulaEnabled(ruleset)) {
+        throw new Error('BUILD_CARD illegal under v6Formula — element cards are hand-only');
       }
       return applyBuildCard(state, pack, playerId, action, ruleset, 'action');
     }
@@ -2619,6 +2634,9 @@ export function applyAction(
     }
     case 'ACTIVATE_BOUND': {
       if (state.phase !== 'action') throw new Error('Not in action phase');
+      if (isV6FormulaEnabled(ruleset)) {
+        throw new Error('ACTIVATE_BOUND illegal under v6Formula — no bound element cards');
+      }
       const bound = state.players[playerId].bound.find((b) => b.instanceId === action.boundInstanceId);
       if (!bound || bound.exhausted) throw new Error('Cannot activate this bound card');
       if (state.meta.activationLockedBoundId === bound.instanceId) {

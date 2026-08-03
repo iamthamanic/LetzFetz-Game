@@ -140,8 +140,9 @@ export function packToPresentationCards(
         `Typ: ${CARD_TYPE_DE[e.cardType]}`,
         `Wert: ${e.value}`,
         `Sofort: ${e.instantText}`,
-        `Gebaut: ${e.boundText}`,
-        `Widerstand: ${e.value}`,
+        ...(e.boundText
+          ? [`Gebaut: ${e.boundText}`, `Widerstand: ${e.value}`]
+          : ['Handaktion (V6) — nicht baubar']),
       ],
       image_asset: resolveCardArtPath(e.id),
       fromPack: true,

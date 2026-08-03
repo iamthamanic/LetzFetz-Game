@@ -83,10 +83,10 @@ export function illustrationPublicPath(key: string, kind: IllustrationKind): str
   return publicAssetUrl(`/cards/${kind}/${key}.png`);
 }
 
-/** Resolve illustration key from any base-pack card id. */
+/** Resolve illustration key from any base-pack / V6 element card id. */
 export function illustrationKeyForCardId(cardId: string): string | null {
   const elementMatch = cardId.match(
-    /^(fire|water|earth|air|shadow|light)-(attack|block|boost)(?:-\d+[ab]?)?$/,
+    /^(?:v6-)?(fire|water|earth|air|shadow|light)-(attack|block|boost)(?:-\d+[ab]?)?$/,
   );
   if (elementMatch) {
     return `${elementMatch[1]}-${elementMatch[2]}`;
