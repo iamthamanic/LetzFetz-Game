@@ -23,6 +23,7 @@ import type { ArenaCardDef } from '../../../game/types';
 import type { PendingIntent } from './gameActionHelpers';
 import {
   buildRequiresReplace,
+  findPaidFormulaChangeAction,
   isBuildReplaceTarget,
   isChallengeTargetForAttack,
   isActivateDiscardOption,
@@ -323,8 +324,11 @@ export function buildGameViewModel(
     const buildNeedsReplace =
       interaction === 'build' && buildRequiresReplace(legalActions, card.instanceId);
     const activateDiscard =
-      pending?.type === 'activate' &&
-      isActivateDiscardOption(legalActions, pending.boundInstanceId, card.instanceId);
+      (pending?.type === 'activate' &&
+        isActivateDiscardOption(legalActions, pending.boundInstanceId, card.instanceId)) ||
+      (pending?.type === 'formula-paid-change' &&
+        findPaidFormulaChangeAction(legalActions, pending.cardInstanceId, card.instanceId) !==
+          null);
 
     // Build phase: hand cards only become playable after "Engine bauen".
     // Action phase: hand action cards only after "Aktion spielen" (action-select / attack).
@@ -339,7 +343,11 @@ export function buildGameViewModel(
 
     let isPlayable = false;
     if (state.phase === 'build' && isHumanTurn) {
-      isPlayable = buildModeOpen && interaction === 'build';
+      if (pending?.type === 'formula-paid-change') {
+        isPlayable = activateDiscard;
+      } else {
+        isPlayable = buildModeOpen && interaction === 'build';
+      }
     } else if (state.phase === 'action' && isHumanTurn && !isHumanDefender) {
       if (improviseMode) {
         isPlayable = hasDiscardDraw;

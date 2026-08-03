@@ -15,6 +15,7 @@ import {
   findDiscardDrawAction,
   findPlayGlitchAction,
   findPoolActivateAction,
+  formulaChangeRequiresDiscard,
   hasChallengeForAttack,
 } from './gameActionHelpers';
 import { CharacterPlate } from './CharacterPlate';
@@ -84,6 +85,10 @@ export function GameBoard({
     if (action) {
       onDispatch(action);
       clearPending();
+      return;
+    }
+    if (formulaChangeRequiresDiscard(view.legalActions, handInstanceId)) {
+      onPendingChange({ type: 'formula-paid-change', cardInstanceId: handInstanceId });
     }
   };
 
