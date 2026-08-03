@@ -49,6 +49,10 @@ export interface LetzFetzCardProps {
   effects?: string[];
   effects_text?: string;
   image_asset?: string;
+  /**
+   * Formel-Kombination: show ordered component thumbs (T/E/K) instead of a single hero.
+   */
+  componentImages?: string[];
   size?: LetzFetzCardSize;
   layout?: LetzFetzCardLayout;
   interactive?: boolean;
@@ -109,6 +113,7 @@ export function LetzFetzCard({
   effects,
   effects_text,
   image_asset,
+  componentImages,
   size = 'lg',
   layout = 'portrait',
   interactive = false,
@@ -253,11 +258,34 @@ export function LetzFetzCard({
   ) : null;
 
   const fit = portrait && presentation ? presentation.imageFit : imageFit;
+  const comboImages =
+    Array.isArray(componentImages) && componentImages.length >= 2
+      ? componentImages.filter((src) => src.trim().length > 0)
+      : [];
 
   const artPanel = (
     <div className="relative min-h-0 flex-1 overflow-hidden bg-[#090807]">
       <CardGrungeOverlay filterId={filterId} mode="art-panel" />
-      {image_asset ? (
+      {comboImages.length >= 2 ? (
+        <div
+          className="relative z-[1] flex h-full w-full items-stretch gap-0.5 p-0.5"
+          data-testid="formula-combo-component-images"
+        >
+          {comboImages.map((src, index) => (
+            <div key={`${src}-${index}`} className="min-w-0 flex-1 overflow-hidden rounded-[1px]">
+              <ImageWithFallback
+                src={src}
+                alt=""
+                aria-hidden
+                className={`h-full w-full object-center ${
+                  fit === 'contain' ? 'object-contain' : 'object-cover'
+                } ${size === 'sm' ? 'opacity-90' : ''}`}
+                loading="lazy"
+              />
+            </div>
+          ))}
+        </div>
+      ) : image_asset ? (
         <ImageWithFallback
           src={image_asset}
           alt=""

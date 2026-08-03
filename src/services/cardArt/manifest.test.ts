@@ -57,6 +57,14 @@ describe('card art manifest', () => {
     expect(resolveCardArtPath('v5-katalysator-spiegelung')).toBe('/cards/formula/spiegelung.png');
   });
 
+  it('resolves V6 formula component art under /cards/formula/', () => {
+    expect(resolveCardArtPath('v6-technik-impulsgeschoss')).toBe('/cards/formula/impulsgeschoss.png');
+    expect(resolveCardArtPath('v6-essenz-feuer')).toBe('/cards/formula/feuer.png');
+    expect(resolveCardArtPath('v6-katalysator-verdichtung')).toBe(
+      '/cards/formula/verdichtung.png',
+    );
+  });
+
   it('resolves V5 formula combination art from catalog slug', () => {
     expect(resolveFormulaCombinationArtPath('raubhiebsirenen')).toBe(
       '/cards/formula/raubhiebsirenen.png',

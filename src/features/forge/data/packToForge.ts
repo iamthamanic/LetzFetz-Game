@@ -9,8 +9,16 @@ import {
   mergePresentationOverlays,
   packToPresentationCards,
 } from '../../../components/cards/packPresentation';
-import { readVfxRegistryFormulaRecipeSummaries, readVfxRegistryTechniqueSummaries } from '../../../services/storage/vfxRegistryBridge';
+import {
+  readVfxRegistryFormulaRecipeSummaries,
+  readVfxRegistryTechniqueSummaries,
+} from '../../../services/storage/vfxRegistryBridge';
 import type { ForgeCardData } from '../model/types';
+import { V6_GENERATED_FORMULA_RECIPES } from '../../../generated/v6/formulaRecipes.generated';
+import {
+  formulaSlotKey,
+  v6FormulaRecipesToForgeCards,
+} from './v6FormulaRecipesToForge';
 
 function studioTechniquesToForgeCards(): ForgeCardData[] {
   return readVfxRegistryTechniqueSummaries().map((entry) => ({
@@ -32,32 +40,37 @@ function studioTechniquesToForgeCards(): ForgeCardData[] {
   }));
 }
 
-function combinateRecipesToForgeCards(): ForgeCardData[] {
-  return readVfxRegistryFormulaRecipeSummaries().map((entry) => {
-    const slotLines = [
-      entry.techniqueId ? `Technik: ${entry.techniqueId}` : null,
-      entry.essenceId ? `Essenz: ${entry.essenceId}` : null,
-      entry.catalystId ? `Katalysator: ${entry.catalystId}` : null,
-    ].filter((line): line is string => line != null);
+function combinateRecipesToForgeCards(catalogSlotKeys: ReadonlySet<string>): ForgeCardData[] {
+  return readVfxRegistryFormulaRecipeSummaries()
+    .filter((entry) => {
+      const key = formulaSlotKey(entry.techniqueId, entry.essenceId, entry.catalystId);
+      return !catalogSlotKeys.has(key);
+    })
+    .map((entry) => {
+      const slotLines = [
+        entry.techniqueId ? `Technik: ${entry.techniqueId}` : null,
+        entry.essenceId ? `Essenz: ${entry.essenceId}` : null,
+        entry.catalystId ? `Katalysator: ${entry.catalystId}` : null,
+      ].filter((line): line is string => line != null);
 
-    return {
-      id: entry.id,
-      name: entry.name,
-      type: 'Formula',
-      element: 'Neutral',
-      stats_json: { resistance: 1 },
-      effects: [
-        'Rolle: Kombination',
-        'Quelle: Combinate',
-        `Status: ${entry.status}`,
-        ...slotLines,
-      ],
-      image_asset: entry.heroFrameUrl ?? '',
-      fromPack: false,
-      created_at: entry.createdAt,
-      updated_at: entry.updatedAt,
-    };
-  });
+      return {
+        id: entry.id,
+        name: entry.name,
+        type: 'Formula',
+        element: 'Neutral',
+        stats_json: { resistance: 1 },
+        effects: [
+          'Rolle: Kombination',
+          'Quelle: Combinate',
+          `Status: ${entry.status}`,
+          ...slotLines,
+        ],
+        image_asset: entry.heroFrameUrl ?? '',
+        fromPack: false,
+        created_at: entry.createdAt,
+        updated_at: entry.updatedAt,
+      };
+    });
 }
 
 /** Base pack + V5 Formelkomponenten / Gegenstände when the pack has none of its own. */
@@ -78,10 +91,18 @@ function packWithFormulaComponents(pack: ContentPack): ContentPack {
 }
 
 export function packToForgeCards(pack: ContentPack = BASE_PACK): ForgeCardData[] {
+  const catalogKombis = v6FormulaRecipesToForgeCards();
+  const catalogSlotKeys = new Set(
+    V6_GENERATED_FORMULA_RECIPES.map((recipe) =>
+      formulaSlotKey(recipe.techniqueId, recipe.essenceId, recipe.catalystId),
+    ),
+  );
+
   return [
     ...packToPresentationCards(packWithFormulaComponents(pack)),
     ...studioTechniquesToForgeCards(),
-    ...combinateRecipesToForgeCards(),
+    ...catalogKombis,
+    ...combinateRecipesToForgeCards(catalogSlotKeys),
   ];
 }
 

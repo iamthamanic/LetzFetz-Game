@@ -22,6 +22,11 @@ export interface CardPresentationData {
   };
   effects: string[];
   image_asset: string;
+  /**
+   * Formel-Kombination: ordered component art paths (Technik → Essenz → Katalysator).
+   * Used when there is no single hero PNG (V6 product: no per-combo artwork).
+   */
+  component_images?: string[];
   notes?: string;
   fromPack?: boolean;
   created_at?: string;
