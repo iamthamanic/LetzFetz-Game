@@ -14,7 +14,7 @@ function shot(page: import('@playwright/test').Page, name: string) {
 }
 
 test.describe('App nav overhaul', () => {
-  test('header, tabs, notes ghost, play active glow', async ({ page }) => {
+  test('header, tabs, play active glow', async ({ page }) => {
     await page.goto('/');
 
     const header = page.getByTestId('app-header');
@@ -31,7 +31,8 @@ test.describe('App nav overhaul', () => {
     await expect(playTab).toHaveClass(/ring-emerald/);
     await shot(page, '02-header-play-active.png');
 
-    await expect(page.getByRole('button', { name: 'Notizen öffnen' })).toBeVisible();
+    // Header Notes removed intentionally — Notes remain under Settings only.
+    await expect(page.getByRole('button', { name: 'Notizen öffnen' })).toHaveCount(0);
 
     await page.setViewportSize({ width: 390, height: 844 });
     await expect(page.getByTestId('nav-tab-play')).toBeVisible();

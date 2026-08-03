@@ -175,9 +175,9 @@ Wenn du Brand anfasst, diese Dateien prüfen:
 ### Layout
 
 - **Header:** `bg-stone-950/95 backdrop-blur-md border-b border-stone-800`
-- **Brand (links):** Logo-PNG via `AppBrand`
+- **Brand (links):** Logo-PNG via `AppBrand` (RGBA freigestellt; Home-Logo mit `.brand-logo-shimmer`)
 - **Nav (rechts):** Play · Material · Build (`font-brand` auf Label)
-- **Notizen:** Ghost-Button, `aria-label="Notizen öffnen"`
+- **Notizen:** nur über Settings („Notizen öffnen“) — kein Header-Ghost-Button
 
 ### Tab tones (`Tabs.tsx`)
 

@@ -1,9 +1,10 @@
 /**
  * App shell navigation — view tabs, history back/forward, match pause / quit / restart.
+ * Notes live under Settings (header StickyNote removed intentionally).
  * Location: src/features/shell/AppNav.tsx
  */
 import React from 'react';
-import { Boxes, ChevronLeft, ChevronRight, Gamepad2, Layers, Settings, StickyNote } from 'lucide-react';
+import { Boxes, ChevronLeft, ChevronRight, Gamepad2, Layers, Settings } from 'lucide-react';
 import { Tabs, type TabItem } from '../../components/ui/Tabs';
 import { Button } from '../../components/ui/Button';
 import { AppNavMatchControls } from './AppNavMatchControls';
@@ -15,7 +16,6 @@ interface AppNavProps {
   onViewChange: (view: AppView) => void;
   onOpenSettings: () => void;
   settingsOpen: boolean;
-  onOpenNotes: () => void;
   canGoBack: boolean;
   canGoForward: boolean;
   onGoBack: () => void;
@@ -49,7 +49,6 @@ export function AppNav({
   onViewChange,
   onOpenSettings,
   settingsOpen,
-  onOpenNotes,
   canGoBack,
   canGoForward,
   onGoBack,
@@ -119,16 +118,6 @@ export function AppNav({
           ariaLabel="Hauptnavigation"
         />
       </div>
-      <Button
-        variant="ghost"
-        size="sm"
-        icon={<StickyNote className="h-4 w-4" />}
-        aria-label="Notizen"
-        title="Notizen"
-        onClick={onOpenNotes}
-        className="shrink-0 px-2 text-stone-400 hover:bg-stone-800 hover:text-stone-200"
-        data-testid="app-nav-notes"
-      />
     </div>
   );
 }

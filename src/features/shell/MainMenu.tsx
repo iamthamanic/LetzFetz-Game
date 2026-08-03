@@ -98,15 +98,15 @@ export function MainMenu({ onNavigate, onOpenSettings }: MainMenuProps) {
         <MenuGlitchBackdrop />
         <div className="relative z-10 isolate flex w-full max-w-md flex-col items-center gap-10">
           <div className="relative z-10 flex flex-col items-center gap-3 text-center">
-            <div className="brand-logo-shimmer relative z-10" data-testid="main-menu-logo">
+            <div className="brand-logo-shimmer relative z-10 bg-transparent" data-testid="main-menu-logo">
               <img
                 src={LETZ_FETZ_LOGO_SRC}
                 alt="Letz Fetz"
-                className="relative z-10 h-20 w-auto max-w-[240px] object-contain sm:h-24 sm:max-w-[280px]"
+                className="relative z-0 h-20 w-auto max-w-[240px] bg-transparent object-contain sm:h-24 sm:max-w-[280px]"
                 loading="eager"
                 decoding="async"
               />
-              <span className="btn-brand-shimmer__shine brand-logo-shimmer__shine" aria-hidden="true" />
+              <span className="brand-logo-shimmer__shine" aria-hidden="true" />
             </div>
           </div>
 
