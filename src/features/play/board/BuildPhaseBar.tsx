@@ -10,12 +10,15 @@ interface BuildPhaseBarProps {
   canActivateFormula?: boolean;
   buildModeActive: boolean;
   inputLocked?: boolean;
-  /** When true, DE copy uses Formelphase wording. */
+  /** When true, DE copy uses Formelphase wording (V5 or V6). */
+  formulaBoard?: boolean;
+  /** @deprecated use formulaBoard */
   v5Formula?: boolean;
   onStartBuild: () => void;
   onActivateFormula?: () => void;
   onSkip: () => void;
   onCancel: () => void;
+  previewSlot?: React.ReactNode;
 }
 
 export function BuildPhaseBar({
@@ -23,24 +26,29 @@ export function BuildPhaseBar({
   canActivateFormula = false,
   buildModeActive,
   inputLocked = false,
+  formulaBoard,
   v5Formula = false,
   onStartBuild,
   onActivateFormula,
   onSkip,
   onCancel,
+  previewSlot,
 }: BuildPhaseBarProps) {
+  const formulaMode = formulaBoard ?? v5Formula;
   const buildDisabled = inputLocked || !canBuild || buildModeActive;
-  const noBuildHint = v5Formula
+  const noBuildHint = formulaMode
     ? 'Keine Formelkarten auf der Hand — nur Skip oder Aktivieren.'
     : 'Keine baubaren Karten auf der Hand — nur Glitch-Karten oder nichts Baubares.';
-  const startLabel = v5Formula ? 'Formel bauen' : 'Engine bauen';
-  const startTitle = v5Formula
+  const startLabel = formulaMode ? 'Formel bauen' : 'Engine bauen';
+  const startTitle = formulaMode
     ? 'Wähle eine Formelkarte zum Bauen / Ersetzen / Schnellmix'
     : 'Wähle eine Handkarte zum Bauen in die Engine';
-  const skipLabel = v5Formula ? 'Skip Formelphase' : 'Skip Bau-Phase';
+  const skipLabel = formulaMode ? 'Skip Formelphase' : 'Skip Bau-Phase';
 
   return (
-    <div data-testid="build-phase-bar" className="flex flex-wrap items-center gap-2">
+    <div data-testid="build-phase-bar" className="flex flex-col gap-2">
+      {previewSlot}
+      <div className="flex flex-wrap items-center gap-2">
       {buildModeActive ? (
         <Button
           variant="secondary"
@@ -66,7 +74,7 @@ export function BuildPhaseBar({
           </Button>
         </span>
       )}
-      {v5Formula && onActivateFormula ? (
+      {formulaMode && onActivateFormula ? (
         <Button
           variant="accent"
           size="sm"
@@ -91,6 +99,7 @@ export function BuildPhaseBar({
       >
         {skipLabel}
       </Button>
+      </div>
     </div>
   );
 }
