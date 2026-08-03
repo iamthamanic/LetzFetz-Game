@@ -3,11 +3,18 @@
  * Location: src/game/engine/arena.ts
  */
 import type { GameState, PlayerId, RulesetConfig } from '../types';
-import { createEmptyMeta, resetTurnMeta } from '../types';
+import { resetTurnMeta } from '../types';
 import { checkWinner } from './createGame';
 import { cloneState, clampHp, drawForPlayer } from './helpers';
 import { modifyDieRoll } from './dice';
 import type { Rng } from './deck';
+
+/** Minimal arena shape for Riss / switchArena (pack arenas). */
+export type SwitchableArena = {
+  id: string;
+  name?: string;
+  d6Variants?: [string, string, string];
+};
 
 export function isSpaeti(state: GameState): boolean {
   return state.arena.arenaId === 'arena-spaeti';
@@ -191,27 +198,41 @@ export function afterBoundDestroyed(
   return checkWinner(next);
 }
 
+/**
+ * Riss in der Realität / Arena-Swap (§29–32 V6, V1 §15.1).
+ * Replaces the active arena immediately. Does **not** undo already-applied
+ * player state (HP, Schild, Marks). Clears only arena-turn-scoped flags so the
+ * new arena starts fresh; preserves match identity meta (v6FormulaEnabled,
+ * Echo/Delay queues, Affinity, equipment flags, …).
+ */
 export function switchArena(
   state: GameState,
-  packArenas: { id: string; d6Variants?: [string, string, string] }[],
+  packArenas: SwitchableArena[],
   rng: Rng,
 ): GameState {
   const next = cloneState(state);
   const others = packArenas.filter((a) => a.id !== next.arena.arenaId);
   const pool = others.length > 0 ? others : packArenas;
-  const pick = pool[Math.floor(rng() * pool.length)];
-  const d6Variant = pick.d6Variants ? Math.floor((Math.floor(rng() * 6)) / 2) : null;
+  const pick = pool[Math.floor(rng() * pool.length)] ?? pool[0];
+  if (!pick) {
+    next.lastEvent = 'Riss in der Realität: keine Arena im Pack.';
+    return next;
+  }
+  const d6Variant = pick.d6Variants ? Math.floor(Math.floor(rng() * 6) / 2) : null;
   next.arena = { arenaId: pick.id, d6Variant };
+  // Preserve persistent match meta; reset arena-turn counters for the new arena.
   next.meta = {
-    ...createEmptyMeta(),
-    boostsPlayed: { ...next.meta.boostsPlayed },
-    drawBan: next.meta.drawBan,
-    activationLockedBoundId: next.meta.activationLockedBoundId,
-    activationLockOwner: next.meta.activationLockOwner,
+    ...next.meta,
+    spaetiFilterUsed: { p1: false, p2: false },
+    kristallHealUsed: { p1: false, p2: false },
+    vulkanAttackBonusUsed: { p1: false, p2: false },
+    sumpfBlockBonusUsed: { p1: false, p2: false },
+    awaitingPostBoostArena: false,
     clubSwapAvailable: pick.id === 'arena-club' && d6Variant === 1,
     basarExhaustAvailable: pick.id === 'arena-schattenbasar' && d6Variant === 1,
   };
-  next.lastEvent = `Arena gewechselt: ${pick.id}.`;
+  const label = pick.name?.trim() || pick.id;
+  next.lastEvent = `Riss in der Realität: Arena gewechselt → ${label}.`;
   return next;
 }
 

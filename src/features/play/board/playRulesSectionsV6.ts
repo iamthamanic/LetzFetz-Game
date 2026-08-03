@@ -108,7 +108,7 @@ export const V6_PLAY_RULE_SECTIONS: RulesSection[] = [
       'Club: Luft-Karten +1 Arena-Wert; nach Formelersatz 1 ziehen / 1 abwerfen.',
       'Schattenbasar: nach Formel-Störung optional 1 Leben zahlen → zerstören.',
       'Elementreaktionen: max 1 pro Timing.',
-      'Riss in der Realität wechselt die Arena zufällig (sofort gültig).',
+      'Riss in der Realität (Hauptaktion): aktuelle Arena ablegen, neue zufällig aus dem Pack — gilt sofort; bereits ausgelöste Effekte der alten Arena werden nicht rückgängig gemacht.',
     ].join('\n'),
   ),
 ];

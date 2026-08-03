@@ -74,7 +74,7 @@ Katalysatoren richten sich **nicht** auf; nach Auflösung Ablage (Echo/Delay: bi
 
 Genau 1 Karte. Stapel leer → Ablage mischen. Negative Sofort-Glitches nicht im V6-Core (Chaos später: `V6_CHAOS_EXPANSION`).
 
-**Standard-Glitches (7):** Timing explizit Aktionsphase oder Reaktion. Aktionsphase: Riss · Kurzschluss · Empfang · Systemfehler · Download (Formelziele). Reaktion: Nein, Bruder · Rückkopplung.
+**Standard-Glitches (7):** Timing explizit Aktionsphase oder Reaktion. Aktionsphase: Riss (Arena-Swap) · Kurzschluss · Empfang · Systemfehler · Download (Formelziele). Reaktion: Nein, Bruder · Rückkopplung. Riss: siehe §11.
 
 ### Formelphase
 
@@ -175,6 +175,8 @@ Ziel = Formelkomponente **oder** Konstrukt. Kein Lebensschaden. Differenz → st
 ## 11. Arenen (Kern)
 
 Immer aktiv, symmetrisch: Späti · Kristall · Vulkan · Sumpf · Club · Schattenbasar (siehe Vollkonzept §29–32 / Engine #350).
+
+**Riss in der Realität:** Aktionsphase-Hauptaktion (`glitch-riss`). Lege die aktuelle Arena ab und decke zufällig eine andere Arena aus dem Pack auf. Die neue Arena gilt sofort. Bereits ausgelöste Effekte der alten Arena werden nicht rückgängig gemacht; Zugende-Trigger der alten Arena greifen nicht mehr, sobald gewechselt wurde.
 
 ---
 
