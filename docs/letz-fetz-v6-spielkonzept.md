@@ -8,6 +8,8 @@
 
 **Slice 1 tracking (GitHub):** #318 authoring/recipes · #319 engine plan/execute · #320 match lifecycle · #321 UI preview=plan · #322 Setup INTERNAL smoke (flag). Play-Default remains **V5** (no AGENTS cutover in Slice 1).
 
+**V6_PLAYABLE:** Setup tile `v6` only when `VITE_V6_PLAYABLE=true` or `localStorage['letz-fetz:v6-playable']='1'`. Default pack choice stays **V5**.
+
 > **Leitsatz:** Der Charakter bestimmt den Rahmen. Die Karten bestimmen die Möglichkeiten. Der Spieler bestimmt das Ergebnis.
 
 Dieses Dokument hält fest, was für Integration und Playtest **als geklärt gilt**. Offene Punkte stehen am Ende unter §99. Es ersetzt noch nicht die Engine-Prosa (`SPIELANLEITUNG_V6_*`) — die entsteht nach Finalisierung.

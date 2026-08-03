@@ -12,6 +12,7 @@ export {
   V5_PACK_MAIN_DECK_SIZE,
   V5_PACK_RULESET,
 } from './packs/v5';
+export { V6_CORE_PACK, buildV6CorePack, V6_PACK_RULESET } from './packs/v6';
 export { mergeFormulaPlayOverlay, countOverlayDeckExtras } from './packs/mergeFormulaPlayOverlay';
 export type {
   DeckOptInEntry,
