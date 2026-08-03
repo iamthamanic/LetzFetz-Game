@@ -147,7 +147,16 @@ export const V6_SLICE1_ESSENCES: EssenceCardDef[] = [
   },
 ];
 
+/** Ten V6 core Katalysatoren (Echo … Opfergabe). Matrix TEK: see V6_MATRIX_CATALYST_IDS. */
 export const V6_SLICE1_CATALYSTS: CatalystCardDef[] = [
+  {
+    kind: 'catalyst',
+    id: 'v6-katalysator-echo',
+    name: 'Echo',
+    stability: 2,
+    effectText:
+      'Wiederhole zu Beginn deines nächsten Zuges 1 Punkt des Primärwerts. Bleibt bis zur Echo-Auflösung, dann Ablage.',
+  },
   {
     kind: 'catalyst',
     id: 'v6-katalysator-ueberladung',
@@ -166,11 +175,51 @@ export const V6_SLICE1_CATALYSTS: CatalystCardDef[] = [
   },
   {
     kind: 'catalyst',
+    id: 'v6-katalysator-ausbreitung',
+    name: 'Ausbreitung',
+    stability: 3,
+    effectText:
+      'Gegnergerichtet: zusätzlich −1 Stabilität an eine Formelkomponente. Selbstgerichtet: +1 Stabilität an eine eigene. Explizites Authoring erforderlich (keine generische Matrix).',
+  },
+  {
+    kind: 'catalyst',
+    id: 'v6-katalysator-kettenkopplung',
+    name: 'Kettenkopplung',
+    stability: 3,
+    effectText:
+      'Bei erfolgreicher vorbereiteter Aktion: nächste Aktion desselben Typs +1. Explizites Authoring erforderlich (keine generische Matrix).',
+  },
+  {
+    kind: 'catalyst',
+    id: 'v6-katalysator-verzoegerung',
+    name: 'Verzögerung',
+    stability: 3,
+    effectText:
+      'Primäreffekt zu Beginn deines nächsten Zuges mit +2. Bleibt bis zur Auflösung, dann Ablage.',
+  },
+  {
+    kind: 'catalyst',
     id: 'v6-katalysator-sofortzuender',
     name: 'Sofortzünder',
     stability: 2,
     effectText:
       'Primärwert −1. Nach Auflösung: 1 ziehen, dann 1 abwerfen. Wird verbraucht.',
+  },
+  {
+    kind: 'catalyst',
+    id: 'v6-katalysator-spiegelung',
+    name: 'Spiegelung',
+    stability: 3,
+    effectText:
+      'Offensiv: nach Treffer 1 Schild. Defensiv: bei Vollblock/Schildgewinn 1 Schaden am Gegner. Explizites Authoring erforderlich (keine generische Matrix).',
+  },
+  {
+    kind: 'catalyst',
+    id: 'v6-katalysator-umkehrung',
+    name: 'Umkehrung',
+    stability: 2,
+    effectText:
+      'Bis zu 2 Punkte Schaden↔Heilung/Schild (Ziel bleibt legal). Nie generisch geraten — nur approved Authoring.',
   },
   {
     kind: 'catalyst',

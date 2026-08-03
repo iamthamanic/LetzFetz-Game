@@ -3,9 +3,10 @@
  * Produced by scripts/generate-v6-formula-recipes.ts
  * Location: src/generated/v6/formulaRecipes.generated.ts
  *
- * Catalog: V6 Slice-1 (10 Techniken × 6 Essenzen × 4 Katalysatoren).
- * These 604 recipes are the locked current set — later expansion
+ * Catalog: V6 Slice-1 (10 Techniken × 6 Essenzen × 6 matrix Katalysatoren).
+ * These 876 recipes are the locked current set — later expansion
  * adds new ids; do not renumber or replace Slice-1 recipeIds.
+ * Four catalysts remain availability:unsupported until #383 (no invented TEK).
  */
 
 export type V6GeneratedRecipeKind = 'te' | 'tk' | 'ek' | 'tek' | 'overformula';
@@ -43,14 +44,18 @@ export interface V6GeneratedFormulaRecipe {
   formulaDefensePenalty: number | null;
   /** Catalog construct summon (#381); null when not a summon recipe. */
   summonConstructDefId: string | null;
+  /** Echo / Delay timing — null means immediate (or TE without catalyst). */
+  timingMode: 'immediate' | 'echo' | 'delay' | null;
+  echoAmount: number | null;
+  delayBonus: number | null;
 }
 
-/** Meta for the locked Slice-1 recipe catalog (not the future 60×10K matrix). */
+/** Meta for the locked Slice-1 recipe catalog (not the future 10T×10K matrix). */
 export const V6_SLICE1_RECIPE_CATALOG = {
   id: 'v6-slice1',
-  label: 'V6 Slice-1 Formelkatalog (10T×6E×4K)',
-  recipeCount: 604,
-  breakdown: {"te":60,"tk":40,"ek":24,"tek":240,"overformula":240},
+  label: 'V6 Slice-1 Formelkatalog (10T×6E×6K)',
+  recipeCount: 876,
+  breakdown: {"te":60,"tk":60,"ek":36,"tek":360,"overformula":360},
 } as const;
 
 export const V6_GENERATED_FORMULA_RECIPES: readonly V6GeneratedFormulaRecipe[] = [
@@ -81,7 +86,10 @@ export const V6_GENERATED_FORMULA_RECIPES: readonly V6GeneratedFormulaRecipe[] =
     "overformulaPrimaryBonus": null,
     "overformulaIntensityBonus": null,
     "formulaDefensePenalty": null,
-    "summonConstructDefId": null
+    "summonConstructDefId": null,
+    "timingMode": null,
+    "echoAmount": null,
+    "delayBonus": null
   },
   {
     "recipeId": "v6-te-impulsgeschoss-wasser",
@@ -110,7 +118,10 @@ export const V6_GENERATED_FORMULA_RECIPES: readonly V6GeneratedFormulaRecipe[] =
     "overformulaPrimaryBonus": null,
     "overformulaIntensityBonus": null,
     "formulaDefensePenalty": null,
-    "summonConstructDefId": null
+    "summonConstructDefId": null,
+    "timingMode": null,
+    "echoAmount": null,
+    "delayBonus": null
   },
   {
     "recipeId": "v6-te-impulsgeschoss-erde",
@@ -139,7 +150,10 @@ export const V6_GENERATED_FORMULA_RECIPES: readonly V6GeneratedFormulaRecipe[] =
     "overformulaPrimaryBonus": null,
     "overformulaIntensityBonus": null,
     "formulaDefensePenalty": null,
-    "summonConstructDefId": null
+    "summonConstructDefId": null,
+    "timingMode": null,
+    "echoAmount": null,
+    "delayBonus": null
   },
   {
     "recipeId": "v6-te-impulsgeschoss-luft",
@@ -168,7 +182,10 @@ export const V6_GENERATED_FORMULA_RECIPES: readonly V6GeneratedFormulaRecipe[] =
     "overformulaPrimaryBonus": null,
     "overformulaIntensityBonus": null,
     "formulaDefensePenalty": null,
-    "summonConstructDefId": null
+    "summonConstructDefId": null,
+    "timingMode": null,
+    "echoAmount": null,
+    "delayBonus": null
   },
   {
     "recipeId": "v6-te-impulsgeschoss-licht",
@@ -197,7 +214,10 @@ export const V6_GENERATED_FORMULA_RECIPES: readonly V6GeneratedFormulaRecipe[] =
     "overformulaPrimaryBonus": null,
     "overformulaIntensityBonus": null,
     "formulaDefensePenalty": null,
-    "summonConstructDefId": null
+    "summonConstructDefId": null,
+    "timingMode": null,
+    "echoAmount": null,
+    "delayBonus": null
   },
   {
     "recipeId": "v6-te-impulsgeschoss-schatten",
@@ -226,7 +246,10 @@ export const V6_GENERATED_FORMULA_RECIPES: readonly V6GeneratedFormulaRecipe[] =
     "overformulaPrimaryBonus": null,
     "overformulaIntensityBonus": null,
     "formulaDefensePenalty": null,
-    "summonConstructDefId": null
+    "summonConstructDefId": null,
+    "timingMode": null,
+    "echoAmount": null,
+    "delayBonus": null
   },
   {
     "recipeId": "v6-te-adrenalinschrei-feuer",
@@ -254,7 +277,10 @@ export const V6_GENERATED_FORMULA_RECIPES: readonly V6GeneratedFormulaRecipe[] =
     "overformulaPrimaryBonus": null,
     "overformulaIntensityBonus": null,
     "formulaDefensePenalty": null,
-    "summonConstructDefId": null
+    "summonConstructDefId": null,
+    "timingMode": null,
+    "echoAmount": null,
+    "delayBonus": null
   },
   {
     "recipeId": "v6-te-adrenalinschrei-wasser",
@@ -282,7 +308,10 @@ export const V6_GENERATED_FORMULA_RECIPES: readonly V6GeneratedFormulaRecipe[] =
     "overformulaPrimaryBonus": null,
     "overformulaIntensityBonus": null,
     "formulaDefensePenalty": null,
-    "summonConstructDefId": null
+    "summonConstructDefId": null,
+    "timingMode": null,
+    "echoAmount": null,
+    "delayBonus": null
   },
   {
     "recipeId": "v6-te-adrenalinschrei-erde",
@@ -310,7 +339,10 @@ export const V6_GENERATED_FORMULA_RECIPES: readonly V6GeneratedFormulaRecipe[] =
     "overformulaPrimaryBonus": null,
     "overformulaIntensityBonus": null,
     "formulaDefensePenalty": null,
-    "summonConstructDefId": null
+    "summonConstructDefId": null,
+    "timingMode": null,
+    "echoAmount": null,
+    "delayBonus": null
   },
   {
     "recipeId": "v6-te-adrenalinschrei-luft",
@@ -338,7 +370,10 @@ export const V6_GENERATED_FORMULA_RECIPES: readonly V6GeneratedFormulaRecipe[] =
     "overformulaPrimaryBonus": null,
     "overformulaIntensityBonus": null,
     "formulaDefensePenalty": null,
-    "summonConstructDefId": null
+    "summonConstructDefId": null,
+    "timingMode": null,
+    "echoAmount": null,
+    "delayBonus": null
   },
   {
     "recipeId": "v6-te-adrenalinschrei-licht",
@@ -366,7 +401,10 @@ export const V6_GENERATED_FORMULA_RECIPES: readonly V6GeneratedFormulaRecipe[] =
     "overformulaPrimaryBonus": null,
     "overformulaIntensityBonus": null,
     "formulaDefensePenalty": null,
-    "summonConstructDefId": null
+    "summonConstructDefId": null,
+    "timingMode": null,
+    "echoAmount": null,
+    "delayBonus": null
   },
   {
     "recipeId": "v6-te-adrenalinschrei-schatten",
@@ -394,7 +432,10 @@ export const V6_GENERATED_FORMULA_RECIPES: readonly V6GeneratedFormulaRecipe[] =
     "overformulaPrimaryBonus": null,
     "overformulaIntensityBonus": null,
     "formulaDefensePenalty": null,
-    "summonConstructDefId": null
+    "summonConstructDefId": null,
+    "timingMode": null,
+    "echoAmount": null,
+    "delayBonus": null
   },
   {
     "recipeId": "v6-te-fintenschnitt-feuer",
@@ -422,7 +463,10 @@ export const V6_GENERATED_FORMULA_RECIPES: readonly V6GeneratedFormulaRecipe[] =
     "overformulaPrimaryBonus": null,
     "overformulaIntensityBonus": null,
     "formulaDefensePenalty": null,
-    "summonConstructDefId": null
+    "summonConstructDefId": null,
+    "timingMode": null,
+    "echoAmount": null,
+    "delayBonus": null
   },
   {
     "recipeId": "v6-te-fintenschnitt-wasser",
@@ -450,7 +494,10 @@ export const V6_GENERATED_FORMULA_RECIPES: readonly V6GeneratedFormulaRecipe[] =
     "overformulaPrimaryBonus": null,
     "overformulaIntensityBonus": null,
     "formulaDefensePenalty": null,
-    "summonConstructDefId": null
+    "summonConstructDefId": null,
+    "timingMode": null,
+    "echoAmount": null,
+    "delayBonus": null
   },
   {
     "recipeId": "v6-te-fintenschnitt-erde",
@@ -478,7 +525,10 @@ export const V6_GENERATED_FORMULA_RECIPES: readonly V6GeneratedFormulaRecipe[] =
     "overformulaPrimaryBonus": null,
     "overformulaIntensityBonus": null,
     "formulaDefensePenalty": null,
-    "summonConstructDefId": null
+    "summonConstructDefId": null,
+    "timingMode": null,
+    "echoAmount": null,
+    "delayBonus": null
   },
   {
     "recipeId": "v6-te-fintenschnitt-luft",
@@ -506,7 +556,10 @@ export const V6_GENERATED_FORMULA_RECIPES: readonly V6GeneratedFormulaRecipe[] =
     "overformulaPrimaryBonus": null,
     "overformulaIntensityBonus": null,
     "formulaDefensePenalty": null,
-    "summonConstructDefId": null
+    "summonConstructDefId": null,
+    "timingMode": null,
+    "echoAmount": null,
+    "delayBonus": null
   },
   {
     "recipeId": "v6-te-fintenschnitt-licht",
@@ -534,7 +587,10 @@ export const V6_GENERATED_FORMULA_RECIPES: readonly V6GeneratedFormulaRecipe[] =
     "overformulaPrimaryBonus": null,
     "overformulaIntensityBonus": null,
     "formulaDefensePenalty": null,
-    "summonConstructDefId": null
+    "summonConstructDefId": null,
+    "timingMode": null,
+    "echoAmount": null,
+    "delayBonus": null
   },
   {
     "recipeId": "v6-te-fintenschnitt-schatten",
@@ -562,7 +618,10 @@ export const V6_GENERATED_FORMULA_RECIPES: readonly V6GeneratedFormulaRecipe[] =
     "overformulaPrimaryBonus": null,
     "overformulaIntensityBonus": null,
     "formulaDefensePenalty": null,
-    "summonConstructDefId": null
+    "summonConstructDefId": null,
+    "timingMode": null,
+    "echoAmount": null,
+    "delayBonus": null
   },
   {
     "recipeId": "v6-te-brechschlag-feuer",
@@ -591,7 +650,10 @@ export const V6_GENERATED_FORMULA_RECIPES: readonly V6GeneratedFormulaRecipe[] =
     "overformulaPrimaryBonus": null,
     "overformulaIntensityBonus": null,
     "formulaDefensePenalty": null,
-    "summonConstructDefId": null
+    "summonConstructDefId": null,
+    "timingMode": null,
+    "echoAmount": null,
+    "delayBonus": null
   },
   {
     "recipeId": "v6-te-brechschlag-wasser",
@@ -620,7 +682,10 @@ export const V6_GENERATED_FORMULA_RECIPES: readonly V6GeneratedFormulaRecipe[] =
     "overformulaPrimaryBonus": null,
     "overformulaIntensityBonus": null,
     "formulaDefensePenalty": null,
-    "summonConstructDefId": null
+    "summonConstructDefId": null,
+    "timingMode": null,
+    "echoAmount": null,
+    "delayBonus": null
   },
   {
     "recipeId": "v6-te-brechschlag-erde",
@@ -649,7 +714,10 @@ export const V6_GENERATED_FORMULA_RECIPES: readonly V6GeneratedFormulaRecipe[] =
     "overformulaPrimaryBonus": null,
     "overformulaIntensityBonus": null,
     "formulaDefensePenalty": null,
-    "summonConstructDefId": null
+    "summonConstructDefId": null,
+    "timingMode": null,
+    "echoAmount": null,
+    "delayBonus": null
   },
   {
     "recipeId": "v6-te-brechschlag-luft",
@@ -678,7 +746,10 @@ export const V6_GENERATED_FORMULA_RECIPES: readonly V6GeneratedFormulaRecipe[] =
     "overformulaPrimaryBonus": null,
     "overformulaIntensityBonus": null,
     "formulaDefensePenalty": null,
-    "summonConstructDefId": null
+    "summonConstructDefId": null,
+    "timingMode": null,
+    "echoAmount": null,
+    "delayBonus": null
   },
   {
     "recipeId": "v6-te-brechschlag-licht",
@@ -707,7 +778,10 @@ export const V6_GENERATED_FORMULA_RECIPES: readonly V6GeneratedFormulaRecipe[] =
     "overformulaPrimaryBonus": null,
     "overformulaIntensityBonus": null,
     "formulaDefensePenalty": null,
-    "summonConstructDefId": null
+    "summonConstructDefId": null,
+    "timingMode": null,
+    "echoAmount": null,
+    "delayBonus": null
   },
   {
     "recipeId": "v6-te-brechschlag-schatten",
@@ -736,7 +810,10 @@ export const V6_GENERATED_FORMULA_RECIPES: readonly V6GeneratedFormulaRecipe[] =
     "overformulaPrimaryBonus": null,
     "overformulaIntensityBonus": null,
     "formulaDefensePenalty": null,
-    "summonConstructDefId": null
+    "summonConstructDefId": null,
+    "timingMode": null,
+    "echoAmount": null,
+    "delayBonus": null
   },
   {
     "recipeId": "v6-te-kettenfessel-feuer",
@@ -765,7 +842,10 @@ export const V6_GENERATED_FORMULA_RECIPES: readonly V6GeneratedFormulaRecipe[] =
     "overformulaPrimaryBonus": null,
     "overformulaIntensityBonus": null,
     "formulaDefensePenalty": null,
-    "summonConstructDefId": null
+    "summonConstructDefId": null,
+    "timingMode": null,
+    "echoAmount": null,
+    "delayBonus": null
   },
   {
     "recipeId": "v6-te-kettenfessel-wasser",
@@ -794,7 +874,10 @@ export const V6_GENERATED_FORMULA_RECIPES: readonly V6GeneratedFormulaRecipe[] =
     "overformulaPrimaryBonus": null,
     "overformulaIntensityBonus": null,
     "formulaDefensePenalty": null,
-    "summonConstructDefId": null
+    "summonConstructDefId": null,
+    "timingMode": null,
+    "echoAmount": null,
+    "delayBonus": null
   },
   {
     "recipeId": "v6-te-kettenfessel-erde",
@@ -823,7 +906,10 @@ export const V6_GENERATED_FORMULA_RECIPES: readonly V6GeneratedFormulaRecipe[] =
     "overformulaPrimaryBonus": null,
     "overformulaIntensityBonus": null,
     "formulaDefensePenalty": null,
-    "summonConstructDefId": null
+    "summonConstructDefId": null,
+    "timingMode": null,
+    "echoAmount": null,
+    "delayBonus": null
   },
   {
     "recipeId": "v6-te-kettenfessel-luft",
@@ -852,7 +938,10 @@ export const V6_GENERATED_FORMULA_RECIPES: readonly V6GeneratedFormulaRecipe[] =
     "overformulaPrimaryBonus": null,
     "overformulaIntensityBonus": null,
     "formulaDefensePenalty": null,
-    "summonConstructDefId": null
+    "summonConstructDefId": null,
+    "timingMode": null,
+    "echoAmount": null,
+    "delayBonus": null
   },
   {
     "recipeId": "v6-te-kettenfessel-licht",
@@ -881,7 +970,10 @@ export const V6_GENERATED_FORMULA_RECIPES: readonly V6GeneratedFormulaRecipe[] =
     "overformulaPrimaryBonus": null,
     "overformulaIntensityBonus": null,
     "formulaDefensePenalty": null,
-    "summonConstructDefId": null
+    "summonConstructDefId": null,
+    "timingMode": null,
+    "echoAmount": null,
+    "delayBonus": null
   },
   {
     "recipeId": "v6-te-kettenfessel-schatten",
@@ -910,7 +1002,10 @@ export const V6_GENERATED_FORMULA_RECIPES: readonly V6GeneratedFormulaRecipe[] =
     "overformulaPrimaryBonus": null,
     "overformulaIntensityBonus": null,
     "formulaDefensePenalty": null,
-    "summonConstructDefId": null
+    "summonConstructDefId": null,
+    "timingMode": null,
+    "echoAmount": null,
+    "delayBonus": null
   },
   {
     "recipeId": "v6-te-bannkreis-feuer",
@@ -938,7 +1033,10 @@ export const V6_GENERATED_FORMULA_RECIPES: readonly V6GeneratedFormulaRecipe[] =
     "overformulaPrimaryBonus": null,
     "overformulaIntensityBonus": null,
     "formulaDefensePenalty": null,
-    "summonConstructDefId": null
+    "summonConstructDefId": null,
+    "timingMode": null,
+    "echoAmount": null,
+    "delayBonus": null
   },
   {
     "recipeId": "v6-te-bannkreis-wasser",
@@ -966,7 +1064,10 @@ export const V6_GENERATED_FORMULA_RECIPES: readonly V6GeneratedFormulaRecipe[] =
     "overformulaPrimaryBonus": null,
     "overformulaIntensityBonus": null,
     "formulaDefensePenalty": null,
-    "summonConstructDefId": null
+    "summonConstructDefId": null,
+    "timingMode": null,
+    "echoAmount": null,
+    "delayBonus": null
   },
   {
     "recipeId": "v6-te-bannkreis-erde",
@@ -994,7 +1095,10 @@ export const V6_GENERATED_FORMULA_RECIPES: readonly V6GeneratedFormulaRecipe[] =
     "overformulaPrimaryBonus": null,
     "overformulaIntensityBonus": null,
     "formulaDefensePenalty": null,
-    "summonConstructDefId": null
+    "summonConstructDefId": null,
+    "timingMode": null,
+    "echoAmount": null,
+    "delayBonus": null
   },
   {
     "recipeId": "v6-te-bannkreis-luft",
@@ -1022,7 +1126,10 @@ export const V6_GENERATED_FORMULA_RECIPES: readonly V6GeneratedFormulaRecipe[] =
     "overformulaPrimaryBonus": null,
     "overformulaIntensityBonus": null,
     "formulaDefensePenalty": null,
-    "summonConstructDefId": null
+    "summonConstructDefId": null,
+    "timingMode": null,
+    "echoAmount": null,
+    "delayBonus": null
   },
   {
     "recipeId": "v6-te-bannkreis-licht",
@@ -1050,7 +1157,10 @@ export const V6_GENERATED_FORMULA_RECIPES: readonly V6GeneratedFormulaRecipe[] =
     "overformulaPrimaryBonus": null,
     "overformulaIntensityBonus": null,
     "formulaDefensePenalty": null,
-    "summonConstructDefId": null
+    "summonConstructDefId": null,
+    "timingMode": null,
+    "echoAmount": null,
+    "delayBonus": null
   },
   {
     "recipeId": "v6-te-bannkreis-schatten",
@@ -1078,7 +1188,10 @@ export const V6_GENERATED_FORMULA_RECIPES: readonly V6GeneratedFormulaRecipe[] =
     "overformulaPrimaryBonus": null,
     "overformulaIntensityBonus": null,
     "formulaDefensePenalty": null,
-    "summonConstructDefId": null
+    "summonConstructDefId": null,
+    "timingMode": null,
+    "echoAmount": null,
+    "delayBonus": null
   },
   {
     "recipeId": "v6-te-ueberraschungsangriff-feuer",
@@ -1107,7 +1220,10 @@ export const V6_GENERATED_FORMULA_RECIPES: readonly V6GeneratedFormulaRecipe[] =
     "overformulaPrimaryBonus": null,
     "overformulaIntensityBonus": null,
     "formulaDefensePenalty": null,
-    "summonConstructDefId": null
+    "summonConstructDefId": null,
+    "timingMode": null,
+    "echoAmount": null,
+    "delayBonus": null
   },
   {
     "recipeId": "v6-te-ueberraschungsangriff-wasser",
@@ -1136,7 +1252,10 @@ export const V6_GENERATED_FORMULA_RECIPES: readonly V6GeneratedFormulaRecipe[] =
     "overformulaPrimaryBonus": null,
     "overformulaIntensityBonus": null,
     "formulaDefensePenalty": null,
-    "summonConstructDefId": null
+    "summonConstructDefId": null,
+    "timingMode": null,
+    "echoAmount": null,
+    "delayBonus": null
   },
   {
     "recipeId": "v6-te-ueberraschungsangriff-erde",
@@ -1165,7 +1284,10 @@ export const V6_GENERATED_FORMULA_RECIPES: readonly V6GeneratedFormulaRecipe[] =
     "overformulaPrimaryBonus": null,
     "overformulaIntensityBonus": null,
     "formulaDefensePenalty": null,
-    "summonConstructDefId": null
+    "summonConstructDefId": null,
+    "timingMode": null,
+    "echoAmount": null,
+    "delayBonus": null
   },
   {
     "recipeId": "v6-te-ueberraschungsangriff-luft",
@@ -1194,7 +1316,10 @@ export const V6_GENERATED_FORMULA_RECIPES: readonly V6GeneratedFormulaRecipe[] =
     "overformulaPrimaryBonus": null,
     "overformulaIntensityBonus": null,
     "formulaDefensePenalty": null,
-    "summonConstructDefId": null
+    "summonConstructDefId": null,
+    "timingMode": null,
+    "echoAmount": null,
+    "delayBonus": null
   },
   {
     "recipeId": "v6-te-ueberraschungsangriff-licht",
@@ -1223,7 +1348,10 @@ export const V6_GENERATED_FORMULA_RECIPES: readonly V6GeneratedFormulaRecipe[] =
     "overformulaPrimaryBonus": null,
     "overformulaIntensityBonus": null,
     "formulaDefensePenalty": null,
-    "summonConstructDefId": null
+    "summonConstructDefId": null,
+    "timingMode": null,
+    "echoAmount": null,
+    "delayBonus": null
   },
   {
     "recipeId": "v6-te-ueberraschungsangriff-schatten",
@@ -1252,7 +1380,10 @@ export const V6_GENERATED_FORMULA_RECIPES: readonly V6GeneratedFormulaRecipe[] =
     "overformulaPrimaryBonus": null,
     "overformulaIntensityBonus": null,
     "formulaDefensePenalty": null,
-    "summonConstructDefId": null
+    "summonConstructDefId": null,
+    "timingMode": null,
+    "echoAmount": null,
+    "delayBonus": null
   },
   {
     "recipeId": "v6-te-schicksalmanifestation-feuer",
@@ -1280,7 +1411,10 @@ export const V6_GENERATED_FORMULA_RECIPES: readonly V6GeneratedFormulaRecipe[] =
     "overformulaPrimaryBonus": null,
     "overformulaIntensityBonus": null,
     "formulaDefensePenalty": null,
-    "summonConstructDefId": null
+    "summonConstructDefId": null,
+    "timingMode": null,
+    "echoAmount": null,
+    "delayBonus": null
   },
   {
     "recipeId": "v6-te-schicksalmanifestation-wasser",
@@ -1308,7 +1442,10 @@ export const V6_GENERATED_FORMULA_RECIPES: readonly V6GeneratedFormulaRecipe[] =
     "overformulaPrimaryBonus": null,
     "overformulaIntensityBonus": null,
     "formulaDefensePenalty": null,
-    "summonConstructDefId": null
+    "summonConstructDefId": null,
+    "timingMode": null,
+    "echoAmount": null,
+    "delayBonus": null
   },
   {
     "recipeId": "v6-te-schicksalmanifestation-erde",
@@ -1336,7 +1473,10 @@ export const V6_GENERATED_FORMULA_RECIPES: readonly V6GeneratedFormulaRecipe[] =
     "overformulaPrimaryBonus": null,
     "overformulaIntensityBonus": null,
     "formulaDefensePenalty": null,
-    "summonConstructDefId": null
+    "summonConstructDefId": null,
+    "timingMode": null,
+    "echoAmount": null,
+    "delayBonus": null
   },
   {
     "recipeId": "v6-te-schicksalmanifestation-luft",
@@ -1364,7 +1504,10 @@ export const V6_GENERATED_FORMULA_RECIPES: readonly V6GeneratedFormulaRecipe[] =
     "overformulaPrimaryBonus": null,
     "overformulaIntensityBonus": null,
     "formulaDefensePenalty": null,
-    "summonConstructDefId": null
+    "summonConstructDefId": null,
+    "timingMode": null,
+    "echoAmount": null,
+    "delayBonus": null
   },
   {
     "recipeId": "v6-te-schicksalmanifestation-licht",
@@ -1392,7 +1535,10 @@ export const V6_GENERATED_FORMULA_RECIPES: readonly V6GeneratedFormulaRecipe[] =
     "overformulaPrimaryBonus": null,
     "overformulaIntensityBonus": null,
     "formulaDefensePenalty": null,
-    "summonConstructDefId": null
+    "summonConstructDefId": null,
+    "timingMode": null,
+    "echoAmount": null,
+    "delayBonus": null
   },
   {
     "recipeId": "v6-te-schicksalmanifestation-schatten",
@@ -1420,7 +1566,10 @@ export const V6_GENERATED_FORMULA_RECIPES: readonly V6GeneratedFormulaRecipe[] =
     "overformulaPrimaryBonus": null,
     "overformulaIntensityBonus": null,
     "formulaDefensePenalty": null,
-    "summonConstructDefId": null
+    "summonConstructDefId": null,
+    "timingMode": null,
+    "echoAmount": null,
+    "delayBonus": null
   },
   {
     "recipeId": "v6-te-magiepanzer-feuer",
@@ -1449,7 +1598,10 @@ export const V6_GENERATED_FORMULA_RECIPES: readonly V6GeneratedFormulaRecipe[] =
     "overformulaPrimaryBonus": null,
     "overformulaIntensityBonus": null,
     "formulaDefensePenalty": null,
-    "summonConstructDefId": null
+    "summonConstructDefId": null,
+    "timingMode": null,
+    "echoAmount": null,
+    "delayBonus": null
   },
   {
     "recipeId": "v6-te-magiepanzer-wasser",
@@ -1477,7 +1629,10 @@ export const V6_GENERATED_FORMULA_RECIPES: readonly V6GeneratedFormulaRecipe[] =
     "overformulaPrimaryBonus": null,
     "overformulaIntensityBonus": null,
     "formulaDefensePenalty": null,
-    "summonConstructDefId": null
+    "summonConstructDefId": null,
+    "timingMode": null,
+    "echoAmount": null,
+    "delayBonus": null
   },
   {
     "recipeId": "v6-te-magiepanzer-erde",
@@ -1505,7 +1660,10 @@ export const V6_GENERATED_FORMULA_RECIPES: readonly V6GeneratedFormulaRecipe[] =
     "overformulaPrimaryBonus": null,
     "overformulaIntensityBonus": null,
     "formulaDefensePenalty": null,
-    "summonConstructDefId": null
+    "summonConstructDefId": null,
+    "timingMode": null,
+    "echoAmount": null,
+    "delayBonus": null
   },
   {
     "recipeId": "v6-te-magiepanzer-luft",
@@ -1533,7 +1691,10 @@ export const V6_GENERATED_FORMULA_RECIPES: readonly V6GeneratedFormulaRecipe[] =
     "overformulaPrimaryBonus": null,
     "overformulaIntensityBonus": null,
     "formulaDefensePenalty": null,
-    "summonConstructDefId": null
+    "summonConstructDefId": null,
+    "timingMode": null,
+    "echoAmount": null,
+    "delayBonus": null
   },
   {
     "recipeId": "v6-te-magiepanzer-licht",
@@ -1561,7 +1722,10 @@ export const V6_GENERATED_FORMULA_RECIPES: readonly V6GeneratedFormulaRecipe[] =
     "overformulaPrimaryBonus": null,
     "overformulaIntensityBonus": null,
     "formulaDefensePenalty": null,
-    "summonConstructDefId": null
+    "summonConstructDefId": null,
+    "timingMode": null,
+    "echoAmount": null,
+    "delayBonus": null
   },
   {
     "recipeId": "v6-te-magiepanzer-schatten",
@@ -1590,7 +1754,10 @@ export const V6_GENERATED_FORMULA_RECIPES: readonly V6GeneratedFormulaRecipe[] =
     "overformulaPrimaryBonus": null,
     "overformulaIntensityBonus": null,
     "formulaDefensePenalty": null,
-    "summonConstructDefId": null
+    "summonConstructDefId": null,
+    "timingMode": null,
+    "echoAmount": null,
+    "delayBonus": null
   },
   {
     "recipeId": "v6-te-beschwoerungsritual-feuer",
@@ -1618,7 +1785,10 @@ export const V6_GENERATED_FORMULA_RECIPES: readonly V6GeneratedFormulaRecipe[] =
     "overformulaPrimaryBonus": null,
     "overformulaIntensityBonus": null,
     "formulaDefensePenalty": null,
-    "summonConstructDefId": "v6-konstrukt-spieltest-schattenpuppe"
+    "summonConstructDefId": "v6-konstrukt-spieltest-schattenpuppe",
+    "timingMode": null,
+    "echoAmount": null,
+    "delayBonus": null
   },
   {
     "recipeId": "v6-te-beschwoerungsritual-wasser",
@@ -1646,7 +1816,10 @@ export const V6_GENERATED_FORMULA_RECIPES: readonly V6GeneratedFormulaRecipe[] =
     "overformulaPrimaryBonus": null,
     "overformulaIntensityBonus": null,
     "formulaDefensePenalty": null,
-    "summonConstructDefId": "v6-konstrukt-spieltest-schattenpuppe"
+    "summonConstructDefId": "v6-konstrukt-spieltest-schattenpuppe",
+    "timingMode": null,
+    "echoAmount": null,
+    "delayBonus": null
   },
   {
     "recipeId": "v6-te-beschwoerungsritual-erde",
@@ -1674,7 +1847,10 @@ export const V6_GENERATED_FORMULA_RECIPES: readonly V6GeneratedFormulaRecipe[] =
     "overformulaPrimaryBonus": null,
     "overformulaIntensityBonus": null,
     "formulaDefensePenalty": null,
-    "summonConstructDefId": "v6-konstrukt-spieltest-schattenpuppe"
+    "summonConstructDefId": "v6-konstrukt-spieltest-schattenpuppe",
+    "timingMode": null,
+    "echoAmount": null,
+    "delayBonus": null
   },
   {
     "recipeId": "v6-te-beschwoerungsritual-luft",
@@ -1702,7 +1878,10 @@ export const V6_GENERATED_FORMULA_RECIPES: readonly V6GeneratedFormulaRecipe[] =
     "overformulaPrimaryBonus": null,
     "overformulaIntensityBonus": null,
     "formulaDefensePenalty": null,
-    "summonConstructDefId": "v6-konstrukt-spieltest-schattenpuppe"
+    "summonConstructDefId": "v6-konstrukt-spieltest-schattenpuppe",
+    "timingMode": null,
+    "echoAmount": null,
+    "delayBonus": null
   },
   {
     "recipeId": "v6-te-beschwoerungsritual-licht",
@@ -1730,7 +1909,10 @@ export const V6_GENERATED_FORMULA_RECIPES: readonly V6GeneratedFormulaRecipe[] =
     "overformulaPrimaryBonus": null,
     "overformulaIntensityBonus": null,
     "formulaDefensePenalty": null,
-    "summonConstructDefId": "v6-konstrukt-spieltest-schattenpuppe"
+    "summonConstructDefId": "v6-konstrukt-spieltest-schattenpuppe",
+    "timingMode": null,
+    "echoAmount": null,
+    "delayBonus": null
   },
   {
     "recipeId": "v6-te-beschwoerungsritual-schatten",
@@ -1758,7 +1940,38 @@ export const V6_GENERATED_FORMULA_RECIPES: readonly V6GeneratedFormulaRecipe[] =
     "overformulaPrimaryBonus": null,
     "overformulaIntensityBonus": null,
     "formulaDefensePenalty": null,
-    "summonConstructDefId": "v6-konstrukt-spieltest-schattenpuppe"
+    "summonConstructDefId": "v6-konstrukt-spieltest-schattenpuppe",
+    "timingMode": null,
+    "echoAmount": null,
+    "delayBonus": null
+  },
+  {
+    "recipeId": "v6-tk-impulsgeschoss-echo",
+    "kind": "tk",
+    "catalogSlice": "slice1",
+    "techniqueId": "v6-technik-impulsgeschoss",
+    "essenceId": null,
+    "catalystId": "v6-katalysator-echo",
+    "name": "Echoimpuls",
+    "effectSummary": "Verursache 2 Schaden am Gegner. Echo: zu Beginn deines nächsten Zuges wiederhole 1 Punkt des Primärwerts. Katalysator bleibt bis zur Echo-Auflösung.",
+    "primary": {
+      "kind": "damage",
+      "value": 2,
+      "target": "opponent",
+      "offensive": true
+    },
+    "rider": null,
+    "intensity": null,
+    "transformId": "xform-echo",
+    "grantsFetz": false,
+    "catalystConsumed": false,
+    "overformulaPrimaryBonus": null,
+    "overformulaIntensityBonus": null,
+    "formulaDefensePenalty": null,
+    "summonConstructDefId": null,
+    "timingMode": "echo",
+    "echoAmount": 1,
+    "delayBonus": null
   },
   {
     "recipeId": "v6-tk-impulsgeschoss-ueberladung",
@@ -1783,7 +1996,10 @@ export const V6_GENERATED_FORMULA_RECIPES: readonly V6GeneratedFormulaRecipe[] =
     "overformulaPrimaryBonus": null,
     "overformulaIntensityBonus": null,
     "formulaDefensePenalty": null,
-    "summonConstructDefId": null
+    "summonConstructDefId": null,
+    "timingMode": "immediate",
+    "echoAmount": null,
+    "delayBonus": null
   },
   {
     "recipeId": "v6-tk-impulsgeschoss-verdichtung",
@@ -1808,7 +2024,38 @@ export const V6_GENERATED_FORMULA_RECIPES: readonly V6GeneratedFormulaRecipe[] =
     "overformulaPrimaryBonus": null,
     "overformulaIntensityBonus": null,
     "formulaDefensePenalty": null,
-    "summonConstructDefId": null
+    "summonConstructDefId": null,
+    "timingMode": "immediate",
+    "echoAmount": null,
+    "delayBonus": null
+  },
+  {
+    "recipeId": "v6-tk-impulsgeschoss-verzoegerung",
+    "kind": "tk",
+    "catalogSlice": "slice1",
+    "techniqueId": "v6-technik-impulsgeschoss",
+    "essenceId": null,
+    "catalystId": "v6-katalysator-verzoegerung",
+    "name": "Delayimpuls",
+    "effectSummary": "Verursache 2 Schaden am Gegner. Verzögerung: Primäreffekt geschieht nicht sofort, sondern zu Beginn deines nächsten Zuges und erhält +2. Katalysator bleibt bis zur Auflösung.",
+    "primary": {
+      "kind": "damage",
+      "value": 2,
+      "target": "opponent",
+      "offensive": true
+    },
+    "rider": null,
+    "intensity": null,
+    "transformId": "xform-verzoegerung",
+    "grantsFetz": false,
+    "catalystConsumed": false,
+    "overformulaPrimaryBonus": null,
+    "overformulaIntensityBonus": null,
+    "formulaDefensePenalty": null,
+    "summonConstructDefId": null,
+    "timingMode": "delay",
+    "echoAmount": null,
+    "delayBonus": 2
   },
   {
     "recipeId": "v6-tk-impulsgeschoss-sofortzuender",
@@ -1833,7 +2080,10 @@ export const V6_GENERATED_FORMULA_RECIPES: readonly V6GeneratedFormulaRecipe[] =
     "overformulaPrimaryBonus": null,
     "overformulaIntensityBonus": null,
     "formulaDefensePenalty": null,
-    "summonConstructDefId": null
+    "summonConstructDefId": null,
+    "timingMode": "immediate",
+    "echoAmount": null,
+    "delayBonus": null
   },
   {
     "recipeId": "v6-tk-impulsgeschoss-opfergabe",
@@ -1858,7 +2108,37 @@ export const V6_GENERATED_FORMULA_RECIPES: readonly V6GeneratedFormulaRecipe[] =
     "overformulaPrimaryBonus": null,
     "overformulaIntensityBonus": null,
     "formulaDefensePenalty": null,
-    "summonConstructDefId": null
+    "summonConstructDefId": null,
+    "timingMode": "immediate",
+    "echoAmount": null,
+    "delayBonus": null
+  },
+  {
+    "recipeId": "v6-tk-adrenalinschrei-echo",
+    "kind": "tk",
+    "catalogSlice": "slice1",
+    "techniqueId": "v6-technik-adrenalinschrei",
+    "essenceId": null,
+    "catalystId": "v6-katalysator-echo",
+    "name": "Echoschrei",
+    "effectSummary": "Bereite Angriff +2 vor. Echo: zu Beginn deines nächsten Zuges wiederhole 1 Punkt des Primärwerts. Katalysator bleibt bis zur Echo-Auflösung.",
+    "primary": {
+      "kind": "prep_attack",
+      "value": 2,
+      "target": "self"
+    },
+    "rider": null,
+    "intensity": null,
+    "transformId": "xform-echo",
+    "grantsFetz": false,
+    "catalystConsumed": false,
+    "overformulaPrimaryBonus": null,
+    "overformulaIntensityBonus": null,
+    "formulaDefensePenalty": null,
+    "summonConstructDefId": null,
+    "timingMode": "echo",
+    "echoAmount": 1,
+    "delayBonus": null
   },
   {
     "recipeId": "v6-tk-adrenalinschrei-ueberladung",
@@ -1882,7 +2162,10 @@ export const V6_GENERATED_FORMULA_RECIPES: readonly V6GeneratedFormulaRecipe[] =
     "overformulaPrimaryBonus": null,
     "overformulaIntensityBonus": null,
     "formulaDefensePenalty": null,
-    "summonConstructDefId": null
+    "summonConstructDefId": null,
+    "timingMode": "immediate",
+    "echoAmount": null,
+    "delayBonus": null
   },
   {
     "recipeId": "v6-tk-adrenalinschrei-verdichtung",
@@ -1906,7 +2189,37 @@ export const V6_GENERATED_FORMULA_RECIPES: readonly V6GeneratedFormulaRecipe[] =
     "overformulaPrimaryBonus": null,
     "overformulaIntensityBonus": null,
     "formulaDefensePenalty": null,
-    "summonConstructDefId": null
+    "summonConstructDefId": null,
+    "timingMode": "immediate",
+    "echoAmount": null,
+    "delayBonus": null
+  },
+  {
+    "recipeId": "v6-tk-adrenalinschrei-verzoegerung",
+    "kind": "tk",
+    "catalogSlice": "slice1",
+    "techniqueId": "v6-technik-adrenalinschrei",
+    "essenceId": null,
+    "catalystId": "v6-katalysator-verzoegerung",
+    "name": "Delayschrei",
+    "effectSummary": "Bereite Angriff +2 vor. Verzögerung: Primäreffekt geschieht nicht sofort, sondern zu Beginn deines nächsten Zuges und erhält +2. Katalysator bleibt bis zur Auflösung.",
+    "primary": {
+      "kind": "prep_attack",
+      "value": 2,
+      "target": "self"
+    },
+    "rider": null,
+    "intensity": null,
+    "transformId": "xform-verzoegerung",
+    "grantsFetz": false,
+    "catalystConsumed": false,
+    "overformulaPrimaryBonus": null,
+    "overformulaIntensityBonus": null,
+    "formulaDefensePenalty": null,
+    "summonConstructDefId": null,
+    "timingMode": "delay",
+    "echoAmount": null,
+    "delayBonus": 2
   },
   {
     "recipeId": "v6-tk-adrenalinschrei-sofortzuender",
@@ -1930,7 +2243,10 @@ export const V6_GENERATED_FORMULA_RECIPES: readonly V6GeneratedFormulaRecipe[] =
     "overformulaPrimaryBonus": null,
     "overformulaIntensityBonus": null,
     "formulaDefensePenalty": null,
-    "summonConstructDefId": null
+    "summonConstructDefId": null,
+    "timingMode": "immediate",
+    "echoAmount": null,
+    "delayBonus": null
   },
   {
     "recipeId": "v6-tk-adrenalinschrei-opfergabe",
@@ -1954,7 +2270,37 @@ export const V6_GENERATED_FORMULA_RECIPES: readonly V6GeneratedFormulaRecipe[] =
     "overformulaPrimaryBonus": null,
     "overformulaIntensityBonus": null,
     "formulaDefensePenalty": null,
-    "summonConstructDefId": null
+    "summonConstructDefId": null,
+    "timingMode": "immediate",
+    "echoAmount": null,
+    "delayBonus": null
+  },
+  {
+    "recipeId": "v6-tk-fintenschnitt-echo",
+    "kind": "tk",
+    "catalogSlice": "slice1",
+    "techniqueId": "v6-technik-fintenschnitt",
+    "essenceId": null,
+    "catalystId": "v6-katalysator-echo",
+    "name": "Echofinte",
+    "effectSummary": "Bereite Block +2 vor. Echo: zu Beginn deines nächsten Zuges wiederhole 1 Punkt des Primärwerts. Katalysator bleibt bis zur Echo-Auflösung.",
+    "primary": {
+      "kind": "prep_block",
+      "value": 2,
+      "target": "self"
+    },
+    "rider": null,
+    "intensity": null,
+    "transformId": "xform-echo",
+    "grantsFetz": false,
+    "catalystConsumed": false,
+    "overformulaPrimaryBonus": null,
+    "overformulaIntensityBonus": null,
+    "formulaDefensePenalty": null,
+    "summonConstructDefId": null,
+    "timingMode": "echo",
+    "echoAmount": 1,
+    "delayBonus": null
   },
   {
     "recipeId": "v6-tk-fintenschnitt-ueberladung",
@@ -1978,7 +2324,10 @@ export const V6_GENERATED_FORMULA_RECIPES: readonly V6GeneratedFormulaRecipe[] =
     "overformulaPrimaryBonus": null,
     "overformulaIntensityBonus": null,
     "formulaDefensePenalty": null,
-    "summonConstructDefId": null
+    "summonConstructDefId": null,
+    "timingMode": "immediate",
+    "echoAmount": null,
+    "delayBonus": null
   },
   {
     "recipeId": "v6-tk-fintenschnitt-verdichtung",
@@ -2002,7 +2351,37 @@ export const V6_GENERATED_FORMULA_RECIPES: readonly V6GeneratedFormulaRecipe[] =
     "overformulaPrimaryBonus": null,
     "overformulaIntensityBonus": null,
     "formulaDefensePenalty": null,
-    "summonConstructDefId": null
+    "summonConstructDefId": null,
+    "timingMode": "immediate",
+    "echoAmount": null,
+    "delayBonus": null
+  },
+  {
+    "recipeId": "v6-tk-fintenschnitt-verzoegerung",
+    "kind": "tk",
+    "catalogSlice": "slice1",
+    "techniqueId": "v6-technik-fintenschnitt",
+    "essenceId": null,
+    "catalystId": "v6-katalysator-verzoegerung",
+    "name": "Delayfinte",
+    "effectSummary": "Bereite Block +2 vor. Verzögerung: Primäreffekt geschieht nicht sofort, sondern zu Beginn deines nächsten Zuges und erhält +2. Katalysator bleibt bis zur Auflösung.",
+    "primary": {
+      "kind": "prep_block",
+      "value": 2,
+      "target": "self"
+    },
+    "rider": null,
+    "intensity": null,
+    "transformId": "xform-verzoegerung",
+    "grantsFetz": false,
+    "catalystConsumed": false,
+    "overformulaPrimaryBonus": null,
+    "overformulaIntensityBonus": null,
+    "formulaDefensePenalty": null,
+    "summonConstructDefId": null,
+    "timingMode": "delay",
+    "echoAmount": null,
+    "delayBonus": 2
   },
   {
     "recipeId": "v6-tk-fintenschnitt-sofortzuender",
@@ -2026,7 +2405,10 @@ export const V6_GENERATED_FORMULA_RECIPES: readonly V6GeneratedFormulaRecipe[] =
     "overformulaPrimaryBonus": null,
     "overformulaIntensityBonus": null,
     "formulaDefensePenalty": null,
-    "summonConstructDefId": null
+    "summonConstructDefId": null,
+    "timingMode": "immediate",
+    "echoAmount": null,
+    "delayBonus": null
   },
   {
     "recipeId": "v6-tk-fintenschnitt-opfergabe",
@@ -2050,7 +2432,38 @@ export const V6_GENERATED_FORMULA_RECIPES: readonly V6GeneratedFormulaRecipe[] =
     "overformulaPrimaryBonus": null,
     "overformulaIntensityBonus": null,
     "formulaDefensePenalty": null,
-    "summonConstructDefId": null
+    "summonConstructDefId": null,
+    "timingMode": "immediate",
+    "echoAmount": null,
+    "delayBonus": null
+  },
+  {
+    "recipeId": "v6-tk-brechschlag-echo",
+    "kind": "tk",
+    "catalogSlice": "slice1",
+    "techniqueId": "v6-technik-brechschlag",
+    "essenceId": null,
+    "catalystId": "v6-katalysator-echo",
+    "name": "Echobruch",
+    "effectSummary": "Verursache 2 Schaden am Gegner. Echo: zu Beginn deines nächsten Zuges wiederhole 1 Punkt des Primärwerts. Katalysator bleibt bis zur Echo-Auflösung.",
+    "primary": {
+      "kind": "damage",
+      "value": 2,
+      "target": "opponent",
+      "offensive": true
+    },
+    "rider": null,
+    "intensity": null,
+    "transformId": "xform-echo",
+    "grantsFetz": false,
+    "catalystConsumed": false,
+    "overformulaPrimaryBonus": null,
+    "overformulaIntensityBonus": null,
+    "formulaDefensePenalty": null,
+    "summonConstructDefId": null,
+    "timingMode": "echo",
+    "echoAmount": 1,
+    "delayBonus": null
   },
   {
     "recipeId": "v6-tk-brechschlag-ueberladung",
@@ -2075,7 +2488,10 @@ export const V6_GENERATED_FORMULA_RECIPES: readonly V6GeneratedFormulaRecipe[] =
     "overformulaPrimaryBonus": null,
     "overformulaIntensityBonus": null,
     "formulaDefensePenalty": null,
-    "summonConstructDefId": null
+    "summonConstructDefId": null,
+    "timingMode": "immediate",
+    "echoAmount": null,
+    "delayBonus": null
   },
   {
     "recipeId": "v6-tk-brechschlag-verdichtung",
@@ -2100,7 +2516,38 @@ export const V6_GENERATED_FORMULA_RECIPES: readonly V6GeneratedFormulaRecipe[] =
     "overformulaPrimaryBonus": null,
     "overformulaIntensityBonus": null,
     "formulaDefensePenalty": null,
-    "summonConstructDefId": null
+    "summonConstructDefId": null,
+    "timingMode": "immediate",
+    "echoAmount": null,
+    "delayBonus": null
+  },
+  {
+    "recipeId": "v6-tk-brechschlag-verzoegerung",
+    "kind": "tk",
+    "catalogSlice": "slice1",
+    "techniqueId": "v6-technik-brechschlag",
+    "essenceId": null,
+    "catalystId": "v6-katalysator-verzoegerung",
+    "name": "Delaybruch",
+    "effectSummary": "Verursache 2 Schaden am Gegner. Verzögerung: Primäreffekt geschieht nicht sofort, sondern zu Beginn deines nächsten Zuges und erhält +2. Katalysator bleibt bis zur Auflösung.",
+    "primary": {
+      "kind": "damage",
+      "value": 2,
+      "target": "opponent",
+      "offensive": true
+    },
+    "rider": null,
+    "intensity": null,
+    "transformId": "xform-verzoegerung",
+    "grantsFetz": false,
+    "catalystConsumed": false,
+    "overformulaPrimaryBonus": null,
+    "overformulaIntensityBonus": null,
+    "formulaDefensePenalty": null,
+    "summonConstructDefId": null,
+    "timingMode": "delay",
+    "echoAmount": null,
+    "delayBonus": 2
   },
   {
     "recipeId": "v6-tk-brechschlag-sofortzuender",
@@ -2125,7 +2572,10 @@ export const V6_GENERATED_FORMULA_RECIPES: readonly V6GeneratedFormulaRecipe[] =
     "overformulaPrimaryBonus": null,
     "overformulaIntensityBonus": null,
     "formulaDefensePenalty": null,
-    "summonConstructDefId": null
+    "summonConstructDefId": null,
+    "timingMode": "immediate",
+    "echoAmount": null,
+    "delayBonus": null
   },
   {
     "recipeId": "v6-tk-brechschlag-opfergabe",
@@ -2150,7 +2600,38 @@ export const V6_GENERATED_FORMULA_RECIPES: readonly V6GeneratedFormulaRecipe[] =
     "overformulaPrimaryBonus": null,
     "overformulaIntensityBonus": null,
     "formulaDefensePenalty": null,
-    "summonConstructDefId": null
+    "summonConstructDefId": null,
+    "timingMode": "immediate",
+    "echoAmount": null,
+    "delayBonus": null
+  },
+  {
+    "recipeId": "v6-tk-kettenfessel-echo",
+    "kind": "tk",
+    "catalogSlice": "slice1",
+    "techniqueId": "v6-technik-kettenfessel",
+    "essenceId": null,
+    "catalystId": "v6-katalysator-echo",
+    "name": "Echokette",
+    "effectSummary": "Fessel Intensität 2 auf einen besetzten gegnerischen Formelplatz (manuelle Wahl). Echo: zu Beginn deines nächsten Zuges wiederhole 1 Punkt des Primärwerts. Katalysator bleibt bis zur Echo-Auflösung.",
+    "primary": {
+      "kind": "fessel",
+      "value": 2,
+      "target": "opponent",
+      "offensive": true
+    },
+    "rider": null,
+    "intensity": 2,
+    "transformId": "xform-echo",
+    "grantsFetz": false,
+    "catalystConsumed": false,
+    "overformulaPrimaryBonus": null,
+    "overformulaIntensityBonus": null,
+    "formulaDefensePenalty": null,
+    "summonConstructDefId": null,
+    "timingMode": "echo",
+    "echoAmount": 1,
+    "delayBonus": null
   },
   {
     "recipeId": "v6-tk-kettenfessel-ueberladung",
@@ -2175,7 +2656,10 @@ export const V6_GENERATED_FORMULA_RECIPES: readonly V6GeneratedFormulaRecipe[] =
     "overformulaPrimaryBonus": null,
     "overformulaIntensityBonus": null,
     "formulaDefensePenalty": null,
-    "summonConstructDefId": null
+    "summonConstructDefId": null,
+    "timingMode": "immediate",
+    "echoAmount": null,
+    "delayBonus": null
   },
   {
     "recipeId": "v6-tk-kettenfessel-verdichtung",
@@ -2200,7 +2684,38 @@ export const V6_GENERATED_FORMULA_RECIPES: readonly V6GeneratedFormulaRecipe[] =
     "overformulaPrimaryBonus": null,
     "overformulaIntensityBonus": null,
     "formulaDefensePenalty": null,
-    "summonConstructDefId": null
+    "summonConstructDefId": null,
+    "timingMode": "immediate",
+    "echoAmount": null,
+    "delayBonus": null
+  },
+  {
+    "recipeId": "v6-tk-kettenfessel-verzoegerung",
+    "kind": "tk",
+    "catalogSlice": "slice1",
+    "techniqueId": "v6-technik-kettenfessel",
+    "essenceId": null,
+    "catalystId": "v6-katalysator-verzoegerung",
+    "name": "Delaykette",
+    "effectSummary": "Fessel Intensität 2 auf einen besetzten gegnerischen Formelplatz (manuelle Wahl). Verzögerung: Primäreffekt geschieht nicht sofort, sondern zu Beginn deines nächsten Zuges und erhält +2. Katalysator bleibt bis zur Auflösung.",
+    "primary": {
+      "kind": "fessel",
+      "value": 2,
+      "target": "opponent",
+      "offensive": true
+    },
+    "rider": null,
+    "intensity": 2,
+    "transformId": "xform-verzoegerung",
+    "grantsFetz": false,
+    "catalystConsumed": false,
+    "overformulaPrimaryBonus": null,
+    "overformulaIntensityBonus": null,
+    "formulaDefensePenalty": null,
+    "summonConstructDefId": null,
+    "timingMode": "delay",
+    "echoAmount": null,
+    "delayBonus": 2
   },
   {
     "recipeId": "v6-tk-kettenfessel-sofortzuender",
@@ -2225,7 +2740,10 @@ export const V6_GENERATED_FORMULA_RECIPES: readonly V6GeneratedFormulaRecipe[] =
     "overformulaPrimaryBonus": null,
     "overformulaIntensityBonus": null,
     "formulaDefensePenalty": null,
-    "summonConstructDefId": null
+    "summonConstructDefId": null,
+    "timingMode": "immediate",
+    "echoAmount": null,
+    "delayBonus": null
   },
   {
     "recipeId": "v6-tk-kettenfessel-opfergabe",
@@ -2250,7 +2768,37 @@ export const V6_GENERATED_FORMULA_RECIPES: readonly V6GeneratedFormulaRecipe[] =
     "overformulaPrimaryBonus": null,
     "overformulaIntensityBonus": null,
     "formulaDefensePenalty": null,
-    "summonConstructDefId": null
+    "summonConstructDefId": null,
+    "timingMode": "immediate",
+    "echoAmount": null,
+    "delayBonus": null
+  },
+  {
+    "recipeId": "v6-tk-bannkreis-echo",
+    "kind": "tk",
+    "catalogSlice": "slice1",
+    "techniqueId": "v6-technik-bannkreis",
+    "essenceId": null,
+    "catalystId": "v6-katalysator-echo",
+    "name": "Echokreis",
+    "effectSummary": "Gewinne 2 Schild. Echo: zu Beginn deines nächsten Zuges wiederhole 1 Punkt des Primärwerts. Katalysator bleibt bis zur Echo-Auflösung.",
+    "primary": {
+      "kind": "shield",
+      "value": 2,
+      "target": "self"
+    },
+    "rider": null,
+    "intensity": null,
+    "transformId": "xform-echo",
+    "grantsFetz": false,
+    "catalystConsumed": false,
+    "overformulaPrimaryBonus": null,
+    "overformulaIntensityBonus": null,
+    "formulaDefensePenalty": null,
+    "summonConstructDefId": null,
+    "timingMode": "echo",
+    "echoAmount": 1,
+    "delayBonus": null
   },
   {
     "recipeId": "v6-tk-bannkreis-ueberladung",
@@ -2274,7 +2822,10 @@ export const V6_GENERATED_FORMULA_RECIPES: readonly V6GeneratedFormulaRecipe[] =
     "overformulaPrimaryBonus": null,
     "overformulaIntensityBonus": null,
     "formulaDefensePenalty": null,
-    "summonConstructDefId": null
+    "summonConstructDefId": null,
+    "timingMode": "immediate",
+    "echoAmount": null,
+    "delayBonus": null
   },
   {
     "recipeId": "v6-tk-bannkreis-verdichtung",
@@ -2298,7 +2849,37 @@ export const V6_GENERATED_FORMULA_RECIPES: readonly V6GeneratedFormulaRecipe[] =
     "overformulaPrimaryBonus": null,
     "overformulaIntensityBonus": null,
     "formulaDefensePenalty": null,
-    "summonConstructDefId": null
+    "summonConstructDefId": null,
+    "timingMode": "immediate",
+    "echoAmount": null,
+    "delayBonus": null
+  },
+  {
+    "recipeId": "v6-tk-bannkreis-verzoegerung",
+    "kind": "tk",
+    "catalogSlice": "slice1",
+    "techniqueId": "v6-technik-bannkreis",
+    "essenceId": null,
+    "catalystId": "v6-katalysator-verzoegerung",
+    "name": "Delaykreis",
+    "effectSummary": "Gewinne 2 Schild. Verzögerung: Primäreffekt geschieht nicht sofort, sondern zu Beginn deines nächsten Zuges und erhält +2. Katalysator bleibt bis zur Auflösung.",
+    "primary": {
+      "kind": "shield",
+      "value": 2,
+      "target": "self"
+    },
+    "rider": null,
+    "intensity": null,
+    "transformId": "xform-verzoegerung",
+    "grantsFetz": false,
+    "catalystConsumed": false,
+    "overformulaPrimaryBonus": null,
+    "overformulaIntensityBonus": null,
+    "formulaDefensePenalty": null,
+    "summonConstructDefId": null,
+    "timingMode": "delay",
+    "echoAmount": null,
+    "delayBonus": 2
   },
   {
     "recipeId": "v6-tk-bannkreis-sofortzuender",
@@ -2322,7 +2903,10 @@ export const V6_GENERATED_FORMULA_RECIPES: readonly V6GeneratedFormulaRecipe[] =
     "overformulaPrimaryBonus": null,
     "overformulaIntensityBonus": null,
     "formulaDefensePenalty": null,
-    "summonConstructDefId": null
+    "summonConstructDefId": null,
+    "timingMode": "immediate",
+    "echoAmount": null,
+    "delayBonus": null
   },
   {
     "recipeId": "v6-tk-bannkreis-opfergabe",
@@ -2346,7 +2930,38 @@ export const V6_GENERATED_FORMULA_RECIPES: readonly V6GeneratedFormulaRecipe[] =
     "overformulaPrimaryBonus": null,
     "overformulaIntensityBonus": null,
     "formulaDefensePenalty": null,
-    "summonConstructDefId": null
+    "summonConstructDefId": null,
+    "timingMode": "immediate",
+    "echoAmount": null,
+    "delayBonus": null
+  },
+  {
+    "recipeId": "v6-tk-ueberraschungsangriff-echo",
+    "kind": "tk",
+    "catalogSlice": "slice1",
+    "techniqueId": "v6-technik-ueberraschungsangriff",
+    "essenceId": null,
+    "catalystId": "v6-katalysator-echo",
+    "name": "Echostoß",
+    "effectSummary": "Verursache 2 Schaden am Gegner. Echo: zu Beginn deines nächsten Zuges wiederhole 1 Punkt des Primärwerts. Katalysator bleibt bis zur Echo-Auflösung.",
+    "primary": {
+      "kind": "damage",
+      "value": 2,
+      "target": "opponent",
+      "offensive": true
+    },
+    "rider": null,
+    "intensity": null,
+    "transformId": "xform-echo",
+    "grantsFetz": false,
+    "catalystConsumed": false,
+    "overformulaPrimaryBonus": null,
+    "overformulaIntensityBonus": null,
+    "formulaDefensePenalty": null,
+    "summonConstructDefId": null,
+    "timingMode": "echo",
+    "echoAmount": 1,
+    "delayBonus": null
   },
   {
     "recipeId": "v6-tk-ueberraschungsangriff-ueberladung",
@@ -2371,7 +2986,10 @@ export const V6_GENERATED_FORMULA_RECIPES: readonly V6GeneratedFormulaRecipe[] =
     "overformulaPrimaryBonus": null,
     "overformulaIntensityBonus": null,
     "formulaDefensePenalty": null,
-    "summonConstructDefId": null
+    "summonConstructDefId": null,
+    "timingMode": "immediate",
+    "echoAmount": null,
+    "delayBonus": null
   },
   {
     "recipeId": "v6-tk-ueberraschungsangriff-verdichtung",
@@ -2396,7 +3014,38 @@ export const V6_GENERATED_FORMULA_RECIPES: readonly V6GeneratedFormulaRecipe[] =
     "overformulaPrimaryBonus": null,
     "overformulaIntensityBonus": null,
     "formulaDefensePenalty": null,
-    "summonConstructDefId": null
+    "summonConstructDefId": null,
+    "timingMode": "immediate",
+    "echoAmount": null,
+    "delayBonus": null
+  },
+  {
+    "recipeId": "v6-tk-ueberraschungsangriff-verzoegerung",
+    "kind": "tk",
+    "catalogSlice": "slice1",
+    "techniqueId": "v6-technik-ueberraschungsangriff",
+    "essenceId": null,
+    "catalystId": "v6-katalysator-verzoegerung",
+    "name": "Delaystoß",
+    "effectSummary": "Verursache 2 Schaden am Gegner. Verzögerung: Primäreffekt geschieht nicht sofort, sondern zu Beginn deines nächsten Zuges und erhält +2. Katalysator bleibt bis zur Auflösung.",
+    "primary": {
+      "kind": "damage",
+      "value": 2,
+      "target": "opponent",
+      "offensive": true
+    },
+    "rider": null,
+    "intensity": null,
+    "transformId": "xform-verzoegerung",
+    "grantsFetz": false,
+    "catalystConsumed": false,
+    "overformulaPrimaryBonus": null,
+    "overformulaIntensityBonus": null,
+    "formulaDefensePenalty": null,
+    "summonConstructDefId": null,
+    "timingMode": "delay",
+    "echoAmount": null,
+    "delayBonus": 2
   },
   {
     "recipeId": "v6-tk-ueberraschungsangriff-sofortzuender",
@@ -2421,7 +3070,10 @@ export const V6_GENERATED_FORMULA_RECIPES: readonly V6GeneratedFormulaRecipe[] =
     "overformulaPrimaryBonus": null,
     "overformulaIntensityBonus": null,
     "formulaDefensePenalty": null,
-    "summonConstructDefId": null
+    "summonConstructDefId": null,
+    "timingMode": "immediate",
+    "echoAmount": null,
+    "delayBonus": null
   },
   {
     "recipeId": "v6-tk-ueberraschungsangriff-opfergabe",
@@ -2446,7 +3098,37 @@ export const V6_GENERATED_FORMULA_RECIPES: readonly V6GeneratedFormulaRecipe[] =
     "overformulaPrimaryBonus": null,
     "overformulaIntensityBonus": null,
     "formulaDefensePenalty": null,
-    "summonConstructDefId": null
+    "summonConstructDefId": null,
+    "timingMode": "immediate",
+    "echoAmount": null,
+    "delayBonus": null
+  },
+  {
+    "recipeId": "v6-tk-schicksalmanifestation-echo",
+    "kind": "tk",
+    "catalogSlice": "slice1",
+    "techniqueId": "v6-technik-schicksalmanifestation",
+    "essenceId": null,
+    "catalystId": "v6-katalysator-echo",
+    "name": "Echoschicksal",
+    "effectSummary": "Bereite Boost +2 vor. Echo: zu Beginn deines nächsten Zuges wiederhole 1 Punkt des Primärwerts. Katalysator bleibt bis zur Echo-Auflösung.",
+    "primary": {
+      "kind": "prep_boost",
+      "value": 2,
+      "target": "self"
+    },
+    "rider": null,
+    "intensity": null,
+    "transformId": "xform-echo",
+    "grantsFetz": false,
+    "catalystConsumed": false,
+    "overformulaPrimaryBonus": null,
+    "overformulaIntensityBonus": null,
+    "formulaDefensePenalty": null,
+    "summonConstructDefId": null,
+    "timingMode": "echo",
+    "echoAmount": 1,
+    "delayBonus": null
   },
   {
     "recipeId": "v6-tk-schicksalmanifestation-ueberladung",
@@ -2470,7 +3152,10 @@ export const V6_GENERATED_FORMULA_RECIPES: readonly V6GeneratedFormulaRecipe[] =
     "overformulaPrimaryBonus": null,
     "overformulaIntensityBonus": null,
     "formulaDefensePenalty": null,
-    "summonConstructDefId": null
+    "summonConstructDefId": null,
+    "timingMode": "immediate",
+    "echoAmount": null,
+    "delayBonus": null
   },
   {
     "recipeId": "v6-tk-schicksalmanifestation-verdichtung",
@@ -2494,7 +3179,37 @@ export const V6_GENERATED_FORMULA_RECIPES: readonly V6GeneratedFormulaRecipe[] =
     "overformulaPrimaryBonus": null,
     "overformulaIntensityBonus": null,
     "formulaDefensePenalty": null,
-    "summonConstructDefId": null
+    "summonConstructDefId": null,
+    "timingMode": "immediate",
+    "echoAmount": null,
+    "delayBonus": null
+  },
+  {
+    "recipeId": "v6-tk-schicksalmanifestation-verzoegerung",
+    "kind": "tk",
+    "catalogSlice": "slice1",
+    "techniqueId": "v6-technik-schicksalmanifestation",
+    "essenceId": null,
+    "catalystId": "v6-katalysator-verzoegerung",
+    "name": "Delayschicksal",
+    "effectSummary": "Bereite Boost +2 vor. Verzögerung: Primäreffekt geschieht nicht sofort, sondern zu Beginn deines nächsten Zuges und erhält +2. Katalysator bleibt bis zur Auflösung.",
+    "primary": {
+      "kind": "prep_boost",
+      "value": 2,
+      "target": "self"
+    },
+    "rider": null,
+    "intensity": null,
+    "transformId": "xform-verzoegerung",
+    "grantsFetz": false,
+    "catalystConsumed": false,
+    "overformulaPrimaryBonus": null,
+    "overformulaIntensityBonus": null,
+    "formulaDefensePenalty": null,
+    "summonConstructDefId": null,
+    "timingMode": "delay",
+    "echoAmount": null,
+    "delayBonus": 2
   },
   {
     "recipeId": "v6-tk-schicksalmanifestation-sofortzuender",
@@ -2518,7 +3233,10 @@ export const V6_GENERATED_FORMULA_RECIPES: readonly V6GeneratedFormulaRecipe[] =
     "overformulaPrimaryBonus": null,
     "overformulaIntensityBonus": null,
     "formulaDefensePenalty": null,
-    "summonConstructDefId": null
+    "summonConstructDefId": null,
+    "timingMode": "immediate",
+    "echoAmount": null,
+    "delayBonus": null
   },
   {
     "recipeId": "v6-tk-schicksalmanifestation-opfergabe",
@@ -2542,7 +3260,37 @@ export const V6_GENERATED_FORMULA_RECIPES: readonly V6GeneratedFormulaRecipe[] =
     "overformulaPrimaryBonus": null,
     "overformulaIntensityBonus": null,
     "formulaDefensePenalty": null,
-    "summonConstructDefId": null
+    "summonConstructDefId": null,
+    "timingMode": "immediate",
+    "echoAmount": null,
+    "delayBonus": null
+  },
+  {
+    "recipeId": "v6-tk-magiepanzer-echo",
+    "kind": "tk",
+    "catalogSlice": "slice1",
+    "techniqueId": "v6-technik-magiepanzer",
+    "essenceId": null,
+    "catalystId": "v6-katalysator-echo",
+    "name": "Echopanzer",
+    "effectSummary": "Gewinne 2 Schild. Echo: zu Beginn deines nächsten Zuges wiederhole 1 Punkt des Primärwerts. Katalysator bleibt bis zur Echo-Auflösung.",
+    "primary": {
+      "kind": "shield",
+      "value": 2,
+      "target": "self"
+    },
+    "rider": null,
+    "intensity": null,
+    "transformId": "xform-echo",
+    "grantsFetz": false,
+    "catalystConsumed": false,
+    "overformulaPrimaryBonus": null,
+    "overformulaIntensityBonus": null,
+    "formulaDefensePenalty": null,
+    "summonConstructDefId": null,
+    "timingMode": "echo",
+    "echoAmount": 1,
+    "delayBonus": null
   },
   {
     "recipeId": "v6-tk-magiepanzer-ueberladung",
@@ -2566,7 +3314,10 @@ export const V6_GENERATED_FORMULA_RECIPES: readonly V6GeneratedFormulaRecipe[] =
     "overformulaPrimaryBonus": null,
     "overformulaIntensityBonus": null,
     "formulaDefensePenalty": null,
-    "summonConstructDefId": null
+    "summonConstructDefId": null,
+    "timingMode": "immediate",
+    "echoAmount": null,
+    "delayBonus": null
   },
   {
     "recipeId": "v6-tk-magiepanzer-verdichtung",
@@ -2590,7 +3341,37 @@ export const V6_GENERATED_FORMULA_RECIPES: readonly V6GeneratedFormulaRecipe[] =
     "overformulaPrimaryBonus": null,
     "overformulaIntensityBonus": null,
     "formulaDefensePenalty": null,
-    "summonConstructDefId": null
+    "summonConstructDefId": null,
+    "timingMode": "immediate",
+    "echoAmount": null,
+    "delayBonus": null
+  },
+  {
+    "recipeId": "v6-tk-magiepanzer-verzoegerung",
+    "kind": "tk",
+    "catalogSlice": "slice1",
+    "techniqueId": "v6-technik-magiepanzer",
+    "essenceId": null,
+    "catalystId": "v6-katalysator-verzoegerung",
+    "name": "Delaypanzer",
+    "effectSummary": "Gewinne 2 Schild. Verzögerung: Primäreffekt geschieht nicht sofort, sondern zu Beginn deines nächsten Zuges und erhält +2. Katalysator bleibt bis zur Auflösung.",
+    "primary": {
+      "kind": "shield",
+      "value": 2,
+      "target": "self"
+    },
+    "rider": null,
+    "intensity": null,
+    "transformId": "xform-verzoegerung",
+    "grantsFetz": false,
+    "catalystConsumed": false,
+    "overformulaPrimaryBonus": null,
+    "overformulaIntensityBonus": null,
+    "formulaDefensePenalty": null,
+    "summonConstructDefId": null,
+    "timingMode": "delay",
+    "echoAmount": null,
+    "delayBonus": 2
   },
   {
     "recipeId": "v6-tk-magiepanzer-sofortzuender",
@@ -2614,7 +3395,10 @@ export const V6_GENERATED_FORMULA_RECIPES: readonly V6GeneratedFormulaRecipe[] =
     "overformulaPrimaryBonus": null,
     "overformulaIntensityBonus": null,
     "formulaDefensePenalty": null,
-    "summonConstructDefId": null
+    "summonConstructDefId": null,
+    "timingMode": "immediate",
+    "echoAmount": null,
+    "delayBonus": null
   },
   {
     "recipeId": "v6-tk-magiepanzer-opfergabe",
@@ -2638,7 +3422,37 @@ export const V6_GENERATED_FORMULA_RECIPES: readonly V6GeneratedFormulaRecipe[] =
     "overformulaPrimaryBonus": null,
     "overformulaIntensityBonus": null,
     "formulaDefensePenalty": null,
-    "summonConstructDefId": null
+    "summonConstructDefId": null,
+    "timingMode": "immediate",
+    "echoAmount": null,
+    "delayBonus": null
+  },
+  {
+    "recipeId": "v6-tk-beschwoerungsritual-echo",
+    "kind": "tk",
+    "catalogSlice": "slice1",
+    "techniqueId": "v6-technik-beschwoerungsritual",
+    "essenceId": null,
+    "catalystId": "v6-katalysator-echo",
+    "name": "Echoritual",
+    "effectSummary": "Beschwöre ein Konstrukt mit Haltbarkeit 3. Ersetzt ein bestehendes Konstrukt. Keine Fetzladung. Echo: zu Beginn deines nächsten Zuges wiederhole 1 Punkt des Primärwerts. Katalysator bleibt bis zur Echo-Auflösung.",
+    "primary": {
+      "kind": "summon_construct",
+      "value": 3,
+      "target": "self"
+    },
+    "rider": null,
+    "intensity": null,
+    "transformId": "xform-echo",
+    "grantsFetz": false,
+    "catalystConsumed": false,
+    "overformulaPrimaryBonus": null,
+    "overformulaIntensityBonus": null,
+    "formulaDefensePenalty": null,
+    "summonConstructDefId": "v6-konstrukt-spieltest-schattenpuppe",
+    "timingMode": "echo",
+    "echoAmount": 1,
+    "delayBonus": null
   },
   {
     "recipeId": "v6-tk-beschwoerungsritual-ueberladung",
@@ -2662,7 +3476,10 @@ export const V6_GENERATED_FORMULA_RECIPES: readonly V6GeneratedFormulaRecipe[] =
     "overformulaPrimaryBonus": null,
     "overformulaIntensityBonus": null,
     "formulaDefensePenalty": null,
-    "summonConstructDefId": "v6-konstrukt-spieltest-schattenpuppe"
+    "summonConstructDefId": "v6-konstrukt-spieltest-schattenpuppe",
+    "timingMode": "immediate",
+    "echoAmount": null,
+    "delayBonus": null
   },
   {
     "recipeId": "v6-tk-beschwoerungsritual-verdichtung",
@@ -2686,7 +3503,37 @@ export const V6_GENERATED_FORMULA_RECIPES: readonly V6GeneratedFormulaRecipe[] =
     "overformulaPrimaryBonus": null,
     "overformulaIntensityBonus": null,
     "formulaDefensePenalty": null,
-    "summonConstructDefId": "v6-konstrukt-spieltest-schattenpuppe"
+    "summonConstructDefId": "v6-konstrukt-spieltest-schattenpuppe",
+    "timingMode": "immediate",
+    "echoAmount": null,
+    "delayBonus": null
+  },
+  {
+    "recipeId": "v6-tk-beschwoerungsritual-verzoegerung",
+    "kind": "tk",
+    "catalogSlice": "slice1",
+    "techniqueId": "v6-technik-beschwoerungsritual",
+    "essenceId": null,
+    "catalystId": "v6-katalysator-verzoegerung",
+    "name": "Delayritual",
+    "effectSummary": "Beschwöre ein Konstrukt mit Haltbarkeit 3. Ersetzt ein bestehendes Konstrukt. Keine Fetzladung. Verzögerung: Primäreffekt geschieht nicht sofort, sondern zu Beginn deines nächsten Zuges und erhält +2. Katalysator bleibt bis zur Auflösung.",
+    "primary": {
+      "kind": "summon_construct",
+      "value": 3,
+      "target": "self"
+    },
+    "rider": null,
+    "intensity": null,
+    "transformId": "xform-verzoegerung",
+    "grantsFetz": false,
+    "catalystConsumed": false,
+    "overformulaPrimaryBonus": null,
+    "overformulaIntensityBonus": null,
+    "formulaDefensePenalty": null,
+    "summonConstructDefId": "v6-konstrukt-spieltest-schattenpuppe",
+    "timingMode": "delay",
+    "echoAmount": null,
+    "delayBonus": 2
   },
   {
     "recipeId": "v6-tk-beschwoerungsritual-sofortzuender",
@@ -2710,7 +3557,10 @@ export const V6_GENERATED_FORMULA_RECIPES: readonly V6GeneratedFormulaRecipe[] =
     "overformulaPrimaryBonus": null,
     "overformulaIntensityBonus": null,
     "formulaDefensePenalty": null,
-    "summonConstructDefId": "v6-konstrukt-spieltest-schattenpuppe"
+    "summonConstructDefId": "v6-konstrukt-spieltest-schattenpuppe",
+    "timingMode": "immediate",
+    "echoAmount": null,
+    "delayBonus": null
   },
   {
     "recipeId": "v6-tk-beschwoerungsritual-opfergabe",
@@ -2734,7 +3584,42 @@ export const V6_GENERATED_FORMULA_RECIPES: readonly V6GeneratedFormulaRecipe[] =
     "overformulaPrimaryBonus": null,
     "overformulaIntensityBonus": null,
     "formulaDefensePenalty": null,
-    "summonConstructDefId": "v6-konstrukt-spieltest-schattenpuppe"
+    "summonConstructDefId": "v6-konstrukt-spieltest-schattenpuppe",
+    "timingMode": "immediate",
+    "echoAmount": null,
+    "delayBonus": null
+  },
+  {
+    "recipeId": "v6-ek-feuer-echo",
+    "kind": "ek",
+    "catalogSlice": "slice1",
+    "techniqueId": null,
+    "essenceId": "v6-essenz-feuer",
+    "catalystId": "v6-katalysator-echo",
+    "name": "Glutecho",
+    "effectSummary": "Verursache 2 Schaden am Gegner. Bei Lebensschaden: Brennen, falls keine Reaktion. Echo: zu Beginn deines nächsten Zuges wiederhole 1 Punkt des Primärwerts. Katalysator bleibt bis zur Echo-Auflösung.",
+    "primary": {
+      "kind": "damage",
+      "value": 2,
+      "target": "opponent",
+      "offensive": true
+    },
+    "rider": {
+      "id": "rider-brennen",
+      "summary": "Bei Lebensschaden: Brennen, falls keine Reaktion.",
+      "defenseSuppressible": true
+    },
+    "intensity": null,
+    "transformId": "xform-echo",
+    "grantsFetz": false,
+    "catalystConsumed": false,
+    "overformulaPrimaryBonus": null,
+    "overformulaIntensityBonus": null,
+    "formulaDefensePenalty": null,
+    "summonConstructDefId": null,
+    "timingMode": "echo",
+    "echoAmount": 1,
+    "delayBonus": null
   },
   {
     "recipeId": "v6-ek-feuer-ueberladung",
@@ -2763,7 +3648,10 @@ export const V6_GENERATED_FORMULA_RECIPES: readonly V6GeneratedFormulaRecipe[] =
     "overformulaPrimaryBonus": null,
     "overformulaIntensityBonus": null,
     "formulaDefensePenalty": null,
-    "summonConstructDefId": null
+    "summonConstructDefId": null,
+    "timingMode": "immediate",
+    "echoAmount": null,
+    "delayBonus": null
   },
   {
     "recipeId": "v6-ek-feuer-verdichtung",
@@ -2792,7 +3680,42 @@ export const V6_GENERATED_FORMULA_RECIPES: readonly V6GeneratedFormulaRecipe[] =
     "overformulaPrimaryBonus": null,
     "overformulaIntensityBonus": null,
     "formulaDefensePenalty": null,
-    "summonConstructDefId": null
+    "summonConstructDefId": null,
+    "timingMode": "immediate",
+    "echoAmount": null,
+    "delayBonus": null
+  },
+  {
+    "recipeId": "v6-ek-feuer-verzoegerung",
+    "kind": "ek",
+    "catalogSlice": "slice1",
+    "techniqueId": null,
+    "essenceId": "v6-essenz-feuer",
+    "catalystId": "v6-katalysator-verzoegerung",
+    "name": "Glutverzögerung",
+    "effectSummary": "Verursache 2 Schaden am Gegner. Bei Lebensschaden: Brennen, falls keine Reaktion. Verzögerung: Primäreffekt geschieht nicht sofort, sondern zu Beginn deines nächsten Zuges und erhält +2. Katalysator bleibt bis zur Auflösung.",
+    "primary": {
+      "kind": "damage",
+      "value": 2,
+      "target": "opponent",
+      "offensive": true
+    },
+    "rider": {
+      "id": "rider-brennen",
+      "summary": "Bei Lebensschaden: Brennen, falls keine Reaktion.",
+      "defenseSuppressible": true
+    },
+    "intensity": null,
+    "transformId": "xform-verzoegerung",
+    "grantsFetz": false,
+    "catalystConsumed": false,
+    "overformulaPrimaryBonus": null,
+    "overformulaIntensityBonus": null,
+    "formulaDefensePenalty": null,
+    "summonConstructDefId": null,
+    "timingMode": "delay",
+    "echoAmount": null,
+    "delayBonus": 2
   },
   {
     "recipeId": "v6-ek-feuer-sofortzuender",
@@ -2821,7 +3744,10 @@ export const V6_GENERATED_FORMULA_RECIPES: readonly V6GeneratedFormulaRecipe[] =
     "overformulaPrimaryBonus": null,
     "overformulaIntensityBonus": null,
     "formulaDefensePenalty": null,
-    "summonConstructDefId": null
+    "summonConstructDefId": null,
+    "timingMode": "immediate",
+    "echoAmount": null,
+    "delayBonus": null
   },
   {
     "recipeId": "v6-ek-feuer-opfergabe",
@@ -2850,7 +3776,41 @@ export const V6_GENERATED_FORMULA_RECIPES: readonly V6GeneratedFormulaRecipe[] =
     "overformulaPrimaryBonus": null,
     "overformulaIntensityBonus": null,
     "formulaDefensePenalty": null,
-    "summonConstructDefId": null
+    "summonConstructDefId": null,
+    "timingMode": "immediate",
+    "echoAmount": null,
+    "delayBonus": null
+  },
+  {
+    "recipeId": "v6-ek-wasser-echo",
+    "kind": "ek",
+    "catalogSlice": "slice1",
+    "techniqueId": null,
+    "essenceId": "v6-essenz-wasser",
+    "catalystId": "v6-katalysator-echo",
+    "name": "Wellenecho",
+    "effectSummary": "Heile 2 Leben. Bei Heilung oder Schildgewinn: entferne optional eine Marke von dir. Echo: zu Beginn deines nächsten Zuges wiederhole 1 Punkt des Primärwerts. Katalysator bleibt bis zur Echo-Auflösung.",
+    "primary": {
+      "kind": "heal",
+      "value": 2,
+      "target": "self"
+    },
+    "rider": {
+      "id": "rider-reinigen",
+      "summary": "Bei Heilung oder Schildgewinn: entferne optional eine Marke von dir.",
+      "defenseSuppressible": false
+    },
+    "intensity": null,
+    "transformId": "xform-echo",
+    "grantsFetz": false,
+    "catalystConsumed": false,
+    "overformulaPrimaryBonus": null,
+    "overformulaIntensityBonus": null,
+    "formulaDefensePenalty": null,
+    "summonConstructDefId": null,
+    "timingMode": "echo",
+    "echoAmount": 1,
+    "delayBonus": null
   },
   {
     "recipeId": "v6-ek-wasser-ueberladung",
@@ -2878,7 +3838,10 @@ export const V6_GENERATED_FORMULA_RECIPES: readonly V6GeneratedFormulaRecipe[] =
     "overformulaPrimaryBonus": null,
     "overformulaIntensityBonus": null,
     "formulaDefensePenalty": null,
-    "summonConstructDefId": null
+    "summonConstructDefId": null,
+    "timingMode": "immediate",
+    "echoAmount": null,
+    "delayBonus": null
   },
   {
     "recipeId": "v6-ek-wasser-verdichtung",
@@ -2906,7 +3869,41 @@ export const V6_GENERATED_FORMULA_RECIPES: readonly V6GeneratedFormulaRecipe[] =
     "overformulaPrimaryBonus": null,
     "overformulaIntensityBonus": null,
     "formulaDefensePenalty": null,
-    "summonConstructDefId": null
+    "summonConstructDefId": null,
+    "timingMode": "immediate",
+    "echoAmount": null,
+    "delayBonus": null
+  },
+  {
+    "recipeId": "v6-ek-wasser-verzoegerung",
+    "kind": "ek",
+    "catalogSlice": "slice1",
+    "techniqueId": null,
+    "essenceId": "v6-essenz-wasser",
+    "catalystId": "v6-katalysator-verzoegerung",
+    "name": "Wellenverzögerung",
+    "effectSummary": "Heile 2 Leben. Bei Heilung oder Schildgewinn: entferne optional eine Marke von dir. Verzögerung: Primäreffekt geschieht nicht sofort, sondern zu Beginn deines nächsten Zuges und erhält +2. Katalysator bleibt bis zur Auflösung.",
+    "primary": {
+      "kind": "heal",
+      "value": 2,
+      "target": "self"
+    },
+    "rider": {
+      "id": "rider-reinigen",
+      "summary": "Bei Heilung oder Schildgewinn: entferne optional eine Marke von dir.",
+      "defenseSuppressible": false
+    },
+    "intensity": null,
+    "transformId": "xform-verzoegerung",
+    "grantsFetz": false,
+    "catalystConsumed": false,
+    "overformulaPrimaryBonus": null,
+    "overformulaIntensityBonus": null,
+    "formulaDefensePenalty": null,
+    "summonConstructDefId": null,
+    "timingMode": "delay",
+    "echoAmount": null,
+    "delayBonus": 2
   },
   {
     "recipeId": "v6-ek-wasser-sofortzuender",
@@ -2934,7 +3931,10 @@ export const V6_GENERATED_FORMULA_RECIPES: readonly V6GeneratedFormulaRecipe[] =
     "overformulaPrimaryBonus": null,
     "overformulaIntensityBonus": null,
     "formulaDefensePenalty": null,
-    "summonConstructDefId": null
+    "summonConstructDefId": null,
+    "timingMode": "immediate",
+    "echoAmount": null,
+    "delayBonus": null
   },
   {
     "recipeId": "v6-ek-wasser-opfergabe",
@@ -2962,7 +3962,41 @@ export const V6_GENERATED_FORMULA_RECIPES: readonly V6GeneratedFormulaRecipe[] =
     "overformulaPrimaryBonus": null,
     "overformulaIntensityBonus": null,
     "formulaDefensePenalty": null,
-    "summonConstructDefId": null
+    "summonConstructDefId": null,
+    "timingMode": "immediate",
+    "echoAmount": null,
+    "delayBonus": null
+  },
+  {
+    "recipeId": "v6-ek-erde-echo",
+    "kind": "ek",
+    "catalogSlice": "slice1",
+    "techniqueId": null,
+    "essenceId": "v6-essenz-erde",
+    "catalystId": "v6-katalysator-echo",
+    "name": "Felsecho",
+    "effectSummary": "Gewinne 2 Schild. Verwendete Komponenten +1 Stabilität bis nächste Startphase. Echo: zu Beginn deines nächsten Zuges wiederhole 1 Punkt des Primärwerts. Katalysator bleibt bis zur Echo-Auflösung.",
+    "primary": {
+      "kind": "shield",
+      "value": 2,
+      "target": "self"
+    },
+    "rider": {
+      "id": "rider-stabilitaet",
+      "summary": "Verwendete Komponenten +1 Stabilität bis nächste Startphase.",
+      "defenseSuppressible": false
+    },
+    "intensity": null,
+    "transformId": "xform-echo",
+    "grantsFetz": false,
+    "catalystConsumed": false,
+    "overformulaPrimaryBonus": null,
+    "overformulaIntensityBonus": null,
+    "formulaDefensePenalty": null,
+    "summonConstructDefId": null,
+    "timingMode": "echo",
+    "echoAmount": 1,
+    "delayBonus": null
   },
   {
     "recipeId": "v6-ek-erde-ueberladung",
@@ -2990,7 +4024,10 @@ export const V6_GENERATED_FORMULA_RECIPES: readonly V6GeneratedFormulaRecipe[] =
     "overformulaPrimaryBonus": null,
     "overformulaIntensityBonus": null,
     "formulaDefensePenalty": null,
-    "summonConstructDefId": null
+    "summonConstructDefId": null,
+    "timingMode": "immediate",
+    "echoAmount": null,
+    "delayBonus": null
   },
   {
     "recipeId": "v6-ek-erde-verdichtung",
@@ -3018,7 +4055,41 @@ export const V6_GENERATED_FORMULA_RECIPES: readonly V6GeneratedFormulaRecipe[] =
     "overformulaPrimaryBonus": null,
     "overformulaIntensityBonus": null,
     "formulaDefensePenalty": null,
-    "summonConstructDefId": null
+    "summonConstructDefId": null,
+    "timingMode": "immediate",
+    "echoAmount": null,
+    "delayBonus": null
+  },
+  {
+    "recipeId": "v6-ek-erde-verzoegerung",
+    "kind": "ek",
+    "catalogSlice": "slice1",
+    "techniqueId": null,
+    "essenceId": "v6-essenz-erde",
+    "catalystId": "v6-katalysator-verzoegerung",
+    "name": "Felsverzögerung",
+    "effectSummary": "Gewinne 2 Schild. Verwendete Komponenten +1 Stabilität bis nächste Startphase. Verzögerung: Primäreffekt geschieht nicht sofort, sondern zu Beginn deines nächsten Zuges und erhält +2. Katalysator bleibt bis zur Auflösung.",
+    "primary": {
+      "kind": "shield",
+      "value": 2,
+      "target": "self"
+    },
+    "rider": {
+      "id": "rider-stabilitaet",
+      "summary": "Verwendete Komponenten +1 Stabilität bis nächste Startphase.",
+      "defenseSuppressible": false
+    },
+    "intensity": null,
+    "transformId": "xform-verzoegerung",
+    "grantsFetz": false,
+    "catalystConsumed": false,
+    "overformulaPrimaryBonus": null,
+    "overformulaIntensityBonus": null,
+    "formulaDefensePenalty": null,
+    "summonConstructDefId": null,
+    "timingMode": "delay",
+    "echoAmount": null,
+    "delayBonus": 2
   },
   {
     "recipeId": "v6-ek-erde-sofortzuender",
@@ -3046,7 +4117,10 @@ export const V6_GENERATED_FORMULA_RECIPES: readonly V6GeneratedFormulaRecipe[] =
     "overformulaPrimaryBonus": null,
     "overformulaIntensityBonus": null,
     "formulaDefensePenalty": null,
-    "summonConstructDefId": null
+    "summonConstructDefId": null,
+    "timingMode": "immediate",
+    "echoAmount": null,
+    "delayBonus": null
   },
   {
     "recipeId": "v6-ek-erde-opfergabe",
@@ -3074,7 +4148,41 @@ export const V6_GENERATED_FORMULA_RECIPES: readonly V6GeneratedFormulaRecipe[] =
     "overformulaPrimaryBonus": null,
     "overformulaIntensityBonus": null,
     "formulaDefensePenalty": null,
-    "summonConstructDefId": null
+    "summonConstructDefId": null,
+    "timingMode": "immediate",
+    "echoAmount": null,
+    "delayBonus": null
+  },
+  {
+    "recipeId": "v6-ek-luft-echo",
+    "kind": "ek",
+    "catalogSlice": "slice1",
+    "techniqueId": null,
+    "essenceId": "v6-essenz-luft",
+    "catalystId": "v6-katalysator-echo",
+    "name": "Windecho",
+    "effectSummary": "Bereite Boost +2 vor. Nächster eigener Aktions-W6 +1 (max +2). Echo: zu Beginn deines nächsten Zuges wiederhole 1 Punkt des Primärwerts. Katalysator bleibt bis zur Echo-Auflösung.",
+    "primary": {
+      "kind": "prep_boost",
+      "value": 2,
+      "target": "self"
+    },
+    "rider": {
+      "id": "rider-w6",
+      "summary": "Nächster eigener Aktions-W6 +1 (max +2).",
+      "defenseSuppressible": true
+    },
+    "intensity": null,
+    "transformId": "xform-echo",
+    "grantsFetz": false,
+    "catalystConsumed": false,
+    "overformulaPrimaryBonus": null,
+    "overformulaIntensityBonus": null,
+    "formulaDefensePenalty": null,
+    "summonConstructDefId": null,
+    "timingMode": "echo",
+    "echoAmount": 1,
+    "delayBonus": null
   },
   {
     "recipeId": "v6-ek-luft-ueberladung",
@@ -3102,7 +4210,10 @@ export const V6_GENERATED_FORMULA_RECIPES: readonly V6GeneratedFormulaRecipe[] =
     "overformulaPrimaryBonus": null,
     "overformulaIntensityBonus": null,
     "formulaDefensePenalty": null,
-    "summonConstructDefId": null
+    "summonConstructDefId": null,
+    "timingMode": "immediate",
+    "echoAmount": null,
+    "delayBonus": null
   },
   {
     "recipeId": "v6-ek-luft-verdichtung",
@@ -3130,7 +4241,41 @@ export const V6_GENERATED_FORMULA_RECIPES: readonly V6GeneratedFormulaRecipe[] =
     "overformulaPrimaryBonus": null,
     "overformulaIntensityBonus": null,
     "formulaDefensePenalty": null,
-    "summonConstructDefId": null
+    "summonConstructDefId": null,
+    "timingMode": "immediate",
+    "echoAmount": null,
+    "delayBonus": null
+  },
+  {
+    "recipeId": "v6-ek-luft-verzoegerung",
+    "kind": "ek",
+    "catalogSlice": "slice1",
+    "techniqueId": null,
+    "essenceId": "v6-essenz-luft",
+    "catalystId": "v6-katalysator-verzoegerung",
+    "name": "Windverzögerung",
+    "effectSummary": "Bereite Boost +2 vor. Nächster eigener Aktions-W6 +1 (max +2). Verzögerung: Primäreffekt geschieht nicht sofort, sondern zu Beginn deines nächsten Zuges und erhält +2. Katalysator bleibt bis zur Auflösung.",
+    "primary": {
+      "kind": "prep_boost",
+      "value": 2,
+      "target": "self"
+    },
+    "rider": {
+      "id": "rider-w6",
+      "summary": "Nächster eigener Aktions-W6 +1 (max +2).",
+      "defenseSuppressible": true
+    },
+    "intensity": null,
+    "transformId": "xform-verzoegerung",
+    "grantsFetz": false,
+    "catalystConsumed": false,
+    "overformulaPrimaryBonus": null,
+    "overformulaIntensityBonus": null,
+    "formulaDefensePenalty": null,
+    "summonConstructDefId": null,
+    "timingMode": "delay",
+    "echoAmount": null,
+    "delayBonus": 2
   },
   {
     "recipeId": "v6-ek-luft-sofortzuender",
@@ -3158,7 +4303,10 @@ export const V6_GENERATED_FORMULA_RECIPES: readonly V6GeneratedFormulaRecipe[] =
     "overformulaPrimaryBonus": null,
     "overformulaIntensityBonus": null,
     "formulaDefensePenalty": null,
-    "summonConstructDefId": null
+    "summonConstructDefId": null,
+    "timingMode": "immediate",
+    "echoAmount": null,
+    "delayBonus": null
   },
   {
     "recipeId": "v6-ek-luft-opfergabe",
@@ -3186,7 +4334,41 @@ export const V6_GENERATED_FORMULA_RECIPES: readonly V6GeneratedFormulaRecipe[] =
     "overformulaPrimaryBonus": null,
     "overformulaIntensityBonus": null,
     "formulaDefensePenalty": null,
-    "summonConstructDefId": null
+    "summonConstructDefId": null,
+    "timingMode": "immediate",
+    "echoAmount": null,
+    "delayBonus": null
+  },
+  {
+    "recipeId": "v6-ek-licht-echo",
+    "kind": "ek",
+    "catalogSlice": "slice1",
+    "techniqueId": null,
+    "essenceId": "v6-essenz-licht",
+    "catalystId": "v6-katalysator-echo",
+    "name": "Lichtecho",
+    "effectSummary": "Gewinne 2 Schild. Bei Schildgewinn: entferne optional eine Marke von dir. Echo: zu Beginn deines nächsten Zuges wiederhole 1 Punkt des Primärwerts. Katalysator bleibt bis zur Echo-Auflösung.",
+    "primary": {
+      "kind": "shield",
+      "value": 2,
+      "target": "self"
+    },
+    "rider": {
+      "id": "rider-reinigen-licht",
+      "summary": "Bei Schildgewinn: entferne optional eine Marke von dir.",
+      "defenseSuppressible": false
+    },
+    "intensity": null,
+    "transformId": "xform-echo",
+    "grantsFetz": false,
+    "catalystConsumed": false,
+    "overformulaPrimaryBonus": null,
+    "overformulaIntensityBonus": null,
+    "formulaDefensePenalty": null,
+    "summonConstructDefId": null,
+    "timingMode": "echo",
+    "echoAmount": 1,
+    "delayBonus": null
   },
   {
     "recipeId": "v6-ek-licht-ueberladung",
@@ -3214,7 +4396,10 @@ export const V6_GENERATED_FORMULA_RECIPES: readonly V6GeneratedFormulaRecipe[] =
     "overformulaPrimaryBonus": null,
     "overformulaIntensityBonus": null,
     "formulaDefensePenalty": null,
-    "summonConstructDefId": null
+    "summonConstructDefId": null,
+    "timingMode": "immediate",
+    "echoAmount": null,
+    "delayBonus": null
   },
   {
     "recipeId": "v6-ek-licht-verdichtung",
@@ -3242,7 +4427,41 @@ export const V6_GENERATED_FORMULA_RECIPES: readonly V6GeneratedFormulaRecipe[] =
     "overformulaPrimaryBonus": null,
     "overformulaIntensityBonus": null,
     "formulaDefensePenalty": null,
-    "summonConstructDefId": null
+    "summonConstructDefId": null,
+    "timingMode": "immediate",
+    "echoAmount": null,
+    "delayBonus": null
+  },
+  {
+    "recipeId": "v6-ek-licht-verzoegerung",
+    "kind": "ek",
+    "catalogSlice": "slice1",
+    "techniqueId": null,
+    "essenceId": "v6-essenz-licht",
+    "catalystId": "v6-katalysator-verzoegerung",
+    "name": "Lichtverzögerung",
+    "effectSummary": "Gewinne 2 Schild. Bei Schildgewinn: entferne optional eine Marke von dir. Verzögerung: Primäreffekt geschieht nicht sofort, sondern zu Beginn deines nächsten Zuges und erhält +2. Katalysator bleibt bis zur Auflösung.",
+    "primary": {
+      "kind": "shield",
+      "value": 2,
+      "target": "self"
+    },
+    "rider": {
+      "id": "rider-reinigen-licht",
+      "summary": "Bei Schildgewinn: entferne optional eine Marke von dir.",
+      "defenseSuppressible": false
+    },
+    "intensity": null,
+    "transformId": "xform-verzoegerung",
+    "grantsFetz": false,
+    "catalystConsumed": false,
+    "overformulaPrimaryBonus": null,
+    "overformulaIntensityBonus": null,
+    "formulaDefensePenalty": null,
+    "summonConstructDefId": null,
+    "timingMode": "delay",
+    "echoAmount": null,
+    "delayBonus": 2
   },
   {
     "recipeId": "v6-ek-licht-sofortzuender",
@@ -3270,7 +4489,10 @@ export const V6_GENERATED_FORMULA_RECIPES: readonly V6GeneratedFormulaRecipe[] =
     "overformulaPrimaryBonus": null,
     "overformulaIntensityBonus": null,
     "formulaDefensePenalty": null,
-    "summonConstructDefId": null
+    "summonConstructDefId": null,
+    "timingMode": "immediate",
+    "echoAmount": null,
+    "delayBonus": null
   },
   {
     "recipeId": "v6-ek-licht-opfergabe",
@@ -3298,7 +4520,42 @@ export const V6_GENERATED_FORMULA_RECIPES: readonly V6GeneratedFormulaRecipe[] =
     "overformulaPrimaryBonus": null,
     "overformulaIntensityBonus": null,
     "formulaDefensePenalty": null,
-    "summonConstructDefId": null
+    "summonConstructDefId": null,
+    "timingMode": "immediate",
+    "echoAmount": null,
+    "delayBonus": null
+  },
+  {
+    "recipeId": "v6-ek-schatten-echo",
+    "kind": "ek",
+    "catalogSlice": "slice1",
+    "techniqueId": null,
+    "essenceId": "v6-essenz-schatten",
+    "catalystId": "v6-katalysator-echo",
+    "name": "Schattenecho",
+    "effectSummary": "Verursache 2 Schaden am Gegner. Bei Treffer: erschöpfe optional 1 gegnerische Formelkomponente. Echo: zu Beginn deines nächsten Zuges wiederhole 1 Punkt des Primärwerts. Katalysator bleibt bis zur Echo-Auflösung.",
+    "primary": {
+      "kind": "damage",
+      "value": 2,
+      "target": "opponent",
+      "offensive": true
+    },
+    "rider": {
+      "id": "rider-fluch",
+      "summary": "Bei Treffer: erschöpfe optional 1 gegnerische Formelkomponente.",
+      "defenseSuppressible": true
+    },
+    "intensity": null,
+    "transformId": "xform-echo",
+    "grantsFetz": false,
+    "catalystConsumed": false,
+    "overformulaPrimaryBonus": null,
+    "overformulaIntensityBonus": null,
+    "formulaDefensePenalty": null,
+    "summonConstructDefId": null,
+    "timingMode": "echo",
+    "echoAmount": 1,
+    "delayBonus": null
   },
   {
     "recipeId": "v6-ek-schatten-ueberladung",
@@ -3327,7 +4584,10 @@ export const V6_GENERATED_FORMULA_RECIPES: readonly V6GeneratedFormulaRecipe[] =
     "overformulaPrimaryBonus": null,
     "overformulaIntensityBonus": null,
     "formulaDefensePenalty": null,
-    "summonConstructDefId": null
+    "summonConstructDefId": null,
+    "timingMode": "immediate",
+    "echoAmount": null,
+    "delayBonus": null
   },
   {
     "recipeId": "v6-ek-schatten-verdichtung",
@@ -3356,7 +4616,42 @@ export const V6_GENERATED_FORMULA_RECIPES: readonly V6GeneratedFormulaRecipe[] =
     "overformulaPrimaryBonus": null,
     "overformulaIntensityBonus": null,
     "formulaDefensePenalty": null,
-    "summonConstructDefId": null
+    "summonConstructDefId": null,
+    "timingMode": "immediate",
+    "echoAmount": null,
+    "delayBonus": null
+  },
+  {
+    "recipeId": "v6-ek-schatten-verzoegerung",
+    "kind": "ek",
+    "catalogSlice": "slice1",
+    "techniqueId": null,
+    "essenceId": "v6-essenz-schatten",
+    "catalystId": "v6-katalysator-verzoegerung",
+    "name": "Schattenverzögerung",
+    "effectSummary": "Verursache 2 Schaden am Gegner. Bei Treffer: erschöpfe optional 1 gegnerische Formelkomponente. Verzögerung: Primäreffekt geschieht nicht sofort, sondern zu Beginn deines nächsten Zuges und erhält +2. Katalysator bleibt bis zur Auflösung.",
+    "primary": {
+      "kind": "damage",
+      "value": 2,
+      "target": "opponent",
+      "offensive": true
+    },
+    "rider": {
+      "id": "rider-fluch",
+      "summary": "Bei Treffer: erschöpfe optional 1 gegnerische Formelkomponente.",
+      "defenseSuppressible": true
+    },
+    "intensity": null,
+    "transformId": "xform-verzoegerung",
+    "grantsFetz": false,
+    "catalystConsumed": false,
+    "overformulaPrimaryBonus": null,
+    "overformulaIntensityBonus": null,
+    "formulaDefensePenalty": null,
+    "summonConstructDefId": null,
+    "timingMode": "delay",
+    "echoAmount": null,
+    "delayBonus": 2
   },
   {
     "recipeId": "v6-ek-schatten-sofortzuender",
@@ -3385,7 +4680,10 @@ export const V6_GENERATED_FORMULA_RECIPES: readonly V6GeneratedFormulaRecipe[] =
     "overformulaPrimaryBonus": null,
     "overformulaIntensityBonus": null,
     "formulaDefensePenalty": null,
-    "summonConstructDefId": null
+    "summonConstructDefId": null,
+    "timingMode": "immediate",
+    "echoAmount": null,
+    "delayBonus": null
   },
   {
     "recipeId": "v6-ek-schatten-opfergabe",
@@ -3414,7 +4712,74 @@ export const V6_GENERATED_FORMULA_RECIPES: readonly V6GeneratedFormulaRecipe[] =
     "overformulaPrimaryBonus": null,
     "overformulaIntensityBonus": null,
     "formulaDefensePenalty": null,
-    "summonConstructDefId": null
+    "summonConstructDefId": null,
+    "timingMode": "immediate",
+    "echoAmount": null,
+    "delayBonus": null
+  },
+  {
+    "recipeId": "v6-tek-impulsgeschoss-feuer-echo",
+    "kind": "tek",
+    "catalogSlice": "slice1",
+    "techniqueId": "v6-technik-impulsgeschoss",
+    "essenceId": "v6-essenz-feuer",
+    "catalystId": "v6-katalysator-echo",
+    "name": "Glutimpuls · Echo",
+    "effectSummary": "Verursache 3 Schaden am Gegner. Bei Lebensschaden: Brennen, falls keine Reaktion. Echo: zu Beginn deines nächsten Zuges wiederhole 1 Punkt des Primärwerts. Katalysator bleibt bis zur Echo-Auflösung. TEK: +1 Fetzladung (max 1×/Zug).",
+    "primary": {
+      "kind": "damage",
+      "value": 3,
+      "target": "opponent",
+      "offensive": true
+    },
+    "rider": {
+      "id": "rider-brennen",
+      "summary": "Bei Lebensschaden: Brennen, falls keine Reaktion.",
+      "defenseSuppressible": true
+    },
+    "intensity": null,
+    "transformId": "xform-echo",
+    "grantsFetz": true,
+    "catalystConsumed": false,
+    "overformulaPrimaryBonus": null,
+    "overformulaIntensityBonus": null,
+    "formulaDefensePenalty": null,
+    "summonConstructDefId": null,
+    "timingMode": "echo",
+    "echoAmount": 1,
+    "delayBonus": null
+  },
+  {
+    "recipeId": "v6-over-impulsgeschoss-feuer-echo",
+    "kind": "overformula",
+    "catalogSlice": "slice1",
+    "techniqueId": "v6-technik-impulsgeschoss",
+    "essenceId": "v6-essenz-feuer",
+    "catalystId": "v6-katalysator-echo",
+    "name": "Überformel Glutimpuls · Echo",
+    "effectSummary": "Verursache 5 Schaden am Gegner. Bei Lebensschaden: Brennen, falls keine Reaktion. (verstärkt) Echo: zu Beginn deines nächsten Zuges wiederhole 1 Punkt des Primärwerts. Katalysator bleibt bis zur Echo-Auflösung. Überformel: Primär +2 (fester Slice-1-Bonus). Überformel: Fetzladung wird verbraucht. Formelabwehr −1.",
+    "primary": {
+      "kind": "damage",
+      "value": 5,
+      "target": "opponent",
+      "offensive": true
+    },
+    "rider": {
+      "id": "rider-brennen",
+      "summary": "Bei Lebensschaden: Brennen, falls keine Reaktion. (verstärkt)",
+      "defenseSuppressible": true
+    },
+    "intensity": null,
+    "transformId": "xform-echo",
+    "grantsFetz": false,
+    "catalystConsumed": false,
+    "overformulaPrimaryBonus": 2,
+    "overformulaIntensityBonus": null,
+    "formulaDefensePenalty": -1,
+    "summonConstructDefId": null,
+    "timingMode": "echo",
+    "echoAmount": 1,
+    "delayBonus": null
   },
   {
     "recipeId": "v6-tek-impulsgeschoss-feuer-ueberladung",
@@ -3443,7 +4808,10 @@ export const V6_GENERATED_FORMULA_RECIPES: readonly V6GeneratedFormulaRecipe[] =
     "overformulaPrimaryBonus": null,
     "overformulaIntensityBonus": null,
     "formulaDefensePenalty": null,
-    "summonConstructDefId": null
+    "summonConstructDefId": null,
+    "timingMode": "immediate",
+    "echoAmount": null,
+    "delayBonus": null
   },
   {
     "recipeId": "v6-over-impulsgeschoss-feuer-ueberladung",
@@ -3472,7 +4840,10 @@ export const V6_GENERATED_FORMULA_RECIPES: readonly V6GeneratedFormulaRecipe[] =
     "overformulaPrimaryBonus": 2,
     "overformulaIntensityBonus": null,
     "formulaDefensePenalty": -1,
-    "summonConstructDefId": null
+    "summonConstructDefId": null,
+    "timingMode": "immediate",
+    "echoAmount": null,
+    "delayBonus": null
   },
   {
     "recipeId": "v6-tek-impulsgeschoss-feuer-verdichtung",
@@ -3501,7 +4872,10 @@ export const V6_GENERATED_FORMULA_RECIPES: readonly V6GeneratedFormulaRecipe[] =
     "overformulaPrimaryBonus": null,
     "overformulaIntensityBonus": null,
     "formulaDefensePenalty": null,
-    "summonConstructDefId": null
+    "summonConstructDefId": null,
+    "timingMode": "immediate",
+    "echoAmount": null,
+    "delayBonus": null
   },
   {
     "recipeId": "v6-over-impulsgeschoss-feuer-verdichtung",
@@ -3530,7 +4904,74 @@ export const V6_GENERATED_FORMULA_RECIPES: readonly V6GeneratedFormulaRecipe[] =
     "overformulaPrimaryBonus": 2,
     "overformulaIntensityBonus": null,
     "formulaDefensePenalty": -1,
-    "summonConstructDefId": null
+    "summonConstructDefId": null,
+    "timingMode": "immediate",
+    "echoAmount": null,
+    "delayBonus": null
+  },
+  {
+    "recipeId": "v6-tek-impulsgeschoss-feuer-verzoegerung",
+    "kind": "tek",
+    "catalogSlice": "slice1",
+    "techniqueId": "v6-technik-impulsgeschoss",
+    "essenceId": "v6-essenz-feuer",
+    "catalystId": "v6-katalysator-verzoegerung",
+    "name": "Glutimpuls · Verzögerung",
+    "effectSummary": "Verursache 3 Schaden am Gegner. Bei Lebensschaden: Brennen, falls keine Reaktion. Verzögerung: Primäreffekt geschieht nicht sofort, sondern zu Beginn deines nächsten Zuges und erhält +2. Katalysator bleibt bis zur Auflösung. TEK: +1 Fetzladung (max 1×/Zug).",
+    "primary": {
+      "kind": "damage",
+      "value": 3,
+      "target": "opponent",
+      "offensive": true
+    },
+    "rider": {
+      "id": "rider-brennen",
+      "summary": "Bei Lebensschaden: Brennen, falls keine Reaktion.",
+      "defenseSuppressible": true
+    },
+    "intensity": null,
+    "transformId": "xform-verzoegerung",
+    "grantsFetz": true,
+    "catalystConsumed": false,
+    "overformulaPrimaryBonus": null,
+    "overformulaIntensityBonus": null,
+    "formulaDefensePenalty": null,
+    "summonConstructDefId": null,
+    "timingMode": "delay",
+    "echoAmount": null,
+    "delayBonus": 2
+  },
+  {
+    "recipeId": "v6-over-impulsgeschoss-feuer-verzoegerung",
+    "kind": "overformula",
+    "catalogSlice": "slice1",
+    "techniqueId": "v6-technik-impulsgeschoss",
+    "essenceId": "v6-essenz-feuer",
+    "catalystId": "v6-katalysator-verzoegerung",
+    "name": "Überformel Glutimpuls · Verzögerung",
+    "effectSummary": "Verursache 5 Schaden am Gegner. Bei Lebensschaden: Brennen, falls keine Reaktion. (verstärkt) Verzögerung: Primäreffekt geschieht nicht sofort, sondern zu Beginn deines nächsten Zuges und erhält +2. Katalysator bleibt bis zur Auflösung. Überformel: Primär +2 (fester Slice-1-Bonus). Überformel: Fetzladung wird verbraucht. Formelabwehr −1.",
+    "primary": {
+      "kind": "damage",
+      "value": 5,
+      "target": "opponent",
+      "offensive": true
+    },
+    "rider": {
+      "id": "rider-brennen",
+      "summary": "Bei Lebensschaden: Brennen, falls keine Reaktion. (verstärkt)",
+      "defenseSuppressible": true
+    },
+    "intensity": null,
+    "transformId": "xform-verzoegerung",
+    "grantsFetz": false,
+    "catalystConsumed": false,
+    "overformulaPrimaryBonus": 2,
+    "overformulaIntensityBonus": null,
+    "formulaDefensePenalty": -1,
+    "summonConstructDefId": null,
+    "timingMode": "delay",
+    "echoAmount": null,
+    "delayBonus": 2
   },
   {
     "recipeId": "v6-tek-impulsgeschoss-feuer-sofortzuender",
@@ -3559,7 +5000,10 @@ export const V6_GENERATED_FORMULA_RECIPES: readonly V6GeneratedFormulaRecipe[] =
     "overformulaPrimaryBonus": null,
     "overformulaIntensityBonus": null,
     "formulaDefensePenalty": null,
-    "summonConstructDefId": null
+    "summonConstructDefId": null,
+    "timingMode": "immediate",
+    "echoAmount": null,
+    "delayBonus": null
   },
   {
     "recipeId": "v6-over-impulsgeschoss-feuer-sofortzuender",
@@ -3588,7 +5032,10 @@ export const V6_GENERATED_FORMULA_RECIPES: readonly V6GeneratedFormulaRecipe[] =
     "overformulaPrimaryBonus": 2,
     "overformulaIntensityBonus": null,
     "formulaDefensePenalty": -1,
-    "summonConstructDefId": null
+    "summonConstructDefId": null,
+    "timingMode": "immediate",
+    "echoAmount": null,
+    "delayBonus": null
   },
   {
     "recipeId": "v6-tek-impulsgeschoss-feuer-opfergabe",
@@ -3617,7 +5064,10 @@ export const V6_GENERATED_FORMULA_RECIPES: readonly V6GeneratedFormulaRecipe[] =
     "overformulaPrimaryBonus": null,
     "overformulaIntensityBonus": null,
     "formulaDefensePenalty": null,
-    "summonConstructDefId": null
+    "summonConstructDefId": null,
+    "timingMode": "immediate",
+    "echoAmount": null,
+    "delayBonus": null
   },
   {
     "recipeId": "v6-over-impulsgeschoss-feuer-opfergabe",
@@ -3646,7 +5096,74 @@ export const V6_GENERATED_FORMULA_RECIPES: readonly V6GeneratedFormulaRecipe[] =
     "overformulaPrimaryBonus": 2,
     "overformulaIntensityBonus": null,
     "formulaDefensePenalty": -1,
-    "summonConstructDefId": null
+    "summonConstructDefId": null,
+    "timingMode": "immediate",
+    "echoAmount": null,
+    "delayBonus": null
+  },
+  {
+    "recipeId": "v6-tek-impulsgeschoss-wasser-echo",
+    "kind": "tek",
+    "catalogSlice": "slice1",
+    "techniqueId": "v6-technik-impulsgeschoss",
+    "essenceId": "v6-essenz-wasser",
+    "catalystId": "v6-katalysator-echo",
+    "name": "Spritzschuss · Echo",
+    "effectSummary": "Verursache 2 Schaden am Gegner. Bei Heilung oder Schildgewinn: entferne optional eine Marke von dir. Echo: zu Beginn deines nächsten Zuges wiederhole 1 Punkt des Primärwerts. Katalysator bleibt bis zur Echo-Auflösung. TEK: +1 Fetzladung (max 1×/Zug).",
+    "primary": {
+      "kind": "damage",
+      "value": 2,
+      "target": "opponent",
+      "offensive": true
+    },
+    "rider": {
+      "id": "rider-reinigen",
+      "summary": "Bei Heilung oder Schildgewinn: entferne optional eine Marke von dir.",
+      "defenseSuppressible": false
+    },
+    "intensity": null,
+    "transformId": "xform-echo",
+    "grantsFetz": true,
+    "catalystConsumed": false,
+    "overformulaPrimaryBonus": null,
+    "overformulaIntensityBonus": null,
+    "formulaDefensePenalty": null,
+    "summonConstructDefId": null,
+    "timingMode": "echo",
+    "echoAmount": 1,
+    "delayBonus": null
+  },
+  {
+    "recipeId": "v6-over-impulsgeschoss-wasser-echo",
+    "kind": "overformula",
+    "catalogSlice": "slice1",
+    "techniqueId": "v6-technik-impulsgeschoss",
+    "essenceId": "v6-essenz-wasser",
+    "catalystId": "v6-katalysator-echo",
+    "name": "Überformel Spritzschuss · Echo",
+    "effectSummary": "Verursache 4 Schaden am Gegner. Bei Heilung oder Schildgewinn: entferne optional eine Marke von dir. (verstärkt) Echo: zu Beginn deines nächsten Zuges wiederhole 1 Punkt des Primärwerts. Katalysator bleibt bis zur Echo-Auflösung. Überformel: Primär +2 (fester Slice-1-Bonus). Überformel: Fetzladung wird verbraucht. Formelabwehr −1.",
+    "primary": {
+      "kind": "damage",
+      "value": 4,
+      "target": "opponent",
+      "offensive": true
+    },
+    "rider": {
+      "id": "rider-reinigen",
+      "summary": "Bei Heilung oder Schildgewinn: entferne optional eine Marke von dir. (verstärkt)",
+      "defenseSuppressible": false
+    },
+    "intensity": null,
+    "transformId": "xform-echo",
+    "grantsFetz": false,
+    "catalystConsumed": false,
+    "overformulaPrimaryBonus": 2,
+    "overformulaIntensityBonus": null,
+    "formulaDefensePenalty": -1,
+    "summonConstructDefId": null,
+    "timingMode": "echo",
+    "echoAmount": 1,
+    "delayBonus": null
   },
   {
     "recipeId": "v6-tek-impulsgeschoss-wasser-ueberladung",
@@ -3675,7 +5192,10 @@ export const V6_GENERATED_FORMULA_RECIPES: readonly V6GeneratedFormulaRecipe[] =
     "overformulaPrimaryBonus": null,
     "overformulaIntensityBonus": null,
     "formulaDefensePenalty": null,
-    "summonConstructDefId": null
+    "summonConstructDefId": null,
+    "timingMode": "immediate",
+    "echoAmount": null,
+    "delayBonus": null
   },
   {
     "recipeId": "v6-over-impulsgeschoss-wasser-ueberladung",
@@ -3704,7 +5224,10 @@ export const V6_GENERATED_FORMULA_RECIPES: readonly V6GeneratedFormulaRecipe[] =
     "overformulaPrimaryBonus": 2,
     "overformulaIntensityBonus": null,
     "formulaDefensePenalty": -1,
-    "summonConstructDefId": null
+    "summonConstructDefId": null,
+    "timingMode": "immediate",
+    "echoAmount": null,
+    "delayBonus": null
   },
   {
     "recipeId": "v6-tek-impulsgeschoss-wasser-verdichtung",
@@ -3733,7 +5256,10 @@ export const V6_GENERATED_FORMULA_RECIPES: readonly V6GeneratedFormulaRecipe[] =
     "overformulaPrimaryBonus": null,
     "overformulaIntensityBonus": null,
     "formulaDefensePenalty": null,
-    "summonConstructDefId": null
+    "summonConstructDefId": null,
+    "timingMode": "immediate",
+    "echoAmount": null,
+    "delayBonus": null
   },
   {
     "recipeId": "v6-over-impulsgeschoss-wasser-verdichtung",
@@ -3762,7 +5288,74 @@ export const V6_GENERATED_FORMULA_RECIPES: readonly V6GeneratedFormulaRecipe[] =
     "overformulaPrimaryBonus": 2,
     "overformulaIntensityBonus": null,
     "formulaDefensePenalty": -1,
-    "summonConstructDefId": null
+    "summonConstructDefId": null,
+    "timingMode": "immediate",
+    "echoAmount": null,
+    "delayBonus": null
+  },
+  {
+    "recipeId": "v6-tek-impulsgeschoss-wasser-verzoegerung",
+    "kind": "tek",
+    "catalogSlice": "slice1",
+    "techniqueId": "v6-technik-impulsgeschoss",
+    "essenceId": "v6-essenz-wasser",
+    "catalystId": "v6-katalysator-verzoegerung",
+    "name": "Spritzschuss · Verzögerung",
+    "effectSummary": "Verursache 2 Schaden am Gegner. Bei Heilung oder Schildgewinn: entferne optional eine Marke von dir. Verzögerung: Primäreffekt geschieht nicht sofort, sondern zu Beginn deines nächsten Zuges und erhält +2. Katalysator bleibt bis zur Auflösung. TEK: +1 Fetzladung (max 1×/Zug).",
+    "primary": {
+      "kind": "damage",
+      "value": 2,
+      "target": "opponent",
+      "offensive": true
+    },
+    "rider": {
+      "id": "rider-reinigen",
+      "summary": "Bei Heilung oder Schildgewinn: entferne optional eine Marke von dir.",
+      "defenseSuppressible": false
+    },
+    "intensity": null,
+    "transformId": "xform-verzoegerung",
+    "grantsFetz": true,
+    "catalystConsumed": false,
+    "overformulaPrimaryBonus": null,
+    "overformulaIntensityBonus": null,
+    "formulaDefensePenalty": null,
+    "summonConstructDefId": null,
+    "timingMode": "delay",
+    "echoAmount": null,
+    "delayBonus": 2
+  },
+  {
+    "recipeId": "v6-over-impulsgeschoss-wasser-verzoegerung",
+    "kind": "overformula",
+    "catalogSlice": "slice1",
+    "techniqueId": "v6-technik-impulsgeschoss",
+    "essenceId": "v6-essenz-wasser",
+    "catalystId": "v6-katalysator-verzoegerung",
+    "name": "Überformel Spritzschuss · Verzögerung",
+    "effectSummary": "Verursache 4 Schaden am Gegner. Bei Heilung oder Schildgewinn: entferne optional eine Marke von dir. (verstärkt) Verzögerung: Primäreffekt geschieht nicht sofort, sondern zu Beginn deines nächsten Zuges und erhält +2. Katalysator bleibt bis zur Auflösung. Überformel: Primär +2 (fester Slice-1-Bonus). Überformel: Fetzladung wird verbraucht. Formelabwehr −1.",
+    "primary": {
+      "kind": "damage",
+      "value": 4,
+      "target": "opponent",
+      "offensive": true
+    },
+    "rider": {
+      "id": "rider-reinigen",
+      "summary": "Bei Heilung oder Schildgewinn: entferne optional eine Marke von dir. (verstärkt)",
+      "defenseSuppressible": false
+    },
+    "intensity": null,
+    "transformId": "xform-verzoegerung",
+    "grantsFetz": false,
+    "catalystConsumed": false,
+    "overformulaPrimaryBonus": 2,
+    "overformulaIntensityBonus": null,
+    "formulaDefensePenalty": -1,
+    "summonConstructDefId": null,
+    "timingMode": "delay",
+    "echoAmount": null,
+    "delayBonus": 2
   },
   {
     "recipeId": "v6-tek-impulsgeschoss-wasser-sofortzuender",
@@ -3791,7 +5384,10 @@ export const V6_GENERATED_FORMULA_RECIPES: readonly V6GeneratedFormulaRecipe[] =
     "overformulaPrimaryBonus": null,
     "overformulaIntensityBonus": null,
     "formulaDefensePenalty": null,
-    "summonConstructDefId": null
+    "summonConstructDefId": null,
+    "timingMode": "immediate",
+    "echoAmount": null,
+    "delayBonus": null
   },
   {
     "recipeId": "v6-over-impulsgeschoss-wasser-sofortzuender",
@@ -3820,7 +5416,10 @@ export const V6_GENERATED_FORMULA_RECIPES: readonly V6GeneratedFormulaRecipe[] =
     "overformulaPrimaryBonus": 2,
     "overformulaIntensityBonus": null,
     "formulaDefensePenalty": -1,
-    "summonConstructDefId": null
+    "summonConstructDefId": null,
+    "timingMode": "immediate",
+    "echoAmount": null,
+    "delayBonus": null
   },
   {
     "recipeId": "v6-tek-impulsgeschoss-wasser-opfergabe",
@@ -3849,7 +5448,10 @@ export const V6_GENERATED_FORMULA_RECIPES: readonly V6GeneratedFormulaRecipe[] =
     "overformulaPrimaryBonus": null,
     "overformulaIntensityBonus": null,
     "formulaDefensePenalty": null,
-    "summonConstructDefId": null
+    "summonConstructDefId": null,
+    "timingMode": "immediate",
+    "echoAmount": null,
+    "delayBonus": null
   },
   {
     "recipeId": "v6-over-impulsgeschoss-wasser-opfergabe",
@@ -3878,7 +5480,74 @@ export const V6_GENERATED_FORMULA_RECIPES: readonly V6GeneratedFormulaRecipe[] =
     "overformulaPrimaryBonus": 2,
     "overformulaIntensityBonus": null,
     "formulaDefensePenalty": -1,
-    "summonConstructDefId": null
+    "summonConstructDefId": null,
+    "timingMode": "immediate",
+    "echoAmount": null,
+    "delayBonus": null
+  },
+  {
+    "recipeId": "v6-tek-impulsgeschoss-erde-echo",
+    "kind": "tek",
+    "catalogSlice": "slice1",
+    "techniqueId": "v6-technik-impulsgeschoss",
+    "essenceId": "v6-essenz-erde",
+    "catalystId": "v6-katalysator-echo",
+    "name": "Felsnadel · Echo",
+    "effectSummary": "Verursache 2 Schaden am Gegner. Verwendete Komponenten +1 Stabilität bis nächste Startphase. Echo: zu Beginn deines nächsten Zuges wiederhole 1 Punkt des Primärwerts. Katalysator bleibt bis zur Echo-Auflösung. TEK: +1 Fetzladung (max 1×/Zug).",
+    "primary": {
+      "kind": "damage",
+      "value": 2,
+      "target": "opponent",
+      "offensive": true
+    },
+    "rider": {
+      "id": "rider-stabilitaet",
+      "summary": "Verwendete Komponenten +1 Stabilität bis nächste Startphase.",
+      "defenseSuppressible": false
+    },
+    "intensity": null,
+    "transformId": "xform-echo",
+    "grantsFetz": true,
+    "catalystConsumed": false,
+    "overformulaPrimaryBonus": null,
+    "overformulaIntensityBonus": null,
+    "formulaDefensePenalty": null,
+    "summonConstructDefId": null,
+    "timingMode": "echo",
+    "echoAmount": 1,
+    "delayBonus": null
+  },
+  {
+    "recipeId": "v6-over-impulsgeschoss-erde-echo",
+    "kind": "overformula",
+    "catalogSlice": "slice1",
+    "techniqueId": "v6-technik-impulsgeschoss",
+    "essenceId": "v6-essenz-erde",
+    "catalystId": "v6-katalysator-echo",
+    "name": "Überformel Felsnadel · Echo",
+    "effectSummary": "Verursache 4 Schaden am Gegner. Verwendete Komponenten +1 Stabilität bis nächste Startphase. (verstärkt) Echo: zu Beginn deines nächsten Zuges wiederhole 1 Punkt des Primärwerts. Katalysator bleibt bis zur Echo-Auflösung. Überformel: Primär +2 (fester Slice-1-Bonus). Überformel: Fetzladung wird verbraucht. Formelabwehr −1.",
+    "primary": {
+      "kind": "damage",
+      "value": 4,
+      "target": "opponent",
+      "offensive": true
+    },
+    "rider": {
+      "id": "rider-stabilitaet",
+      "summary": "Verwendete Komponenten +1 Stabilität bis nächste Startphase. (verstärkt)",
+      "defenseSuppressible": false
+    },
+    "intensity": null,
+    "transformId": "xform-echo",
+    "grantsFetz": false,
+    "catalystConsumed": false,
+    "overformulaPrimaryBonus": 2,
+    "overformulaIntensityBonus": null,
+    "formulaDefensePenalty": -1,
+    "summonConstructDefId": null,
+    "timingMode": "echo",
+    "echoAmount": 1,
+    "delayBonus": null
   },
   {
     "recipeId": "v6-tek-impulsgeschoss-erde-ueberladung",
@@ -3907,7 +5576,10 @@ export const V6_GENERATED_FORMULA_RECIPES: readonly V6GeneratedFormulaRecipe[] =
     "overformulaPrimaryBonus": null,
     "overformulaIntensityBonus": null,
     "formulaDefensePenalty": null,
-    "summonConstructDefId": null
+    "summonConstructDefId": null,
+    "timingMode": "immediate",
+    "echoAmount": null,
+    "delayBonus": null
   },
   {
     "recipeId": "v6-over-impulsgeschoss-erde-ueberladung",
@@ -3936,7 +5608,10 @@ export const V6_GENERATED_FORMULA_RECIPES: readonly V6GeneratedFormulaRecipe[] =
     "overformulaPrimaryBonus": 2,
     "overformulaIntensityBonus": null,
     "formulaDefensePenalty": -1,
-    "summonConstructDefId": null
+    "summonConstructDefId": null,
+    "timingMode": "immediate",
+    "echoAmount": null,
+    "delayBonus": null
   },
   {
     "recipeId": "v6-tek-impulsgeschoss-erde-verdichtung",
@@ -3965,7 +5640,10 @@ export const V6_GENERATED_FORMULA_RECIPES: readonly V6GeneratedFormulaRecipe[] =
     "overformulaPrimaryBonus": null,
     "overformulaIntensityBonus": null,
     "formulaDefensePenalty": null,
-    "summonConstructDefId": null
+    "summonConstructDefId": null,
+    "timingMode": "immediate",
+    "echoAmount": null,
+    "delayBonus": null
   },
   {
     "recipeId": "v6-over-impulsgeschoss-erde-verdichtung",
@@ -3994,7 +5672,74 @@ export const V6_GENERATED_FORMULA_RECIPES: readonly V6GeneratedFormulaRecipe[] =
     "overformulaPrimaryBonus": 2,
     "overformulaIntensityBonus": null,
     "formulaDefensePenalty": -1,
-    "summonConstructDefId": null
+    "summonConstructDefId": null,
+    "timingMode": "immediate",
+    "echoAmount": null,
+    "delayBonus": null
+  },
+  {
+    "recipeId": "v6-tek-impulsgeschoss-erde-verzoegerung",
+    "kind": "tek",
+    "catalogSlice": "slice1",
+    "techniqueId": "v6-technik-impulsgeschoss",
+    "essenceId": "v6-essenz-erde",
+    "catalystId": "v6-katalysator-verzoegerung",
+    "name": "Felsnadel · Verzögerung",
+    "effectSummary": "Verursache 2 Schaden am Gegner. Verwendete Komponenten +1 Stabilität bis nächste Startphase. Verzögerung: Primäreffekt geschieht nicht sofort, sondern zu Beginn deines nächsten Zuges und erhält +2. Katalysator bleibt bis zur Auflösung. TEK: +1 Fetzladung (max 1×/Zug).",
+    "primary": {
+      "kind": "damage",
+      "value": 2,
+      "target": "opponent",
+      "offensive": true
+    },
+    "rider": {
+      "id": "rider-stabilitaet",
+      "summary": "Verwendete Komponenten +1 Stabilität bis nächste Startphase.",
+      "defenseSuppressible": false
+    },
+    "intensity": null,
+    "transformId": "xform-verzoegerung",
+    "grantsFetz": true,
+    "catalystConsumed": false,
+    "overformulaPrimaryBonus": null,
+    "overformulaIntensityBonus": null,
+    "formulaDefensePenalty": null,
+    "summonConstructDefId": null,
+    "timingMode": "delay",
+    "echoAmount": null,
+    "delayBonus": 2
+  },
+  {
+    "recipeId": "v6-over-impulsgeschoss-erde-verzoegerung",
+    "kind": "overformula",
+    "catalogSlice": "slice1",
+    "techniqueId": "v6-technik-impulsgeschoss",
+    "essenceId": "v6-essenz-erde",
+    "catalystId": "v6-katalysator-verzoegerung",
+    "name": "Überformel Felsnadel · Verzögerung",
+    "effectSummary": "Verursache 4 Schaden am Gegner. Verwendete Komponenten +1 Stabilität bis nächste Startphase. (verstärkt) Verzögerung: Primäreffekt geschieht nicht sofort, sondern zu Beginn deines nächsten Zuges und erhält +2. Katalysator bleibt bis zur Auflösung. Überformel: Primär +2 (fester Slice-1-Bonus). Überformel: Fetzladung wird verbraucht. Formelabwehr −1.",
+    "primary": {
+      "kind": "damage",
+      "value": 4,
+      "target": "opponent",
+      "offensive": true
+    },
+    "rider": {
+      "id": "rider-stabilitaet",
+      "summary": "Verwendete Komponenten +1 Stabilität bis nächste Startphase. (verstärkt)",
+      "defenseSuppressible": false
+    },
+    "intensity": null,
+    "transformId": "xform-verzoegerung",
+    "grantsFetz": false,
+    "catalystConsumed": false,
+    "overformulaPrimaryBonus": 2,
+    "overformulaIntensityBonus": null,
+    "formulaDefensePenalty": -1,
+    "summonConstructDefId": null,
+    "timingMode": "delay",
+    "echoAmount": null,
+    "delayBonus": 2
   },
   {
     "recipeId": "v6-tek-impulsgeschoss-erde-sofortzuender",
@@ -4023,7 +5768,10 @@ export const V6_GENERATED_FORMULA_RECIPES: readonly V6GeneratedFormulaRecipe[] =
     "overformulaPrimaryBonus": null,
     "overformulaIntensityBonus": null,
     "formulaDefensePenalty": null,
-    "summonConstructDefId": null
+    "summonConstructDefId": null,
+    "timingMode": "immediate",
+    "echoAmount": null,
+    "delayBonus": null
   },
   {
     "recipeId": "v6-over-impulsgeschoss-erde-sofortzuender",
@@ -4052,7 +5800,10 @@ export const V6_GENERATED_FORMULA_RECIPES: readonly V6GeneratedFormulaRecipe[] =
     "overformulaPrimaryBonus": 2,
     "overformulaIntensityBonus": null,
     "formulaDefensePenalty": -1,
-    "summonConstructDefId": null
+    "summonConstructDefId": null,
+    "timingMode": "immediate",
+    "echoAmount": null,
+    "delayBonus": null
   },
   {
     "recipeId": "v6-tek-impulsgeschoss-erde-opfergabe",
@@ -4081,7 +5832,10 @@ export const V6_GENERATED_FORMULA_RECIPES: readonly V6GeneratedFormulaRecipe[] =
     "overformulaPrimaryBonus": null,
     "overformulaIntensityBonus": null,
     "formulaDefensePenalty": null,
-    "summonConstructDefId": null
+    "summonConstructDefId": null,
+    "timingMode": "immediate",
+    "echoAmount": null,
+    "delayBonus": null
   },
   {
     "recipeId": "v6-over-impulsgeschoss-erde-opfergabe",
@@ -4110,7 +5864,74 @@ export const V6_GENERATED_FORMULA_RECIPES: readonly V6GeneratedFormulaRecipe[] =
     "overformulaPrimaryBonus": 2,
     "overformulaIntensityBonus": null,
     "formulaDefensePenalty": -1,
-    "summonConstructDefId": null
+    "summonConstructDefId": null,
+    "timingMode": "immediate",
+    "echoAmount": null,
+    "delayBonus": null
+  },
+  {
+    "recipeId": "v6-tek-impulsgeschoss-luft-echo",
+    "kind": "tek",
+    "catalogSlice": "slice1",
+    "techniqueId": "v6-technik-impulsgeschoss",
+    "essenceId": "v6-essenz-luft",
+    "catalystId": "v6-katalysator-echo",
+    "name": "Luftnadel · Echo",
+    "effectSummary": "Verursache 2 Schaden am Gegner. Nächster eigener Aktions-W6 +1 (max +2). Echo: zu Beginn deines nächsten Zuges wiederhole 1 Punkt des Primärwerts. Katalysator bleibt bis zur Echo-Auflösung. TEK: +1 Fetzladung (max 1×/Zug).",
+    "primary": {
+      "kind": "damage",
+      "value": 2,
+      "target": "opponent",
+      "offensive": true
+    },
+    "rider": {
+      "id": "rider-w6",
+      "summary": "Nächster eigener Aktions-W6 +1 (max +2).",
+      "defenseSuppressible": true
+    },
+    "intensity": null,
+    "transformId": "xform-echo",
+    "grantsFetz": true,
+    "catalystConsumed": false,
+    "overformulaPrimaryBonus": null,
+    "overformulaIntensityBonus": null,
+    "formulaDefensePenalty": null,
+    "summonConstructDefId": null,
+    "timingMode": "echo",
+    "echoAmount": 1,
+    "delayBonus": null
+  },
+  {
+    "recipeId": "v6-over-impulsgeschoss-luft-echo",
+    "kind": "overformula",
+    "catalogSlice": "slice1",
+    "techniqueId": "v6-technik-impulsgeschoss",
+    "essenceId": "v6-essenz-luft",
+    "catalystId": "v6-katalysator-echo",
+    "name": "Überformel Luftnadel · Echo",
+    "effectSummary": "Verursache 4 Schaden am Gegner. Nächster eigener Aktions-W6 +1 (max +2). (verstärkt) Echo: zu Beginn deines nächsten Zuges wiederhole 1 Punkt des Primärwerts. Katalysator bleibt bis zur Echo-Auflösung. Überformel: Primär +2 (fester Slice-1-Bonus). Überformel: Fetzladung wird verbraucht. Formelabwehr −1.",
+    "primary": {
+      "kind": "damage",
+      "value": 4,
+      "target": "opponent",
+      "offensive": true
+    },
+    "rider": {
+      "id": "rider-w6",
+      "summary": "Nächster eigener Aktions-W6 +1 (max +2). (verstärkt)",
+      "defenseSuppressible": true
+    },
+    "intensity": null,
+    "transformId": "xform-echo",
+    "grantsFetz": false,
+    "catalystConsumed": false,
+    "overformulaPrimaryBonus": 2,
+    "overformulaIntensityBonus": null,
+    "formulaDefensePenalty": -1,
+    "summonConstructDefId": null,
+    "timingMode": "echo",
+    "echoAmount": 1,
+    "delayBonus": null
   },
   {
     "recipeId": "v6-tek-impulsgeschoss-luft-ueberladung",
@@ -4139,7 +5960,10 @@ export const V6_GENERATED_FORMULA_RECIPES: readonly V6GeneratedFormulaRecipe[] =
     "overformulaPrimaryBonus": null,
     "overformulaIntensityBonus": null,
     "formulaDefensePenalty": null,
-    "summonConstructDefId": null
+    "summonConstructDefId": null,
+    "timingMode": "immediate",
+    "echoAmount": null,
+    "delayBonus": null
   },
   {
     "recipeId": "v6-over-impulsgeschoss-luft-ueberladung",
@@ -4168,7 +5992,10 @@ export const V6_GENERATED_FORMULA_RECIPES: readonly V6GeneratedFormulaRecipe[] =
     "overformulaPrimaryBonus": 2,
     "overformulaIntensityBonus": null,
     "formulaDefensePenalty": -1,
-    "summonConstructDefId": null
+    "summonConstructDefId": null,
+    "timingMode": "immediate",
+    "echoAmount": null,
+    "delayBonus": null
   },
   {
     "recipeId": "v6-tek-impulsgeschoss-luft-verdichtung",
@@ -4197,7 +6024,10 @@ export const V6_GENERATED_FORMULA_RECIPES: readonly V6GeneratedFormulaRecipe[] =
     "overformulaPrimaryBonus": null,
     "overformulaIntensityBonus": null,
     "formulaDefensePenalty": null,
-    "summonConstructDefId": null
+    "summonConstructDefId": null,
+    "timingMode": "immediate",
+    "echoAmount": null,
+    "delayBonus": null
   },
   {
     "recipeId": "v6-over-impulsgeschoss-luft-verdichtung",
@@ -4226,7 +6056,74 @@ export const V6_GENERATED_FORMULA_RECIPES: readonly V6GeneratedFormulaRecipe[] =
     "overformulaPrimaryBonus": 2,
     "overformulaIntensityBonus": null,
     "formulaDefensePenalty": -1,
-    "summonConstructDefId": null
+    "summonConstructDefId": null,
+    "timingMode": "immediate",
+    "echoAmount": null,
+    "delayBonus": null
+  },
+  {
+    "recipeId": "v6-tek-impulsgeschoss-luft-verzoegerung",
+    "kind": "tek",
+    "catalogSlice": "slice1",
+    "techniqueId": "v6-technik-impulsgeschoss",
+    "essenceId": "v6-essenz-luft",
+    "catalystId": "v6-katalysator-verzoegerung",
+    "name": "Luftnadel · Verzögerung",
+    "effectSummary": "Verursache 2 Schaden am Gegner. Nächster eigener Aktions-W6 +1 (max +2). Verzögerung: Primäreffekt geschieht nicht sofort, sondern zu Beginn deines nächsten Zuges und erhält +2. Katalysator bleibt bis zur Auflösung. TEK: +1 Fetzladung (max 1×/Zug).",
+    "primary": {
+      "kind": "damage",
+      "value": 2,
+      "target": "opponent",
+      "offensive": true
+    },
+    "rider": {
+      "id": "rider-w6",
+      "summary": "Nächster eigener Aktions-W6 +1 (max +2).",
+      "defenseSuppressible": true
+    },
+    "intensity": null,
+    "transformId": "xform-verzoegerung",
+    "grantsFetz": true,
+    "catalystConsumed": false,
+    "overformulaPrimaryBonus": null,
+    "overformulaIntensityBonus": null,
+    "formulaDefensePenalty": null,
+    "summonConstructDefId": null,
+    "timingMode": "delay",
+    "echoAmount": null,
+    "delayBonus": 2
+  },
+  {
+    "recipeId": "v6-over-impulsgeschoss-luft-verzoegerung",
+    "kind": "overformula",
+    "catalogSlice": "slice1",
+    "techniqueId": "v6-technik-impulsgeschoss",
+    "essenceId": "v6-essenz-luft",
+    "catalystId": "v6-katalysator-verzoegerung",
+    "name": "Überformel Luftnadel · Verzögerung",
+    "effectSummary": "Verursache 4 Schaden am Gegner. Nächster eigener Aktions-W6 +1 (max +2). (verstärkt) Verzögerung: Primäreffekt geschieht nicht sofort, sondern zu Beginn deines nächsten Zuges und erhält +2. Katalysator bleibt bis zur Auflösung. Überformel: Primär +2 (fester Slice-1-Bonus). Überformel: Fetzladung wird verbraucht. Formelabwehr −1.",
+    "primary": {
+      "kind": "damage",
+      "value": 4,
+      "target": "opponent",
+      "offensive": true
+    },
+    "rider": {
+      "id": "rider-w6",
+      "summary": "Nächster eigener Aktions-W6 +1 (max +2). (verstärkt)",
+      "defenseSuppressible": true
+    },
+    "intensity": null,
+    "transformId": "xform-verzoegerung",
+    "grantsFetz": false,
+    "catalystConsumed": false,
+    "overformulaPrimaryBonus": 2,
+    "overformulaIntensityBonus": null,
+    "formulaDefensePenalty": -1,
+    "summonConstructDefId": null,
+    "timingMode": "delay",
+    "echoAmount": null,
+    "delayBonus": 2
   },
   {
     "recipeId": "v6-tek-impulsgeschoss-luft-sofortzuender",
@@ -4255,7 +6152,10 @@ export const V6_GENERATED_FORMULA_RECIPES: readonly V6GeneratedFormulaRecipe[] =
     "overformulaPrimaryBonus": null,
     "overformulaIntensityBonus": null,
     "formulaDefensePenalty": null,
-    "summonConstructDefId": null
+    "summonConstructDefId": null,
+    "timingMode": "immediate",
+    "echoAmount": null,
+    "delayBonus": null
   },
   {
     "recipeId": "v6-over-impulsgeschoss-luft-sofortzuender",
@@ -4284,7 +6184,10 @@ export const V6_GENERATED_FORMULA_RECIPES: readonly V6GeneratedFormulaRecipe[] =
     "overformulaPrimaryBonus": 2,
     "overformulaIntensityBonus": null,
     "formulaDefensePenalty": -1,
-    "summonConstructDefId": null
+    "summonConstructDefId": null,
+    "timingMode": "immediate",
+    "echoAmount": null,
+    "delayBonus": null
   },
   {
     "recipeId": "v6-tek-impulsgeschoss-luft-opfergabe",
@@ -4313,7 +6216,10 @@ export const V6_GENERATED_FORMULA_RECIPES: readonly V6GeneratedFormulaRecipe[] =
     "overformulaPrimaryBonus": null,
     "overformulaIntensityBonus": null,
     "formulaDefensePenalty": null,
-    "summonConstructDefId": null
+    "summonConstructDefId": null,
+    "timingMode": "immediate",
+    "echoAmount": null,
+    "delayBonus": null
   },
   {
     "recipeId": "v6-over-impulsgeschoss-luft-opfergabe",
@@ -4342,7 +6248,74 @@ export const V6_GENERATED_FORMULA_RECIPES: readonly V6GeneratedFormulaRecipe[] =
     "overformulaPrimaryBonus": 2,
     "overformulaIntensityBonus": null,
     "formulaDefensePenalty": -1,
-    "summonConstructDefId": null
+    "summonConstructDefId": null,
+    "timingMode": "immediate",
+    "echoAmount": null,
+    "delayBonus": null
+  },
+  {
+    "recipeId": "v6-tek-impulsgeschoss-licht-echo",
+    "kind": "tek",
+    "catalogSlice": "slice1",
+    "techniqueId": "v6-technik-impulsgeschoss",
+    "essenceId": "v6-essenz-licht",
+    "catalystId": "v6-katalysator-echo",
+    "name": "Lichtstich · Echo",
+    "effectSummary": "Verursache 2 Schaden am Gegner. Bei Schildgewinn: entferne optional eine Marke von dir. Echo: zu Beginn deines nächsten Zuges wiederhole 1 Punkt des Primärwerts. Katalysator bleibt bis zur Echo-Auflösung. TEK: +1 Fetzladung (max 1×/Zug).",
+    "primary": {
+      "kind": "damage",
+      "value": 2,
+      "target": "opponent",
+      "offensive": true
+    },
+    "rider": {
+      "id": "rider-reinigen-licht",
+      "summary": "Bei Schildgewinn: entferne optional eine Marke von dir.",
+      "defenseSuppressible": false
+    },
+    "intensity": null,
+    "transformId": "xform-echo",
+    "grantsFetz": true,
+    "catalystConsumed": false,
+    "overformulaPrimaryBonus": null,
+    "overformulaIntensityBonus": null,
+    "formulaDefensePenalty": null,
+    "summonConstructDefId": null,
+    "timingMode": "echo",
+    "echoAmount": 1,
+    "delayBonus": null
+  },
+  {
+    "recipeId": "v6-over-impulsgeschoss-licht-echo",
+    "kind": "overformula",
+    "catalogSlice": "slice1",
+    "techniqueId": "v6-technik-impulsgeschoss",
+    "essenceId": "v6-essenz-licht",
+    "catalystId": "v6-katalysator-echo",
+    "name": "Überformel Lichtstich · Echo",
+    "effectSummary": "Verursache 4 Schaden am Gegner. Bei Schildgewinn: entferne optional eine Marke von dir. (verstärkt) Echo: zu Beginn deines nächsten Zuges wiederhole 1 Punkt des Primärwerts. Katalysator bleibt bis zur Echo-Auflösung. Überformel: Primär +2 (fester Slice-1-Bonus). Überformel: Fetzladung wird verbraucht. Formelabwehr −1.",
+    "primary": {
+      "kind": "damage",
+      "value": 4,
+      "target": "opponent",
+      "offensive": true
+    },
+    "rider": {
+      "id": "rider-reinigen-licht",
+      "summary": "Bei Schildgewinn: entferne optional eine Marke von dir. (verstärkt)",
+      "defenseSuppressible": false
+    },
+    "intensity": null,
+    "transformId": "xform-echo",
+    "grantsFetz": false,
+    "catalystConsumed": false,
+    "overformulaPrimaryBonus": 2,
+    "overformulaIntensityBonus": null,
+    "formulaDefensePenalty": -1,
+    "summonConstructDefId": null,
+    "timingMode": "echo",
+    "echoAmount": 1,
+    "delayBonus": null
   },
   {
     "recipeId": "v6-tek-impulsgeschoss-licht-ueberladung",
@@ -4371,7 +6344,10 @@ export const V6_GENERATED_FORMULA_RECIPES: readonly V6GeneratedFormulaRecipe[] =
     "overformulaPrimaryBonus": null,
     "overformulaIntensityBonus": null,
     "formulaDefensePenalty": null,
-    "summonConstructDefId": null
+    "summonConstructDefId": null,
+    "timingMode": "immediate",
+    "echoAmount": null,
+    "delayBonus": null
   },
   {
     "recipeId": "v6-over-impulsgeschoss-licht-ueberladung",
@@ -4400,7 +6376,10 @@ export const V6_GENERATED_FORMULA_RECIPES: readonly V6GeneratedFormulaRecipe[] =
     "overformulaPrimaryBonus": 2,
     "overformulaIntensityBonus": null,
     "formulaDefensePenalty": -1,
-    "summonConstructDefId": null
+    "summonConstructDefId": null,
+    "timingMode": "immediate",
+    "echoAmount": null,
+    "delayBonus": null
   },
   {
     "recipeId": "v6-tek-impulsgeschoss-licht-verdichtung",
@@ -4429,7 +6408,10 @@ export const V6_GENERATED_FORMULA_RECIPES: readonly V6GeneratedFormulaRecipe[] =
     "overformulaPrimaryBonus": null,
     "overformulaIntensityBonus": null,
     "formulaDefensePenalty": null,
-    "summonConstructDefId": null
+    "summonConstructDefId": null,
+    "timingMode": "immediate",
+    "echoAmount": null,
+    "delayBonus": null
   },
   {
     "recipeId": "v6-over-impulsgeschoss-licht-verdichtung",
@@ -4458,7 +6440,74 @@ export const V6_GENERATED_FORMULA_RECIPES: readonly V6GeneratedFormulaRecipe[] =
     "overformulaPrimaryBonus": 2,
     "overformulaIntensityBonus": null,
     "formulaDefensePenalty": -1,
-    "summonConstructDefId": null
+    "summonConstructDefId": null,
+    "timingMode": "immediate",
+    "echoAmount": null,
+    "delayBonus": null
+  },
+  {
+    "recipeId": "v6-tek-impulsgeschoss-licht-verzoegerung",
+    "kind": "tek",
+    "catalogSlice": "slice1",
+    "techniqueId": "v6-technik-impulsgeschoss",
+    "essenceId": "v6-essenz-licht",
+    "catalystId": "v6-katalysator-verzoegerung",
+    "name": "Lichtstich · Verzögerung",
+    "effectSummary": "Verursache 2 Schaden am Gegner. Bei Schildgewinn: entferne optional eine Marke von dir. Verzögerung: Primäreffekt geschieht nicht sofort, sondern zu Beginn deines nächsten Zuges und erhält +2. Katalysator bleibt bis zur Auflösung. TEK: +1 Fetzladung (max 1×/Zug).",
+    "primary": {
+      "kind": "damage",
+      "value": 2,
+      "target": "opponent",
+      "offensive": true
+    },
+    "rider": {
+      "id": "rider-reinigen-licht",
+      "summary": "Bei Schildgewinn: entferne optional eine Marke von dir.",
+      "defenseSuppressible": false
+    },
+    "intensity": null,
+    "transformId": "xform-verzoegerung",
+    "grantsFetz": true,
+    "catalystConsumed": false,
+    "overformulaPrimaryBonus": null,
+    "overformulaIntensityBonus": null,
+    "formulaDefensePenalty": null,
+    "summonConstructDefId": null,
+    "timingMode": "delay",
+    "echoAmount": null,
+    "delayBonus": 2
+  },
+  {
+    "recipeId": "v6-over-impulsgeschoss-licht-verzoegerung",
+    "kind": "overformula",
+    "catalogSlice": "slice1",
+    "techniqueId": "v6-technik-impulsgeschoss",
+    "essenceId": "v6-essenz-licht",
+    "catalystId": "v6-katalysator-verzoegerung",
+    "name": "Überformel Lichtstich · Verzögerung",
+    "effectSummary": "Verursache 4 Schaden am Gegner. Bei Schildgewinn: entferne optional eine Marke von dir. (verstärkt) Verzögerung: Primäreffekt geschieht nicht sofort, sondern zu Beginn deines nächsten Zuges und erhält +2. Katalysator bleibt bis zur Auflösung. Überformel: Primär +2 (fester Slice-1-Bonus). Überformel: Fetzladung wird verbraucht. Formelabwehr −1.",
+    "primary": {
+      "kind": "damage",
+      "value": 4,
+      "target": "opponent",
+      "offensive": true
+    },
+    "rider": {
+      "id": "rider-reinigen-licht",
+      "summary": "Bei Schildgewinn: entferne optional eine Marke von dir. (verstärkt)",
+      "defenseSuppressible": false
+    },
+    "intensity": null,
+    "transformId": "xform-verzoegerung",
+    "grantsFetz": false,
+    "catalystConsumed": false,
+    "overformulaPrimaryBonus": 2,
+    "overformulaIntensityBonus": null,
+    "formulaDefensePenalty": -1,
+    "summonConstructDefId": null,
+    "timingMode": "delay",
+    "echoAmount": null,
+    "delayBonus": 2
   },
   {
     "recipeId": "v6-tek-impulsgeschoss-licht-sofortzuender",
@@ -4487,7 +6536,10 @@ export const V6_GENERATED_FORMULA_RECIPES: readonly V6GeneratedFormulaRecipe[] =
     "overformulaPrimaryBonus": null,
     "overformulaIntensityBonus": null,
     "formulaDefensePenalty": null,
-    "summonConstructDefId": null
+    "summonConstructDefId": null,
+    "timingMode": "immediate",
+    "echoAmount": null,
+    "delayBonus": null
   },
   {
     "recipeId": "v6-over-impulsgeschoss-licht-sofortzuender",
@@ -4516,7 +6568,10 @@ export const V6_GENERATED_FORMULA_RECIPES: readonly V6GeneratedFormulaRecipe[] =
     "overformulaPrimaryBonus": 2,
     "overformulaIntensityBonus": null,
     "formulaDefensePenalty": -1,
-    "summonConstructDefId": null
+    "summonConstructDefId": null,
+    "timingMode": "immediate",
+    "echoAmount": null,
+    "delayBonus": null
   },
   {
     "recipeId": "v6-tek-impulsgeschoss-licht-opfergabe",
@@ -4545,7 +6600,10 @@ export const V6_GENERATED_FORMULA_RECIPES: readonly V6GeneratedFormulaRecipe[] =
     "overformulaPrimaryBonus": null,
     "overformulaIntensityBonus": null,
     "formulaDefensePenalty": null,
-    "summonConstructDefId": null
+    "summonConstructDefId": null,
+    "timingMode": "immediate",
+    "echoAmount": null,
+    "delayBonus": null
   },
   {
     "recipeId": "v6-over-impulsgeschoss-licht-opfergabe",
@@ -4574,7 +6632,74 @@ export const V6_GENERATED_FORMULA_RECIPES: readonly V6GeneratedFormulaRecipe[] =
     "overformulaPrimaryBonus": 2,
     "overformulaIntensityBonus": null,
     "formulaDefensePenalty": -1,
-    "summonConstructDefId": null
+    "summonConstructDefId": null,
+    "timingMode": "immediate",
+    "echoAmount": null,
+    "delayBonus": null
+  },
+  {
+    "recipeId": "v6-tek-impulsgeschoss-schatten-echo",
+    "kind": "tek",
+    "catalogSlice": "slice1",
+    "techniqueId": "v6-technik-impulsgeschoss",
+    "essenceId": "v6-essenz-schatten",
+    "catalystId": "v6-katalysator-echo",
+    "name": "Schattenstich · Echo",
+    "effectSummary": "Verursache 2 Schaden am Gegner. Bei Treffer: erschöpfe optional 1 gegnerische Formelkomponente. Echo: zu Beginn deines nächsten Zuges wiederhole 1 Punkt des Primärwerts. Katalysator bleibt bis zur Echo-Auflösung. TEK: +1 Fetzladung (max 1×/Zug).",
+    "primary": {
+      "kind": "damage",
+      "value": 2,
+      "target": "opponent",
+      "offensive": true
+    },
+    "rider": {
+      "id": "rider-fluch",
+      "summary": "Bei Treffer: erschöpfe optional 1 gegnerische Formelkomponente.",
+      "defenseSuppressible": true
+    },
+    "intensity": null,
+    "transformId": "xform-echo",
+    "grantsFetz": true,
+    "catalystConsumed": false,
+    "overformulaPrimaryBonus": null,
+    "overformulaIntensityBonus": null,
+    "formulaDefensePenalty": null,
+    "summonConstructDefId": null,
+    "timingMode": "echo",
+    "echoAmount": 1,
+    "delayBonus": null
+  },
+  {
+    "recipeId": "v6-over-impulsgeschoss-schatten-echo",
+    "kind": "overformula",
+    "catalogSlice": "slice1",
+    "techniqueId": "v6-technik-impulsgeschoss",
+    "essenceId": "v6-essenz-schatten",
+    "catalystId": "v6-katalysator-echo",
+    "name": "Überformel Schattenstich · Echo",
+    "effectSummary": "Verursache 4 Schaden am Gegner. Bei Treffer: erschöpfe optional 1 gegnerische Formelkomponente. (verstärkt) Echo: zu Beginn deines nächsten Zuges wiederhole 1 Punkt des Primärwerts. Katalysator bleibt bis zur Echo-Auflösung. Überformel: Primär +2 (fester Slice-1-Bonus). Überformel: Fetzladung wird verbraucht. Formelabwehr −1.",
+    "primary": {
+      "kind": "damage",
+      "value": 4,
+      "target": "opponent",
+      "offensive": true
+    },
+    "rider": {
+      "id": "rider-fluch",
+      "summary": "Bei Treffer: erschöpfe optional 1 gegnerische Formelkomponente. (verstärkt)",
+      "defenseSuppressible": true
+    },
+    "intensity": null,
+    "transformId": "xform-echo",
+    "grantsFetz": false,
+    "catalystConsumed": false,
+    "overformulaPrimaryBonus": 2,
+    "overformulaIntensityBonus": null,
+    "formulaDefensePenalty": -1,
+    "summonConstructDefId": null,
+    "timingMode": "echo",
+    "echoAmount": 1,
+    "delayBonus": null
   },
   {
     "recipeId": "v6-tek-impulsgeschoss-schatten-ueberladung",
@@ -4603,7 +6728,10 @@ export const V6_GENERATED_FORMULA_RECIPES: readonly V6GeneratedFormulaRecipe[] =
     "overformulaPrimaryBonus": null,
     "overformulaIntensityBonus": null,
     "formulaDefensePenalty": null,
-    "summonConstructDefId": null
+    "summonConstructDefId": null,
+    "timingMode": "immediate",
+    "echoAmount": null,
+    "delayBonus": null
   },
   {
     "recipeId": "v6-over-impulsgeschoss-schatten-ueberladung",
@@ -4632,7 +6760,10 @@ export const V6_GENERATED_FORMULA_RECIPES: readonly V6GeneratedFormulaRecipe[] =
     "overformulaPrimaryBonus": 2,
     "overformulaIntensityBonus": null,
     "formulaDefensePenalty": -1,
-    "summonConstructDefId": null
+    "summonConstructDefId": null,
+    "timingMode": "immediate",
+    "echoAmount": null,
+    "delayBonus": null
   },
   {
     "recipeId": "v6-tek-impulsgeschoss-schatten-verdichtung",
@@ -4661,7 +6792,10 @@ export const V6_GENERATED_FORMULA_RECIPES: readonly V6GeneratedFormulaRecipe[] =
     "overformulaPrimaryBonus": null,
     "overformulaIntensityBonus": null,
     "formulaDefensePenalty": null,
-    "summonConstructDefId": null
+    "summonConstructDefId": null,
+    "timingMode": "immediate",
+    "echoAmount": null,
+    "delayBonus": null
   },
   {
     "recipeId": "v6-over-impulsgeschoss-schatten-verdichtung",
@@ -4690,7 +6824,74 @@ export const V6_GENERATED_FORMULA_RECIPES: readonly V6GeneratedFormulaRecipe[] =
     "overformulaPrimaryBonus": 2,
     "overformulaIntensityBonus": null,
     "formulaDefensePenalty": -1,
-    "summonConstructDefId": null
+    "summonConstructDefId": null,
+    "timingMode": "immediate",
+    "echoAmount": null,
+    "delayBonus": null
+  },
+  {
+    "recipeId": "v6-tek-impulsgeschoss-schatten-verzoegerung",
+    "kind": "tek",
+    "catalogSlice": "slice1",
+    "techniqueId": "v6-technik-impulsgeschoss",
+    "essenceId": "v6-essenz-schatten",
+    "catalystId": "v6-katalysator-verzoegerung",
+    "name": "Schattenstich · Verzögerung",
+    "effectSummary": "Verursache 2 Schaden am Gegner. Bei Treffer: erschöpfe optional 1 gegnerische Formelkomponente. Verzögerung: Primäreffekt geschieht nicht sofort, sondern zu Beginn deines nächsten Zuges und erhält +2. Katalysator bleibt bis zur Auflösung. TEK: +1 Fetzladung (max 1×/Zug).",
+    "primary": {
+      "kind": "damage",
+      "value": 2,
+      "target": "opponent",
+      "offensive": true
+    },
+    "rider": {
+      "id": "rider-fluch",
+      "summary": "Bei Treffer: erschöpfe optional 1 gegnerische Formelkomponente.",
+      "defenseSuppressible": true
+    },
+    "intensity": null,
+    "transformId": "xform-verzoegerung",
+    "grantsFetz": true,
+    "catalystConsumed": false,
+    "overformulaPrimaryBonus": null,
+    "overformulaIntensityBonus": null,
+    "formulaDefensePenalty": null,
+    "summonConstructDefId": null,
+    "timingMode": "delay",
+    "echoAmount": null,
+    "delayBonus": 2
+  },
+  {
+    "recipeId": "v6-over-impulsgeschoss-schatten-verzoegerung",
+    "kind": "overformula",
+    "catalogSlice": "slice1",
+    "techniqueId": "v6-technik-impulsgeschoss",
+    "essenceId": "v6-essenz-schatten",
+    "catalystId": "v6-katalysator-verzoegerung",
+    "name": "Überformel Schattenstich · Verzögerung",
+    "effectSummary": "Verursache 4 Schaden am Gegner. Bei Treffer: erschöpfe optional 1 gegnerische Formelkomponente. (verstärkt) Verzögerung: Primäreffekt geschieht nicht sofort, sondern zu Beginn deines nächsten Zuges und erhält +2. Katalysator bleibt bis zur Auflösung. Überformel: Primär +2 (fester Slice-1-Bonus). Überformel: Fetzladung wird verbraucht. Formelabwehr −1.",
+    "primary": {
+      "kind": "damage",
+      "value": 4,
+      "target": "opponent",
+      "offensive": true
+    },
+    "rider": {
+      "id": "rider-fluch",
+      "summary": "Bei Treffer: erschöpfe optional 1 gegnerische Formelkomponente. (verstärkt)",
+      "defenseSuppressible": true
+    },
+    "intensity": null,
+    "transformId": "xform-verzoegerung",
+    "grantsFetz": false,
+    "catalystConsumed": false,
+    "overformulaPrimaryBonus": 2,
+    "overformulaIntensityBonus": null,
+    "formulaDefensePenalty": -1,
+    "summonConstructDefId": null,
+    "timingMode": "delay",
+    "echoAmount": null,
+    "delayBonus": 2
   },
   {
     "recipeId": "v6-tek-impulsgeschoss-schatten-sofortzuender",
@@ -4719,7 +6920,10 @@ export const V6_GENERATED_FORMULA_RECIPES: readonly V6GeneratedFormulaRecipe[] =
     "overformulaPrimaryBonus": null,
     "overformulaIntensityBonus": null,
     "formulaDefensePenalty": null,
-    "summonConstructDefId": null
+    "summonConstructDefId": null,
+    "timingMode": "immediate",
+    "echoAmount": null,
+    "delayBonus": null
   },
   {
     "recipeId": "v6-over-impulsgeschoss-schatten-sofortzuender",
@@ -4748,7 +6952,10 @@ export const V6_GENERATED_FORMULA_RECIPES: readonly V6GeneratedFormulaRecipe[] =
     "overformulaPrimaryBonus": 2,
     "overformulaIntensityBonus": null,
     "formulaDefensePenalty": -1,
-    "summonConstructDefId": null
+    "summonConstructDefId": null,
+    "timingMode": "immediate",
+    "echoAmount": null,
+    "delayBonus": null
   },
   {
     "recipeId": "v6-tek-impulsgeschoss-schatten-opfergabe",
@@ -4777,7 +6984,10 @@ export const V6_GENERATED_FORMULA_RECIPES: readonly V6GeneratedFormulaRecipe[] =
     "overformulaPrimaryBonus": null,
     "overformulaIntensityBonus": null,
     "formulaDefensePenalty": null,
-    "summonConstructDefId": null
+    "summonConstructDefId": null,
+    "timingMode": "immediate",
+    "echoAmount": null,
+    "delayBonus": null
   },
   {
     "recipeId": "v6-over-impulsgeschoss-schatten-opfergabe",
@@ -4806,7 +7016,72 @@ export const V6_GENERATED_FORMULA_RECIPES: readonly V6GeneratedFormulaRecipe[] =
     "overformulaPrimaryBonus": 2,
     "overformulaIntensityBonus": null,
     "formulaDefensePenalty": -1,
-    "summonConstructDefId": null
+    "summonConstructDefId": null,
+    "timingMode": "immediate",
+    "echoAmount": null,
+    "delayBonus": null
+  },
+  {
+    "recipeId": "v6-tek-adrenalinschrei-feuer-echo",
+    "kind": "tek",
+    "catalogSlice": "slice1",
+    "techniqueId": "v6-technik-adrenalinschrei",
+    "essenceId": "v6-essenz-feuer",
+    "catalystId": "v6-katalysator-echo",
+    "name": "Kampfschrei · Echo",
+    "effectSummary": "Bereite Angriff +2 vor. Bei Lebensschaden: Brennen, falls keine Reaktion. Echo: zu Beginn deines nächsten Zuges wiederhole 1 Punkt des Primärwerts. Katalysator bleibt bis zur Echo-Auflösung. TEK: +1 Fetzladung (max 1×/Zug).",
+    "primary": {
+      "kind": "prep_attack",
+      "value": 2,
+      "target": "self"
+    },
+    "rider": {
+      "id": "rider-brennen",
+      "summary": "Bei Lebensschaden: Brennen, falls keine Reaktion.",
+      "defenseSuppressible": true
+    },
+    "intensity": 1,
+    "transformId": "xform-echo",
+    "grantsFetz": true,
+    "catalystConsumed": false,
+    "overformulaPrimaryBonus": null,
+    "overformulaIntensityBonus": null,
+    "formulaDefensePenalty": null,
+    "summonConstructDefId": null,
+    "timingMode": "echo",
+    "echoAmount": 1,
+    "delayBonus": null
+  },
+  {
+    "recipeId": "v6-over-adrenalinschrei-feuer-echo",
+    "kind": "overformula",
+    "catalogSlice": "slice1",
+    "techniqueId": "v6-technik-adrenalinschrei",
+    "essenceId": "v6-essenz-feuer",
+    "catalystId": "v6-katalysator-echo",
+    "name": "Überformel Kampfschrei · Echo",
+    "effectSummary": "Bereite Angriff +2 vor. Bei Lebensschaden: Brennen, falls keine Reaktion. (verstärkt) Echo: zu Beginn deines nächsten Zuges wiederhole 1 Punkt des Primärwerts. Katalysator bleibt bis zur Echo-Auflösung. Überformel: Intensität +1 (fester Slice-1-Bonus). Überformel: Fetzladung wird verbraucht. Formelabwehr −1.",
+    "primary": {
+      "kind": "prep_attack",
+      "value": 2,
+      "target": "self"
+    },
+    "rider": {
+      "id": "rider-brennen",
+      "summary": "Bei Lebensschaden: Brennen, falls keine Reaktion. (verstärkt)",
+      "defenseSuppressible": true
+    },
+    "intensity": 2,
+    "transformId": "xform-echo",
+    "grantsFetz": false,
+    "catalystConsumed": false,
+    "overformulaPrimaryBonus": null,
+    "overformulaIntensityBonus": 1,
+    "formulaDefensePenalty": -1,
+    "summonConstructDefId": null,
+    "timingMode": "echo",
+    "echoAmount": 1,
+    "delayBonus": null
   },
   {
     "recipeId": "v6-tek-adrenalinschrei-feuer-ueberladung",
@@ -4834,7 +7109,10 @@ export const V6_GENERATED_FORMULA_RECIPES: readonly V6GeneratedFormulaRecipe[] =
     "overformulaPrimaryBonus": null,
     "overformulaIntensityBonus": null,
     "formulaDefensePenalty": null,
-    "summonConstructDefId": null
+    "summonConstructDefId": null,
+    "timingMode": "immediate",
+    "echoAmount": null,
+    "delayBonus": null
   },
   {
     "recipeId": "v6-over-adrenalinschrei-feuer-ueberladung",
@@ -4862,7 +7140,10 @@ export const V6_GENERATED_FORMULA_RECIPES: readonly V6GeneratedFormulaRecipe[] =
     "overformulaPrimaryBonus": null,
     "overformulaIntensityBonus": 1,
     "formulaDefensePenalty": -1,
-    "summonConstructDefId": null
+    "summonConstructDefId": null,
+    "timingMode": "immediate",
+    "echoAmount": null,
+    "delayBonus": null
   },
   {
     "recipeId": "v6-tek-adrenalinschrei-feuer-verdichtung",
@@ -4890,7 +7171,10 @@ export const V6_GENERATED_FORMULA_RECIPES: readonly V6GeneratedFormulaRecipe[] =
     "overformulaPrimaryBonus": null,
     "overformulaIntensityBonus": null,
     "formulaDefensePenalty": null,
-    "summonConstructDefId": null
+    "summonConstructDefId": null,
+    "timingMode": "immediate",
+    "echoAmount": null,
+    "delayBonus": null
   },
   {
     "recipeId": "v6-over-adrenalinschrei-feuer-verdichtung",
@@ -4918,7 +7202,72 @@ export const V6_GENERATED_FORMULA_RECIPES: readonly V6GeneratedFormulaRecipe[] =
     "overformulaPrimaryBonus": null,
     "overformulaIntensityBonus": 1,
     "formulaDefensePenalty": -1,
-    "summonConstructDefId": null
+    "summonConstructDefId": null,
+    "timingMode": "immediate",
+    "echoAmount": null,
+    "delayBonus": null
+  },
+  {
+    "recipeId": "v6-tek-adrenalinschrei-feuer-verzoegerung",
+    "kind": "tek",
+    "catalogSlice": "slice1",
+    "techniqueId": "v6-technik-adrenalinschrei",
+    "essenceId": "v6-essenz-feuer",
+    "catalystId": "v6-katalysator-verzoegerung",
+    "name": "Kampfschrei · Verzögerung",
+    "effectSummary": "Bereite Angriff +2 vor. Bei Lebensschaden: Brennen, falls keine Reaktion. Verzögerung: Primäreffekt geschieht nicht sofort, sondern zu Beginn deines nächsten Zuges und erhält +2. Katalysator bleibt bis zur Auflösung. TEK: +1 Fetzladung (max 1×/Zug).",
+    "primary": {
+      "kind": "prep_attack",
+      "value": 2,
+      "target": "self"
+    },
+    "rider": {
+      "id": "rider-brennen",
+      "summary": "Bei Lebensschaden: Brennen, falls keine Reaktion.",
+      "defenseSuppressible": true
+    },
+    "intensity": 1,
+    "transformId": "xform-verzoegerung",
+    "grantsFetz": true,
+    "catalystConsumed": false,
+    "overformulaPrimaryBonus": null,
+    "overformulaIntensityBonus": null,
+    "formulaDefensePenalty": null,
+    "summonConstructDefId": null,
+    "timingMode": "delay",
+    "echoAmount": null,
+    "delayBonus": 2
+  },
+  {
+    "recipeId": "v6-over-adrenalinschrei-feuer-verzoegerung",
+    "kind": "overformula",
+    "catalogSlice": "slice1",
+    "techniqueId": "v6-technik-adrenalinschrei",
+    "essenceId": "v6-essenz-feuer",
+    "catalystId": "v6-katalysator-verzoegerung",
+    "name": "Überformel Kampfschrei · Verzögerung",
+    "effectSummary": "Bereite Angriff +2 vor. Bei Lebensschaden: Brennen, falls keine Reaktion. (verstärkt) Verzögerung: Primäreffekt geschieht nicht sofort, sondern zu Beginn deines nächsten Zuges und erhält +2. Katalysator bleibt bis zur Auflösung. Überformel: Intensität +1 (fester Slice-1-Bonus). Überformel: Fetzladung wird verbraucht. Formelabwehr −1.",
+    "primary": {
+      "kind": "prep_attack",
+      "value": 2,
+      "target": "self"
+    },
+    "rider": {
+      "id": "rider-brennen",
+      "summary": "Bei Lebensschaden: Brennen, falls keine Reaktion. (verstärkt)",
+      "defenseSuppressible": true
+    },
+    "intensity": 2,
+    "transformId": "xform-verzoegerung",
+    "grantsFetz": false,
+    "catalystConsumed": false,
+    "overformulaPrimaryBonus": null,
+    "overformulaIntensityBonus": 1,
+    "formulaDefensePenalty": -1,
+    "summonConstructDefId": null,
+    "timingMode": "delay",
+    "echoAmount": null,
+    "delayBonus": 2
   },
   {
     "recipeId": "v6-tek-adrenalinschrei-feuer-sofortzuender",
@@ -4946,7 +7295,10 @@ export const V6_GENERATED_FORMULA_RECIPES: readonly V6GeneratedFormulaRecipe[] =
     "overformulaPrimaryBonus": null,
     "overformulaIntensityBonus": null,
     "formulaDefensePenalty": null,
-    "summonConstructDefId": null
+    "summonConstructDefId": null,
+    "timingMode": "immediate",
+    "echoAmount": null,
+    "delayBonus": null
   },
   {
     "recipeId": "v6-over-adrenalinschrei-feuer-sofortzuender",
@@ -4974,7 +7326,10 @@ export const V6_GENERATED_FORMULA_RECIPES: readonly V6GeneratedFormulaRecipe[] =
     "overformulaPrimaryBonus": null,
     "overformulaIntensityBonus": 1,
     "formulaDefensePenalty": -1,
-    "summonConstructDefId": null
+    "summonConstructDefId": null,
+    "timingMode": "immediate",
+    "echoAmount": null,
+    "delayBonus": null
   },
   {
     "recipeId": "v6-tek-adrenalinschrei-feuer-opfergabe",
@@ -5002,7 +7357,10 @@ export const V6_GENERATED_FORMULA_RECIPES: readonly V6GeneratedFormulaRecipe[] =
     "overformulaPrimaryBonus": null,
     "overformulaIntensityBonus": null,
     "formulaDefensePenalty": null,
-    "summonConstructDefId": null
+    "summonConstructDefId": null,
+    "timingMode": "immediate",
+    "echoAmount": null,
+    "delayBonus": null
   },
   {
     "recipeId": "v6-over-adrenalinschrei-feuer-opfergabe",
@@ -5030,7 +7388,72 @@ export const V6_GENERATED_FORMULA_RECIPES: readonly V6GeneratedFormulaRecipe[] =
     "overformulaPrimaryBonus": null,
     "overformulaIntensityBonus": 1,
     "formulaDefensePenalty": -1,
-    "summonConstructDefId": null
+    "summonConstructDefId": null,
+    "timingMode": "immediate",
+    "echoAmount": null,
+    "delayBonus": null
+  },
+  {
+    "recipeId": "v6-tek-adrenalinschrei-wasser-echo",
+    "kind": "tek",
+    "catalogSlice": "slice1",
+    "techniqueId": "v6-technik-adrenalinschrei",
+    "essenceId": "v6-essenz-wasser",
+    "catalystId": "v6-katalysator-echo",
+    "name": "Klärschrei · Echo",
+    "effectSummary": "Bereite Boost +2 vor. Bei Heilung oder Schildgewinn: entferne optional eine Marke von dir. Echo: zu Beginn deines nächsten Zuges wiederhole 1 Punkt des Primärwerts. Katalysator bleibt bis zur Echo-Auflösung. TEK: +1 Fetzladung (max 1×/Zug).",
+    "primary": {
+      "kind": "prep_boost",
+      "value": 2,
+      "target": "self"
+    },
+    "rider": {
+      "id": "rider-reinigen",
+      "summary": "Bei Heilung oder Schildgewinn: entferne optional eine Marke von dir.",
+      "defenseSuppressible": false
+    },
+    "intensity": 1,
+    "transformId": "xform-echo",
+    "grantsFetz": true,
+    "catalystConsumed": false,
+    "overformulaPrimaryBonus": null,
+    "overformulaIntensityBonus": null,
+    "formulaDefensePenalty": null,
+    "summonConstructDefId": null,
+    "timingMode": "echo",
+    "echoAmount": 1,
+    "delayBonus": null
+  },
+  {
+    "recipeId": "v6-over-adrenalinschrei-wasser-echo",
+    "kind": "overformula",
+    "catalogSlice": "slice1",
+    "techniqueId": "v6-technik-adrenalinschrei",
+    "essenceId": "v6-essenz-wasser",
+    "catalystId": "v6-katalysator-echo",
+    "name": "Überformel Klärschrei · Echo",
+    "effectSummary": "Bereite Boost +2 vor. Bei Heilung oder Schildgewinn: entferne optional eine Marke von dir. (verstärkt) Echo: zu Beginn deines nächsten Zuges wiederhole 1 Punkt des Primärwerts. Katalysator bleibt bis zur Echo-Auflösung. Überformel: Intensität +1 (fester Slice-1-Bonus). Überformel: Fetzladung wird verbraucht. Formelabwehr −1.",
+    "primary": {
+      "kind": "prep_boost",
+      "value": 2,
+      "target": "self"
+    },
+    "rider": {
+      "id": "rider-reinigen",
+      "summary": "Bei Heilung oder Schildgewinn: entferne optional eine Marke von dir. (verstärkt)",
+      "defenseSuppressible": false
+    },
+    "intensity": 2,
+    "transformId": "xform-echo",
+    "grantsFetz": false,
+    "catalystConsumed": false,
+    "overformulaPrimaryBonus": null,
+    "overformulaIntensityBonus": 1,
+    "formulaDefensePenalty": -1,
+    "summonConstructDefId": null,
+    "timingMode": "echo",
+    "echoAmount": 1,
+    "delayBonus": null
   },
   {
     "recipeId": "v6-tek-adrenalinschrei-wasser-ueberladung",
@@ -5058,7 +7481,10 @@ export const V6_GENERATED_FORMULA_RECIPES: readonly V6GeneratedFormulaRecipe[] =
     "overformulaPrimaryBonus": null,
     "overformulaIntensityBonus": null,
     "formulaDefensePenalty": null,
-    "summonConstructDefId": null
+    "summonConstructDefId": null,
+    "timingMode": "immediate",
+    "echoAmount": null,
+    "delayBonus": null
   },
   {
     "recipeId": "v6-over-adrenalinschrei-wasser-ueberladung",
@@ -5086,7 +7512,10 @@ export const V6_GENERATED_FORMULA_RECIPES: readonly V6GeneratedFormulaRecipe[] =
     "overformulaPrimaryBonus": null,
     "overformulaIntensityBonus": 1,
     "formulaDefensePenalty": -1,
-    "summonConstructDefId": null
+    "summonConstructDefId": null,
+    "timingMode": "immediate",
+    "echoAmount": null,
+    "delayBonus": null
   },
   {
     "recipeId": "v6-tek-adrenalinschrei-wasser-verdichtung",
@@ -5114,7 +7543,10 @@ export const V6_GENERATED_FORMULA_RECIPES: readonly V6GeneratedFormulaRecipe[] =
     "overformulaPrimaryBonus": null,
     "overformulaIntensityBonus": null,
     "formulaDefensePenalty": null,
-    "summonConstructDefId": null
+    "summonConstructDefId": null,
+    "timingMode": "immediate",
+    "echoAmount": null,
+    "delayBonus": null
   },
   {
     "recipeId": "v6-over-adrenalinschrei-wasser-verdichtung",
@@ -5142,7 +7574,72 @@ export const V6_GENERATED_FORMULA_RECIPES: readonly V6GeneratedFormulaRecipe[] =
     "overformulaPrimaryBonus": null,
     "overformulaIntensityBonus": 1,
     "formulaDefensePenalty": -1,
-    "summonConstructDefId": null
+    "summonConstructDefId": null,
+    "timingMode": "immediate",
+    "echoAmount": null,
+    "delayBonus": null
+  },
+  {
+    "recipeId": "v6-tek-adrenalinschrei-wasser-verzoegerung",
+    "kind": "tek",
+    "catalogSlice": "slice1",
+    "techniqueId": "v6-technik-adrenalinschrei",
+    "essenceId": "v6-essenz-wasser",
+    "catalystId": "v6-katalysator-verzoegerung",
+    "name": "Klärschrei · Verzögerung",
+    "effectSummary": "Bereite Boost +2 vor. Bei Heilung oder Schildgewinn: entferne optional eine Marke von dir. Verzögerung: Primäreffekt geschieht nicht sofort, sondern zu Beginn deines nächsten Zuges und erhält +2. Katalysator bleibt bis zur Auflösung. TEK: +1 Fetzladung (max 1×/Zug).",
+    "primary": {
+      "kind": "prep_boost",
+      "value": 2,
+      "target": "self"
+    },
+    "rider": {
+      "id": "rider-reinigen",
+      "summary": "Bei Heilung oder Schildgewinn: entferne optional eine Marke von dir.",
+      "defenseSuppressible": false
+    },
+    "intensity": 1,
+    "transformId": "xform-verzoegerung",
+    "grantsFetz": true,
+    "catalystConsumed": false,
+    "overformulaPrimaryBonus": null,
+    "overformulaIntensityBonus": null,
+    "formulaDefensePenalty": null,
+    "summonConstructDefId": null,
+    "timingMode": "delay",
+    "echoAmount": null,
+    "delayBonus": 2
+  },
+  {
+    "recipeId": "v6-over-adrenalinschrei-wasser-verzoegerung",
+    "kind": "overformula",
+    "catalogSlice": "slice1",
+    "techniqueId": "v6-technik-adrenalinschrei",
+    "essenceId": "v6-essenz-wasser",
+    "catalystId": "v6-katalysator-verzoegerung",
+    "name": "Überformel Klärschrei · Verzögerung",
+    "effectSummary": "Bereite Boost +2 vor. Bei Heilung oder Schildgewinn: entferne optional eine Marke von dir. (verstärkt) Verzögerung: Primäreffekt geschieht nicht sofort, sondern zu Beginn deines nächsten Zuges und erhält +2. Katalysator bleibt bis zur Auflösung. Überformel: Intensität +1 (fester Slice-1-Bonus). Überformel: Fetzladung wird verbraucht. Formelabwehr −1.",
+    "primary": {
+      "kind": "prep_boost",
+      "value": 2,
+      "target": "self"
+    },
+    "rider": {
+      "id": "rider-reinigen",
+      "summary": "Bei Heilung oder Schildgewinn: entferne optional eine Marke von dir. (verstärkt)",
+      "defenseSuppressible": false
+    },
+    "intensity": 2,
+    "transformId": "xform-verzoegerung",
+    "grantsFetz": false,
+    "catalystConsumed": false,
+    "overformulaPrimaryBonus": null,
+    "overformulaIntensityBonus": 1,
+    "formulaDefensePenalty": -1,
+    "summonConstructDefId": null,
+    "timingMode": "delay",
+    "echoAmount": null,
+    "delayBonus": 2
   },
   {
     "recipeId": "v6-tek-adrenalinschrei-wasser-sofortzuender",
@@ -5170,7 +7667,10 @@ export const V6_GENERATED_FORMULA_RECIPES: readonly V6GeneratedFormulaRecipe[] =
     "overformulaPrimaryBonus": null,
     "overformulaIntensityBonus": null,
     "formulaDefensePenalty": null,
-    "summonConstructDefId": null
+    "summonConstructDefId": null,
+    "timingMode": "immediate",
+    "echoAmount": null,
+    "delayBonus": null
   },
   {
     "recipeId": "v6-over-adrenalinschrei-wasser-sofortzuender",
@@ -5198,7 +7698,10 @@ export const V6_GENERATED_FORMULA_RECIPES: readonly V6GeneratedFormulaRecipe[] =
     "overformulaPrimaryBonus": null,
     "overformulaIntensityBonus": 1,
     "formulaDefensePenalty": -1,
-    "summonConstructDefId": null
+    "summonConstructDefId": null,
+    "timingMode": "immediate",
+    "echoAmount": null,
+    "delayBonus": null
   },
   {
     "recipeId": "v6-tek-adrenalinschrei-wasser-opfergabe",
@@ -5226,7 +7729,10 @@ export const V6_GENERATED_FORMULA_RECIPES: readonly V6GeneratedFormulaRecipe[] =
     "overformulaPrimaryBonus": null,
     "overformulaIntensityBonus": null,
     "formulaDefensePenalty": null,
-    "summonConstructDefId": null
+    "summonConstructDefId": null,
+    "timingMode": "immediate",
+    "echoAmount": null,
+    "delayBonus": null
   },
   {
     "recipeId": "v6-over-adrenalinschrei-wasser-opfergabe",
@@ -5254,7 +7760,72 @@ export const V6_GENERATED_FORMULA_RECIPES: readonly V6GeneratedFormulaRecipe[] =
     "overformulaPrimaryBonus": null,
     "overformulaIntensityBonus": 1,
     "formulaDefensePenalty": -1,
-    "summonConstructDefId": null
+    "summonConstructDefId": null,
+    "timingMode": "immediate",
+    "echoAmount": null,
+    "delayBonus": null
+  },
+  {
+    "recipeId": "v6-tek-adrenalinschrei-erde-echo",
+    "kind": "tek",
+    "catalogSlice": "slice1",
+    "techniqueId": "v6-technik-adrenalinschrei",
+    "essenceId": "v6-essenz-erde",
+    "catalystId": "v6-katalysator-echo",
+    "name": "Standschrei · Echo",
+    "effectSummary": "Bereite Angriff +2 vor. Verwendete Komponenten +1 Stabilität bis nächste Startphase. Echo: zu Beginn deines nächsten Zuges wiederhole 1 Punkt des Primärwerts. Katalysator bleibt bis zur Echo-Auflösung. TEK: +1 Fetzladung (max 1×/Zug).",
+    "primary": {
+      "kind": "prep_attack",
+      "value": 2,
+      "target": "self"
+    },
+    "rider": {
+      "id": "rider-stabilitaet",
+      "summary": "Verwendete Komponenten +1 Stabilität bis nächste Startphase.",
+      "defenseSuppressible": false
+    },
+    "intensity": 1,
+    "transformId": "xform-echo",
+    "grantsFetz": true,
+    "catalystConsumed": false,
+    "overformulaPrimaryBonus": null,
+    "overformulaIntensityBonus": null,
+    "formulaDefensePenalty": null,
+    "summonConstructDefId": null,
+    "timingMode": "echo",
+    "echoAmount": 1,
+    "delayBonus": null
+  },
+  {
+    "recipeId": "v6-over-adrenalinschrei-erde-echo",
+    "kind": "overformula",
+    "catalogSlice": "slice1",
+    "techniqueId": "v6-technik-adrenalinschrei",
+    "essenceId": "v6-essenz-erde",
+    "catalystId": "v6-katalysator-echo",
+    "name": "Überformel Standschrei · Echo",
+    "effectSummary": "Bereite Angriff +2 vor. Verwendete Komponenten +1 Stabilität bis nächste Startphase. (verstärkt) Echo: zu Beginn deines nächsten Zuges wiederhole 1 Punkt des Primärwerts. Katalysator bleibt bis zur Echo-Auflösung. Überformel: Intensität +1 (fester Slice-1-Bonus). Überformel: Fetzladung wird verbraucht. Formelabwehr −1.",
+    "primary": {
+      "kind": "prep_attack",
+      "value": 2,
+      "target": "self"
+    },
+    "rider": {
+      "id": "rider-stabilitaet",
+      "summary": "Verwendete Komponenten +1 Stabilität bis nächste Startphase. (verstärkt)",
+      "defenseSuppressible": false
+    },
+    "intensity": 2,
+    "transformId": "xform-echo",
+    "grantsFetz": false,
+    "catalystConsumed": false,
+    "overformulaPrimaryBonus": null,
+    "overformulaIntensityBonus": 1,
+    "formulaDefensePenalty": -1,
+    "summonConstructDefId": null,
+    "timingMode": "echo",
+    "echoAmount": 1,
+    "delayBonus": null
   },
   {
     "recipeId": "v6-tek-adrenalinschrei-erde-ueberladung",
@@ -5282,7 +7853,10 @@ export const V6_GENERATED_FORMULA_RECIPES: readonly V6GeneratedFormulaRecipe[] =
     "overformulaPrimaryBonus": null,
     "overformulaIntensityBonus": null,
     "formulaDefensePenalty": null,
-    "summonConstructDefId": null
+    "summonConstructDefId": null,
+    "timingMode": "immediate",
+    "echoAmount": null,
+    "delayBonus": null
   },
   {
     "recipeId": "v6-over-adrenalinschrei-erde-ueberladung",
@@ -5310,7 +7884,10 @@ export const V6_GENERATED_FORMULA_RECIPES: readonly V6GeneratedFormulaRecipe[] =
     "overformulaPrimaryBonus": null,
     "overformulaIntensityBonus": 1,
     "formulaDefensePenalty": -1,
-    "summonConstructDefId": null
+    "summonConstructDefId": null,
+    "timingMode": "immediate",
+    "echoAmount": null,
+    "delayBonus": null
   },
   {
     "recipeId": "v6-tek-adrenalinschrei-erde-verdichtung",
@@ -5338,7 +7915,10 @@ export const V6_GENERATED_FORMULA_RECIPES: readonly V6GeneratedFormulaRecipe[] =
     "overformulaPrimaryBonus": null,
     "overformulaIntensityBonus": null,
     "formulaDefensePenalty": null,
-    "summonConstructDefId": null
+    "summonConstructDefId": null,
+    "timingMode": "immediate",
+    "echoAmount": null,
+    "delayBonus": null
   },
   {
     "recipeId": "v6-over-adrenalinschrei-erde-verdichtung",
@@ -5366,7 +7946,72 @@ export const V6_GENERATED_FORMULA_RECIPES: readonly V6GeneratedFormulaRecipe[] =
     "overformulaPrimaryBonus": null,
     "overformulaIntensityBonus": 1,
     "formulaDefensePenalty": -1,
-    "summonConstructDefId": null
+    "summonConstructDefId": null,
+    "timingMode": "immediate",
+    "echoAmount": null,
+    "delayBonus": null
+  },
+  {
+    "recipeId": "v6-tek-adrenalinschrei-erde-verzoegerung",
+    "kind": "tek",
+    "catalogSlice": "slice1",
+    "techniqueId": "v6-technik-adrenalinschrei",
+    "essenceId": "v6-essenz-erde",
+    "catalystId": "v6-katalysator-verzoegerung",
+    "name": "Standschrei · Verzögerung",
+    "effectSummary": "Bereite Angriff +2 vor. Verwendete Komponenten +1 Stabilität bis nächste Startphase. Verzögerung: Primäreffekt geschieht nicht sofort, sondern zu Beginn deines nächsten Zuges und erhält +2. Katalysator bleibt bis zur Auflösung. TEK: +1 Fetzladung (max 1×/Zug).",
+    "primary": {
+      "kind": "prep_attack",
+      "value": 2,
+      "target": "self"
+    },
+    "rider": {
+      "id": "rider-stabilitaet",
+      "summary": "Verwendete Komponenten +1 Stabilität bis nächste Startphase.",
+      "defenseSuppressible": false
+    },
+    "intensity": 1,
+    "transformId": "xform-verzoegerung",
+    "grantsFetz": true,
+    "catalystConsumed": false,
+    "overformulaPrimaryBonus": null,
+    "overformulaIntensityBonus": null,
+    "formulaDefensePenalty": null,
+    "summonConstructDefId": null,
+    "timingMode": "delay",
+    "echoAmount": null,
+    "delayBonus": 2
+  },
+  {
+    "recipeId": "v6-over-adrenalinschrei-erde-verzoegerung",
+    "kind": "overformula",
+    "catalogSlice": "slice1",
+    "techniqueId": "v6-technik-adrenalinschrei",
+    "essenceId": "v6-essenz-erde",
+    "catalystId": "v6-katalysator-verzoegerung",
+    "name": "Überformel Standschrei · Verzögerung",
+    "effectSummary": "Bereite Angriff +2 vor. Verwendete Komponenten +1 Stabilität bis nächste Startphase. (verstärkt) Verzögerung: Primäreffekt geschieht nicht sofort, sondern zu Beginn deines nächsten Zuges und erhält +2. Katalysator bleibt bis zur Auflösung. Überformel: Intensität +1 (fester Slice-1-Bonus). Überformel: Fetzladung wird verbraucht. Formelabwehr −1.",
+    "primary": {
+      "kind": "prep_attack",
+      "value": 2,
+      "target": "self"
+    },
+    "rider": {
+      "id": "rider-stabilitaet",
+      "summary": "Verwendete Komponenten +1 Stabilität bis nächste Startphase. (verstärkt)",
+      "defenseSuppressible": false
+    },
+    "intensity": 2,
+    "transformId": "xform-verzoegerung",
+    "grantsFetz": false,
+    "catalystConsumed": false,
+    "overformulaPrimaryBonus": null,
+    "overformulaIntensityBonus": 1,
+    "formulaDefensePenalty": -1,
+    "summonConstructDefId": null,
+    "timingMode": "delay",
+    "echoAmount": null,
+    "delayBonus": 2
   },
   {
     "recipeId": "v6-tek-adrenalinschrei-erde-sofortzuender",
@@ -5394,7 +8039,10 @@ export const V6_GENERATED_FORMULA_RECIPES: readonly V6GeneratedFormulaRecipe[] =
     "overformulaPrimaryBonus": null,
     "overformulaIntensityBonus": null,
     "formulaDefensePenalty": null,
-    "summonConstructDefId": null
+    "summonConstructDefId": null,
+    "timingMode": "immediate",
+    "echoAmount": null,
+    "delayBonus": null
   },
   {
     "recipeId": "v6-over-adrenalinschrei-erde-sofortzuender",
@@ -5422,7 +8070,10 @@ export const V6_GENERATED_FORMULA_RECIPES: readonly V6GeneratedFormulaRecipe[] =
     "overformulaPrimaryBonus": null,
     "overformulaIntensityBonus": 1,
     "formulaDefensePenalty": -1,
-    "summonConstructDefId": null
+    "summonConstructDefId": null,
+    "timingMode": "immediate",
+    "echoAmount": null,
+    "delayBonus": null
   },
   {
     "recipeId": "v6-tek-adrenalinschrei-erde-opfergabe",
@@ -5450,7 +8101,10 @@ export const V6_GENERATED_FORMULA_RECIPES: readonly V6GeneratedFormulaRecipe[] =
     "overformulaPrimaryBonus": null,
     "overformulaIntensityBonus": null,
     "formulaDefensePenalty": null,
-    "summonConstructDefId": null
+    "summonConstructDefId": null,
+    "timingMode": "immediate",
+    "echoAmount": null,
+    "delayBonus": null
   },
   {
     "recipeId": "v6-over-adrenalinschrei-erde-opfergabe",
@@ -5478,7 +8132,72 @@ export const V6_GENERATED_FORMULA_RECIPES: readonly V6GeneratedFormulaRecipe[] =
     "overformulaPrimaryBonus": null,
     "overformulaIntensityBonus": 1,
     "formulaDefensePenalty": -1,
-    "summonConstructDefId": null
+    "summonConstructDefId": null,
+    "timingMode": "immediate",
+    "echoAmount": null,
+    "delayBonus": null
+  },
+  {
+    "recipeId": "v6-tek-adrenalinschrei-luft-echo",
+    "kind": "tek",
+    "catalogSlice": "slice1",
+    "techniqueId": "v6-technik-adrenalinschrei",
+    "essenceId": "v6-essenz-luft",
+    "catalystId": "v6-katalysator-echo",
+    "name": "Tempeschrei · Echo",
+    "effectSummary": "Bereite Angriff +2 vor. Nächster eigener Aktions-W6 +1 (max +2). Echo: zu Beginn deines nächsten Zuges wiederhole 1 Punkt des Primärwerts. Katalysator bleibt bis zur Echo-Auflösung. TEK: +1 Fetzladung (max 1×/Zug).",
+    "primary": {
+      "kind": "prep_attack",
+      "value": 2,
+      "target": "self"
+    },
+    "rider": {
+      "id": "rider-w6",
+      "summary": "Nächster eigener Aktions-W6 +1 (max +2).",
+      "defenseSuppressible": true
+    },
+    "intensity": 1,
+    "transformId": "xform-echo",
+    "grantsFetz": true,
+    "catalystConsumed": false,
+    "overformulaPrimaryBonus": null,
+    "overformulaIntensityBonus": null,
+    "formulaDefensePenalty": null,
+    "summonConstructDefId": null,
+    "timingMode": "echo",
+    "echoAmount": 1,
+    "delayBonus": null
+  },
+  {
+    "recipeId": "v6-over-adrenalinschrei-luft-echo",
+    "kind": "overformula",
+    "catalogSlice": "slice1",
+    "techniqueId": "v6-technik-adrenalinschrei",
+    "essenceId": "v6-essenz-luft",
+    "catalystId": "v6-katalysator-echo",
+    "name": "Überformel Tempeschrei · Echo",
+    "effectSummary": "Bereite Angriff +2 vor. Nächster eigener Aktions-W6 +1 (max +2). (verstärkt) Echo: zu Beginn deines nächsten Zuges wiederhole 1 Punkt des Primärwerts. Katalysator bleibt bis zur Echo-Auflösung. Überformel: Intensität +1 (fester Slice-1-Bonus). Überformel: Fetzladung wird verbraucht. Formelabwehr −1.",
+    "primary": {
+      "kind": "prep_attack",
+      "value": 2,
+      "target": "self"
+    },
+    "rider": {
+      "id": "rider-w6",
+      "summary": "Nächster eigener Aktions-W6 +1 (max +2). (verstärkt)",
+      "defenseSuppressible": true
+    },
+    "intensity": 2,
+    "transformId": "xform-echo",
+    "grantsFetz": false,
+    "catalystConsumed": false,
+    "overformulaPrimaryBonus": null,
+    "overformulaIntensityBonus": 1,
+    "formulaDefensePenalty": -1,
+    "summonConstructDefId": null,
+    "timingMode": "echo",
+    "echoAmount": 1,
+    "delayBonus": null
   },
   {
     "recipeId": "v6-tek-adrenalinschrei-luft-ueberladung",
@@ -5506,7 +8225,10 @@ export const V6_GENERATED_FORMULA_RECIPES: readonly V6GeneratedFormulaRecipe[] =
     "overformulaPrimaryBonus": null,
     "overformulaIntensityBonus": null,
     "formulaDefensePenalty": null,
-    "summonConstructDefId": null
+    "summonConstructDefId": null,
+    "timingMode": "immediate",
+    "echoAmount": null,
+    "delayBonus": null
   },
   {
     "recipeId": "v6-over-adrenalinschrei-luft-ueberladung",
@@ -5534,7 +8256,10 @@ export const V6_GENERATED_FORMULA_RECIPES: readonly V6GeneratedFormulaRecipe[] =
     "overformulaPrimaryBonus": null,
     "overformulaIntensityBonus": 1,
     "formulaDefensePenalty": -1,
-    "summonConstructDefId": null
+    "summonConstructDefId": null,
+    "timingMode": "immediate",
+    "echoAmount": null,
+    "delayBonus": null
   },
   {
     "recipeId": "v6-tek-adrenalinschrei-luft-verdichtung",
@@ -5562,7 +8287,10 @@ export const V6_GENERATED_FORMULA_RECIPES: readonly V6GeneratedFormulaRecipe[] =
     "overformulaPrimaryBonus": null,
     "overformulaIntensityBonus": null,
     "formulaDefensePenalty": null,
-    "summonConstructDefId": null
+    "summonConstructDefId": null,
+    "timingMode": "immediate",
+    "echoAmount": null,
+    "delayBonus": null
   },
   {
     "recipeId": "v6-over-adrenalinschrei-luft-verdichtung",
@@ -5590,7 +8318,72 @@ export const V6_GENERATED_FORMULA_RECIPES: readonly V6GeneratedFormulaRecipe[] =
     "overformulaPrimaryBonus": null,
     "overformulaIntensityBonus": 1,
     "formulaDefensePenalty": -1,
-    "summonConstructDefId": null
+    "summonConstructDefId": null,
+    "timingMode": "immediate",
+    "echoAmount": null,
+    "delayBonus": null
+  },
+  {
+    "recipeId": "v6-tek-adrenalinschrei-luft-verzoegerung",
+    "kind": "tek",
+    "catalogSlice": "slice1",
+    "techniqueId": "v6-technik-adrenalinschrei",
+    "essenceId": "v6-essenz-luft",
+    "catalystId": "v6-katalysator-verzoegerung",
+    "name": "Tempeschrei · Verzögerung",
+    "effectSummary": "Bereite Angriff +2 vor. Nächster eigener Aktions-W6 +1 (max +2). Verzögerung: Primäreffekt geschieht nicht sofort, sondern zu Beginn deines nächsten Zuges und erhält +2. Katalysator bleibt bis zur Auflösung. TEK: +1 Fetzladung (max 1×/Zug).",
+    "primary": {
+      "kind": "prep_attack",
+      "value": 2,
+      "target": "self"
+    },
+    "rider": {
+      "id": "rider-w6",
+      "summary": "Nächster eigener Aktions-W6 +1 (max +2).",
+      "defenseSuppressible": true
+    },
+    "intensity": 1,
+    "transformId": "xform-verzoegerung",
+    "grantsFetz": true,
+    "catalystConsumed": false,
+    "overformulaPrimaryBonus": null,
+    "overformulaIntensityBonus": null,
+    "formulaDefensePenalty": null,
+    "summonConstructDefId": null,
+    "timingMode": "delay",
+    "echoAmount": null,
+    "delayBonus": 2
+  },
+  {
+    "recipeId": "v6-over-adrenalinschrei-luft-verzoegerung",
+    "kind": "overformula",
+    "catalogSlice": "slice1",
+    "techniqueId": "v6-technik-adrenalinschrei",
+    "essenceId": "v6-essenz-luft",
+    "catalystId": "v6-katalysator-verzoegerung",
+    "name": "Überformel Tempeschrei · Verzögerung",
+    "effectSummary": "Bereite Angriff +2 vor. Nächster eigener Aktions-W6 +1 (max +2). (verstärkt) Verzögerung: Primäreffekt geschieht nicht sofort, sondern zu Beginn deines nächsten Zuges und erhält +2. Katalysator bleibt bis zur Auflösung. Überformel: Intensität +1 (fester Slice-1-Bonus). Überformel: Fetzladung wird verbraucht. Formelabwehr −1.",
+    "primary": {
+      "kind": "prep_attack",
+      "value": 2,
+      "target": "self"
+    },
+    "rider": {
+      "id": "rider-w6",
+      "summary": "Nächster eigener Aktions-W6 +1 (max +2). (verstärkt)",
+      "defenseSuppressible": true
+    },
+    "intensity": 2,
+    "transformId": "xform-verzoegerung",
+    "grantsFetz": false,
+    "catalystConsumed": false,
+    "overformulaPrimaryBonus": null,
+    "overformulaIntensityBonus": 1,
+    "formulaDefensePenalty": -1,
+    "summonConstructDefId": null,
+    "timingMode": "delay",
+    "echoAmount": null,
+    "delayBonus": 2
   },
   {
     "recipeId": "v6-tek-adrenalinschrei-luft-sofortzuender",
@@ -5618,7 +8411,10 @@ export const V6_GENERATED_FORMULA_RECIPES: readonly V6GeneratedFormulaRecipe[] =
     "overformulaPrimaryBonus": null,
     "overformulaIntensityBonus": null,
     "formulaDefensePenalty": null,
-    "summonConstructDefId": null
+    "summonConstructDefId": null,
+    "timingMode": "immediate",
+    "echoAmount": null,
+    "delayBonus": null
   },
   {
     "recipeId": "v6-over-adrenalinschrei-luft-sofortzuender",
@@ -5646,7 +8442,10 @@ export const V6_GENERATED_FORMULA_RECIPES: readonly V6GeneratedFormulaRecipe[] =
     "overformulaPrimaryBonus": null,
     "overformulaIntensityBonus": 1,
     "formulaDefensePenalty": -1,
-    "summonConstructDefId": null
+    "summonConstructDefId": null,
+    "timingMode": "immediate",
+    "echoAmount": null,
+    "delayBonus": null
   },
   {
     "recipeId": "v6-tek-adrenalinschrei-luft-opfergabe",
@@ -5674,7 +8473,10 @@ export const V6_GENERATED_FORMULA_RECIPES: readonly V6GeneratedFormulaRecipe[] =
     "overformulaPrimaryBonus": null,
     "overformulaIntensityBonus": null,
     "formulaDefensePenalty": null,
-    "summonConstructDefId": null
+    "summonConstructDefId": null,
+    "timingMode": "immediate",
+    "echoAmount": null,
+    "delayBonus": null
   },
   {
     "recipeId": "v6-over-adrenalinschrei-luft-opfergabe",
@@ -5702,7 +8504,72 @@ export const V6_GENERATED_FORMULA_RECIPES: readonly V6GeneratedFormulaRecipe[] =
     "overformulaPrimaryBonus": null,
     "overformulaIntensityBonus": 1,
     "formulaDefensePenalty": -1,
-    "summonConstructDefId": null
+    "summonConstructDefId": null,
+    "timingMode": "immediate",
+    "echoAmount": null,
+    "delayBonus": null
+  },
+  {
+    "recipeId": "v6-tek-adrenalinschrei-licht-echo",
+    "kind": "tek",
+    "catalogSlice": "slice1",
+    "techniqueId": "v6-technik-adrenalinschrei",
+    "essenceId": "v6-essenz-licht",
+    "catalystId": "v6-katalysator-echo",
+    "name": "Klarschrei · Echo",
+    "effectSummary": "Bereite Boost +2 vor. Bei Schildgewinn: entferne optional eine Marke von dir. Echo: zu Beginn deines nächsten Zuges wiederhole 1 Punkt des Primärwerts. Katalysator bleibt bis zur Echo-Auflösung. TEK: +1 Fetzladung (max 1×/Zug).",
+    "primary": {
+      "kind": "prep_boost",
+      "value": 2,
+      "target": "self"
+    },
+    "rider": {
+      "id": "rider-reinigen-licht",
+      "summary": "Bei Schildgewinn: entferne optional eine Marke von dir.",
+      "defenseSuppressible": false
+    },
+    "intensity": 1,
+    "transformId": "xform-echo",
+    "grantsFetz": true,
+    "catalystConsumed": false,
+    "overformulaPrimaryBonus": null,
+    "overformulaIntensityBonus": null,
+    "formulaDefensePenalty": null,
+    "summonConstructDefId": null,
+    "timingMode": "echo",
+    "echoAmount": 1,
+    "delayBonus": null
+  },
+  {
+    "recipeId": "v6-over-adrenalinschrei-licht-echo",
+    "kind": "overformula",
+    "catalogSlice": "slice1",
+    "techniqueId": "v6-technik-adrenalinschrei",
+    "essenceId": "v6-essenz-licht",
+    "catalystId": "v6-katalysator-echo",
+    "name": "Überformel Klarschrei · Echo",
+    "effectSummary": "Bereite Boost +2 vor. Bei Schildgewinn: entferne optional eine Marke von dir. (verstärkt) Echo: zu Beginn deines nächsten Zuges wiederhole 1 Punkt des Primärwerts. Katalysator bleibt bis zur Echo-Auflösung. Überformel: Intensität +1 (fester Slice-1-Bonus). Überformel: Fetzladung wird verbraucht. Formelabwehr −1.",
+    "primary": {
+      "kind": "prep_boost",
+      "value": 2,
+      "target": "self"
+    },
+    "rider": {
+      "id": "rider-reinigen-licht",
+      "summary": "Bei Schildgewinn: entferne optional eine Marke von dir. (verstärkt)",
+      "defenseSuppressible": false
+    },
+    "intensity": 2,
+    "transformId": "xform-echo",
+    "grantsFetz": false,
+    "catalystConsumed": false,
+    "overformulaPrimaryBonus": null,
+    "overformulaIntensityBonus": 1,
+    "formulaDefensePenalty": -1,
+    "summonConstructDefId": null,
+    "timingMode": "echo",
+    "echoAmount": 1,
+    "delayBonus": null
   },
   {
     "recipeId": "v6-tek-adrenalinschrei-licht-ueberladung",
@@ -5730,7 +8597,10 @@ export const V6_GENERATED_FORMULA_RECIPES: readonly V6GeneratedFormulaRecipe[] =
     "overformulaPrimaryBonus": null,
     "overformulaIntensityBonus": null,
     "formulaDefensePenalty": null,
-    "summonConstructDefId": null
+    "summonConstructDefId": null,
+    "timingMode": "immediate",
+    "echoAmount": null,
+    "delayBonus": null
   },
   {
     "recipeId": "v6-over-adrenalinschrei-licht-ueberladung",
@@ -5758,7 +8628,10 @@ export const V6_GENERATED_FORMULA_RECIPES: readonly V6GeneratedFormulaRecipe[] =
     "overformulaPrimaryBonus": null,
     "overformulaIntensityBonus": 1,
     "formulaDefensePenalty": -1,
-    "summonConstructDefId": null
+    "summonConstructDefId": null,
+    "timingMode": "immediate",
+    "echoAmount": null,
+    "delayBonus": null
   },
   {
     "recipeId": "v6-tek-adrenalinschrei-licht-verdichtung",
@@ -5786,7 +8659,10 @@ export const V6_GENERATED_FORMULA_RECIPES: readonly V6GeneratedFormulaRecipe[] =
     "overformulaPrimaryBonus": null,
     "overformulaIntensityBonus": null,
     "formulaDefensePenalty": null,
-    "summonConstructDefId": null
+    "summonConstructDefId": null,
+    "timingMode": "immediate",
+    "echoAmount": null,
+    "delayBonus": null
   },
   {
     "recipeId": "v6-over-adrenalinschrei-licht-verdichtung",
@@ -5814,7 +8690,72 @@ export const V6_GENERATED_FORMULA_RECIPES: readonly V6GeneratedFormulaRecipe[] =
     "overformulaPrimaryBonus": null,
     "overformulaIntensityBonus": 1,
     "formulaDefensePenalty": -1,
-    "summonConstructDefId": null
+    "summonConstructDefId": null,
+    "timingMode": "immediate",
+    "echoAmount": null,
+    "delayBonus": null
+  },
+  {
+    "recipeId": "v6-tek-adrenalinschrei-licht-verzoegerung",
+    "kind": "tek",
+    "catalogSlice": "slice1",
+    "techniqueId": "v6-technik-adrenalinschrei",
+    "essenceId": "v6-essenz-licht",
+    "catalystId": "v6-katalysator-verzoegerung",
+    "name": "Klarschrei · Verzögerung",
+    "effectSummary": "Bereite Boost +2 vor. Bei Schildgewinn: entferne optional eine Marke von dir. Verzögerung: Primäreffekt geschieht nicht sofort, sondern zu Beginn deines nächsten Zuges und erhält +2. Katalysator bleibt bis zur Auflösung. TEK: +1 Fetzladung (max 1×/Zug).",
+    "primary": {
+      "kind": "prep_boost",
+      "value": 2,
+      "target": "self"
+    },
+    "rider": {
+      "id": "rider-reinigen-licht",
+      "summary": "Bei Schildgewinn: entferne optional eine Marke von dir.",
+      "defenseSuppressible": false
+    },
+    "intensity": 1,
+    "transformId": "xform-verzoegerung",
+    "grantsFetz": true,
+    "catalystConsumed": false,
+    "overformulaPrimaryBonus": null,
+    "overformulaIntensityBonus": null,
+    "formulaDefensePenalty": null,
+    "summonConstructDefId": null,
+    "timingMode": "delay",
+    "echoAmount": null,
+    "delayBonus": 2
+  },
+  {
+    "recipeId": "v6-over-adrenalinschrei-licht-verzoegerung",
+    "kind": "overformula",
+    "catalogSlice": "slice1",
+    "techniqueId": "v6-technik-adrenalinschrei",
+    "essenceId": "v6-essenz-licht",
+    "catalystId": "v6-katalysator-verzoegerung",
+    "name": "Überformel Klarschrei · Verzögerung",
+    "effectSummary": "Bereite Boost +2 vor. Bei Schildgewinn: entferne optional eine Marke von dir. (verstärkt) Verzögerung: Primäreffekt geschieht nicht sofort, sondern zu Beginn deines nächsten Zuges und erhält +2. Katalysator bleibt bis zur Auflösung. Überformel: Intensität +1 (fester Slice-1-Bonus). Überformel: Fetzladung wird verbraucht. Formelabwehr −1.",
+    "primary": {
+      "kind": "prep_boost",
+      "value": 2,
+      "target": "self"
+    },
+    "rider": {
+      "id": "rider-reinigen-licht",
+      "summary": "Bei Schildgewinn: entferne optional eine Marke von dir. (verstärkt)",
+      "defenseSuppressible": false
+    },
+    "intensity": 2,
+    "transformId": "xform-verzoegerung",
+    "grantsFetz": false,
+    "catalystConsumed": false,
+    "overformulaPrimaryBonus": null,
+    "overformulaIntensityBonus": 1,
+    "formulaDefensePenalty": -1,
+    "summonConstructDefId": null,
+    "timingMode": "delay",
+    "echoAmount": null,
+    "delayBonus": 2
   },
   {
     "recipeId": "v6-tek-adrenalinschrei-licht-sofortzuender",
@@ -5842,7 +8783,10 @@ export const V6_GENERATED_FORMULA_RECIPES: readonly V6GeneratedFormulaRecipe[] =
     "overformulaPrimaryBonus": null,
     "overformulaIntensityBonus": null,
     "formulaDefensePenalty": null,
-    "summonConstructDefId": null
+    "summonConstructDefId": null,
+    "timingMode": "immediate",
+    "echoAmount": null,
+    "delayBonus": null
   },
   {
     "recipeId": "v6-over-adrenalinschrei-licht-sofortzuender",
@@ -5870,7 +8814,10 @@ export const V6_GENERATED_FORMULA_RECIPES: readonly V6GeneratedFormulaRecipe[] =
     "overformulaPrimaryBonus": null,
     "overformulaIntensityBonus": 1,
     "formulaDefensePenalty": -1,
-    "summonConstructDefId": null
+    "summonConstructDefId": null,
+    "timingMode": "immediate",
+    "echoAmount": null,
+    "delayBonus": null
   },
   {
     "recipeId": "v6-tek-adrenalinschrei-licht-opfergabe",
@@ -5898,7 +8845,10 @@ export const V6_GENERATED_FORMULA_RECIPES: readonly V6GeneratedFormulaRecipe[] =
     "overformulaPrimaryBonus": null,
     "overformulaIntensityBonus": null,
     "formulaDefensePenalty": null,
-    "summonConstructDefId": null
+    "summonConstructDefId": null,
+    "timingMode": "immediate",
+    "echoAmount": null,
+    "delayBonus": null
   },
   {
     "recipeId": "v6-over-adrenalinschrei-licht-opfergabe",
@@ -5926,7 +8876,72 @@ export const V6_GENERATED_FORMULA_RECIPES: readonly V6GeneratedFormulaRecipe[] =
     "overformulaPrimaryBonus": null,
     "overformulaIntensityBonus": 1,
     "formulaDefensePenalty": -1,
-    "summonConstructDefId": null
+    "summonConstructDefId": null,
+    "timingMode": "immediate",
+    "echoAmount": null,
+    "delayBonus": null
+  },
+  {
+    "recipeId": "v6-tek-adrenalinschrei-schatten-echo",
+    "kind": "tek",
+    "catalogSlice": "slice1",
+    "techniqueId": "v6-technik-adrenalinschrei",
+    "essenceId": "v6-essenz-schatten",
+    "catalystId": "v6-katalysator-echo",
+    "name": "Fluchschrei · Echo",
+    "effectSummary": "Bereite Angriff +2 vor. Bei Treffer: erschöpfe optional 1 gegnerische Formelkomponente. Echo: zu Beginn deines nächsten Zuges wiederhole 1 Punkt des Primärwerts. Katalysator bleibt bis zur Echo-Auflösung. TEK: +1 Fetzladung (max 1×/Zug).",
+    "primary": {
+      "kind": "prep_attack",
+      "value": 2,
+      "target": "self"
+    },
+    "rider": {
+      "id": "rider-fluch",
+      "summary": "Bei Treffer: erschöpfe optional 1 gegnerische Formelkomponente.",
+      "defenseSuppressible": true
+    },
+    "intensity": 1,
+    "transformId": "xform-echo",
+    "grantsFetz": true,
+    "catalystConsumed": false,
+    "overformulaPrimaryBonus": null,
+    "overformulaIntensityBonus": null,
+    "formulaDefensePenalty": null,
+    "summonConstructDefId": null,
+    "timingMode": "echo",
+    "echoAmount": 1,
+    "delayBonus": null
+  },
+  {
+    "recipeId": "v6-over-adrenalinschrei-schatten-echo",
+    "kind": "overformula",
+    "catalogSlice": "slice1",
+    "techniqueId": "v6-technik-adrenalinschrei",
+    "essenceId": "v6-essenz-schatten",
+    "catalystId": "v6-katalysator-echo",
+    "name": "Überformel Fluchschrei · Echo",
+    "effectSummary": "Bereite Angriff +2 vor. Bei Treffer: erschöpfe optional 1 gegnerische Formelkomponente. (verstärkt) Echo: zu Beginn deines nächsten Zuges wiederhole 1 Punkt des Primärwerts. Katalysator bleibt bis zur Echo-Auflösung. Überformel: Intensität +1 (fester Slice-1-Bonus). Überformel: Fetzladung wird verbraucht. Formelabwehr −1.",
+    "primary": {
+      "kind": "prep_attack",
+      "value": 2,
+      "target": "self"
+    },
+    "rider": {
+      "id": "rider-fluch",
+      "summary": "Bei Treffer: erschöpfe optional 1 gegnerische Formelkomponente. (verstärkt)",
+      "defenseSuppressible": true
+    },
+    "intensity": 2,
+    "transformId": "xform-echo",
+    "grantsFetz": false,
+    "catalystConsumed": false,
+    "overformulaPrimaryBonus": null,
+    "overformulaIntensityBonus": 1,
+    "formulaDefensePenalty": -1,
+    "summonConstructDefId": null,
+    "timingMode": "echo",
+    "echoAmount": 1,
+    "delayBonus": null
   },
   {
     "recipeId": "v6-tek-adrenalinschrei-schatten-ueberladung",
@@ -5954,7 +8969,10 @@ export const V6_GENERATED_FORMULA_RECIPES: readonly V6GeneratedFormulaRecipe[] =
     "overformulaPrimaryBonus": null,
     "overformulaIntensityBonus": null,
     "formulaDefensePenalty": null,
-    "summonConstructDefId": null
+    "summonConstructDefId": null,
+    "timingMode": "immediate",
+    "echoAmount": null,
+    "delayBonus": null
   },
   {
     "recipeId": "v6-over-adrenalinschrei-schatten-ueberladung",
@@ -5982,7 +9000,10 @@ export const V6_GENERATED_FORMULA_RECIPES: readonly V6GeneratedFormulaRecipe[] =
     "overformulaPrimaryBonus": null,
     "overformulaIntensityBonus": 1,
     "formulaDefensePenalty": -1,
-    "summonConstructDefId": null
+    "summonConstructDefId": null,
+    "timingMode": "immediate",
+    "echoAmount": null,
+    "delayBonus": null
   },
   {
     "recipeId": "v6-tek-adrenalinschrei-schatten-verdichtung",
@@ -6010,7 +9031,10 @@ export const V6_GENERATED_FORMULA_RECIPES: readonly V6GeneratedFormulaRecipe[] =
     "overformulaPrimaryBonus": null,
     "overformulaIntensityBonus": null,
     "formulaDefensePenalty": null,
-    "summonConstructDefId": null
+    "summonConstructDefId": null,
+    "timingMode": "immediate",
+    "echoAmount": null,
+    "delayBonus": null
   },
   {
     "recipeId": "v6-over-adrenalinschrei-schatten-verdichtung",
@@ -6038,7 +9062,72 @@ export const V6_GENERATED_FORMULA_RECIPES: readonly V6GeneratedFormulaRecipe[] =
     "overformulaPrimaryBonus": null,
     "overformulaIntensityBonus": 1,
     "formulaDefensePenalty": -1,
-    "summonConstructDefId": null
+    "summonConstructDefId": null,
+    "timingMode": "immediate",
+    "echoAmount": null,
+    "delayBonus": null
+  },
+  {
+    "recipeId": "v6-tek-adrenalinschrei-schatten-verzoegerung",
+    "kind": "tek",
+    "catalogSlice": "slice1",
+    "techniqueId": "v6-technik-adrenalinschrei",
+    "essenceId": "v6-essenz-schatten",
+    "catalystId": "v6-katalysator-verzoegerung",
+    "name": "Fluchschrei · Verzögerung",
+    "effectSummary": "Bereite Angriff +2 vor. Bei Treffer: erschöpfe optional 1 gegnerische Formelkomponente. Verzögerung: Primäreffekt geschieht nicht sofort, sondern zu Beginn deines nächsten Zuges und erhält +2. Katalysator bleibt bis zur Auflösung. TEK: +1 Fetzladung (max 1×/Zug).",
+    "primary": {
+      "kind": "prep_attack",
+      "value": 2,
+      "target": "self"
+    },
+    "rider": {
+      "id": "rider-fluch",
+      "summary": "Bei Treffer: erschöpfe optional 1 gegnerische Formelkomponente.",
+      "defenseSuppressible": true
+    },
+    "intensity": 1,
+    "transformId": "xform-verzoegerung",
+    "grantsFetz": true,
+    "catalystConsumed": false,
+    "overformulaPrimaryBonus": null,
+    "overformulaIntensityBonus": null,
+    "formulaDefensePenalty": null,
+    "summonConstructDefId": null,
+    "timingMode": "delay",
+    "echoAmount": null,
+    "delayBonus": 2
+  },
+  {
+    "recipeId": "v6-over-adrenalinschrei-schatten-verzoegerung",
+    "kind": "overformula",
+    "catalogSlice": "slice1",
+    "techniqueId": "v6-technik-adrenalinschrei",
+    "essenceId": "v6-essenz-schatten",
+    "catalystId": "v6-katalysator-verzoegerung",
+    "name": "Überformel Fluchschrei · Verzögerung",
+    "effectSummary": "Bereite Angriff +2 vor. Bei Treffer: erschöpfe optional 1 gegnerische Formelkomponente. (verstärkt) Verzögerung: Primäreffekt geschieht nicht sofort, sondern zu Beginn deines nächsten Zuges und erhält +2. Katalysator bleibt bis zur Auflösung. Überformel: Intensität +1 (fester Slice-1-Bonus). Überformel: Fetzladung wird verbraucht. Formelabwehr −1.",
+    "primary": {
+      "kind": "prep_attack",
+      "value": 2,
+      "target": "self"
+    },
+    "rider": {
+      "id": "rider-fluch",
+      "summary": "Bei Treffer: erschöpfe optional 1 gegnerische Formelkomponente. (verstärkt)",
+      "defenseSuppressible": true
+    },
+    "intensity": 2,
+    "transformId": "xform-verzoegerung",
+    "grantsFetz": false,
+    "catalystConsumed": false,
+    "overformulaPrimaryBonus": null,
+    "overformulaIntensityBonus": 1,
+    "formulaDefensePenalty": -1,
+    "summonConstructDefId": null,
+    "timingMode": "delay",
+    "echoAmount": null,
+    "delayBonus": 2
   },
   {
     "recipeId": "v6-tek-adrenalinschrei-schatten-sofortzuender",
@@ -6066,7 +9155,10 @@ export const V6_GENERATED_FORMULA_RECIPES: readonly V6GeneratedFormulaRecipe[] =
     "overformulaPrimaryBonus": null,
     "overformulaIntensityBonus": null,
     "formulaDefensePenalty": null,
-    "summonConstructDefId": null
+    "summonConstructDefId": null,
+    "timingMode": "immediate",
+    "echoAmount": null,
+    "delayBonus": null
   },
   {
     "recipeId": "v6-over-adrenalinschrei-schatten-sofortzuender",
@@ -6094,7 +9186,10 @@ export const V6_GENERATED_FORMULA_RECIPES: readonly V6GeneratedFormulaRecipe[] =
     "overformulaPrimaryBonus": null,
     "overformulaIntensityBonus": 1,
     "formulaDefensePenalty": -1,
-    "summonConstructDefId": null
+    "summonConstructDefId": null,
+    "timingMode": "immediate",
+    "echoAmount": null,
+    "delayBonus": null
   },
   {
     "recipeId": "v6-tek-adrenalinschrei-schatten-opfergabe",
@@ -6122,7 +9217,10 @@ export const V6_GENERATED_FORMULA_RECIPES: readonly V6GeneratedFormulaRecipe[] =
     "overformulaPrimaryBonus": null,
     "overformulaIntensityBonus": null,
     "formulaDefensePenalty": null,
-    "summonConstructDefId": null
+    "summonConstructDefId": null,
+    "timingMode": "immediate",
+    "echoAmount": null,
+    "delayBonus": null
   },
   {
     "recipeId": "v6-over-adrenalinschrei-schatten-opfergabe",
@@ -6150,7 +9248,72 @@ export const V6_GENERATED_FORMULA_RECIPES: readonly V6GeneratedFormulaRecipe[] =
     "overformulaPrimaryBonus": null,
     "overformulaIntensityBonus": 1,
     "formulaDefensePenalty": -1,
-    "summonConstructDefId": null
+    "summonConstructDefId": null,
+    "timingMode": "immediate",
+    "echoAmount": null,
+    "delayBonus": null
+  },
+  {
+    "recipeId": "v6-tek-fintenschnitt-feuer-echo",
+    "kind": "tek",
+    "catalogSlice": "slice1",
+    "techniqueId": "v6-technik-fintenschnitt",
+    "essenceId": "v6-essenz-feuer",
+    "catalystId": "v6-katalysator-echo",
+    "name": "Glutfinte · Echo",
+    "effectSummary": "Bereite Block +2 vor. Bei Lebensschaden: Brennen, falls keine Reaktion. Echo: zu Beginn deines nächsten Zuges wiederhole 1 Punkt des Primärwerts. Katalysator bleibt bis zur Echo-Auflösung. TEK: +1 Fetzladung (max 1×/Zug).",
+    "primary": {
+      "kind": "prep_block",
+      "value": 2,
+      "target": "self"
+    },
+    "rider": {
+      "id": "rider-brennen",
+      "summary": "Bei Lebensschaden: Brennen, falls keine Reaktion.",
+      "defenseSuppressible": true
+    },
+    "intensity": 1,
+    "transformId": "xform-echo",
+    "grantsFetz": true,
+    "catalystConsumed": false,
+    "overformulaPrimaryBonus": null,
+    "overformulaIntensityBonus": null,
+    "formulaDefensePenalty": null,
+    "summonConstructDefId": null,
+    "timingMode": "echo",
+    "echoAmount": 1,
+    "delayBonus": null
+  },
+  {
+    "recipeId": "v6-over-fintenschnitt-feuer-echo",
+    "kind": "overformula",
+    "catalogSlice": "slice1",
+    "techniqueId": "v6-technik-fintenschnitt",
+    "essenceId": "v6-essenz-feuer",
+    "catalystId": "v6-katalysator-echo",
+    "name": "Überformel Glutfinte · Echo",
+    "effectSummary": "Bereite Block +2 vor. Bei Lebensschaden: Brennen, falls keine Reaktion. (verstärkt) Echo: zu Beginn deines nächsten Zuges wiederhole 1 Punkt des Primärwerts. Katalysator bleibt bis zur Echo-Auflösung. Überformel: Intensität +1 (fester Slice-1-Bonus). Überformel: Fetzladung wird verbraucht. Formelabwehr −1.",
+    "primary": {
+      "kind": "prep_block",
+      "value": 2,
+      "target": "self"
+    },
+    "rider": {
+      "id": "rider-brennen",
+      "summary": "Bei Lebensschaden: Brennen, falls keine Reaktion. (verstärkt)",
+      "defenseSuppressible": true
+    },
+    "intensity": 2,
+    "transformId": "xform-echo",
+    "grantsFetz": false,
+    "catalystConsumed": false,
+    "overformulaPrimaryBonus": null,
+    "overformulaIntensityBonus": 1,
+    "formulaDefensePenalty": -1,
+    "summonConstructDefId": null,
+    "timingMode": "echo",
+    "echoAmount": 1,
+    "delayBonus": null
   },
   {
     "recipeId": "v6-tek-fintenschnitt-feuer-ueberladung",
@@ -6178,7 +9341,10 @@ export const V6_GENERATED_FORMULA_RECIPES: readonly V6GeneratedFormulaRecipe[] =
     "overformulaPrimaryBonus": null,
     "overformulaIntensityBonus": null,
     "formulaDefensePenalty": null,
-    "summonConstructDefId": null
+    "summonConstructDefId": null,
+    "timingMode": "immediate",
+    "echoAmount": null,
+    "delayBonus": null
   },
   {
     "recipeId": "v6-over-fintenschnitt-feuer-ueberladung",
@@ -6206,7 +9372,10 @@ export const V6_GENERATED_FORMULA_RECIPES: readonly V6GeneratedFormulaRecipe[] =
     "overformulaPrimaryBonus": null,
     "overformulaIntensityBonus": 1,
     "formulaDefensePenalty": -1,
-    "summonConstructDefId": null
+    "summonConstructDefId": null,
+    "timingMode": "immediate",
+    "echoAmount": null,
+    "delayBonus": null
   },
   {
     "recipeId": "v6-tek-fintenschnitt-feuer-verdichtung",
@@ -6234,7 +9403,10 @@ export const V6_GENERATED_FORMULA_RECIPES: readonly V6GeneratedFormulaRecipe[] =
     "overformulaPrimaryBonus": null,
     "overformulaIntensityBonus": null,
     "formulaDefensePenalty": null,
-    "summonConstructDefId": null
+    "summonConstructDefId": null,
+    "timingMode": "immediate",
+    "echoAmount": null,
+    "delayBonus": null
   },
   {
     "recipeId": "v6-over-fintenschnitt-feuer-verdichtung",
@@ -6262,7 +9434,72 @@ export const V6_GENERATED_FORMULA_RECIPES: readonly V6GeneratedFormulaRecipe[] =
     "overformulaPrimaryBonus": null,
     "overformulaIntensityBonus": 1,
     "formulaDefensePenalty": -1,
-    "summonConstructDefId": null
+    "summonConstructDefId": null,
+    "timingMode": "immediate",
+    "echoAmount": null,
+    "delayBonus": null
+  },
+  {
+    "recipeId": "v6-tek-fintenschnitt-feuer-verzoegerung",
+    "kind": "tek",
+    "catalogSlice": "slice1",
+    "techniqueId": "v6-technik-fintenschnitt",
+    "essenceId": "v6-essenz-feuer",
+    "catalystId": "v6-katalysator-verzoegerung",
+    "name": "Glutfinte · Verzögerung",
+    "effectSummary": "Bereite Block +2 vor. Bei Lebensschaden: Brennen, falls keine Reaktion. Verzögerung: Primäreffekt geschieht nicht sofort, sondern zu Beginn deines nächsten Zuges und erhält +2. Katalysator bleibt bis zur Auflösung. TEK: +1 Fetzladung (max 1×/Zug).",
+    "primary": {
+      "kind": "prep_block",
+      "value": 2,
+      "target": "self"
+    },
+    "rider": {
+      "id": "rider-brennen",
+      "summary": "Bei Lebensschaden: Brennen, falls keine Reaktion.",
+      "defenseSuppressible": true
+    },
+    "intensity": 1,
+    "transformId": "xform-verzoegerung",
+    "grantsFetz": true,
+    "catalystConsumed": false,
+    "overformulaPrimaryBonus": null,
+    "overformulaIntensityBonus": null,
+    "formulaDefensePenalty": null,
+    "summonConstructDefId": null,
+    "timingMode": "delay",
+    "echoAmount": null,
+    "delayBonus": 2
+  },
+  {
+    "recipeId": "v6-over-fintenschnitt-feuer-verzoegerung",
+    "kind": "overformula",
+    "catalogSlice": "slice1",
+    "techniqueId": "v6-technik-fintenschnitt",
+    "essenceId": "v6-essenz-feuer",
+    "catalystId": "v6-katalysator-verzoegerung",
+    "name": "Überformel Glutfinte · Verzögerung",
+    "effectSummary": "Bereite Block +2 vor. Bei Lebensschaden: Brennen, falls keine Reaktion. (verstärkt) Verzögerung: Primäreffekt geschieht nicht sofort, sondern zu Beginn deines nächsten Zuges und erhält +2. Katalysator bleibt bis zur Auflösung. Überformel: Intensität +1 (fester Slice-1-Bonus). Überformel: Fetzladung wird verbraucht. Formelabwehr −1.",
+    "primary": {
+      "kind": "prep_block",
+      "value": 2,
+      "target": "self"
+    },
+    "rider": {
+      "id": "rider-brennen",
+      "summary": "Bei Lebensschaden: Brennen, falls keine Reaktion. (verstärkt)",
+      "defenseSuppressible": true
+    },
+    "intensity": 2,
+    "transformId": "xform-verzoegerung",
+    "grantsFetz": false,
+    "catalystConsumed": false,
+    "overformulaPrimaryBonus": null,
+    "overformulaIntensityBonus": 1,
+    "formulaDefensePenalty": -1,
+    "summonConstructDefId": null,
+    "timingMode": "delay",
+    "echoAmount": null,
+    "delayBonus": 2
   },
   {
     "recipeId": "v6-tek-fintenschnitt-feuer-sofortzuender",
@@ -6290,7 +9527,10 @@ export const V6_GENERATED_FORMULA_RECIPES: readonly V6GeneratedFormulaRecipe[] =
     "overformulaPrimaryBonus": null,
     "overformulaIntensityBonus": null,
     "formulaDefensePenalty": null,
-    "summonConstructDefId": null
+    "summonConstructDefId": null,
+    "timingMode": "immediate",
+    "echoAmount": null,
+    "delayBonus": null
   },
   {
     "recipeId": "v6-over-fintenschnitt-feuer-sofortzuender",
@@ -6318,7 +9558,10 @@ export const V6_GENERATED_FORMULA_RECIPES: readonly V6GeneratedFormulaRecipe[] =
     "overformulaPrimaryBonus": null,
     "overformulaIntensityBonus": 1,
     "formulaDefensePenalty": -1,
-    "summonConstructDefId": null
+    "summonConstructDefId": null,
+    "timingMode": "immediate",
+    "echoAmount": null,
+    "delayBonus": null
   },
   {
     "recipeId": "v6-tek-fintenschnitt-feuer-opfergabe",
@@ -6346,7 +9589,10 @@ export const V6_GENERATED_FORMULA_RECIPES: readonly V6GeneratedFormulaRecipe[] =
     "overformulaPrimaryBonus": null,
     "overformulaIntensityBonus": null,
     "formulaDefensePenalty": null,
-    "summonConstructDefId": null
+    "summonConstructDefId": null,
+    "timingMode": "immediate",
+    "echoAmount": null,
+    "delayBonus": null
   },
   {
     "recipeId": "v6-over-fintenschnitt-feuer-opfergabe",
@@ -6374,7 +9620,72 @@ export const V6_GENERATED_FORMULA_RECIPES: readonly V6GeneratedFormulaRecipe[] =
     "overformulaPrimaryBonus": null,
     "overformulaIntensityBonus": 1,
     "formulaDefensePenalty": -1,
-    "summonConstructDefId": null
+    "summonConstructDefId": null,
+    "timingMode": "immediate",
+    "echoAmount": null,
+    "delayBonus": null
+  },
+  {
+    "recipeId": "v6-tek-fintenschnitt-wasser-echo",
+    "kind": "tek",
+    "catalogSlice": "slice1",
+    "techniqueId": "v6-technik-fintenschnitt",
+    "essenceId": "v6-essenz-wasser",
+    "catalystId": "v6-katalysator-echo",
+    "name": "Wellenfinte · Echo",
+    "effectSummary": "Bereite Block +2 vor. Bei Heilung oder Schildgewinn: entferne optional eine Marke von dir. Echo: zu Beginn deines nächsten Zuges wiederhole 1 Punkt des Primärwerts. Katalysator bleibt bis zur Echo-Auflösung. TEK: +1 Fetzladung (max 1×/Zug).",
+    "primary": {
+      "kind": "prep_block",
+      "value": 2,
+      "target": "self"
+    },
+    "rider": {
+      "id": "rider-reinigen",
+      "summary": "Bei Heilung oder Schildgewinn: entferne optional eine Marke von dir.",
+      "defenseSuppressible": false
+    },
+    "intensity": 1,
+    "transformId": "xform-echo",
+    "grantsFetz": true,
+    "catalystConsumed": false,
+    "overformulaPrimaryBonus": null,
+    "overformulaIntensityBonus": null,
+    "formulaDefensePenalty": null,
+    "summonConstructDefId": null,
+    "timingMode": "echo",
+    "echoAmount": 1,
+    "delayBonus": null
+  },
+  {
+    "recipeId": "v6-over-fintenschnitt-wasser-echo",
+    "kind": "overformula",
+    "catalogSlice": "slice1",
+    "techniqueId": "v6-technik-fintenschnitt",
+    "essenceId": "v6-essenz-wasser",
+    "catalystId": "v6-katalysator-echo",
+    "name": "Überformel Wellenfinte · Echo",
+    "effectSummary": "Bereite Block +2 vor. Bei Heilung oder Schildgewinn: entferne optional eine Marke von dir. (verstärkt) Echo: zu Beginn deines nächsten Zuges wiederhole 1 Punkt des Primärwerts. Katalysator bleibt bis zur Echo-Auflösung. Überformel: Intensität +1 (fester Slice-1-Bonus). Überformel: Fetzladung wird verbraucht. Formelabwehr −1.",
+    "primary": {
+      "kind": "prep_block",
+      "value": 2,
+      "target": "self"
+    },
+    "rider": {
+      "id": "rider-reinigen",
+      "summary": "Bei Heilung oder Schildgewinn: entferne optional eine Marke von dir. (verstärkt)",
+      "defenseSuppressible": false
+    },
+    "intensity": 2,
+    "transformId": "xform-echo",
+    "grantsFetz": false,
+    "catalystConsumed": false,
+    "overformulaPrimaryBonus": null,
+    "overformulaIntensityBonus": 1,
+    "formulaDefensePenalty": -1,
+    "summonConstructDefId": null,
+    "timingMode": "echo",
+    "echoAmount": 1,
+    "delayBonus": null
   },
   {
     "recipeId": "v6-tek-fintenschnitt-wasser-ueberladung",
@@ -6402,7 +9713,10 @@ export const V6_GENERATED_FORMULA_RECIPES: readonly V6GeneratedFormulaRecipe[] =
     "overformulaPrimaryBonus": null,
     "overformulaIntensityBonus": null,
     "formulaDefensePenalty": null,
-    "summonConstructDefId": null
+    "summonConstructDefId": null,
+    "timingMode": "immediate",
+    "echoAmount": null,
+    "delayBonus": null
   },
   {
     "recipeId": "v6-over-fintenschnitt-wasser-ueberladung",
@@ -6430,7 +9744,10 @@ export const V6_GENERATED_FORMULA_RECIPES: readonly V6GeneratedFormulaRecipe[] =
     "overformulaPrimaryBonus": null,
     "overformulaIntensityBonus": 1,
     "formulaDefensePenalty": -1,
-    "summonConstructDefId": null
+    "summonConstructDefId": null,
+    "timingMode": "immediate",
+    "echoAmount": null,
+    "delayBonus": null
   },
   {
     "recipeId": "v6-tek-fintenschnitt-wasser-verdichtung",
@@ -6458,7 +9775,10 @@ export const V6_GENERATED_FORMULA_RECIPES: readonly V6GeneratedFormulaRecipe[] =
     "overformulaPrimaryBonus": null,
     "overformulaIntensityBonus": null,
     "formulaDefensePenalty": null,
-    "summonConstructDefId": null
+    "summonConstructDefId": null,
+    "timingMode": "immediate",
+    "echoAmount": null,
+    "delayBonus": null
   },
   {
     "recipeId": "v6-over-fintenschnitt-wasser-verdichtung",
@@ -6486,7 +9806,72 @@ export const V6_GENERATED_FORMULA_RECIPES: readonly V6GeneratedFormulaRecipe[] =
     "overformulaPrimaryBonus": null,
     "overformulaIntensityBonus": 1,
     "formulaDefensePenalty": -1,
-    "summonConstructDefId": null
+    "summonConstructDefId": null,
+    "timingMode": "immediate",
+    "echoAmount": null,
+    "delayBonus": null
+  },
+  {
+    "recipeId": "v6-tek-fintenschnitt-wasser-verzoegerung",
+    "kind": "tek",
+    "catalogSlice": "slice1",
+    "techniqueId": "v6-technik-fintenschnitt",
+    "essenceId": "v6-essenz-wasser",
+    "catalystId": "v6-katalysator-verzoegerung",
+    "name": "Wellenfinte · Verzögerung",
+    "effectSummary": "Bereite Block +2 vor. Bei Heilung oder Schildgewinn: entferne optional eine Marke von dir. Verzögerung: Primäreffekt geschieht nicht sofort, sondern zu Beginn deines nächsten Zuges und erhält +2. Katalysator bleibt bis zur Auflösung. TEK: +1 Fetzladung (max 1×/Zug).",
+    "primary": {
+      "kind": "prep_block",
+      "value": 2,
+      "target": "self"
+    },
+    "rider": {
+      "id": "rider-reinigen",
+      "summary": "Bei Heilung oder Schildgewinn: entferne optional eine Marke von dir.",
+      "defenseSuppressible": false
+    },
+    "intensity": 1,
+    "transformId": "xform-verzoegerung",
+    "grantsFetz": true,
+    "catalystConsumed": false,
+    "overformulaPrimaryBonus": null,
+    "overformulaIntensityBonus": null,
+    "formulaDefensePenalty": null,
+    "summonConstructDefId": null,
+    "timingMode": "delay",
+    "echoAmount": null,
+    "delayBonus": 2
+  },
+  {
+    "recipeId": "v6-over-fintenschnitt-wasser-verzoegerung",
+    "kind": "overformula",
+    "catalogSlice": "slice1",
+    "techniqueId": "v6-technik-fintenschnitt",
+    "essenceId": "v6-essenz-wasser",
+    "catalystId": "v6-katalysator-verzoegerung",
+    "name": "Überformel Wellenfinte · Verzögerung",
+    "effectSummary": "Bereite Block +2 vor. Bei Heilung oder Schildgewinn: entferne optional eine Marke von dir. (verstärkt) Verzögerung: Primäreffekt geschieht nicht sofort, sondern zu Beginn deines nächsten Zuges und erhält +2. Katalysator bleibt bis zur Auflösung. Überformel: Intensität +1 (fester Slice-1-Bonus). Überformel: Fetzladung wird verbraucht. Formelabwehr −1.",
+    "primary": {
+      "kind": "prep_block",
+      "value": 2,
+      "target": "self"
+    },
+    "rider": {
+      "id": "rider-reinigen",
+      "summary": "Bei Heilung oder Schildgewinn: entferne optional eine Marke von dir. (verstärkt)",
+      "defenseSuppressible": false
+    },
+    "intensity": 2,
+    "transformId": "xform-verzoegerung",
+    "grantsFetz": false,
+    "catalystConsumed": false,
+    "overformulaPrimaryBonus": null,
+    "overformulaIntensityBonus": 1,
+    "formulaDefensePenalty": -1,
+    "summonConstructDefId": null,
+    "timingMode": "delay",
+    "echoAmount": null,
+    "delayBonus": 2
   },
   {
     "recipeId": "v6-tek-fintenschnitt-wasser-sofortzuender",
@@ -6514,7 +9899,10 @@ export const V6_GENERATED_FORMULA_RECIPES: readonly V6GeneratedFormulaRecipe[] =
     "overformulaPrimaryBonus": null,
     "overformulaIntensityBonus": null,
     "formulaDefensePenalty": null,
-    "summonConstructDefId": null
+    "summonConstructDefId": null,
+    "timingMode": "immediate",
+    "echoAmount": null,
+    "delayBonus": null
   },
   {
     "recipeId": "v6-over-fintenschnitt-wasser-sofortzuender",
@@ -6542,7 +9930,10 @@ export const V6_GENERATED_FORMULA_RECIPES: readonly V6GeneratedFormulaRecipe[] =
     "overformulaPrimaryBonus": null,
     "overformulaIntensityBonus": 1,
     "formulaDefensePenalty": -1,
-    "summonConstructDefId": null
+    "summonConstructDefId": null,
+    "timingMode": "immediate",
+    "echoAmount": null,
+    "delayBonus": null
   },
   {
     "recipeId": "v6-tek-fintenschnitt-wasser-opfergabe",
@@ -6570,7 +9961,10 @@ export const V6_GENERATED_FORMULA_RECIPES: readonly V6GeneratedFormulaRecipe[] =
     "overformulaPrimaryBonus": null,
     "overformulaIntensityBonus": null,
     "formulaDefensePenalty": null,
-    "summonConstructDefId": null
+    "summonConstructDefId": null,
+    "timingMode": "immediate",
+    "echoAmount": null,
+    "delayBonus": null
   },
   {
     "recipeId": "v6-over-fintenschnitt-wasser-opfergabe",
@@ -6598,7 +9992,72 @@ export const V6_GENERATED_FORMULA_RECIPES: readonly V6GeneratedFormulaRecipe[] =
     "overformulaPrimaryBonus": null,
     "overformulaIntensityBonus": 1,
     "formulaDefensePenalty": -1,
-    "summonConstructDefId": null
+    "summonConstructDefId": null,
+    "timingMode": "immediate",
+    "echoAmount": null,
+    "delayBonus": null
+  },
+  {
+    "recipeId": "v6-tek-fintenschnitt-erde-echo",
+    "kind": "tek",
+    "catalogSlice": "slice1",
+    "techniqueId": "v6-technik-fintenschnitt",
+    "essenceId": "v6-essenz-erde",
+    "catalystId": "v6-katalysator-echo",
+    "name": "Felsfinte · Echo",
+    "effectSummary": "Bereite Block +2 vor. Verwendete Komponenten +1 Stabilität bis nächste Startphase. Echo: zu Beginn deines nächsten Zuges wiederhole 1 Punkt des Primärwerts. Katalysator bleibt bis zur Echo-Auflösung. TEK: +1 Fetzladung (max 1×/Zug).",
+    "primary": {
+      "kind": "prep_block",
+      "value": 2,
+      "target": "self"
+    },
+    "rider": {
+      "id": "rider-stabilitaet",
+      "summary": "Verwendete Komponenten +1 Stabilität bis nächste Startphase.",
+      "defenseSuppressible": false
+    },
+    "intensity": 1,
+    "transformId": "xform-echo",
+    "grantsFetz": true,
+    "catalystConsumed": false,
+    "overformulaPrimaryBonus": null,
+    "overformulaIntensityBonus": null,
+    "formulaDefensePenalty": null,
+    "summonConstructDefId": null,
+    "timingMode": "echo",
+    "echoAmount": 1,
+    "delayBonus": null
+  },
+  {
+    "recipeId": "v6-over-fintenschnitt-erde-echo",
+    "kind": "overformula",
+    "catalogSlice": "slice1",
+    "techniqueId": "v6-technik-fintenschnitt",
+    "essenceId": "v6-essenz-erde",
+    "catalystId": "v6-katalysator-echo",
+    "name": "Überformel Felsfinte · Echo",
+    "effectSummary": "Bereite Block +2 vor. Verwendete Komponenten +1 Stabilität bis nächste Startphase. (verstärkt) Echo: zu Beginn deines nächsten Zuges wiederhole 1 Punkt des Primärwerts. Katalysator bleibt bis zur Echo-Auflösung. Überformel: Intensität +1 (fester Slice-1-Bonus). Überformel: Fetzladung wird verbraucht. Formelabwehr −1.",
+    "primary": {
+      "kind": "prep_block",
+      "value": 2,
+      "target": "self"
+    },
+    "rider": {
+      "id": "rider-stabilitaet",
+      "summary": "Verwendete Komponenten +1 Stabilität bis nächste Startphase. (verstärkt)",
+      "defenseSuppressible": false
+    },
+    "intensity": 2,
+    "transformId": "xform-echo",
+    "grantsFetz": false,
+    "catalystConsumed": false,
+    "overformulaPrimaryBonus": null,
+    "overformulaIntensityBonus": 1,
+    "formulaDefensePenalty": -1,
+    "summonConstructDefId": null,
+    "timingMode": "echo",
+    "echoAmount": 1,
+    "delayBonus": null
   },
   {
     "recipeId": "v6-tek-fintenschnitt-erde-ueberladung",
@@ -6626,7 +10085,10 @@ export const V6_GENERATED_FORMULA_RECIPES: readonly V6GeneratedFormulaRecipe[] =
     "overformulaPrimaryBonus": null,
     "overformulaIntensityBonus": null,
     "formulaDefensePenalty": null,
-    "summonConstructDefId": null
+    "summonConstructDefId": null,
+    "timingMode": "immediate",
+    "echoAmount": null,
+    "delayBonus": null
   },
   {
     "recipeId": "v6-over-fintenschnitt-erde-ueberladung",
@@ -6654,7 +10116,10 @@ export const V6_GENERATED_FORMULA_RECIPES: readonly V6GeneratedFormulaRecipe[] =
     "overformulaPrimaryBonus": null,
     "overformulaIntensityBonus": 1,
     "formulaDefensePenalty": -1,
-    "summonConstructDefId": null
+    "summonConstructDefId": null,
+    "timingMode": "immediate",
+    "echoAmount": null,
+    "delayBonus": null
   },
   {
     "recipeId": "v6-tek-fintenschnitt-erde-verdichtung",
@@ -6682,7 +10147,10 @@ export const V6_GENERATED_FORMULA_RECIPES: readonly V6GeneratedFormulaRecipe[] =
     "overformulaPrimaryBonus": null,
     "overformulaIntensityBonus": null,
     "formulaDefensePenalty": null,
-    "summonConstructDefId": null
+    "summonConstructDefId": null,
+    "timingMode": "immediate",
+    "echoAmount": null,
+    "delayBonus": null
   },
   {
     "recipeId": "v6-over-fintenschnitt-erde-verdichtung",
@@ -6710,7 +10178,72 @@ export const V6_GENERATED_FORMULA_RECIPES: readonly V6GeneratedFormulaRecipe[] =
     "overformulaPrimaryBonus": null,
     "overformulaIntensityBonus": 1,
     "formulaDefensePenalty": -1,
-    "summonConstructDefId": null
+    "summonConstructDefId": null,
+    "timingMode": "immediate",
+    "echoAmount": null,
+    "delayBonus": null
+  },
+  {
+    "recipeId": "v6-tek-fintenschnitt-erde-verzoegerung",
+    "kind": "tek",
+    "catalogSlice": "slice1",
+    "techniqueId": "v6-technik-fintenschnitt",
+    "essenceId": "v6-essenz-erde",
+    "catalystId": "v6-katalysator-verzoegerung",
+    "name": "Felsfinte · Verzögerung",
+    "effectSummary": "Bereite Block +2 vor. Verwendete Komponenten +1 Stabilität bis nächste Startphase. Verzögerung: Primäreffekt geschieht nicht sofort, sondern zu Beginn deines nächsten Zuges und erhält +2. Katalysator bleibt bis zur Auflösung. TEK: +1 Fetzladung (max 1×/Zug).",
+    "primary": {
+      "kind": "prep_block",
+      "value": 2,
+      "target": "self"
+    },
+    "rider": {
+      "id": "rider-stabilitaet",
+      "summary": "Verwendete Komponenten +1 Stabilität bis nächste Startphase.",
+      "defenseSuppressible": false
+    },
+    "intensity": 1,
+    "transformId": "xform-verzoegerung",
+    "grantsFetz": true,
+    "catalystConsumed": false,
+    "overformulaPrimaryBonus": null,
+    "overformulaIntensityBonus": null,
+    "formulaDefensePenalty": null,
+    "summonConstructDefId": null,
+    "timingMode": "delay",
+    "echoAmount": null,
+    "delayBonus": 2
+  },
+  {
+    "recipeId": "v6-over-fintenschnitt-erde-verzoegerung",
+    "kind": "overformula",
+    "catalogSlice": "slice1",
+    "techniqueId": "v6-technik-fintenschnitt",
+    "essenceId": "v6-essenz-erde",
+    "catalystId": "v6-katalysator-verzoegerung",
+    "name": "Überformel Felsfinte · Verzögerung",
+    "effectSummary": "Bereite Block +2 vor. Verwendete Komponenten +1 Stabilität bis nächste Startphase. (verstärkt) Verzögerung: Primäreffekt geschieht nicht sofort, sondern zu Beginn deines nächsten Zuges und erhält +2. Katalysator bleibt bis zur Auflösung. Überformel: Intensität +1 (fester Slice-1-Bonus). Überformel: Fetzladung wird verbraucht. Formelabwehr −1.",
+    "primary": {
+      "kind": "prep_block",
+      "value": 2,
+      "target": "self"
+    },
+    "rider": {
+      "id": "rider-stabilitaet",
+      "summary": "Verwendete Komponenten +1 Stabilität bis nächste Startphase. (verstärkt)",
+      "defenseSuppressible": false
+    },
+    "intensity": 2,
+    "transformId": "xform-verzoegerung",
+    "grantsFetz": false,
+    "catalystConsumed": false,
+    "overformulaPrimaryBonus": null,
+    "overformulaIntensityBonus": 1,
+    "formulaDefensePenalty": -1,
+    "summonConstructDefId": null,
+    "timingMode": "delay",
+    "echoAmount": null,
+    "delayBonus": 2
   },
   {
     "recipeId": "v6-tek-fintenschnitt-erde-sofortzuender",
@@ -6738,7 +10271,10 @@ export const V6_GENERATED_FORMULA_RECIPES: readonly V6GeneratedFormulaRecipe[] =
     "overformulaPrimaryBonus": null,
     "overformulaIntensityBonus": null,
     "formulaDefensePenalty": null,
-    "summonConstructDefId": null
+    "summonConstructDefId": null,
+    "timingMode": "immediate",
+    "echoAmount": null,
+    "delayBonus": null
   },
   {
     "recipeId": "v6-over-fintenschnitt-erde-sofortzuender",
@@ -6766,7 +10302,10 @@ export const V6_GENERATED_FORMULA_RECIPES: readonly V6GeneratedFormulaRecipe[] =
     "overformulaPrimaryBonus": null,
     "overformulaIntensityBonus": 1,
     "formulaDefensePenalty": -1,
-    "summonConstructDefId": null
+    "summonConstructDefId": null,
+    "timingMode": "immediate",
+    "echoAmount": null,
+    "delayBonus": null
   },
   {
     "recipeId": "v6-tek-fintenschnitt-erde-opfergabe",
@@ -6794,7 +10333,10 @@ export const V6_GENERATED_FORMULA_RECIPES: readonly V6GeneratedFormulaRecipe[] =
     "overformulaPrimaryBonus": null,
     "overformulaIntensityBonus": null,
     "formulaDefensePenalty": null,
-    "summonConstructDefId": null
+    "summonConstructDefId": null,
+    "timingMode": "immediate",
+    "echoAmount": null,
+    "delayBonus": null
   },
   {
     "recipeId": "v6-over-fintenschnitt-erde-opfergabe",
@@ -6822,7 +10364,72 @@ export const V6_GENERATED_FORMULA_RECIPES: readonly V6GeneratedFormulaRecipe[] =
     "overformulaPrimaryBonus": null,
     "overformulaIntensityBonus": 1,
     "formulaDefensePenalty": -1,
-    "summonConstructDefId": null
+    "summonConstructDefId": null,
+    "timingMode": "immediate",
+    "echoAmount": null,
+    "delayBonus": null
+  },
+  {
+    "recipeId": "v6-tek-fintenschnitt-luft-echo",
+    "kind": "tek",
+    "catalogSlice": "slice1",
+    "techniqueId": "v6-technik-fintenschnitt",
+    "essenceId": "v6-essenz-luft",
+    "catalystId": "v6-katalysator-echo",
+    "name": "Windfinte · Echo",
+    "effectSummary": "Bereite Block +2 vor. Nächster eigener Aktions-W6 +1 (max +2). Echo: zu Beginn deines nächsten Zuges wiederhole 1 Punkt des Primärwerts. Katalysator bleibt bis zur Echo-Auflösung. TEK: +1 Fetzladung (max 1×/Zug).",
+    "primary": {
+      "kind": "prep_block",
+      "value": 2,
+      "target": "self"
+    },
+    "rider": {
+      "id": "rider-w6",
+      "summary": "Nächster eigener Aktions-W6 +1 (max +2).",
+      "defenseSuppressible": true
+    },
+    "intensity": 1,
+    "transformId": "xform-echo",
+    "grantsFetz": true,
+    "catalystConsumed": false,
+    "overformulaPrimaryBonus": null,
+    "overformulaIntensityBonus": null,
+    "formulaDefensePenalty": null,
+    "summonConstructDefId": null,
+    "timingMode": "echo",
+    "echoAmount": 1,
+    "delayBonus": null
+  },
+  {
+    "recipeId": "v6-over-fintenschnitt-luft-echo",
+    "kind": "overformula",
+    "catalogSlice": "slice1",
+    "techniqueId": "v6-technik-fintenschnitt",
+    "essenceId": "v6-essenz-luft",
+    "catalystId": "v6-katalysator-echo",
+    "name": "Überformel Windfinte · Echo",
+    "effectSummary": "Bereite Block +2 vor. Nächster eigener Aktions-W6 +1 (max +2). (verstärkt) Echo: zu Beginn deines nächsten Zuges wiederhole 1 Punkt des Primärwerts. Katalysator bleibt bis zur Echo-Auflösung. Überformel: Intensität +1 (fester Slice-1-Bonus). Überformel: Fetzladung wird verbraucht. Formelabwehr −1.",
+    "primary": {
+      "kind": "prep_block",
+      "value": 2,
+      "target": "self"
+    },
+    "rider": {
+      "id": "rider-w6",
+      "summary": "Nächster eigener Aktions-W6 +1 (max +2). (verstärkt)",
+      "defenseSuppressible": true
+    },
+    "intensity": 2,
+    "transformId": "xform-echo",
+    "grantsFetz": false,
+    "catalystConsumed": false,
+    "overformulaPrimaryBonus": null,
+    "overformulaIntensityBonus": 1,
+    "formulaDefensePenalty": -1,
+    "summonConstructDefId": null,
+    "timingMode": "echo",
+    "echoAmount": 1,
+    "delayBonus": null
   },
   {
     "recipeId": "v6-tek-fintenschnitt-luft-ueberladung",
@@ -6850,7 +10457,10 @@ export const V6_GENERATED_FORMULA_RECIPES: readonly V6GeneratedFormulaRecipe[] =
     "overformulaPrimaryBonus": null,
     "overformulaIntensityBonus": null,
     "formulaDefensePenalty": null,
-    "summonConstructDefId": null
+    "summonConstructDefId": null,
+    "timingMode": "immediate",
+    "echoAmount": null,
+    "delayBonus": null
   },
   {
     "recipeId": "v6-over-fintenschnitt-luft-ueberladung",
@@ -6878,7 +10488,10 @@ export const V6_GENERATED_FORMULA_RECIPES: readonly V6GeneratedFormulaRecipe[] =
     "overformulaPrimaryBonus": null,
     "overformulaIntensityBonus": 1,
     "formulaDefensePenalty": -1,
-    "summonConstructDefId": null
+    "summonConstructDefId": null,
+    "timingMode": "immediate",
+    "echoAmount": null,
+    "delayBonus": null
   },
   {
     "recipeId": "v6-tek-fintenschnitt-luft-verdichtung",
@@ -6906,7 +10519,10 @@ export const V6_GENERATED_FORMULA_RECIPES: readonly V6GeneratedFormulaRecipe[] =
     "overformulaPrimaryBonus": null,
     "overformulaIntensityBonus": null,
     "formulaDefensePenalty": null,
-    "summonConstructDefId": null
+    "summonConstructDefId": null,
+    "timingMode": "immediate",
+    "echoAmount": null,
+    "delayBonus": null
   },
   {
     "recipeId": "v6-over-fintenschnitt-luft-verdichtung",
@@ -6934,7 +10550,72 @@ export const V6_GENERATED_FORMULA_RECIPES: readonly V6GeneratedFormulaRecipe[] =
     "overformulaPrimaryBonus": null,
     "overformulaIntensityBonus": 1,
     "formulaDefensePenalty": -1,
-    "summonConstructDefId": null
+    "summonConstructDefId": null,
+    "timingMode": "immediate",
+    "echoAmount": null,
+    "delayBonus": null
+  },
+  {
+    "recipeId": "v6-tek-fintenschnitt-luft-verzoegerung",
+    "kind": "tek",
+    "catalogSlice": "slice1",
+    "techniqueId": "v6-technik-fintenschnitt",
+    "essenceId": "v6-essenz-luft",
+    "catalystId": "v6-katalysator-verzoegerung",
+    "name": "Windfinte · Verzögerung",
+    "effectSummary": "Bereite Block +2 vor. Nächster eigener Aktions-W6 +1 (max +2). Verzögerung: Primäreffekt geschieht nicht sofort, sondern zu Beginn deines nächsten Zuges und erhält +2. Katalysator bleibt bis zur Auflösung. TEK: +1 Fetzladung (max 1×/Zug).",
+    "primary": {
+      "kind": "prep_block",
+      "value": 2,
+      "target": "self"
+    },
+    "rider": {
+      "id": "rider-w6",
+      "summary": "Nächster eigener Aktions-W6 +1 (max +2).",
+      "defenseSuppressible": true
+    },
+    "intensity": 1,
+    "transformId": "xform-verzoegerung",
+    "grantsFetz": true,
+    "catalystConsumed": false,
+    "overformulaPrimaryBonus": null,
+    "overformulaIntensityBonus": null,
+    "formulaDefensePenalty": null,
+    "summonConstructDefId": null,
+    "timingMode": "delay",
+    "echoAmount": null,
+    "delayBonus": 2
+  },
+  {
+    "recipeId": "v6-over-fintenschnitt-luft-verzoegerung",
+    "kind": "overformula",
+    "catalogSlice": "slice1",
+    "techniqueId": "v6-technik-fintenschnitt",
+    "essenceId": "v6-essenz-luft",
+    "catalystId": "v6-katalysator-verzoegerung",
+    "name": "Überformel Windfinte · Verzögerung",
+    "effectSummary": "Bereite Block +2 vor. Nächster eigener Aktions-W6 +1 (max +2). (verstärkt) Verzögerung: Primäreffekt geschieht nicht sofort, sondern zu Beginn deines nächsten Zuges und erhält +2. Katalysator bleibt bis zur Auflösung. Überformel: Intensität +1 (fester Slice-1-Bonus). Überformel: Fetzladung wird verbraucht. Formelabwehr −1.",
+    "primary": {
+      "kind": "prep_block",
+      "value": 2,
+      "target": "self"
+    },
+    "rider": {
+      "id": "rider-w6",
+      "summary": "Nächster eigener Aktions-W6 +1 (max +2). (verstärkt)",
+      "defenseSuppressible": true
+    },
+    "intensity": 2,
+    "transformId": "xform-verzoegerung",
+    "grantsFetz": false,
+    "catalystConsumed": false,
+    "overformulaPrimaryBonus": null,
+    "overformulaIntensityBonus": 1,
+    "formulaDefensePenalty": -1,
+    "summonConstructDefId": null,
+    "timingMode": "delay",
+    "echoAmount": null,
+    "delayBonus": 2
   },
   {
     "recipeId": "v6-tek-fintenschnitt-luft-sofortzuender",
@@ -6962,7 +10643,10 @@ export const V6_GENERATED_FORMULA_RECIPES: readonly V6GeneratedFormulaRecipe[] =
     "overformulaPrimaryBonus": null,
     "overformulaIntensityBonus": null,
     "formulaDefensePenalty": null,
-    "summonConstructDefId": null
+    "summonConstructDefId": null,
+    "timingMode": "immediate",
+    "echoAmount": null,
+    "delayBonus": null
   },
   {
     "recipeId": "v6-over-fintenschnitt-luft-sofortzuender",
@@ -6990,7 +10674,10 @@ export const V6_GENERATED_FORMULA_RECIPES: readonly V6GeneratedFormulaRecipe[] =
     "overformulaPrimaryBonus": null,
     "overformulaIntensityBonus": 1,
     "formulaDefensePenalty": -1,
-    "summonConstructDefId": null
+    "summonConstructDefId": null,
+    "timingMode": "immediate",
+    "echoAmount": null,
+    "delayBonus": null
   },
   {
     "recipeId": "v6-tek-fintenschnitt-luft-opfergabe",
@@ -7018,7 +10705,10 @@ export const V6_GENERATED_FORMULA_RECIPES: readonly V6GeneratedFormulaRecipe[] =
     "overformulaPrimaryBonus": null,
     "overformulaIntensityBonus": null,
     "formulaDefensePenalty": null,
-    "summonConstructDefId": null
+    "summonConstructDefId": null,
+    "timingMode": "immediate",
+    "echoAmount": null,
+    "delayBonus": null
   },
   {
     "recipeId": "v6-over-fintenschnitt-luft-opfergabe",
@@ -7046,7 +10736,72 @@ export const V6_GENERATED_FORMULA_RECIPES: readonly V6GeneratedFormulaRecipe[] =
     "overformulaPrimaryBonus": null,
     "overformulaIntensityBonus": 1,
     "formulaDefensePenalty": -1,
-    "summonConstructDefId": null
+    "summonConstructDefId": null,
+    "timingMode": "immediate",
+    "echoAmount": null,
+    "delayBonus": null
+  },
+  {
+    "recipeId": "v6-tek-fintenschnitt-licht-echo",
+    "kind": "tek",
+    "catalogSlice": "slice1",
+    "techniqueId": "v6-technik-fintenschnitt",
+    "essenceId": "v6-essenz-licht",
+    "catalystId": "v6-katalysator-echo",
+    "name": "Lichtfinte · Echo",
+    "effectSummary": "Bereite Block +2 vor. Bei Schildgewinn: entferne optional eine Marke von dir. Echo: zu Beginn deines nächsten Zuges wiederhole 1 Punkt des Primärwerts. Katalysator bleibt bis zur Echo-Auflösung. TEK: +1 Fetzladung (max 1×/Zug).",
+    "primary": {
+      "kind": "prep_block",
+      "value": 2,
+      "target": "self"
+    },
+    "rider": {
+      "id": "rider-reinigen-licht",
+      "summary": "Bei Schildgewinn: entferne optional eine Marke von dir.",
+      "defenseSuppressible": false
+    },
+    "intensity": 1,
+    "transformId": "xform-echo",
+    "grantsFetz": true,
+    "catalystConsumed": false,
+    "overformulaPrimaryBonus": null,
+    "overformulaIntensityBonus": null,
+    "formulaDefensePenalty": null,
+    "summonConstructDefId": null,
+    "timingMode": "echo",
+    "echoAmount": 1,
+    "delayBonus": null
+  },
+  {
+    "recipeId": "v6-over-fintenschnitt-licht-echo",
+    "kind": "overformula",
+    "catalogSlice": "slice1",
+    "techniqueId": "v6-technik-fintenschnitt",
+    "essenceId": "v6-essenz-licht",
+    "catalystId": "v6-katalysator-echo",
+    "name": "Überformel Lichtfinte · Echo",
+    "effectSummary": "Bereite Block +2 vor. Bei Schildgewinn: entferne optional eine Marke von dir. (verstärkt) Echo: zu Beginn deines nächsten Zuges wiederhole 1 Punkt des Primärwerts. Katalysator bleibt bis zur Echo-Auflösung. Überformel: Intensität +1 (fester Slice-1-Bonus). Überformel: Fetzladung wird verbraucht. Formelabwehr −1.",
+    "primary": {
+      "kind": "prep_block",
+      "value": 2,
+      "target": "self"
+    },
+    "rider": {
+      "id": "rider-reinigen-licht",
+      "summary": "Bei Schildgewinn: entferne optional eine Marke von dir. (verstärkt)",
+      "defenseSuppressible": false
+    },
+    "intensity": 2,
+    "transformId": "xform-echo",
+    "grantsFetz": false,
+    "catalystConsumed": false,
+    "overformulaPrimaryBonus": null,
+    "overformulaIntensityBonus": 1,
+    "formulaDefensePenalty": -1,
+    "summonConstructDefId": null,
+    "timingMode": "echo",
+    "echoAmount": 1,
+    "delayBonus": null
   },
   {
     "recipeId": "v6-tek-fintenschnitt-licht-ueberladung",
@@ -7074,7 +10829,10 @@ export const V6_GENERATED_FORMULA_RECIPES: readonly V6GeneratedFormulaRecipe[] =
     "overformulaPrimaryBonus": null,
     "overformulaIntensityBonus": null,
     "formulaDefensePenalty": null,
-    "summonConstructDefId": null
+    "summonConstructDefId": null,
+    "timingMode": "immediate",
+    "echoAmount": null,
+    "delayBonus": null
   },
   {
     "recipeId": "v6-over-fintenschnitt-licht-ueberladung",
@@ -7102,7 +10860,10 @@ export const V6_GENERATED_FORMULA_RECIPES: readonly V6GeneratedFormulaRecipe[] =
     "overformulaPrimaryBonus": null,
     "overformulaIntensityBonus": 1,
     "formulaDefensePenalty": -1,
-    "summonConstructDefId": null
+    "summonConstructDefId": null,
+    "timingMode": "immediate",
+    "echoAmount": null,
+    "delayBonus": null
   },
   {
     "recipeId": "v6-tek-fintenschnitt-licht-verdichtung",
@@ -7130,7 +10891,10 @@ export const V6_GENERATED_FORMULA_RECIPES: readonly V6GeneratedFormulaRecipe[] =
     "overformulaPrimaryBonus": null,
     "overformulaIntensityBonus": null,
     "formulaDefensePenalty": null,
-    "summonConstructDefId": null
+    "summonConstructDefId": null,
+    "timingMode": "immediate",
+    "echoAmount": null,
+    "delayBonus": null
   },
   {
     "recipeId": "v6-over-fintenschnitt-licht-verdichtung",
@@ -7158,7 +10922,72 @@ export const V6_GENERATED_FORMULA_RECIPES: readonly V6GeneratedFormulaRecipe[] =
     "overformulaPrimaryBonus": null,
     "overformulaIntensityBonus": 1,
     "formulaDefensePenalty": -1,
-    "summonConstructDefId": null
+    "summonConstructDefId": null,
+    "timingMode": "immediate",
+    "echoAmount": null,
+    "delayBonus": null
+  },
+  {
+    "recipeId": "v6-tek-fintenschnitt-licht-verzoegerung",
+    "kind": "tek",
+    "catalogSlice": "slice1",
+    "techniqueId": "v6-technik-fintenschnitt",
+    "essenceId": "v6-essenz-licht",
+    "catalystId": "v6-katalysator-verzoegerung",
+    "name": "Lichtfinte · Verzögerung",
+    "effectSummary": "Bereite Block +2 vor. Bei Schildgewinn: entferne optional eine Marke von dir. Verzögerung: Primäreffekt geschieht nicht sofort, sondern zu Beginn deines nächsten Zuges und erhält +2. Katalysator bleibt bis zur Auflösung. TEK: +1 Fetzladung (max 1×/Zug).",
+    "primary": {
+      "kind": "prep_block",
+      "value": 2,
+      "target": "self"
+    },
+    "rider": {
+      "id": "rider-reinigen-licht",
+      "summary": "Bei Schildgewinn: entferne optional eine Marke von dir.",
+      "defenseSuppressible": false
+    },
+    "intensity": 1,
+    "transformId": "xform-verzoegerung",
+    "grantsFetz": true,
+    "catalystConsumed": false,
+    "overformulaPrimaryBonus": null,
+    "overformulaIntensityBonus": null,
+    "formulaDefensePenalty": null,
+    "summonConstructDefId": null,
+    "timingMode": "delay",
+    "echoAmount": null,
+    "delayBonus": 2
+  },
+  {
+    "recipeId": "v6-over-fintenschnitt-licht-verzoegerung",
+    "kind": "overformula",
+    "catalogSlice": "slice1",
+    "techniqueId": "v6-technik-fintenschnitt",
+    "essenceId": "v6-essenz-licht",
+    "catalystId": "v6-katalysator-verzoegerung",
+    "name": "Überformel Lichtfinte · Verzögerung",
+    "effectSummary": "Bereite Block +2 vor. Bei Schildgewinn: entferne optional eine Marke von dir. (verstärkt) Verzögerung: Primäreffekt geschieht nicht sofort, sondern zu Beginn deines nächsten Zuges und erhält +2. Katalysator bleibt bis zur Auflösung. Überformel: Intensität +1 (fester Slice-1-Bonus). Überformel: Fetzladung wird verbraucht. Formelabwehr −1.",
+    "primary": {
+      "kind": "prep_block",
+      "value": 2,
+      "target": "self"
+    },
+    "rider": {
+      "id": "rider-reinigen-licht",
+      "summary": "Bei Schildgewinn: entferne optional eine Marke von dir. (verstärkt)",
+      "defenseSuppressible": false
+    },
+    "intensity": 2,
+    "transformId": "xform-verzoegerung",
+    "grantsFetz": false,
+    "catalystConsumed": false,
+    "overformulaPrimaryBonus": null,
+    "overformulaIntensityBonus": 1,
+    "formulaDefensePenalty": -1,
+    "summonConstructDefId": null,
+    "timingMode": "delay",
+    "echoAmount": null,
+    "delayBonus": 2
   },
   {
     "recipeId": "v6-tek-fintenschnitt-licht-sofortzuender",
@@ -7186,7 +11015,10 @@ export const V6_GENERATED_FORMULA_RECIPES: readonly V6GeneratedFormulaRecipe[] =
     "overformulaPrimaryBonus": null,
     "overformulaIntensityBonus": null,
     "formulaDefensePenalty": null,
-    "summonConstructDefId": null
+    "summonConstructDefId": null,
+    "timingMode": "immediate",
+    "echoAmount": null,
+    "delayBonus": null
   },
   {
     "recipeId": "v6-over-fintenschnitt-licht-sofortzuender",
@@ -7214,7 +11046,10 @@ export const V6_GENERATED_FORMULA_RECIPES: readonly V6GeneratedFormulaRecipe[] =
     "overformulaPrimaryBonus": null,
     "overformulaIntensityBonus": 1,
     "formulaDefensePenalty": -1,
-    "summonConstructDefId": null
+    "summonConstructDefId": null,
+    "timingMode": "immediate",
+    "echoAmount": null,
+    "delayBonus": null
   },
   {
     "recipeId": "v6-tek-fintenschnitt-licht-opfergabe",
@@ -7242,7 +11077,10 @@ export const V6_GENERATED_FORMULA_RECIPES: readonly V6GeneratedFormulaRecipe[] =
     "overformulaPrimaryBonus": null,
     "overformulaIntensityBonus": null,
     "formulaDefensePenalty": null,
-    "summonConstructDefId": null
+    "summonConstructDefId": null,
+    "timingMode": "immediate",
+    "echoAmount": null,
+    "delayBonus": null
   },
   {
     "recipeId": "v6-over-fintenschnitt-licht-opfergabe",
@@ -7270,7 +11108,72 @@ export const V6_GENERATED_FORMULA_RECIPES: readonly V6GeneratedFormulaRecipe[] =
     "overformulaPrimaryBonus": null,
     "overformulaIntensityBonus": 1,
     "formulaDefensePenalty": -1,
-    "summonConstructDefId": null
+    "summonConstructDefId": null,
+    "timingMode": "immediate",
+    "echoAmount": null,
+    "delayBonus": null
+  },
+  {
+    "recipeId": "v6-tek-fintenschnitt-schatten-echo",
+    "kind": "tek",
+    "catalogSlice": "slice1",
+    "techniqueId": "v6-technik-fintenschnitt",
+    "essenceId": "v6-essenz-schatten",
+    "catalystId": "v6-katalysator-echo",
+    "name": "Schattenfinte · Echo",
+    "effectSummary": "Bereite Block +2 vor. Bei Treffer: erschöpfe optional 1 gegnerische Formelkomponente. Echo: zu Beginn deines nächsten Zuges wiederhole 1 Punkt des Primärwerts. Katalysator bleibt bis zur Echo-Auflösung. TEK: +1 Fetzladung (max 1×/Zug).",
+    "primary": {
+      "kind": "prep_block",
+      "value": 2,
+      "target": "self"
+    },
+    "rider": {
+      "id": "rider-fluch",
+      "summary": "Bei Treffer: erschöpfe optional 1 gegnerische Formelkomponente.",
+      "defenseSuppressible": true
+    },
+    "intensity": 1,
+    "transformId": "xform-echo",
+    "grantsFetz": true,
+    "catalystConsumed": false,
+    "overformulaPrimaryBonus": null,
+    "overformulaIntensityBonus": null,
+    "formulaDefensePenalty": null,
+    "summonConstructDefId": null,
+    "timingMode": "echo",
+    "echoAmount": 1,
+    "delayBonus": null
+  },
+  {
+    "recipeId": "v6-over-fintenschnitt-schatten-echo",
+    "kind": "overformula",
+    "catalogSlice": "slice1",
+    "techniqueId": "v6-technik-fintenschnitt",
+    "essenceId": "v6-essenz-schatten",
+    "catalystId": "v6-katalysator-echo",
+    "name": "Überformel Schattenfinte · Echo",
+    "effectSummary": "Bereite Block +2 vor. Bei Treffer: erschöpfe optional 1 gegnerische Formelkomponente. (verstärkt) Echo: zu Beginn deines nächsten Zuges wiederhole 1 Punkt des Primärwerts. Katalysator bleibt bis zur Echo-Auflösung. Überformel: Intensität +1 (fester Slice-1-Bonus). Überformel: Fetzladung wird verbraucht. Formelabwehr −1.",
+    "primary": {
+      "kind": "prep_block",
+      "value": 2,
+      "target": "self"
+    },
+    "rider": {
+      "id": "rider-fluch",
+      "summary": "Bei Treffer: erschöpfe optional 1 gegnerische Formelkomponente. (verstärkt)",
+      "defenseSuppressible": true
+    },
+    "intensity": 2,
+    "transformId": "xform-echo",
+    "grantsFetz": false,
+    "catalystConsumed": false,
+    "overformulaPrimaryBonus": null,
+    "overformulaIntensityBonus": 1,
+    "formulaDefensePenalty": -1,
+    "summonConstructDefId": null,
+    "timingMode": "echo",
+    "echoAmount": 1,
+    "delayBonus": null
   },
   {
     "recipeId": "v6-tek-fintenschnitt-schatten-ueberladung",
@@ -7298,7 +11201,10 @@ export const V6_GENERATED_FORMULA_RECIPES: readonly V6GeneratedFormulaRecipe[] =
     "overformulaPrimaryBonus": null,
     "overformulaIntensityBonus": null,
     "formulaDefensePenalty": null,
-    "summonConstructDefId": null
+    "summonConstructDefId": null,
+    "timingMode": "immediate",
+    "echoAmount": null,
+    "delayBonus": null
   },
   {
     "recipeId": "v6-over-fintenschnitt-schatten-ueberladung",
@@ -7326,7 +11232,10 @@ export const V6_GENERATED_FORMULA_RECIPES: readonly V6GeneratedFormulaRecipe[] =
     "overformulaPrimaryBonus": null,
     "overformulaIntensityBonus": 1,
     "formulaDefensePenalty": -1,
-    "summonConstructDefId": null
+    "summonConstructDefId": null,
+    "timingMode": "immediate",
+    "echoAmount": null,
+    "delayBonus": null
   },
   {
     "recipeId": "v6-tek-fintenschnitt-schatten-verdichtung",
@@ -7354,7 +11263,10 @@ export const V6_GENERATED_FORMULA_RECIPES: readonly V6GeneratedFormulaRecipe[] =
     "overformulaPrimaryBonus": null,
     "overformulaIntensityBonus": null,
     "formulaDefensePenalty": null,
-    "summonConstructDefId": null
+    "summonConstructDefId": null,
+    "timingMode": "immediate",
+    "echoAmount": null,
+    "delayBonus": null
   },
   {
     "recipeId": "v6-over-fintenschnitt-schatten-verdichtung",
@@ -7382,7 +11294,72 @@ export const V6_GENERATED_FORMULA_RECIPES: readonly V6GeneratedFormulaRecipe[] =
     "overformulaPrimaryBonus": null,
     "overformulaIntensityBonus": 1,
     "formulaDefensePenalty": -1,
-    "summonConstructDefId": null
+    "summonConstructDefId": null,
+    "timingMode": "immediate",
+    "echoAmount": null,
+    "delayBonus": null
+  },
+  {
+    "recipeId": "v6-tek-fintenschnitt-schatten-verzoegerung",
+    "kind": "tek",
+    "catalogSlice": "slice1",
+    "techniqueId": "v6-technik-fintenschnitt",
+    "essenceId": "v6-essenz-schatten",
+    "catalystId": "v6-katalysator-verzoegerung",
+    "name": "Schattenfinte · Verzögerung",
+    "effectSummary": "Bereite Block +2 vor. Bei Treffer: erschöpfe optional 1 gegnerische Formelkomponente. Verzögerung: Primäreffekt geschieht nicht sofort, sondern zu Beginn deines nächsten Zuges und erhält +2. Katalysator bleibt bis zur Auflösung. TEK: +1 Fetzladung (max 1×/Zug).",
+    "primary": {
+      "kind": "prep_block",
+      "value": 2,
+      "target": "self"
+    },
+    "rider": {
+      "id": "rider-fluch",
+      "summary": "Bei Treffer: erschöpfe optional 1 gegnerische Formelkomponente.",
+      "defenseSuppressible": true
+    },
+    "intensity": 1,
+    "transformId": "xform-verzoegerung",
+    "grantsFetz": true,
+    "catalystConsumed": false,
+    "overformulaPrimaryBonus": null,
+    "overformulaIntensityBonus": null,
+    "formulaDefensePenalty": null,
+    "summonConstructDefId": null,
+    "timingMode": "delay",
+    "echoAmount": null,
+    "delayBonus": 2
+  },
+  {
+    "recipeId": "v6-over-fintenschnitt-schatten-verzoegerung",
+    "kind": "overformula",
+    "catalogSlice": "slice1",
+    "techniqueId": "v6-technik-fintenschnitt",
+    "essenceId": "v6-essenz-schatten",
+    "catalystId": "v6-katalysator-verzoegerung",
+    "name": "Überformel Schattenfinte · Verzögerung",
+    "effectSummary": "Bereite Block +2 vor. Bei Treffer: erschöpfe optional 1 gegnerische Formelkomponente. (verstärkt) Verzögerung: Primäreffekt geschieht nicht sofort, sondern zu Beginn deines nächsten Zuges und erhält +2. Katalysator bleibt bis zur Auflösung. Überformel: Intensität +1 (fester Slice-1-Bonus). Überformel: Fetzladung wird verbraucht. Formelabwehr −1.",
+    "primary": {
+      "kind": "prep_block",
+      "value": 2,
+      "target": "self"
+    },
+    "rider": {
+      "id": "rider-fluch",
+      "summary": "Bei Treffer: erschöpfe optional 1 gegnerische Formelkomponente. (verstärkt)",
+      "defenseSuppressible": true
+    },
+    "intensity": 2,
+    "transformId": "xform-verzoegerung",
+    "grantsFetz": false,
+    "catalystConsumed": false,
+    "overformulaPrimaryBonus": null,
+    "overformulaIntensityBonus": 1,
+    "formulaDefensePenalty": -1,
+    "summonConstructDefId": null,
+    "timingMode": "delay",
+    "echoAmount": null,
+    "delayBonus": 2
   },
   {
     "recipeId": "v6-tek-fintenschnitt-schatten-sofortzuender",
@@ -7410,7 +11387,10 @@ export const V6_GENERATED_FORMULA_RECIPES: readonly V6GeneratedFormulaRecipe[] =
     "overformulaPrimaryBonus": null,
     "overformulaIntensityBonus": null,
     "formulaDefensePenalty": null,
-    "summonConstructDefId": null
+    "summonConstructDefId": null,
+    "timingMode": "immediate",
+    "echoAmount": null,
+    "delayBonus": null
   },
   {
     "recipeId": "v6-over-fintenschnitt-schatten-sofortzuender",
@@ -7438,7 +11418,10 @@ export const V6_GENERATED_FORMULA_RECIPES: readonly V6GeneratedFormulaRecipe[] =
     "overformulaPrimaryBonus": null,
     "overformulaIntensityBonus": 1,
     "formulaDefensePenalty": -1,
-    "summonConstructDefId": null
+    "summonConstructDefId": null,
+    "timingMode": "immediate",
+    "echoAmount": null,
+    "delayBonus": null
   },
   {
     "recipeId": "v6-tek-fintenschnitt-schatten-opfergabe",
@@ -7466,7 +11449,10 @@ export const V6_GENERATED_FORMULA_RECIPES: readonly V6GeneratedFormulaRecipe[] =
     "overformulaPrimaryBonus": null,
     "overformulaIntensityBonus": null,
     "formulaDefensePenalty": null,
-    "summonConstructDefId": null
+    "summonConstructDefId": null,
+    "timingMode": "immediate",
+    "echoAmount": null,
+    "delayBonus": null
   },
   {
     "recipeId": "v6-over-fintenschnitt-schatten-opfergabe",
@@ -7494,7 +11480,74 @@ export const V6_GENERATED_FORMULA_RECIPES: readonly V6GeneratedFormulaRecipe[] =
     "overformulaPrimaryBonus": null,
     "overformulaIntensityBonus": 1,
     "formulaDefensePenalty": -1,
-    "summonConstructDefId": null
+    "summonConstructDefId": null,
+    "timingMode": "immediate",
+    "echoAmount": null,
+    "delayBonus": null
+  },
+  {
+    "recipeId": "v6-tek-brechschlag-feuer-echo",
+    "kind": "tek",
+    "catalogSlice": "slice1",
+    "techniqueId": "v6-technik-brechschlag",
+    "essenceId": "v6-essenz-feuer",
+    "catalystId": "v6-katalysator-echo",
+    "name": "Glutbruch · Echo",
+    "effectSummary": "Verursache 3 Schaden am Gegner. Bei Lebensschaden: Brennen, falls keine Reaktion. Echo: zu Beginn deines nächsten Zuges wiederhole 1 Punkt des Primärwerts. Katalysator bleibt bis zur Echo-Auflösung. TEK: +1 Fetzladung (max 1×/Zug).",
+    "primary": {
+      "kind": "damage",
+      "value": 3,
+      "target": "opponent",
+      "offensive": true
+    },
+    "rider": {
+      "id": "rider-brennen",
+      "summary": "Bei Lebensschaden: Brennen, falls keine Reaktion.",
+      "defenseSuppressible": true
+    },
+    "intensity": null,
+    "transformId": "xform-echo",
+    "grantsFetz": true,
+    "catalystConsumed": false,
+    "overformulaPrimaryBonus": null,
+    "overformulaIntensityBonus": null,
+    "formulaDefensePenalty": null,
+    "summonConstructDefId": null,
+    "timingMode": "echo",
+    "echoAmount": 1,
+    "delayBonus": null
+  },
+  {
+    "recipeId": "v6-over-brechschlag-feuer-echo",
+    "kind": "overformula",
+    "catalogSlice": "slice1",
+    "techniqueId": "v6-technik-brechschlag",
+    "essenceId": "v6-essenz-feuer",
+    "catalystId": "v6-katalysator-echo",
+    "name": "Überformel Glutbruch · Echo",
+    "effectSummary": "Verursache 5 Schaden am Gegner. Bei Lebensschaden: Brennen, falls keine Reaktion. (verstärkt) Echo: zu Beginn deines nächsten Zuges wiederhole 1 Punkt des Primärwerts. Katalysator bleibt bis zur Echo-Auflösung. Überformel: Primär +2 (fester Slice-1-Bonus). Überformel: Fetzladung wird verbraucht. Formelabwehr −1.",
+    "primary": {
+      "kind": "damage",
+      "value": 5,
+      "target": "opponent",
+      "offensive": true
+    },
+    "rider": {
+      "id": "rider-brennen",
+      "summary": "Bei Lebensschaden: Brennen, falls keine Reaktion. (verstärkt)",
+      "defenseSuppressible": true
+    },
+    "intensity": null,
+    "transformId": "xform-echo",
+    "grantsFetz": false,
+    "catalystConsumed": false,
+    "overformulaPrimaryBonus": 2,
+    "overformulaIntensityBonus": null,
+    "formulaDefensePenalty": -1,
+    "summonConstructDefId": null,
+    "timingMode": "echo",
+    "echoAmount": 1,
+    "delayBonus": null
   },
   {
     "recipeId": "v6-tek-brechschlag-feuer-ueberladung",
@@ -7523,7 +11576,10 @@ export const V6_GENERATED_FORMULA_RECIPES: readonly V6GeneratedFormulaRecipe[] =
     "overformulaPrimaryBonus": null,
     "overformulaIntensityBonus": null,
     "formulaDefensePenalty": null,
-    "summonConstructDefId": null
+    "summonConstructDefId": null,
+    "timingMode": "immediate",
+    "echoAmount": null,
+    "delayBonus": null
   },
   {
     "recipeId": "v6-over-brechschlag-feuer-ueberladung",
@@ -7552,7 +11608,10 @@ export const V6_GENERATED_FORMULA_RECIPES: readonly V6GeneratedFormulaRecipe[] =
     "overformulaPrimaryBonus": 2,
     "overformulaIntensityBonus": null,
     "formulaDefensePenalty": -1,
-    "summonConstructDefId": null
+    "summonConstructDefId": null,
+    "timingMode": "immediate",
+    "echoAmount": null,
+    "delayBonus": null
   },
   {
     "recipeId": "v6-tek-brechschlag-feuer-verdichtung",
@@ -7581,7 +11640,10 @@ export const V6_GENERATED_FORMULA_RECIPES: readonly V6GeneratedFormulaRecipe[] =
     "overformulaPrimaryBonus": null,
     "overformulaIntensityBonus": null,
     "formulaDefensePenalty": null,
-    "summonConstructDefId": null
+    "summonConstructDefId": null,
+    "timingMode": "immediate",
+    "echoAmount": null,
+    "delayBonus": null
   },
   {
     "recipeId": "v6-over-brechschlag-feuer-verdichtung",
@@ -7610,7 +11672,74 @@ export const V6_GENERATED_FORMULA_RECIPES: readonly V6GeneratedFormulaRecipe[] =
     "overformulaPrimaryBonus": 2,
     "overformulaIntensityBonus": null,
     "formulaDefensePenalty": -1,
-    "summonConstructDefId": null
+    "summonConstructDefId": null,
+    "timingMode": "immediate",
+    "echoAmount": null,
+    "delayBonus": null
+  },
+  {
+    "recipeId": "v6-tek-brechschlag-feuer-verzoegerung",
+    "kind": "tek",
+    "catalogSlice": "slice1",
+    "techniqueId": "v6-technik-brechschlag",
+    "essenceId": "v6-essenz-feuer",
+    "catalystId": "v6-katalysator-verzoegerung",
+    "name": "Glutbruch · Verzögerung",
+    "effectSummary": "Verursache 3 Schaden am Gegner. Bei Lebensschaden: Brennen, falls keine Reaktion. Verzögerung: Primäreffekt geschieht nicht sofort, sondern zu Beginn deines nächsten Zuges und erhält +2. Katalysator bleibt bis zur Auflösung. TEK: +1 Fetzladung (max 1×/Zug).",
+    "primary": {
+      "kind": "damage",
+      "value": 3,
+      "target": "opponent",
+      "offensive": true
+    },
+    "rider": {
+      "id": "rider-brennen",
+      "summary": "Bei Lebensschaden: Brennen, falls keine Reaktion.",
+      "defenseSuppressible": true
+    },
+    "intensity": null,
+    "transformId": "xform-verzoegerung",
+    "grantsFetz": true,
+    "catalystConsumed": false,
+    "overformulaPrimaryBonus": null,
+    "overformulaIntensityBonus": null,
+    "formulaDefensePenalty": null,
+    "summonConstructDefId": null,
+    "timingMode": "delay",
+    "echoAmount": null,
+    "delayBonus": 2
+  },
+  {
+    "recipeId": "v6-over-brechschlag-feuer-verzoegerung",
+    "kind": "overformula",
+    "catalogSlice": "slice1",
+    "techniqueId": "v6-technik-brechschlag",
+    "essenceId": "v6-essenz-feuer",
+    "catalystId": "v6-katalysator-verzoegerung",
+    "name": "Überformel Glutbruch · Verzögerung",
+    "effectSummary": "Verursache 5 Schaden am Gegner. Bei Lebensschaden: Brennen, falls keine Reaktion. (verstärkt) Verzögerung: Primäreffekt geschieht nicht sofort, sondern zu Beginn deines nächsten Zuges und erhält +2. Katalysator bleibt bis zur Auflösung. Überformel: Primär +2 (fester Slice-1-Bonus). Überformel: Fetzladung wird verbraucht. Formelabwehr −1.",
+    "primary": {
+      "kind": "damage",
+      "value": 5,
+      "target": "opponent",
+      "offensive": true
+    },
+    "rider": {
+      "id": "rider-brennen",
+      "summary": "Bei Lebensschaden: Brennen, falls keine Reaktion. (verstärkt)",
+      "defenseSuppressible": true
+    },
+    "intensity": null,
+    "transformId": "xform-verzoegerung",
+    "grantsFetz": false,
+    "catalystConsumed": false,
+    "overformulaPrimaryBonus": 2,
+    "overformulaIntensityBonus": null,
+    "formulaDefensePenalty": -1,
+    "summonConstructDefId": null,
+    "timingMode": "delay",
+    "echoAmount": null,
+    "delayBonus": 2
   },
   {
     "recipeId": "v6-tek-brechschlag-feuer-sofortzuender",
@@ -7639,7 +11768,10 @@ export const V6_GENERATED_FORMULA_RECIPES: readonly V6GeneratedFormulaRecipe[] =
     "overformulaPrimaryBonus": null,
     "overformulaIntensityBonus": null,
     "formulaDefensePenalty": null,
-    "summonConstructDefId": null
+    "summonConstructDefId": null,
+    "timingMode": "immediate",
+    "echoAmount": null,
+    "delayBonus": null
   },
   {
     "recipeId": "v6-over-brechschlag-feuer-sofortzuender",
@@ -7668,7 +11800,10 @@ export const V6_GENERATED_FORMULA_RECIPES: readonly V6GeneratedFormulaRecipe[] =
     "overformulaPrimaryBonus": 2,
     "overformulaIntensityBonus": null,
     "formulaDefensePenalty": -1,
-    "summonConstructDefId": null
+    "summonConstructDefId": null,
+    "timingMode": "immediate",
+    "echoAmount": null,
+    "delayBonus": null
   },
   {
     "recipeId": "v6-tek-brechschlag-feuer-opfergabe",
@@ -7697,7 +11832,10 @@ export const V6_GENERATED_FORMULA_RECIPES: readonly V6GeneratedFormulaRecipe[] =
     "overformulaPrimaryBonus": null,
     "overformulaIntensityBonus": null,
     "formulaDefensePenalty": null,
-    "summonConstructDefId": null
+    "summonConstructDefId": null,
+    "timingMode": "immediate",
+    "echoAmount": null,
+    "delayBonus": null
   },
   {
     "recipeId": "v6-over-brechschlag-feuer-opfergabe",
@@ -7726,7 +11864,74 @@ export const V6_GENERATED_FORMULA_RECIPES: readonly V6GeneratedFormulaRecipe[] =
     "overformulaPrimaryBonus": 2,
     "overformulaIntensityBonus": null,
     "formulaDefensePenalty": -1,
-    "summonConstructDefId": null
+    "summonConstructDefId": null,
+    "timingMode": "immediate",
+    "echoAmount": null,
+    "delayBonus": null
+  },
+  {
+    "recipeId": "v6-tek-brechschlag-wasser-echo",
+    "kind": "tek",
+    "catalogSlice": "slice1",
+    "techniqueId": "v6-technik-brechschlag",
+    "essenceId": "v6-essenz-wasser",
+    "catalystId": "v6-katalysator-echo",
+    "name": "Wellenbruch · Echo",
+    "effectSummary": "Verursache 2 Schaden am Gegner. Bei Heilung oder Schildgewinn: entferne optional eine Marke von dir. Echo: zu Beginn deines nächsten Zuges wiederhole 1 Punkt des Primärwerts. Katalysator bleibt bis zur Echo-Auflösung. TEK: +1 Fetzladung (max 1×/Zug).",
+    "primary": {
+      "kind": "damage",
+      "value": 2,
+      "target": "opponent",
+      "offensive": true
+    },
+    "rider": {
+      "id": "rider-reinigen",
+      "summary": "Bei Heilung oder Schildgewinn: entferne optional eine Marke von dir.",
+      "defenseSuppressible": false
+    },
+    "intensity": null,
+    "transformId": "xform-echo",
+    "grantsFetz": true,
+    "catalystConsumed": false,
+    "overformulaPrimaryBonus": null,
+    "overformulaIntensityBonus": null,
+    "formulaDefensePenalty": null,
+    "summonConstructDefId": null,
+    "timingMode": "echo",
+    "echoAmount": 1,
+    "delayBonus": null
+  },
+  {
+    "recipeId": "v6-over-brechschlag-wasser-echo",
+    "kind": "overformula",
+    "catalogSlice": "slice1",
+    "techniqueId": "v6-technik-brechschlag",
+    "essenceId": "v6-essenz-wasser",
+    "catalystId": "v6-katalysator-echo",
+    "name": "Überformel Wellenbruch · Echo",
+    "effectSummary": "Verursache 4 Schaden am Gegner. Bei Heilung oder Schildgewinn: entferne optional eine Marke von dir. (verstärkt) Echo: zu Beginn deines nächsten Zuges wiederhole 1 Punkt des Primärwerts. Katalysator bleibt bis zur Echo-Auflösung. Überformel: Primär +2 (fester Slice-1-Bonus). Überformel: Fetzladung wird verbraucht. Formelabwehr −1.",
+    "primary": {
+      "kind": "damage",
+      "value": 4,
+      "target": "opponent",
+      "offensive": true
+    },
+    "rider": {
+      "id": "rider-reinigen",
+      "summary": "Bei Heilung oder Schildgewinn: entferne optional eine Marke von dir. (verstärkt)",
+      "defenseSuppressible": false
+    },
+    "intensity": null,
+    "transformId": "xform-echo",
+    "grantsFetz": false,
+    "catalystConsumed": false,
+    "overformulaPrimaryBonus": 2,
+    "overformulaIntensityBonus": null,
+    "formulaDefensePenalty": -1,
+    "summonConstructDefId": null,
+    "timingMode": "echo",
+    "echoAmount": 1,
+    "delayBonus": null
   },
   {
     "recipeId": "v6-tek-brechschlag-wasser-ueberladung",
@@ -7755,7 +11960,10 @@ export const V6_GENERATED_FORMULA_RECIPES: readonly V6GeneratedFormulaRecipe[] =
     "overformulaPrimaryBonus": null,
     "overformulaIntensityBonus": null,
     "formulaDefensePenalty": null,
-    "summonConstructDefId": null
+    "summonConstructDefId": null,
+    "timingMode": "immediate",
+    "echoAmount": null,
+    "delayBonus": null
   },
   {
     "recipeId": "v6-over-brechschlag-wasser-ueberladung",
@@ -7784,7 +11992,10 @@ export const V6_GENERATED_FORMULA_RECIPES: readonly V6GeneratedFormulaRecipe[] =
     "overformulaPrimaryBonus": 2,
     "overformulaIntensityBonus": null,
     "formulaDefensePenalty": -1,
-    "summonConstructDefId": null
+    "summonConstructDefId": null,
+    "timingMode": "immediate",
+    "echoAmount": null,
+    "delayBonus": null
   },
   {
     "recipeId": "v6-tek-brechschlag-wasser-verdichtung",
@@ -7813,7 +12024,10 @@ export const V6_GENERATED_FORMULA_RECIPES: readonly V6GeneratedFormulaRecipe[] =
     "overformulaPrimaryBonus": null,
     "overformulaIntensityBonus": null,
     "formulaDefensePenalty": null,
-    "summonConstructDefId": null
+    "summonConstructDefId": null,
+    "timingMode": "immediate",
+    "echoAmount": null,
+    "delayBonus": null
   },
   {
     "recipeId": "v6-over-brechschlag-wasser-verdichtung",
@@ -7842,7 +12056,74 @@ export const V6_GENERATED_FORMULA_RECIPES: readonly V6GeneratedFormulaRecipe[] =
     "overformulaPrimaryBonus": 2,
     "overformulaIntensityBonus": null,
     "formulaDefensePenalty": -1,
-    "summonConstructDefId": null
+    "summonConstructDefId": null,
+    "timingMode": "immediate",
+    "echoAmount": null,
+    "delayBonus": null
+  },
+  {
+    "recipeId": "v6-tek-brechschlag-wasser-verzoegerung",
+    "kind": "tek",
+    "catalogSlice": "slice1",
+    "techniqueId": "v6-technik-brechschlag",
+    "essenceId": "v6-essenz-wasser",
+    "catalystId": "v6-katalysator-verzoegerung",
+    "name": "Wellenbruch · Verzögerung",
+    "effectSummary": "Verursache 2 Schaden am Gegner. Bei Heilung oder Schildgewinn: entferne optional eine Marke von dir. Verzögerung: Primäreffekt geschieht nicht sofort, sondern zu Beginn deines nächsten Zuges und erhält +2. Katalysator bleibt bis zur Auflösung. TEK: +1 Fetzladung (max 1×/Zug).",
+    "primary": {
+      "kind": "damage",
+      "value": 2,
+      "target": "opponent",
+      "offensive": true
+    },
+    "rider": {
+      "id": "rider-reinigen",
+      "summary": "Bei Heilung oder Schildgewinn: entferne optional eine Marke von dir.",
+      "defenseSuppressible": false
+    },
+    "intensity": null,
+    "transformId": "xform-verzoegerung",
+    "grantsFetz": true,
+    "catalystConsumed": false,
+    "overformulaPrimaryBonus": null,
+    "overformulaIntensityBonus": null,
+    "formulaDefensePenalty": null,
+    "summonConstructDefId": null,
+    "timingMode": "delay",
+    "echoAmount": null,
+    "delayBonus": 2
+  },
+  {
+    "recipeId": "v6-over-brechschlag-wasser-verzoegerung",
+    "kind": "overformula",
+    "catalogSlice": "slice1",
+    "techniqueId": "v6-technik-brechschlag",
+    "essenceId": "v6-essenz-wasser",
+    "catalystId": "v6-katalysator-verzoegerung",
+    "name": "Überformel Wellenbruch · Verzögerung",
+    "effectSummary": "Verursache 4 Schaden am Gegner. Bei Heilung oder Schildgewinn: entferne optional eine Marke von dir. (verstärkt) Verzögerung: Primäreffekt geschieht nicht sofort, sondern zu Beginn deines nächsten Zuges und erhält +2. Katalysator bleibt bis zur Auflösung. Überformel: Primär +2 (fester Slice-1-Bonus). Überformel: Fetzladung wird verbraucht. Formelabwehr −1.",
+    "primary": {
+      "kind": "damage",
+      "value": 4,
+      "target": "opponent",
+      "offensive": true
+    },
+    "rider": {
+      "id": "rider-reinigen",
+      "summary": "Bei Heilung oder Schildgewinn: entferne optional eine Marke von dir. (verstärkt)",
+      "defenseSuppressible": false
+    },
+    "intensity": null,
+    "transformId": "xform-verzoegerung",
+    "grantsFetz": false,
+    "catalystConsumed": false,
+    "overformulaPrimaryBonus": 2,
+    "overformulaIntensityBonus": null,
+    "formulaDefensePenalty": -1,
+    "summonConstructDefId": null,
+    "timingMode": "delay",
+    "echoAmount": null,
+    "delayBonus": 2
   },
   {
     "recipeId": "v6-tek-brechschlag-wasser-sofortzuender",
@@ -7871,7 +12152,10 @@ export const V6_GENERATED_FORMULA_RECIPES: readonly V6GeneratedFormulaRecipe[] =
     "overformulaPrimaryBonus": null,
     "overformulaIntensityBonus": null,
     "formulaDefensePenalty": null,
-    "summonConstructDefId": null
+    "summonConstructDefId": null,
+    "timingMode": "immediate",
+    "echoAmount": null,
+    "delayBonus": null
   },
   {
     "recipeId": "v6-over-brechschlag-wasser-sofortzuender",
@@ -7900,7 +12184,10 @@ export const V6_GENERATED_FORMULA_RECIPES: readonly V6GeneratedFormulaRecipe[] =
     "overformulaPrimaryBonus": 2,
     "overformulaIntensityBonus": null,
     "formulaDefensePenalty": -1,
-    "summonConstructDefId": null
+    "summonConstructDefId": null,
+    "timingMode": "immediate",
+    "echoAmount": null,
+    "delayBonus": null
   },
   {
     "recipeId": "v6-tek-brechschlag-wasser-opfergabe",
@@ -7929,7 +12216,10 @@ export const V6_GENERATED_FORMULA_RECIPES: readonly V6GeneratedFormulaRecipe[] =
     "overformulaPrimaryBonus": null,
     "overformulaIntensityBonus": null,
     "formulaDefensePenalty": null,
-    "summonConstructDefId": null
+    "summonConstructDefId": null,
+    "timingMode": "immediate",
+    "echoAmount": null,
+    "delayBonus": null
   },
   {
     "recipeId": "v6-over-brechschlag-wasser-opfergabe",
@@ -7958,7 +12248,74 @@ export const V6_GENERATED_FORMULA_RECIPES: readonly V6GeneratedFormulaRecipe[] =
     "overformulaPrimaryBonus": 2,
     "overformulaIntensityBonus": null,
     "formulaDefensePenalty": -1,
-    "summonConstructDefId": null
+    "summonConstructDefId": null,
+    "timingMode": "immediate",
+    "echoAmount": null,
+    "delayBonus": null
+  },
+  {
+    "recipeId": "v6-tek-brechschlag-erde-echo",
+    "kind": "tek",
+    "catalogSlice": "slice1",
+    "techniqueId": "v6-technik-brechschlag",
+    "essenceId": "v6-essenz-erde",
+    "catalystId": "v6-katalysator-echo",
+    "name": "Felsbruch · Echo",
+    "effectSummary": "Verursache 3 Schaden am Gegner. Verwendete Komponenten +1 Stabilität bis nächste Startphase. Echo: zu Beginn deines nächsten Zuges wiederhole 1 Punkt des Primärwerts. Katalysator bleibt bis zur Echo-Auflösung. TEK: +1 Fetzladung (max 1×/Zug).",
+    "primary": {
+      "kind": "damage",
+      "value": 3,
+      "target": "opponent",
+      "offensive": true
+    },
+    "rider": {
+      "id": "rider-stabilitaet",
+      "summary": "Verwendete Komponenten +1 Stabilität bis nächste Startphase.",
+      "defenseSuppressible": false
+    },
+    "intensity": null,
+    "transformId": "xform-echo",
+    "grantsFetz": true,
+    "catalystConsumed": false,
+    "overformulaPrimaryBonus": null,
+    "overformulaIntensityBonus": null,
+    "formulaDefensePenalty": null,
+    "summonConstructDefId": null,
+    "timingMode": "echo",
+    "echoAmount": 1,
+    "delayBonus": null
+  },
+  {
+    "recipeId": "v6-over-brechschlag-erde-echo",
+    "kind": "overformula",
+    "catalogSlice": "slice1",
+    "techniqueId": "v6-technik-brechschlag",
+    "essenceId": "v6-essenz-erde",
+    "catalystId": "v6-katalysator-echo",
+    "name": "Überformel Felsbruch · Echo",
+    "effectSummary": "Verursache 5 Schaden am Gegner. Verwendete Komponenten +1 Stabilität bis nächste Startphase. (verstärkt) Echo: zu Beginn deines nächsten Zuges wiederhole 1 Punkt des Primärwerts. Katalysator bleibt bis zur Echo-Auflösung. Überformel: Primär +2 (fester Slice-1-Bonus). Überformel: Fetzladung wird verbraucht. Formelabwehr −1.",
+    "primary": {
+      "kind": "damage",
+      "value": 5,
+      "target": "opponent",
+      "offensive": true
+    },
+    "rider": {
+      "id": "rider-stabilitaet",
+      "summary": "Verwendete Komponenten +1 Stabilität bis nächste Startphase. (verstärkt)",
+      "defenseSuppressible": false
+    },
+    "intensity": null,
+    "transformId": "xform-echo",
+    "grantsFetz": false,
+    "catalystConsumed": false,
+    "overformulaPrimaryBonus": 2,
+    "overformulaIntensityBonus": null,
+    "formulaDefensePenalty": -1,
+    "summonConstructDefId": null,
+    "timingMode": "echo",
+    "echoAmount": 1,
+    "delayBonus": null
   },
   {
     "recipeId": "v6-tek-brechschlag-erde-ueberladung",
@@ -7987,7 +12344,10 @@ export const V6_GENERATED_FORMULA_RECIPES: readonly V6GeneratedFormulaRecipe[] =
     "overformulaPrimaryBonus": null,
     "overformulaIntensityBonus": null,
     "formulaDefensePenalty": null,
-    "summonConstructDefId": null
+    "summonConstructDefId": null,
+    "timingMode": "immediate",
+    "echoAmount": null,
+    "delayBonus": null
   },
   {
     "recipeId": "v6-over-brechschlag-erde-ueberladung",
@@ -8016,7 +12376,10 @@ export const V6_GENERATED_FORMULA_RECIPES: readonly V6GeneratedFormulaRecipe[] =
     "overformulaPrimaryBonus": 2,
     "overformulaIntensityBonus": null,
     "formulaDefensePenalty": -1,
-    "summonConstructDefId": null
+    "summonConstructDefId": null,
+    "timingMode": "immediate",
+    "echoAmount": null,
+    "delayBonus": null
   },
   {
     "recipeId": "v6-tek-brechschlag-erde-verdichtung",
@@ -8045,7 +12408,10 @@ export const V6_GENERATED_FORMULA_RECIPES: readonly V6GeneratedFormulaRecipe[] =
     "overformulaPrimaryBonus": null,
     "overformulaIntensityBonus": null,
     "formulaDefensePenalty": null,
-    "summonConstructDefId": null
+    "summonConstructDefId": null,
+    "timingMode": "immediate",
+    "echoAmount": null,
+    "delayBonus": null
   },
   {
     "recipeId": "v6-over-brechschlag-erde-verdichtung",
@@ -8074,7 +12440,74 @@ export const V6_GENERATED_FORMULA_RECIPES: readonly V6GeneratedFormulaRecipe[] =
     "overformulaPrimaryBonus": 2,
     "overformulaIntensityBonus": null,
     "formulaDefensePenalty": -1,
-    "summonConstructDefId": null
+    "summonConstructDefId": null,
+    "timingMode": "immediate",
+    "echoAmount": null,
+    "delayBonus": null
+  },
+  {
+    "recipeId": "v6-tek-brechschlag-erde-verzoegerung",
+    "kind": "tek",
+    "catalogSlice": "slice1",
+    "techniqueId": "v6-technik-brechschlag",
+    "essenceId": "v6-essenz-erde",
+    "catalystId": "v6-katalysator-verzoegerung",
+    "name": "Felsbruch · Verzögerung",
+    "effectSummary": "Verursache 3 Schaden am Gegner. Verwendete Komponenten +1 Stabilität bis nächste Startphase. Verzögerung: Primäreffekt geschieht nicht sofort, sondern zu Beginn deines nächsten Zuges und erhält +2. Katalysator bleibt bis zur Auflösung. TEK: +1 Fetzladung (max 1×/Zug).",
+    "primary": {
+      "kind": "damage",
+      "value": 3,
+      "target": "opponent",
+      "offensive": true
+    },
+    "rider": {
+      "id": "rider-stabilitaet",
+      "summary": "Verwendete Komponenten +1 Stabilität bis nächste Startphase.",
+      "defenseSuppressible": false
+    },
+    "intensity": null,
+    "transformId": "xform-verzoegerung",
+    "grantsFetz": true,
+    "catalystConsumed": false,
+    "overformulaPrimaryBonus": null,
+    "overformulaIntensityBonus": null,
+    "formulaDefensePenalty": null,
+    "summonConstructDefId": null,
+    "timingMode": "delay",
+    "echoAmount": null,
+    "delayBonus": 2
+  },
+  {
+    "recipeId": "v6-over-brechschlag-erde-verzoegerung",
+    "kind": "overformula",
+    "catalogSlice": "slice1",
+    "techniqueId": "v6-technik-brechschlag",
+    "essenceId": "v6-essenz-erde",
+    "catalystId": "v6-katalysator-verzoegerung",
+    "name": "Überformel Felsbruch · Verzögerung",
+    "effectSummary": "Verursache 5 Schaden am Gegner. Verwendete Komponenten +1 Stabilität bis nächste Startphase. (verstärkt) Verzögerung: Primäreffekt geschieht nicht sofort, sondern zu Beginn deines nächsten Zuges und erhält +2. Katalysator bleibt bis zur Auflösung. Überformel: Primär +2 (fester Slice-1-Bonus). Überformel: Fetzladung wird verbraucht. Formelabwehr −1.",
+    "primary": {
+      "kind": "damage",
+      "value": 5,
+      "target": "opponent",
+      "offensive": true
+    },
+    "rider": {
+      "id": "rider-stabilitaet",
+      "summary": "Verwendete Komponenten +1 Stabilität bis nächste Startphase. (verstärkt)",
+      "defenseSuppressible": false
+    },
+    "intensity": null,
+    "transformId": "xform-verzoegerung",
+    "grantsFetz": false,
+    "catalystConsumed": false,
+    "overformulaPrimaryBonus": 2,
+    "overformulaIntensityBonus": null,
+    "formulaDefensePenalty": -1,
+    "summonConstructDefId": null,
+    "timingMode": "delay",
+    "echoAmount": null,
+    "delayBonus": 2
   },
   {
     "recipeId": "v6-tek-brechschlag-erde-sofortzuender",
@@ -8103,7 +12536,10 @@ export const V6_GENERATED_FORMULA_RECIPES: readonly V6GeneratedFormulaRecipe[] =
     "overformulaPrimaryBonus": null,
     "overformulaIntensityBonus": null,
     "formulaDefensePenalty": null,
-    "summonConstructDefId": null
+    "summonConstructDefId": null,
+    "timingMode": "immediate",
+    "echoAmount": null,
+    "delayBonus": null
   },
   {
     "recipeId": "v6-over-brechschlag-erde-sofortzuender",
@@ -8132,7 +12568,10 @@ export const V6_GENERATED_FORMULA_RECIPES: readonly V6GeneratedFormulaRecipe[] =
     "overformulaPrimaryBonus": 2,
     "overformulaIntensityBonus": null,
     "formulaDefensePenalty": -1,
-    "summonConstructDefId": null
+    "summonConstructDefId": null,
+    "timingMode": "immediate",
+    "echoAmount": null,
+    "delayBonus": null
   },
   {
     "recipeId": "v6-tek-brechschlag-erde-opfergabe",
@@ -8161,7 +12600,10 @@ export const V6_GENERATED_FORMULA_RECIPES: readonly V6GeneratedFormulaRecipe[] =
     "overformulaPrimaryBonus": null,
     "overformulaIntensityBonus": null,
     "formulaDefensePenalty": null,
-    "summonConstructDefId": null
+    "summonConstructDefId": null,
+    "timingMode": "immediate",
+    "echoAmount": null,
+    "delayBonus": null
   },
   {
     "recipeId": "v6-over-brechschlag-erde-opfergabe",
@@ -8190,7 +12632,74 @@ export const V6_GENERATED_FORMULA_RECIPES: readonly V6GeneratedFormulaRecipe[] =
     "overformulaPrimaryBonus": 2,
     "overformulaIntensityBonus": null,
     "formulaDefensePenalty": -1,
-    "summonConstructDefId": null
+    "summonConstructDefId": null,
+    "timingMode": "immediate",
+    "echoAmount": null,
+    "delayBonus": null
+  },
+  {
+    "recipeId": "v6-tek-brechschlag-luft-echo",
+    "kind": "tek",
+    "catalogSlice": "slice1",
+    "techniqueId": "v6-technik-brechschlag",
+    "essenceId": "v6-essenz-luft",
+    "catalystId": "v6-katalysator-echo",
+    "name": "Windbruch · Echo",
+    "effectSummary": "Verursache 2 Schaden am Gegner. Nächster eigener Aktions-W6 +1 (max +2). Echo: zu Beginn deines nächsten Zuges wiederhole 1 Punkt des Primärwerts. Katalysator bleibt bis zur Echo-Auflösung. TEK: +1 Fetzladung (max 1×/Zug).",
+    "primary": {
+      "kind": "damage",
+      "value": 2,
+      "target": "opponent",
+      "offensive": true
+    },
+    "rider": {
+      "id": "rider-w6",
+      "summary": "Nächster eigener Aktions-W6 +1 (max +2).",
+      "defenseSuppressible": true
+    },
+    "intensity": null,
+    "transformId": "xform-echo",
+    "grantsFetz": true,
+    "catalystConsumed": false,
+    "overformulaPrimaryBonus": null,
+    "overformulaIntensityBonus": null,
+    "formulaDefensePenalty": null,
+    "summonConstructDefId": null,
+    "timingMode": "echo",
+    "echoAmount": 1,
+    "delayBonus": null
+  },
+  {
+    "recipeId": "v6-over-brechschlag-luft-echo",
+    "kind": "overformula",
+    "catalogSlice": "slice1",
+    "techniqueId": "v6-technik-brechschlag",
+    "essenceId": "v6-essenz-luft",
+    "catalystId": "v6-katalysator-echo",
+    "name": "Überformel Windbruch · Echo",
+    "effectSummary": "Verursache 4 Schaden am Gegner. Nächster eigener Aktions-W6 +1 (max +2). (verstärkt) Echo: zu Beginn deines nächsten Zuges wiederhole 1 Punkt des Primärwerts. Katalysator bleibt bis zur Echo-Auflösung. Überformel: Primär +2 (fester Slice-1-Bonus). Überformel: Fetzladung wird verbraucht. Formelabwehr −1.",
+    "primary": {
+      "kind": "damage",
+      "value": 4,
+      "target": "opponent",
+      "offensive": true
+    },
+    "rider": {
+      "id": "rider-w6",
+      "summary": "Nächster eigener Aktions-W6 +1 (max +2). (verstärkt)",
+      "defenseSuppressible": true
+    },
+    "intensity": null,
+    "transformId": "xform-echo",
+    "grantsFetz": false,
+    "catalystConsumed": false,
+    "overformulaPrimaryBonus": 2,
+    "overformulaIntensityBonus": null,
+    "formulaDefensePenalty": -1,
+    "summonConstructDefId": null,
+    "timingMode": "echo",
+    "echoAmount": 1,
+    "delayBonus": null
   },
   {
     "recipeId": "v6-tek-brechschlag-luft-ueberladung",
@@ -8219,7 +12728,10 @@ export const V6_GENERATED_FORMULA_RECIPES: readonly V6GeneratedFormulaRecipe[] =
     "overformulaPrimaryBonus": null,
     "overformulaIntensityBonus": null,
     "formulaDefensePenalty": null,
-    "summonConstructDefId": null
+    "summonConstructDefId": null,
+    "timingMode": "immediate",
+    "echoAmount": null,
+    "delayBonus": null
   },
   {
     "recipeId": "v6-over-brechschlag-luft-ueberladung",
@@ -8248,7 +12760,10 @@ export const V6_GENERATED_FORMULA_RECIPES: readonly V6GeneratedFormulaRecipe[] =
     "overformulaPrimaryBonus": 2,
     "overformulaIntensityBonus": null,
     "formulaDefensePenalty": -1,
-    "summonConstructDefId": null
+    "summonConstructDefId": null,
+    "timingMode": "immediate",
+    "echoAmount": null,
+    "delayBonus": null
   },
   {
     "recipeId": "v6-tek-brechschlag-luft-verdichtung",
@@ -8277,7 +12792,10 @@ export const V6_GENERATED_FORMULA_RECIPES: readonly V6GeneratedFormulaRecipe[] =
     "overformulaPrimaryBonus": null,
     "overformulaIntensityBonus": null,
     "formulaDefensePenalty": null,
-    "summonConstructDefId": null
+    "summonConstructDefId": null,
+    "timingMode": "immediate",
+    "echoAmount": null,
+    "delayBonus": null
   },
   {
     "recipeId": "v6-over-brechschlag-luft-verdichtung",
@@ -8306,7 +12824,74 @@ export const V6_GENERATED_FORMULA_RECIPES: readonly V6GeneratedFormulaRecipe[] =
     "overformulaPrimaryBonus": 2,
     "overformulaIntensityBonus": null,
     "formulaDefensePenalty": -1,
-    "summonConstructDefId": null
+    "summonConstructDefId": null,
+    "timingMode": "immediate",
+    "echoAmount": null,
+    "delayBonus": null
+  },
+  {
+    "recipeId": "v6-tek-brechschlag-luft-verzoegerung",
+    "kind": "tek",
+    "catalogSlice": "slice1",
+    "techniqueId": "v6-technik-brechschlag",
+    "essenceId": "v6-essenz-luft",
+    "catalystId": "v6-katalysator-verzoegerung",
+    "name": "Windbruch · Verzögerung",
+    "effectSummary": "Verursache 2 Schaden am Gegner. Nächster eigener Aktions-W6 +1 (max +2). Verzögerung: Primäreffekt geschieht nicht sofort, sondern zu Beginn deines nächsten Zuges und erhält +2. Katalysator bleibt bis zur Auflösung. TEK: +1 Fetzladung (max 1×/Zug).",
+    "primary": {
+      "kind": "damage",
+      "value": 2,
+      "target": "opponent",
+      "offensive": true
+    },
+    "rider": {
+      "id": "rider-w6",
+      "summary": "Nächster eigener Aktions-W6 +1 (max +2).",
+      "defenseSuppressible": true
+    },
+    "intensity": null,
+    "transformId": "xform-verzoegerung",
+    "grantsFetz": true,
+    "catalystConsumed": false,
+    "overformulaPrimaryBonus": null,
+    "overformulaIntensityBonus": null,
+    "formulaDefensePenalty": null,
+    "summonConstructDefId": null,
+    "timingMode": "delay",
+    "echoAmount": null,
+    "delayBonus": 2
+  },
+  {
+    "recipeId": "v6-over-brechschlag-luft-verzoegerung",
+    "kind": "overformula",
+    "catalogSlice": "slice1",
+    "techniqueId": "v6-technik-brechschlag",
+    "essenceId": "v6-essenz-luft",
+    "catalystId": "v6-katalysator-verzoegerung",
+    "name": "Überformel Windbruch · Verzögerung",
+    "effectSummary": "Verursache 4 Schaden am Gegner. Nächster eigener Aktions-W6 +1 (max +2). (verstärkt) Verzögerung: Primäreffekt geschieht nicht sofort, sondern zu Beginn deines nächsten Zuges und erhält +2. Katalysator bleibt bis zur Auflösung. Überformel: Primär +2 (fester Slice-1-Bonus). Überformel: Fetzladung wird verbraucht. Formelabwehr −1.",
+    "primary": {
+      "kind": "damage",
+      "value": 4,
+      "target": "opponent",
+      "offensive": true
+    },
+    "rider": {
+      "id": "rider-w6",
+      "summary": "Nächster eigener Aktions-W6 +1 (max +2). (verstärkt)",
+      "defenseSuppressible": true
+    },
+    "intensity": null,
+    "transformId": "xform-verzoegerung",
+    "grantsFetz": false,
+    "catalystConsumed": false,
+    "overformulaPrimaryBonus": 2,
+    "overformulaIntensityBonus": null,
+    "formulaDefensePenalty": -1,
+    "summonConstructDefId": null,
+    "timingMode": "delay",
+    "echoAmount": null,
+    "delayBonus": 2
   },
   {
     "recipeId": "v6-tek-brechschlag-luft-sofortzuender",
@@ -8335,7 +12920,10 @@ export const V6_GENERATED_FORMULA_RECIPES: readonly V6GeneratedFormulaRecipe[] =
     "overformulaPrimaryBonus": null,
     "overformulaIntensityBonus": null,
     "formulaDefensePenalty": null,
-    "summonConstructDefId": null
+    "summonConstructDefId": null,
+    "timingMode": "immediate",
+    "echoAmount": null,
+    "delayBonus": null
   },
   {
     "recipeId": "v6-over-brechschlag-luft-sofortzuender",
@@ -8364,7 +12952,10 @@ export const V6_GENERATED_FORMULA_RECIPES: readonly V6GeneratedFormulaRecipe[] =
     "overformulaPrimaryBonus": 2,
     "overformulaIntensityBonus": null,
     "formulaDefensePenalty": -1,
-    "summonConstructDefId": null
+    "summonConstructDefId": null,
+    "timingMode": "immediate",
+    "echoAmount": null,
+    "delayBonus": null
   },
   {
     "recipeId": "v6-tek-brechschlag-luft-opfergabe",
@@ -8393,7 +12984,10 @@ export const V6_GENERATED_FORMULA_RECIPES: readonly V6GeneratedFormulaRecipe[] =
     "overformulaPrimaryBonus": null,
     "overformulaIntensityBonus": null,
     "formulaDefensePenalty": null,
-    "summonConstructDefId": null
+    "summonConstructDefId": null,
+    "timingMode": "immediate",
+    "echoAmount": null,
+    "delayBonus": null
   },
   {
     "recipeId": "v6-over-brechschlag-luft-opfergabe",
@@ -8422,7 +13016,74 @@ export const V6_GENERATED_FORMULA_RECIPES: readonly V6GeneratedFormulaRecipe[] =
     "overformulaPrimaryBonus": 2,
     "overformulaIntensityBonus": null,
     "formulaDefensePenalty": -1,
-    "summonConstructDefId": null
+    "summonConstructDefId": null,
+    "timingMode": "immediate",
+    "echoAmount": null,
+    "delayBonus": null
+  },
+  {
+    "recipeId": "v6-tek-brechschlag-licht-echo",
+    "kind": "tek",
+    "catalogSlice": "slice1",
+    "techniqueId": "v6-technik-brechschlag",
+    "essenceId": "v6-essenz-licht",
+    "catalystId": "v6-katalysator-echo",
+    "name": "Lichtbruch · Echo",
+    "effectSummary": "Verursache 2 Schaden am Gegner. Bei Schildgewinn: entferne optional eine Marke von dir. Echo: zu Beginn deines nächsten Zuges wiederhole 1 Punkt des Primärwerts. Katalysator bleibt bis zur Echo-Auflösung. TEK: +1 Fetzladung (max 1×/Zug).",
+    "primary": {
+      "kind": "damage",
+      "value": 2,
+      "target": "opponent",
+      "offensive": true
+    },
+    "rider": {
+      "id": "rider-reinigen-licht",
+      "summary": "Bei Schildgewinn: entferne optional eine Marke von dir.",
+      "defenseSuppressible": false
+    },
+    "intensity": null,
+    "transformId": "xform-echo",
+    "grantsFetz": true,
+    "catalystConsumed": false,
+    "overformulaPrimaryBonus": null,
+    "overformulaIntensityBonus": null,
+    "formulaDefensePenalty": null,
+    "summonConstructDefId": null,
+    "timingMode": "echo",
+    "echoAmount": 1,
+    "delayBonus": null
+  },
+  {
+    "recipeId": "v6-over-brechschlag-licht-echo",
+    "kind": "overformula",
+    "catalogSlice": "slice1",
+    "techniqueId": "v6-technik-brechschlag",
+    "essenceId": "v6-essenz-licht",
+    "catalystId": "v6-katalysator-echo",
+    "name": "Überformel Lichtbruch · Echo",
+    "effectSummary": "Verursache 4 Schaden am Gegner. Bei Schildgewinn: entferne optional eine Marke von dir. (verstärkt) Echo: zu Beginn deines nächsten Zuges wiederhole 1 Punkt des Primärwerts. Katalysator bleibt bis zur Echo-Auflösung. Überformel: Primär +2 (fester Slice-1-Bonus). Überformel: Fetzladung wird verbraucht. Formelabwehr −1.",
+    "primary": {
+      "kind": "damage",
+      "value": 4,
+      "target": "opponent",
+      "offensive": true
+    },
+    "rider": {
+      "id": "rider-reinigen-licht",
+      "summary": "Bei Schildgewinn: entferne optional eine Marke von dir. (verstärkt)",
+      "defenseSuppressible": false
+    },
+    "intensity": null,
+    "transformId": "xform-echo",
+    "grantsFetz": false,
+    "catalystConsumed": false,
+    "overformulaPrimaryBonus": 2,
+    "overformulaIntensityBonus": null,
+    "formulaDefensePenalty": -1,
+    "summonConstructDefId": null,
+    "timingMode": "echo",
+    "echoAmount": 1,
+    "delayBonus": null
   },
   {
     "recipeId": "v6-tek-brechschlag-licht-ueberladung",
@@ -8451,7 +13112,10 @@ export const V6_GENERATED_FORMULA_RECIPES: readonly V6GeneratedFormulaRecipe[] =
     "overformulaPrimaryBonus": null,
     "overformulaIntensityBonus": null,
     "formulaDefensePenalty": null,
-    "summonConstructDefId": null
+    "summonConstructDefId": null,
+    "timingMode": "immediate",
+    "echoAmount": null,
+    "delayBonus": null
   },
   {
     "recipeId": "v6-over-brechschlag-licht-ueberladung",
@@ -8480,7 +13144,10 @@ export const V6_GENERATED_FORMULA_RECIPES: readonly V6GeneratedFormulaRecipe[] =
     "overformulaPrimaryBonus": 2,
     "overformulaIntensityBonus": null,
     "formulaDefensePenalty": -1,
-    "summonConstructDefId": null
+    "summonConstructDefId": null,
+    "timingMode": "immediate",
+    "echoAmount": null,
+    "delayBonus": null
   },
   {
     "recipeId": "v6-tek-brechschlag-licht-verdichtung",
@@ -8509,7 +13176,10 @@ export const V6_GENERATED_FORMULA_RECIPES: readonly V6GeneratedFormulaRecipe[] =
     "overformulaPrimaryBonus": null,
     "overformulaIntensityBonus": null,
     "formulaDefensePenalty": null,
-    "summonConstructDefId": null
+    "summonConstructDefId": null,
+    "timingMode": "immediate",
+    "echoAmount": null,
+    "delayBonus": null
   },
   {
     "recipeId": "v6-over-brechschlag-licht-verdichtung",
@@ -8538,7 +13208,74 @@ export const V6_GENERATED_FORMULA_RECIPES: readonly V6GeneratedFormulaRecipe[] =
     "overformulaPrimaryBonus": 2,
     "overformulaIntensityBonus": null,
     "formulaDefensePenalty": -1,
-    "summonConstructDefId": null
+    "summonConstructDefId": null,
+    "timingMode": "immediate",
+    "echoAmount": null,
+    "delayBonus": null
+  },
+  {
+    "recipeId": "v6-tek-brechschlag-licht-verzoegerung",
+    "kind": "tek",
+    "catalogSlice": "slice1",
+    "techniqueId": "v6-technik-brechschlag",
+    "essenceId": "v6-essenz-licht",
+    "catalystId": "v6-katalysator-verzoegerung",
+    "name": "Lichtbruch · Verzögerung",
+    "effectSummary": "Verursache 2 Schaden am Gegner. Bei Schildgewinn: entferne optional eine Marke von dir. Verzögerung: Primäreffekt geschieht nicht sofort, sondern zu Beginn deines nächsten Zuges und erhält +2. Katalysator bleibt bis zur Auflösung. TEK: +1 Fetzladung (max 1×/Zug).",
+    "primary": {
+      "kind": "damage",
+      "value": 2,
+      "target": "opponent",
+      "offensive": true
+    },
+    "rider": {
+      "id": "rider-reinigen-licht",
+      "summary": "Bei Schildgewinn: entferne optional eine Marke von dir.",
+      "defenseSuppressible": false
+    },
+    "intensity": null,
+    "transformId": "xform-verzoegerung",
+    "grantsFetz": true,
+    "catalystConsumed": false,
+    "overformulaPrimaryBonus": null,
+    "overformulaIntensityBonus": null,
+    "formulaDefensePenalty": null,
+    "summonConstructDefId": null,
+    "timingMode": "delay",
+    "echoAmount": null,
+    "delayBonus": 2
+  },
+  {
+    "recipeId": "v6-over-brechschlag-licht-verzoegerung",
+    "kind": "overformula",
+    "catalogSlice": "slice1",
+    "techniqueId": "v6-technik-brechschlag",
+    "essenceId": "v6-essenz-licht",
+    "catalystId": "v6-katalysator-verzoegerung",
+    "name": "Überformel Lichtbruch · Verzögerung",
+    "effectSummary": "Verursache 4 Schaden am Gegner. Bei Schildgewinn: entferne optional eine Marke von dir. (verstärkt) Verzögerung: Primäreffekt geschieht nicht sofort, sondern zu Beginn deines nächsten Zuges und erhält +2. Katalysator bleibt bis zur Auflösung. Überformel: Primär +2 (fester Slice-1-Bonus). Überformel: Fetzladung wird verbraucht. Formelabwehr −1.",
+    "primary": {
+      "kind": "damage",
+      "value": 4,
+      "target": "opponent",
+      "offensive": true
+    },
+    "rider": {
+      "id": "rider-reinigen-licht",
+      "summary": "Bei Schildgewinn: entferne optional eine Marke von dir. (verstärkt)",
+      "defenseSuppressible": false
+    },
+    "intensity": null,
+    "transformId": "xform-verzoegerung",
+    "grantsFetz": false,
+    "catalystConsumed": false,
+    "overformulaPrimaryBonus": 2,
+    "overformulaIntensityBonus": null,
+    "formulaDefensePenalty": -1,
+    "summonConstructDefId": null,
+    "timingMode": "delay",
+    "echoAmount": null,
+    "delayBonus": 2
   },
   {
     "recipeId": "v6-tek-brechschlag-licht-sofortzuender",
@@ -8567,7 +13304,10 @@ export const V6_GENERATED_FORMULA_RECIPES: readonly V6GeneratedFormulaRecipe[] =
     "overformulaPrimaryBonus": null,
     "overformulaIntensityBonus": null,
     "formulaDefensePenalty": null,
-    "summonConstructDefId": null
+    "summonConstructDefId": null,
+    "timingMode": "immediate",
+    "echoAmount": null,
+    "delayBonus": null
   },
   {
     "recipeId": "v6-over-brechschlag-licht-sofortzuender",
@@ -8596,7 +13336,10 @@ export const V6_GENERATED_FORMULA_RECIPES: readonly V6GeneratedFormulaRecipe[] =
     "overformulaPrimaryBonus": 2,
     "overformulaIntensityBonus": null,
     "formulaDefensePenalty": -1,
-    "summonConstructDefId": null
+    "summonConstructDefId": null,
+    "timingMode": "immediate",
+    "echoAmount": null,
+    "delayBonus": null
   },
   {
     "recipeId": "v6-tek-brechschlag-licht-opfergabe",
@@ -8625,7 +13368,10 @@ export const V6_GENERATED_FORMULA_RECIPES: readonly V6GeneratedFormulaRecipe[] =
     "overformulaPrimaryBonus": null,
     "overformulaIntensityBonus": null,
     "formulaDefensePenalty": null,
-    "summonConstructDefId": null
+    "summonConstructDefId": null,
+    "timingMode": "immediate",
+    "echoAmount": null,
+    "delayBonus": null
   },
   {
     "recipeId": "v6-over-brechschlag-licht-opfergabe",
@@ -8654,7 +13400,74 @@ export const V6_GENERATED_FORMULA_RECIPES: readonly V6GeneratedFormulaRecipe[] =
     "overformulaPrimaryBonus": 2,
     "overformulaIntensityBonus": null,
     "formulaDefensePenalty": -1,
-    "summonConstructDefId": null
+    "summonConstructDefId": null,
+    "timingMode": "immediate",
+    "echoAmount": null,
+    "delayBonus": null
+  },
+  {
+    "recipeId": "v6-tek-brechschlag-schatten-echo",
+    "kind": "tek",
+    "catalogSlice": "slice1",
+    "techniqueId": "v6-technik-brechschlag",
+    "essenceId": "v6-essenz-schatten",
+    "catalystId": "v6-katalysator-echo",
+    "name": "Schattenbruch · Echo",
+    "effectSummary": "Verursache 2 Schaden am Gegner. Bei Treffer: erschöpfe optional 1 gegnerische Formelkomponente. Echo: zu Beginn deines nächsten Zuges wiederhole 1 Punkt des Primärwerts. Katalysator bleibt bis zur Echo-Auflösung. TEK: +1 Fetzladung (max 1×/Zug).",
+    "primary": {
+      "kind": "damage",
+      "value": 2,
+      "target": "opponent",
+      "offensive": true
+    },
+    "rider": {
+      "id": "rider-fluch",
+      "summary": "Bei Treffer: erschöpfe optional 1 gegnerische Formelkomponente.",
+      "defenseSuppressible": true
+    },
+    "intensity": null,
+    "transformId": "xform-echo",
+    "grantsFetz": true,
+    "catalystConsumed": false,
+    "overformulaPrimaryBonus": null,
+    "overformulaIntensityBonus": null,
+    "formulaDefensePenalty": null,
+    "summonConstructDefId": null,
+    "timingMode": "echo",
+    "echoAmount": 1,
+    "delayBonus": null
+  },
+  {
+    "recipeId": "v6-over-brechschlag-schatten-echo",
+    "kind": "overformula",
+    "catalogSlice": "slice1",
+    "techniqueId": "v6-technik-brechschlag",
+    "essenceId": "v6-essenz-schatten",
+    "catalystId": "v6-katalysator-echo",
+    "name": "Überformel Schattenbruch · Echo",
+    "effectSummary": "Verursache 4 Schaden am Gegner. Bei Treffer: erschöpfe optional 1 gegnerische Formelkomponente. (verstärkt) Echo: zu Beginn deines nächsten Zuges wiederhole 1 Punkt des Primärwerts. Katalysator bleibt bis zur Echo-Auflösung. Überformel: Primär +2 (fester Slice-1-Bonus). Überformel: Fetzladung wird verbraucht. Formelabwehr −1.",
+    "primary": {
+      "kind": "damage",
+      "value": 4,
+      "target": "opponent",
+      "offensive": true
+    },
+    "rider": {
+      "id": "rider-fluch",
+      "summary": "Bei Treffer: erschöpfe optional 1 gegnerische Formelkomponente. (verstärkt)",
+      "defenseSuppressible": true
+    },
+    "intensity": null,
+    "transformId": "xform-echo",
+    "grantsFetz": false,
+    "catalystConsumed": false,
+    "overformulaPrimaryBonus": 2,
+    "overformulaIntensityBonus": null,
+    "formulaDefensePenalty": -1,
+    "summonConstructDefId": null,
+    "timingMode": "echo",
+    "echoAmount": 1,
+    "delayBonus": null
   },
   {
     "recipeId": "v6-tek-brechschlag-schatten-ueberladung",
@@ -8683,7 +13496,10 @@ export const V6_GENERATED_FORMULA_RECIPES: readonly V6GeneratedFormulaRecipe[] =
     "overformulaPrimaryBonus": null,
     "overformulaIntensityBonus": null,
     "formulaDefensePenalty": null,
-    "summonConstructDefId": null
+    "summonConstructDefId": null,
+    "timingMode": "immediate",
+    "echoAmount": null,
+    "delayBonus": null
   },
   {
     "recipeId": "v6-over-brechschlag-schatten-ueberladung",
@@ -8712,7 +13528,10 @@ export const V6_GENERATED_FORMULA_RECIPES: readonly V6GeneratedFormulaRecipe[] =
     "overformulaPrimaryBonus": 2,
     "overformulaIntensityBonus": null,
     "formulaDefensePenalty": -1,
-    "summonConstructDefId": null
+    "summonConstructDefId": null,
+    "timingMode": "immediate",
+    "echoAmount": null,
+    "delayBonus": null
   },
   {
     "recipeId": "v6-tek-brechschlag-schatten-verdichtung",
@@ -8741,7 +13560,10 @@ export const V6_GENERATED_FORMULA_RECIPES: readonly V6GeneratedFormulaRecipe[] =
     "overformulaPrimaryBonus": null,
     "overformulaIntensityBonus": null,
     "formulaDefensePenalty": null,
-    "summonConstructDefId": null
+    "summonConstructDefId": null,
+    "timingMode": "immediate",
+    "echoAmount": null,
+    "delayBonus": null
   },
   {
     "recipeId": "v6-over-brechschlag-schatten-verdichtung",
@@ -8770,7 +13592,74 @@ export const V6_GENERATED_FORMULA_RECIPES: readonly V6GeneratedFormulaRecipe[] =
     "overformulaPrimaryBonus": 2,
     "overformulaIntensityBonus": null,
     "formulaDefensePenalty": -1,
-    "summonConstructDefId": null
+    "summonConstructDefId": null,
+    "timingMode": "immediate",
+    "echoAmount": null,
+    "delayBonus": null
+  },
+  {
+    "recipeId": "v6-tek-brechschlag-schatten-verzoegerung",
+    "kind": "tek",
+    "catalogSlice": "slice1",
+    "techniqueId": "v6-technik-brechschlag",
+    "essenceId": "v6-essenz-schatten",
+    "catalystId": "v6-katalysator-verzoegerung",
+    "name": "Schattenbruch · Verzögerung",
+    "effectSummary": "Verursache 2 Schaden am Gegner. Bei Treffer: erschöpfe optional 1 gegnerische Formelkomponente. Verzögerung: Primäreffekt geschieht nicht sofort, sondern zu Beginn deines nächsten Zuges und erhält +2. Katalysator bleibt bis zur Auflösung. TEK: +1 Fetzladung (max 1×/Zug).",
+    "primary": {
+      "kind": "damage",
+      "value": 2,
+      "target": "opponent",
+      "offensive": true
+    },
+    "rider": {
+      "id": "rider-fluch",
+      "summary": "Bei Treffer: erschöpfe optional 1 gegnerische Formelkomponente.",
+      "defenseSuppressible": true
+    },
+    "intensity": null,
+    "transformId": "xform-verzoegerung",
+    "grantsFetz": true,
+    "catalystConsumed": false,
+    "overformulaPrimaryBonus": null,
+    "overformulaIntensityBonus": null,
+    "formulaDefensePenalty": null,
+    "summonConstructDefId": null,
+    "timingMode": "delay",
+    "echoAmount": null,
+    "delayBonus": 2
+  },
+  {
+    "recipeId": "v6-over-brechschlag-schatten-verzoegerung",
+    "kind": "overformula",
+    "catalogSlice": "slice1",
+    "techniqueId": "v6-technik-brechschlag",
+    "essenceId": "v6-essenz-schatten",
+    "catalystId": "v6-katalysator-verzoegerung",
+    "name": "Überformel Schattenbruch · Verzögerung",
+    "effectSummary": "Verursache 4 Schaden am Gegner. Bei Treffer: erschöpfe optional 1 gegnerische Formelkomponente. (verstärkt) Verzögerung: Primäreffekt geschieht nicht sofort, sondern zu Beginn deines nächsten Zuges und erhält +2. Katalysator bleibt bis zur Auflösung. Überformel: Primär +2 (fester Slice-1-Bonus). Überformel: Fetzladung wird verbraucht. Formelabwehr −1.",
+    "primary": {
+      "kind": "damage",
+      "value": 4,
+      "target": "opponent",
+      "offensive": true
+    },
+    "rider": {
+      "id": "rider-fluch",
+      "summary": "Bei Treffer: erschöpfe optional 1 gegnerische Formelkomponente. (verstärkt)",
+      "defenseSuppressible": true
+    },
+    "intensity": null,
+    "transformId": "xform-verzoegerung",
+    "grantsFetz": false,
+    "catalystConsumed": false,
+    "overformulaPrimaryBonus": 2,
+    "overformulaIntensityBonus": null,
+    "formulaDefensePenalty": -1,
+    "summonConstructDefId": null,
+    "timingMode": "delay",
+    "echoAmount": null,
+    "delayBonus": 2
   },
   {
     "recipeId": "v6-tek-brechschlag-schatten-sofortzuender",
@@ -8799,7 +13688,10 @@ export const V6_GENERATED_FORMULA_RECIPES: readonly V6GeneratedFormulaRecipe[] =
     "overformulaPrimaryBonus": null,
     "overformulaIntensityBonus": null,
     "formulaDefensePenalty": null,
-    "summonConstructDefId": null
+    "summonConstructDefId": null,
+    "timingMode": "immediate",
+    "echoAmount": null,
+    "delayBonus": null
   },
   {
     "recipeId": "v6-over-brechschlag-schatten-sofortzuender",
@@ -8828,7 +13720,10 @@ export const V6_GENERATED_FORMULA_RECIPES: readonly V6GeneratedFormulaRecipe[] =
     "overformulaPrimaryBonus": 2,
     "overformulaIntensityBonus": null,
     "formulaDefensePenalty": -1,
-    "summonConstructDefId": null
+    "summonConstructDefId": null,
+    "timingMode": "immediate",
+    "echoAmount": null,
+    "delayBonus": null
   },
   {
     "recipeId": "v6-tek-brechschlag-schatten-opfergabe",
@@ -8857,7 +13752,10 @@ export const V6_GENERATED_FORMULA_RECIPES: readonly V6GeneratedFormulaRecipe[] =
     "overformulaPrimaryBonus": null,
     "overformulaIntensityBonus": null,
     "formulaDefensePenalty": null,
-    "summonConstructDefId": null
+    "summonConstructDefId": null,
+    "timingMode": "immediate",
+    "echoAmount": null,
+    "delayBonus": null
   },
   {
     "recipeId": "v6-over-brechschlag-schatten-opfergabe",
@@ -8886,7 +13784,74 @@ export const V6_GENERATED_FORMULA_RECIPES: readonly V6GeneratedFormulaRecipe[] =
     "overformulaPrimaryBonus": 2,
     "overformulaIntensityBonus": null,
     "formulaDefensePenalty": -1,
-    "summonConstructDefId": null
+    "summonConstructDefId": null,
+    "timingMode": "immediate",
+    "echoAmount": null,
+    "delayBonus": null
+  },
+  {
+    "recipeId": "v6-tek-kettenfessel-feuer-echo",
+    "kind": "tek",
+    "catalogSlice": "slice1",
+    "techniqueId": "v6-technik-kettenfessel",
+    "essenceId": "v6-essenz-feuer",
+    "catalystId": "v6-katalysator-echo",
+    "name": "Glutkette · Echo",
+    "effectSummary": "Fessel Intensität 2 auf einen besetzten gegnerischen Formelplatz (manuelle Wahl). Bei Lebensschaden: Brennen, falls keine Reaktion. Echo: zu Beginn deines nächsten Zuges wiederhole 1 Punkt des Primärwerts. Katalysator bleibt bis zur Echo-Auflösung. TEK: +1 Fetzladung (max 1×/Zug).",
+    "primary": {
+      "kind": "fessel",
+      "value": 2,
+      "target": "opponent",
+      "offensive": true
+    },
+    "rider": {
+      "id": "rider-brennen",
+      "summary": "Bei Lebensschaden: Brennen, falls keine Reaktion.",
+      "defenseSuppressible": true
+    },
+    "intensity": 2,
+    "transformId": "xform-echo",
+    "grantsFetz": true,
+    "catalystConsumed": false,
+    "overformulaPrimaryBonus": null,
+    "overformulaIntensityBonus": null,
+    "formulaDefensePenalty": null,
+    "summonConstructDefId": null,
+    "timingMode": "echo",
+    "echoAmount": 1,
+    "delayBonus": null
+  },
+  {
+    "recipeId": "v6-over-kettenfessel-feuer-echo",
+    "kind": "overformula",
+    "catalogSlice": "slice1",
+    "techniqueId": "v6-technik-kettenfessel",
+    "essenceId": "v6-essenz-feuer",
+    "catalystId": "v6-katalysator-echo",
+    "name": "Überformel Glutkette · Echo",
+    "effectSummary": "Fessel Intensität 3 auf einen besetzten gegnerischen Formelplatz (manuelle Wahl). Bei Lebensschaden: Brennen, falls keine Reaktion. (verstärkt) Echo: zu Beginn deines nächsten Zuges wiederhole 1 Punkt des Primärwerts. Katalysator bleibt bis zur Echo-Auflösung. Überformel: Intensität +1 (fester Slice-1-Bonus). Überformel: Fetzladung wird verbraucht. Formelabwehr −1.",
+    "primary": {
+      "kind": "fessel",
+      "value": 3,
+      "target": "opponent",
+      "offensive": true
+    },
+    "rider": {
+      "id": "rider-brennen",
+      "summary": "Bei Lebensschaden: Brennen, falls keine Reaktion. (verstärkt)",
+      "defenseSuppressible": true
+    },
+    "intensity": 3,
+    "transformId": "xform-echo",
+    "grantsFetz": false,
+    "catalystConsumed": false,
+    "overformulaPrimaryBonus": null,
+    "overformulaIntensityBonus": 1,
+    "formulaDefensePenalty": -1,
+    "summonConstructDefId": null,
+    "timingMode": "echo",
+    "echoAmount": 1,
+    "delayBonus": null
   },
   {
     "recipeId": "v6-tek-kettenfessel-feuer-ueberladung",
@@ -8915,7 +13880,10 @@ export const V6_GENERATED_FORMULA_RECIPES: readonly V6GeneratedFormulaRecipe[] =
     "overformulaPrimaryBonus": null,
     "overformulaIntensityBonus": null,
     "formulaDefensePenalty": null,
-    "summonConstructDefId": null
+    "summonConstructDefId": null,
+    "timingMode": "immediate",
+    "echoAmount": null,
+    "delayBonus": null
   },
   {
     "recipeId": "v6-over-kettenfessel-feuer-ueberladung",
@@ -8944,7 +13912,10 @@ export const V6_GENERATED_FORMULA_RECIPES: readonly V6GeneratedFormulaRecipe[] =
     "overformulaPrimaryBonus": null,
     "overformulaIntensityBonus": 1,
     "formulaDefensePenalty": -1,
-    "summonConstructDefId": null
+    "summonConstructDefId": null,
+    "timingMode": "immediate",
+    "echoAmount": null,
+    "delayBonus": null
   },
   {
     "recipeId": "v6-tek-kettenfessel-feuer-verdichtung",
@@ -8973,7 +13944,10 @@ export const V6_GENERATED_FORMULA_RECIPES: readonly V6GeneratedFormulaRecipe[] =
     "overformulaPrimaryBonus": null,
     "overformulaIntensityBonus": null,
     "formulaDefensePenalty": null,
-    "summonConstructDefId": null
+    "summonConstructDefId": null,
+    "timingMode": "immediate",
+    "echoAmount": null,
+    "delayBonus": null
   },
   {
     "recipeId": "v6-over-kettenfessel-feuer-verdichtung",
@@ -9002,7 +13976,74 @@ export const V6_GENERATED_FORMULA_RECIPES: readonly V6GeneratedFormulaRecipe[] =
     "overformulaPrimaryBonus": null,
     "overformulaIntensityBonus": 1,
     "formulaDefensePenalty": -1,
-    "summonConstructDefId": null
+    "summonConstructDefId": null,
+    "timingMode": "immediate",
+    "echoAmount": null,
+    "delayBonus": null
+  },
+  {
+    "recipeId": "v6-tek-kettenfessel-feuer-verzoegerung",
+    "kind": "tek",
+    "catalogSlice": "slice1",
+    "techniqueId": "v6-technik-kettenfessel",
+    "essenceId": "v6-essenz-feuer",
+    "catalystId": "v6-katalysator-verzoegerung",
+    "name": "Glutkette · Verzögerung",
+    "effectSummary": "Fessel Intensität 2 auf einen besetzten gegnerischen Formelplatz (manuelle Wahl). Bei Lebensschaden: Brennen, falls keine Reaktion. Verzögerung: Primäreffekt geschieht nicht sofort, sondern zu Beginn deines nächsten Zuges und erhält +2. Katalysator bleibt bis zur Auflösung. TEK: +1 Fetzladung (max 1×/Zug).",
+    "primary": {
+      "kind": "fessel",
+      "value": 2,
+      "target": "opponent",
+      "offensive": true
+    },
+    "rider": {
+      "id": "rider-brennen",
+      "summary": "Bei Lebensschaden: Brennen, falls keine Reaktion.",
+      "defenseSuppressible": true
+    },
+    "intensity": 2,
+    "transformId": "xform-verzoegerung",
+    "grantsFetz": true,
+    "catalystConsumed": false,
+    "overformulaPrimaryBonus": null,
+    "overformulaIntensityBonus": null,
+    "formulaDefensePenalty": null,
+    "summonConstructDefId": null,
+    "timingMode": "delay",
+    "echoAmount": null,
+    "delayBonus": 2
+  },
+  {
+    "recipeId": "v6-over-kettenfessel-feuer-verzoegerung",
+    "kind": "overformula",
+    "catalogSlice": "slice1",
+    "techniqueId": "v6-technik-kettenfessel",
+    "essenceId": "v6-essenz-feuer",
+    "catalystId": "v6-katalysator-verzoegerung",
+    "name": "Überformel Glutkette · Verzögerung",
+    "effectSummary": "Fessel Intensität 3 auf einen besetzten gegnerischen Formelplatz (manuelle Wahl). Bei Lebensschaden: Brennen, falls keine Reaktion. (verstärkt) Verzögerung: Primäreffekt geschieht nicht sofort, sondern zu Beginn deines nächsten Zuges und erhält +2. Katalysator bleibt bis zur Auflösung. Überformel: Intensität +1 (fester Slice-1-Bonus). Überformel: Fetzladung wird verbraucht. Formelabwehr −1.",
+    "primary": {
+      "kind": "fessel",
+      "value": 3,
+      "target": "opponent",
+      "offensive": true
+    },
+    "rider": {
+      "id": "rider-brennen",
+      "summary": "Bei Lebensschaden: Brennen, falls keine Reaktion. (verstärkt)",
+      "defenseSuppressible": true
+    },
+    "intensity": 3,
+    "transformId": "xform-verzoegerung",
+    "grantsFetz": false,
+    "catalystConsumed": false,
+    "overformulaPrimaryBonus": null,
+    "overformulaIntensityBonus": 1,
+    "formulaDefensePenalty": -1,
+    "summonConstructDefId": null,
+    "timingMode": "delay",
+    "echoAmount": null,
+    "delayBonus": 2
   },
   {
     "recipeId": "v6-tek-kettenfessel-feuer-sofortzuender",
@@ -9031,7 +14072,10 @@ export const V6_GENERATED_FORMULA_RECIPES: readonly V6GeneratedFormulaRecipe[] =
     "overformulaPrimaryBonus": null,
     "overformulaIntensityBonus": null,
     "formulaDefensePenalty": null,
-    "summonConstructDefId": null
+    "summonConstructDefId": null,
+    "timingMode": "immediate",
+    "echoAmount": null,
+    "delayBonus": null
   },
   {
     "recipeId": "v6-over-kettenfessel-feuer-sofortzuender",
@@ -9060,7 +14104,10 @@ export const V6_GENERATED_FORMULA_RECIPES: readonly V6GeneratedFormulaRecipe[] =
     "overformulaPrimaryBonus": null,
     "overformulaIntensityBonus": 1,
     "formulaDefensePenalty": -1,
-    "summonConstructDefId": null
+    "summonConstructDefId": null,
+    "timingMode": "immediate",
+    "echoAmount": null,
+    "delayBonus": null
   },
   {
     "recipeId": "v6-tek-kettenfessel-feuer-opfergabe",
@@ -9089,7 +14136,10 @@ export const V6_GENERATED_FORMULA_RECIPES: readonly V6GeneratedFormulaRecipe[] =
     "overformulaPrimaryBonus": null,
     "overformulaIntensityBonus": null,
     "formulaDefensePenalty": null,
-    "summonConstructDefId": null
+    "summonConstructDefId": null,
+    "timingMode": "immediate",
+    "echoAmount": null,
+    "delayBonus": null
   },
   {
     "recipeId": "v6-over-kettenfessel-feuer-opfergabe",
@@ -9118,7 +14168,74 @@ export const V6_GENERATED_FORMULA_RECIPES: readonly V6GeneratedFormulaRecipe[] =
     "overformulaPrimaryBonus": null,
     "overformulaIntensityBonus": 1,
     "formulaDefensePenalty": -1,
-    "summonConstructDefId": null
+    "summonConstructDefId": null,
+    "timingMode": "immediate",
+    "echoAmount": null,
+    "delayBonus": null
+  },
+  {
+    "recipeId": "v6-tek-kettenfessel-wasser-echo",
+    "kind": "tek",
+    "catalogSlice": "slice1",
+    "techniqueId": "v6-technik-kettenfessel",
+    "essenceId": "v6-essenz-wasser",
+    "catalystId": "v6-katalysator-echo",
+    "name": "Wellenkette · Echo",
+    "effectSummary": "Fessel Intensität 2 auf einen besetzten gegnerischen Formelplatz (manuelle Wahl). Bei Heilung oder Schildgewinn: entferne optional eine Marke von dir. Echo: zu Beginn deines nächsten Zuges wiederhole 1 Punkt des Primärwerts. Katalysator bleibt bis zur Echo-Auflösung. TEK: +1 Fetzladung (max 1×/Zug).",
+    "primary": {
+      "kind": "fessel",
+      "value": 2,
+      "target": "opponent",
+      "offensive": true
+    },
+    "rider": {
+      "id": "rider-reinigen",
+      "summary": "Bei Heilung oder Schildgewinn: entferne optional eine Marke von dir.",
+      "defenseSuppressible": false
+    },
+    "intensity": 2,
+    "transformId": "xform-echo",
+    "grantsFetz": true,
+    "catalystConsumed": false,
+    "overformulaPrimaryBonus": null,
+    "overformulaIntensityBonus": null,
+    "formulaDefensePenalty": null,
+    "summonConstructDefId": null,
+    "timingMode": "echo",
+    "echoAmount": 1,
+    "delayBonus": null
+  },
+  {
+    "recipeId": "v6-over-kettenfessel-wasser-echo",
+    "kind": "overformula",
+    "catalogSlice": "slice1",
+    "techniqueId": "v6-technik-kettenfessel",
+    "essenceId": "v6-essenz-wasser",
+    "catalystId": "v6-katalysator-echo",
+    "name": "Überformel Wellenkette · Echo",
+    "effectSummary": "Fessel Intensität 3 auf einen besetzten gegnerischen Formelplatz (manuelle Wahl). Bei Heilung oder Schildgewinn: entferne optional eine Marke von dir. (verstärkt) Echo: zu Beginn deines nächsten Zuges wiederhole 1 Punkt des Primärwerts. Katalysator bleibt bis zur Echo-Auflösung. Überformel: Intensität +1 (fester Slice-1-Bonus). Überformel: Fetzladung wird verbraucht. Formelabwehr −1.",
+    "primary": {
+      "kind": "fessel",
+      "value": 3,
+      "target": "opponent",
+      "offensive": true
+    },
+    "rider": {
+      "id": "rider-reinigen",
+      "summary": "Bei Heilung oder Schildgewinn: entferne optional eine Marke von dir. (verstärkt)",
+      "defenseSuppressible": false
+    },
+    "intensity": 3,
+    "transformId": "xform-echo",
+    "grantsFetz": false,
+    "catalystConsumed": false,
+    "overformulaPrimaryBonus": null,
+    "overformulaIntensityBonus": 1,
+    "formulaDefensePenalty": -1,
+    "summonConstructDefId": null,
+    "timingMode": "echo",
+    "echoAmount": 1,
+    "delayBonus": null
   },
   {
     "recipeId": "v6-tek-kettenfessel-wasser-ueberladung",
@@ -9147,7 +14264,10 @@ export const V6_GENERATED_FORMULA_RECIPES: readonly V6GeneratedFormulaRecipe[] =
     "overformulaPrimaryBonus": null,
     "overformulaIntensityBonus": null,
     "formulaDefensePenalty": null,
-    "summonConstructDefId": null
+    "summonConstructDefId": null,
+    "timingMode": "immediate",
+    "echoAmount": null,
+    "delayBonus": null
   },
   {
     "recipeId": "v6-over-kettenfessel-wasser-ueberladung",
@@ -9176,7 +14296,10 @@ export const V6_GENERATED_FORMULA_RECIPES: readonly V6GeneratedFormulaRecipe[] =
     "overformulaPrimaryBonus": null,
     "overformulaIntensityBonus": 1,
     "formulaDefensePenalty": -1,
-    "summonConstructDefId": null
+    "summonConstructDefId": null,
+    "timingMode": "immediate",
+    "echoAmount": null,
+    "delayBonus": null
   },
   {
     "recipeId": "v6-tek-kettenfessel-wasser-verdichtung",
@@ -9205,7 +14328,10 @@ export const V6_GENERATED_FORMULA_RECIPES: readonly V6GeneratedFormulaRecipe[] =
     "overformulaPrimaryBonus": null,
     "overformulaIntensityBonus": null,
     "formulaDefensePenalty": null,
-    "summonConstructDefId": null
+    "summonConstructDefId": null,
+    "timingMode": "immediate",
+    "echoAmount": null,
+    "delayBonus": null
   },
   {
     "recipeId": "v6-over-kettenfessel-wasser-verdichtung",
@@ -9234,7 +14360,74 @@ export const V6_GENERATED_FORMULA_RECIPES: readonly V6GeneratedFormulaRecipe[] =
     "overformulaPrimaryBonus": null,
     "overformulaIntensityBonus": 1,
     "formulaDefensePenalty": -1,
-    "summonConstructDefId": null
+    "summonConstructDefId": null,
+    "timingMode": "immediate",
+    "echoAmount": null,
+    "delayBonus": null
+  },
+  {
+    "recipeId": "v6-tek-kettenfessel-wasser-verzoegerung",
+    "kind": "tek",
+    "catalogSlice": "slice1",
+    "techniqueId": "v6-technik-kettenfessel",
+    "essenceId": "v6-essenz-wasser",
+    "catalystId": "v6-katalysator-verzoegerung",
+    "name": "Wellenkette · Verzögerung",
+    "effectSummary": "Fessel Intensität 2 auf einen besetzten gegnerischen Formelplatz (manuelle Wahl). Bei Heilung oder Schildgewinn: entferne optional eine Marke von dir. Verzögerung: Primäreffekt geschieht nicht sofort, sondern zu Beginn deines nächsten Zuges und erhält +2. Katalysator bleibt bis zur Auflösung. TEK: +1 Fetzladung (max 1×/Zug).",
+    "primary": {
+      "kind": "fessel",
+      "value": 2,
+      "target": "opponent",
+      "offensive": true
+    },
+    "rider": {
+      "id": "rider-reinigen",
+      "summary": "Bei Heilung oder Schildgewinn: entferne optional eine Marke von dir.",
+      "defenseSuppressible": false
+    },
+    "intensity": 2,
+    "transformId": "xform-verzoegerung",
+    "grantsFetz": true,
+    "catalystConsumed": false,
+    "overformulaPrimaryBonus": null,
+    "overformulaIntensityBonus": null,
+    "formulaDefensePenalty": null,
+    "summonConstructDefId": null,
+    "timingMode": "delay",
+    "echoAmount": null,
+    "delayBonus": 2
+  },
+  {
+    "recipeId": "v6-over-kettenfessel-wasser-verzoegerung",
+    "kind": "overformula",
+    "catalogSlice": "slice1",
+    "techniqueId": "v6-technik-kettenfessel",
+    "essenceId": "v6-essenz-wasser",
+    "catalystId": "v6-katalysator-verzoegerung",
+    "name": "Überformel Wellenkette · Verzögerung",
+    "effectSummary": "Fessel Intensität 3 auf einen besetzten gegnerischen Formelplatz (manuelle Wahl). Bei Heilung oder Schildgewinn: entferne optional eine Marke von dir. (verstärkt) Verzögerung: Primäreffekt geschieht nicht sofort, sondern zu Beginn deines nächsten Zuges und erhält +2. Katalysator bleibt bis zur Auflösung. Überformel: Intensität +1 (fester Slice-1-Bonus). Überformel: Fetzladung wird verbraucht. Formelabwehr −1.",
+    "primary": {
+      "kind": "fessel",
+      "value": 3,
+      "target": "opponent",
+      "offensive": true
+    },
+    "rider": {
+      "id": "rider-reinigen",
+      "summary": "Bei Heilung oder Schildgewinn: entferne optional eine Marke von dir. (verstärkt)",
+      "defenseSuppressible": false
+    },
+    "intensity": 3,
+    "transformId": "xform-verzoegerung",
+    "grantsFetz": false,
+    "catalystConsumed": false,
+    "overformulaPrimaryBonus": null,
+    "overformulaIntensityBonus": 1,
+    "formulaDefensePenalty": -1,
+    "summonConstructDefId": null,
+    "timingMode": "delay",
+    "echoAmount": null,
+    "delayBonus": 2
   },
   {
     "recipeId": "v6-tek-kettenfessel-wasser-sofortzuender",
@@ -9263,7 +14456,10 @@ export const V6_GENERATED_FORMULA_RECIPES: readonly V6GeneratedFormulaRecipe[] =
     "overformulaPrimaryBonus": null,
     "overformulaIntensityBonus": null,
     "formulaDefensePenalty": null,
-    "summonConstructDefId": null
+    "summonConstructDefId": null,
+    "timingMode": "immediate",
+    "echoAmount": null,
+    "delayBonus": null
   },
   {
     "recipeId": "v6-over-kettenfessel-wasser-sofortzuender",
@@ -9292,7 +14488,10 @@ export const V6_GENERATED_FORMULA_RECIPES: readonly V6GeneratedFormulaRecipe[] =
     "overformulaPrimaryBonus": null,
     "overformulaIntensityBonus": 1,
     "formulaDefensePenalty": -1,
-    "summonConstructDefId": null
+    "summonConstructDefId": null,
+    "timingMode": "immediate",
+    "echoAmount": null,
+    "delayBonus": null
   },
   {
     "recipeId": "v6-tek-kettenfessel-wasser-opfergabe",
@@ -9321,7 +14520,10 @@ export const V6_GENERATED_FORMULA_RECIPES: readonly V6GeneratedFormulaRecipe[] =
     "overformulaPrimaryBonus": null,
     "overformulaIntensityBonus": null,
     "formulaDefensePenalty": null,
-    "summonConstructDefId": null
+    "summonConstructDefId": null,
+    "timingMode": "immediate",
+    "echoAmount": null,
+    "delayBonus": null
   },
   {
     "recipeId": "v6-over-kettenfessel-wasser-opfergabe",
@@ -9350,7 +14552,74 @@ export const V6_GENERATED_FORMULA_RECIPES: readonly V6GeneratedFormulaRecipe[] =
     "overformulaPrimaryBonus": null,
     "overformulaIntensityBonus": 1,
     "formulaDefensePenalty": -1,
-    "summonConstructDefId": null
+    "summonConstructDefId": null,
+    "timingMode": "immediate",
+    "echoAmount": null,
+    "delayBonus": null
+  },
+  {
+    "recipeId": "v6-tek-kettenfessel-erde-echo",
+    "kind": "tek",
+    "catalogSlice": "slice1",
+    "techniqueId": "v6-technik-kettenfessel",
+    "essenceId": "v6-essenz-erde",
+    "catalystId": "v6-katalysator-echo",
+    "name": "Felskette · Echo",
+    "effectSummary": "Fessel Intensität 2 auf einen besetzten gegnerischen Formelplatz (manuelle Wahl). Verwendete Komponenten +1 Stabilität bis nächste Startphase. Echo: zu Beginn deines nächsten Zuges wiederhole 1 Punkt des Primärwerts. Katalysator bleibt bis zur Echo-Auflösung. TEK: +1 Fetzladung (max 1×/Zug).",
+    "primary": {
+      "kind": "fessel",
+      "value": 2,
+      "target": "opponent",
+      "offensive": true
+    },
+    "rider": {
+      "id": "rider-stabilitaet",
+      "summary": "Verwendete Komponenten +1 Stabilität bis nächste Startphase.",
+      "defenseSuppressible": false
+    },
+    "intensity": 2,
+    "transformId": "xform-echo",
+    "grantsFetz": true,
+    "catalystConsumed": false,
+    "overformulaPrimaryBonus": null,
+    "overformulaIntensityBonus": null,
+    "formulaDefensePenalty": null,
+    "summonConstructDefId": null,
+    "timingMode": "echo",
+    "echoAmount": 1,
+    "delayBonus": null
+  },
+  {
+    "recipeId": "v6-over-kettenfessel-erde-echo",
+    "kind": "overformula",
+    "catalogSlice": "slice1",
+    "techniqueId": "v6-technik-kettenfessel",
+    "essenceId": "v6-essenz-erde",
+    "catalystId": "v6-katalysator-echo",
+    "name": "Überformel Felskette · Echo",
+    "effectSummary": "Fessel Intensität 3 auf einen besetzten gegnerischen Formelplatz (manuelle Wahl). Verwendete Komponenten +1 Stabilität bis nächste Startphase. (verstärkt) Echo: zu Beginn deines nächsten Zuges wiederhole 1 Punkt des Primärwerts. Katalysator bleibt bis zur Echo-Auflösung. Überformel: Intensität +1 (fester Slice-1-Bonus). Überformel: Fetzladung wird verbraucht. Formelabwehr −1.",
+    "primary": {
+      "kind": "fessel",
+      "value": 3,
+      "target": "opponent",
+      "offensive": true
+    },
+    "rider": {
+      "id": "rider-stabilitaet",
+      "summary": "Verwendete Komponenten +1 Stabilität bis nächste Startphase. (verstärkt)",
+      "defenseSuppressible": false
+    },
+    "intensity": 3,
+    "transformId": "xform-echo",
+    "grantsFetz": false,
+    "catalystConsumed": false,
+    "overformulaPrimaryBonus": null,
+    "overformulaIntensityBonus": 1,
+    "formulaDefensePenalty": -1,
+    "summonConstructDefId": null,
+    "timingMode": "echo",
+    "echoAmount": 1,
+    "delayBonus": null
   },
   {
     "recipeId": "v6-tek-kettenfessel-erde-ueberladung",
@@ -9379,7 +14648,10 @@ export const V6_GENERATED_FORMULA_RECIPES: readonly V6GeneratedFormulaRecipe[] =
     "overformulaPrimaryBonus": null,
     "overformulaIntensityBonus": null,
     "formulaDefensePenalty": null,
-    "summonConstructDefId": null
+    "summonConstructDefId": null,
+    "timingMode": "immediate",
+    "echoAmount": null,
+    "delayBonus": null
   },
   {
     "recipeId": "v6-over-kettenfessel-erde-ueberladung",
@@ -9408,7 +14680,10 @@ export const V6_GENERATED_FORMULA_RECIPES: readonly V6GeneratedFormulaRecipe[] =
     "overformulaPrimaryBonus": null,
     "overformulaIntensityBonus": 1,
     "formulaDefensePenalty": -1,
-    "summonConstructDefId": null
+    "summonConstructDefId": null,
+    "timingMode": "immediate",
+    "echoAmount": null,
+    "delayBonus": null
   },
   {
     "recipeId": "v6-tek-kettenfessel-erde-verdichtung",
@@ -9437,7 +14712,10 @@ export const V6_GENERATED_FORMULA_RECIPES: readonly V6GeneratedFormulaRecipe[] =
     "overformulaPrimaryBonus": null,
     "overformulaIntensityBonus": null,
     "formulaDefensePenalty": null,
-    "summonConstructDefId": null
+    "summonConstructDefId": null,
+    "timingMode": "immediate",
+    "echoAmount": null,
+    "delayBonus": null
   },
   {
     "recipeId": "v6-over-kettenfessel-erde-verdichtung",
@@ -9466,7 +14744,74 @@ export const V6_GENERATED_FORMULA_RECIPES: readonly V6GeneratedFormulaRecipe[] =
     "overformulaPrimaryBonus": null,
     "overformulaIntensityBonus": 1,
     "formulaDefensePenalty": -1,
-    "summonConstructDefId": null
+    "summonConstructDefId": null,
+    "timingMode": "immediate",
+    "echoAmount": null,
+    "delayBonus": null
+  },
+  {
+    "recipeId": "v6-tek-kettenfessel-erde-verzoegerung",
+    "kind": "tek",
+    "catalogSlice": "slice1",
+    "techniqueId": "v6-technik-kettenfessel",
+    "essenceId": "v6-essenz-erde",
+    "catalystId": "v6-katalysator-verzoegerung",
+    "name": "Felskette · Verzögerung",
+    "effectSummary": "Fessel Intensität 2 auf einen besetzten gegnerischen Formelplatz (manuelle Wahl). Verwendete Komponenten +1 Stabilität bis nächste Startphase. Verzögerung: Primäreffekt geschieht nicht sofort, sondern zu Beginn deines nächsten Zuges und erhält +2. Katalysator bleibt bis zur Auflösung. TEK: +1 Fetzladung (max 1×/Zug).",
+    "primary": {
+      "kind": "fessel",
+      "value": 2,
+      "target": "opponent",
+      "offensive": true
+    },
+    "rider": {
+      "id": "rider-stabilitaet",
+      "summary": "Verwendete Komponenten +1 Stabilität bis nächste Startphase.",
+      "defenseSuppressible": false
+    },
+    "intensity": 2,
+    "transformId": "xform-verzoegerung",
+    "grantsFetz": true,
+    "catalystConsumed": false,
+    "overformulaPrimaryBonus": null,
+    "overformulaIntensityBonus": null,
+    "formulaDefensePenalty": null,
+    "summonConstructDefId": null,
+    "timingMode": "delay",
+    "echoAmount": null,
+    "delayBonus": 2
+  },
+  {
+    "recipeId": "v6-over-kettenfessel-erde-verzoegerung",
+    "kind": "overformula",
+    "catalogSlice": "slice1",
+    "techniqueId": "v6-technik-kettenfessel",
+    "essenceId": "v6-essenz-erde",
+    "catalystId": "v6-katalysator-verzoegerung",
+    "name": "Überformel Felskette · Verzögerung",
+    "effectSummary": "Fessel Intensität 3 auf einen besetzten gegnerischen Formelplatz (manuelle Wahl). Verwendete Komponenten +1 Stabilität bis nächste Startphase. (verstärkt) Verzögerung: Primäreffekt geschieht nicht sofort, sondern zu Beginn deines nächsten Zuges und erhält +2. Katalysator bleibt bis zur Auflösung. Überformel: Intensität +1 (fester Slice-1-Bonus). Überformel: Fetzladung wird verbraucht. Formelabwehr −1.",
+    "primary": {
+      "kind": "fessel",
+      "value": 3,
+      "target": "opponent",
+      "offensive": true
+    },
+    "rider": {
+      "id": "rider-stabilitaet",
+      "summary": "Verwendete Komponenten +1 Stabilität bis nächste Startphase. (verstärkt)",
+      "defenseSuppressible": false
+    },
+    "intensity": 3,
+    "transformId": "xform-verzoegerung",
+    "grantsFetz": false,
+    "catalystConsumed": false,
+    "overformulaPrimaryBonus": null,
+    "overformulaIntensityBonus": 1,
+    "formulaDefensePenalty": -1,
+    "summonConstructDefId": null,
+    "timingMode": "delay",
+    "echoAmount": null,
+    "delayBonus": 2
   },
   {
     "recipeId": "v6-tek-kettenfessel-erde-sofortzuender",
@@ -9495,7 +14840,10 @@ export const V6_GENERATED_FORMULA_RECIPES: readonly V6GeneratedFormulaRecipe[] =
     "overformulaPrimaryBonus": null,
     "overformulaIntensityBonus": null,
     "formulaDefensePenalty": null,
-    "summonConstructDefId": null
+    "summonConstructDefId": null,
+    "timingMode": "immediate",
+    "echoAmount": null,
+    "delayBonus": null
   },
   {
     "recipeId": "v6-over-kettenfessel-erde-sofortzuender",
@@ -9524,7 +14872,10 @@ export const V6_GENERATED_FORMULA_RECIPES: readonly V6GeneratedFormulaRecipe[] =
     "overformulaPrimaryBonus": null,
     "overformulaIntensityBonus": 1,
     "formulaDefensePenalty": -1,
-    "summonConstructDefId": null
+    "summonConstructDefId": null,
+    "timingMode": "immediate",
+    "echoAmount": null,
+    "delayBonus": null
   },
   {
     "recipeId": "v6-tek-kettenfessel-erde-opfergabe",
@@ -9553,7 +14904,10 @@ export const V6_GENERATED_FORMULA_RECIPES: readonly V6GeneratedFormulaRecipe[] =
     "overformulaPrimaryBonus": null,
     "overformulaIntensityBonus": null,
     "formulaDefensePenalty": null,
-    "summonConstructDefId": null
+    "summonConstructDefId": null,
+    "timingMode": "immediate",
+    "echoAmount": null,
+    "delayBonus": null
   },
   {
     "recipeId": "v6-over-kettenfessel-erde-opfergabe",
@@ -9582,7 +14936,74 @@ export const V6_GENERATED_FORMULA_RECIPES: readonly V6GeneratedFormulaRecipe[] =
     "overformulaPrimaryBonus": null,
     "overformulaIntensityBonus": 1,
     "formulaDefensePenalty": -1,
-    "summonConstructDefId": null
+    "summonConstructDefId": null,
+    "timingMode": "immediate",
+    "echoAmount": null,
+    "delayBonus": null
+  },
+  {
+    "recipeId": "v6-tek-kettenfessel-luft-echo",
+    "kind": "tek",
+    "catalogSlice": "slice1",
+    "techniqueId": "v6-technik-kettenfessel",
+    "essenceId": "v6-essenz-luft",
+    "catalystId": "v6-katalysator-echo",
+    "name": "Windkette · Echo",
+    "effectSummary": "Fessel Intensität 2 auf einen besetzten gegnerischen Formelplatz (manuelle Wahl). Nächster eigener Aktions-W6 +1 (max +2). Echo: zu Beginn deines nächsten Zuges wiederhole 1 Punkt des Primärwerts. Katalysator bleibt bis zur Echo-Auflösung. TEK: +1 Fetzladung (max 1×/Zug).",
+    "primary": {
+      "kind": "fessel",
+      "value": 2,
+      "target": "opponent",
+      "offensive": true
+    },
+    "rider": {
+      "id": "rider-w6",
+      "summary": "Nächster eigener Aktions-W6 +1 (max +2).",
+      "defenseSuppressible": true
+    },
+    "intensity": 2,
+    "transformId": "xform-echo",
+    "grantsFetz": true,
+    "catalystConsumed": false,
+    "overformulaPrimaryBonus": null,
+    "overformulaIntensityBonus": null,
+    "formulaDefensePenalty": null,
+    "summonConstructDefId": null,
+    "timingMode": "echo",
+    "echoAmount": 1,
+    "delayBonus": null
+  },
+  {
+    "recipeId": "v6-over-kettenfessel-luft-echo",
+    "kind": "overformula",
+    "catalogSlice": "slice1",
+    "techniqueId": "v6-technik-kettenfessel",
+    "essenceId": "v6-essenz-luft",
+    "catalystId": "v6-katalysator-echo",
+    "name": "Überformel Windkette · Echo",
+    "effectSummary": "Fessel Intensität 3 auf einen besetzten gegnerischen Formelplatz (manuelle Wahl). Nächster eigener Aktions-W6 +1 (max +2). (verstärkt) Echo: zu Beginn deines nächsten Zuges wiederhole 1 Punkt des Primärwerts. Katalysator bleibt bis zur Echo-Auflösung. Überformel: Intensität +1 (fester Slice-1-Bonus). Überformel: Fetzladung wird verbraucht. Formelabwehr −1.",
+    "primary": {
+      "kind": "fessel",
+      "value": 3,
+      "target": "opponent",
+      "offensive": true
+    },
+    "rider": {
+      "id": "rider-w6",
+      "summary": "Nächster eigener Aktions-W6 +1 (max +2). (verstärkt)",
+      "defenseSuppressible": true
+    },
+    "intensity": 3,
+    "transformId": "xform-echo",
+    "grantsFetz": false,
+    "catalystConsumed": false,
+    "overformulaPrimaryBonus": null,
+    "overformulaIntensityBonus": 1,
+    "formulaDefensePenalty": -1,
+    "summonConstructDefId": null,
+    "timingMode": "echo",
+    "echoAmount": 1,
+    "delayBonus": null
   },
   {
     "recipeId": "v6-tek-kettenfessel-luft-ueberladung",
@@ -9611,7 +15032,10 @@ export const V6_GENERATED_FORMULA_RECIPES: readonly V6GeneratedFormulaRecipe[] =
     "overformulaPrimaryBonus": null,
     "overformulaIntensityBonus": null,
     "formulaDefensePenalty": null,
-    "summonConstructDefId": null
+    "summonConstructDefId": null,
+    "timingMode": "immediate",
+    "echoAmount": null,
+    "delayBonus": null
   },
   {
     "recipeId": "v6-over-kettenfessel-luft-ueberladung",
@@ -9640,7 +15064,10 @@ export const V6_GENERATED_FORMULA_RECIPES: readonly V6GeneratedFormulaRecipe[] =
     "overformulaPrimaryBonus": null,
     "overformulaIntensityBonus": 1,
     "formulaDefensePenalty": -1,
-    "summonConstructDefId": null
+    "summonConstructDefId": null,
+    "timingMode": "immediate",
+    "echoAmount": null,
+    "delayBonus": null
   },
   {
     "recipeId": "v6-tek-kettenfessel-luft-verdichtung",
@@ -9669,7 +15096,10 @@ export const V6_GENERATED_FORMULA_RECIPES: readonly V6GeneratedFormulaRecipe[] =
     "overformulaPrimaryBonus": null,
     "overformulaIntensityBonus": null,
     "formulaDefensePenalty": null,
-    "summonConstructDefId": null
+    "summonConstructDefId": null,
+    "timingMode": "immediate",
+    "echoAmount": null,
+    "delayBonus": null
   },
   {
     "recipeId": "v6-over-kettenfessel-luft-verdichtung",
@@ -9698,7 +15128,74 @@ export const V6_GENERATED_FORMULA_RECIPES: readonly V6GeneratedFormulaRecipe[] =
     "overformulaPrimaryBonus": null,
     "overformulaIntensityBonus": 1,
     "formulaDefensePenalty": -1,
-    "summonConstructDefId": null
+    "summonConstructDefId": null,
+    "timingMode": "immediate",
+    "echoAmount": null,
+    "delayBonus": null
+  },
+  {
+    "recipeId": "v6-tek-kettenfessel-luft-verzoegerung",
+    "kind": "tek",
+    "catalogSlice": "slice1",
+    "techniqueId": "v6-technik-kettenfessel",
+    "essenceId": "v6-essenz-luft",
+    "catalystId": "v6-katalysator-verzoegerung",
+    "name": "Windkette · Verzögerung",
+    "effectSummary": "Fessel Intensität 2 auf einen besetzten gegnerischen Formelplatz (manuelle Wahl). Nächster eigener Aktions-W6 +1 (max +2). Verzögerung: Primäreffekt geschieht nicht sofort, sondern zu Beginn deines nächsten Zuges und erhält +2. Katalysator bleibt bis zur Auflösung. TEK: +1 Fetzladung (max 1×/Zug).",
+    "primary": {
+      "kind": "fessel",
+      "value": 2,
+      "target": "opponent",
+      "offensive": true
+    },
+    "rider": {
+      "id": "rider-w6",
+      "summary": "Nächster eigener Aktions-W6 +1 (max +2).",
+      "defenseSuppressible": true
+    },
+    "intensity": 2,
+    "transformId": "xform-verzoegerung",
+    "grantsFetz": true,
+    "catalystConsumed": false,
+    "overformulaPrimaryBonus": null,
+    "overformulaIntensityBonus": null,
+    "formulaDefensePenalty": null,
+    "summonConstructDefId": null,
+    "timingMode": "delay",
+    "echoAmount": null,
+    "delayBonus": 2
+  },
+  {
+    "recipeId": "v6-over-kettenfessel-luft-verzoegerung",
+    "kind": "overformula",
+    "catalogSlice": "slice1",
+    "techniqueId": "v6-technik-kettenfessel",
+    "essenceId": "v6-essenz-luft",
+    "catalystId": "v6-katalysator-verzoegerung",
+    "name": "Überformel Windkette · Verzögerung",
+    "effectSummary": "Fessel Intensität 3 auf einen besetzten gegnerischen Formelplatz (manuelle Wahl). Nächster eigener Aktions-W6 +1 (max +2). (verstärkt) Verzögerung: Primäreffekt geschieht nicht sofort, sondern zu Beginn deines nächsten Zuges und erhält +2. Katalysator bleibt bis zur Auflösung. Überformel: Intensität +1 (fester Slice-1-Bonus). Überformel: Fetzladung wird verbraucht. Formelabwehr −1.",
+    "primary": {
+      "kind": "fessel",
+      "value": 3,
+      "target": "opponent",
+      "offensive": true
+    },
+    "rider": {
+      "id": "rider-w6",
+      "summary": "Nächster eigener Aktions-W6 +1 (max +2). (verstärkt)",
+      "defenseSuppressible": true
+    },
+    "intensity": 3,
+    "transformId": "xform-verzoegerung",
+    "grantsFetz": false,
+    "catalystConsumed": false,
+    "overformulaPrimaryBonus": null,
+    "overformulaIntensityBonus": 1,
+    "formulaDefensePenalty": -1,
+    "summonConstructDefId": null,
+    "timingMode": "delay",
+    "echoAmount": null,
+    "delayBonus": 2
   },
   {
     "recipeId": "v6-tek-kettenfessel-luft-sofortzuender",
@@ -9727,7 +15224,10 @@ export const V6_GENERATED_FORMULA_RECIPES: readonly V6GeneratedFormulaRecipe[] =
     "overformulaPrimaryBonus": null,
     "overformulaIntensityBonus": null,
     "formulaDefensePenalty": null,
-    "summonConstructDefId": null
+    "summonConstructDefId": null,
+    "timingMode": "immediate",
+    "echoAmount": null,
+    "delayBonus": null
   },
   {
     "recipeId": "v6-over-kettenfessel-luft-sofortzuender",
@@ -9756,7 +15256,10 @@ export const V6_GENERATED_FORMULA_RECIPES: readonly V6GeneratedFormulaRecipe[] =
     "overformulaPrimaryBonus": null,
     "overformulaIntensityBonus": 1,
     "formulaDefensePenalty": -1,
-    "summonConstructDefId": null
+    "summonConstructDefId": null,
+    "timingMode": "immediate",
+    "echoAmount": null,
+    "delayBonus": null
   },
   {
     "recipeId": "v6-tek-kettenfessel-luft-opfergabe",
@@ -9785,7 +15288,10 @@ export const V6_GENERATED_FORMULA_RECIPES: readonly V6GeneratedFormulaRecipe[] =
     "overformulaPrimaryBonus": null,
     "overformulaIntensityBonus": null,
     "formulaDefensePenalty": null,
-    "summonConstructDefId": null
+    "summonConstructDefId": null,
+    "timingMode": "immediate",
+    "echoAmount": null,
+    "delayBonus": null
   },
   {
     "recipeId": "v6-over-kettenfessel-luft-opfergabe",
@@ -9814,7 +15320,74 @@ export const V6_GENERATED_FORMULA_RECIPES: readonly V6GeneratedFormulaRecipe[] =
     "overformulaPrimaryBonus": null,
     "overformulaIntensityBonus": 1,
     "formulaDefensePenalty": -1,
-    "summonConstructDefId": null
+    "summonConstructDefId": null,
+    "timingMode": "immediate",
+    "echoAmount": null,
+    "delayBonus": null
+  },
+  {
+    "recipeId": "v6-tek-kettenfessel-licht-echo",
+    "kind": "tek",
+    "catalogSlice": "slice1",
+    "techniqueId": "v6-technik-kettenfessel",
+    "essenceId": "v6-essenz-licht",
+    "catalystId": "v6-katalysator-echo",
+    "name": "Lichtkette · Echo",
+    "effectSummary": "Fessel Intensität 2 auf einen besetzten gegnerischen Formelplatz (manuelle Wahl). Bei Schildgewinn: entferne optional eine Marke von dir. Echo: zu Beginn deines nächsten Zuges wiederhole 1 Punkt des Primärwerts. Katalysator bleibt bis zur Echo-Auflösung. TEK: +1 Fetzladung (max 1×/Zug).",
+    "primary": {
+      "kind": "fessel",
+      "value": 2,
+      "target": "opponent",
+      "offensive": true
+    },
+    "rider": {
+      "id": "rider-reinigen-licht",
+      "summary": "Bei Schildgewinn: entferne optional eine Marke von dir.",
+      "defenseSuppressible": false
+    },
+    "intensity": 2,
+    "transformId": "xform-echo",
+    "grantsFetz": true,
+    "catalystConsumed": false,
+    "overformulaPrimaryBonus": null,
+    "overformulaIntensityBonus": null,
+    "formulaDefensePenalty": null,
+    "summonConstructDefId": null,
+    "timingMode": "echo",
+    "echoAmount": 1,
+    "delayBonus": null
+  },
+  {
+    "recipeId": "v6-over-kettenfessel-licht-echo",
+    "kind": "overformula",
+    "catalogSlice": "slice1",
+    "techniqueId": "v6-technik-kettenfessel",
+    "essenceId": "v6-essenz-licht",
+    "catalystId": "v6-katalysator-echo",
+    "name": "Überformel Lichtkette · Echo",
+    "effectSummary": "Fessel Intensität 3 auf einen besetzten gegnerischen Formelplatz (manuelle Wahl). Bei Schildgewinn: entferne optional eine Marke von dir. (verstärkt) Echo: zu Beginn deines nächsten Zuges wiederhole 1 Punkt des Primärwerts. Katalysator bleibt bis zur Echo-Auflösung. Überformel: Intensität +1 (fester Slice-1-Bonus). Überformel: Fetzladung wird verbraucht. Formelabwehr −1.",
+    "primary": {
+      "kind": "fessel",
+      "value": 3,
+      "target": "opponent",
+      "offensive": true
+    },
+    "rider": {
+      "id": "rider-reinigen-licht",
+      "summary": "Bei Schildgewinn: entferne optional eine Marke von dir. (verstärkt)",
+      "defenseSuppressible": false
+    },
+    "intensity": 3,
+    "transformId": "xform-echo",
+    "grantsFetz": false,
+    "catalystConsumed": false,
+    "overformulaPrimaryBonus": null,
+    "overformulaIntensityBonus": 1,
+    "formulaDefensePenalty": -1,
+    "summonConstructDefId": null,
+    "timingMode": "echo",
+    "echoAmount": 1,
+    "delayBonus": null
   },
   {
     "recipeId": "v6-tek-kettenfessel-licht-ueberladung",
@@ -9843,7 +15416,10 @@ export const V6_GENERATED_FORMULA_RECIPES: readonly V6GeneratedFormulaRecipe[] =
     "overformulaPrimaryBonus": null,
     "overformulaIntensityBonus": null,
     "formulaDefensePenalty": null,
-    "summonConstructDefId": null
+    "summonConstructDefId": null,
+    "timingMode": "immediate",
+    "echoAmount": null,
+    "delayBonus": null
   },
   {
     "recipeId": "v6-over-kettenfessel-licht-ueberladung",
@@ -9872,7 +15448,10 @@ export const V6_GENERATED_FORMULA_RECIPES: readonly V6GeneratedFormulaRecipe[] =
     "overformulaPrimaryBonus": null,
     "overformulaIntensityBonus": 1,
     "formulaDefensePenalty": -1,
-    "summonConstructDefId": null
+    "summonConstructDefId": null,
+    "timingMode": "immediate",
+    "echoAmount": null,
+    "delayBonus": null
   },
   {
     "recipeId": "v6-tek-kettenfessel-licht-verdichtung",
@@ -9901,7 +15480,10 @@ export const V6_GENERATED_FORMULA_RECIPES: readonly V6GeneratedFormulaRecipe[] =
     "overformulaPrimaryBonus": null,
     "overformulaIntensityBonus": null,
     "formulaDefensePenalty": null,
-    "summonConstructDefId": null
+    "summonConstructDefId": null,
+    "timingMode": "immediate",
+    "echoAmount": null,
+    "delayBonus": null
   },
   {
     "recipeId": "v6-over-kettenfessel-licht-verdichtung",
@@ -9930,7 +15512,74 @@ export const V6_GENERATED_FORMULA_RECIPES: readonly V6GeneratedFormulaRecipe[] =
     "overformulaPrimaryBonus": null,
     "overformulaIntensityBonus": 1,
     "formulaDefensePenalty": -1,
-    "summonConstructDefId": null
+    "summonConstructDefId": null,
+    "timingMode": "immediate",
+    "echoAmount": null,
+    "delayBonus": null
+  },
+  {
+    "recipeId": "v6-tek-kettenfessel-licht-verzoegerung",
+    "kind": "tek",
+    "catalogSlice": "slice1",
+    "techniqueId": "v6-technik-kettenfessel",
+    "essenceId": "v6-essenz-licht",
+    "catalystId": "v6-katalysator-verzoegerung",
+    "name": "Lichtkette · Verzögerung",
+    "effectSummary": "Fessel Intensität 2 auf einen besetzten gegnerischen Formelplatz (manuelle Wahl). Bei Schildgewinn: entferne optional eine Marke von dir. Verzögerung: Primäreffekt geschieht nicht sofort, sondern zu Beginn deines nächsten Zuges und erhält +2. Katalysator bleibt bis zur Auflösung. TEK: +1 Fetzladung (max 1×/Zug).",
+    "primary": {
+      "kind": "fessel",
+      "value": 2,
+      "target": "opponent",
+      "offensive": true
+    },
+    "rider": {
+      "id": "rider-reinigen-licht",
+      "summary": "Bei Schildgewinn: entferne optional eine Marke von dir.",
+      "defenseSuppressible": false
+    },
+    "intensity": 2,
+    "transformId": "xform-verzoegerung",
+    "grantsFetz": true,
+    "catalystConsumed": false,
+    "overformulaPrimaryBonus": null,
+    "overformulaIntensityBonus": null,
+    "formulaDefensePenalty": null,
+    "summonConstructDefId": null,
+    "timingMode": "delay",
+    "echoAmount": null,
+    "delayBonus": 2
+  },
+  {
+    "recipeId": "v6-over-kettenfessel-licht-verzoegerung",
+    "kind": "overformula",
+    "catalogSlice": "slice1",
+    "techniqueId": "v6-technik-kettenfessel",
+    "essenceId": "v6-essenz-licht",
+    "catalystId": "v6-katalysator-verzoegerung",
+    "name": "Überformel Lichtkette · Verzögerung",
+    "effectSummary": "Fessel Intensität 3 auf einen besetzten gegnerischen Formelplatz (manuelle Wahl). Bei Schildgewinn: entferne optional eine Marke von dir. (verstärkt) Verzögerung: Primäreffekt geschieht nicht sofort, sondern zu Beginn deines nächsten Zuges und erhält +2. Katalysator bleibt bis zur Auflösung. Überformel: Intensität +1 (fester Slice-1-Bonus). Überformel: Fetzladung wird verbraucht. Formelabwehr −1.",
+    "primary": {
+      "kind": "fessel",
+      "value": 3,
+      "target": "opponent",
+      "offensive": true
+    },
+    "rider": {
+      "id": "rider-reinigen-licht",
+      "summary": "Bei Schildgewinn: entferne optional eine Marke von dir. (verstärkt)",
+      "defenseSuppressible": false
+    },
+    "intensity": 3,
+    "transformId": "xform-verzoegerung",
+    "grantsFetz": false,
+    "catalystConsumed": false,
+    "overformulaPrimaryBonus": null,
+    "overformulaIntensityBonus": 1,
+    "formulaDefensePenalty": -1,
+    "summonConstructDefId": null,
+    "timingMode": "delay",
+    "echoAmount": null,
+    "delayBonus": 2
   },
   {
     "recipeId": "v6-tek-kettenfessel-licht-sofortzuender",
@@ -9959,7 +15608,10 @@ export const V6_GENERATED_FORMULA_RECIPES: readonly V6GeneratedFormulaRecipe[] =
     "overformulaPrimaryBonus": null,
     "overformulaIntensityBonus": null,
     "formulaDefensePenalty": null,
-    "summonConstructDefId": null
+    "summonConstructDefId": null,
+    "timingMode": "immediate",
+    "echoAmount": null,
+    "delayBonus": null
   },
   {
     "recipeId": "v6-over-kettenfessel-licht-sofortzuender",
@@ -9988,7 +15640,10 @@ export const V6_GENERATED_FORMULA_RECIPES: readonly V6GeneratedFormulaRecipe[] =
     "overformulaPrimaryBonus": null,
     "overformulaIntensityBonus": 1,
     "formulaDefensePenalty": -1,
-    "summonConstructDefId": null
+    "summonConstructDefId": null,
+    "timingMode": "immediate",
+    "echoAmount": null,
+    "delayBonus": null
   },
   {
     "recipeId": "v6-tek-kettenfessel-licht-opfergabe",
@@ -10017,7 +15672,10 @@ export const V6_GENERATED_FORMULA_RECIPES: readonly V6GeneratedFormulaRecipe[] =
     "overformulaPrimaryBonus": null,
     "overformulaIntensityBonus": null,
     "formulaDefensePenalty": null,
-    "summonConstructDefId": null
+    "summonConstructDefId": null,
+    "timingMode": "immediate",
+    "echoAmount": null,
+    "delayBonus": null
   },
   {
     "recipeId": "v6-over-kettenfessel-licht-opfergabe",
@@ -10046,7 +15704,74 @@ export const V6_GENERATED_FORMULA_RECIPES: readonly V6GeneratedFormulaRecipe[] =
     "overformulaPrimaryBonus": null,
     "overformulaIntensityBonus": 1,
     "formulaDefensePenalty": -1,
-    "summonConstructDefId": null
+    "summonConstructDefId": null,
+    "timingMode": "immediate",
+    "echoAmount": null,
+    "delayBonus": null
+  },
+  {
+    "recipeId": "v6-tek-kettenfessel-schatten-echo",
+    "kind": "tek",
+    "catalogSlice": "slice1",
+    "techniqueId": "v6-technik-kettenfessel",
+    "essenceId": "v6-essenz-schatten",
+    "catalystId": "v6-katalysator-echo",
+    "name": "Schattenkette · Echo",
+    "effectSummary": "Fessel Intensität 2 auf einen besetzten gegnerischen Formelplatz (manuelle Wahl). Bei Treffer: erschöpfe optional 1 gegnerische Formelkomponente. Echo: zu Beginn deines nächsten Zuges wiederhole 1 Punkt des Primärwerts. Katalysator bleibt bis zur Echo-Auflösung. TEK: +1 Fetzladung (max 1×/Zug).",
+    "primary": {
+      "kind": "fessel",
+      "value": 2,
+      "target": "opponent",
+      "offensive": true
+    },
+    "rider": {
+      "id": "rider-fluch",
+      "summary": "Bei Treffer: erschöpfe optional 1 gegnerische Formelkomponente.",
+      "defenseSuppressible": true
+    },
+    "intensity": 2,
+    "transformId": "xform-echo",
+    "grantsFetz": true,
+    "catalystConsumed": false,
+    "overformulaPrimaryBonus": null,
+    "overformulaIntensityBonus": null,
+    "formulaDefensePenalty": null,
+    "summonConstructDefId": null,
+    "timingMode": "echo",
+    "echoAmount": 1,
+    "delayBonus": null
+  },
+  {
+    "recipeId": "v6-over-kettenfessel-schatten-echo",
+    "kind": "overformula",
+    "catalogSlice": "slice1",
+    "techniqueId": "v6-technik-kettenfessel",
+    "essenceId": "v6-essenz-schatten",
+    "catalystId": "v6-katalysator-echo",
+    "name": "Überformel Schattenkette · Echo",
+    "effectSummary": "Fessel Intensität 3 auf einen besetzten gegnerischen Formelplatz (manuelle Wahl). Bei Treffer: erschöpfe optional 1 gegnerische Formelkomponente. (verstärkt) Echo: zu Beginn deines nächsten Zuges wiederhole 1 Punkt des Primärwerts. Katalysator bleibt bis zur Echo-Auflösung. Überformel: Intensität +1 (fester Slice-1-Bonus). Überformel: Fetzladung wird verbraucht. Formelabwehr −1.",
+    "primary": {
+      "kind": "fessel",
+      "value": 3,
+      "target": "opponent",
+      "offensive": true
+    },
+    "rider": {
+      "id": "rider-fluch",
+      "summary": "Bei Treffer: erschöpfe optional 1 gegnerische Formelkomponente. (verstärkt)",
+      "defenseSuppressible": true
+    },
+    "intensity": 3,
+    "transformId": "xform-echo",
+    "grantsFetz": false,
+    "catalystConsumed": false,
+    "overformulaPrimaryBonus": null,
+    "overformulaIntensityBonus": 1,
+    "formulaDefensePenalty": -1,
+    "summonConstructDefId": null,
+    "timingMode": "echo",
+    "echoAmount": 1,
+    "delayBonus": null
   },
   {
     "recipeId": "v6-tek-kettenfessel-schatten-ueberladung",
@@ -10075,7 +15800,10 @@ export const V6_GENERATED_FORMULA_RECIPES: readonly V6GeneratedFormulaRecipe[] =
     "overformulaPrimaryBonus": null,
     "overformulaIntensityBonus": null,
     "formulaDefensePenalty": null,
-    "summonConstructDefId": null
+    "summonConstructDefId": null,
+    "timingMode": "immediate",
+    "echoAmount": null,
+    "delayBonus": null
   },
   {
     "recipeId": "v6-over-kettenfessel-schatten-ueberladung",
@@ -10104,7 +15832,10 @@ export const V6_GENERATED_FORMULA_RECIPES: readonly V6GeneratedFormulaRecipe[] =
     "overformulaPrimaryBonus": null,
     "overformulaIntensityBonus": 1,
     "formulaDefensePenalty": -1,
-    "summonConstructDefId": null
+    "summonConstructDefId": null,
+    "timingMode": "immediate",
+    "echoAmount": null,
+    "delayBonus": null
   },
   {
     "recipeId": "v6-tek-kettenfessel-schatten-verdichtung",
@@ -10133,7 +15864,10 @@ export const V6_GENERATED_FORMULA_RECIPES: readonly V6GeneratedFormulaRecipe[] =
     "overformulaPrimaryBonus": null,
     "overformulaIntensityBonus": null,
     "formulaDefensePenalty": null,
-    "summonConstructDefId": null
+    "summonConstructDefId": null,
+    "timingMode": "immediate",
+    "echoAmount": null,
+    "delayBonus": null
   },
   {
     "recipeId": "v6-over-kettenfessel-schatten-verdichtung",
@@ -10162,7 +15896,74 @@ export const V6_GENERATED_FORMULA_RECIPES: readonly V6GeneratedFormulaRecipe[] =
     "overformulaPrimaryBonus": null,
     "overformulaIntensityBonus": 1,
     "formulaDefensePenalty": -1,
-    "summonConstructDefId": null
+    "summonConstructDefId": null,
+    "timingMode": "immediate",
+    "echoAmount": null,
+    "delayBonus": null
+  },
+  {
+    "recipeId": "v6-tek-kettenfessel-schatten-verzoegerung",
+    "kind": "tek",
+    "catalogSlice": "slice1",
+    "techniqueId": "v6-technik-kettenfessel",
+    "essenceId": "v6-essenz-schatten",
+    "catalystId": "v6-katalysator-verzoegerung",
+    "name": "Schattenkette · Verzögerung",
+    "effectSummary": "Fessel Intensität 2 auf einen besetzten gegnerischen Formelplatz (manuelle Wahl). Bei Treffer: erschöpfe optional 1 gegnerische Formelkomponente. Verzögerung: Primäreffekt geschieht nicht sofort, sondern zu Beginn deines nächsten Zuges und erhält +2. Katalysator bleibt bis zur Auflösung. TEK: +1 Fetzladung (max 1×/Zug).",
+    "primary": {
+      "kind": "fessel",
+      "value": 2,
+      "target": "opponent",
+      "offensive": true
+    },
+    "rider": {
+      "id": "rider-fluch",
+      "summary": "Bei Treffer: erschöpfe optional 1 gegnerische Formelkomponente.",
+      "defenseSuppressible": true
+    },
+    "intensity": 2,
+    "transformId": "xform-verzoegerung",
+    "grantsFetz": true,
+    "catalystConsumed": false,
+    "overformulaPrimaryBonus": null,
+    "overformulaIntensityBonus": null,
+    "formulaDefensePenalty": null,
+    "summonConstructDefId": null,
+    "timingMode": "delay",
+    "echoAmount": null,
+    "delayBonus": 2
+  },
+  {
+    "recipeId": "v6-over-kettenfessel-schatten-verzoegerung",
+    "kind": "overformula",
+    "catalogSlice": "slice1",
+    "techniqueId": "v6-technik-kettenfessel",
+    "essenceId": "v6-essenz-schatten",
+    "catalystId": "v6-katalysator-verzoegerung",
+    "name": "Überformel Schattenkette · Verzögerung",
+    "effectSummary": "Fessel Intensität 3 auf einen besetzten gegnerischen Formelplatz (manuelle Wahl). Bei Treffer: erschöpfe optional 1 gegnerische Formelkomponente. (verstärkt) Verzögerung: Primäreffekt geschieht nicht sofort, sondern zu Beginn deines nächsten Zuges und erhält +2. Katalysator bleibt bis zur Auflösung. Überformel: Intensität +1 (fester Slice-1-Bonus). Überformel: Fetzladung wird verbraucht. Formelabwehr −1.",
+    "primary": {
+      "kind": "fessel",
+      "value": 3,
+      "target": "opponent",
+      "offensive": true
+    },
+    "rider": {
+      "id": "rider-fluch",
+      "summary": "Bei Treffer: erschöpfe optional 1 gegnerische Formelkomponente. (verstärkt)",
+      "defenseSuppressible": true
+    },
+    "intensity": 3,
+    "transformId": "xform-verzoegerung",
+    "grantsFetz": false,
+    "catalystConsumed": false,
+    "overformulaPrimaryBonus": null,
+    "overformulaIntensityBonus": 1,
+    "formulaDefensePenalty": -1,
+    "summonConstructDefId": null,
+    "timingMode": "delay",
+    "echoAmount": null,
+    "delayBonus": 2
   },
   {
     "recipeId": "v6-tek-kettenfessel-schatten-sofortzuender",
@@ -10191,7 +15992,10 @@ export const V6_GENERATED_FORMULA_RECIPES: readonly V6GeneratedFormulaRecipe[] =
     "overformulaPrimaryBonus": null,
     "overformulaIntensityBonus": null,
     "formulaDefensePenalty": null,
-    "summonConstructDefId": null
+    "summonConstructDefId": null,
+    "timingMode": "immediate",
+    "echoAmount": null,
+    "delayBonus": null
   },
   {
     "recipeId": "v6-over-kettenfessel-schatten-sofortzuender",
@@ -10220,7 +16024,10 @@ export const V6_GENERATED_FORMULA_RECIPES: readonly V6GeneratedFormulaRecipe[] =
     "overformulaPrimaryBonus": null,
     "overformulaIntensityBonus": 1,
     "formulaDefensePenalty": -1,
-    "summonConstructDefId": null
+    "summonConstructDefId": null,
+    "timingMode": "immediate",
+    "echoAmount": null,
+    "delayBonus": null
   },
   {
     "recipeId": "v6-tek-kettenfessel-schatten-opfergabe",
@@ -10249,7 +16056,10 @@ export const V6_GENERATED_FORMULA_RECIPES: readonly V6GeneratedFormulaRecipe[] =
     "overformulaPrimaryBonus": null,
     "overformulaIntensityBonus": null,
     "formulaDefensePenalty": null,
-    "summonConstructDefId": null
+    "summonConstructDefId": null,
+    "timingMode": "immediate",
+    "echoAmount": null,
+    "delayBonus": null
   },
   {
     "recipeId": "v6-over-kettenfessel-schatten-opfergabe",
@@ -10278,7 +16088,72 @@ export const V6_GENERATED_FORMULA_RECIPES: readonly V6GeneratedFormulaRecipe[] =
     "overformulaPrimaryBonus": null,
     "overformulaIntensityBonus": 1,
     "formulaDefensePenalty": -1,
-    "summonConstructDefId": null
+    "summonConstructDefId": null,
+    "timingMode": "immediate",
+    "echoAmount": null,
+    "delayBonus": null
+  },
+  {
+    "recipeId": "v6-tek-bannkreis-feuer-echo",
+    "kind": "tek",
+    "catalogSlice": "slice1",
+    "techniqueId": "v6-technik-bannkreis",
+    "essenceId": "v6-essenz-feuer",
+    "catalystId": "v6-katalysator-echo",
+    "name": "Glutkreis · Echo",
+    "effectSummary": "Gewinne 2 Schild. Bei Lebensschaden: Brennen, falls keine Reaktion. Echo: zu Beginn deines nächsten Zuges wiederhole 1 Punkt des Primärwerts. Katalysator bleibt bis zur Echo-Auflösung. TEK: +1 Fetzladung (max 1×/Zug).",
+    "primary": {
+      "kind": "shield",
+      "value": 2,
+      "target": "self"
+    },
+    "rider": {
+      "id": "rider-brennen",
+      "summary": "Bei Lebensschaden: Brennen, falls keine Reaktion.",
+      "defenseSuppressible": true
+    },
+    "intensity": 1,
+    "transformId": "xform-echo",
+    "grantsFetz": true,
+    "catalystConsumed": false,
+    "overformulaPrimaryBonus": null,
+    "overformulaIntensityBonus": null,
+    "formulaDefensePenalty": null,
+    "summonConstructDefId": null,
+    "timingMode": "echo",
+    "echoAmount": 1,
+    "delayBonus": null
+  },
+  {
+    "recipeId": "v6-over-bannkreis-feuer-echo",
+    "kind": "overformula",
+    "catalogSlice": "slice1",
+    "techniqueId": "v6-technik-bannkreis",
+    "essenceId": "v6-essenz-feuer",
+    "catalystId": "v6-katalysator-echo",
+    "name": "Überformel Glutkreis · Echo",
+    "effectSummary": "Gewinne 4 Schild. Bei Lebensschaden: Brennen, falls keine Reaktion. (verstärkt) Echo: zu Beginn deines nächsten Zuges wiederhole 1 Punkt des Primärwerts. Katalysator bleibt bis zur Echo-Auflösung. Überformel: Primär +2 (fester Slice-1-Bonus). Überformel: Fetzladung wird verbraucht. Formelabwehr −1.",
+    "primary": {
+      "kind": "shield",
+      "value": 4,
+      "target": "self"
+    },
+    "rider": {
+      "id": "rider-brennen",
+      "summary": "Bei Lebensschaden: Brennen, falls keine Reaktion. (verstärkt)",
+      "defenseSuppressible": true
+    },
+    "intensity": 1,
+    "transformId": "xform-echo",
+    "grantsFetz": false,
+    "catalystConsumed": false,
+    "overformulaPrimaryBonus": 2,
+    "overformulaIntensityBonus": null,
+    "formulaDefensePenalty": -1,
+    "summonConstructDefId": null,
+    "timingMode": "echo",
+    "echoAmount": 1,
+    "delayBonus": null
   },
   {
     "recipeId": "v6-tek-bannkreis-feuer-ueberladung",
@@ -10306,7 +16181,10 @@ export const V6_GENERATED_FORMULA_RECIPES: readonly V6GeneratedFormulaRecipe[] =
     "overformulaPrimaryBonus": null,
     "overformulaIntensityBonus": null,
     "formulaDefensePenalty": null,
-    "summonConstructDefId": null
+    "summonConstructDefId": null,
+    "timingMode": "immediate",
+    "echoAmount": null,
+    "delayBonus": null
   },
   {
     "recipeId": "v6-over-bannkreis-feuer-ueberladung",
@@ -10334,7 +16212,10 @@ export const V6_GENERATED_FORMULA_RECIPES: readonly V6GeneratedFormulaRecipe[] =
     "overformulaPrimaryBonus": 2,
     "overformulaIntensityBonus": null,
     "formulaDefensePenalty": -1,
-    "summonConstructDefId": null
+    "summonConstructDefId": null,
+    "timingMode": "immediate",
+    "echoAmount": null,
+    "delayBonus": null
   },
   {
     "recipeId": "v6-tek-bannkreis-feuer-verdichtung",
@@ -10362,7 +16243,10 @@ export const V6_GENERATED_FORMULA_RECIPES: readonly V6GeneratedFormulaRecipe[] =
     "overformulaPrimaryBonus": null,
     "overformulaIntensityBonus": null,
     "formulaDefensePenalty": null,
-    "summonConstructDefId": null
+    "summonConstructDefId": null,
+    "timingMode": "immediate",
+    "echoAmount": null,
+    "delayBonus": null
   },
   {
     "recipeId": "v6-over-bannkreis-feuer-verdichtung",
@@ -10390,7 +16274,72 @@ export const V6_GENERATED_FORMULA_RECIPES: readonly V6GeneratedFormulaRecipe[] =
     "overformulaPrimaryBonus": 2,
     "overformulaIntensityBonus": null,
     "formulaDefensePenalty": -1,
-    "summonConstructDefId": null
+    "summonConstructDefId": null,
+    "timingMode": "immediate",
+    "echoAmount": null,
+    "delayBonus": null
+  },
+  {
+    "recipeId": "v6-tek-bannkreis-feuer-verzoegerung",
+    "kind": "tek",
+    "catalogSlice": "slice1",
+    "techniqueId": "v6-technik-bannkreis",
+    "essenceId": "v6-essenz-feuer",
+    "catalystId": "v6-katalysator-verzoegerung",
+    "name": "Glutkreis · Verzögerung",
+    "effectSummary": "Gewinne 2 Schild. Bei Lebensschaden: Brennen, falls keine Reaktion. Verzögerung: Primäreffekt geschieht nicht sofort, sondern zu Beginn deines nächsten Zuges und erhält +2. Katalysator bleibt bis zur Auflösung. TEK: +1 Fetzladung (max 1×/Zug).",
+    "primary": {
+      "kind": "shield",
+      "value": 2,
+      "target": "self"
+    },
+    "rider": {
+      "id": "rider-brennen",
+      "summary": "Bei Lebensschaden: Brennen, falls keine Reaktion.",
+      "defenseSuppressible": true
+    },
+    "intensity": 1,
+    "transformId": "xform-verzoegerung",
+    "grantsFetz": true,
+    "catalystConsumed": false,
+    "overformulaPrimaryBonus": null,
+    "overformulaIntensityBonus": null,
+    "formulaDefensePenalty": null,
+    "summonConstructDefId": null,
+    "timingMode": "delay",
+    "echoAmount": null,
+    "delayBonus": 2
+  },
+  {
+    "recipeId": "v6-over-bannkreis-feuer-verzoegerung",
+    "kind": "overformula",
+    "catalogSlice": "slice1",
+    "techniqueId": "v6-technik-bannkreis",
+    "essenceId": "v6-essenz-feuer",
+    "catalystId": "v6-katalysator-verzoegerung",
+    "name": "Überformel Glutkreis · Verzögerung",
+    "effectSummary": "Gewinne 4 Schild. Bei Lebensschaden: Brennen, falls keine Reaktion. (verstärkt) Verzögerung: Primäreffekt geschieht nicht sofort, sondern zu Beginn deines nächsten Zuges und erhält +2. Katalysator bleibt bis zur Auflösung. Überformel: Primär +2 (fester Slice-1-Bonus). Überformel: Fetzladung wird verbraucht. Formelabwehr −1.",
+    "primary": {
+      "kind": "shield",
+      "value": 4,
+      "target": "self"
+    },
+    "rider": {
+      "id": "rider-brennen",
+      "summary": "Bei Lebensschaden: Brennen, falls keine Reaktion. (verstärkt)",
+      "defenseSuppressible": true
+    },
+    "intensity": 1,
+    "transformId": "xform-verzoegerung",
+    "grantsFetz": false,
+    "catalystConsumed": false,
+    "overformulaPrimaryBonus": 2,
+    "overformulaIntensityBonus": null,
+    "formulaDefensePenalty": -1,
+    "summonConstructDefId": null,
+    "timingMode": "delay",
+    "echoAmount": null,
+    "delayBonus": 2
   },
   {
     "recipeId": "v6-tek-bannkreis-feuer-sofortzuender",
@@ -10418,7 +16367,10 @@ export const V6_GENERATED_FORMULA_RECIPES: readonly V6GeneratedFormulaRecipe[] =
     "overformulaPrimaryBonus": null,
     "overformulaIntensityBonus": null,
     "formulaDefensePenalty": null,
-    "summonConstructDefId": null
+    "summonConstructDefId": null,
+    "timingMode": "immediate",
+    "echoAmount": null,
+    "delayBonus": null
   },
   {
     "recipeId": "v6-over-bannkreis-feuer-sofortzuender",
@@ -10446,7 +16398,10 @@ export const V6_GENERATED_FORMULA_RECIPES: readonly V6GeneratedFormulaRecipe[] =
     "overformulaPrimaryBonus": 2,
     "overformulaIntensityBonus": null,
     "formulaDefensePenalty": -1,
-    "summonConstructDefId": null
+    "summonConstructDefId": null,
+    "timingMode": "immediate",
+    "echoAmount": null,
+    "delayBonus": null
   },
   {
     "recipeId": "v6-tek-bannkreis-feuer-opfergabe",
@@ -10474,7 +16429,10 @@ export const V6_GENERATED_FORMULA_RECIPES: readonly V6GeneratedFormulaRecipe[] =
     "overformulaPrimaryBonus": null,
     "overformulaIntensityBonus": null,
     "formulaDefensePenalty": null,
-    "summonConstructDefId": null
+    "summonConstructDefId": null,
+    "timingMode": "immediate",
+    "echoAmount": null,
+    "delayBonus": null
   },
   {
     "recipeId": "v6-over-bannkreis-feuer-opfergabe",
@@ -10502,7 +16460,72 @@ export const V6_GENERATED_FORMULA_RECIPES: readonly V6GeneratedFormulaRecipe[] =
     "overformulaPrimaryBonus": 2,
     "overformulaIntensityBonus": null,
     "formulaDefensePenalty": -1,
-    "summonConstructDefId": null
+    "summonConstructDefId": null,
+    "timingMode": "immediate",
+    "echoAmount": null,
+    "delayBonus": null
+  },
+  {
+    "recipeId": "v6-tek-bannkreis-wasser-echo",
+    "kind": "tek",
+    "catalogSlice": "slice1",
+    "techniqueId": "v6-technik-bannkreis",
+    "essenceId": "v6-essenz-wasser",
+    "catalystId": "v6-katalysator-echo",
+    "name": "Wellenkreis · Echo",
+    "effectSummary": "Heile 2 Leben. Bei Heilung oder Schildgewinn: entferne optional eine Marke von dir. Echo: zu Beginn deines nächsten Zuges wiederhole 1 Punkt des Primärwerts. Katalysator bleibt bis zur Echo-Auflösung. TEK: +1 Fetzladung (max 1×/Zug).",
+    "primary": {
+      "kind": "heal",
+      "value": 2,
+      "target": "self"
+    },
+    "rider": {
+      "id": "rider-reinigen",
+      "summary": "Bei Heilung oder Schildgewinn: entferne optional eine Marke von dir.",
+      "defenseSuppressible": false
+    },
+    "intensity": 1,
+    "transformId": "xform-echo",
+    "grantsFetz": true,
+    "catalystConsumed": false,
+    "overformulaPrimaryBonus": null,
+    "overformulaIntensityBonus": null,
+    "formulaDefensePenalty": null,
+    "summonConstructDefId": null,
+    "timingMode": "echo",
+    "echoAmount": 1,
+    "delayBonus": null
+  },
+  {
+    "recipeId": "v6-over-bannkreis-wasser-echo",
+    "kind": "overformula",
+    "catalogSlice": "slice1",
+    "techniqueId": "v6-technik-bannkreis",
+    "essenceId": "v6-essenz-wasser",
+    "catalystId": "v6-katalysator-echo",
+    "name": "Überformel Wellenkreis · Echo",
+    "effectSummary": "Heile 4 Leben. Bei Heilung oder Schildgewinn: entferne optional eine Marke von dir. (verstärkt) Echo: zu Beginn deines nächsten Zuges wiederhole 1 Punkt des Primärwerts. Katalysator bleibt bis zur Echo-Auflösung. Überformel: Primär +2 (fester Slice-1-Bonus). Überformel: Fetzladung wird verbraucht. Formelabwehr −1.",
+    "primary": {
+      "kind": "heal",
+      "value": 4,
+      "target": "self"
+    },
+    "rider": {
+      "id": "rider-reinigen",
+      "summary": "Bei Heilung oder Schildgewinn: entferne optional eine Marke von dir. (verstärkt)",
+      "defenseSuppressible": false
+    },
+    "intensity": 1,
+    "transformId": "xform-echo",
+    "grantsFetz": false,
+    "catalystConsumed": false,
+    "overformulaPrimaryBonus": 2,
+    "overformulaIntensityBonus": null,
+    "formulaDefensePenalty": -1,
+    "summonConstructDefId": null,
+    "timingMode": "echo",
+    "echoAmount": 1,
+    "delayBonus": null
   },
   {
     "recipeId": "v6-tek-bannkreis-wasser-ueberladung",
@@ -10530,7 +16553,10 @@ export const V6_GENERATED_FORMULA_RECIPES: readonly V6GeneratedFormulaRecipe[] =
     "overformulaPrimaryBonus": null,
     "overformulaIntensityBonus": null,
     "formulaDefensePenalty": null,
-    "summonConstructDefId": null
+    "summonConstructDefId": null,
+    "timingMode": "immediate",
+    "echoAmount": null,
+    "delayBonus": null
   },
   {
     "recipeId": "v6-over-bannkreis-wasser-ueberladung",
@@ -10558,7 +16584,10 @@ export const V6_GENERATED_FORMULA_RECIPES: readonly V6GeneratedFormulaRecipe[] =
     "overformulaPrimaryBonus": 2,
     "overformulaIntensityBonus": null,
     "formulaDefensePenalty": -1,
-    "summonConstructDefId": null
+    "summonConstructDefId": null,
+    "timingMode": "immediate",
+    "echoAmount": null,
+    "delayBonus": null
   },
   {
     "recipeId": "v6-tek-bannkreis-wasser-verdichtung",
@@ -10586,7 +16615,10 @@ export const V6_GENERATED_FORMULA_RECIPES: readonly V6GeneratedFormulaRecipe[] =
     "overformulaPrimaryBonus": null,
     "overformulaIntensityBonus": null,
     "formulaDefensePenalty": null,
-    "summonConstructDefId": null
+    "summonConstructDefId": null,
+    "timingMode": "immediate",
+    "echoAmount": null,
+    "delayBonus": null
   },
   {
     "recipeId": "v6-over-bannkreis-wasser-verdichtung",
@@ -10614,7 +16646,72 @@ export const V6_GENERATED_FORMULA_RECIPES: readonly V6GeneratedFormulaRecipe[] =
     "overformulaPrimaryBonus": 2,
     "overformulaIntensityBonus": null,
     "formulaDefensePenalty": -1,
-    "summonConstructDefId": null
+    "summonConstructDefId": null,
+    "timingMode": "immediate",
+    "echoAmount": null,
+    "delayBonus": null
+  },
+  {
+    "recipeId": "v6-tek-bannkreis-wasser-verzoegerung",
+    "kind": "tek",
+    "catalogSlice": "slice1",
+    "techniqueId": "v6-technik-bannkreis",
+    "essenceId": "v6-essenz-wasser",
+    "catalystId": "v6-katalysator-verzoegerung",
+    "name": "Wellenkreis · Verzögerung",
+    "effectSummary": "Heile 2 Leben. Bei Heilung oder Schildgewinn: entferne optional eine Marke von dir. Verzögerung: Primäreffekt geschieht nicht sofort, sondern zu Beginn deines nächsten Zuges und erhält +2. Katalysator bleibt bis zur Auflösung. TEK: +1 Fetzladung (max 1×/Zug).",
+    "primary": {
+      "kind": "heal",
+      "value": 2,
+      "target": "self"
+    },
+    "rider": {
+      "id": "rider-reinigen",
+      "summary": "Bei Heilung oder Schildgewinn: entferne optional eine Marke von dir.",
+      "defenseSuppressible": false
+    },
+    "intensity": 1,
+    "transformId": "xform-verzoegerung",
+    "grantsFetz": true,
+    "catalystConsumed": false,
+    "overformulaPrimaryBonus": null,
+    "overformulaIntensityBonus": null,
+    "formulaDefensePenalty": null,
+    "summonConstructDefId": null,
+    "timingMode": "delay",
+    "echoAmount": null,
+    "delayBonus": 2
+  },
+  {
+    "recipeId": "v6-over-bannkreis-wasser-verzoegerung",
+    "kind": "overformula",
+    "catalogSlice": "slice1",
+    "techniqueId": "v6-technik-bannkreis",
+    "essenceId": "v6-essenz-wasser",
+    "catalystId": "v6-katalysator-verzoegerung",
+    "name": "Überformel Wellenkreis · Verzögerung",
+    "effectSummary": "Heile 4 Leben. Bei Heilung oder Schildgewinn: entferne optional eine Marke von dir. (verstärkt) Verzögerung: Primäreffekt geschieht nicht sofort, sondern zu Beginn deines nächsten Zuges und erhält +2. Katalysator bleibt bis zur Auflösung. Überformel: Primär +2 (fester Slice-1-Bonus). Überformel: Fetzladung wird verbraucht. Formelabwehr −1.",
+    "primary": {
+      "kind": "heal",
+      "value": 4,
+      "target": "self"
+    },
+    "rider": {
+      "id": "rider-reinigen",
+      "summary": "Bei Heilung oder Schildgewinn: entferne optional eine Marke von dir. (verstärkt)",
+      "defenseSuppressible": false
+    },
+    "intensity": 1,
+    "transformId": "xform-verzoegerung",
+    "grantsFetz": false,
+    "catalystConsumed": false,
+    "overformulaPrimaryBonus": 2,
+    "overformulaIntensityBonus": null,
+    "formulaDefensePenalty": -1,
+    "summonConstructDefId": null,
+    "timingMode": "delay",
+    "echoAmount": null,
+    "delayBonus": 2
   },
   {
     "recipeId": "v6-tek-bannkreis-wasser-sofortzuender",
@@ -10642,7 +16739,10 @@ export const V6_GENERATED_FORMULA_RECIPES: readonly V6GeneratedFormulaRecipe[] =
     "overformulaPrimaryBonus": null,
     "overformulaIntensityBonus": null,
     "formulaDefensePenalty": null,
-    "summonConstructDefId": null
+    "summonConstructDefId": null,
+    "timingMode": "immediate",
+    "echoAmount": null,
+    "delayBonus": null
   },
   {
     "recipeId": "v6-over-bannkreis-wasser-sofortzuender",
@@ -10670,7 +16770,10 @@ export const V6_GENERATED_FORMULA_RECIPES: readonly V6GeneratedFormulaRecipe[] =
     "overformulaPrimaryBonus": 2,
     "overformulaIntensityBonus": null,
     "formulaDefensePenalty": -1,
-    "summonConstructDefId": null
+    "summonConstructDefId": null,
+    "timingMode": "immediate",
+    "echoAmount": null,
+    "delayBonus": null
   },
   {
     "recipeId": "v6-tek-bannkreis-wasser-opfergabe",
@@ -10698,7 +16801,10 @@ export const V6_GENERATED_FORMULA_RECIPES: readonly V6GeneratedFormulaRecipe[] =
     "overformulaPrimaryBonus": null,
     "overformulaIntensityBonus": null,
     "formulaDefensePenalty": null,
-    "summonConstructDefId": null
+    "summonConstructDefId": null,
+    "timingMode": "immediate",
+    "echoAmount": null,
+    "delayBonus": null
   },
   {
     "recipeId": "v6-over-bannkreis-wasser-opfergabe",
@@ -10726,7 +16832,72 @@ export const V6_GENERATED_FORMULA_RECIPES: readonly V6GeneratedFormulaRecipe[] =
     "overformulaPrimaryBonus": 2,
     "overformulaIntensityBonus": null,
     "formulaDefensePenalty": -1,
-    "summonConstructDefId": null
+    "summonConstructDefId": null,
+    "timingMode": "immediate",
+    "echoAmount": null,
+    "delayBonus": null
+  },
+  {
+    "recipeId": "v6-tek-bannkreis-erde-echo",
+    "kind": "tek",
+    "catalogSlice": "slice1",
+    "techniqueId": "v6-technik-bannkreis",
+    "essenceId": "v6-essenz-erde",
+    "catalystId": "v6-katalysator-echo",
+    "name": "Felskreis · Echo",
+    "effectSummary": "Gewinne 2 Schild. Verwendete Komponenten +1 Stabilität bis nächste Startphase. Echo: zu Beginn deines nächsten Zuges wiederhole 1 Punkt des Primärwerts. Katalysator bleibt bis zur Echo-Auflösung. TEK: +1 Fetzladung (max 1×/Zug).",
+    "primary": {
+      "kind": "shield",
+      "value": 2,
+      "target": "self"
+    },
+    "rider": {
+      "id": "rider-stabilitaet",
+      "summary": "Verwendete Komponenten +1 Stabilität bis nächste Startphase.",
+      "defenseSuppressible": false
+    },
+    "intensity": 1,
+    "transformId": "xform-echo",
+    "grantsFetz": true,
+    "catalystConsumed": false,
+    "overformulaPrimaryBonus": null,
+    "overformulaIntensityBonus": null,
+    "formulaDefensePenalty": null,
+    "summonConstructDefId": null,
+    "timingMode": "echo",
+    "echoAmount": 1,
+    "delayBonus": null
+  },
+  {
+    "recipeId": "v6-over-bannkreis-erde-echo",
+    "kind": "overformula",
+    "catalogSlice": "slice1",
+    "techniqueId": "v6-technik-bannkreis",
+    "essenceId": "v6-essenz-erde",
+    "catalystId": "v6-katalysator-echo",
+    "name": "Überformel Felskreis · Echo",
+    "effectSummary": "Gewinne 4 Schild. Verwendete Komponenten +1 Stabilität bis nächste Startphase. (verstärkt) Echo: zu Beginn deines nächsten Zuges wiederhole 1 Punkt des Primärwerts. Katalysator bleibt bis zur Echo-Auflösung. Überformel: Primär +2 (fester Slice-1-Bonus). Überformel: Fetzladung wird verbraucht. Formelabwehr −1.",
+    "primary": {
+      "kind": "shield",
+      "value": 4,
+      "target": "self"
+    },
+    "rider": {
+      "id": "rider-stabilitaet",
+      "summary": "Verwendete Komponenten +1 Stabilität bis nächste Startphase. (verstärkt)",
+      "defenseSuppressible": false
+    },
+    "intensity": 1,
+    "transformId": "xform-echo",
+    "grantsFetz": false,
+    "catalystConsumed": false,
+    "overformulaPrimaryBonus": 2,
+    "overformulaIntensityBonus": null,
+    "formulaDefensePenalty": -1,
+    "summonConstructDefId": null,
+    "timingMode": "echo",
+    "echoAmount": 1,
+    "delayBonus": null
   },
   {
     "recipeId": "v6-tek-bannkreis-erde-ueberladung",
@@ -10754,7 +16925,10 @@ export const V6_GENERATED_FORMULA_RECIPES: readonly V6GeneratedFormulaRecipe[] =
     "overformulaPrimaryBonus": null,
     "overformulaIntensityBonus": null,
     "formulaDefensePenalty": null,
-    "summonConstructDefId": null
+    "summonConstructDefId": null,
+    "timingMode": "immediate",
+    "echoAmount": null,
+    "delayBonus": null
   },
   {
     "recipeId": "v6-over-bannkreis-erde-ueberladung",
@@ -10782,7 +16956,10 @@ export const V6_GENERATED_FORMULA_RECIPES: readonly V6GeneratedFormulaRecipe[] =
     "overformulaPrimaryBonus": 2,
     "overformulaIntensityBonus": null,
     "formulaDefensePenalty": -1,
-    "summonConstructDefId": null
+    "summonConstructDefId": null,
+    "timingMode": "immediate",
+    "echoAmount": null,
+    "delayBonus": null
   },
   {
     "recipeId": "v6-tek-bannkreis-erde-verdichtung",
@@ -10810,7 +16987,10 @@ export const V6_GENERATED_FORMULA_RECIPES: readonly V6GeneratedFormulaRecipe[] =
     "overformulaPrimaryBonus": null,
     "overformulaIntensityBonus": null,
     "formulaDefensePenalty": null,
-    "summonConstructDefId": null
+    "summonConstructDefId": null,
+    "timingMode": "immediate",
+    "echoAmount": null,
+    "delayBonus": null
   },
   {
     "recipeId": "v6-over-bannkreis-erde-verdichtung",
@@ -10838,7 +17018,72 @@ export const V6_GENERATED_FORMULA_RECIPES: readonly V6GeneratedFormulaRecipe[] =
     "overformulaPrimaryBonus": 2,
     "overformulaIntensityBonus": null,
     "formulaDefensePenalty": -1,
-    "summonConstructDefId": null
+    "summonConstructDefId": null,
+    "timingMode": "immediate",
+    "echoAmount": null,
+    "delayBonus": null
+  },
+  {
+    "recipeId": "v6-tek-bannkreis-erde-verzoegerung",
+    "kind": "tek",
+    "catalogSlice": "slice1",
+    "techniqueId": "v6-technik-bannkreis",
+    "essenceId": "v6-essenz-erde",
+    "catalystId": "v6-katalysator-verzoegerung",
+    "name": "Felskreis · Verzögerung",
+    "effectSummary": "Gewinne 2 Schild. Verwendete Komponenten +1 Stabilität bis nächste Startphase. Verzögerung: Primäreffekt geschieht nicht sofort, sondern zu Beginn deines nächsten Zuges und erhält +2. Katalysator bleibt bis zur Auflösung. TEK: +1 Fetzladung (max 1×/Zug).",
+    "primary": {
+      "kind": "shield",
+      "value": 2,
+      "target": "self"
+    },
+    "rider": {
+      "id": "rider-stabilitaet",
+      "summary": "Verwendete Komponenten +1 Stabilität bis nächste Startphase.",
+      "defenseSuppressible": false
+    },
+    "intensity": 1,
+    "transformId": "xform-verzoegerung",
+    "grantsFetz": true,
+    "catalystConsumed": false,
+    "overformulaPrimaryBonus": null,
+    "overformulaIntensityBonus": null,
+    "formulaDefensePenalty": null,
+    "summonConstructDefId": null,
+    "timingMode": "delay",
+    "echoAmount": null,
+    "delayBonus": 2
+  },
+  {
+    "recipeId": "v6-over-bannkreis-erde-verzoegerung",
+    "kind": "overformula",
+    "catalogSlice": "slice1",
+    "techniqueId": "v6-technik-bannkreis",
+    "essenceId": "v6-essenz-erde",
+    "catalystId": "v6-katalysator-verzoegerung",
+    "name": "Überformel Felskreis · Verzögerung",
+    "effectSummary": "Gewinne 4 Schild. Verwendete Komponenten +1 Stabilität bis nächste Startphase. (verstärkt) Verzögerung: Primäreffekt geschieht nicht sofort, sondern zu Beginn deines nächsten Zuges und erhält +2. Katalysator bleibt bis zur Auflösung. Überformel: Primär +2 (fester Slice-1-Bonus). Überformel: Fetzladung wird verbraucht. Formelabwehr −1.",
+    "primary": {
+      "kind": "shield",
+      "value": 4,
+      "target": "self"
+    },
+    "rider": {
+      "id": "rider-stabilitaet",
+      "summary": "Verwendete Komponenten +1 Stabilität bis nächste Startphase. (verstärkt)",
+      "defenseSuppressible": false
+    },
+    "intensity": 1,
+    "transformId": "xform-verzoegerung",
+    "grantsFetz": false,
+    "catalystConsumed": false,
+    "overformulaPrimaryBonus": 2,
+    "overformulaIntensityBonus": null,
+    "formulaDefensePenalty": -1,
+    "summonConstructDefId": null,
+    "timingMode": "delay",
+    "echoAmount": null,
+    "delayBonus": 2
   },
   {
     "recipeId": "v6-tek-bannkreis-erde-sofortzuender",
@@ -10866,7 +17111,10 @@ export const V6_GENERATED_FORMULA_RECIPES: readonly V6GeneratedFormulaRecipe[] =
     "overformulaPrimaryBonus": null,
     "overformulaIntensityBonus": null,
     "formulaDefensePenalty": null,
-    "summonConstructDefId": null
+    "summonConstructDefId": null,
+    "timingMode": "immediate",
+    "echoAmount": null,
+    "delayBonus": null
   },
   {
     "recipeId": "v6-over-bannkreis-erde-sofortzuender",
@@ -10894,7 +17142,10 @@ export const V6_GENERATED_FORMULA_RECIPES: readonly V6GeneratedFormulaRecipe[] =
     "overformulaPrimaryBonus": 2,
     "overformulaIntensityBonus": null,
     "formulaDefensePenalty": -1,
-    "summonConstructDefId": null
+    "summonConstructDefId": null,
+    "timingMode": "immediate",
+    "echoAmount": null,
+    "delayBonus": null
   },
   {
     "recipeId": "v6-tek-bannkreis-erde-opfergabe",
@@ -10922,7 +17173,10 @@ export const V6_GENERATED_FORMULA_RECIPES: readonly V6GeneratedFormulaRecipe[] =
     "overformulaPrimaryBonus": null,
     "overformulaIntensityBonus": null,
     "formulaDefensePenalty": null,
-    "summonConstructDefId": null
+    "summonConstructDefId": null,
+    "timingMode": "immediate",
+    "echoAmount": null,
+    "delayBonus": null
   },
   {
     "recipeId": "v6-over-bannkreis-erde-opfergabe",
@@ -10950,7 +17204,72 @@ export const V6_GENERATED_FORMULA_RECIPES: readonly V6GeneratedFormulaRecipe[] =
     "overformulaPrimaryBonus": 2,
     "overformulaIntensityBonus": null,
     "formulaDefensePenalty": -1,
-    "summonConstructDefId": null
+    "summonConstructDefId": null,
+    "timingMode": "immediate",
+    "echoAmount": null,
+    "delayBonus": null
+  },
+  {
+    "recipeId": "v6-tek-bannkreis-luft-echo",
+    "kind": "tek",
+    "catalogSlice": "slice1",
+    "techniqueId": "v6-technik-bannkreis",
+    "essenceId": "v6-essenz-luft",
+    "catalystId": "v6-katalysator-echo",
+    "name": "Windkreis · Echo",
+    "effectSummary": "Gewinne 2 Schild. Nächster eigener Aktions-W6 +1 (max +2). Echo: zu Beginn deines nächsten Zuges wiederhole 1 Punkt des Primärwerts. Katalysator bleibt bis zur Echo-Auflösung. TEK: +1 Fetzladung (max 1×/Zug).",
+    "primary": {
+      "kind": "shield",
+      "value": 2,
+      "target": "self"
+    },
+    "rider": {
+      "id": "rider-w6",
+      "summary": "Nächster eigener Aktions-W6 +1 (max +2).",
+      "defenseSuppressible": true
+    },
+    "intensity": 1,
+    "transformId": "xform-echo",
+    "grantsFetz": true,
+    "catalystConsumed": false,
+    "overformulaPrimaryBonus": null,
+    "overformulaIntensityBonus": null,
+    "formulaDefensePenalty": null,
+    "summonConstructDefId": null,
+    "timingMode": "echo",
+    "echoAmount": 1,
+    "delayBonus": null
+  },
+  {
+    "recipeId": "v6-over-bannkreis-luft-echo",
+    "kind": "overformula",
+    "catalogSlice": "slice1",
+    "techniqueId": "v6-technik-bannkreis",
+    "essenceId": "v6-essenz-luft",
+    "catalystId": "v6-katalysator-echo",
+    "name": "Überformel Windkreis · Echo",
+    "effectSummary": "Gewinne 4 Schild. Nächster eigener Aktions-W6 +1 (max +2). (verstärkt) Echo: zu Beginn deines nächsten Zuges wiederhole 1 Punkt des Primärwerts. Katalysator bleibt bis zur Echo-Auflösung. Überformel: Primär +2 (fester Slice-1-Bonus). Überformel: Fetzladung wird verbraucht. Formelabwehr −1.",
+    "primary": {
+      "kind": "shield",
+      "value": 4,
+      "target": "self"
+    },
+    "rider": {
+      "id": "rider-w6",
+      "summary": "Nächster eigener Aktions-W6 +1 (max +2). (verstärkt)",
+      "defenseSuppressible": true
+    },
+    "intensity": 1,
+    "transformId": "xform-echo",
+    "grantsFetz": false,
+    "catalystConsumed": false,
+    "overformulaPrimaryBonus": 2,
+    "overformulaIntensityBonus": null,
+    "formulaDefensePenalty": -1,
+    "summonConstructDefId": null,
+    "timingMode": "echo",
+    "echoAmount": 1,
+    "delayBonus": null
   },
   {
     "recipeId": "v6-tek-bannkreis-luft-ueberladung",
@@ -10978,7 +17297,10 @@ export const V6_GENERATED_FORMULA_RECIPES: readonly V6GeneratedFormulaRecipe[] =
     "overformulaPrimaryBonus": null,
     "overformulaIntensityBonus": null,
     "formulaDefensePenalty": null,
-    "summonConstructDefId": null
+    "summonConstructDefId": null,
+    "timingMode": "immediate",
+    "echoAmount": null,
+    "delayBonus": null
   },
   {
     "recipeId": "v6-over-bannkreis-luft-ueberladung",
@@ -11006,7 +17328,10 @@ export const V6_GENERATED_FORMULA_RECIPES: readonly V6GeneratedFormulaRecipe[] =
     "overformulaPrimaryBonus": 2,
     "overformulaIntensityBonus": null,
     "formulaDefensePenalty": -1,
-    "summonConstructDefId": null
+    "summonConstructDefId": null,
+    "timingMode": "immediate",
+    "echoAmount": null,
+    "delayBonus": null
   },
   {
     "recipeId": "v6-tek-bannkreis-luft-verdichtung",
@@ -11034,7 +17359,10 @@ export const V6_GENERATED_FORMULA_RECIPES: readonly V6GeneratedFormulaRecipe[] =
     "overformulaPrimaryBonus": null,
     "overformulaIntensityBonus": null,
     "formulaDefensePenalty": null,
-    "summonConstructDefId": null
+    "summonConstructDefId": null,
+    "timingMode": "immediate",
+    "echoAmount": null,
+    "delayBonus": null
   },
   {
     "recipeId": "v6-over-bannkreis-luft-verdichtung",
@@ -11062,7 +17390,72 @@ export const V6_GENERATED_FORMULA_RECIPES: readonly V6GeneratedFormulaRecipe[] =
     "overformulaPrimaryBonus": 2,
     "overformulaIntensityBonus": null,
     "formulaDefensePenalty": -1,
-    "summonConstructDefId": null
+    "summonConstructDefId": null,
+    "timingMode": "immediate",
+    "echoAmount": null,
+    "delayBonus": null
+  },
+  {
+    "recipeId": "v6-tek-bannkreis-luft-verzoegerung",
+    "kind": "tek",
+    "catalogSlice": "slice1",
+    "techniqueId": "v6-technik-bannkreis",
+    "essenceId": "v6-essenz-luft",
+    "catalystId": "v6-katalysator-verzoegerung",
+    "name": "Windkreis · Verzögerung",
+    "effectSummary": "Gewinne 2 Schild. Nächster eigener Aktions-W6 +1 (max +2). Verzögerung: Primäreffekt geschieht nicht sofort, sondern zu Beginn deines nächsten Zuges und erhält +2. Katalysator bleibt bis zur Auflösung. TEK: +1 Fetzladung (max 1×/Zug).",
+    "primary": {
+      "kind": "shield",
+      "value": 2,
+      "target": "self"
+    },
+    "rider": {
+      "id": "rider-w6",
+      "summary": "Nächster eigener Aktions-W6 +1 (max +2).",
+      "defenseSuppressible": true
+    },
+    "intensity": 1,
+    "transformId": "xform-verzoegerung",
+    "grantsFetz": true,
+    "catalystConsumed": false,
+    "overformulaPrimaryBonus": null,
+    "overformulaIntensityBonus": null,
+    "formulaDefensePenalty": null,
+    "summonConstructDefId": null,
+    "timingMode": "delay",
+    "echoAmount": null,
+    "delayBonus": 2
+  },
+  {
+    "recipeId": "v6-over-bannkreis-luft-verzoegerung",
+    "kind": "overformula",
+    "catalogSlice": "slice1",
+    "techniqueId": "v6-technik-bannkreis",
+    "essenceId": "v6-essenz-luft",
+    "catalystId": "v6-katalysator-verzoegerung",
+    "name": "Überformel Windkreis · Verzögerung",
+    "effectSummary": "Gewinne 4 Schild. Nächster eigener Aktions-W6 +1 (max +2). (verstärkt) Verzögerung: Primäreffekt geschieht nicht sofort, sondern zu Beginn deines nächsten Zuges und erhält +2. Katalysator bleibt bis zur Auflösung. Überformel: Primär +2 (fester Slice-1-Bonus). Überformel: Fetzladung wird verbraucht. Formelabwehr −1.",
+    "primary": {
+      "kind": "shield",
+      "value": 4,
+      "target": "self"
+    },
+    "rider": {
+      "id": "rider-w6",
+      "summary": "Nächster eigener Aktions-W6 +1 (max +2). (verstärkt)",
+      "defenseSuppressible": true
+    },
+    "intensity": 1,
+    "transformId": "xform-verzoegerung",
+    "grantsFetz": false,
+    "catalystConsumed": false,
+    "overformulaPrimaryBonus": 2,
+    "overformulaIntensityBonus": null,
+    "formulaDefensePenalty": -1,
+    "summonConstructDefId": null,
+    "timingMode": "delay",
+    "echoAmount": null,
+    "delayBonus": 2
   },
   {
     "recipeId": "v6-tek-bannkreis-luft-sofortzuender",
@@ -11090,7 +17483,10 @@ export const V6_GENERATED_FORMULA_RECIPES: readonly V6GeneratedFormulaRecipe[] =
     "overformulaPrimaryBonus": null,
     "overformulaIntensityBonus": null,
     "formulaDefensePenalty": null,
-    "summonConstructDefId": null
+    "summonConstructDefId": null,
+    "timingMode": "immediate",
+    "echoAmount": null,
+    "delayBonus": null
   },
   {
     "recipeId": "v6-over-bannkreis-luft-sofortzuender",
@@ -11118,7 +17514,10 @@ export const V6_GENERATED_FORMULA_RECIPES: readonly V6GeneratedFormulaRecipe[] =
     "overformulaPrimaryBonus": 2,
     "overformulaIntensityBonus": null,
     "formulaDefensePenalty": -1,
-    "summonConstructDefId": null
+    "summonConstructDefId": null,
+    "timingMode": "immediate",
+    "echoAmount": null,
+    "delayBonus": null
   },
   {
     "recipeId": "v6-tek-bannkreis-luft-opfergabe",
@@ -11146,7 +17545,10 @@ export const V6_GENERATED_FORMULA_RECIPES: readonly V6GeneratedFormulaRecipe[] =
     "overformulaPrimaryBonus": null,
     "overformulaIntensityBonus": null,
     "formulaDefensePenalty": null,
-    "summonConstructDefId": null
+    "summonConstructDefId": null,
+    "timingMode": "immediate",
+    "echoAmount": null,
+    "delayBonus": null
   },
   {
     "recipeId": "v6-over-bannkreis-luft-opfergabe",
@@ -11174,7 +17576,72 @@ export const V6_GENERATED_FORMULA_RECIPES: readonly V6GeneratedFormulaRecipe[] =
     "overformulaPrimaryBonus": 2,
     "overformulaIntensityBonus": null,
     "formulaDefensePenalty": -1,
-    "summonConstructDefId": null
+    "summonConstructDefId": null,
+    "timingMode": "immediate",
+    "echoAmount": null,
+    "delayBonus": null
+  },
+  {
+    "recipeId": "v6-tek-bannkreis-licht-echo",
+    "kind": "tek",
+    "catalogSlice": "slice1",
+    "techniqueId": "v6-technik-bannkreis",
+    "essenceId": "v6-essenz-licht",
+    "catalystId": "v6-katalysator-echo",
+    "name": "Lichtkreis · Echo",
+    "effectSummary": "Gewinne 2 Schild. Bei Schildgewinn: entferne optional eine Marke von dir. Echo: zu Beginn deines nächsten Zuges wiederhole 1 Punkt des Primärwerts. Katalysator bleibt bis zur Echo-Auflösung. TEK: +1 Fetzladung (max 1×/Zug).",
+    "primary": {
+      "kind": "shield",
+      "value": 2,
+      "target": "self"
+    },
+    "rider": {
+      "id": "rider-reinigen-licht",
+      "summary": "Bei Schildgewinn: entferne optional eine Marke von dir.",
+      "defenseSuppressible": false
+    },
+    "intensity": 1,
+    "transformId": "xform-echo",
+    "grantsFetz": true,
+    "catalystConsumed": false,
+    "overformulaPrimaryBonus": null,
+    "overformulaIntensityBonus": null,
+    "formulaDefensePenalty": null,
+    "summonConstructDefId": null,
+    "timingMode": "echo",
+    "echoAmount": 1,
+    "delayBonus": null
+  },
+  {
+    "recipeId": "v6-over-bannkreis-licht-echo",
+    "kind": "overformula",
+    "catalogSlice": "slice1",
+    "techniqueId": "v6-technik-bannkreis",
+    "essenceId": "v6-essenz-licht",
+    "catalystId": "v6-katalysator-echo",
+    "name": "Überformel Lichtkreis · Echo",
+    "effectSummary": "Gewinne 4 Schild. Bei Schildgewinn: entferne optional eine Marke von dir. (verstärkt) Echo: zu Beginn deines nächsten Zuges wiederhole 1 Punkt des Primärwerts. Katalysator bleibt bis zur Echo-Auflösung. Überformel: Primär +2 (fester Slice-1-Bonus). Überformel: Fetzladung wird verbraucht. Formelabwehr −1.",
+    "primary": {
+      "kind": "shield",
+      "value": 4,
+      "target": "self"
+    },
+    "rider": {
+      "id": "rider-reinigen-licht",
+      "summary": "Bei Schildgewinn: entferne optional eine Marke von dir. (verstärkt)",
+      "defenseSuppressible": false
+    },
+    "intensity": 1,
+    "transformId": "xform-echo",
+    "grantsFetz": false,
+    "catalystConsumed": false,
+    "overformulaPrimaryBonus": 2,
+    "overformulaIntensityBonus": null,
+    "formulaDefensePenalty": -1,
+    "summonConstructDefId": null,
+    "timingMode": "echo",
+    "echoAmount": 1,
+    "delayBonus": null
   },
   {
     "recipeId": "v6-tek-bannkreis-licht-ueberladung",
@@ -11202,7 +17669,10 @@ export const V6_GENERATED_FORMULA_RECIPES: readonly V6GeneratedFormulaRecipe[] =
     "overformulaPrimaryBonus": null,
     "overformulaIntensityBonus": null,
     "formulaDefensePenalty": null,
-    "summonConstructDefId": null
+    "summonConstructDefId": null,
+    "timingMode": "immediate",
+    "echoAmount": null,
+    "delayBonus": null
   },
   {
     "recipeId": "v6-over-bannkreis-licht-ueberladung",
@@ -11230,7 +17700,10 @@ export const V6_GENERATED_FORMULA_RECIPES: readonly V6GeneratedFormulaRecipe[] =
     "overformulaPrimaryBonus": 2,
     "overformulaIntensityBonus": null,
     "formulaDefensePenalty": -1,
-    "summonConstructDefId": null
+    "summonConstructDefId": null,
+    "timingMode": "immediate",
+    "echoAmount": null,
+    "delayBonus": null
   },
   {
     "recipeId": "v6-tek-bannkreis-licht-verdichtung",
@@ -11258,7 +17731,10 @@ export const V6_GENERATED_FORMULA_RECIPES: readonly V6GeneratedFormulaRecipe[] =
     "overformulaPrimaryBonus": null,
     "overformulaIntensityBonus": null,
     "formulaDefensePenalty": null,
-    "summonConstructDefId": null
+    "summonConstructDefId": null,
+    "timingMode": "immediate",
+    "echoAmount": null,
+    "delayBonus": null
   },
   {
     "recipeId": "v6-over-bannkreis-licht-verdichtung",
@@ -11286,7 +17762,72 @@ export const V6_GENERATED_FORMULA_RECIPES: readonly V6GeneratedFormulaRecipe[] =
     "overformulaPrimaryBonus": 2,
     "overformulaIntensityBonus": null,
     "formulaDefensePenalty": -1,
-    "summonConstructDefId": null
+    "summonConstructDefId": null,
+    "timingMode": "immediate",
+    "echoAmount": null,
+    "delayBonus": null
+  },
+  {
+    "recipeId": "v6-tek-bannkreis-licht-verzoegerung",
+    "kind": "tek",
+    "catalogSlice": "slice1",
+    "techniqueId": "v6-technik-bannkreis",
+    "essenceId": "v6-essenz-licht",
+    "catalystId": "v6-katalysator-verzoegerung",
+    "name": "Lichtkreis · Verzögerung",
+    "effectSummary": "Gewinne 2 Schild. Bei Schildgewinn: entferne optional eine Marke von dir. Verzögerung: Primäreffekt geschieht nicht sofort, sondern zu Beginn deines nächsten Zuges und erhält +2. Katalysator bleibt bis zur Auflösung. TEK: +1 Fetzladung (max 1×/Zug).",
+    "primary": {
+      "kind": "shield",
+      "value": 2,
+      "target": "self"
+    },
+    "rider": {
+      "id": "rider-reinigen-licht",
+      "summary": "Bei Schildgewinn: entferne optional eine Marke von dir.",
+      "defenseSuppressible": false
+    },
+    "intensity": 1,
+    "transformId": "xform-verzoegerung",
+    "grantsFetz": true,
+    "catalystConsumed": false,
+    "overformulaPrimaryBonus": null,
+    "overformulaIntensityBonus": null,
+    "formulaDefensePenalty": null,
+    "summonConstructDefId": null,
+    "timingMode": "delay",
+    "echoAmount": null,
+    "delayBonus": 2
+  },
+  {
+    "recipeId": "v6-over-bannkreis-licht-verzoegerung",
+    "kind": "overformula",
+    "catalogSlice": "slice1",
+    "techniqueId": "v6-technik-bannkreis",
+    "essenceId": "v6-essenz-licht",
+    "catalystId": "v6-katalysator-verzoegerung",
+    "name": "Überformel Lichtkreis · Verzögerung",
+    "effectSummary": "Gewinne 4 Schild. Bei Schildgewinn: entferne optional eine Marke von dir. (verstärkt) Verzögerung: Primäreffekt geschieht nicht sofort, sondern zu Beginn deines nächsten Zuges und erhält +2. Katalysator bleibt bis zur Auflösung. Überformel: Primär +2 (fester Slice-1-Bonus). Überformel: Fetzladung wird verbraucht. Formelabwehr −1.",
+    "primary": {
+      "kind": "shield",
+      "value": 4,
+      "target": "self"
+    },
+    "rider": {
+      "id": "rider-reinigen-licht",
+      "summary": "Bei Schildgewinn: entferne optional eine Marke von dir. (verstärkt)",
+      "defenseSuppressible": false
+    },
+    "intensity": 1,
+    "transformId": "xform-verzoegerung",
+    "grantsFetz": false,
+    "catalystConsumed": false,
+    "overformulaPrimaryBonus": 2,
+    "overformulaIntensityBonus": null,
+    "formulaDefensePenalty": -1,
+    "summonConstructDefId": null,
+    "timingMode": "delay",
+    "echoAmount": null,
+    "delayBonus": 2
   },
   {
     "recipeId": "v6-tek-bannkreis-licht-sofortzuender",
@@ -11314,7 +17855,10 @@ export const V6_GENERATED_FORMULA_RECIPES: readonly V6GeneratedFormulaRecipe[] =
     "overformulaPrimaryBonus": null,
     "overformulaIntensityBonus": null,
     "formulaDefensePenalty": null,
-    "summonConstructDefId": null
+    "summonConstructDefId": null,
+    "timingMode": "immediate",
+    "echoAmount": null,
+    "delayBonus": null
   },
   {
     "recipeId": "v6-over-bannkreis-licht-sofortzuender",
@@ -11342,7 +17886,10 @@ export const V6_GENERATED_FORMULA_RECIPES: readonly V6GeneratedFormulaRecipe[] =
     "overformulaPrimaryBonus": 2,
     "overformulaIntensityBonus": null,
     "formulaDefensePenalty": -1,
-    "summonConstructDefId": null
+    "summonConstructDefId": null,
+    "timingMode": "immediate",
+    "echoAmount": null,
+    "delayBonus": null
   },
   {
     "recipeId": "v6-tek-bannkreis-licht-opfergabe",
@@ -11370,7 +17917,10 @@ export const V6_GENERATED_FORMULA_RECIPES: readonly V6GeneratedFormulaRecipe[] =
     "overformulaPrimaryBonus": null,
     "overformulaIntensityBonus": null,
     "formulaDefensePenalty": null,
-    "summonConstructDefId": null
+    "summonConstructDefId": null,
+    "timingMode": "immediate",
+    "echoAmount": null,
+    "delayBonus": null
   },
   {
     "recipeId": "v6-over-bannkreis-licht-opfergabe",
@@ -11398,7 +17948,72 @@ export const V6_GENERATED_FORMULA_RECIPES: readonly V6GeneratedFormulaRecipe[] =
     "overformulaPrimaryBonus": 2,
     "overformulaIntensityBonus": null,
     "formulaDefensePenalty": -1,
-    "summonConstructDefId": null
+    "summonConstructDefId": null,
+    "timingMode": "immediate",
+    "echoAmount": null,
+    "delayBonus": null
+  },
+  {
+    "recipeId": "v6-tek-bannkreis-schatten-echo",
+    "kind": "tek",
+    "catalogSlice": "slice1",
+    "techniqueId": "v6-technik-bannkreis",
+    "essenceId": "v6-essenz-schatten",
+    "catalystId": "v6-katalysator-echo",
+    "name": "Schattenkreis · Echo",
+    "effectSummary": "Gewinne 2 Schild. Bei Treffer: erschöpfe optional 1 gegnerische Formelkomponente. Echo: zu Beginn deines nächsten Zuges wiederhole 1 Punkt des Primärwerts. Katalysator bleibt bis zur Echo-Auflösung. TEK: +1 Fetzladung (max 1×/Zug).",
+    "primary": {
+      "kind": "shield",
+      "value": 2,
+      "target": "self"
+    },
+    "rider": {
+      "id": "rider-fluch",
+      "summary": "Bei Treffer: erschöpfe optional 1 gegnerische Formelkomponente.",
+      "defenseSuppressible": true
+    },
+    "intensity": 1,
+    "transformId": "xform-echo",
+    "grantsFetz": true,
+    "catalystConsumed": false,
+    "overformulaPrimaryBonus": null,
+    "overformulaIntensityBonus": null,
+    "formulaDefensePenalty": null,
+    "summonConstructDefId": null,
+    "timingMode": "echo",
+    "echoAmount": 1,
+    "delayBonus": null
+  },
+  {
+    "recipeId": "v6-over-bannkreis-schatten-echo",
+    "kind": "overformula",
+    "catalogSlice": "slice1",
+    "techniqueId": "v6-technik-bannkreis",
+    "essenceId": "v6-essenz-schatten",
+    "catalystId": "v6-katalysator-echo",
+    "name": "Überformel Schattenkreis · Echo",
+    "effectSummary": "Gewinne 4 Schild. Bei Treffer: erschöpfe optional 1 gegnerische Formelkomponente. (verstärkt) Echo: zu Beginn deines nächsten Zuges wiederhole 1 Punkt des Primärwerts. Katalysator bleibt bis zur Echo-Auflösung. Überformel: Primär +2 (fester Slice-1-Bonus). Überformel: Fetzladung wird verbraucht. Formelabwehr −1.",
+    "primary": {
+      "kind": "shield",
+      "value": 4,
+      "target": "self"
+    },
+    "rider": {
+      "id": "rider-fluch",
+      "summary": "Bei Treffer: erschöpfe optional 1 gegnerische Formelkomponente. (verstärkt)",
+      "defenseSuppressible": true
+    },
+    "intensity": 1,
+    "transformId": "xform-echo",
+    "grantsFetz": false,
+    "catalystConsumed": false,
+    "overformulaPrimaryBonus": 2,
+    "overformulaIntensityBonus": null,
+    "formulaDefensePenalty": -1,
+    "summonConstructDefId": null,
+    "timingMode": "echo",
+    "echoAmount": 1,
+    "delayBonus": null
   },
   {
     "recipeId": "v6-tek-bannkreis-schatten-ueberladung",
@@ -11426,7 +18041,10 @@ export const V6_GENERATED_FORMULA_RECIPES: readonly V6GeneratedFormulaRecipe[] =
     "overformulaPrimaryBonus": null,
     "overformulaIntensityBonus": null,
     "formulaDefensePenalty": null,
-    "summonConstructDefId": null
+    "summonConstructDefId": null,
+    "timingMode": "immediate",
+    "echoAmount": null,
+    "delayBonus": null
   },
   {
     "recipeId": "v6-over-bannkreis-schatten-ueberladung",
@@ -11454,7 +18072,10 @@ export const V6_GENERATED_FORMULA_RECIPES: readonly V6GeneratedFormulaRecipe[] =
     "overformulaPrimaryBonus": 2,
     "overformulaIntensityBonus": null,
     "formulaDefensePenalty": -1,
-    "summonConstructDefId": null
+    "summonConstructDefId": null,
+    "timingMode": "immediate",
+    "echoAmount": null,
+    "delayBonus": null
   },
   {
     "recipeId": "v6-tek-bannkreis-schatten-verdichtung",
@@ -11482,7 +18103,10 @@ export const V6_GENERATED_FORMULA_RECIPES: readonly V6GeneratedFormulaRecipe[] =
     "overformulaPrimaryBonus": null,
     "overformulaIntensityBonus": null,
     "formulaDefensePenalty": null,
-    "summonConstructDefId": null
+    "summonConstructDefId": null,
+    "timingMode": "immediate",
+    "echoAmount": null,
+    "delayBonus": null
   },
   {
     "recipeId": "v6-over-bannkreis-schatten-verdichtung",
@@ -11510,7 +18134,72 @@ export const V6_GENERATED_FORMULA_RECIPES: readonly V6GeneratedFormulaRecipe[] =
     "overformulaPrimaryBonus": 2,
     "overformulaIntensityBonus": null,
     "formulaDefensePenalty": -1,
-    "summonConstructDefId": null
+    "summonConstructDefId": null,
+    "timingMode": "immediate",
+    "echoAmount": null,
+    "delayBonus": null
+  },
+  {
+    "recipeId": "v6-tek-bannkreis-schatten-verzoegerung",
+    "kind": "tek",
+    "catalogSlice": "slice1",
+    "techniqueId": "v6-technik-bannkreis",
+    "essenceId": "v6-essenz-schatten",
+    "catalystId": "v6-katalysator-verzoegerung",
+    "name": "Schattenkreis · Verzögerung",
+    "effectSummary": "Gewinne 2 Schild. Bei Treffer: erschöpfe optional 1 gegnerische Formelkomponente. Verzögerung: Primäreffekt geschieht nicht sofort, sondern zu Beginn deines nächsten Zuges und erhält +2. Katalysator bleibt bis zur Auflösung. TEK: +1 Fetzladung (max 1×/Zug).",
+    "primary": {
+      "kind": "shield",
+      "value": 2,
+      "target": "self"
+    },
+    "rider": {
+      "id": "rider-fluch",
+      "summary": "Bei Treffer: erschöpfe optional 1 gegnerische Formelkomponente.",
+      "defenseSuppressible": true
+    },
+    "intensity": 1,
+    "transformId": "xform-verzoegerung",
+    "grantsFetz": true,
+    "catalystConsumed": false,
+    "overformulaPrimaryBonus": null,
+    "overformulaIntensityBonus": null,
+    "formulaDefensePenalty": null,
+    "summonConstructDefId": null,
+    "timingMode": "delay",
+    "echoAmount": null,
+    "delayBonus": 2
+  },
+  {
+    "recipeId": "v6-over-bannkreis-schatten-verzoegerung",
+    "kind": "overformula",
+    "catalogSlice": "slice1",
+    "techniqueId": "v6-technik-bannkreis",
+    "essenceId": "v6-essenz-schatten",
+    "catalystId": "v6-katalysator-verzoegerung",
+    "name": "Überformel Schattenkreis · Verzögerung",
+    "effectSummary": "Gewinne 4 Schild. Bei Treffer: erschöpfe optional 1 gegnerische Formelkomponente. (verstärkt) Verzögerung: Primäreffekt geschieht nicht sofort, sondern zu Beginn deines nächsten Zuges und erhält +2. Katalysator bleibt bis zur Auflösung. Überformel: Primär +2 (fester Slice-1-Bonus). Überformel: Fetzladung wird verbraucht. Formelabwehr −1.",
+    "primary": {
+      "kind": "shield",
+      "value": 4,
+      "target": "self"
+    },
+    "rider": {
+      "id": "rider-fluch",
+      "summary": "Bei Treffer: erschöpfe optional 1 gegnerische Formelkomponente. (verstärkt)",
+      "defenseSuppressible": true
+    },
+    "intensity": 1,
+    "transformId": "xform-verzoegerung",
+    "grantsFetz": false,
+    "catalystConsumed": false,
+    "overformulaPrimaryBonus": 2,
+    "overformulaIntensityBonus": null,
+    "formulaDefensePenalty": -1,
+    "summonConstructDefId": null,
+    "timingMode": "delay",
+    "echoAmount": null,
+    "delayBonus": 2
   },
   {
     "recipeId": "v6-tek-bannkreis-schatten-sofortzuender",
@@ -11538,7 +18227,10 @@ export const V6_GENERATED_FORMULA_RECIPES: readonly V6GeneratedFormulaRecipe[] =
     "overformulaPrimaryBonus": null,
     "overformulaIntensityBonus": null,
     "formulaDefensePenalty": null,
-    "summonConstructDefId": null
+    "summonConstructDefId": null,
+    "timingMode": "immediate",
+    "echoAmount": null,
+    "delayBonus": null
   },
   {
     "recipeId": "v6-over-bannkreis-schatten-sofortzuender",
@@ -11566,7 +18258,10 @@ export const V6_GENERATED_FORMULA_RECIPES: readonly V6GeneratedFormulaRecipe[] =
     "overformulaPrimaryBonus": 2,
     "overformulaIntensityBonus": null,
     "formulaDefensePenalty": -1,
-    "summonConstructDefId": null
+    "summonConstructDefId": null,
+    "timingMode": "immediate",
+    "echoAmount": null,
+    "delayBonus": null
   },
   {
     "recipeId": "v6-tek-bannkreis-schatten-opfergabe",
@@ -11594,7 +18289,10 @@ export const V6_GENERATED_FORMULA_RECIPES: readonly V6GeneratedFormulaRecipe[] =
     "overformulaPrimaryBonus": null,
     "overformulaIntensityBonus": null,
     "formulaDefensePenalty": null,
-    "summonConstructDefId": null
+    "summonConstructDefId": null,
+    "timingMode": "immediate",
+    "echoAmount": null,
+    "delayBonus": null
   },
   {
     "recipeId": "v6-over-bannkreis-schatten-opfergabe",
@@ -11622,7 +18320,74 @@ export const V6_GENERATED_FORMULA_RECIPES: readonly V6GeneratedFormulaRecipe[] =
     "overformulaPrimaryBonus": 2,
     "overformulaIntensityBonus": null,
     "formulaDefensePenalty": -1,
-    "summonConstructDefId": null
+    "summonConstructDefId": null,
+    "timingMode": "immediate",
+    "echoAmount": null,
+    "delayBonus": null
+  },
+  {
+    "recipeId": "v6-tek-ueberraschungsangriff-feuer-echo",
+    "kind": "tek",
+    "catalogSlice": "slice1",
+    "techniqueId": "v6-technik-ueberraschungsangriff",
+    "essenceId": "v6-essenz-feuer",
+    "catalystId": "v6-katalysator-echo",
+    "name": "Glutüberraschung · Echo",
+    "effectSummary": "Verursache 3 Schaden am Gegner. Bei Lebensschaden: Brennen, falls keine Reaktion. Echo: zu Beginn deines nächsten Zuges wiederhole 1 Punkt des Primärwerts. Katalysator bleibt bis zur Echo-Auflösung. TEK: +1 Fetzladung (max 1×/Zug).",
+    "primary": {
+      "kind": "damage",
+      "value": 3,
+      "target": "opponent",
+      "offensive": true
+    },
+    "rider": {
+      "id": "rider-brennen",
+      "summary": "Bei Lebensschaden: Brennen, falls keine Reaktion.",
+      "defenseSuppressible": true
+    },
+    "intensity": null,
+    "transformId": "xform-echo",
+    "grantsFetz": true,
+    "catalystConsumed": false,
+    "overformulaPrimaryBonus": null,
+    "overformulaIntensityBonus": null,
+    "formulaDefensePenalty": null,
+    "summonConstructDefId": null,
+    "timingMode": "echo",
+    "echoAmount": 1,
+    "delayBonus": null
+  },
+  {
+    "recipeId": "v6-over-ueberraschungsangriff-feuer-echo",
+    "kind": "overformula",
+    "catalogSlice": "slice1",
+    "techniqueId": "v6-technik-ueberraschungsangriff",
+    "essenceId": "v6-essenz-feuer",
+    "catalystId": "v6-katalysator-echo",
+    "name": "Überformel Glutüberraschung · Echo",
+    "effectSummary": "Verursache 5 Schaden am Gegner. Bei Lebensschaden: Brennen, falls keine Reaktion. (verstärkt) Echo: zu Beginn deines nächsten Zuges wiederhole 1 Punkt des Primärwerts. Katalysator bleibt bis zur Echo-Auflösung. Überformel: Primär +2 (fester Slice-1-Bonus). Überformel: Fetzladung wird verbraucht. Formelabwehr −1.",
+    "primary": {
+      "kind": "damage",
+      "value": 5,
+      "target": "opponent",
+      "offensive": true
+    },
+    "rider": {
+      "id": "rider-brennen",
+      "summary": "Bei Lebensschaden: Brennen, falls keine Reaktion. (verstärkt)",
+      "defenseSuppressible": true
+    },
+    "intensity": null,
+    "transformId": "xform-echo",
+    "grantsFetz": false,
+    "catalystConsumed": false,
+    "overformulaPrimaryBonus": 2,
+    "overformulaIntensityBonus": null,
+    "formulaDefensePenalty": -1,
+    "summonConstructDefId": null,
+    "timingMode": "echo",
+    "echoAmount": 1,
+    "delayBonus": null
   },
   {
     "recipeId": "v6-tek-ueberraschungsangriff-feuer-ueberladung",
@@ -11651,7 +18416,10 @@ export const V6_GENERATED_FORMULA_RECIPES: readonly V6GeneratedFormulaRecipe[] =
     "overformulaPrimaryBonus": null,
     "overformulaIntensityBonus": null,
     "formulaDefensePenalty": null,
-    "summonConstructDefId": null
+    "summonConstructDefId": null,
+    "timingMode": "immediate",
+    "echoAmount": null,
+    "delayBonus": null
   },
   {
     "recipeId": "v6-over-ueberraschungsangriff-feuer-ueberladung",
@@ -11680,7 +18448,10 @@ export const V6_GENERATED_FORMULA_RECIPES: readonly V6GeneratedFormulaRecipe[] =
     "overformulaPrimaryBonus": 2,
     "overformulaIntensityBonus": null,
     "formulaDefensePenalty": -1,
-    "summonConstructDefId": null
+    "summonConstructDefId": null,
+    "timingMode": "immediate",
+    "echoAmount": null,
+    "delayBonus": null
   },
   {
     "recipeId": "v6-tek-ueberraschungsangriff-feuer-verdichtung",
@@ -11709,7 +18480,10 @@ export const V6_GENERATED_FORMULA_RECIPES: readonly V6GeneratedFormulaRecipe[] =
     "overformulaPrimaryBonus": null,
     "overformulaIntensityBonus": null,
     "formulaDefensePenalty": null,
-    "summonConstructDefId": null
+    "summonConstructDefId": null,
+    "timingMode": "immediate",
+    "echoAmount": null,
+    "delayBonus": null
   },
   {
     "recipeId": "v6-over-ueberraschungsangriff-feuer-verdichtung",
@@ -11738,7 +18512,74 @@ export const V6_GENERATED_FORMULA_RECIPES: readonly V6GeneratedFormulaRecipe[] =
     "overformulaPrimaryBonus": 2,
     "overformulaIntensityBonus": null,
     "formulaDefensePenalty": -1,
-    "summonConstructDefId": null
+    "summonConstructDefId": null,
+    "timingMode": "immediate",
+    "echoAmount": null,
+    "delayBonus": null
+  },
+  {
+    "recipeId": "v6-tek-ueberraschungsangriff-feuer-verzoegerung",
+    "kind": "tek",
+    "catalogSlice": "slice1",
+    "techniqueId": "v6-technik-ueberraschungsangriff",
+    "essenceId": "v6-essenz-feuer",
+    "catalystId": "v6-katalysator-verzoegerung",
+    "name": "Glutüberraschung · Verzögerung",
+    "effectSummary": "Verursache 3 Schaden am Gegner. Bei Lebensschaden: Brennen, falls keine Reaktion. Verzögerung: Primäreffekt geschieht nicht sofort, sondern zu Beginn deines nächsten Zuges und erhält +2. Katalysator bleibt bis zur Auflösung. TEK: +1 Fetzladung (max 1×/Zug).",
+    "primary": {
+      "kind": "damage",
+      "value": 3,
+      "target": "opponent",
+      "offensive": true
+    },
+    "rider": {
+      "id": "rider-brennen",
+      "summary": "Bei Lebensschaden: Brennen, falls keine Reaktion.",
+      "defenseSuppressible": true
+    },
+    "intensity": null,
+    "transformId": "xform-verzoegerung",
+    "grantsFetz": true,
+    "catalystConsumed": false,
+    "overformulaPrimaryBonus": null,
+    "overformulaIntensityBonus": null,
+    "formulaDefensePenalty": null,
+    "summonConstructDefId": null,
+    "timingMode": "delay",
+    "echoAmount": null,
+    "delayBonus": 2
+  },
+  {
+    "recipeId": "v6-over-ueberraschungsangriff-feuer-verzoegerung",
+    "kind": "overformula",
+    "catalogSlice": "slice1",
+    "techniqueId": "v6-technik-ueberraschungsangriff",
+    "essenceId": "v6-essenz-feuer",
+    "catalystId": "v6-katalysator-verzoegerung",
+    "name": "Überformel Glutüberraschung · Verzögerung",
+    "effectSummary": "Verursache 5 Schaden am Gegner. Bei Lebensschaden: Brennen, falls keine Reaktion. (verstärkt) Verzögerung: Primäreffekt geschieht nicht sofort, sondern zu Beginn deines nächsten Zuges und erhält +2. Katalysator bleibt bis zur Auflösung. Überformel: Primär +2 (fester Slice-1-Bonus). Überformel: Fetzladung wird verbraucht. Formelabwehr −1.",
+    "primary": {
+      "kind": "damage",
+      "value": 5,
+      "target": "opponent",
+      "offensive": true
+    },
+    "rider": {
+      "id": "rider-brennen",
+      "summary": "Bei Lebensschaden: Brennen, falls keine Reaktion. (verstärkt)",
+      "defenseSuppressible": true
+    },
+    "intensity": null,
+    "transformId": "xform-verzoegerung",
+    "grantsFetz": false,
+    "catalystConsumed": false,
+    "overformulaPrimaryBonus": 2,
+    "overformulaIntensityBonus": null,
+    "formulaDefensePenalty": -1,
+    "summonConstructDefId": null,
+    "timingMode": "delay",
+    "echoAmount": null,
+    "delayBonus": 2
   },
   {
     "recipeId": "v6-tek-ueberraschungsangriff-feuer-sofortzuender",
@@ -11767,7 +18608,10 @@ export const V6_GENERATED_FORMULA_RECIPES: readonly V6GeneratedFormulaRecipe[] =
     "overformulaPrimaryBonus": null,
     "overformulaIntensityBonus": null,
     "formulaDefensePenalty": null,
-    "summonConstructDefId": null
+    "summonConstructDefId": null,
+    "timingMode": "immediate",
+    "echoAmount": null,
+    "delayBonus": null
   },
   {
     "recipeId": "v6-over-ueberraschungsangriff-feuer-sofortzuender",
@@ -11796,7 +18640,10 @@ export const V6_GENERATED_FORMULA_RECIPES: readonly V6GeneratedFormulaRecipe[] =
     "overformulaPrimaryBonus": 2,
     "overformulaIntensityBonus": null,
     "formulaDefensePenalty": -1,
-    "summonConstructDefId": null
+    "summonConstructDefId": null,
+    "timingMode": "immediate",
+    "echoAmount": null,
+    "delayBonus": null
   },
   {
     "recipeId": "v6-tek-ueberraschungsangriff-feuer-opfergabe",
@@ -11825,7 +18672,10 @@ export const V6_GENERATED_FORMULA_RECIPES: readonly V6GeneratedFormulaRecipe[] =
     "overformulaPrimaryBonus": null,
     "overformulaIntensityBonus": null,
     "formulaDefensePenalty": null,
-    "summonConstructDefId": null
+    "summonConstructDefId": null,
+    "timingMode": "immediate",
+    "echoAmount": null,
+    "delayBonus": null
   },
   {
     "recipeId": "v6-over-ueberraschungsangriff-feuer-opfergabe",
@@ -11854,7 +18704,74 @@ export const V6_GENERATED_FORMULA_RECIPES: readonly V6GeneratedFormulaRecipe[] =
     "overformulaPrimaryBonus": 2,
     "overformulaIntensityBonus": null,
     "formulaDefensePenalty": -1,
-    "summonConstructDefId": null
+    "summonConstructDefId": null,
+    "timingMode": "immediate",
+    "echoAmount": null,
+    "delayBonus": null
+  },
+  {
+    "recipeId": "v6-tek-ueberraschungsangriff-wasser-echo",
+    "kind": "tek",
+    "catalogSlice": "slice1",
+    "techniqueId": "v6-technik-ueberraschungsangriff",
+    "essenceId": "v6-essenz-wasser",
+    "catalystId": "v6-katalysator-echo",
+    "name": "Wellenüberraschung · Echo",
+    "effectSummary": "Verursache 2 Schaden am Gegner. Bei Heilung oder Schildgewinn: entferne optional eine Marke von dir. Echo: zu Beginn deines nächsten Zuges wiederhole 1 Punkt des Primärwerts. Katalysator bleibt bis zur Echo-Auflösung. TEK: +1 Fetzladung (max 1×/Zug).",
+    "primary": {
+      "kind": "damage",
+      "value": 2,
+      "target": "opponent",
+      "offensive": true
+    },
+    "rider": {
+      "id": "rider-reinigen",
+      "summary": "Bei Heilung oder Schildgewinn: entferne optional eine Marke von dir.",
+      "defenseSuppressible": false
+    },
+    "intensity": null,
+    "transformId": "xform-echo",
+    "grantsFetz": true,
+    "catalystConsumed": false,
+    "overformulaPrimaryBonus": null,
+    "overformulaIntensityBonus": null,
+    "formulaDefensePenalty": null,
+    "summonConstructDefId": null,
+    "timingMode": "echo",
+    "echoAmount": 1,
+    "delayBonus": null
+  },
+  {
+    "recipeId": "v6-over-ueberraschungsangriff-wasser-echo",
+    "kind": "overformula",
+    "catalogSlice": "slice1",
+    "techniqueId": "v6-technik-ueberraschungsangriff",
+    "essenceId": "v6-essenz-wasser",
+    "catalystId": "v6-katalysator-echo",
+    "name": "Überformel Wellenüberraschung · Echo",
+    "effectSummary": "Verursache 4 Schaden am Gegner. Bei Heilung oder Schildgewinn: entferne optional eine Marke von dir. (verstärkt) Echo: zu Beginn deines nächsten Zuges wiederhole 1 Punkt des Primärwerts. Katalysator bleibt bis zur Echo-Auflösung. Überformel: Primär +2 (fester Slice-1-Bonus). Überformel: Fetzladung wird verbraucht. Formelabwehr −1.",
+    "primary": {
+      "kind": "damage",
+      "value": 4,
+      "target": "opponent",
+      "offensive": true
+    },
+    "rider": {
+      "id": "rider-reinigen",
+      "summary": "Bei Heilung oder Schildgewinn: entferne optional eine Marke von dir. (verstärkt)",
+      "defenseSuppressible": false
+    },
+    "intensity": null,
+    "transformId": "xform-echo",
+    "grantsFetz": false,
+    "catalystConsumed": false,
+    "overformulaPrimaryBonus": 2,
+    "overformulaIntensityBonus": null,
+    "formulaDefensePenalty": -1,
+    "summonConstructDefId": null,
+    "timingMode": "echo",
+    "echoAmount": 1,
+    "delayBonus": null
   },
   {
     "recipeId": "v6-tek-ueberraschungsangriff-wasser-ueberladung",
@@ -11883,7 +18800,10 @@ export const V6_GENERATED_FORMULA_RECIPES: readonly V6GeneratedFormulaRecipe[] =
     "overformulaPrimaryBonus": null,
     "overformulaIntensityBonus": null,
     "formulaDefensePenalty": null,
-    "summonConstructDefId": null
+    "summonConstructDefId": null,
+    "timingMode": "immediate",
+    "echoAmount": null,
+    "delayBonus": null
   },
   {
     "recipeId": "v6-over-ueberraschungsangriff-wasser-ueberladung",
@@ -11912,7 +18832,10 @@ export const V6_GENERATED_FORMULA_RECIPES: readonly V6GeneratedFormulaRecipe[] =
     "overformulaPrimaryBonus": 2,
     "overformulaIntensityBonus": null,
     "formulaDefensePenalty": -1,
-    "summonConstructDefId": null
+    "summonConstructDefId": null,
+    "timingMode": "immediate",
+    "echoAmount": null,
+    "delayBonus": null
   },
   {
     "recipeId": "v6-tek-ueberraschungsangriff-wasser-verdichtung",
@@ -11941,7 +18864,10 @@ export const V6_GENERATED_FORMULA_RECIPES: readonly V6GeneratedFormulaRecipe[] =
     "overformulaPrimaryBonus": null,
     "overformulaIntensityBonus": null,
     "formulaDefensePenalty": null,
-    "summonConstructDefId": null
+    "summonConstructDefId": null,
+    "timingMode": "immediate",
+    "echoAmount": null,
+    "delayBonus": null
   },
   {
     "recipeId": "v6-over-ueberraschungsangriff-wasser-verdichtung",
@@ -11970,7 +18896,74 @@ export const V6_GENERATED_FORMULA_RECIPES: readonly V6GeneratedFormulaRecipe[] =
     "overformulaPrimaryBonus": 2,
     "overformulaIntensityBonus": null,
     "formulaDefensePenalty": -1,
-    "summonConstructDefId": null
+    "summonConstructDefId": null,
+    "timingMode": "immediate",
+    "echoAmount": null,
+    "delayBonus": null
+  },
+  {
+    "recipeId": "v6-tek-ueberraschungsangriff-wasser-verzoegerung",
+    "kind": "tek",
+    "catalogSlice": "slice1",
+    "techniqueId": "v6-technik-ueberraschungsangriff",
+    "essenceId": "v6-essenz-wasser",
+    "catalystId": "v6-katalysator-verzoegerung",
+    "name": "Wellenüberraschung · Verzögerung",
+    "effectSummary": "Verursache 2 Schaden am Gegner. Bei Heilung oder Schildgewinn: entferne optional eine Marke von dir. Verzögerung: Primäreffekt geschieht nicht sofort, sondern zu Beginn deines nächsten Zuges und erhält +2. Katalysator bleibt bis zur Auflösung. TEK: +1 Fetzladung (max 1×/Zug).",
+    "primary": {
+      "kind": "damage",
+      "value": 2,
+      "target": "opponent",
+      "offensive": true
+    },
+    "rider": {
+      "id": "rider-reinigen",
+      "summary": "Bei Heilung oder Schildgewinn: entferne optional eine Marke von dir.",
+      "defenseSuppressible": false
+    },
+    "intensity": null,
+    "transformId": "xform-verzoegerung",
+    "grantsFetz": true,
+    "catalystConsumed": false,
+    "overformulaPrimaryBonus": null,
+    "overformulaIntensityBonus": null,
+    "formulaDefensePenalty": null,
+    "summonConstructDefId": null,
+    "timingMode": "delay",
+    "echoAmount": null,
+    "delayBonus": 2
+  },
+  {
+    "recipeId": "v6-over-ueberraschungsangriff-wasser-verzoegerung",
+    "kind": "overformula",
+    "catalogSlice": "slice1",
+    "techniqueId": "v6-technik-ueberraschungsangriff",
+    "essenceId": "v6-essenz-wasser",
+    "catalystId": "v6-katalysator-verzoegerung",
+    "name": "Überformel Wellenüberraschung · Verzögerung",
+    "effectSummary": "Verursache 4 Schaden am Gegner. Bei Heilung oder Schildgewinn: entferne optional eine Marke von dir. (verstärkt) Verzögerung: Primäreffekt geschieht nicht sofort, sondern zu Beginn deines nächsten Zuges und erhält +2. Katalysator bleibt bis zur Auflösung. Überformel: Primär +2 (fester Slice-1-Bonus). Überformel: Fetzladung wird verbraucht. Formelabwehr −1.",
+    "primary": {
+      "kind": "damage",
+      "value": 4,
+      "target": "opponent",
+      "offensive": true
+    },
+    "rider": {
+      "id": "rider-reinigen",
+      "summary": "Bei Heilung oder Schildgewinn: entferne optional eine Marke von dir. (verstärkt)",
+      "defenseSuppressible": false
+    },
+    "intensity": null,
+    "transformId": "xform-verzoegerung",
+    "grantsFetz": false,
+    "catalystConsumed": false,
+    "overformulaPrimaryBonus": 2,
+    "overformulaIntensityBonus": null,
+    "formulaDefensePenalty": -1,
+    "summonConstructDefId": null,
+    "timingMode": "delay",
+    "echoAmount": null,
+    "delayBonus": 2
   },
   {
     "recipeId": "v6-tek-ueberraschungsangriff-wasser-sofortzuender",
@@ -11999,7 +18992,10 @@ export const V6_GENERATED_FORMULA_RECIPES: readonly V6GeneratedFormulaRecipe[] =
     "overformulaPrimaryBonus": null,
     "overformulaIntensityBonus": null,
     "formulaDefensePenalty": null,
-    "summonConstructDefId": null
+    "summonConstructDefId": null,
+    "timingMode": "immediate",
+    "echoAmount": null,
+    "delayBonus": null
   },
   {
     "recipeId": "v6-over-ueberraschungsangriff-wasser-sofortzuender",
@@ -12028,7 +19024,10 @@ export const V6_GENERATED_FORMULA_RECIPES: readonly V6GeneratedFormulaRecipe[] =
     "overformulaPrimaryBonus": 2,
     "overformulaIntensityBonus": null,
     "formulaDefensePenalty": -1,
-    "summonConstructDefId": null
+    "summonConstructDefId": null,
+    "timingMode": "immediate",
+    "echoAmount": null,
+    "delayBonus": null
   },
   {
     "recipeId": "v6-tek-ueberraschungsangriff-wasser-opfergabe",
@@ -12057,7 +19056,10 @@ export const V6_GENERATED_FORMULA_RECIPES: readonly V6GeneratedFormulaRecipe[] =
     "overformulaPrimaryBonus": null,
     "overformulaIntensityBonus": null,
     "formulaDefensePenalty": null,
-    "summonConstructDefId": null
+    "summonConstructDefId": null,
+    "timingMode": "immediate",
+    "echoAmount": null,
+    "delayBonus": null
   },
   {
     "recipeId": "v6-over-ueberraschungsangriff-wasser-opfergabe",
@@ -12086,7 +19088,74 @@ export const V6_GENERATED_FORMULA_RECIPES: readonly V6GeneratedFormulaRecipe[] =
     "overformulaPrimaryBonus": 2,
     "overformulaIntensityBonus": null,
     "formulaDefensePenalty": -1,
-    "summonConstructDefId": null
+    "summonConstructDefId": null,
+    "timingMode": "immediate",
+    "echoAmount": null,
+    "delayBonus": null
+  },
+  {
+    "recipeId": "v6-tek-ueberraschungsangriff-erde-echo",
+    "kind": "tek",
+    "catalogSlice": "slice1",
+    "techniqueId": "v6-technik-ueberraschungsangriff",
+    "essenceId": "v6-essenz-erde",
+    "catalystId": "v6-katalysator-echo",
+    "name": "Felsüberraschung · Echo",
+    "effectSummary": "Verursache 2 Schaden am Gegner. Verwendete Komponenten +1 Stabilität bis nächste Startphase. Echo: zu Beginn deines nächsten Zuges wiederhole 1 Punkt des Primärwerts. Katalysator bleibt bis zur Echo-Auflösung. TEK: +1 Fetzladung (max 1×/Zug).",
+    "primary": {
+      "kind": "damage",
+      "value": 2,
+      "target": "opponent",
+      "offensive": true
+    },
+    "rider": {
+      "id": "rider-stabilitaet",
+      "summary": "Verwendete Komponenten +1 Stabilität bis nächste Startphase.",
+      "defenseSuppressible": false
+    },
+    "intensity": null,
+    "transformId": "xform-echo",
+    "grantsFetz": true,
+    "catalystConsumed": false,
+    "overformulaPrimaryBonus": null,
+    "overformulaIntensityBonus": null,
+    "formulaDefensePenalty": null,
+    "summonConstructDefId": null,
+    "timingMode": "echo",
+    "echoAmount": 1,
+    "delayBonus": null
+  },
+  {
+    "recipeId": "v6-over-ueberraschungsangriff-erde-echo",
+    "kind": "overformula",
+    "catalogSlice": "slice1",
+    "techniqueId": "v6-technik-ueberraschungsangriff",
+    "essenceId": "v6-essenz-erde",
+    "catalystId": "v6-katalysator-echo",
+    "name": "Überformel Felsüberraschung · Echo",
+    "effectSummary": "Verursache 4 Schaden am Gegner. Verwendete Komponenten +1 Stabilität bis nächste Startphase. (verstärkt) Echo: zu Beginn deines nächsten Zuges wiederhole 1 Punkt des Primärwerts. Katalysator bleibt bis zur Echo-Auflösung. Überformel: Primär +2 (fester Slice-1-Bonus). Überformel: Fetzladung wird verbraucht. Formelabwehr −1.",
+    "primary": {
+      "kind": "damage",
+      "value": 4,
+      "target": "opponent",
+      "offensive": true
+    },
+    "rider": {
+      "id": "rider-stabilitaet",
+      "summary": "Verwendete Komponenten +1 Stabilität bis nächste Startphase. (verstärkt)",
+      "defenseSuppressible": false
+    },
+    "intensity": null,
+    "transformId": "xform-echo",
+    "grantsFetz": false,
+    "catalystConsumed": false,
+    "overformulaPrimaryBonus": 2,
+    "overformulaIntensityBonus": null,
+    "formulaDefensePenalty": -1,
+    "summonConstructDefId": null,
+    "timingMode": "echo",
+    "echoAmount": 1,
+    "delayBonus": null
   },
   {
     "recipeId": "v6-tek-ueberraschungsangriff-erde-ueberladung",
@@ -12115,7 +19184,10 @@ export const V6_GENERATED_FORMULA_RECIPES: readonly V6GeneratedFormulaRecipe[] =
     "overformulaPrimaryBonus": null,
     "overformulaIntensityBonus": null,
     "formulaDefensePenalty": null,
-    "summonConstructDefId": null
+    "summonConstructDefId": null,
+    "timingMode": "immediate",
+    "echoAmount": null,
+    "delayBonus": null
   },
   {
     "recipeId": "v6-over-ueberraschungsangriff-erde-ueberladung",
@@ -12144,7 +19216,10 @@ export const V6_GENERATED_FORMULA_RECIPES: readonly V6GeneratedFormulaRecipe[] =
     "overformulaPrimaryBonus": 2,
     "overformulaIntensityBonus": null,
     "formulaDefensePenalty": -1,
-    "summonConstructDefId": null
+    "summonConstructDefId": null,
+    "timingMode": "immediate",
+    "echoAmount": null,
+    "delayBonus": null
   },
   {
     "recipeId": "v6-tek-ueberraschungsangriff-erde-verdichtung",
@@ -12173,7 +19248,10 @@ export const V6_GENERATED_FORMULA_RECIPES: readonly V6GeneratedFormulaRecipe[] =
     "overformulaPrimaryBonus": null,
     "overformulaIntensityBonus": null,
     "formulaDefensePenalty": null,
-    "summonConstructDefId": null
+    "summonConstructDefId": null,
+    "timingMode": "immediate",
+    "echoAmount": null,
+    "delayBonus": null
   },
   {
     "recipeId": "v6-over-ueberraschungsangriff-erde-verdichtung",
@@ -12202,7 +19280,74 @@ export const V6_GENERATED_FORMULA_RECIPES: readonly V6GeneratedFormulaRecipe[] =
     "overformulaPrimaryBonus": 2,
     "overformulaIntensityBonus": null,
     "formulaDefensePenalty": -1,
-    "summonConstructDefId": null
+    "summonConstructDefId": null,
+    "timingMode": "immediate",
+    "echoAmount": null,
+    "delayBonus": null
+  },
+  {
+    "recipeId": "v6-tek-ueberraschungsangriff-erde-verzoegerung",
+    "kind": "tek",
+    "catalogSlice": "slice1",
+    "techniqueId": "v6-technik-ueberraschungsangriff",
+    "essenceId": "v6-essenz-erde",
+    "catalystId": "v6-katalysator-verzoegerung",
+    "name": "Felsüberraschung · Verzögerung",
+    "effectSummary": "Verursache 2 Schaden am Gegner. Verwendete Komponenten +1 Stabilität bis nächste Startphase. Verzögerung: Primäreffekt geschieht nicht sofort, sondern zu Beginn deines nächsten Zuges und erhält +2. Katalysator bleibt bis zur Auflösung. TEK: +1 Fetzladung (max 1×/Zug).",
+    "primary": {
+      "kind": "damage",
+      "value": 2,
+      "target": "opponent",
+      "offensive": true
+    },
+    "rider": {
+      "id": "rider-stabilitaet",
+      "summary": "Verwendete Komponenten +1 Stabilität bis nächste Startphase.",
+      "defenseSuppressible": false
+    },
+    "intensity": null,
+    "transformId": "xform-verzoegerung",
+    "grantsFetz": true,
+    "catalystConsumed": false,
+    "overformulaPrimaryBonus": null,
+    "overformulaIntensityBonus": null,
+    "formulaDefensePenalty": null,
+    "summonConstructDefId": null,
+    "timingMode": "delay",
+    "echoAmount": null,
+    "delayBonus": 2
+  },
+  {
+    "recipeId": "v6-over-ueberraschungsangriff-erde-verzoegerung",
+    "kind": "overformula",
+    "catalogSlice": "slice1",
+    "techniqueId": "v6-technik-ueberraschungsangriff",
+    "essenceId": "v6-essenz-erde",
+    "catalystId": "v6-katalysator-verzoegerung",
+    "name": "Überformel Felsüberraschung · Verzögerung",
+    "effectSummary": "Verursache 4 Schaden am Gegner. Verwendete Komponenten +1 Stabilität bis nächste Startphase. (verstärkt) Verzögerung: Primäreffekt geschieht nicht sofort, sondern zu Beginn deines nächsten Zuges und erhält +2. Katalysator bleibt bis zur Auflösung. Überformel: Primär +2 (fester Slice-1-Bonus). Überformel: Fetzladung wird verbraucht. Formelabwehr −1.",
+    "primary": {
+      "kind": "damage",
+      "value": 4,
+      "target": "opponent",
+      "offensive": true
+    },
+    "rider": {
+      "id": "rider-stabilitaet",
+      "summary": "Verwendete Komponenten +1 Stabilität bis nächste Startphase. (verstärkt)",
+      "defenseSuppressible": false
+    },
+    "intensity": null,
+    "transformId": "xform-verzoegerung",
+    "grantsFetz": false,
+    "catalystConsumed": false,
+    "overformulaPrimaryBonus": 2,
+    "overformulaIntensityBonus": null,
+    "formulaDefensePenalty": -1,
+    "summonConstructDefId": null,
+    "timingMode": "delay",
+    "echoAmount": null,
+    "delayBonus": 2
   },
   {
     "recipeId": "v6-tek-ueberraschungsangriff-erde-sofortzuender",
@@ -12231,7 +19376,10 @@ export const V6_GENERATED_FORMULA_RECIPES: readonly V6GeneratedFormulaRecipe[] =
     "overformulaPrimaryBonus": null,
     "overformulaIntensityBonus": null,
     "formulaDefensePenalty": null,
-    "summonConstructDefId": null
+    "summonConstructDefId": null,
+    "timingMode": "immediate",
+    "echoAmount": null,
+    "delayBonus": null
   },
   {
     "recipeId": "v6-over-ueberraschungsangriff-erde-sofortzuender",
@@ -12260,7 +19408,10 @@ export const V6_GENERATED_FORMULA_RECIPES: readonly V6GeneratedFormulaRecipe[] =
     "overformulaPrimaryBonus": 2,
     "overformulaIntensityBonus": null,
     "formulaDefensePenalty": -1,
-    "summonConstructDefId": null
+    "summonConstructDefId": null,
+    "timingMode": "immediate",
+    "echoAmount": null,
+    "delayBonus": null
   },
   {
     "recipeId": "v6-tek-ueberraschungsangriff-erde-opfergabe",
@@ -12289,7 +19440,10 @@ export const V6_GENERATED_FORMULA_RECIPES: readonly V6GeneratedFormulaRecipe[] =
     "overformulaPrimaryBonus": null,
     "overformulaIntensityBonus": null,
     "formulaDefensePenalty": null,
-    "summonConstructDefId": null
+    "summonConstructDefId": null,
+    "timingMode": "immediate",
+    "echoAmount": null,
+    "delayBonus": null
   },
   {
     "recipeId": "v6-over-ueberraschungsangriff-erde-opfergabe",
@@ -12318,7 +19472,74 @@ export const V6_GENERATED_FORMULA_RECIPES: readonly V6GeneratedFormulaRecipe[] =
     "overformulaPrimaryBonus": 2,
     "overformulaIntensityBonus": null,
     "formulaDefensePenalty": -1,
-    "summonConstructDefId": null
+    "summonConstructDefId": null,
+    "timingMode": "immediate",
+    "echoAmount": null,
+    "delayBonus": null
+  },
+  {
+    "recipeId": "v6-tek-ueberraschungsangriff-luft-echo",
+    "kind": "tek",
+    "catalogSlice": "slice1",
+    "techniqueId": "v6-technik-ueberraschungsangriff",
+    "essenceId": "v6-essenz-luft",
+    "catalystId": "v6-katalysator-echo",
+    "name": "Windüberraschung · Echo",
+    "effectSummary": "Verursache 3 Schaden am Gegner. Nächster eigener Aktions-W6 +1 (max +2). Echo: zu Beginn deines nächsten Zuges wiederhole 1 Punkt des Primärwerts. Katalysator bleibt bis zur Echo-Auflösung. TEK: +1 Fetzladung (max 1×/Zug).",
+    "primary": {
+      "kind": "damage",
+      "value": 3,
+      "target": "opponent",
+      "offensive": true
+    },
+    "rider": {
+      "id": "rider-w6",
+      "summary": "Nächster eigener Aktions-W6 +1 (max +2).",
+      "defenseSuppressible": true
+    },
+    "intensity": null,
+    "transformId": "xform-echo",
+    "grantsFetz": true,
+    "catalystConsumed": false,
+    "overformulaPrimaryBonus": null,
+    "overformulaIntensityBonus": null,
+    "formulaDefensePenalty": null,
+    "summonConstructDefId": null,
+    "timingMode": "echo",
+    "echoAmount": 1,
+    "delayBonus": null
+  },
+  {
+    "recipeId": "v6-over-ueberraschungsangriff-luft-echo",
+    "kind": "overformula",
+    "catalogSlice": "slice1",
+    "techniqueId": "v6-technik-ueberraschungsangriff",
+    "essenceId": "v6-essenz-luft",
+    "catalystId": "v6-katalysator-echo",
+    "name": "Überformel Windüberraschung · Echo",
+    "effectSummary": "Verursache 5 Schaden am Gegner. Nächster eigener Aktions-W6 +1 (max +2). (verstärkt) Echo: zu Beginn deines nächsten Zuges wiederhole 1 Punkt des Primärwerts. Katalysator bleibt bis zur Echo-Auflösung. Überformel: Primär +2 (fester Slice-1-Bonus). Überformel: Fetzladung wird verbraucht. Formelabwehr −1.",
+    "primary": {
+      "kind": "damage",
+      "value": 5,
+      "target": "opponent",
+      "offensive": true
+    },
+    "rider": {
+      "id": "rider-w6",
+      "summary": "Nächster eigener Aktions-W6 +1 (max +2). (verstärkt)",
+      "defenseSuppressible": true
+    },
+    "intensity": null,
+    "transformId": "xform-echo",
+    "grantsFetz": false,
+    "catalystConsumed": false,
+    "overformulaPrimaryBonus": 2,
+    "overformulaIntensityBonus": null,
+    "formulaDefensePenalty": -1,
+    "summonConstructDefId": null,
+    "timingMode": "echo",
+    "echoAmount": 1,
+    "delayBonus": null
   },
   {
     "recipeId": "v6-tek-ueberraschungsangriff-luft-ueberladung",
@@ -12347,7 +19568,10 @@ export const V6_GENERATED_FORMULA_RECIPES: readonly V6GeneratedFormulaRecipe[] =
     "overformulaPrimaryBonus": null,
     "overformulaIntensityBonus": null,
     "formulaDefensePenalty": null,
-    "summonConstructDefId": null
+    "summonConstructDefId": null,
+    "timingMode": "immediate",
+    "echoAmount": null,
+    "delayBonus": null
   },
   {
     "recipeId": "v6-over-ueberraschungsangriff-luft-ueberladung",
@@ -12376,7 +19600,10 @@ export const V6_GENERATED_FORMULA_RECIPES: readonly V6GeneratedFormulaRecipe[] =
     "overformulaPrimaryBonus": 2,
     "overformulaIntensityBonus": null,
     "formulaDefensePenalty": -1,
-    "summonConstructDefId": null
+    "summonConstructDefId": null,
+    "timingMode": "immediate",
+    "echoAmount": null,
+    "delayBonus": null
   },
   {
     "recipeId": "v6-tek-ueberraschungsangriff-luft-verdichtung",
@@ -12405,7 +19632,10 @@ export const V6_GENERATED_FORMULA_RECIPES: readonly V6GeneratedFormulaRecipe[] =
     "overformulaPrimaryBonus": null,
     "overformulaIntensityBonus": null,
     "formulaDefensePenalty": null,
-    "summonConstructDefId": null
+    "summonConstructDefId": null,
+    "timingMode": "immediate",
+    "echoAmount": null,
+    "delayBonus": null
   },
   {
     "recipeId": "v6-over-ueberraschungsangriff-luft-verdichtung",
@@ -12434,7 +19664,74 @@ export const V6_GENERATED_FORMULA_RECIPES: readonly V6GeneratedFormulaRecipe[] =
     "overformulaPrimaryBonus": 2,
     "overformulaIntensityBonus": null,
     "formulaDefensePenalty": -1,
-    "summonConstructDefId": null
+    "summonConstructDefId": null,
+    "timingMode": "immediate",
+    "echoAmount": null,
+    "delayBonus": null
+  },
+  {
+    "recipeId": "v6-tek-ueberraschungsangriff-luft-verzoegerung",
+    "kind": "tek",
+    "catalogSlice": "slice1",
+    "techniqueId": "v6-technik-ueberraschungsangriff",
+    "essenceId": "v6-essenz-luft",
+    "catalystId": "v6-katalysator-verzoegerung",
+    "name": "Windüberraschung · Verzögerung",
+    "effectSummary": "Verursache 3 Schaden am Gegner. Nächster eigener Aktions-W6 +1 (max +2). Verzögerung: Primäreffekt geschieht nicht sofort, sondern zu Beginn deines nächsten Zuges und erhält +2. Katalysator bleibt bis zur Auflösung. TEK: +1 Fetzladung (max 1×/Zug).",
+    "primary": {
+      "kind": "damage",
+      "value": 3,
+      "target": "opponent",
+      "offensive": true
+    },
+    "rider": {
+      "id": "rider-w6",
+      "summary": "Nächster eigener Aktions-W6 +1 (max +2).",
+      "defenseSuppressible": true
+    },
+    "intensity": null,
+    "transformId": "xform-verzoegerung",
+    "grantsFetz": true,
+    "catalystConsumed": false,
+    "overformulaPrimaryBonus": null,
+    "overformulaIntensityBonus": null,
+    "formulaDefensePenalty": null,
+    "summonConstructDefId": null,
+    "timingMode": "delay",
+    "echoAmount": null,
+    "delayBonus": 2
+  },
+  {
+    "recipeId": "v6-over-ueberraschungsangriff-luft-verzoegerung",
+    "kind": "overformula",
+    "catalogSlice": "slice1",
+    "techniqueId": "v6-technik-ueberraschungsangriff",
+    "essenceId": "v6-essenz-luft",
+    "catalystId": "v6-katalysator-verzoegerung",
+    "name": "Überformel Windüberraschung · Verzögerung",
+    "effectSummary": "Verursache 5 Schaden am Gegner. Nächster eigener Aktions-W6 +1 (max +2). (verstärkt) Verzögerung: Primäreffekt geschieht nicht sofort, sondern zu Beginn deines nächsten Zuges und erhält +2. Katalysator bleibt bis zur Auflösung. Überformel: Primär +2 (fester Slice-1-Bonus). Überformel: Fetzladung wird verbraucht. Formelabwehr −1.",
+    "primary": {
+      "kind": "damage",
+      "value": 5,
+      "target": "opponent",
+      "offensive": true
+    },
+    "rider": {
+      "id": "rider-w6",
+      "summary": "Nächster eigener Aktions-W6 +1 (max +2). (verstärkt)",
+      "defenseSuppressible": true
+    },
+    "intensity": null,
+    "transformId": "xform-verzoegerung",
+    "grantsFetz": false,
+    "catalystConsumed": false,
+    "overformulaPrimaryBonus": 2,
+    "overformulaIntensityBonus": null,
+    "formulaDefensePenalty": -1,
+    "summonConstructDefId": null,
+    "timingMode": "delay",
+    "echoAmount": null,
+    "delayBonus": 2
   },
   {
     "recipeId": "v6-tek-ueberraschungsangriff-luft-sofortzuender",
@@ -12463,7 +19760,10 @@ export const V6_GENERATED_FORMULA_RECIPES: readonly V6GeneratedFormulaRecipe[] =
     "overformulaPrimaryBonus": null,
     "overformulaIntensityBonus": null,
     "formulaDefensePenalty": null,
-    "summonConstructDefId": null
+    "summonConstructDefId": null,
+    "timingMode": "immediate",
+    "echoAmount": null,
+    "delayBonus": null
   },
   {
     "recipeId": "v6-over-ueberraschungsangriff-luft-sofortzuender",
@@ -12492,7 +19792,10 @@ export const V6_GENERATED_FORMULA_RECIPES: readonly V6GeneratedFormulaRecipe[] =
     "overformulaPrimaryBonus": 2,
     "overformulaIntensityBonus": null,
     "formulaDefensePenalty": -1,
-    "summonConstructDefId": null
+    "summonConstructDefId": null,
+    "timingMode": "immediate",
+    "echoAmount": null,
+    "delayBonus": null
   },
   {
     "recipeId": "v6-tek-ueberraschungsangriff-luft-opfergabe",
@@ -12521,7 +19824,10 @@ export const V6_GENERATED_FORMULA_RECIPES: readonly V6GeneratedFormulaRecipe[] =
     "overformulaPrimaryBonus": null,
     "overformulaIntensityBonus": null,
     "formulaDefensePenalty": null,
-    "summonConstructDefId": null
+    "summonConstructDefId": null,
+    "timingMode": "immediate",
+    "echoAmount": null,
+    "delayBonus": null
   },
   {
     "recipeId": "v6-over-ueberraschungsangriff-luft-opfergabe",
@@ -12550,7 +19856,74 @@ export const V6_GENERATED_FORMULA_RECIPES: readonly V6GeneratedFormulaRecipe[] =
     "overformulaPrimaryBonus": 2,
     "overformulaIntensityBonus": null,
     "formulaDefensePenalty": -1,
-    "summonConstructDefId": null
+    "summonConstructDefId": null,
+    "timingMode": "immediate",
+    "echoAmount": null,
+    "delayBonus": null
+  },
+  {
+    "recipeId": "v6-tek-ueberraschungsangriff-licht-echo",
+    "kind": "tek",
+    "catalogSlice": "slice1",
+    "techniqueId": "v6-technik-ueberraschungsangriff",
+    "essenceId": "v6-essenz-licht",
+    "catalystId": "v6-katalysator-echo",
+    "name": "Lichtüberraschung · Echo",
+    "effectSummary": "Verursache 2 Schaden am Gegner. Bei Schildgewinn: entferne optional eine Marke von dir. Echo: zu Beginn deines nächsten Zuges wiederhole 1 Punkt des Primärwerts. Katalysator bleibt bis zur Echo-Auflösung. TEK: +1 Fetzladung (max 1×/Zug).",
+    "primary": {
+      "kind": "damage",
+      "value": 2,
+      "target": "opponent",
+      "offensive": true
+    },
+    "rider": {
+      "id": "rider-reinigen-licht",
+      "summary": "Bei Schildgewinn: entferne optional eine Marke von dir.",
+      "defenseSuppressible": false
+    },
+    "intensity": null,
+    "transformId": "xform-echo",
+    "grantsFetz": true,
+    "catalystConsumed": false,
+    "overformulaPrimaryBonus": null,
+    "overformulaIntensityBonus": null,
+    "formulaDefensePenalty": null,
+    "summonConstructDefId": null,
+    "timingMode": "echo",
+    "echoAmount": 1,
+    "delayBonus": null
+  },
+  {
+    "recipeId": "v6-over-ueberraschungsangriff-licht-echo",
+    "kind": "overformula",
+    "catalogSlice": "slice1",
+    "techniqueId": "v6-technik-ueberraschungsangriff",
+    "essenceId": "v6-essenz-licht",
+    "catalystId": "v6-katalysator-echo",
+    "name": "Überformel Lichtüberraschung · Echo",
+    "effectSummary": "Verursache 4 Schaden am Gegner. Bei Schildgewinn: entferne optional eine Marke von dir. (verstärkt) Echo: zu Beginn deines nächsten Zuges wiederhole 1 Punkt des Primärwerts. Katalysator bleibt bis zur Echo-Auflösung. Überformel: Primär +2 (fester Slice-1-Bonus). Überformel: Fetzladung wird verbraucht. Formelabwehr −1.",
+    "primary": {
+      "kind": "damage",
+      "value": 4,
+      "target": "opponent",
+      "offensive": true
+    },
+    "rider": {
+      "id": "rider-reinigen-licht",
+      "summary": "Bei Schildgewinn: entferne optional eine Marke von dir. (verstärkt)",
+      "defenseSuppressible": false
+    },
+    "intensity": null,
+    "transformId": "xform-echo",
+    "grantsFetz": false,
+    "catalystConsumed": false,
+    "overformulaPrimaryBonus": 2,
+    "overformulaIntensityBonus": null,
+    "formulaDefensePenalty": -1,
+    "summonConstructDefId": null,
+    "timingMode": "echo",
+    "echoAmount": 1,
+    "delayBonus": null
   },
   {
     "recipeId": "v6-tek-ueberraschungsangriff-licht-ueberladung",
@@ -12579,7 +19952,10 @@ export const V6_GENERATED_FORMULA_RECIPES: readonly V6GeneratedFormulaRecipe[] =
     "overformulaPrimaryBonus": null,
     "overformulaIntensityBonus": null,
     "formulaDefensePenalty": null,
-    "summonConstructDefId": null
+    "summonConstructDefId": null,
+    "timingMode": "immediate",
+    "echoAmount": null,
+    "delayBonus": null
   },
   {
     "recipeId": "v6-over-ueberraschungsangriff-licht-ueberladung",
@@ -12608,7 +19984,10 @@ export const V6_GENERATED_FORMULA_RECIPES: readonly V6GeneratedFormulaRecipe[] =
     "overformulaPrimaryBonus": 2,
     "overformulaIntensityBonus": null,
     "formulaDefensePenalty": -1,
-    "summonConstructDefId": null
+    "summonConstructDefId": null,
+    "timingMode": "immediate",
+    "echoAmount": null,
+    "delayBonus": null
   },
   {
     "recipeId": "v6-tek-ueberraschungsangriff-licht-verdichtung",
@@ -12637,7 +20016,10 @@ export const V6_GENERATED_FORMULA_RECIPES: readonly V6GeneratedFormulaRecipe[] =
     "overformulaPrimaryBonus": null,
     "overformulaIntensityBonus": null,
     "formulaDefensePenalty": null,
-    "summonConstructDefId": null
+    "summonConstructDefId": null,
+    "timingMode": "immediate",
+    "echoAmount": null,
+    "delayBonus": null
   },
   {
     "recipeId": "v6-over-ueberraschungsangriff-licht-verdichtung",
@@ -12666,7 +20048,74 @@ export const V6_GENERATED_FORMULA_RECIPES: readonly V6GeneratedFormulaRecipe[] =
     "overformulaPrimaryBonus": 2,
     "overformulaIntensityBonus": null,
     "formulaDefensePenalty": -1,
-    "summonConstructDefId": null
+    "summonConstructDefId": null,
+    "timingMode": "immediate",
+    "echoAmount": null,
+    "delayBonus": null
+  },
+  {
+    "recipeId": "v6-tek-ueberraschungsangriff-licht-verzoegerung",
+    "kind": "tek",
+    "catalogSlice": "slice1",
+    "techniqueId": "v6-technik-ueberraschungsangriff",
+    "essenceId": "v6-essenz-licht",
+    "catalystId": "v6-katalysator-verzoegerung",
+    "name": "Lichtüberraschung · Verzögerung",
+    "effectSummary": "Verursache 2 Schaden am Gegner. Bei Schildgewinn: entferne optional eine Marke von dir. Verzögerung: Primäreffekt geschieht nicht sofort, sondern zu Beginn deines nächsten Zuges und erhält +2. Katalysator bleibt bis zur Auflösung. TEK: +1 Fetzladung (max 1×/Zug).",
+    "primary": {
+      "kind": "damage",
+      "value": 2,
+      "target": "opponent",
+      "offensive": true
+    },
+    "rider": {
+      "id": "rider-reinigen-licht",
+      "summary": "Bei Schildgewinn: entferne optional eine Marke von dir.",
+      "defenseSuppressible": false
+    },
+    "intensity": null,
+    "transformId": "xform-verzoegerung",
+    "grantsFetz": true,
+    "catalystConsumed": false,
+    "overformulaPrimaryBonus": null,
+    "overformulaIntensityBonus": null,
+    "formulaDefensePenalty": null,
+    "summonConstructDefId": null,
+    "timingMode": "delay",
+    "echoAmount": null,
+    "delayBonus": 2
+  },
+  {
+    "recipeId": "v6-over-ueberraschungsangriff-licht-verzoegerung",
+    "kind": "overformula",
+    "catalogSlice": "slice1",
+    "techniqueId": "v6-technik-ueberraschungsangriff",
+    "essenceId": "v6-essenz-licht",
+    "catalystId": "v6-katalysator-verzoegerung",
+    "name": "Überformel Lichtüberraschung · Verzögerung",
+    "effectSummary": "Verursache 4 Schaden am Gegner. Bei Schildgewinn: entferne optional eine Marke von dir. (verstärkt) Verzögerung: Primäreffekt geschieht nicht sofort, sondern zu Beginn deines nächsten Zuges und erhält +2. Katalysator bleibt bis zur Auflösung. Überformel: Primär +2 (fester Slice-1-Bonus). Überformel: Fetzladung wird verbraucht. Formelabwehr −1.",
+    "primary": {
+      "kind": "damage",
+      "value": 4,
+      "target": "opponent",
+      "offensive": true
+    },
+    "rider": {
+      "id": "rider-reinigen-licht",
+      "summary": "Bei Schildgewinn: entferne optional eine Marke von dir. (verstärkt)",
+      "defenseSuppressible": false
+    },
+    "intensity": null,
+    "transformId": "xform-verzoegerung",
+    "grantsFetz": false,
+    "catalystConsumed": false,
+    "overformulaPrimaryBonus": 2,
+    "overformulaIntensityBonus": null,
+    "formulaDefensePenalty": -1,
+    "summonConstructDefId": null,
+    "timingMode": "delay",
+    "echoAmount": null,
+    "delayBonus": 2
   },
   {
     "recipeId": "v6-tek-ueberraschungsangriff-licht-sofortzuender",
@@ -12695,7 +20144,10 @@ export const V6_GENERATED_FORMULA_RECIPES: readonly V6GeneratedFormulaRecipe[] =
     "overformulaPrimaryBonus": null,
     "overformulaIntensityBonus": null,
     "formulaDefensePenalty": null,
-    "summonConstructDefId": null
+    "summonConstructDefId": null,
+    "timingMode": "immediate",
+    "echoAmount": null,
+    "delayBonus": null
   },
   {
     "recipeId": "v6-over-ueberraschungsangriff-licht-sofortzuender",
@@ -12724,7 +20176,10 @@ export const V6_GENERATED_FORMULA_RECIPES: readonly V6GeneratedFormulaRecipe[] =
     "overformulaPrimaryBonus": 2,
     "overformulaIntensityBonus": null,
     "formulaDefensePenalty": -1,
-    "summonConstructDefId": null
+    "summonConstructDefId": null,
+    "timingMode": "immediate",
+    "echoAmount": null,
+    "delayBonus": null
   },
   {
     "recipeId": "v6-tek-ueberraschungsangriff-licht-opfergabe",
@@ -12753,7 +20208,10 @@ export const V6_GENERATED_FORMULA_RECIPES: readonly V6GeneratedFormulaRecipe[] =
     "overformulaPrimaryBonus": null,
     "overformulaIntensityBonus": null,
     "formulaDefensePenalty": null,
-    "summonConstructDefId": null
+    "summonConstructDefId": null,
+    "timingMode": "immediate",
+    "echoAmount": null,
+    "delayBonus": null
   },
   {
     "recipeId": "v6-over-ueberraschungsangriff-licht-opfergabe",
@@ -12782,7 +20240,74 @@ export const V6_GENERATED_FORMULA_RECIPES: readonly V6GeneratedFormulaRecipe[] =
     "overformulaPrimaryBonus": 2,
     "overformulaIntensityBonus": null,
     "formulaDefensePenalty": -1,
-    "summonConstructDefId": null
+    "summonConstructDefId": null,
+    "timingMode": "immediate",
+    "echoAmount": null,
+    "delayBonus": null
+  },
+  {
+    "recipeId": "v6-tek-ueberraschungsangriff-schatten-echo",
+    "kind": "tek",
+    "catalogSlice": "slice1",
+    "techniqueId": "v6-technik-ueberraschungsangriff",
+    "essenceId": "v6-essenz-schatten",
+    "catalystId": "v6-katalysator-echo",
+    "name": "Schattenüberraschung · Echo",
+    "effectSummary": "Verursache 3 Schaden am Gegner. Bei Treffer: erschöpfe optional 1 gegnerische Formelkomponente. Echo: zu Beginn deines nächsten Zuges wiederhole 1 Punkt des Primärwerts. Katalysator bleibt bis zur Echo-Auflösung. TEK: +1 Fetzladung (max 1×/Zug).",
+    "primary": {
+      "kind": "damage",
+      "value": 3,
+      "target": "opponent",
+      "offensive": true
+    },
+    "rider": {
+      "id": "rider-fluch",
+      "summary": "Bei Treffer: erschöpfe optional 1 gegnerische Formelkomponente.",
+      "defenseSuppressible": true
+    },
+    "intensity": null,
+    "transformId": "xform-echo",
+    "grantsFetz": true,
+    "catalystConsumed": false,
+    "overformulaPrimaryBonus": null,
+    "overformulaIntensityBonus": null,
+    "formulaDefensePenalty": null,
+    "summonConstructDefId": null,
+    "timingMode": "echo",
+    "echoAmount": 1,
+    "delayBonus": null
+  },
+  {
+    "recipeId": "v6-over-ueberraschungsangriff-schatten-echo",
+    "kind": "overformula",
+    "catalogSlice": "slice1",
+    "techniqueId": "v6-technik-ueberraschungsangriff",
+    "essenceId": "v6-essenz-schatten",
+    "catalystId": "v6-katalysator-echo",
+    "name": "Überformel Schattenüberraschung · Echo",
+    "effectSummary": "Verursache 5 Schaden am Gegner. Bei Treffer: erschöpfe optional 1 gegnerische Formelkomponente. (verstärkt) Echo: zu Beginn deines nächsten Zuges wiederhole 1 Punkt des Primärwerts. Katalysator bleibt bis zur Echo-Auflösung. Überformel: Primär +2 (fester Slice-1-Bonus). Überformel: Fetzladung wird verbraucht. Formelabwehr −1.",
+    "primary": {
+      "kind": "damage",
+      "value": 5,
+      "target": "opponent",
+      "offensive": true
+    },
+    "rider": {
+      "id": "rider-fluch",
+      "summary": "Bei Treffer: erschöpfe optional 1 gegnerische Formelkomponente. (verstärkt)",
+      "defenseSuppressible": true
+    },
+    "intensity": null,
+    "transformId": "xform-echo",
+    "grantsFetz": false,
+    "catalystConsumed": false,
+    "overformulaPrimaryBonus": 2,
+    "overformulaIntensityBonus": null,
+    "formulaDefensePenalty": -1,
+    "summonConstructDefId": null,
+    "timingMode": "echo",
+    "echoAmount": 1,
+    "delayBonus": null
   },
   {
     "recipeId": "v6-tek-ueberraschungsangriff-schatten-ueberladung",
@@ -12811,7 +20336,10 @@ export const V6_GENERATED_FORMULA_RECIPES: readonly V6GeneratedFormulaRecipe[] =
     "overformulaPrimaryBonus": null,
     "overformulaIntensityBonus": null,
     "formulaDefensePenalty": null,
-    "summonConstructDefId": null
+    "summonConstructDefId": null,
+    "timingMode": "immediate",
+    "echoAmount": null,
+    "delayBonus": null
   },
   {
     "recipeId": "v6-over-ueberraschungsangriff-schatten-ueberladung",
@@ -12840,7 +20368,10 @@ export const V6_GENERATED_FORMULA_RECIPES: readonly V6GeneratedFormulaRecipe[] =
     "overformulaPrimaryBonus": 2,
     "overformulaIntensityBonus": null,
     "formulaDefensePenalty": -1,
-    "summonConstructDefId": null
+    "summonConstructDefId": null,
+    "timingMode": "immediate",
+    "echoAmount": null,
+    "delayBonus": null
   },
   {
     "recipeId": "v6-tek-ueberraschungsangriff-schatten-verdichtung",
@@ -12869,7 +20400,10 @@ export const V6_GENERATED_FORMULA_RECIPES: readonly V6GeneratedFormulaRecipe[] =
     "overformulaPrimaryBonus": null,
     "overformulaIntensityBonus": null,
     "formulaDefensePenalty": null,
-    "summonConstructDefId": null
+    "summonConstructDefId": null,
+    "timingMode": "immediate",
+    "echoAmount": null,
+    "delayBonus": null
   },
   {
     "recipeId": "v6-over-ueberraschungsangriff-schatten-verdichtung",
@@ -12898,7 +20432,74 @@ export const V6_GENERATED_FORMULA_RECIPES: readonly V6GeneratedFormulaRecipe[] =
     "overformulaPrimaryBonus": 2,
     "overformulaIntensityBonus": null,
     "formulaDefensePenalty": -1,
-    "summonConstructDefId": null
+    "summonConstructDefId": null,
+    "timingMode": "immediate",
+    "echoAmount": null,
+    "delayBonus": null
+  },
+  {
+    "recipeId": "v6-tek-ueberraschungsangriff-schatten-verzoegerung",
+    "kind": "tek",
+    "catalogSlice": "slice1",
+    "techniqueId": "v6-technik-ueberraschungsangriff",
+    "essenceId": "v6-essenz-schatten",
+    "catalystId": "v6-katalysator-verzoegerung",
+    "name": "Schattenüberraschung · Verzögerung",
+    "effectSummary": "Verursache 3 Schaden am Gegner. Bei Treffer: erschöpfe optional 1 gegnerische Formelkomponente. Verzögerung: Primäreffekt geschieht nicht sofort, sondern zu Beginn deines nächsten Zuges und erhält +2. Katalysator bleibt bis zur Auflösung. TEK: +1 Fetzladung (max 1×/Zug).",
+    "primary": {
+      "kind": "damage",
+      "value": 3,
+      "target": "opponent",
+      "offensive": true
+    },
+    "rider": {
+      "id": "rider-fluch",
+      "summary": "Bei Treffer: erschöpfe optional 1 gegnerische Formelkomponente.",
+      "defenseSuppressible": true
+    },
+    "intensity": null,
+    "transformId": "xform-verzoegerung",
+    "grantsFetz": true,
+    "catalystConsumed": false,
+    "overformulaPrimaryBonus": null,
+    "overformulaIntensityBonus": null,
+    "formulaDefensePenalty": null,
+    "summonConstructDefId": null,
+    "timingMode": "delay",
+    "echoAmount": null,
+    "delayBonus": 2
+  },
+  {
+    "recipeId": "v6-over-ueberraschungsangriff-schatten-verzoegerung",
+    "kind": "overformula",
+    "catalogSlice": "slice1",
+    "techniqueId": "v6-technik-ueberraschungsangriff",
+    "essenceId": "v6-essenz-schatten",
+    "catalystId": "v6-katalysator-verzoegerung",
+    "name": "Überformel Schattenüberraschung · Verzögerung",
+    "effectSummary": "Verursache 5 Schaden am Gegner. Bei Treffer: erschöpfe optional 1 gegnerische Formelkomponente. (verstärkt) Verzögerung: Primäreffekt geschieht nicht sofort, sondern zu Beginn deines nächsten Zuges und erhält +2. Katalysator bleibt bis zur Auflösung. Überformel: Primär +2 (fester Slice-1-Bonus). Überformel: Fetzladung wird verbraucht. Formelabwehr −1.",
+    "primary": {
+      "kind": "damage",
+      "value": 5,
+      "target": "opponent",
+      "offensive": true
+    },
+    "rider": {
+      "id": "rider-fluch",
+      "summary": "Bei Treffer: erschöpfe optional 1 gegnerische Formelkomponente. (verstärkt)",
+      "defenseSuppressible": true
+    },
+    "intensity": null,
+    "transformId": "xform-verzoegerung",
+    "grantsFetz": false,
+    "catalystConsumed": false,
+    "overformulaPrimaryBonus": 2,
+    "overformulaIntensityBonus": null,
+    "formulaDefensePenalty": -1,
+    "summonConstructDefId": null,
+    "timingMode": "delay",
+    "echoAmount": null,
+    "delayBonus": 2
   },
   {
     "recipeId": "v6-tek-ueberraschungsangriff-schatten-sofortzuender",
@@ -12927,7 +20528,10 @@ export const V6_GENERATED_FORMULA_RECIPES: readonly V6GeneratedFormulaRecipe[] =
     "overformulaPrimaryBonus": null,
     "overformulaIntensityBonus": null,
     "formulaDefensePenalty": null,
-    "summonConstructDefId": null
+    "summonConstructDefId": null,
+    "timingMode": "immediate",
+    "echoAmount": null,
+    "delayBonus": null
   },
   {
     "recipeId": "v6-over-ueberraschungsangriff-schatten-sofortzuender",
@@ -12956,7 +20560,10 @@ export const V6_GENERATED_FORMULA_RECIPES: readonly V6GeneratedFormulaRecipe[] =
     "overformulaPrimaryBonus": 2,
     "overformulaIntensityBonus": null,
     "formulaDefensePenalty": -1,
-    "summonConstructDefId": null
+    "summonConstructDefId": null,
+    "timingMode": "immediate",
+    "echoAmount": null,
+    "delayBonus": null
   },
   {
     "recipeId": "v6-tek-ueberraschungsangriff-schatten-opfergabe",
@@ -12985,7 +20592,10 @@ export const V6_GENERATED_FORMULA_RECIPES: readonly V6GeneratedFormulaRecipe[] =
     "overformulaPrimaryBonus": null,
     "overformulaIntensityBonus": null,
     "formulaDefensePenalty": null,
-    "summonConstructDefId": null
+    "summonConstructDefId": null,
+    "timingMode": "immediate",
+    "echoAmount": null,
+    "delayBonus": null
   },
   {
     "recipeId": "v6-over-ueberraschungsangriff-schatten-opfergabe",
@@ -13014,7 +20624,72 @@ export const V6_GENERATED_FORMULA_RECIPES: readonly V6GeneratedFormulaRecipe[] =
     "overformulaPrimaryBonus": 2,
     "overformulaIntensityBonus": null,
     "formulaDefensePenalty": -1,
-    "summonConstructDefId": null
+    "summonConstructDefId": null,
+    "timingMode": "immediate",
+    "echoAmount": null,
+    "delayBonus": null
+  },
+  {
+    "recipeId": "v6-tek-schicksalmanifestation-feuer-echo",
+    "kind": "tek",
+    "catalogSlice": "slice1",
+    "techniqueId": "v6-technik-schicksalmanifestation",
+    "essenceId": "v6-essenz-feuer",
+    "catalystId": "v6-katalysator-echo",
+    "name": "Glutschicksal · Echo",
+    "effectSummary": "Bereite Boost +2 vor. Bei Lebensschaden: Brennen, falls keine Reaktion. Echo: zu Beginn deines nächsten Zuges wiederhole 1 Punkt des Primärwerts. Katalysator bleibt bis zur Echo-Auflösung. TEK: +1 Fetzladung (max 1×/Zug).",
+    "primary": {
+      "kind": "prep_boost",
+      "value": 2,
+      "target": "self"
+    },
+    "rider": {
+      "id": "rider-brennen",
+      "summary": "Bei Lebensschaden: Brennen, falls keine Reaktion.",
+      "defenseSuppressible": true
+    },
+    "intensity": 1,
+    "transformId": "xform-echo",
+    "grantsFetz": true,
+    "catalystConsumed": false,
+    "overformulaPrimaryBonus": null,
+    "overformulaIntensityBonus": null,
+    "formulaDefensePenalty": null,
+    "summonConstructDefId": null,
+    "timingMode": "echo",
+    "echoAmount": 1,
+    "delayBonus": null
+  },
+  {
+    "recipeId": "v6-over-schicksalmanifestation-feuer-echo",
+    "kind": "overformula",
+    "catalogSlice": "slice1",
+    "techniqueId": "v6-technik-schicksalmanifestation",
+    "essenceId": "v6-essenz-feuer",
+    "catalystId": "v6-katalysator-echo",
+    "name": "Überformel Glutschicksal · Echo",
+    "effectSummary": "Bereite Boost +2 vor. Bei Lebensschaden: Brennen, falls keine Reaktion. (verstärkt) Echo: zu Beginn deines nächsten Zuges wiederhole 1 Punkt des Primärwerts. Katalysator bleibt bis zur Echo-Auflösung. Überformel: Intensität +1 (fester Slice-1-Bonus). Überformel: Fetzladung wird verbraucht. Formelabwehr −1.",
+    "primary": {
+      "kind": "prep_boost",
+      "value": 2,
+      "target": "self"
+    },
+    "rider": {
+      "id": "rider-brennen",
+      "summary": "Bei Lebensschaden: Brennen, falls keine Reaktion. (verstärkt)",
+      "defenseSuppressible": true
+    },
+    "intensity": 2,
+    "transformId": "xform-echo",
+    "grantsFetz": false,
+    "catalystConsumed": false,
+    "overformulaPrimaryBonus": null,
+    "overformulaIntensityBonus": 1,
+    "formulaDefensePenalty": -1,
+    "summonConstructDefId": null,
+    "timingMode": "echo",
+    "echoAmount": 1,
+    "delayBonus": null
   },
   {
     "recipeId": "v6-tek-schicksalmanifestation-feuer-ueberladung",
@@ -13042,7 +20717,10 @@ export const V6_GENERATED_FORMULA_RECIPES: readonly V6GeneratedFormulaRecipe[] =
     "overformulaPrimaryBonus": null,
     "overformulaIntensityBonus": null,
     "formulaDefensePenalty": null,
-    "summonConstructDefId": null
+    "summonConstructDefId": null,
+    "timingMode": "immediate",
+    "echoAmount": null,
+    "delayBonus": null
   },
   {
     "recipeId": "v6-over-schicksalmanifestation-feuer-ueberladung",
@@ -13070,7 +20748,10 @@ export const V6_GENERATED_FORMULA_RECIPES: readonly V6GeneratedFormulaRecipe[] =
     "overformulaPrimaryBonus": null,
     "overformulaIntensityBonus": 1,
     "formulaDefensePenalty": -1,
-    "summonConstructDefId": null
+    "summonConstructDefId": null,
+    "timingMode": "immediate",
+    "echoAmount": null,
+    "delayBonus": null
   },
   {
     "recipeId": "v6-tek-schicksalmanifestation-feuer-verdichtung",
@@ -13098,7 +20779,10 @@ export const V6_GENERATED_FORMULA_RECIPES: readonly V6GeneratedFormulaRecipe[] =
     "overformulaPrimaryBonus": null,
     "overformulaIntensityBonus": null,
     "formulaDefensePenalty": null,
-    "summonConstructDefId": null
+    "summonConstructDefId": null,
+    "timingMode": "immediate",
+    "echoAmount": null,
+    "delayBonus": null
   },
   {
     "recipeId": "v6-over-schicksalmanifestation-feuer-verdichtung",
@@ -13126,7 +20810,72 @@ export const V6_GENERATED_FORMULA_RECIPES: readonly V6GeneratedFormulaRecipe[] =
     "overformulaPrimaryBonus": null,
     "overformulaIntensityBonus": 1,
     "formulaDefensePenalty": -1,
-    "summonConstructDefId": null
+    "summonConstructDefId": null,
+    "timingMode": "immediate",
+    "echoAmount": null,
+    "delayBonus": null
+  },
+  {
+    "recipeId": "v6-tek-schicksalmanifestation-feuer-verzoegerung",
+    "kind": "tek",
+    "catalogSlice": "slice1",
+    "techniqueId": "v6-technik-schicksalmanifestation",
+    "essenceId": "v6-essenz-feuer",
+    "catalystId": "v6-katalysator-verzoegerung",
+    "name": "Glutschicksal · Verzögerung",
+    "effectSummary": "Bereite Boost +2 vor. Bei Lebensschaden: Brennen, falls keine Reaktion. Verzögerung: Primäreffekt geschieht nicht sofort, sondern zu Beginn deines nächsten Zuges und erhält +2. Katalysator bleibt bis zur Auflösung. TEK: +1 Fetzladung (max 1×/Zug).",
+    "primary": {
+      "kind": "prep_boost",
+      "value": 2,
+      "target": "self"
+    },
+    "rider": {
+      "id": "rider-brennen",
+      "summary": "Bei Lebensschaden: Brennen, falls keine Reaktion.",
+      "defenseSuppressible": true
+    },
+    "intensity": 1,
+    "transformId": "xform-verzoegerung",
+    "grantsFetz": true,
+    "catalystConsumed": false,
+    "overformulaPrimaryBonus": null,
+    "overformulaIntensityBonus": null,
+    "formulaDefensePenalty": null,
+    "summonConstructDefId": null,
+    "timingMode": "delay",
+    "echoAmount": null,
+    "delayBonus": 2
+  },
+  {
+    "recipeId": "v6-over-schicksalmanifestation-feuer-verzoegerung",
+    "kind": "overformula",
+    "catalogSlice": "slice1",
+    "techniqueId": "v6-technik-schicksalmanifestation",
+    "essenceId": "v6-essenz-feuer",
+    "catalystId": "v6-katalysator-verzoegerung",
+    "name": "Überformel Glutschicksal · Verzögerung",
+    "effectSummary": "Bereite Boost +2 vor. Bei Lebensschaden: Brennen, falls keine Reaktion. (verstärkt) Verzögerung: Primäreffekt geschieht nicht sofort, sondern zu Beginn deines nächsten Zuges und erhält +2. Katalysator bleibt bis zur Auflösung. Überformel: Intensität +1 (fester Slice-1-Bonus). Überformel: Fetzladung wird verbraucht. Formelabwehr −1.",
+    "primary": {
+      "kind": "prep_boost",
+      "value": 2,
+      "target": "self"
+    },
+    "rider": {
+      "id": "rider-brennen",
+      "summary": "Bei Lebensschaden: Brennen, falls keine Reaktion. (verstärkt)",
+      "defenseSuppressible": true
+    },
+    "intensity": 2,
+    "transformId": "xform-verzoegerung",
+    "grantsFetz": false,
+    "catalystConsumed": false,
+    "overformulaPrimaryBonus": null,
+    "overformulaIntensityBonus": 1,
+    "formulaDefensePenalty": -1,
+    "summonConstructDefId": null,
+    "timingMode": "delay",
+    "echoAmount": null,
+    "delayBonus": 2
   },
   {
     "recipeId": "v6-tek-schicksalmanifestation-feuer-sofortzuender",
@@ -13154,7 +20903,10 @@ export const V6_GENERATED_FORMULA_RECIPES: readonly V6GeneratedFormulaRecipe[] =
     "overformulaPrimaryBonus": null,
     "overformulaIntensityBonus": null,
     "formulaDefensePenalty": null,
-    "summonConstructDefId": null
+    "summonConstructDefId": null,
+    "timingMode": "immediate",
+    "echoAmount": null,
+    "delayBonus": null
   },
   {
     "recipeId": "v6-over-schicksalmanifestation-feuer-sofortzuender",
@@ -13182,7 +20934,10 @@ export const V6_GENERATED_FORMULA_RECIPES: readonly V6GeneratedFormulaRecipe[] =
     "overformulaPrimaryBonus": null,
     "overformulaIntensityBonus": 1,
     "formulaDefensePenalty": -1,
-    "summonConstructDefId": null
+    "summonConstructDefId": null,
+    "timingMode": "immediate",
+    "echoAmount": null,
+    "delayBonus": null
   },
   {
     "recipeId": "v6-tek-schicksalmanifestation-feuer-opfergabe",
@@ -13210,7 +20965,10 @@ export const V6_GENERATED_FORMULA_RECIPES: readonly V6GeneratedFormulaRecipe[] =
     "overformulaPrimaryBonus": null,
     "overformulaIntensityBonus": null,
     "formulaDefensePenalty": null,
-    "summonConstructDefId": null
+    "summonConstructDefId": null,
+    "timingMode": "immediate",
+    "echoAmount": null,
+    "delayBonus": null
   },
   {
     "recipeId": "v6-over-schicksalmanifestation-feuer-opfergabe",
@@ -13238,7 +20996,72 @@ export const V6_GENERATED_FORMULA_RECIPES: readonly V6GeneratedFormulaRecipe[] =
     "overformulaPrimaryBonus": null,
     "overformulaIntensityBonus": 1,
     "formulaDefensePenalty": -1,
-    "summonConstructDefId": null
+    "summonConstructDefId": null,
+    "timingMode": "immediate",
+    "echoAmount": null,
+    "delayBonus": null
+  },
+  {
+    "recipeId": "v6-tek-schicksalmanifestation-wasser-echo",
+    "kind": "tek",
+    "catalogSlice": "slice1",
+    "techniqueId": "v6-technik-schicksalmanifestation",
+    "essenceId": "v6-essenz-wasser",
+    "catalystId": "v6-katalysator-echo",
+    "name": "Wellenschicksal · Echo",
+    "effectSummary": "Bereite Boost +2 vor. Bei Heilung oder Schildgewinn: entferne optional eine Marke von dir. Echo: zu Beginn deines nächsten Zuges wiederhole 1 Punkt des Primärwerts. Katalysator bleibt bis zur Echo-Auflösung. TEK: +1 Fetzladung (max 1×/Zug).",
+    "primary": {
+      "kind": "prep_boost",
+      "value": 2,
+      "target": "self"
+    },
+    "rider": {
+      "id": "rider-reinigen",
+      "summary": "Bei Heilung oder Schildgewinn: entferne optional eine Marke von dir.",
+      "defenseSuppressible": false
+    },
+    "intensity": 1,
+    "transformId": "xform-echo",
+    "grantsFetz": true,
+    "catalystConsumed": false,
+    "overformulaPrimaryBonus": null,
+    "overformulaIntensityBonus": null,
+    "formulaDefensePenalty": null,
+    "summonConstructDefId": null,
+    "timingMode": "echo",
+    "echoAmount": 1,
+    "delayBonus": null
+  },
+  {
+    "recipeId": "v6-over-schicksalmanifestation-wasser-echo",
+    "kind": "overformula",
+    "catalogSlice": "slice1",
+    "techniqueId": "v6-technik-schicksalmanifestation",
+    "essenceId": "v6-essenz-wasser",
+    "catalystId": "v6-katalysator-echo",
+    "name": "Überformel Wellenschicksal · Echo",
+    "effectSummary": "Bereite Boost +2 vor. Bei Heilung oder Schildgewinn: entferne optional eine Marke von dir. (verstärkt) Echo: zu Beginn deines nächsten Zuges wiederhole 1 Punkt des Primärwerts. Katalysator bleibt bis zur Echo-Auflösung. Überformel: Intensität +1 (fester Slice-1-Bonus). Überformel: Fetzladung wird verbraucht. Formelabwehr −1.",
+    "primary": {
+      "kind": "prep_boost",
+      "value": 2,
+      "target": "self"
+    },
+    "rider": {
+      "id": "rider-reinigen",
+      "summary": "Bei Heilung oder Schildgewinn: entferne optional eine Marke von dir. (verstärkt)",
+      "defenseSuppressible": false
+    },
+    "intensity": 2,
+    "transformId": "xform-echo",
+    "grantsFetz": false,
+    "catalystConsumed": false,
+    "overformulaPrimaryBonus": null,
+    "overformulaIntensityBonus": 1,
+    "formulaDefensePenalty": -1,
+    "summonConstructDefId": null,
+    "timingMode": "echo",
+    "echoAmount": 1,
+    "delayBonus": null
   },
   {
     "recipeId": "v6-tek-schicksalmanifestation-wasser-ueberladung",
@@ -13266,7 +21089,10 @@ export const V6_GENERATED_FORMULA_RECIPES: readonly V6GeneratedFormulaRecipe[] =
     "overformulaPrimaryBonus": null,
     "overformulaIntensityBonus": null,
     "formulaDefensePenalty": null,
-    "summonConstructDefId": null
+    "summonConstructDefId": null,
+    "timingMode": "immediate",
+    "echoAmount": null,
+    "delayBonus": null
   },
   {
     "recipeId": "v6-over-schicksalmanifestation-wasser-ueberladung",
@@ -13294,7 +21120,10 @@ export const V6_GENERATED_FORMULA_RECIPES: readonly V6GeneratedFormulaRecipe[] =
     "overformulaPrimaryBonus": null,
     "overformulaIntensityBonus": 1,
     "formulaDefensePenalty": -1,
-    "summonConstructDefId": null
+    "summonConstructDefId": null,
+    "timingMode": "immediate",
+    "echoAmount": null,
+    "delayBonus": null
   },
   {
     "recipeId": "v6-tek-schicksalmanifestation-wasser-verdichtung",
@@ -13322,7 +21151,10 @@ export const V6_GENERATED_FORMULA_RECIPES: readonly V6GeneratedFormulaRecipe[] =
     "overformulaPrimaryBonus": null,
     "overformulaIntensityBonus": null,
     "formulaDefensePenalty": null,
-    "summonConstructDefId": null
+    "summonConstructDefId": null,
+    "timingMode": "immediate",
+    "echoAmount": null,
+    "delayBonus": null
   },
   {
     "recipeId": "v6-over-schicksalmanifestation-wasser-verdichtung",
@@ -13350,7 +21182,72 @@ export const V6_GENERATED_FORMULA_RECIPES: readonly V6GeneratedFormulaRecipe[] =
     "overformulaPrimaryBonus": null,
     "overformulaIntensityBonus": 1,
     "formulaDefensePenalty": -1,
-    "summonConstructDefId": null
+    "summonConstructDefId": null,
+    "timingMode": "immediate",
+    "echoAmount": null,
+    "delayBonus": null
+  },
+  {
+    "recipeId": "v6-tek-schicksalmanifestation-wasser-verzoegerung",
+    "kind": "tek",
+    "catalogSlice": "slice1",
+    "techniqueId": "v6-technik-schicksalmanifestation",
+    "essenceId": "v6-essenz-wasser",
+    "catalystId": "v6-katalysator-verzoegerung",
+    "name": "Wellenschicksal · Verzögerung",
+    "effectSummary": "Bereite Boost +2 vor. Bei Heilung oder Schildgewinn: entferne optional eine Marke von dir. Verzögerung: Primäreffekt geschieht nicht sofort, sondern zu Beginn deines nächsten Zuges und erhält +2. Katalysator bleibt bis zur Auflösung. TEK: +1 Fetzladung (max 1×/Zug).",
+    "primary": {
+      "kind": "prep_boost",
+      "value": 2,
+      "target": "self"
+    },
+    "rider": {
+      "id": "rider-reinigen",
+      "summary": "Bei Heilung oder Schildgewinn: entferne optional eine Marke von dir.",
+      "defenseSuppressible": false
+    },
+    "intensity": 1,
+    "transformId": "xform-verzoegerung",
+    "grantsFetz": true,
+    "catalystConsumed": false,
+    "overformulaPrimaryBonus": null,
+    "overformulaIntensityBonus": null,
+    "formulaDefensePenalty": null,
+    "summonConstructDefId": null,
+    "timingMode": "delay",
+    "echoAmount": null,
+    "delayBonus": 2
+  },
+  {
+    "recipeId": "v6-over-schicksalmanifestation-wasser-verzoegerung",
+    "kind": "overformula",
+    "catalogSlice": "slice1",
+    "techniqueId": "v6-technik-schicksalmanifestation",
+    "essenceId": "v6-essenz-wasser",
+    "catalystId": "v6-katalysator-verzoegerung",
+    "name": "Überformel Wellenschicksal · Verzögerung",
+    "effectSummary": "Bereite Boost +2 vor. Bei Heilung oder Schildgewinn: entferne optional eine Marke von dir. (verstärkt) Verzögerung: Primäreffekt geschieht nicht sofort, sondern zu Beginn deines nächsten Zuges und erhält +2. Katalysator bleibt bis zur Auflösung. Überformel: Intensität +1 (fester Slice-1-Bonus). Überformel: Fetzladung wird verbraucht. Formelabwehr −1.",
+    "primary": {
+      "kind": "prep_boost",
+      "value": 2,
+      "target": "self"
+    },
+    "rider": {
+      "id": "rider-reinigen",
+      "summary": "Bei Heilung oder Schildgewinn: entferne optional eine Marke von dir. (verstärkt)",
+      "defenseSuppressible": false
+    },
+    "intensity": 2,
+    "transformId": "xform-verzoegerung",
+    "grantsFetz": false,
+    "catalystConsumed": false,
+    "overformulaPrimaryBonus": null,
+    "overformulaIntensityBonus": 1,
+    "formulaDefensePenalty": -1,
+    "summonConstructDefId": null,
+    "timingMode": "delay",
+    "echoAmount": null,
+    "delayBonus": 2
   },
   {
     "recipeId": "v6-tek-schicksalmanifestation-wasser-sofortzuender",
@@ -13378,7 +21275,10 @@ export const V6_GENERATED_FORMULA_RECIPES: readonly V6GeneratedFormulaRecipe[] =
     "overformulaPrimaryBonus": null,
     "overformulaIntensityBonus": null,
     "formulaDefensePenalty": null,
-    "summonConstructDefId": null
+    "summonConstructDefId": null,
+    "timingMode": "immediate",
+    "echoAmount": null,
+    "delayBonus": null
   },
   {
     "recipeId": "v6-over-schicksalmanifestation-wasser-sofortzuender",
@@ -13406,7 +21306,10 @@ export const V6_GENERATED_FORMULA_RECIPES: readonly V6GeneratedFormulaRecipe[] =
     "overformulaPrimaryBonus": null,
     "overformulaIntensityBonus": 1,
     "formulaDefensePenalty": -1,
-    "summonConstructDefId": null
+    "summonConstructDefId": null,
+    "timingMode": "immediate",
+    "echoAmount": null,
+    "delayBonus": null
   },
   {
     "recipeId": "v6-tek-schicksalmanifestation-wasser-opfergabe",
@@ -13434,7 +21337,10 @@ export const V6_GENERATED_FORMULA_RECIPES: readonly V6GeneratedFormulaRecipe[] =
     "overformulaPrimaryBonus": null,
     "overformulaIntensityBonus": null,
     "formulaDefensePenalty": null,
-    "summonConstructDefId": null
+    "summonConstructDefId": null,
+    "timingMode": "immediate",
+    "echoAmount": null,
+    "delayBonus": null
   },
   {
     "recipeId": "v6-over-schicksalmanifestation-wasser-opfergabe",
@@ -13462,7 +21368,72 @@ export const V6_GENERATED_FORMULA_RECIPES: readonly V6GeneratedFormulaRecipe[] =
     "overformulaPrimaryBonus": null,
     "overformulaIntensityBonus": 1,
     "formulaDefensePenalty": -1,
-    "summonConstructDefId": null
+    "summonConstructDefId": null,
+    "timingMode": "immediate",
+    "echoAmount": null,
+    "delayBonus": null
+  },
+  {
+    "recipeId": "v6-tek-schicksalmanifestation-erde-echo",
+    "kind": "tek",
+    "catalogSlice": "slice1",
+    "techniqueId": "v6-technik-schicksalmanifestation",
+    "essenceId": "v6-essenz-erde",
+    "catalystId": "v6-katalysator-echo",
+    "name": "Felsschicksal · Echo",
+    "effectSummary": "Bereite Boost +2 vor. Verwendete Komponenten +1 Stabilität bis nächste Startphase. Echo: zu Beginn deines nächsten Zuges wiederhole 1 Punkt des Primärwerts. Katalysator bleibt bis zur Echo-Auflösung. TEK: +1 Fetzladung (max 1×/Zug).",
+    "primary": {
+      "kind": "prep_boost",
+      "value": 2,
+      "target": "self"
+    },
+    "rider": {
+      "id": "rider-stabilitaet",
+      "summary": "Verwendete Komponenten +1 Stabilität bis nächste Startphase.",
+      "defenseSuppressible": false
+    },
+    "intensity": 1,
+    "transformId": "xform-echo",
+    "grantsFetz": true,
+    "catalystConsumed": false,
+    "overformulaPrimaryBonus": null,
+    "overformulaIntensityBonus": null,
+    "formulaDefensePenalty": null,
+    "summonConstructDefId": null,
+    "timingMode": "echo",
+    "echoAmount": 1,
+    "delayBonus": null
+  },
+  {
+    "recipeId": "v6-over-schicksalmanifestation-erde-echo",
+    "kind": "overformula",
+    "catalogSlice": "slice1",
+    "techniqueId": "v6-technik-schicksalmanifestation",
+    "essenceId": "v6-essenz-erde",
+    "catalystId": "v6-katalysator-echo",
+    "name": "Überformel Felsschicksal · Echo",
+    "effectSummary": "Bereite Boost +2 vor. Verwendete Komponenten +1 Stabilität bis nächste Startphase. (verstärkt) Echo: zu Beginn deines nächsten Zuges wiederhole 1 Punkt des Primärwerts. Katalysator bleibt bis zur Echo-Auflösung. Überformel: Intensität +1 (fester Slice-1-Bonus). Überformel: Fetzladung wird verbraucht. Formelabwehr −1.",
+    "primary": {
+      "kind": "prep_boost",
+      "value": 2,
+      "target": "self"
+    },
+    "rider": {
+      "id": "rider-stabilitaet",
+      "summary": "Verwendete Komponenten +1 Stabilität bis nächste Startphase. (verstärkt)",
+      "defenseSuppressible": false
+    },
+    "intensity": 2,
+    "transformId": "xform-echo",
+    "grantsFetz": false,
+    "catalystConsumed": false,
+    "overformulaPrimaryBonus": null,
+    "overformulaIntensityBonus": 1,
+    "formulaDefensePenalty": -1,
+    "summonConstructDefId": null,
+    "timingMode": "echo",
+    "echoAmount": 1,
+    "delayBonus": null
   },
   {
     "recipeId": "v6-tek-schicksalmanifestation-erde-ueberladung",
@@ -13490,7 +21461,10 @@ export const V6_GENERATED_FORMULA_RECIPES: readonly V6GeneratedFormulaRecipe[] =
     "overformulaPrimaryBonus": null,
     "overformulaIntensityBonus": null,
     "formulaDefensePenalty": null,
-    "summonConstructDefId": null
+    "summonConstructDefId": null,
+    "timingMode": "immediate",
+    "echoAmount": null,
+    "delayBonus": null
   },
   {
     "recipeId": "v6-over-schicksalmanifestation-erde-ueberladung",
@@ -13518,7 +21492,10 @@ export const V6_GENERATED_FORMULA_RECIPES: readonly V6GeneratedFormulaRecipe[] =
     "overformulaPrimaryBonus": null,
     "overformulaIntensityBonus": 1,
     "formulaDefensePenalty": -1,
-    "summonConstructDefId": null
+    "summonConstructDefId": null,
+    "timingMode": "immediate",
+    "echoAmount": null,
+    "delayBonus": null
   },
   {
     "recipeId": "v6-tek-schicksalmanifestation-erde-verdichtung",
@@ -13546,7 +21523,10 @@ export const V6_GENERATED_FORMULA_RECIPES: readonly V6GeneratedFormulaRecipe[] =
     "overformulaPrimaryBonus": null,
     "overformulaIntensityBonus": null,
     "formulaDefensePenalty": null,
-    "summonConstructDefId": null
+    "summonConstructDefId": null,
+    "timingMode": "immediate",
+    "echoAmount": null,
+    "delayBonus": null
   },
   {
     "recipeId": "v6-over-schicksalmanifestation-erde-verdichtung",
@@ -13574,7 +21554,72 @@ export const V6_GENERATED_FORMULA_RECIPES: readonly V6GeneratedFormulaRecipe[] =
     "overformulaPrimaryBonus": null,
     "overformulaIntensityBonus": 1,
     "formulaDefensePenalty": -1,
-    "summonConstructDefId": null
+    "summonConstructDefId": null,
+    "timingMode": "immediate",
+    "echoAmount": null,
+    "delayBonus": null
+  },
+  {
+    "recipeId": "v6-tek-schicksalmanifestation-erde-verzoegerung",
+    "kind": "tek",
+    "catalogSlice": "slice1",
+    "techniqueId": "v6-technik-schicksalmanifestation",
+    "essenceId": "v6-essenz-erde",
+    "catalystId": "v6-katalysator-verzoegerung",
+    "name": "Felsschicksal · Verzögerung",
+    "effectSummary": "Bereite Boost +2 vor. Verwendete Komponenten +1 Stabilität bis nächste Startphase. Verzögerung: Primäreffekt geschieht nicht sofort, sondern zu Beginn deines nächsten Zuges und erhält +2. Katalysator bleibt bis zur Auflösung. TEK: +1 Fetzladung (max 1×/Zug).",
+    "primary": {
+      "kind": "prep_boost",
+      "value": 2,
+      "target": "self"
+    },
+    "rider": {
+      "id": "rider-stabilitaet",
+      "summary": "Verwendete Komponenten +1 Stabilität bis nächste Startphase.",
+      "defenseSuppressible": false
+    },
+    "intensity": 1,
+    "transformId": "xform-verzoegerung",
+    "grantsFetz": true,
+    "catalystConsumed": false,
+    "overformulaPrimaryBonus": null,
+    "overformulaIntensityBonus": null,
+    "formulaDefensePenalty": null,
+    "summonConstructDefId": null,
+    "timingMode": "delay",
+    "echoAmount": null,
+    "delayBonus": 2
+  },
+  {
+    "recipeId": "v6-over-schicksalmanifestation-erde-verzoegerung",
+    "kind": "overformula",
+    "catalogSlice": "slice1",
+    "techniqueId": "v6-technik-schicksalmanifestation",
+    "essenceId": "v6-essenz-erde",
+    "catalystId": "v6-katalysator-verzoegerung",
+    "name": "Überformel Felsschicksal · Verzögerung",
+    "effectSummary": "Bereite Boost +2 vor. Verwendete Komponenten +1 Stabilität bis nächste Startphase. (verstärkt) Verzögerung: Primäreffekt geschieht nicht sofort, sondern zu Beginn deines nächsten Zuges und erhält +2. Katalysator bleibt bis zur Auflösung. Überformel: Intensität +1 (fester Slice-1-Bonus). Überformel: Fetzladung wird verbraucht. Formelabwehr −1.",
+    "primary": {
+      "kind": "prep_boost",
+      "value": 2,
+      "target": "self"
+    },
+    "rider": {
+      "id": "rider-stabilitaet",
+      "summary": "Verwendete Komponenten +1 Stabilität bis nächste Startphase. (verstärkt)",
+      "defenseSuppressible": false
+    },
+    "intensity": 2,
+    "transformId": "xform-verzoegerung",
+    "grantsFetz": false,
+    "catalystConsumed": false,
+    "overformulaPrimaryBonus": null,
+    "overformulaIntensityBonus": 1,
+    "formulaDefensePenalty": -1,
+    "summonConstructDefId": null,
+    "timingMode": "delay",
+    "echoAmount": null,
+    "delayBonus": 2
   },
   {
     "recipeId": "v6-tek-schicksalmanifestation-erde-sofortzuender",
@@ -13602,7 +21647,10 @@ export const V6_GENERATED_FORMULA_RECIPES: readonly V6GeneratedFormulaRecipe[] =
     "overformulaPrimaryBonus": null,
     "overformulaIntensityBonus": null,
     "formulaDefensePenalty": null,
-    "summonConstructDefId": null
+    "summonConstructDefId": null,
+    "timingMode": "immediate",
+    "echoAmount": null,
+    "delayBonus": null
   },
   {
     "recipeId": "v6-over-schicksalmanifestation-erde-sofortzuender",
@@ -13630,7 +21678,10 @@ export const V6_GENERATED_FORMULA_RECIPES: readonly V6GeneratedFormulaRecipe[] =
     "overformulaPrimaryBonus": null,
     "overformulaIntensityBonus": 1,
     "formulaDefensePenalty": -1,
-    "summonConstructDefId": null
+    "summonConstructDefId": null,
+    "timingMode": "immediate",
+    "echoAmount": null,
+    "delayBonus": null
   },
   {
     "recipeId": "v6-tek-schicksalmanifestation-erde-opfergabe",
@@ -13658,7 +21709,10 @@ export const V6_GENERATED_FORMULA_RECIPES: readonly V6GeneratedFormulaRecipe[] =
     "overformulaPrimaryBonus": null,
     "overformulaIntensityBonus": null,
     "formulaDefensePenalty": null,
-    "summonConstructDefId": null
+    "summonConstructDefId": null,
+    "timingMode": "immediate",
+    "echoAmount": null,
+    "delayBonus": null
   },
   {
     "recipeId": "v6-over-schicksalmanifestation-erde-opfergabe",
@@ -13686,7 +21740,72 @@ export const V6_GENERATED_FORMULA_RECIPES: readonly V6GeneratedFormulaRecipe[] =
     "overformulaPrimaryBonus": null,
     "overformulaIntensityBonus": 1,
     "formulaDefensePenalty": -1,
-    "summonConstructDefId": null
+    "summonConstructDefId": null,
+    "timingMode": "immediate",
+    "echoAmount": null,
+    "delayBonus": null
+  },
+  {
+    "recipeId": "v6-tek-schicksalmanifestation-luft-echo",
+    "kind": "tek",
+    "catalogSlice": "slice1",
+    "techniqueId": "v6-technik-schicksalmanifestation",
+    "essenceId": "v6-essenz-luft",
+    "catalystId": "v6-katalysator-echo",
+    "name": "Windschicksal · Echo",
+    "effectSummary": "Bereite Boost +2 vor. Nächster eigener Aktions-W6 +1 (max +2). Echo: zu Beginn deines nächsten Zuges wiederhole 1 Punkt des Primärwerts. Katalysator bleibt bis zur Echo-Auflösung. TEK: +1 Fetzladung (max 1×/Zug).",
+    "primary": {
+      "kind": "prep_boost",
+      "value": 2,
+      "target": "self"
+    },
+    "rider": {
+      "id": "rider-w6",
+      "summary": "Nächster eigener Aktions-W6 +1 (max +2).",
+      "defenseSuppressible": true
+    },
+    "intensity": 1,
+    "transformId": "xform-echo",
+    "grantsFetz": true,
+    "catalystConsumed": false,
+    "overformulaPrimaryBonus": null,
+    "overformulaIntensityBonus": null,
+    "formulaDefensePenalty": null,
+    "summonConstructDefId": null,
+    "timingMode": "echo",
+    "echoAmount": 1,
+    "delayBonus": null
+  },
+  {
+    "recipeId": "v6-over-schicksalmanifestation-luft-echo",
+    "kind": "overformula",
+    "catalogSlice": "slice1",
+    "techniqueId": "v6-technik-schicksalmanifestation",
+    "essenceId": "v6-essenz-luft",
+    "catalystId": "v6-katalysator-echo",
+    "name": "Überformel Windschicksal · Echo",
+    "effectSummary": "Bereite Boost +2 vor. Nächster eigener Aktions-W6 +1 (max +2). (verstärkt) Echo: zu Beginn deines nächsten Zuges wiederhole 1 Punkt des Primärwerts. Katalysator bleibt bis zur Echo-Auflösung. Überformel: Intensität +1 (fester Slice-1-Bonus). Überformel: Fetzladung wird verbraucht. Formelabwehr −1.",
+    "primary": {
+      "kind": "prep_boost",
+      "value": 2,
+      "target": "self"
+    },
+    "rider": {
+      "id": "rider-w6",
+      "summary": "Nächster eigener Aktions-W6 +1 (max +2). (verstärkt)",
+      "defenseSuppressible": true
+    },
+    "intensity": 2,
+    "transformId": "xform-echo",
+    "grantsFetz": false,
+    "catalystConsumed": false,
+    "overformulaPrimaryBonus": null,
+    "overformulaIntensityBonus": 1,
+    "formulaDefensePenalty": -1,
+    "summonConstructDefId": null,
+    "timingMode": "echo",
+    "echoAmount": 1,
+    "delayBonus": null
   },
   {
     "recipeId": "v6-tek-schicksalmanifestation-luft-ueberladung",
@@ -13714,7 +21833,10 @@ export const V6_GENERATED_FORMULA_RECIPES: readonly V6GeneratedFormulaRecipe[] =
     "overformulaPrimaryBonus": null,
     "overformulaIntensityBonus": null,
     "formulaDefensePenalty": null,
-    "summonConstructDefId": null
+    "summonConstructDefId": null,
+    "timingMode": "immediate",
+    "echoAmount": null,
+    "delayBonus": null
   },
   {
     "recipeId": "v6-over-schicksalmanifestation-luft-ueberladung",
@@ -13742,7 +21864,10 @@ export const V6_GENERATED_FORMULA_RECIPES: readonly V6GeneratedFormulaRecipe[] =
     "overformulaPrimaryBonus": null,
     "overformulaIntensityBonus": 1,
     "formulaDefensePenalty": -1,
-    "summonConstructDefId": null
+    "summonConstructDefId": null,
+    "timingMode": "immediate",
+    "echoAmount": null,
+    "delayBonus": null
   },
   {
     "recipeId": "v6-tek-schicksalmanifestation-luft-verdichtung",
@@ -13770,7 +21895,10 @@ export const V6_GENERATED_FORMULA_RECIPES: readonly V6GeneratedFormulaRecipe[] =
     "overformulaPrimaryBonus": null,
     "overformulaIntensityBonus": null,
     "formulaDefensePenalty": null,
-    "summonConstructDefId": null
+    "summonConstructDefId": null,
+    "timingMode": "immediate",
+    "echoAmount": null,
+    "delayBonus": null
   },
   {
     "recipeId": "v6-over-schicksalmanifestation-luft-verdichtung",
@@ -13798,7 +21926,72 @@ export const V6_GENERATED_FORMULA_RECIPES: readonly V6GeneratedFormulaRecipe[] =
     "overformulaPrimaryBonus": null,
     "overformulaIntensityBonus": 1,
     "formulaDefensePenalty": -1,
-    "summonConstructDefId": null
+    "summonConstructDefId": null,
+    "timingMode": "immediate",
+    "echoAmount": null,
+    "delayBonus": null
+  },
+  {
+    "recipeId": "v6-tek-schicksalmanifestation-luft-verzoegerung",
+    "kind": "tek",
+    "catalogSlice": "slice1",
+    "techniqueId": "v6-technik-schicksalmanifestation",
+    "essenceId": "v6-essenz-luft",
+    "catalystId": "v6-katalysator-verzoegerung",
+    "name": "Windschicksal · Verzögerung",
+    "effectSummary": "Bereite Boost +2 vor. Nächster eigener Aktions-W6 +1 (max +2). Verzögerung: Primäreffekt geschieht nicht sofort, sondern zu Beginn deines nächsten Zuges und erhält +2. Katalysator bleibt bis zur Auflösung. TEK: +1 Fetzladung (max 1×/Zug).",
+    "primary": {
+      "kind": "prep_boost",
+      "value": 2,
+      "target": "self"
+    },
+    "rider": {
+      "id": "rider-w6",
+      "summary": "Nächster eigener Aktions-W6 +1 (max +2).",
+      "defenseSuppressible": true
+    },
+    "intensity": 1,
+    "transformId": "xform-verzoegerung",
+    "grantsFetz": true,
+    "catalystConsumed": false,
+    "overformulaPrimaryBonus": null,
+    "overformulaIntensityBonus": null,
+    "formulaDefensePenalty": null,
+    "summonConstructDefId": null,
+    "timingMode": "delay",
+    "echoAmount": null,
+    "delayBonus": 2
+  },
+  {
+    "recipeId": "v6-over-schicksalmanifestation-luft-verzoegerung",
+    "kind": "overformula",
+    "catalogSlice": "slice1",
+    "techniqueId": "v6-technik-schicksalmanifestation",
+    "essenceId": "v6-essenz-luft",
+    "catalystId": "v6-katalysator-verzoegerung",
+    "name": "Überformel Windschicksal · Verzögerung",
+    "effectSummary": "Bereite Boost +2 vor. Nächster eigener Aktions-W6 +1 (max +2). (verstärkt) Verzögerung: Primäreffekt geschieht nicht sofort, sondern zu Beginn deines nächsten Zuges und erhält +2. Katalysator bleibt bis zur Auflösung. Überformel: Intensität +1 (fester Slice-1-Bonus). Überformel: Fetzladung wird verbraucht. Formelabwehr −1.",
+    "primary": {
+      "kind": "prep_boost",
+      "value": 2,
+      "target": "self"
+    },
+    "rider": {
+      "id": "rider-w6",
+      "summary": "Nächster eigener Aktions-W6 +1 (max +2). (verstärkt)",
+      "defenseSuppressible": true
+    },
+    "intensity": 2,
+    "transformId": "xform-verzoegerung",
+    "grantsFetz": false,
+    "catalystConsumed": false,
+    "overformulaPrimaryBonus": null,
+    "overformulaIntensityBonus": 1,
+    "formulaDefensePenalty": -1,
+    "summonConstructDefId": null,
+    "timingMode": "delay",
+    "echoAmount": null,
+    "delayBonus": 2
   },
   {
     "recipeId": "v6-tek-schicksalmanifestation-luft-sofortzuender",
@@ -13826,7 +22019,10 @@ export const V6_GENERATED_FORMULA_RECIPES: readonly V6GeneratedFormulaRecipe[] =
     "overformulaPrimaryBonus": null,
     "overformulaIntensityBonus": null,
     "formulaDefensePenalty": null,
-    "summonConstructDefId": null
+    "summonConstructDefId": null,
+    "timingMode": "immediate",
+    "echoAmount": null,
+    "delayBonus": null
   },
   {
     "recipeId": "v6-over-schicksalmanifestation-luft-sofortzuender",
@@ -13854,7 +22050,10 @@ export const V6_GENERATED_FORMULA_RECIPES: readonly V6GeneratedFormulaRecipe[] =
     "overformulaPrimaryBonus": null,
     "overformulaIntensityBonus": 1,
     "formulaDefensePenalty": -1,
-    "summonConstructDefId": null
+    "summonConstructDefId": null,
+    "timingMode": "immediate",
+    "echoAmount": null,
+    "delayBonus": null
   },
   {
     "recipeId": "v6-tek-schicksalmanifestation-luft-opfergabe",
@@ -13882,7 +22081,10 @@ export const V6_GENERATED_FORMULA_RECIPES: readonly V6GeneratedFormulaRecipe[] =
     "overformulaPrimaryBonus": null,
     "overformulaIntensityBonus": null,
     "formulaDefensePenalty": null,
-    "summonConstructDefId": null
+    "summonConstructDefId": null,
+    "timingMode": "immediate",
+    "echoAmount": null,
+    "delayBonus": null
   },
   {
     "recipeId": "v6-over-schicksalmanifestation-luft-opfergabe",
@@ -13910,7 +22112,72 @@ export const V6_GENERATED_FORMULA_RECIPES: readonly V6GeneratedFormulaRecipe[] =
     "overformulaPrimaryBonus": null,
     "overformulaIntensityBonus": 1,
     "formulaDefensePenalty": -1,
-    "summonConstructDefId": null
+    "summonConstructDefId": null,
+    "timingMode": "immediate",
+    "echoAmount": null,
+    "delayBonus": null
+  },
+  {
+    "recipeId": "v6-tek-schicksalmanifestation-licht-echo",
+    "kind": "tek",
+    "catalogSlice": "slice1",
+    "techniqueId": "v6-technik-schicksalmanifestation",
+    "essenceId": "v6-essenz-licht",
+    "catalystId": "v6-katalysator-echo",
+    "name": "Lichtschicksal · Echo",
+    "effectSummary": "Bereite Boost +2 vor. Bei Schildgewinn: entferne optional eine Marke von dir. Echo: zu Beginn deines nächsten Zuges wiederhole 1 Punkt des Primärwerts. Katalysator bleibt bis zur Echo-Auflösung. TEK: +1 Fetzladung (max 1×/Zug).",
+    "primary": {
+      "kind": "prep_boost",
+      "value": 2,
+      "target": "self"
+    },
+    "rider": {
+      "id": "rider-reinigen-licht",
+      "summary": "Bei Schildgewinn: entferne optional eine Marke von dir.",
+      "defenseSuppressible": false
+    },
+    "intensity": 1,
+    "transformId": "xform-echo",
+    "grantsFetz": true,
+    "catalystConsumed": false,
+    "overformulaPrimaryBonus": null,
+    "overformulaIntensityBonus": null,
+    "formulaDefensePenalty": null,
+    "summonConstructDefId": null,
+    "timingMode": "echo",
+    "echoAmount": 1,
+    "delayBonus": null
+  },
+  {
+    "recipeId": "v6-over-schicksalmanifestation-licht-echo",
+    "kind": "overformula",
+    "catalogSlice": "slice1",
+    "techniqueId": "v6-technik-schicksalmanifestation",
+    "essenceId": "v6-essenz-licht",
+    "catalystId": "v6-katalysator-echo",
+    "name": "Überformel Lichtschicksal · Echo",
+    "effectSummary": "Bereite Boost +2 vor. Bei Schildgewinn: entferne optional eine Marke von dir. (verstärkt) Echo: zu Beginn deines nächsten Zuges wiederhole 1 Punkt des Primärwerts. Katalysator bleibt bis zur Echo-Auflösung. Überformel: Intensität +1 (fester Slice-1-Bonus). Überformel: Fetzladung wird verbraucht. Formelabwehr −1.",
+    "primary": {
+      "kind": "prep_boost",
+      "value": 2,
+      "target": "self"
+    },
+    "rider": {
+      "id": "rider-reinigen-licht",
+      "summary": "Bei Schildgewinn: entferne optional eine Marke von dir. (verstärkt)",
+      "defenseSuppressible": false
+    },
+    "intensity": 2,
+    "transformId": "xform-echo",
+    "grantsFetz": false,
+    "catalystConsumed": false,
+    "overformulaPrimaryBonus": null,
+    "overformulaIntensityBonus": 1,
+    "formulaDefensePenalty": -1,
+    "summonConstructDefId": null,
+    "timingMode": "echo",
+    "echoAmount": 1,
+    "delayBonus": null
   },
   {
     "recipeId": "v6-tek-schicksalmanifestation-licht-ueberladung",
@@ -13938,7 +22205,10 @@ export const V6_GENERATED_FORMULA_RECIPES: readonly V6GeneratedFormulaRecipe[] =
     "overformulaPrimaryBonus": null,
     "overformulaIntensityBonus": null,
     "formulaDefensePenalty": null,
-    "summonConstructDefId": null
+    "summonConstructDefId": null,
+    "timingMode": "immediate",
+    "echoAmount": null,
+    "delayBonus": null
   },
   {
     "recipeId": "v6-over-schicksalmanifestation-licht-ueberladung",
@@ -13966,7 +22236,10 @@ export const V6_GENERATED_FORMULA_RECIPES: readonly V6GeneratedFormulaRecipe[] =
     "overformulaPrimaryBonus": null,
     "overformulaIntensityBonus": 1,
     "formulaDefensePenalty": -1,
-    "summonConstructDefId": null
+    "summonConstructDefId": null,
+    "timingMode": "immediate",
+    "echoAmount": null,
+    "delayBonus": null
   },
   {
     "recipeId": "v6-tek-schicksalmanifestation-licht-verdichtung",
@@ -13994,7 +22267,10 @@ export const V6_GENERATED_FORMULA_RECIPES: readonly V6GeneratedFormulaRecipe[] =
     "overformulaPrimaryBonus": null,
     "overformulaIntensityBonus": null,
     "formulaDefensePenalty": null,
-    "summonConstructDefId": null
+    "summonConstructDefId": null,
+    "timingMode": "immediate",
+    "echoAmount": null,
+    "delayBonus": null
   },
   {
     "recipeId": "v6-over-schicksalmanifestation-licht-verdichtung",
@@ -14022,7 +22298,72 @@ export const V6_GENERATED_FORMULA_RECIPES: readonly V6GeneratedFormulaRecipe[] =
     "overformulaPrimaryBonus": null,
     "overformulaIntensityBonus": 1,
     "formulaDefensePenalty": -1,
-    "summonConstructDefId": null
+    "summonConstructDefId": null,
+    "timingMode": "immediate",
+    "echoAmount": null,
+    "delayBonus": null
+  },
+  {
+    "recipeId": "v6-tek-schicksalmanifestation-licht-verzoegerung",
+    "kind": "tek",
+    "catalogSlice": "slice1",
+    "techniqueId": "v6-technik-schicksalmanifestation",
+    "essenceId": "v6-essenz-licht",
+    "catalystId": "v6-katalysator-verzoegerung",
+    "name": "Lichtschicksal · Verzögerung",
+    "effectSummary": "Bereite Boost +2 vor. Bei Schildgewinn: entferne optional eine Marke von dir. Verzögerung: Primäreffekt geschieht nicht sofort, sondern zu Beginn deines nächsten Zuges und erhält +2. Katalysator bleibt bis zur Auflösung. TEK: +1 Fetzladung (max 1×/Zug).",
+    "primary": {
+      "kind": "prep_boost",
+      "value": 2,
+      "target": "self"
+    },
+    "rider": {
+      "id": "rider-reinigen-licht",
+      "summary": "Bei Schildgewinn: entferne optional eine Marke von dir.",
+      "defenseSuppressible": false
+    },
+    "intensity": 1,
+    "transformId": "xform-verzoegerung",
+    "grantsFetz": true,
+    "catalystConsumed": false,
+    "overformulaPrimaryBonus": null,
+    "overformulaIntensityBonus": null,
+    "formulaDefensePenalty": null,
+    "summonConstructDefId": null,
+    "timingMode": "delay",
+    "echoAmount": null,
+    "delayBonus": 2
+  },
+  {
+    "recipeId": "v6-over-schicksalmanifestation-licht-verzoegerung",
+    "kind": "overformula",
+    "catalogSlice": "slice1",
+    "techniqueId": "v6-technik-schicksalmanifestation",
+    "essenceId": "v6-essenz-licht",
+    "catalystId": "v6-katalysator-verzoegerung",
+    "name": "Überformel Lichtschicksal · Verzögerung",
+    "effectSummary": "Bereite Boost +2 vor. Bei Schildgewinn: entferne optional eine Marke von dir. (verstärkt) Verzögerung: Primäreffekt geschieht nicht sofort, sondern zu Beginn deines nächsten Zuges und erhält +2. Katalysator bleibt bis zur Auflösung. Überformel: Intensität +1 (fester Slice-1-Bonus). Überformel: Fetzladung wird verbraucht. Formelabwehr −1.",
+    "primary": {
+      "kind": "prep_boost",
+      "value": 2,
+      "target": "self"
+    },
+    "rider": {
+      "id": "rider-reinigen-licht",
+      "summary": "Bei Schildgewinn: entferne optional eine Marke von dir. (verstärkt)",
+      "defenseSuppressible": false
+    },
+    "intensity": 2,
+    "transformId": "xform-verzoegerung",
+    "grantsFetz": false,
+    "catalystConsumed": false,
+    "overformulaPrimaryBonus": null,
+    "overformulaIntensityBonus": 1,
+    "formulaDefensePenalty": -1,
+    "summonConstructDefId": null,
+    "timingMode": "delay",
+    "echoAmount": null,
+    "delayBonus": 2
   },
   {
     "recipeId": "v6-tek-schicksalmanifestation-licht-sofortzuender",
@@ -14050,7 +22391,10 @@ export const V6_GENERATED_FORMULA_RECIPES: readonly V6GeneratedFormulaRecipe[] =
     "overformulaPrimaryBonus": null,
     "overformulaIntensityBonus": null,
     "formulaDefensePenalty": null,
-    "summonConstructDefId": null
+    "summonConstructDefId": null,
+    "timingMode": "immediate",
+    "echoAmount": null,
+    "delayBonus": null
   },
   {
     "recipeId": "v6-over-schicksalmanifestation-licht-sofortzuender",
@@ -14078,7 +22422,10 @@ export const V6_GENERATED_FORMULA_RECIPES: readonly V6GeneratedFormulaRecipe[] =
     "overformulaPrimaryBonus": null,
     "overformulaIntensityBonus": 1,
     "formulaDefensePenalty": -1,
-    "summonConstructDefId": null
+    "summonConstructDefId": null,
+    "timingMode": "immediate",
+    "echoAmount": null,
+    "delayBonus": null
   },
   {
     "recipeId": "v6-tek-schicksalmanifestation-licht-opfergabe",
@@ -14106,7 +22453,10 @@ export const V6_GENERATED_FORMULA_RECIPES: readonly V6GeneratedFormulaRecipe[] =
     "overformulaPrimaryBonus": null,
     "overformulaIntensityBonus": null,
     "formulaDefensePenalty": null,
-    "summonConstructDefId": null
+    "summonConstructDefId": null,
+    "timingMode": "immediate",
+    "echoAmount": null,
+    "delayBonus": null
   },
   {
     "recipeId": "v6-over-schicksalmanifestation-licht-opfergabe",
@@ -14134,7 +22484,72 @@ export const V6_GENERATED_FORMULA_RECIPES: readonly V6GeneratedFormulaRecipe[] =
     "overformulaPrimaryBonus": null,
     "overformulaIntensityBonus": 1,
     "formulaDefensePenalty": -1,
-    "summonConstructDefId": null
+    "summonConstructDefId": null,
+    "timingMode": "immediate",
+    "echoAmount": null,
+    "delayBonus": null
+  },
+  {
+    "recipeId": "v6-tek-schicksalmanifestation-schatten-echo",
+    "kind": "tek",
+    "catalogSlice": "slice1",
+    "techniqueId": "v6-technik-schicksalmanifestation",
+    "essenceId": "v6-essenz-schatten",
+    "catalystId": "v6-katalysator-echo",
+    "name": "Schattenschicksal · Echo",
+    "effectSummary": "Bereite Boost +2 vor. Bei Treffer: erschöpfe optional 1 gegnerische Formelkomponente. Echo: zu Beginn deines nächsten Zuges wiederhole 1 Punkt des Primärwerts. Katalysator bleibt bis zur Echo-Auflösung. TEK: +1 Fetzladung (max 1×/Zug).",
+    "primary": {
+      "kind": "prep_boost",
+      "value": 2,
+      "target": "self"
+    },
+    "rider": {
+      "id": "rider-fluch",
+      "summary": "Bei Treffer: erschöpfe optional 1 gegnerische Formelkomponente.",
+      "defenseSuppressible": true
+    },
+    "intensity": 1,
+    "transformId": "xform-echo",
+    "grantsFetz": true,
+    "catalystConsumed": false,
+    "overformulaPrimaryBonus": null,
+    "overformulaIntensityBonus": null,
+    "formulaDefensePenalty": null,
+    "summonConstructDefId": null,
+    "timingMode": "echo",
+    "echoAmount": 1,
+    "delayBonus": null
+  },
+  {
+    "recipeId": "v6-over-schicksalmanifestation-schatten-echo",
+    "kind": "overformula",
+    "catalogSlice": "slice1",
+    "techniqueId": "v6-technik-schicksalmanifestation",
+    "essenceId": "v6-essenz-schatten",
+    "catalystId": "v6-katalysator-echo",
+    "name": "Überformel Schattenschicksal · Echo",
+    "effectSummary": "Bereite Boost +2 vor. Bei Treffer: erschöpfe optional 1 gegnerische Formelkomponente. (verstärkt) Echo: zu Beginn deines nächsten Zuges wiederhole 1 Punkt des Primärwerts. Katalysator bleibt bis zur Echo-Auflösung. Überformel: Intensität +1 (fester Slice-1-Bonus). Überformel: Fetzladung wird verbraucht. Formelabwehr −1.",
+    "primary": {
+      "kind": "prep_boost",
+      "value": 2,
+      "target": "self"
+    },
+    "rider": {
+      "id": "rider-fluch",
+      "summary": "Bei Treffer: erschöpfe optional 1 gegnerische Formelkomponente. (verstärkt)",
+      "defenseSuppressible": true
+    },
+    "intensity": 2,
+    "transformId": "xform-echo",
+    "grantsFetz": false,
+    "catalystConsumed": false,
+    "overformulaPrimaryBonus": null,
+    "overformulaIntensityBonus": 1,
+    "formulaDefensePenalty": -1,
+    "summonConstructDefId": null,
+    "timingMode": "echo",
+    "echoAmount": 1,
+    "delayBonus": null
   },
   {
     "recipeId": "v6-tek-schicksalmanifestation-schatten-ueberladung",
@@ -14162,7 +22577,10 @@ export const V6_GENERATED_FORMULA_RECIPES: readonly V6GeneratedFormulaRecipe[] =
     "overformulaPrimaryBonus": null,
     "overformulaIntensityBonus": null,
     "formulaDefensePenalty": null,
-    "summonConstructDefId": null
+    "summonConstructDefId": null,
+    "timingMode": "immediate",
+    "echoAmount": null,
+    "delayBonus": null
   },
   {
     "recipeId": "v6-over-schicksalmanifestation-schatten-ueberladung",
@@ -14190,7 +22608,10 @@ export const V6_GENERATED_FORMULA_RECIPES: readonly V6GeneratedFormulaRecipe[] =
     "overformulaPrimaryBonus": null,
     "overformulaIntensityBonus": 1,
     "formulaDefensePenalty": -1,
-    "summonConstructDefId": null
+    "summonConstructDefId": null,
+    "timingMode": "immediate",
+    "echoAmount": null,
+    "delayBonus": null
   },
   {
     "recipeId": "v6-tek-schicksalmanifestation-schatten-verdichtung",
@@ -14218,7 +22639,10 @@ export const V6_GENERATED_FORMULA_RECIPES: readonly V6GeneratedFormulaRecipe[] =
     "overformulaPrimaryBonus": null,
     "overformulaIntensityBonus": null,
     "formulaDefensePenalty": null,
-    "summonConstructDefId": null
+    "summonConstructDefId": null,
+    "timingMode": "immediate",
+    "echoAmount": null,
+    "delayBonus": null
   },
   {
     "recipeId": "v6-over-schicksalmanifestation-schatten-verdichtung",
@@ -14246,7 +22670,72 @@ export const V6_GENERATED_FORMULA_RECIPES: readonly V6GeneratedFormulaRecipe[] =
     "overformulaPrimaryBonus": null,
     "overformulaIntensityBonus": 1,
     "formulaDefensePenalty": -1,
-    "summonConstructDefId": null
+    "summonConstructDefId": null,
+    "timingMode": "immediate",
+    "echoAmount": null,
+    "delayBonus": null
+  },
+  {
+    "recipeId": "v6-tek-schicksalmanifestation-schatten-verzoegerung",
+    "kind": "tek",
+    "catalogSlice": "slice1",
+    "techniqueId": "v6-technik-schicksalmanifestation",
+    "essenceId": "v6-essenz-schatten",
+    "catalystId": "v6-katalysator-verzoegerung",
+    "name": "Schattenschicksal · Verzögerung",
+    "effectSummary": "Bereite Boost +2 vor. Bei Treffer: erschöpfe optional 1 gegnerische Formelkomponente. Verzögerung: Primäreffekt geschieht nicht sofort, sondern zu Beginn deines nächsten Zuges und erhält +2. Katalysator bleibt bis zur Auflösung. TEK: +1 Fetzladung (max 1×/Zug).",
+    "primary": {
+      "kind": "prep_boost",
+      "value": 2,
+      "target": "self"
+    },
+    "rider": {
+      "id": "rider-fluch",
+      "summary": "Bei Treffer: erschöpfe optional 1 gegnerische Formelkomponente.",
+      "defenseSuppressible": true
+    },
+    "intensity": 1,
+    "transformId": "xform-verzoegerung",
+    "grantsFetz": true,
+    "catalystConsumed": false,
+    "overformulaPrimaryBonus": null,
+    "overformulaIntensityBonus": null,
+    "formulaDefensePenalty": null,
+    "summonConstructDefId": null,
+    "timingMode": "delay",
+    "echoAmount": null,
+    "delayBonus": 2
+  },
+  {
+    "recipeId": "v6-over-schicksalmanifestation-schatten-verzoegerung",
+    "kind": "overformula",
+    "catalogSlice": "slice1",
+    "techniqueId": "v6-technik-schicksalmanifestation",
+    "essenceId": "v6-essenz-schatten",
+    "catalystId": "v6-katalysator-verzoegerung",
+    "name": "Überformel Schattenschicksal · Verzögerung",
+    "effectSummary": "Bereite Boost +2 vor. Bei Treffer: erschöpfe optional 1 gegnerische Formelkomponente. (verstärkt) Verzögerung: Primäreffekt geschieht nicht sofort, sondern zu Beginn deines nächsten Zuges und erhält +2. Katalysator bleibt bis zur Auflösung. Überformel: Intensität +1 (fester Slice-1-Bonus). Überformel: Fetzladung wird verbraucht. Formelabwehr −1.",
+    "primary": {
+      "kind": "prep_boost",
+      "value": 2,
+      "target": "self"
+    },
+    "rider": {
+      "id": "rider-fluch",
+      "summary": "Bei Treffer: erschöpfe optional 1 gegnerische Formelkomponente. (verstärkt)",
+      "defenseSuppressible": true
+    },
+    "intensity": 2,
+    "transformId": "xform-verzoegerung",
+    "grantsFetz": false,
+    "catalystConsumed": false,
+    "overformulaPrimaryBonus": null,
+    "overformulaIntensityBonus": 1,
+    "formulaDefensePenalty": -1,
+    "summonConstructDefId": null,
+    "timingMode": "delay",
+    "echoAmount": null,
+    "delayBonus": 2
   },
   {
     "recipeId": "v6-tek-schicksalmanifestation-schatten-sofortzuender",
@@ -14274,7 +22763,10 @@ export const V6_GENERATED_FORMULA_RECIPES: readonly V6GeneratedFormulaRecipe[] =
     "overformulaPrimaryBonus": null,
     "overformulaIntensityBonus": null,
     "formulaDefensePenalty": null,
-    "summonConstructDefId": null
+    "summonConstructDefId": null,
+    "timingMode": "immediate",
+    "echoAmount": null,
+    "delayBonus": null
   },
   {
     "recipeId": "v6-over-schicksalmanifestation-schatten-sofortzuender",
@@ -14302,7 +22794,10 @@ export const V6_GENERATED_FORMULA_RECIPES: readonly V6GeneratedFormulaRecipe[] =
     "overformulaPrimaryBonus": null,
     "overformulaIntensityBonus": 1,
     "formulaDefensePenalty": -1,
-    "summonConstructDefId": null
+    "summonConstructDefId": null,
+    "timingMode": "immediate",
+    "echoAmount": null,
+    "delayBonus": null
   },
   {
     "recipeId": "v6-tek-schicksalmanifestation-schatten-opfergabe",
@@ -14330,7 +22825,10 @@ export const V6_GENERATED_FORMULA_RECIPES: readonly V6GeneratedFormulaRecipe[] =
     "overformulaPrimaryBonus": null,
     "overformulaIntensityBonus": null,
     "formulaDefensePenalty": null,
-    "summonConstructDefId": null
+    "summonConstructDefId": null,
+    "timingMode": "immediate",
+    "echoAmount": null,
+    "delayBonus": null
   },
   {
     "recipeId": "v6-over-schicksalmanifestation-schatten-opfergabe",
@@ -14358,7 +22856,74 @@ export const V6_GENERATED_FORMULA_RECIPES: readonly V6GeneratedFormulaRecipe[] =
     "overformulaPrimaryBonus": null,
     "overformulaIntensityBonus": 1,
     "formulaDefensePenalty": -1,
-    "summonConstructDefId": null
+    "summonConstructDefId": null,
+    "timingMode": "immediate",
+    "echoAmount": null,
+    "delayBonus": null
+  },
+  {
+    "recipeId": "v6-tek-magiepanzer-feuer-echo",
+    "kind": "tek",
+    "catalogSlice": "slice1",
+    "techniqueId": "v6-technik-magiepanzer",
+    "essenceId": "v6-essenz-feuer",
+    "catalystId": "v6-katalysator-echo",
+    "name": "Glutfessel · Echo",
+    "effectSummary": "Fessel Intensität 2 auf einen besetzten gegnerischen Formelplatz (manuelle Wahl). Bei Lebensschaden: Brennen, falls keine Reaktion. Echo: zu Beginn deines nächsten Zuges wiederhole 1 Punkt des Primärwerts. Katalysator bleibt bis zur Echo-Auflösung. TEK: +1 Fetzladung (max 1×/Zug).",
+    "primary": {
+      "kind": "fessel",
+      "value": 2,
+      "target": "opponent",
+      "offensive": true
+    },
+    "rider": {
+      "id": "rider-brennen",
+      "summary": "Bei Lebensschaden: Brennen, falls keine Reaktion.",
+      "defenseSuppressible": true
+    },
+    "intensity": 2,
+    "transformId": "xform-echo",
+    "grantsFetz": true,
+    "catalystConsumed": false,
+    "overformulaPrimaryBonus": null,
+    "overformulaIntensityBonus": null,
+    "formulaDefensePenalty": null,
+    "summonConstructDefId": null,
+    "timingMode": "echo",
+    "echoAmount": 1,
+    "delayBonus": null
+  },
+  {
+    "recipeId": "v6-over-magiepanzer-feuer-echo",
+    "kind": "overformula",
+    "catalogSlice": "slice1",
+    "techniqueId": "v6-technik-magiepanzer",
+    "essenceId": "v6-essenz-feuer",
+    "catalystId": "v6-katalysator-echo",
+    "name": "Überformel Glutfessel · Echo",
+    "effectSummary": "Fessel Intensität 3 auf einen besetzten gegnerischen Formelplatz (manuelle Wahl). Bei Lebensschaden: Brennen, falls keine Reaktion. (verstärkt) Echo: zu Beginn deines nächsten Zuges wiederhole 1 Punkt des Primärwerts. Katalysator bleibt bis zur Echo-Auflösung. Überformel: Intensität +1 (fester Slice-1-Bonus). Überformel: Fetzladung wird verbraucht. Formelabwehr −1.",
+    "primary": {
+      "kind": "fessel",
+      "value": 3,
+      "target": "opponent",
+      "offensive": true
+    },
+    "rider": {
+      "id": "rider-brennen",
+      "summary": "Bei Lebensschaden: Brennen, falls keine Reaktion. (verstärkt)",
+      "defenseSuppressible": true
+    },
+    "intensity": 3,
+    "transformId": "xform-echo",
+    "grantsFetz": false,
+    "catalystConsumed": false,
+    "overformulaPrimaryBonus": null,
+    "overformulaIntensityBonus": 1,
+    "formulaDefensePenalty": -1,
+    "summonConstructDefId": null,
+    "timingMode": "echo",
+    "echoAmount": 1,
+    "delayBonus": null
   },
   {
     "recipeId": "v6-tek-magiepanzer-feuer-ueberladung",
@@ -14387,7 +22952,10 @@ export const V6_GENERATED_FORMULA_RECIPES: readonly V6GeneratedFormulaRecipe[] =
     "overformulaPrimaryBonus": null,
     "overformulaIntensityBonus": null,
     "formulaDefensePenalty": null,
-    "summonConstructDefId": null
+    "summonConstructDefId": null,
+    "timingMode": "immediate",
+    "echoAmount": null,
+    "delayBonus": null
   },
   {
     "recipeId": "v6-over-magiepanzer-feuer-ueberladung",
@@ -14416,7 +22984,10 @@ export const V6_GENERATED_FORMULA_RECIPES: readonly V6GeneratedFormulaRecipe[] =
     "overformulaPrimaryBonus": null,
     "overformulaIntensityBonus": 1,
     "formulaDefensePenalty": -1,
-    "summonConstructDefId": null
+    "summonConstructDefId": null,
+    "timingMode": "immediate",
+    "echoAmount": null,
+    "delayBonus": null
   },
   {
     "recipeId": "v6-tek-magiepanzer-feuer-verdichtung",
@@ -14445,7 +23016,10 @@ export const V6_GENERATED_FORMULA_RECIPES: readonly V6GeneratedFormulaRecipe[] =
     "overformulaPrimaryBonus": null,
     "overformulaIntensityBonus": null,
     "formulaDefensePenalty": null,
-    "summonConstructDefId": null
+    "summonConstructDefId": null,
+    "timingMode": "immediate",
+    "echoAmount": null,
+    "delayBonus": null
   },
   {
     "recipeId": "v6-over-magiepanzer-feuer-verdichtung",
@@ -14474,7 +23048,74 @@ export const V6_GENERATED_FORMULA_RECIPES: readonly V6GeneratedFormulaRecipe[] =
     "overformulaPrimaryBonus": null,
     "overformulaIntensityBonus": 1,
     "formulaDefensePenalty": -1,
-    "summonConstructDefId": null
+    "summonConstructDefId": null,
+    "timingMode": "immediate",
+    "echoAmount": null,
+    "delayBonus": null
+  },
+  {
+    "recipeId": "v6-tek-magiepanzer-feuer-verzoegerung",
+    "kind": "tek",
+    "catalogSlice": "slice1",
+    "techniqueId": "v6-technik-magiepanzer",
+    "essenceId": "v6-essenz-feuer",
+    "catalystId": "v6-katalysator-verzoegerung",
+    "name": "Glutfessel · Verzögerung",
+    "effectSummary": "Fessel Intensität 2 auf einen besetzten gegnerischen Formelplatz (manuelle Wahl). Bei Lebensschaden: Brennen, falls keine Reaktion. Verzögerung: Primäreffekt geschieht nicht sofort, sondern zu Beginn deines nächsten Zuges und erhält +2. Katalysator bleibt bis zur Auflösung. TEK: +1 Fetzladung (max 1×/Zug).",
+    "primary": {
+      "kind": "fessel",
+      "value": 2,
+      "target": "opponent",
+      "offensive": true
+    },
+    "rider": {
+      "id": "rider-brennen",
+      "summary": "Bei Lebensschaden: Brennen, falls keine Reaktion.",
+      "defenseSuppressible": true
+    },
+    "intensity": 2,
+    "transformId": "xform-verzoegerung",
+    "grantsFetz": true,
+    "catalystConsumed": false,
+    "overformulaPrimaryBonus": null,
+    "overformulaIntensityBonus": null,
+    "formulaDefensePenalty": null,
+    "summonConstructDefId": null,
+    "timingMode": "delay",
+    "echoAmount": null,
+    "delayBonus": 2
+  },
+  {
+    "recipeId": "v6-over-magiepanzer-feuer-verzoegerung",
+    "kind": "overformula",
+    "catalogSlice": "slice1",
+    "techniqueId": "v6-technik-magiepanzer",
+    "essenceId": "v6-essenz-feuer",
+    "catalystId": "v6-katalysator-verzoegerung",
+    "name": "Überformel Glutfessel · Verzögerung",
+    "effectSummary": "Fessel Intensität 3 auf einen besetzten gegnerischen Formelplatz (manuelle Wahl). Bei Lebensschaden: Brennen, falls keine Reaktion. (verstärkt) Verzögerung: Primäreffekt geschieht nicht sofort, sondern zu Beginn deines nächsten Zuges und erhält +2. Katalysator bleibt bis zur Auflösung. Überformel: Intensität +1 (fester Slice-1-Bonus). Überformel: Fetzladung wird verbraucht. Formelabwehr −1.",
+    "primary": {
+      "kind": "fessel",
+      "value": 3,
+      "target": "opponent",
+      "offensive": true
+    },
+    "rider": {
+      "id": "rider-brennen",
+      "summary": "Bei Lebensschaden: Brennen, falls keine Reaktion. (verstärkt)",
+      "defenseSuppressible": true
+    },
+    "intensity": 3,
+    "transformId": "xform-verzoegerung",
+    "grantsFetz": false,
+    "catalystConsumed": false,
+    "overformulaPrimaryBonus": null,
+    "overformulaIntensityBonus": 1,
+    "formulaDefensePenalty": -1,
+    "summonConstructDefId": null,
+    "timingMode": "delay",
+    "echoAmount": null,
+    "delayBonus": 2
   },
   {
     "recipeId": "v6-tek-magiepanzer-feuer-sofortzuender",
@@ -14503,7 +23144,10 @@ export const V6_GENERATED_FORMULA_RECIPES: readonly V6GeneratedFormulaRecipe[] =
     "overformulaPrimaryBonus": null,
     "overformulaIntensityBonus": null,
     "formulaDefensePenalty": null,
-    "summonConstructDefId": null
+    "summonConstructDefId": null,
+    "timingMode": "immediate",
+    "echoAmount": null,
+    "delayBonus": null
   },
   {
     "recipeId": "v6-over-magiepanzer-feuer-sofortzuender",
@@ -14532,7 +23176,10 @@ export const V6_GENERATED_FORMULA_RECIPES: readonly V6GeneratedFormulaRecipe[] =
     "overformulaPrimaryBonus": null,
     "overformulaIntensityBonus": 1,
     "formulaDefensePenalty": -1,
-    "summonConstructDefId": null
+    "summonConstructDefId": null,
+    "timingMode": "immediate",
+    "echoAmount": null,
+    "delayBonus": null
   },
   {
     "recipeId": "v6-tek-magiepanzer-feuer-opfergabe",
@@ -14561,7 +23208,10 @@ export const V6_GENERATED_FORMULA_RECIPES: readonly V6GeneratedFormulaRecipe[] =
     "overformulaPrimaryBonus": null,
     "overformulaIntensityBonus": null,
     "formulaDefensePenalty": null,
-    "summonConstructDefId": null
+    "summonConstructDefId": null,
+    "timingMode": "immediate",
+    "echoAmount": null,
+    "delayBonus": null
   },
   {
     "recipeId": "v6-over-magiepanzer-feuer-opfergabe",
@@ -14590,7 +23240,72 @@ export const V6_GENERATED_FORMULA_RECIPES: readonly V6GeneratedFormulaRecipe[] =
     "overformulaPrimaryBonus": null,
     "overformulaIntensityBonus": 1,
     "formulaDefensePenalty": -1,
-    "summonConstructDefId": null
+    "summonConstructDefId": null,
+    "timingMode": "immediate",
+    "echoAmount": null,
+    "delayBonus": null
+  },
+  {
+    "recipeId": "v6-tek-magiepanzer-wasser-echo",
+    "kind": "tek",
+    "catalogSlice": "slice1",
+    "techniqueId": "v6-technik-magiepanzer",
+    "essenceId": "v6-essenz-wasser",
+    "catalystId": "v6-katalysator-echo",
+    "name": "Nasspanzer · Echo",
+    "effectSummary": "Heile 2 Leben. Bei Heilung oder Schildgewinn: entferne optional eine Marke von dir. Echo: zu Beginn deines nächsten Zuges wiederhole 1 Punkt des Primärwerts. Katalysator bleibt bis zur Echo-Auflösung. TEK: +1 Fetzladung (max 1×/Zug).",
+    "primary": {
+      "kind": "heal",
+      "value": 2,
+      "target": "self"
+    },
+    "rider": {
+      "id": "rider-reinigen",
+      "summary": "Bei Heilung oder Schildgewinn: entferne optional eine Marke von dir.",
+      "defenseSuppressible": false
+    },
+    "intensity": 1,
+    "transformId": "xform-echo",
+    "grantsFetz": true,
+    "catalystConsumed": false,
+    "overformulaPrimaryBonus": null,
+    "overformulaIntensityBonus": null,
+    "formulaDefensePenalty": null,
+    "summonConstructDefId": null,
+    "timingMode": "echo",
+    "echoAmount": 1,
+    "delayBonus": null
+  },
+  {
+    "recipeId": "v6-over-magiepanzer-wasser-echo",
+    "kind": "overformula",
+    "catalogSlice": "slice1",
+    "techniqueId": "v6-technik-magiepanzer",
+    "essenceId": "v6-essenz-wasser",
+    "catalystId": "v6-katalysator-echo",
+    "name": "Überformel Nasspanzer · Echo",
+    "effectSummary": "Heile 4 Leben. Bei Heilung oder Schildgewinn: entferne optional eine Marke von dir. (verstärkt) Echo: zu Beginn deines nächsten Zuges wiederhole 1 Punkt des Primärwerts. Katalysator bleibt bis zur Echo-Auflösung. Überformel: Primär +2 (fester Slice-1-Bonus). Überformel: Fetzladung wird verbraucht. Formelabwehr −1.",
+    "primary": {
+      "kind": "heal",
+      "value": 4,
+      "target": "self"
+    },
+    "rider": {
+      "id": "rider-reinigen",
+      "summary": "Bei Heilung oder Schildgewinn: entferne optional eine Marke von dir. (verstärkt)",
+      "defenseSuppressible": false
+    },
+    "intensity": 1,
+    "transformId": "xform-echo",
+    "grantsFetz": false,
+    "catalystConsumed": false,
+    "overformulaPrimaryBonus": 2,
+    "overformulaIntensityBonus": null,
+    "formulaDefensePenalty": -1,
+    "summonConstructDefId": null,
+    "timingMode": "echo",
+    "echoAmount": 1,
+    "delayBonus": null
   },
   {
     "recipeId": "v6-tek-magiepanzer-wasser-ueberladung",
@@ -14618,7 +23333,10 @@ export const V6_GENERATED_FORMULA_RECIPES: readonly V6GeneratedFormulaRecipe[] =
     "overformulaPrimaryBonus": null,
     "overformulaIntensityBonus": null,
     "formulaDefensePenalty": null,
-    "summonConstructDefId": null
+    "summonConstructDefId": null,
+    "timingMode": "immediate",
+    "echoAmount": null,
+    "delayBonus": null
   },
   {
     "recipeId": "v6-over-magiepanzer-wasser-ueberladung",
@@ -14646,7 +23364,10 @@ export const V6_GENERATED_FORMULA_RECIPES: readonly V6GeneratedFormulaRecipe[] =
     "overformulaPrimaryBonus": 2,
     "overformulaIntensityBonus": null,
     "formulaDefensePenalty": -1,
-    "summonConstructDefId": null
+    "summonConstructDefId": null,
+    "timingMode": "immediate",
+    "echoAmount": null,
+    "delayBonus": null
   },
   {
     "recipeId": "v6-tek-magiepanzer-wasser-verdichtung",
@@ -14674,7 +23395,10 @@ export const V6_GENERATED_FORMULA_RECIPES: readonly V6GeneratedFormulaRecipe[] =
     "overformulaPrimaryBonus": null,
     "overformulaIntensityBonus": null,
     "formulaDefensePenalty": null,
-    "summonConstructDefId": null
+    "summonConstructDefId": null,
+    "timingMode": "immediate",
+    "echoAmount": null,
+    "delayBonus": null
   },
   {
     "recipeId": "v6-over-magiepanzer-wasser-verdichtung",
@@ -14702,7 +23426,72 @@ export const V6_GENERATED_FORMULA_RECIPES: readonly V6GeneratedFormulaRecipe[] =
     "overformulaPrimaryBonus": 2,
     "overformulaIntensityBonus": null,
     "formulaDefensePenalty": -1,
-    "summonConstructDefId": null
+    "summonConstructDefId": null,
+    "timingMode": "immediate",
+    "echoAmount": null,
+    "delayBonus": null
+  },
+  {
+    "recipeId": "v6-tek-magiepanzer-wasser-verzoegerung",
+    "kind": "tek",
+    "catalogSlice": "slice1",
+    "techniqueId": "v6-technik-magiepanzer",
+    "essenceId": "v6-essenz-wasser",
+    "catalystId": "v6-katalysator-verzoegerung",
+    "name": "Nasspanzer · Verzögerung",
+    "effectSummary": "Heile 2 Leben. Bei Heilung oder Schildgewinn: entferne optional eine Marke von dir. Verzögerung: Primäreffekt geschieht nicht sofort, sondern zu Beginn deines nächsten Zuges und erhält +2. Katalysator bleibt bis zur Auflösung. TEK: +1 Fetzladung (max 1×/Zug).",
+    "primary": {
+      "kind": "heal",
+      "value": 2,
+      "target": "self"
+    },
+    "rider": {
+      "id": "rider-reinigen",
+      "summary": "Bei Heilung oder Schildgewinn: entferne optional eine Marke von dir.",
+      "defenseSuppressible": false
+    },
+    "intensity": 1,
+    "transformId": "xform-verzoegerung",
+    "grantsFetz": true,
+    "catalystConsumed": false,
+    "overformulaPrimaryBonus": null,
+    "overformulaIntensityBonus": null,
+    "formulaDefensePenalty": null,
+    "summonConstructDefId": null,
+    "timingMode": "delay",
+    "echoAmount": null,
+    "delayBonus": 2
+  },
+  {
+    "recipeId": "v6-over-magiepanzer-wasser-verzoegerung",
+    "kind": "overformula",
+    "catalogSlice": "slice1",
+    "techniqueId": "v6-technik-magiepanzer",
+    "essenceId": "v6-essenz-wasser",
+    "catalystId": "v6-katalysator-verzoegerung",
+    "name": "Überformel Nasspanzer · Verzögerung",
+    "effectSummary": "Heile 4 Leben. Bei Heilung oder Schildgewinn: entferne optional eine Marke von dir. (verstärkt) Verzögerung: Primäreffekt geschieht nicht sofort, sondern zu Beginn deines nächsten Zuges und erhält +2. Katalysator bleibt bis zur Auflösung. Überformel: Primär +2 (fester Slice-1-Bonus). Überformel: Fetzladung wird verbraucht. Formelabwehr −1.",
+    "primary": {
+      "kind": "heal",
+      "value": 4,
+      "target": "self"
+    },
+    "rider": {
+      "id": "rider-reinigen",
+      "summary": "Bei Heilung oder Schildgewinn: entferne optional eine Marke von dir. (verstärkt)",
+      "defenseSuppressible": false
+    },
+    "intensity": 1,
+    "transformId": "xform-verzoegerung",
+    "grantsFetz": false,
+    "catalystConsumed": false,
+    "overformulaPrimaryBonus": 2,
+    "overformulaIntensityBonus": null,
+    "formulaDefensePenalty": -1,
+    "summonConstructDefId": null,
+    "timingMode": "delay",
+    "echoAmount": null,
+    "delayBonus": 2
   },
   {
     "recipeId": "v6-tek-magiepanzer-wasser-sofortzuender",
@@ -14730,7 +23519,10 @@ export const V6_GENERATED_FORMULA_RECIPES: readonly V6GeneratedFormulaRecipe[] =
     "overformulaPrimaryBonus": null,
     "overformulaIntensityBonus": null,
     "formulaDefensePenalty": null,
-    "summonConstructDefId": null
+    "summonConstructDefId": null,
+    "timingMode": "immediate",
+    "echoAmount": null,
+    "delayBonus": null
   },
   {
     "recipeId": "v6-over-magiepanzer-wasser-sofortzuender",
@@ -14758,7 +23550,10 @@ export const V6_GENERATED_FORMULA_RECIPES: readonly V6GeneratedFormulaRecipe[] =
     "overformulaPrimaryBonus": 2,
     "overformulaIntensityBonus": null,
     "formulaDefensePenalty": -1,
-    "summonConstructDefId": null
+    "summonConstructDefId": null,
+    "timingMode": "immediate",
+    "echoAmount": null,
+    "delayBonus": null
   },
   {
     "recipeId": "v6-tek-magiepanzer-wasser-opfergabe",
@@ -14786,7 +23581,10 @@ export const V6_GENERATED_FORMULA_RECIPES: readonly V6GeneratedFormulaRecipe[] =
     "overformulaPrimaryBonus": null,
     "overformulaIntensityBonus": null,
     "formulaDefensePenalty": null,
-    "summonConstructDefId": null
+    "summonConstructDefId": null,
+    "timingMode": "immediate",
+    "echoAmount": null,
+    "delayBonus": null
   },
   {
     "recipeId": "v6-over-magiepanzer-wasser-opfergabe",
@@ -14814,7 +23612,72 @@ export const V6_GENERATED_FORMULA_RECIPES: readonly V6GeneratedFormulaRecipe[] =
     "overformulaPrimaryBonus": 2,
     "overformulaIntensityBonus": null,
     "formulaDefensePenalty": -1,
-    "summonConstructDefId": null
+    "summonConstructDefId": null,
+    "timingMode": "immediate",
+    "echoAmount": null,
+    "delayBonus": null
+  },
+  {
+    "recipeId": "v6-tek-magiepanzer-erde-echo",
+    "kind": "tek",
+    "catalogSlice": "slice1",
+    "techniqueId": "v6-technik-magiepanzer",
+    "essenceId": "v6-essenz-erde",
+    "catalystId": "v6-katalysator-echo",
+    "name": "Erdpanzer · Echo",
+    "effectSummary": "Gewinne 2 Schild. Verwendete Komponenten +1 Stabilität bis nächste Startphase. Echo: zu Beginn deines nächsten Zuges wiederhole 1 Punkt des Primärwerts. Katalysator bleibt bis zur Echo-Auflösung. TEK: +1 Fetzladung (max 1×/Zug).",
+    "primary": {
+      "kind": "shield",
+      "value": 2,
+      "target": "self"
+    },
+    "rider": {
+      "id": "rider-stabilitaet",
+      "summary": "Verwendete Komponenten +1 Stabilität bis nächste Startphase.",
+      "defenseSuppressible": false
+    },
+    "intensity": 1,
+    "transformId": "xform-echo",
+    "grantsFetz": true,
+    "catalystConsumed": false,
+    "overformulaPrimaryBonus": null,
+    "overformulaIntensityBonus": null,
+    "formulaDefensePenalty": null,
+    "summonConstructDefId": null,
+    "timingMode": "echo",
+    "echoAmount": 1,
+    "delayBonus": null
+  },
+  {
+    "recipeId": "v6-over-magiepanzer-erde-echo",
+    "kind": "overformula",
+    "catalogSlice": "slice1",
+    "techniqueId": "v6-technik-magiepanzer",
+    "essenceId": "v6-essenz-erde",
+    "catalystId": "v6-katalysator-echo",
+    "name": "Überformel Erdpanzer · Echo",
+    "effectSummary": "Gewinne 4 Schild. Verwendete Komponenten +1 Stabilität bis nächste Startphase. (verstärkt) Echo: zu Beginn deines nächsten Zuges wiederhole 1 Punkt des Primärwerts. Katalysator bleibt bis zur Echo-Auflösung. Überformel: Primär +2 (fester Slice-1-Bonus). Überformel: Fetzladung wird verbraucht. Formelabwehr −1.",
+    "primary": {
+      "kind": "shield",
+      "value": 4,
+      "target": "self"
+    },
+    "rider": {
+      "id": "rider-stabilitaet",
+      "summary": "Verwendete Komponenten +1 Stabilität bis nächste Startphase. (verstärkt)",
+      "defenseSuppressible": false
+    },
+    "intensity": 1,
+    "transformId": "xform-echo",
+    "grantsFetz": false,
+    "catalystConsumed": false,
+    "overformulaPrimaryBonus": 2,
+    "overformulaIntensityBonus": null,
+    "formulaDefensePenalty": -1,
+    "summonConstructDefId": null,
+    "timingMode": "echo",
+    "echoAmount": 1,
+    "delayBonus": null
   },
   {
     "recipeId": "v6-tek-magiepanzer-erde-ueberladung",
@@ -14842,7 +23705,10 @@ export const V6_GENERATED_FORMULA_RECIPES: readonly V6GeneratedFormulaRecipe[] =
     "overformulaPrimaryBonus": null,
     "overformulaIntensityBonus": null,
     "formulaDefensePenalty": null,
-    "summonConstructDefId": null
+    "summonConstructDefId": null,
+    "timingMode": "immediate",
+    "echoAmount": null,
+    "delayBonus": null
   },
   {
     "recipeId": "v6-over-magiepanzer-erde-ueberladung",
@@ -14870,7 +23736,10 @@ export const V6_GENERATED_FORMULA_RECIPES: readonly V6GeneratedFormulaRecipe[] =
     "overformulaPrimaryBonus": 2,
     "overformulaIntensityBonus": null,
     "formulaDefensePenalty": -1,
-    "summonConstructDefId": null
+    "summonConstructDefId": null,
+    "timingMode": "immediate",
+    "echoAmount": null,
+    "delayBonus": null
   },
   {
     "recipeId": "v6-tek-magiepanzer-erde-verdichtung",
@@ -14898,7 +23767,10 @@ export const V6_GENERATED_FORMULA_RECIPES: readonly V6GeneratedFormulaRecipe[] =
     "overformulaPrimaryBonus": null,
     "overformulaIntensityBonus": null,
     "formulaDefensePenalty": null,
-    "summonConstructDefId": null
+    "summonConstructDefId": null,
+    "timingMode": "immediate",
+    "echoAmount": null,
+    "delayBonus": null
   },
   {
     "recipeId": "v6-over-magiepanzer-erde-verdichtung",
@@ -14926,7 +23798,72 @@ export const V6_GENERATED_FORMULA_RECIPES: readonly V6GeneratedFormulaRecipe[] =
     "overformulaPrimaryBonus": 2,
     "overformulaIntensityBonus": null,
     "formulaDefensePenalty": -1,
-    "summonConstructDefId": null
+    "summonConstructDefId": null,
+    "timingMode": "immediate",
+    "echoAmount": null,
+    "delayBonus": null
+  },
+  {
+    "recipeId": "v6-tek-magiepanzer-erde-verzoegerung",
+    "kind": "tek",
+    "catalogSlice": "slice1",
+    "techniqueId": "v6-technik-magiepanzer",
+    "essenceId": "v6-essenz-erde",
+    "catalystId": "v6-katalysator-verzoegerung",
+    "name": "Erdpanzer · Verzögerung",
+    "effectSummary": "Gewinne 2 Schild. Verwendete Komponenten +1 Stabilität bis nächste Startphase. Verzögerung: Primäreffekt geschieht nicht sofort, sondern zu Beginn deines nächsten Zuges und erhält +2. Katalysator bleibt bis zur Auflösung. TEK: +1 Fetzladung (max 1×/Zug).",
+    "primary": {
+      "kind": "shield",
+      "value": 2,
+      "target": "self"
+    },
+    "rider": {
+      "id": "rider-stabilitaet",
+      "summary": "Verwendete Komponenten +1 Stabilität bis nächste Startphase.",
+      "defenseSuppressible": false
+    },
+    "intensity": 1,
+    "transformId": "xform-verzoegerung",
+    "grantsFetz": true,
+    "catalystConsumed": false,
+    "overformulaPrimaryBonus": null,
+    "overformulaIntensityBonus": null,
+    "formulaDefensePenalty": null,
+    "summonConstructDefId": null,
+    "timingMode": "delay",
+    "echoAmount": null,
+    "delayBonus": 2
+  },
+  {
+    "recipeId": "v6-over-magiepanzer-erde-verzoegerung",
+    "kind": "overformula",
+    "catalogSlice": "slice1",
+    "techniqueId": "v6-technik-magiepanzer",
+    "essenceId": "v6-essenz-erde",
+    "catalystId": "v6-katalysator-verzoegerung",
+    "name": "Überformel Erdpanzer · Verzögerung",
+    "effectSummary": "Gewinne 4 Schild. Verwendete Komponenten +1 Stabilität bis nächste Startphase. (verstärkt) Verzögerung: Primäreffekt geschieht nicht sofort, sondern zu Beginn deines nächsten Zuges und erhält +2. Katalysator bleibt bis zur Auflösung. Überformel: Primär +2 (fester Slice-1-Bonus). Überformel: Fetzladung wird verbraucht. Formelabwehr −1.",
+    "primary": {
+      "kind": "shield",
+      "value": 4,
+      "target": "self"
+    },
+    "rider": {
+      "id": "rider-stabilitaet",
+      "summary": "Verwendete Komponenten +1 Stabilität bis nächste Startphase. (verstärkt)",
+      "defenseSuppressible": false
+    },
+    "intensity": 1,
+    "transformId": "xform-verzoegerung",
+    "grantsFetz": false,
+    "catalystConsumed": false,
+    "overformulaPrimaryBonus": 2,
+    "overformulaIntensityBonus": null,
+    "formulaDefensePenalty": -1,
+    "summonConstructDefId": null,
+    "timingMode": "delay",
+    "echoAmount": null,
+    "delayBonus": 2
   },
   {
     "recipeId": "v6-tek-magiepanzer-erde-sofortzuender",
@@ -14954,7 +23891,10 @@ export const V6_GENERATED_FORMULA_RECIPES: readonly V6GeneratedFormulaRecipe[] =
     "overformulaPrimaryBonus": null,
     "overformulaIntensityBonus": null,
     "formulaDefensePenalty": null,
-    "summonConstructDefId": null
+    "summonConstructDefId": null,
+    "timingMode": "immediate",
+    "echoAmount": null,
+    "delayBonus": null
   },
   {
     "recipeId": "v6-over-magiepanzer-erde-sofortzuender",
@@ -14982,7 +23922,10 @@ export const V6_GENERATED_FORMULA_RECIPES: readonly V6GeneratedFormulaRecipe[] =
     "overformulaPrimaryBonus": 2,
     "overformulaIntensityBonus": null,
     "formulaDefensePenalty": -1,
-    "summonConstructDefId": null
+    "summonConstructDefId": null,
+    "timingMode": "immediate",
+    "echoAmount": null,
+    "delayBonus": null
   },
   {
     "recipeId": "v6-tek-magiepanzer-erde-opfergabe",
@@ -15010,7 +23953,10 @@ export const V6_GENERATED_FORMULA_RECIPES: readonly V6GeneratedFormulaRecipe[] =
     "overformulaPrimaryBonus": null,
     "overformulaIntensityBonus": null,
     "formulaDefensePenalty": null,
-    "summonConstructDefId": null
+    "summonConstructDefId": null,
+    "timingMode": "immediate",
+    "echoAmount": null,
+    "delayBonus": null
   },
   {
     "recipeId": "v6-over-magiepanzer-erde-opfergabe",
@@ -15038,7 +23984,72 @@ export const V6_GENERATED_FORMULA_RECIPES: readonly V6GeneratedFormulaRecipe[] =
     "overformulaPrimaryBonus": 2,
     "overformulaIntensityBonus": null,
     "formulaDefensePenalty": -1,
-    "summonConstructDefId": null
+    "summonConstructDefId": null,
+    "timingMode": "immediate",
+    "echoAmount": null,
+    "delayBonus": null
+  },
+  {
+    "recipeId": "v6-tek-magiepanzer-luft-echo",
+    "kind": "tek",
+    "catalogSlice": "slice1",
+    "techniqueId": "v6-technik-magiepanzer",
+    "essenceId": "v6-essenz-luft",
+    "catalystId": "v6-katalysator-echo",
+    "name": "Windpanzer · Echo",
+    "effectSummary": "Gewinne 2 Schild. Nächster eigener Aktions-W6 +1 (max +2). Echo: zu Beginn deines nächsten Zuges wiederhole 1 Punkt des Primärwerts. Katalysator bleibt bis zur Echo-Auflösung. TEK: +1 Fetzladung (max 1×/Zug).",
+    "primary": {
+      "kind": "shield",
+      "value": 2,
+      "target": "self"
+    },
+    "rider": {
+      "id": "rider-w6",
+      "summary": "Nächster eigener Aktions-W6 +1 (max +2).",
+      "defenseSuppressible": true
+    },
+    "intensity": 1,
+    "transformId": "xform-echo",
+    "grantsFetz": true,
+    "catalystConsumed": false,
+    "overformulaPrimaryBonus": null,
+    "overformulaIntensityBonus": null,
+    "formulaDefensePenalty": null,
+    "summonConstructDefId": null,
+    "timingMode": "echo",
+    "echoAmount": 1,
+    "delayBonus": null
+  },
+  {
+    "recipeId": "v6-over-magiepanzer-luft-echo",
+    "kind": "overformula",
+    "catalogSlice": "slice1",
+    "techniqueId": "v6-technik-magiepanzer",
+    "essenceId": "v6-essenz-luft",
+    "catalystId": "v6-katalysator-echo",
+    "name": "Überformel Windpanzer · Echo",
+    "effectSummary": "Gewinne 4 Schild. Nächster eigener Aktions-W6 +1 (max +2). (verstärkt) Echo: zu Beginn deines nächsten Zuges wiederhole 1 Punkt des Primärwerts. Katalysator bleibt bis zur Echo-Auflösung. Überformel: Primär +2 (fester Slice-1-Bonus). Überformel: Fetzladung wird verbraucht. Formelabwehr −1.",
+    "primary": {
+      "kind": "shield",
+      "value": 4,
+      "target": "self"
+    },
+    "rider": {
+      "id": "rider-w6",
+      "summary": "Nächster eigener Aktions-W6 +1 (max +2). (verstärkt)",
+      "defenseSuppressible": true
+    },
+    "intensity": 1,
+    "transformId": "xform-echo",
+    "grantsFetz": false,
+    "catalystConsumed": false,
+    "overformulaPrimaryBonus": 2,
+    "overformulaIntensityBonus": null,
+    "formulaDefensePenalty": -1,
+    "summonConstructDefId": null,
+    "timingMode": "echo",
+    "echoAmount": 1,
+    "delayBonus": null
   },
   {
     "recipeId": "v6-tek-magiepanzer-luft-ueberladung",
@@ -15066,7 +24077,10 @@ export const V6_GENERATED_FORMULA_RECIPES: readonly V6GeneratedFormulaRecipe[] =
     "overformulaPrimaryBonus": null,
     "overformulaIntensityBonus": null,
     "formulaDefensePenalty": null,
-    "summonConstructDefId": null
+    "summonConstructDefId": null,
+    "timingMode": "immediate",
+    "echoAmount": null,
+    "delayBonus": null
   },
   {
     "recipeId": "v6-over-magiepanzer-luft-ueberladung",
@@ -15094,7 +24108,10 @@ export const V6_GENERATED_FORMULA_RECIPES: readonly V6GeneratedFormulaRecipe[] =
     "overformulaPrimaryBonus": 2,
     "overformulaIntensityBonus": null,
     "formulaDefensePenalty": -1,
-    "summonConstructDefId": null
+    "summonConstructDefId": null,
+    "timingMode": "immediate",
+    "echoAmount": null,
+    "delayBonus": null
   },
   {
     "recipeId": "v6-tek-magiepanzer-luft-verdichtung",
@@ -15122,7 +24139,10 @@ export const V6_GENERATED_FORMULA_RECIPES: readonly V6GeneratedFormulaRecipe[] =
     "overformulaPrimaryBonus": null,
     "overformulaIntensityBonus": null,
     "formulaDefensePenalty": null,
-    "summonConstructDefId": null
+    "summonConstructDefId": null,
+    "timingMode": "immediate",
+    "echoAmount": null,
+    "delayBonus": null
   },
   {
     "recipeId": "v6-over-magiepanzer-luft-verdichtung",
@@ -15150,7 +24170,72 @@ export const V6_GENERATED_FORMULA_RECIPES: readonly V6GeneratedFormulaRecipe[] =
     "overformulaPrimaryBonus": 2,
     "overformulaIntensityBonus": null,
     "formulaDefensePenalty": -1,
-    "summonConstructDefId": null
+    "summonConstructDefId": null,
+    "timingMode": "immediate",
+    "echoAmount": null,
+    "delayBonus": null
+  },
+  {
+    "recipeId": "v6-tek-magiepanzer-luft-verzoegerung",
+    "kind": "tek",
+    "catalogSlice": "slice1",
+    "techniqueId": "v6-technik-magiepanzer",
+    "essenceId": "v6-essenz-luft",
+    "catalystId": "v6-katalysator-verzoegerung",
+    "name": "Windpanzer · Verzögerung",
+    "effectSummary": "Gewinne 2 Schild. Nächster eigener Aktions-W6 +1 (max +2). Verzögerung: Primäreffekt geschieht nicht sofort, sondern zu Beginn deines nächsten Zuges und erhält +2. Katalysator bleibt bis zur Auflösung. TEK: +1 Fetzladung (max 1×/Zug).",
+    "primary": {
+      "kind": "shield",
+      "value": 2,
+      "target": "self"
+    },
+    "rider": {
+      "id": "rider-w6",
+      "summary": "Nächster eigener Aktions-W6 +1 (max +2).",
+      "defenseSuppressible": true
+    },
+    "intensity": 1,
+    "transformId": "xform-verzoegerung",
+    "grantsFetz": true,
+    "catalystConsumed": false,
+    "overformulaPrimaryBonus": null,
+    "overformulaIntensityBonus": null,
+    "formulaDefensePenalty": null,
+    "summonConstructDefId": null,
+    "timingMode": "delay",
+    "echoAmount": null,
+    "delayBonus": 2
+  },
+  {
+    "recipeId": "v6-over-magiepanzer-luft-verzoegerung",
+    "kind": "overformula",
+    "catalogSlice": "slice1",
+    "techniqueId": "v6-technik-magiepanzer",
+    "essenceId": "v6-essenz-luft",
+    "catalystId": "v6-katalysator-verzoegerung",
+    "name": "Überformel Windpanzer · Verzögerung",
+    "effectSummary": "Gewinne 4 Schild. Nächster eigener Aktions-W6 +1 (max +2). (verstärkt) Verzögerung: Primäreffekt geschieht nicht sofort, sondern zu Beginn deines nächsten Zuges und erhält +2. Katalysator bleibt bis zur Auflösung. Überformel: Primär +2 (fester Slice-1-Bonus). Überformel: Fetzladung wird verbraucht. Formelabwehr −1.",
+    "primary": {
+      "kind": "shield",
+      "value": 4,
+      "target": "self"
+    },
+    "rider": {
+      "id": "rider-w6",
+      "summary": "Nächster eigener Aktions-W6 +1 (max +2). (verstärkt)",
+      "defenseSuppressible": true
+    },
+    "intensity": 1,
+    "transformId": "xform-verzoegerung",
+    "grantsFetz": false,
+    "catalystConsumed": false,
+    "overformulaPrimaryBonus": 2,
+    "overformulaIntensityBonus": null,
+    "formulaDefensePenalty": -1,
+    "summonConstructDefId": null,
+    "timingMode": "delay",
+    "echoAmount": null,
+    "delayBonus": 2
   },
   {
     "recipeId": "v6-tek-magiepanzer-luft-sofortzuender",
@@ -15178,7 +24263,10 @@ export const V6_GENERATED_FORMULA_RECIPES: readonly V6GeneratedFormulaRecipe[] =
     "overformulaPrimaryBonus": null,
     "overformulaIntensityBonus": null,
     "formulaDefensePenalty": null,
-    "summonConstructDefId": null
+    "summonConstructDefId": null,
+    "timingMode": "immediate",
+    "echoAmount": null,
+    "delayBonus": null
   },
   {
     "recipeId": "v6-over-magiepanzer-luft-sofortzuender",
@@ -15206,7 +24294,10 @@ export const V6_GENERATED_FORMULA_RECIPES: readonly V6GeneratedFormulaRecipe[] =
     "overformulaPrimaryBonus": 2,
     "overformulaIntensityBonus": null,
     "formulaDefensePenalty": -1,
-    "summonConstructDefId": null
+    "summonConstructDefId": null,
+    "timingMode": "immediate",
+    "echoAmount": null,
+    "delayBonus": null
   },
   {
     "recipeId": "v6-tek-magiepanzer-luft-opfergabe",
@@ -15234,7 +24325,10 @@ export const V6_GENERATED_FORMULA_RECIPES: readonly V6GeneratedFormulaRecipe[] =
     "overformulaPrimaryBonus": null,
     "overformulaIntensityBonus": null,
     "formulaDefensePenalty": null,
-    "summonConstructDefId": null
+    "summonConstructDefId": null,
+    "timingMode": "immediate",
+    "echoAmount": null,
+    "delayBonus": null
   },
   {
     "recipeId": "v6-over-magiepanzer-luft-opfergabe",
@@ -15262,7 +24356,72 @@ export const V6_GENERATED_FORMULA_RECIPES: readonly V6GeneratedFormulaRecipe[] =
     "overformulaPrimaryBonus": 2,
     "overformulaIntensityBonus": null,
     "formulaDefensePenalty": -1,
-    "summonConstructDefId": null
+    "summonConstructDefId": null,
+    "timingMode": "immediate",
+    "echoAmount": null,
+    "delayBonus": null
+  },
+  {
+    "recipeId": "v6-tek-magiepanzer-licht-echo",
+    "kind": "tek",
+    "catalogSlice": "slice1",
+    "techniqueId": "v6-technik-magiepanzer",
+    "essenceId": "v6-essenz-licht",
+    "catalystId": "v6-katalysator-echo",
+    "name": "Lichtpanzer · Echo",
+    "effectSummary": "Gewinne 2 Schild. Bei Schildgewinn: entferne optional eine Marke von dir. Echo: zu Beginn deines nächsten Zuges wiederhole 1 Punkt des Primärwerts. Katalysator bleibt bis zur Echo-Auflösung. TEK: +1 Fetzladung (max 1×/Zug).",
+    "primary": {
+      "kind": "shield",
+      "value": 2,
+      "target": "self"
+    },
+    "rider": {
+      "id": "rider-reinigen-licht",
+      "summary": "Bei Schildgewinn: entferne optional eine Marke von dir.",
+      "defenseSuppressible": false
+    },
+    "intensity": 1,
+    "transformId": "xform-echo",
+    "grantsFetz": true,
+    "catalystConsumed": false,
+    "overformulaPrimaryBonus": null,
+    "overformulaIntensityBonus": null,
+    "formulaDefensePenalty": null,
+    "summonConstructDefId": null,
+    "timingMode": "echo",
+    "echoAmount": 1,
+    "delayBonus": null
+  },
+  {
+    "recipeId": "v6-over-magiepanzer-licht-echo",
+    "kind": "overformula",
+    "catalogSlice": "slice1",
+    "techniqueId": "v6-technik-magiepanzer",
+    "essenceId": "v6-essenz-licht",
+    "catalystId": "v6-katalysator-echo",
+    "name": "Überformel Lichtpanzer · Echo",
+    "effectSummary": "Gewinne 4 Schild. Bei Schildgewinn: entferne optional eine Marke von dir. (verstärkt) Echo: zu Beginn deines nächsten Zuges wiederhole 1 Punkt des Primärwerts. Katalysator bleibt bis zur Echo-Auflösung. Überformel: Primär +2 (fester Slice-1-Bonus). Überformel: Fetzladung wird verbraucht. Formelabwehr −1.",
+    "primary": {
+      "kind": "shield",
+      "value": 4,
+      "target": "self"
+    },
+    "rider": {
+      "id": "rider-reinigen-licht",
+      "summary": "Bei Schildgewinn: entferne optional eine Marke von dir. (verstärkt)",
+      "defenseSuppressible": false
+    },
+    "intensity": 1,
+    "transformId": "xform-echo",
+    "grantsFetz": false,
+    "catalystConsumed": false,
+    "overformulaPrimaryBonus": 2,
+    "overformulaIntensityBonus": null,
+    "formulaDefensePenalty": -1,
+    "summonConstructDefId": null,
+    "timingMode": "echo",
+    "echoAmount": 1,
+    "delayBonus": null
   },
   {
     "recipeId": "v6-tek-magiepanzer-licht-ueberladung",
@@ -15290,7 +24449,10 @@ export const V6_GENERATED_FORMULA_RECIPES: readonly V6GeneratedFormulaRecipe[] =
     "overformulaPrimaryBonus": null,
     "overformulaIntensityBonus": null,
     "formulaDefensePenalty": null,
-    "summonConstructDefId": null
+    "summonConstructDefId": null,
+    "timingMode": "immediate",
+    "echoAmount": null,
+    "delayBonus": null
   },
   {
     "recipeId": "v6-over-magiepanzer-licht-ueberladung",
@@ -15318,7 +24480,10 @@ export const V6_GENERATED_FORMULA_RECIPES: readonly V6GeneratedFormulaRecipe[] =
     "overformulaPrimaryBonus": 2,
     "overformulaIntensityBonus": null,
     "formulaDefensePenalty": -1,
-    "summonConstructDefId": null
+    "summonConstructDefId": null,
+    "timingMode": "immediate",
+    "echoAmount": null,
+    "delayBonus": null
   },
   {
     "recipeId": "v6-tek-magiepanzer-licht-verdichtung",
@@ -15346,7 +24511,10 @@ export const V6_GENERATED_FORMULA_RECIPES: readonly V6GeneratedFormulaRecipe[] =
     "overformulaPrimaryBonus": null,
     "overformulaIntensityBonus": null,
     "formulaDefensePenalty": null,
-    "summonConstructDefId": null
+    "summonConstructDefId": null,
+    "timingMode": "immediate",
+    "echoAmount": null,
+    "delayBonus": null
   },
   {
     "recipeId": "v6-over-magiepanzer-licht-verdichtung",
@@ -15374,7 +24542,72 @@ export const V6_GENERATED_FORMULA_RECIPES: readonly V6GeneratedFormulaRecipe[] =
     "overformulaPrimaryBonus": 2,
     "overformulaIntensityBonus": null,
     "formulaDefensePenalty": -1,
-    "summonConstructDefId": null
+    "summonConstructDefId": null,
+    "timingMode": "immediate",
+    "echoAmount": null,
+    "delayBonus": null
+  },
+  {
+    "recipeId": "v6-tek-magiepanzer-licht-verzoegerung",
+    "kind": "tek",
+    "catalogSlice": "slice1",
+    "techniqueId": "v6-technik-magiepanzer",
+    "essenceId": "v6-essenz-licht",
+    "catalystId": "v6-katalysator-verzoegerung",
+    "name": "Lichtpanzer · Verzögerung",
+    "effectSummary": "Gewinne 2 Schild. Bei Schildgewinn: entferne optional eine Marke von dir. Verzögerung: Primäreffekt geschieht nicht sofort, sondern zu Beginn deines nächsten Zuges und erhält +2. Katalysator bleibt bis zur Auflösung. TEK: +1 Fetzladung (max 1×/Zug).",
+    "primary": {
+      "kind": "shield",
+      "value": 2,
+      "target": "self"
+    },
+    "rider": {
+      "id": "rider-reinigen-licht",
+      "summary": "Bei Schildgewinn: entferne optional eine Marke von dir.",
+      "defenseSuppressible": false
+    },
+    "intensity": 1,
+    "transformId": "xform-verzoegerung",
+    "grantsFetz": true,
+    "catalystConsumed": false,
+    "overformulaPrimaryBonus": null,
+    "overformulaIntensityBonus": null,
+    "formulaDefensePenalty": null,
+    "summonConstructDefId": null,
+    "timingMode": "delay",
+    "echoAmount": null,
+    "delayBonus": 2
+  },
+  {
+    "recipeId": "v6-over-magiepanzer-licht-verzoegerung",
+    "kind": "overformula",
+    "catalogSlice": "slice1",
+    "techniqueId": "v6-technik-magiepanzer",
+    "essenceId": "v6-essenz-licht",
+    "catalystId": "v6-katalysator-verzoegerung",
+    "name": "Überformel Lichtpanzer · Verzögerung",
+    "effectSummary": "Gewinne 4 Schild. Bei Schildgewinn: entferne optional eine Marke von dir. (verstärkt) Verzögerung: Primäreffekt geschieht nicht sofort, sondern zu Beginn deines nächsten Zuges und erhält +2. Katalysator bleibt bis zur Auflösung. Überformel: Primär +2 (fester Slice-1-Bonus). Überformel: Fetzladung wird verbraucht. Formelabwehr −1.",
+    "primary": {
+      "kind": "shield",
+      "value": 4,
+      "target": "self"
+    },
+    "rider": {
+      "id": "rider-reinigen-licht",
+      "summary": "Bei Schildgewinn: entferne optional eine Marke von dir. (verstärkt)",
+      "defenseSuppressible": false
+    },
+    "intensity": 1,
+    "transformId": "xform-verzoegerung",
+    "grantsFetz": false,
+    "catalystConsumed": false,
+    "overformulaPrimaryBonus": 2,
+    "overformulaIntensityBonus": null,
+    "formulaDefensePenalty": -1,
+    "summonConstructDefId": null,
+    "timingMode": "delay",
+    "echoAmount": null,
+    "delayBonus": 2
   },
   {
     "recipeId": "v6-tek-magiepanzer-licht-sofortzuender",
@@ -15402,7 +24635,10 @@ export const V6_GENERATED_FORMULA_RECIPES: readonly V6GeneratedFormulaRecipe[] =
     "overformulaPrimaryBonus": null,
     "overformulaIntensityBonus": null,
     "formulaDefensePenalty": null,
-    "summonConstructDefId": null
+    "summonConstructDefId": null,
+    "timingMode": "immediate",
+    "echoAmount": null,
+    "delayBonus": null
   },
   {
     "recipeId": "v6-over-magiepanzer-licht-sofortzuender",
@@ -15430,7 +24666,10 @@ export const V6_GENERATED_FORMULA_RECIPES: readonly V6GeneratedFormulaRecipe[] =
     "overformulaPrimaryBonus": 2,
     "overformulaIntensityBonus": null,
     "formulaDefensePenalty": -1,
-    "summonConstructDefId": null
+    "summonConstructDefId": null,
+    "timingMode": "immediate",
+    "echoAmount": null,
+    "delayBonus": null
   },
   {
     "recipeId": "v6-tek-magiepanzer-licht-opfergabe",
@@ -15458,7 +24697,10 @@ export const V6_GENERATED_FORMULA_RECIPES: readonly V6GeneratedFormulaRecipe[] =
     "overformulaPrimaryBonus": null,
     "overformulaIntensityBonus": null,
     "formulaDefensePenalty": null,
-    "summonConstructDefId": null
+    "summonConstructDefId": null,
+    "timingMode": "immediate",
+    "echoAmount": null,
+    "delayBonus": null
   },
   {
     "recipeId": "v6-over-magiepanzer-licht-opfergabe",
@@ -15486,7 +24728,74 @@ export const V6_GENERATED_FORMULA_RECIPES: readonly V6GeneratedFormulaRecipe[] =
     "overformulaPrimaryBonus": 2,
     "overformulaIntensityBonus": null,
     "formulaDefensePenalty": -1,
-    "summonConstructDefId": null
+    "summonConstructDefId": null,
+    "timingMode": "immediate",
+    "echoAmount": null,
+    "delayBonus": null
+  },
+  {
+    "recipeId": "v6-tek-magiepanzer-schatten-echo",
+    "kind": "tek",
+    "catalogSlice": "slice1",
+    "techniqueId": "v6-technik-magiepanzer",
+    "essenceId": "v6-essenz-schatten",
+    "catalystId": "v6-katalysator-echo",
+    "name": "Schattenfessel · Echo",
+    "effectSummary": "Fessel Intensität 2 auf einen besetzten gegnerischen Formelplatz (manuelle Wahl). Bei Treffer: erschöpfe optional 1 gegnerische Formelkomponente. Echo: zu Beginn deines nächsten Zuges wiederhole 1 Punkt des Primärwerts. Katalysator bleibt bis zur Echo-Auflösung. TEK: +1 Fetzladung (max 1×/Zug).",
+    "primary": {
+      "kind": "fessel",
+      "value": 2,
+      "target": "opponent",
+      "offensive": true
+    },
+    "rider": {
+      "id": "rider-fluch",
+      "summary": "Bei Treffer: erschöpfe optional 1 gegnerische Formelkomponente.",
+      "defenseSuppressible": true
+    },
+    "intensity": 2,
+    "transformId": "xform-echo",
+    "grantsFetz": true,
+    "catalystConsumed": false,
+    "overformulaPrimaryBonus": null,
+    "overformulaIntensityBonus": null,
+    "formulaDefensePenalty": null,
+    "summonConstructDefId": null,
+    "timingMode": "echo",
+    "echoAmount": 1,
+    "delayBonus": null
+  },
+  {
+    "recipeId": "v6-over-magiepanzer-schatten-echo",
+    "kind": "overformula",
+    "catalogSlice": "slice1",
+    "techniqueId": "v6-technik-magiepanzer",
+    "essenceId": "v6-essenz-schatten",
+    "catalystId": "v6-katalysator-echo",
+    "name": "Überformel Schattenfessel · Echo",
+    "effectSummary": "Fessel Intensität 3 auf einen besetzten gegnerischen Formelplatz (manuelle Wahl). Bei Treffer: erschöpfe optional 1 gegnerische Formelkomponente. (verstärkt) Echo: zu Beginn deines nächsten Zuges wiederhole 1 Punkt des Primärwerts. Katalysator bleibt bis zur Echo-Auflösung. Überformel: Intensität +1 (fester Slice-1-Bonus). Überformel: Fetzladung wird verbraucht. Formelabwehr −1.",
+    "primary": {
+      "kind": "fessel",
+      "value": 3,
+      "target": "opponent",
+      "offensive": true
+    },
+    "rider": {
+      "id": "rider-fluch",
+      "summary": "Bei Treffer: erschöpfe optional 1 gegnerische Formelkomponente. (verstärkt)",
+      "defenseSuppressible": true
+    },
+    "intensity": 3,
+    "transformId": "xform-echo",
+    "grantsFetz": false,
+    "catalystConsumed": false,
+    "overformulaPrimaryBonus": null,
+    "overformulaIntensityBonus": 1,
+    "formulaDefensePenalty": -1,
+    "summonConstructDefId": null,
+    "timingMode": "echo",
+    "echoAmount": 1,
+    "delayBonus": null
   },
   {
     "recipeId": "v6-tek-magiepanzer-schatten-ueberladung",
@@ -15515,7 +24824,10 @@ export const V6_GENERATED_FORMULA_RECIPES: readonly V6GeneratedFormulaRecipe[] =
     "overformulaPrimaryBonus": null,
     "overformulaIntensityBonus": null,
     "formulaDefensePenalty": null,
-    "summonConstructDefId": null
+    "summonConstructDefId": null,
+    "timingMode": "immediate",
+    "echoAmount": null,
+    "delayBonus": null
   },
   {
     "recipeId": "v6-over-magiepanzer-schatten-ueberladung",
@@ -15544,7 +24856,10 @@ export const V6_GENERATED_FORMULA_RECIPES: readonly V6GeneratedFormulaRecipe[] =
     "overformulaPrimaryBonus": null,
     "overformulaIntensityBonus": 1,
     "formulaDefensePenalty": -1,
-    "summonConstructDefId": null
+    "summonConstructDefId": null,
+    "timingMode": "immediate",
+    "echoAmount": null,
+    "delayBonus": null
   },
   {
     "recipeId": "v6-tek-magiepanzer-schatten-verdichtung",
@@ -15573,7 +24888,10 @@ export const V6_GENERATED_FORMULA_RECIPES: readonly V6GeneratedFormulaRecipe[] =
     "overformulaPrimaryBonus": null,
     "overformulaIntensityBonus": null,
     "formulaDefensePenalty": null,
-    "summonConstructDefId": null
+    "summonConstructDefId": null,
+    "timingMode": "immediate",
+    "echoAmount": null,
+    "delayBonus": null
   },
   {
     "recipeId": "v6-over-magiepanzer-schatten-verdichtung",
@@ -15602,7 +24920,74 @@ export const V6_GENERATED_FORMULA_RECIPES: readonly V6GeneratedFormulaRecipe[] =
     "overformulaPrimaryBonus": null,
     "overformulaIntensityBonus": 1,
     "formulaDefensePenalty": -1,
-    "summonConstructDefId": null
+    "summonConstructDefId": null,
+    "timingMode": "immediate",
+    "echoAmount": null,
+    "delayBonus": null
+  },
+  {
+    "recipeId": "v6-tek-magiepanzer-schatten-verzoegerung",
+    "kind": "tek",
+    "catalogSlice": "slice1",
+    "techniqueId": "v6-technik-magiepanzer",
+    "essenceId": "v6-essenz-schatten",
+    "catalystId": "v6-katalysator-verzoegerung",
+    "name": "Schattenfessel · Verzögerung",
+    "effectSummary": "Fessel Intensität 2 auf einen besetzten gegnerischen Formelplatz (manuelle Wahl). Bei Treffer: erschöpfe optional 1 gegnerische Formelkomponente. Verzögerung: Primäreffekt geschieht nicht sofort, sondern zu Beginn deines nächsten Zuges und erhält +2. Katalysator bleibt bis zur Auflösung. TEK: +1 Fetzladung (max 1×/Zug).",
+    "primary": {
+      "kind": "fessel",
+      "value": 2,
+      "target": "opponent",
+      "offensive": true
+    },
+    "rider": {
+      "id": "rider-fluch",
+      "summary": "Bei Treffer: erschöpfe optional 1 gegnerische Formelkomponente.",
+      "defenseSuppressible": true
+    },
+    "intensity": 2,
+    "transformId": "xform-verzoegerung",
+    "grantsFetz": true,
+    "catalystConsumed": false,
+    "overformulaPrimaryBonus": null,
+    "overformulaIntensityBonus": null,
+    "formulaDefensePenalty": null,
+    "summonConstructDefId": null,
+    "timingMode": "delay",
+    "echoAmount": null,
+    "delayBonus": 2
+  },
+  {
+    "recipeId": "v6-over-magiepanzer-schatten-verzoegerung",
+    "kind": "overformula",
+    "catalogSlice": "slice1",
+    "techniqueId": "v6-technik-magiepanzer",
+    "essenceId": "v6-essenz-schatten",
+    "catalystId": "v6-katalysator-verzoegerung",
+    "name": "Überformel Schattenfessel · Verzögerung",
+    "effectSummary": "Fessel Intensität 3 auf einen besetzten gegnerischen Formelplatz (manuelle Wahl). Bei Treffer: erschöpfe optional 1 gegnerische Formelkomponente. (verstärkt) Verzögerung: Primäreffekt geschieht nicht sofort, sondern zu Beginn deines nächsten Zuges und erhält +2. Katalysator bleibt bis zur Auflösung. Überformel: Intensität +1 (fester Slice-1-Bonus). Überformel: Fetzladung wird verbraucht. Formelabwehr −1.",
+    "primary": {
+      "kind": "fessel",
+      "value": 3,
+      "target": "opponent",
+      "offensive": true
+    },
+    "rider": {
+      "id": "rider-fluch",
+      "summary": "Bei Treffer: erschöpfe optional 1 gegnerische Formelkomponente. (verstärkt)",
+      "defenseSuppressible": true
+    },
+    "intensity": 3,
+    "transformId": "xform-verzoegerung",
+    "grantsFetz": false,
+    "catalystConsumed": false,
+    "overformulaPrimaryBonus": null,
+    "overformulaIntensityBonus": 1,
+    "formulaDefensePenalty": -1,
+    "summonConstructDefId": null,
+    "timingMode": "delay",
+    "echoAmount": null,
+    "delayBonus": 2
   },
   {
     "recipeId": "v6-tek-magiepanzer-schatten-sofortzuender",
@@ -15631,7 +25016,10 @@ export const V6_GENERATED_FORMULA_RECIPES: readonly V6GeneratedFormulaRecipe[] =
     "overformulaPrimaryBonus": null,
     "overformulaIntensityBonus": null,
     "formulaDefensePenalty": null,
-    "summonConstructDefId": null
+    "summonConstructDefId": null,
+    "timingMode": "immediate",
+    "echoAmount": null,
+    "delayBonus": null
   },
   {
     "recipeId": "v6-over-magiepanzer-schatten-sofortzuender",
@@ -15660,7 +25048,10 @@ export const V6_GENERATED_FORMULA_RECIPES: readonly V6GeneratedFormulaRecipe[] =
     "overformulaPrimaryBonus": null,
     "overformulaIntensityBonus": 1,
     "formulaDefensePenalty": -1,
-    "summonConstructDefId": null
+    "summonConstructDefId": null,
+    "timingMode": "immediate",
+    "echoAmount": null,
+    "delayBonus": null
   },
   {
     "recipeId": "v6-tek-magiepanzer-schatten-opfergabe",
@@ -15689,7 +25080,10 @@ export const V6_GENERATED_FORMULA_RECIPES: readonly V6GeneratedFormulaRecipe[] =
     "overformulaPrimaryBonus": null,
     "overformulaIntensityBonus": null,
     "formulaDefensePenalty": null,
-    "summonConstructDefId": null
+    "summonConstructDefId": null,
+    "timingMode": "immediate",
+    "echoAmount": null,
+    "delayBonus": null
   },
   {
     "recipeId": "v6-over-magiepanzer-schatten-opfergabe",
@@ -15718,7 +25112,72 @@ export const V6_GENERATED_FORMULA_RECIPES: readonly V6GeneratedFormulaRecipe[] =
     "overformulaPrimaryBonus": null,
     "overformulaIntensityBonus": 1,
     "formulaDefensePenalty": -1,
-    "summonConstructDefId": null
+    "summonConstructDefId": null,
+    "timingMode": "immediate",
+    "echoAmount": null,
+    "delayBonus": null
+  },
+  {
+    "recipeId": "v6-tek-beschwoerungsritual-feuer-echo",
+    "kind": "tek",
+    "catalogSlice": "slice1",
+    "techniqueId": "v6-technik-beschwoerungsritual",
+    "essenceId": "v6-essenz-feuer",
+    "catalystId": "v6-katalysator-echo",
+    "name": "Glutbeschwörung · Echo",
+    "effectSummary": "Beschwöre ein Konstrukt mit Haltbarkeit 3. Ersetzt ein bestehendes Konstrukt. Keine Fetzladung. Bei Lebensschaden: Brennen, falls keine Reaktion. Echo: zu Beginn deines nächsten Zuges wiederhole 1 Punkt des Primärwerts. Katalysator bleibt bis zur Echo-Auflösung. TEK-Beschwörung: keine Fetzladung.",
+    "primary": {
+      "kind": "summon_construct",
+      "value": 3,
+      "target": "self"
+    },
+    "rider": {
+      "id": "rider-brennen",
+      "summary": "Bei Lebensschaden: Brennen, falls keine Reaktion.",
+      "defenseSuppressible": true
+    },
+    "intensity": null,
+    "transformId": "xform-echo",
+    "grantsFetz": false,
+    "catalystConsumed": false,
+    "overformulaPrimaryBonus": null,
+    "overformulaIntensityBonus": null,
+    "formulaDefensePenalty": null,
+    "summonConstructDefId": "v6-konstrukt-spieltest-schattenpuppe",
+    "timingMode": "echo",
+    "echoAmount": 1,
+    "delayBonus": null
+  },
+  {
+    "recipeId": "v6-over-beschwoerungsritual-feuer-echo",
+    "kind": "overformula",
+    "catalogSlice": "slice1",
+    "techniqueId": "v6-technik-beschwoerungsritual",
+    "essenceId": "v6-essenz-feuer",
+    "catalystId": "v6-katalysator-echo",
+    "name": "Überformel Glutbeschwörung · Echo",
+    "effectSummary": "Beschwöre ein Konstrukt mit Haltbarkeit 5. Ersetzt ein bestehendes Konstrukt. Keine Fetzladung. Bei Lebensschaden: Brennen, falls keine Reaktion. (verstärkt) Echo: zu Beginn deines nächsten Zuges wiederhole 1 Punkt des Primärwerts. Katalysator bleibt bis zur Echo-Auflösung. Überformel: Primär +2 (fester Slice-1-Bonus). Überformel: Fetzladung wird verbraucht. Formelabwehr −1.",
+    "primary": {
+      "kind": "summon_construct",
+      "value": 5,
+      "target": "self"
+    },
+    "rider": {
+      "id": "rider-brennen",
+      "summary": "Bei Lebensschaden: Brennen, falls keine Reaktion. (verstärkt)",
+      "defenseSuppressible": true
+    },
+    "intensity": null,
+    "transformId": "xform-echo",
+    "grantsFetz": false,
+    "catalystConsumed": false,
+    "overformulaPrimaryBonus": 2,
+    "overformulaIntensityBonus": null,
+    "formulaDefensePenalty": -1,
+    "summonConstructDefId": "v6-konstrukt-spieltest-schattenpuppe",
+    "timingMode": "echo",
+    "echoAmount": 1,
+    "delayBonus": null
   },
   {
     "recipeId": "v6-tek-beschwoerungsritual-feuer-ueberladung",
@@ -15746,7 +25205,10 @@ export const V6_GENERATED_FORMULA_RECIPES: readonly V6GeneratedFormulaRecipe[] =
     "overformulaPrimaryBonus": null,
     "overformulaIntensityBonus": null,
     "formulaDefensePenalty": null,
-    "summonConstructDefId": "v6-konstrukt-spieltest-schattenpuppe"
+    "summonConstructDefId": "v6-konstrukt-spieltest-schattenpuppe",
+    "timingMode": "immediate",
+    "echoAmount": null,
+    "delayBonus": null
   },
   {
     "recipeId": "v6-over-beschwoerungsritual-feuer-ueberladung",
@@ -15774,7 +25236,10 @@ export const V6_GENERATED_FORMULA_RECIPES: readonly V6GeneratedFormulaRecipe[] =
     "overformulaPrimaryBonus": 2,
     "overformulaIntensityBonus": null,
     "formulaDefensePenalty": -1,
-    "summonConstructDefId": "v6-konstrukt-spieltest-schattenpuppe"
+    "summonConstructDefId": "v6-konstrukt-spieltest-schattenpuppe",
+    "timingMode": "immediate",
+    "echoAmount": null,
+    "delayBonus": null
   },
   {
     "recipeId": "v6-tek-beschwoerungsritual-feuer-verdichtung",
@@ -15802,7 +25267,10 @@ export const V6_GENERATED_FORMULA_RECIPES: readonly V6GeneratedFormulaRecipe[] =
     "overformulaPrimaryBonus": null,
     "overformulaIntensityBonus": null,
     "formulaDefensePenalty": null,
-    "summonConstructDefId": "v6-konstrukt-spieltest-schattenpuppe"
+    "summonConstructDefId": "v6-konstrukt-spieltest-schattenpuppe",
+    "timingMode": "immediate",
+    "echoAmount": null,
+    "delayBonus": null
   },
   {
     "recipeId": "v6-over-beschwoerungsritual-feuer-verdichtung",
@@ -15830,7 +25298,72 @@ export const V6_GENERATED_FORMULA_RECIPES: readonly V6GeneratedFormulaRecipe[] =
     "overformulaPrimaryBonus": 2,
     "overformulaIntensityBonus": null,
     "formulaDefensePenalty": -1,
-    "summonConstructDefId": "v6-konstrukt-spieltest-schattenpuppe"
+    "summonConstructDefId": "v6-konstrukt-spieltest-schattenpuppe",
+    "timingMode": "immediate",
+    "echoAmount": null,
+    "delayBonus": null
+  },
+  {
+    "recipeId": "v6-tek-beschwoerungsritual-feuer-verzoegerung",
+    "kind": "tek",
+    "catalogSlice": "slice1",
+    "techniqueId": "v6-technik-beschwoerungsritual",
+    "essenceId": "v6-essenz-feuer",
+    "catalystId": "v6-katalysator-verzoegerung",
+    "name": "Glutbeschwörung · Verzögerung",
+    "effectSummary": "Beschwöre ein Konstrukt mit Haltbarkeit 3. Ersetzt ein bestehendes Konstrukt. Keine Fetzladung. Bei Lebensschaden: Brennen, falls keine Reaktion. Verzögerung: Primäreffekt geschieht nicht sofort, sondern zu Beginn deines nächsten Zuges und erhält +2. Katalysator bleibt bis zur Auflösung. TEK-Beschwörung: keine Fetzladung.",
+    "primary": {
+      "kind": "summon_construct",
+      "value": 3,
+      "target": "self"
+    },
+    "rider": {
+      "id": "rider-brennen",
+      "summary": "Bei Lebensschaden: Brennen, falls keine Reaktion.",
+      "defenseSuppressible": true
+    },
+    "intensity": null,
+    "transformId": "xform-verzoegerung",
+    "grantsFetz": false,
+    "catalystConsumed": false,
+    "overformulaPrimaryBonus": null,
+    "overformulaIntensityBonus": null,
+    "formulaDefensePenalty": null,
+    "summonConstructDefId": "v6-konstrukt-spieltest-schattenpuppe",
+    "timingMode": "delay",
+    "echoAmount": null,
+    "delayBonus": 2
+  },
+  {
+    "recipeId": "v6-over-beschwoerungsritual-feuer-verzoegerung",
+    "kind": "overformula",
+    "catalogSlice": "slice1",
+    "techniqueId": "v6-technik-beschwoerungsritual",
+    "essenceId": "v6-essenz-feuer",
+    "catalystId": "v6-katalysator-verzoegerung",
+    "name": "Überformel Glutbeschwörung · Verzögerung",
+    "effectSummary": "Beschwöre ein Konstrukt mit Haltbarkeit 5. Ersetzt ein bestehendes Konstrukt. Keine Fetzladung. Bei Lebensschaden: Brennen, falls keine Reaktion. (verstärkt) Verzögerung: Primäreffekt geschieht nicht sofort, sondern zu Beginn deines nächsten Zuges und erhält +2. Katalysator bleibt bis zur Auflösung. Überformel: Primär +2 (fester Slice-1-Bonus). Überformel: Fetzladung wird verbraucht. Formelabwehr −1.",
+    "primary": {
+      "kind": "summon_construct",
+      "value": 5,
+      "target": "self"
+    },
+    "rider": {
+      "id": "rider-brennen",
+      "summary": "Bei Lebensschaden: Brennen, falls keine Reaktion. (verstärkt)",
+      "defenseSuppressible": true
+    },
+    "intensity": null,
+    "transformId": "xform-verzoegerung",
+    "grantsFetz": false,
+    "catalystConsumed": false,
+    "overformulaPrimaryBonus": 2,
+    "overformulaIntensityBonus": null,
+    "formulaDefensePenalty": -1,
+    "summonConstructDefId": "v6-konstrukt-spieltest-schattenpuppe",
+    "timingMode": "delay",
+    "echoAmount": null,
+    "delayBonus": 2
   },
   {
     "recipeId": "v6-tek-beschwoerungsritual-feuer-sofortzuender",
@@ -15858,7 +25391,10 @@ export const V6_GENERATED_FORMULA_RECIPES: readonly V6GeneratedFormulaRecipe[] =
     "overformulaPrimaryBonus": null,
     "overformulaIntensityBonus": null,
     "formulaDefensePenalty": null,
-    "summonConstructDefId": "v6-konstrukt-spieltest-schattenpuppe"
+    "summonConstructDefId": "v6-konstrukt-spieltest-schattenpuppe",
+    "timingMode": "immediate",
+    "echoAmount": null,
+    "delayBonus": null
   },
   {
     "recipeId": "v6-over-beschwoerungsritual-feuer-sofortzuender",
@@ -15886,7 +25422,10 @@ export const V6_GENERATED_FORMULA_RECIPES: readonly V6GeneratedFormulaRecipe[] =
     "overformulaPrimaryBonus": 2,
     "overformulaIntensityBonus": null,
     "formulaDefensePenalty": -1,
-    "summonConstructDefId": "v6-konstrukt-spieltest-schattenpuppe"
+    "summonConstructDefId": "v6-konstrukt-spieltest-schattenpuppe",
+    "timingMode": "immediate",
+    "echoAmount": null,
+    "delayBonus": null
   },
   {
     "recipeId": "v6-tek-beschwoerungsritual-feuer-opfergabe",
@@ -15914,7 +25453,10 @@ export const V6_GENERATED_FORMULA_RECIPES: readonly V6GeneratedFormulaRecipe[] =
     "overformulaPrimaryBonus": null,
     "overformulaIntensityBonus": null,
     "formulaDefensePenalty": null,
-    "summonConstructDefId": "v6-konstrukt-spieltest-schattenpuppe"
+    "summonConstructDefId": "v6-konstrukt-spieltest-schattenpuppe",
+    "timingMode": "immediate",
+    "echoAmount": null,
+    "delayBonus": null
   },
   {
     "recipeId": "v6-over-beschwoerungsritual-feuer-opfergabe",
@@ -15942,7 +25484,72 @@ export const V6_GENERATED_FORMULA_RECIPES: readonly V6GeneratedFormulaRecipe[] =
     "overformulaPrimaryBonus": 2,
     "overformulaIntensityBonus": null,
     "formulaDefensePenalty": -1,
-    "summonConstructDefId": "v6-konstrukt-spieltest-schattenpuppe"
+    "summonConstructDefId": "v6-konstrukt-spieltest-schattenpuppe",
+    "timingMode": "immediate",
+    "echoAmount": null,
+    "delayBonus": null
+  },
+  {
+    "recipeId": "v6-tek-beschwoerungsritual-wasser-echo",
+    "kind": "tek",
+    "catalogSlice": "slice1",
+    "techniqueId": "v6-technik-beschwoerungsritual",
+    "essenceId": "v6-essenz-wasser",
+    "catalystId": "v6-katalysator-echo",
+    "name": "Wellenbeschwörung · Echo",
+    "effectSummary": "Beschwöre ein Konstrukt mit Haltbarkeit 3. Ersetzt ein bestehendes Konstrukt. Keine Fetzladung. Bei Heilung oder Schildgewinn: entferne optional eine Marke von dir. Echo: zu Beginn deines nächsten Zuges wiederhole 1 Punkt des Primärwerts. Katalysator bleibt bis zur Echo-Auflösung. TEK-Beschwörung: keine Fetzladung.",
+    "primary": {
+      "kind": "summon_construct",
+      "value": 3,
+      "target": "self"
+    },
+    "rider": {
+      "id": "rider-reinigen",
+      "summary": "Bei Heilung oder Schildgewinn: entferne optional eine Marke von dir.",
+      "defenseSuppressible": false
+    },
+    "intensity": null,
+    "transformId": "xform-echo",
+    "grantsFetz": false,
+    "catalystConsumed": false,
+    "overformulaPrimaryBonus": null,
+    "overformulaIntensityBonus": null,
+    "formulaDefensePenalty": null,
+    "summonConstructDefId": "v6-konstrukt-spieltest-schattenpuppe",
+    "timingMode": "echo",
+    "echoAmount": 1,
+    "delayBonus": null
+  },
+  {
+    "recipeId": "v6-over-beschwoerungsritual-wasser-echo",
+    "kind": "overformula",
+    "catalogSlice": "slice1",
+    "techniqueId": "v6-technik-beschwoerungsritual",
+    "essenceId": "v6-essenz-wasser",
+    "catalystId": "v6-katalysator-echo",
+    "name": "Überformel Wellenbeschwörung · Echo",
+    "effectSummary": "Beschwöre ein Konstrukt mit Haltbarkeit 5. Ersetzt ein bestehendes Konstrukt. Keine Fetzladung. Bei Heilung oder Schildgewinn: entferne optional eine Marke von dir. (verstärkt) Echo: zu Beginn deines nächsten Zuges wiederhole 1 Punkt des Primärwerts. Katalysator bleibt bis zur Echo-Auflösung. Überformel: Primär +2 (fester Slice-1-Bonus). Überformel: Fetzladung wird verbraucht. Formelabwehr −1.",
+    "primary": {
+      "kind": "summon_construct",
+      "value": 5,
+      "target": "self"
+    },
+    "rider": {
+      "id": "rider-reinigen",
+      "summary": "Bei Heilung oder Schildgewinn: entferne optional eine Marke von dir. (verstärkt)",
+      "defenseSuppressible": false
+    },
+    "intensity": null,
+    "transformId": "xform-echo",
+    "grantsFetz": false,
+    "catalystConsumed": false,
+    "overformulaPrimaryBonus": 2,
+    "overformulaIntensityBonus": null,
+    "formulaDefensePenalty": -1,
+    "summonConstructDefId": "v6-konstrukt-spieltest-schattenpuppe",
+    "timingMode": "echo",
+    "echoAmount": 1,
+    "delayBonus": null
   },
   {
     "recipeId": "v6-tek-beschwoerungsritual-wasser-ueberladung",
@@ -15970,7 +25577,10 @@ export const V6_GENERATED_FORMULA_RECIPES: readonly V6GeneratedFormulaRecipe[] =
     "overformulaPrimaryBonus": null,
     "overformulaIntensityBonus": null,
     "formulaDefensePenalty": null,
-    "summonConstructDefId": "v6-konstrukt-spieltest-schattenpuppe"
+    "summonConstructDefId": "v6-konstrukt-spieltest-schattenpuppe",
+    "timingMode": "immediate",
+    "echoAmount": null,
+    "delayBonus": null
   },
   {
     "recipeId": "v6-over-beschwoerungsritual-wasser-ueberladung",
@@ -15998,7 +25608,10 @@ export const V6_GENERATED_FORMULA_RECIPES: readonly V6GeneratedFormulaRecipe[] =
     "overformulaPrimaryBonus": 2,
     "overformulaIntensityBonus": null,
     "formulaDefensePenalty": -1,
-    "summonConstructDefId": "v6-konstrukt-spieltest-schattenpuppe"
+    "summonConstructDefId": "v6-konstrukt-spieltest-schattenpuppe",
+    "timingMode": "immediate",
+    "echoAmount": null,
+    "delayBonus": null
   },
   {
     "recipeId": "v6-tek-beschwoerungsritual-wasser-verdichtung",
@@ -16026,7 +25639,10 @@ export const V6_GENERATED_FORMULA_RECIPES: readonly V6GeneratedFormulaRecipe[] =
     "overformulaPrimaryBonus": null,
     "overformulaIntensityBonus": null,
     "formulaDefensePenalty": null,
-    "summonConstructDefId": "v6-konstrukt-spieltest-schattenpuppe"
+    "summonConstructDefId": "v6-konstrukt-spieltest-schattenpuppe",
+    "timingMode": "immediate",
+    "echoAmount": null,
+    "delayBonus": null
   },
   {
     "recipeId": "v6-over-beschwoerungsritual-wasser-verdichtung",
@@ -16054,7 +25670,72 @@ export const V6_GENERATED_FORMULA_RECIPES: readonly V6GeneratedFormulaRecipe[] =
     "overformulaPrimaryBonus": 2,
     "overformulaIntensityBonus": null,
     "formulaDefensePenalty": -1,
-    "summonConstructDefId": "v6-konstrukt-spieltest-schattenpuppe"
+    "summonConstructDefId": "v6-konstrukt-spieltest-schattenpuppe",
+    "timingMode": "immediate",
+    "echoAmount": null,
+    "delayBonus": null
+  },
+  {
+    "recipeId": "v6-tek-beschwoerungsritual-wasser-verzoegerung",
+    "kind": "tek",
+    "catalogSlice": "slice1",
+    "techniqueId": "v6-technik-beschwoerungsritual",
+    "essenceId": "v6-essenz-wasser",
+    "catalystId": "v6-katalysator-verzoegerung",
+    "name": "Wellenbeschwörung · Verzögerung",
+    "effectSummary": "Beschwöre ein Konstrukt mit Haltbarkeit 3. Ersetzt ein bestehendes Konstrukt. Keine Fetzladung. Bei Heilung oder Schildgewinn: entferne optional eine Marke von dir. Verzögerung: Primäreffekt geschieht nicht sofort, sondern zu Beginn deines nächsten Zuges und erhält +2. Katalysator bleibt bis zur Auflösung. TEK-Beschwörung: keine Fetzladung.",
+    "primary": {
+      "kind": "summon_construct",
+      "value": 3,
+      "target": "self"
+    },
+    "rider": {
+      "id": "rider-reinigen",
+      "summary": "Bei Heilung oder Schildgewinn: entferne optional eine Marke von dir.",
+      "defenseSuppressible": false
+    },
+    "intensity": null,
+    "transformId": "xform-verzoegerung",
+    "grantsFetz": false,
+    "catalystConsumed": false,
+    "overformulaPrimaryBonus": null,
+    "overformulaIntensityBonus": null,
+    "formulaDefensePenalty": null,
+    "summonConstructDefId": "v6-konstrukt-spieltest-schattenpuppe",
+    "timingMode": "delay",
+    "echoAmount": null,
+    "delayBonus": 2
+  },
+  {
+    "recipeId": "v6-over-beschwoerungsritual-wasser-verzoegerung",
+    "kind": "overformula",
+    "catalogSlice": "slice1",
+    "techniqueId": "v6-technik-beschwoerungsritual",
+    "essenceId": "v6-essenz-wasser",
+    "catalystId": "v6-katalysator-verzoegerung",
+    "name": "Überformel Wellenbeschwörung · Verzögerung",
+    "effectSummary": "Beschwöre ein Konstrukt mit Haltbarkeit 5. Ersetzt ein bestehendes Konstrukt. Keine Fetzladung. Bei Heilung oder Schildgewinn: entferne optional eine Marke von dir. (verstärkt) Verzögerung: Primäreffekt geschieht nicht sofort, sondern zu Beginn deines nächsten Zuges und erhält +2. Katalysator bleibt bis zur Auflösung. Überformel: Primär +2 (fester Slice-1-Bonus). Überformel: Fetzladung wird verbraucht. Formelabwehr −1.",
+    "primary": {
+      "kind": "summon_construct",
+      "value": 5,
+      "target": "self"
+    },
+    "rider": {
+      "id": "rider-reinigen",
+      "summary": "Bei Heilung oder Schildgewinn: entferne optional eine Marke von dir. (verstärkt)",
+      "defenseSuppressible": false
+    },
+    "intensity": null,
+    "transformId": "xform-verzoegerung",
+    "grantsFetz": false,
+    "catalystConsumed": false,
+    "overformulaPrimaryBonus": 2,
+    "overformulaIntensityBonus": null,
+    "formulaDefensePenalty": -1,
+    "summonConstructDefId": "v6-konstrukt-spieltest-schattenpuppe",
+    "timingMode": "delay",
+    "echoAmount": null,
+    "delayBonus": 2
   },
   {
     "recipeId": "v6-tek-beschwoerungsritual-wasser-sofortzuender",
@@ -16082,7 +25763,10 @@ export const V6_GENERATED_FORMULA_RECIPES: readonly V6GeneratedFormulaRecipe[] =
     "overformulaPrimaryBonus": null,
     "overformulaIntensityBonus": null,
     "formulaDefensePenalty": null,
-    "summonConstructDefId": "v6-konstrukt-spieltest-schattenpuppe"
+    "summonConstructDefId": "v6-konstrukt-spieltest-schattenpuppe",
+    "timingMode": "immediate",
+    "echoAmount": null,
+    "delayBonus": null
   },
   {
     "recipeId": "v6-over-beschwoerungsritual-wasser-sofortzuender",
@@ -16110,7 +25794,10 @@ export const V6_GENERATED_FORMULA_RECIPES: readonly V6GeneratedFormulaRecipe[] =
     "overformulaPrimaryBonus": 2,
     "overformulaIntensityBonus": null,
     "formulaDefensePenalty": -1,
-    "summonConstructDefId": "v6-konstrukt-spieltest-schattenpuppe"
+    "summonConstructDefId": "v6-konstrukt-spieltest-schattenpuppe",
+    "timingMode": "immediate",
+    "echoAmount": null,
+    "delayBonus": null
   },
   {
     "recipeId": "v6-tek-beschwoerungsritual-wasser-opfergabe",
@@ -16138,7 +25825,10 @@ export const V6_GENERATED_FORMULA_RECIPES: readonly V6GeneratedFormulaRecipe[] =
     "overformulaPrimaryBonus": null,
     "overformulaIntensityBonus": null,
     "formulaDefensePenalty": null,
-    "summonConstructDefId": "v6-konstrukt-spieltest-schattenpuppe"
+    "summonConstructDefId": "v6-konstrukt-spieltest-schattenpuppe",
+    "timingMode": "immediate",
+    "echoAmount": null,
+    "delayBonus": null
   },
   {
     "recipeId": "v6-over-beschwoerungsritual-wasser-opfergabe",
@@ -16166,7 +25856,72 @@ export const V6_GENERATED_FORMULA_RECIPES: readonly V6GeneratedFormulaRecipe[] =
     "overformulaPrimaryBonus": 2,
     "overformulaIntensityBonus": null,
     "formulaDefensePenalty": -1,
-    "summonConstructDefId": "v6-konstrukt-spieltest-schattenpuppe"
+    "summonConstructDefId": "v6-konstrukt-spieltest-schattenpuppe",
+    "timingMode": "immediate",
+    "echoAmount": null,
+    "delayBonus": null
+  },
+  {
+    "recipeId": "v6-tek-beschwoerungsritual-erde-echo",
+    "kind": "tek",
+    "catalogSlice": "slice1",
+    "techniqueId": "v6-technik-beschwoerungsritual",
+    "essenceId": "v6-essenz-erde",
+    "catalystId": "v6-katalysator-echo",
+    "name": "Felsbeschwörung · Echo",
+    "effectSummary": "Beschwöre ein Konstrukt mit Haltbarkeit 3. Ersetzt ein bestehendes Konstrukt. Keine Fetzladung. Verwendete Komponenten +1 Stabilität bis nächste Startphase. Echo: zu Beginn deines nächsten Zuges wiederhole 1 Punkt des Primärwerts. Katalysator bleibt bis zur Echo-Auflösung. TEK-Beschwörung: keine Fetzladung.",
+    "primary": {
+      "kind": "summon_construct",
+      "value": 3,
+      "target": "self"
+    },
+    "rider": {
+      "id": "rider-stabilitaet",
+      "summary": "Verwendete Komponenten +1 Stabilität bis nächste Startphase.",
+      "defenseSuppressible": false
+    },
+    "intensity": null,
+    "transformId": "xform-echo",
+    "grantsFetz": false,
+    "catalystConsumed": false,
+    "overformulaPrimaryBonus": null,
+    "overformulaIntensityBonus": null,
+    "formulaDefensePenalty": null,
+    "summonConstructDefId": "v6-konstrukt-spieltest-schattenpuppe",
+    "timingMode": "echo",
+    "echoAmount": 1,
+    "delayBonus": null
+  },
+  {
+    "recipeId": "v6-over-beschwoerungsritual-erde-echo",
+    "kind": "overformula",
+    "catalogSlice": "slice1",
+    "techniqueId": "v6-technik-beschwoerungsritual",
+    "essenceId": "v6-essenz-erde",
+    "catalystId": "v6-katalysator-echo",
+    "name": "Überformel Felsbeschwörung · Echo",
+    "effectSummary": "Beschwöre ein Konstrukt mit Haltbarkeit 5. Ersetzt ein bestehendes Konstrukt. Keine Fetzladung. Verwendete Komponenten +1 Stabilität bis nächste Startphase. (verstärkt) Echo: zu Beginn deines nächsten Zuges wiederhole 1 Punkt des Primärwerts. Katalysator bleibt bis zur Echo-Auflösung. Überformel: Primär +2 (fester Slice-1-Bonus). Überformel: Fetzladung wird verbraucht. Formelabwehr −1.",
+    "primary": {
+      "kind": "summon_construct",
+      "value": 5,
+      "target": "self"
+    },
+    "rider": {
+      "id": "rider-stabilitaet",
+      "summary": "Verwendete Komponenten +1 Stabilität bis nächste Startphase. (verstärkt)",
+      "defenseSuppressible": false
+    },
+    "intensity": null,
+    "transformId": "xform-echo",
+    "grantsFetz": false,
+    "catalystConsumed": false,
+    "overformulaPrimaryBonus": 2,
+    "overformulaIntensityBonus": null,
+    "formulaDefensePenalty": -1,
+    "summonConstructDefId": "v6-konstrukt-spieltest-schattenpuppe",
+    "timingMode": "echo",
+    "echoAmount": 1,
+    "delayBonus": null
   },
   {
     "recipeId": "v6-tek-beschwoerungsritual-erde-ueberladung",
@@ -16194,7 +25949,10 @@ export const V6_GENERATED_FORMULA_RECIPES: readonly V6GeneratedFormulaRecipe[] =
     "overformulaPrimaryBonus": null,
     "overformulaIntensityBonus": null,
     "formulaDefensePenalty": null,
-    "summonConstructDefId": "v6-konstrukt-spieltest-schattenpuppe"
+    "summonConstructDefId": "v6-konstrukt-spieltest-schattenpuppe",
+    "timingMode": "immediate",
+    "echoAmount": null,
+    "delayBonus": null
   },
   {
     "recipeId": "v6-over-beschwoerungsritual-erde-ueberladung",
@@ -16222,7 +25980,10 @@ export const V6_GENERATED_FORMULA_RECIPES: readonly V6GeneratedFormulaRecipe[] =
     "overformulaPrimaryBonus": 2,
     "overformulaIntensityBonus": null,
     "formulaDefensePenalty": -1,
-    "summonConstructDefId": "v6-konstrukt-spieltest-schattenpuppe"
+    "summonConstructDefId": "v6-konstrukt-spieltest-schattenpuppe",
+    "timingMode": "immediate",
+    "echoAmount": null,
+    "delayBonus": null
   },
   {
     "recipeId": "v6-tek-beschwoerungsritual-erde-verdichtung",
@@ -16250,7 +26011,10 @@ export const V6_GENERATED_FORMULA_RECIPES: readonly V6GeneratedFormulaRecipe[] =
     "overformulaPrimaryBonus": null,
     "overformulaIntensityBonus": null,
     "formulaDefensePenalty": null,
-    "summonConstructDefId": "v6-konstrukt-spieltest-schattenpuppe"
+    "summonConstructDefId": "v6-konstrukt-spieltest-schattenpuppe",
+    "timingMode": "immediate",
+    "echoAmount": null,
+    "delayBonus": null
   },
   {
     "recipeId": "v6-over-beschwoerungsritual-erde-verdichtung",
@@ -16278,7 +26042,72 @@ export const V6_GENERATED_FORMULA_RECIPES: readonly V6GeneratedFormulaRecipe[] =
     "overformulaPrimaryBonus": 2,
     "overformulaIntensityBonus": null,
     "formulaDefensePenalty": -1,
-    "summonConstructDefId": "v6-konstrukt-spieltest-schattenpuppe"
+    "summonConstructDefId": "v6-konstrukt-spieltest-schattenpuppe",
+    "timingMode": "immediate",
+    "echoAmount": null,
+    "delayBonus": null
+  },
+  {
+    "recipeId": "v6-tek-beschwoerungsritual-erde-verzoegerung",
+    "kind": "tek",
+    "catalogSlice": "slice1",
+    "techniqueId": "v6-technik-beschwoerungsritual",
+    "essenceId": "v6-essenz-erde",
+    "catalystId": "v6-katalysator-verzoegerung",
+    "name": "Felsbeschwörung · Verzögerung",
+    "effectSummary": "Beschwöre ein Konstrukt mit Haltbarkeit 3. Ersetzt ein bestehendes Konstrukt. Keine Fetzladung. Verwendete Komponenten +1 Stabilität bis nächste Startphase. Verzögerung: Primäreffekt geschieht nicht sofort, sondern zu Beginn deines nächsten Zuges und erhält +2. Katalysator bleibt bis zur Auflösung. TEK-Beschwörung: keine Fetzladung.",
+    "primary": {
+      "kind": "summon_construct",
+      "value": 3,
+      "target": "self"
+    },
+    "rider": {
+      "id": "rider-stabilitaet",
+      "summary": "Verwendete Komponenten +1 Stabilität bis nächste Startphase.",
+      "defenseSuppressible": false
+    },
+    "intensity": null,
+    "transformId": "xform-verzoegerung",
+    "grantsFetz": false,
+    "catalystConsumed": false,
+    "overformulaPrimaryBonus": null,
+    "overformulaIntensityBonus": null,
+    "formulaDefensePenalty": null,
+    "summonConstructDefId": "v6-konstrukt-spieltest-schattenpuppe",
+    "timingMode": "delay",
+    "echoAmount": null,
+    "delayBonus": 2
+  },
+  {
+    "recipeId": "v6-over-beschwoerungsritual-erde-verzoegerung",
+    "kind": "overformula",
+    "catalogSlice": "slice1",
+    "techniqueId": "v6-technik-beschwoerungsritual",
+    "essenceId": "v6-essenz-erde",
+    "catalystId": "v6-katalysator-verzoegerung",
+    "name": "Überformel Felsbeschwörung · Verzögerung",
+    "effectSummary": "Beschwöre ein Konstrukt mit Haltbarkeit 5. Ersetzt ein bestehendes Konstrukt. Keine Fetzladung. Verwendete Komponenten +1 Stabilität bis nächste Startphase. (verstärkt) Verzögerung: Primäreffekt geschieht nicht sofort, sondern zu Beginn deines nächsten Zuges und erhält +2. Katalysator bleibt bis zur Auflösung. Überformel: Primär +2 (fester Slice-1-Bonus). Überformel: Fetzladung wird verbraucht. Formelabwehr −1.",
+    "primary": {
+      "kind": "summon_construct",
+      "value": 5,
+      "target": "self"
+    },
+    "rider": {
+      "id": "rider-stabilitaet",
+      "summary": "Verwendete Komponenten +1 Stabilität bis nächste Startphase. (verstärkt)",
+      "defenseSuppressible": false
+    },
+    "intensity": null,
+    "transformId": "xform-verzoegerung",
+    "grantsFetz": false,
+    "catalystConsumed": false,
+    "overformulaPrimaryBonus": 2,
+    "overformulaIntensityBonus": null,
+    "formulaDefensePenalty": -1,
+    "summonConstructDefId": "v6-konstrukt-spieltest-schattenpuppe",
+    "timingMode": "delay",
+    "echoAmount": null,
+    "delayBonus": 2
   },
   {
     "recipeId": "v6-tek-beschwoerungsritual-erde-sofortzuender",
@@ -16306,7 +26135,10 @@ export const V6_GENERATED_FORMULA_RECIPES: readonly V6GeneratedFormulaRecipe[] =
     "overformulaPrimaryBonus": null,
     "overformulaIntensityBonus": null,
     "formulaDefensePenalty": null,
-    "summonConstructDefId": "v6-konstrukt-spieltest-schattenpuppe"
+    "summonConstructDefId": "v6-konstrukt-spieltest-schattenpuppe",
+    "timingMode": "immediate",
+    "echoAmount": null,
+    "delayBonus": null
   },
   {
     "recipeId": "v6-over-beschwoerungsritual-erde-sofortzuender",
@@ -16334,7 +26166,10 @@ export const V6_GENERATED_FORMULA_RECIPES: readonly V6GeneratedFormulaRecipe[] =
     "overformulaPrimaryBonus": 2,
     "overformulaIntensityBonus": null,
     "formulaDefensePenalty": -1,
-    "summonConstructDefId": "v6-konstrukt-spieltest-schattenpuppe"
+    "summonConstructDefId": "v6-konstrukt-spieltest-schattenpuppe",
+    "timingMode": "immediate",
+    "echoAmount": null,
+    "delayBonus": null
   },
   {
     "recipeId": "v6-tek-beschwoerungsritual-erde-opfergabe",
@@ -16362,7 +26197,10 @@ export const V6_GENERATED_FORMULA_RECIPES: readonly V6GeneratedFormulaRecipe[] =
     "overformulaPrimaryBonus": null,
     "overformulaIntensityBonus": null,
     "formulaDefensePenalty": null,
-    "summonConstructDefId": "v6-konstrukt-spieltest-schattenpuppe"
+    "summonConstructDefId": "v6-konstrukt-spieltest-schattenpuppe",
+    "timingMode": "immediate",
+    "echoAmount": null,
+    "delayBonus": null
   },
   {
     "recipeId": "v6-over-beschwoerungsritual-erde-opfergabe",
@@ -16390,7 +26228,72 @@ export const V6_GENERATED_FORMULA_RECIPES: readonly V6GeneratedFormulaRecipe[] =
     "overformulaPrimaryBonus": 2,
     "overformulaIntensityBonus": null,
     "formulaDefensePenalty": -1,
-    "summonConstructDefId": "v6-konstrukt-spieltest-schattenpuppe"
+    "summonConstructDefId": "v6-konstrukt-spieltest-schattenpuppe",
+    "timingMode": "immediate",
+    "echoAmount": null,
+    "delayBonus": null
+  },
+  {
+    "recipeId": "v6-tek-beschwoerungsritual-luft-echo",
+    "kind": "tek",
+    "catalogSlice": "slice1",
+    "techniqueId": "v6-technik-beschwoerungsritual",
+    "essenceId": "v6-essenz-luft",
+    "catalystId": "v6-katalysator-echo",
+    "name": "Windbeschwörung · Echo",
+    "effectSummary": "Beschwöre ein Konstrukt mit Haltbarkeit 3. Ersetzt ein bestehendes Konstrukt. Keine Fetzladung. Nächster eigener Aktions-W6 +1 (max +2). Echo: zu Beginn deines nächsten Zuges wiederhole 1 Punkt des Primärwerts. Katalysator bleibt bis zur Echo-Auflösung. TEK-Beschwörung: keine Fetzladung.",
+    "primary": {
+      "kind": "summon_construct",
+      "value": 3,
+      "target": "self"
+    },
+    "rider": {
+      "id": "rider-w6",
+      "summary": "Nächster eigener Aktions-W6 +1 (max +2).",
+      "defenseSuppressible": true
+    },
+    "intensity": null,
+    "transformId": "xform-echo",
+    "grantsFetz": false,
+    "catalystConsumed": false,
+    "overformulaPrimaryBonus": null,
+    "overformulaIntensityBonus": null,
+    "formulaDefensePenalty": null,
+    "summonConstructDefId": "v6-konstrukt-spieltest-schattenpuppe",
+    "timingMode": "echo",
+    "echoAmount": 1,
+    "delayBonus": null
+  },
+  {
+    "recipeId": "v6-over-beschwoerungsritual-luft-echo",
+    "kind": "overformula",
+    "catalogSlice": "slice1",
+    "techniqueId": "v6-technik-beschwoerungsritual",
+    "essenceId": "v6-essenz-luft",
+    "catalystId": "v6-katalysator-echo",
+    "name": "Überformel Windbeschwörung · Echo",
+    "effectSummary": "Beschwöre ein Konstrukt mit Haltbarkeit 5. Ersetzt ein bestehendes Konstrukt. Keine Fetzladung. Nächster eigener Aktions-W6 +1 (max +2). (verstärkt) Echo: zu Beginn deines nächsten Zuges wiederhole 1 Punkt des Primärwerts. Katalysator bleibt bis zur Echo-Auflösung. Überformel: Primär +2 (fester Slice-1-Bonus). Überformel: Fetzladung wird verbraucht. Formelabwehr −1.",
+    "primary": {
+      "kind": "summon_construct",
+      "value": 5,
+      "target": "self"
+    },
+    "rider": {
+      "id": "rider-w6",
+      "summary": "Nächster eigener Aktions-W6 +1 (max +2). (verstärkt)",
+      "defenseSuppressible": true
+    },
+    "intensity": null,
+    "transformId": "xform-echo",
+    "grantsFetz": false,
+    "catalystConsumed": false,
+    "overformulaPrimaryBonus": 2,
+    "overformulaIntensityBonus": null,
+    "formulaDefensePenalty": -1,
+    "summonConstructDefId": "v6-konstrukt-spieltest-schattenpuppe",
+    "timingMode": "echo",
+    "echoAmount": 1,
+    "delayBonus": null
   },
   {
     "recipeId": "v6-tek-beschwoerungsritual-luft-ueberladung",
@@ -16418,7 +26321,10 @@ export const V6_GENERATED_FORMULA_RECIPES: readonly V6GeneratedFormulaRecipe[] =
     "overformulaPrimaryBonus": null,
     "overformulaIntensityBonus": null,
     "formulaDefensePenalty": null,
-    "summonConstructDefId": "v6-konstrukt-spieltest-schattenpuppe"
+    "summonConstructDefId": "v6-konstrukt-spieltest-schattenpuppe",
+    "timingMode": "immediate",
+    "echoAmount": null,
+    "delayBonus": null
   },
   {
     "recipeId": "v6-over-beschwoerungsritual-luft-ueberladung",
@@ -16446,7 +26352,10 @@ export const V6_GENERATED_FORMULA_RECIPES: readonly V6GeneratedFormulaRecipe[] =
     "overformulaPrimaryBonus": 2,
     "overformulaIntensityBonus": null,
     "formulaDefensePenalty": -1,
-    "summonConstructDefId": "v6-konstrukt-spieltest-schattenpuppe"
+    "summonConstructDefId": "v6-konstrukt-spieltest-schattenpuppe",
+    "timingMode": "immediate",
+    "echoAmount": null,
+    "delayBonus": null
   },
   {
     "recipeId": "v6-tek-beschwoerungsritual-luft-verdichtung",
@@ -16474,7 +26383,10 @@ export const V6_GENERATED_FORMULA_RECIPES: readonly V6GeneratedFormulaRecipe[] =
     "overformulaPrimaryBonus": null,
     "overformulaIntensityBonus": null,
     "formulaDefensePenalty": null,
-    "summonConstructDefId": "v6-konstrukt-spieltest-schattenpuppe"
+    "summonConstructDefId": "v6-konstrukt-spieltest-schattenpuppe",
+    "timingMode": "immediate",
+    "echoAmount": null,
+    "delayBonus": null
   },
   {
     "recipeId": "v6-over-beschwoerungsritual-luft-verdichtung",
@@ -16502,7 +26414,72 @@ export const V6_GENERATED_FORMULA_RECIPES: readonly V6GeneratedFormulaRecipe[] =
     "overformulaPrimaryBonus": 2,
     "overformulaIntensityBonus": null,
     "formulaDefensePenalty": -1,
-    "summonConstructDefId": "v6-konstrukt-spieltest-schattenpuppe"
+    "summonConstructDefId": "v6-konstrukt-spieltest-schattenpuppe",
+    "timingMode": "immediate",
+    "echoAmount": null,
+    "delayBonus": null
+  },
+  {
+    "recipeId": "v6-tek-beschwoerungsritual-luft-verzoegerung",
+    "kind": "tek",
+    "catalogSlice": "slice1",
+    "techniqueId": "v6-technik-beschwoerungsritual",
+    "essenceId": "v6-essenz-luft",
+    "catalystId": "v6-katalysator-verzoegerung",
+    "name": "Windbeschwörung · Verzögerung",
+    "effectSummary": "Beschwöre ein Konstrukt mit Haltbarkeit 3. Ersetzt ein bestehendes Konstrukt. Keine Fetzladung. Nächster eigener Aktions-W6 +1 (max +2). Verzögerung: Primäreffekt geschieht nicht sofort, sondern zu Beginn deines nächsten Zuges und erhält +2. Katalysator bleibt bis zur Auflösung. TEK-Beschwörung: keine Fetzladung.",
+    "primary": {
+      "kind": "summon_construct",
+      "value": 3,
+      "target": "self"
+    },
+    "rider": {
+      "id": "rider-w6",
+      "summary": "Nächster eigener Aktions-W6 +1 (max +2).",
+      "defenseSuppressible": true
+    },
+    "intensity": null,
+    "transformId": "xform-verzoegerung",
+    "grantsFetz": false,
+    "catalystConsumed": false,
+    "overformulaPrimaryBonus": null,
+    "overformulaIntensityBonus": null,
+    "formulaDefensePenalty": null,
+    "summonConstructDefId": "v6-konstrukt-spieltest-schattenpuppe",
+    "timingMode": "delay",
+    "echoAmount": null,
+    "delayBonus": 2
+  },
+  {
+    "recipeId": "v6-over-beschwoerungsritual-luft-verzoegerung",
+    "kind": "overformula",
+    "catalogSlice": "slice1",
+    "techniqueId": "v6-technik-beschwoerungsritual",
+    "essenceId": "v6-essenz-luft",
+    "catalystId": "v6-katalysator-verzoegerung",
+    "name": "Überformel Windbeschwörung · Verzögerung",
+    "effectSummary": "Beschwöre ein Konstrukt mit Haltbarkeit 5. Ersetzt ein bestehendes Konstrukt. Keine Fetzladung. Nächster eigener Aktions-W6 +1 (max +2). (verstärkt) Verzögerung: Primäreffekt geschieht nicht sofort, sondern zu Beginn deines nächsten Zuges und erhält +2. Katalysator bleibt bis zur Auflösung. Überformel: Primär +2 (fester Slice-1-Bonus). Überformel: Fetzladung wird verbraucht. Formelabwehr −1.",
+    "primary": {
+      "kind": "summon_construct",
+      "value": 5,
+      "target": "self"
+    },
+    "rider": {
+      "id": "rider-w6",
+      "summary": "Nächster eigener Aktions-W6 +1 (max +2). (verstärkt)",
+      "defenseSuppressible": true
+    },
+    "intensity": null,
+    "transformId": "xform-verzoegerung",
+    "grantsFetz": false,
+    "catalystConsumed": false,
+    "overformulaPrimaryBonus": 2,
+    "overformulaIntensityBonus": null,
+    "formulaDefensePenalty": -1,
+    "summonConstructDefId": "v6-konstrukt-spieltest-schattenpuppe",
+    "timingMode": "delay",
+    "echoAmount": null,
+    "delayBonus": 2
   },
   {
     "recipeId": "v6-tek-beschwoerungsritual-luft-sofortzuender",
@@ -16530,7 +26507,10 @@ export const V6_GENERATED_FORMULA_RECIPES: readonly V6GeneratedFormulaRecipe[] =
     "overformulaPrimaryBonus": null,
     "overformulaIntensityBonus": null,
     "formulaDefensePenalty": null,
-    "summonConstructDefId": "v6-konstrukt-spieltest-schattenpuppe"
+    "summonConstructDefId": "v6-konstrukt-spieltest-schattenpuppe",
+    "timingMode": "immediate",
+    "echoAmount": null,
+    "delayBonus": null
   },
   {
     "recipeId": "v6-over-beschwoerungsritual-luft-sofortzuender",
@@ -16558,7 +26538,10 @@ export const V6_GENERATED_FORMULA_RECIPES: readonly V6GeneratedFormulaRecipe[] =
     "overformulaPrimaryBonus": 2,
     "overformulaIntensityBonus": null,
     "formulaDefensePenalty": -1,
-    "summonConstructDefId": "v6-konstrukt-spieltest-schattenpuppe"
+    "summonConstructDefId": "v6-konstrukt-spieltest-schattenpuppe",
+    "timingMode": "immediate",
+    "echoAmount": null,
+    "delayBonus": null
   },
   {
     "recipeId": "v6-tek-beschwoerungsritual-luft-opfergabe",
@@ -16586,7 +26569,10 @@ export const V6_GENERATED_FORMULA_RECIPES: readonly V6GeneratedFormulaRecipe[] =
     "overformulaPrimaryBonus": null,
     "overformulaIntensityBonus": null,
     "formulaDefensePenalty": null,
-    "summonConstructDefId": "v6-konstrukt-spieltest-schattenpuppe"
+    "summonConstructDefId": "v6-konstrukt-spieltest-schattenpuppe",
+    "timingMode": "immediate",
+    "echoAmount": null,
+    "delayBonus": null
   },
   {
     "recipeId": "v6-over-beschwoerungsritual-luft-opfergabe",
@@ -16614,7 +26600,72 @@ export const V6_GENERATED_FORMULA_RECIPES: readonly V6GeneratedFormulaRecipe[] =
     "overformulaPrimaryBonus": 2,
     "overformulaIntensityBonus": null,
     "formulaDefensePenalty": -1,
-    "summonConstructDefId": "v6-konstrukt-spieltest-schattenpuppe"
+    "summonConstructDefId": "v6-konstrukt-spieltest-schattenpuppe",
+    "timingMode": "immediate",
+    "echoAmount": null,
+    "delayBonus": null
+  },
+  {
+    "recipeId": "v6-tek-beschwoerungsritual-licht-echo",
+    "kind": "tek",
+    "catalogSlice": "slice1",
+    "techniqueId": "v6-technik-beschwoerungsritual",
+    "essenceId": "v6-essenz-licht",
+    "catalystId": "v6-katalysator-echo",
+    "name": "Lichtbeschwörung · Echo",
+    "effectSummary": "Beschwöre ein Konstrukt mit Haltbarkeit 3. Ersetzt ein bestehendes Konstrukt. Keine Fetzladung. Bei Schildgewinn: entferne optional eine Marke von dir. Echo: zu Beginn deines nächsten Zuges wiederhole 1 Punkt des Primärwerts. Katalysator bleibt bis zur Echo-Auflösung. TEK-Beschwörung: keine Fetzladung.",
+    "primary": {
+      "kind": "summon_construct",
+      "value": 3,
+      "target": "self"
+    },
+    "rider": {
+      "id": "rider-reinigen-licht",
+      "summary": "Bei Schildgewinn: entferne optional eine Marke von dir.",
+      "defenseSuppressible": false
+    },
+    "intensity": null,
+    "transformId": "xform-echo",
+    "grantsFetz": false,
+    "catalystConsumed": false,
+    "overformulaPrimaryBonus": null,
+    "overformulaIntensityBonus": null,
+    "formulaDefensePenalty": null,
+    "summonConstructDefId": "v6-konstrukt-spieltest-schattenpuppe",
+    "timingMode": "echo",
+    "echoAmount": 1,
+    "delayBonus": null
+  },
+  {
+    "recipeId": "v6-over-beschwoerungsritual-licht-echo",
+    "kind": "overformula",
+    "catalogSlice": "slice1",
+    "techniqueId": "v6-technik-beschwoerungsritual",
+    "essenceId": "v6-essenz-licht",
+    "catalystId": "v6-katalysator-echo",
+    "name": "Überformel Lichtbeschwörung · Echo",
+    "effectSummary": "Beschwöre ein Konstrukt mit Haltbarkeit 5. Ersetzt ein bestehendes Konstrukt. Keine Fetzladung. Bei Schildgewinn: entferne optional eine Marke von dir. (verstärkt) Echo: zu Beginn deines nächsten Zuges wiederhole 1 Punkt des Primärwerts. Katalysator bleibt bis zur Echo-Auflösung. Überformel: Primär +2 (fester Slice-1-Bonus). Überformel: Fetzladung wird verbraucht. Formelabwehr −1.",
+    "primary": {
+      "kind": "summon_construct",
+      "value": 5,
+      "target": "self"
+    },
+    "rider": {
+      "id": "rider-reinigen-licht",
+      "summary": "Bei Schildgewinn: entferne optional eine Marke von dir. (verstärkt)",
+      "defenseSuppressible": false
+    },
+    "intensity": null,
+    "transformId": "xform-echo",
+    "grantsFetz": false,
+    "catalystConsumed": false,
+    "overformulaPrimaryBonus": 2,
+    "overformulaIntensityBonus": null,
+    "formulaDefensePenalty": -1,
+    "summonConstructDefId": "v6-konstrukt-spieltest-schattenpuppe",
+    "timingMode": "echo",
+    "echoAmount": 1,
+    "delayBonus": null
   },
   {
     "recipeId": "v6-tek-beschwoerungsritual-licht-ueberladung",
@@ -16642,7 +26693,10 @@ export const V6_GENERATED_FORMULA_RECIPES: readonly V6GeneratedFormulaRecipe[] =
     "overformulaPrimaryBonus": null,
     "overformulaIntensityBonus": null,
     "formulaDefensePenalty": null,
-    "summonConstructDefId": "v6-konstrukt-spieltest-schattenpuppe"
+    "summonConstructDefId": "v6-konstrukt-spieltest-schattenpuppe",
+    "timingMode": "immediate",
+    "echoAmount": null,
+    "delayBonus": null
   },
   {
     "recipeId": "v6-over-beschwoerungsritual-licht-ueberladung",
@@ -16670,7 +26724,10 @@ export const V6_GENERATED_FORMULA_RECIPES: readonly V6GeneratedFormulaRecipe[] =
     "overformulaPrimaryBonus": 2,
     "overformulaIntensityBonus": null,
     "formulaDefensePenalty": -1,
-    "summonConstructDefId": "v6-konstrukt-spieltest-schattenpuppe"
+    "summonConstructDefId": "v6-konstrukt-spieltest-schattenpuppe",
+    "timingMode": "immediate",
+    "echoAmount": null,
+    "delayBonus": null
   },
   {
     "recipeId": "v6-tek-beschwoerungsritual-licht-verdichtung",
@@ -16698,7 +26755,10 @@ export const V6_GENERATED_FORMULA_RECIPES: readonly V6GeneratedFormulaRecipe[] =
     "overformulaPrimaryBonus": null,
     "overformulaIntensityBonus": null,
     "formulaDefensePenalty": null,
-    "summonConstructDefId": "v6-konstrukt-spieltest-schattenpuppe"
+    "summonConstructDefId": "v6-konstrukt-spieltest-schattenpuppe",
+    "timingMode": "immediate",
+    "echoAmount": null,
+    "delayBonus": null
   },
   {
     "recipeId": "v6-over-beschwoerungsritual-licht-verdichtung",
@@ -16726,7 +26786,72 @@ export const V6_GENERATED_FORMULA_RECIPES: readonly V6GeneratedFormulaRecipe[] =
     "overformulaPrimaryBonus": 2,
     "overformulaIntensityBonus": null,
     "formulaDefensePenalty": -1,
-    "summonConstructDefId": "v6-konstrukt-spieltest-schattenpuppe"
+    "summonConstructDefId": "v6-konstrukt-spieltest-schattenpuppe",
+    "timingMode": "immediate",
+    "echoAmount": null,
+    "delayBonus": null
+  },
+  {
+    "recipeId": "v6-tek-beschwoerungsritual-licht-verzoegerung",
+    "kind": "tek",
+    "catalogSlice": "slice1",
+    "techniqueId": "v6-technik-beschwoerungsritual",
+    "essenceId": "v6-essenz-licht",
+    "catalystId": "v6-katalysator-verzoegerung",
+    "name": "Lichtbeschwörung · Verzögerung",
+    "effectSummary": "Beschwöre ein Konstrukt mit Haltbarkeit 3. Ersetzt ein bestehendes Konstrukt. Keine Fetzladung. Bei Schildgewinn: entferne optional eine Marke von dir. Verzögerung: Primäreffekt geschieht nicht sofort, sondern zu Beginn deines nächsten Zuges und erhält +2. Katalysator bleibt bis zur Auflösung. TEK-Beschwörung: keine Fetzladung.",
+    "primary": {
+      "kind": "summon_construct",
+      "value": 3,
+      "target": "self"
+    },
+    "rider": {
+      "id": "rider-reinigen-licht",
+      "summary": "Bei Schildgewinn: entferne optional eine Marke von dir.",
+      "defenseSuppressible": false
+    },
+    "intensity": null,
+    "transformId": "xform-verzoegerung",
+    "grantsFetz": false,
+    "catalystConsumed": false,
+    "overformulaPrimaryBonus": null,
+    "overformulaIntensityBonus": null,
+    "formulaDefensePenalty": null,
+    "summonConstructDefId": "v6-konstrukt-spieltest-schattenpuppe",
+    "timingMode": "delay",
+    "echoAmount": null,
+    "delayBonus": 2
+  },
+  {
+    "recipeId": "v6-over-beschwoerungsritual-licht-verzoegerung",
+    "kind": "overformula",
+    "catalogSlice": "slice1",
+    "techniqueId": "v6-technik-beschwoerungsritual",
+    "essenceId": "v6-essenz-licht",
+    "catalystId": "v6-katalysator-verzoegerung",
+    "name": "Überformel Lichtbeschwörung · Verzögerung",
+    "effectSummary": "Beschwöre ein Konstrukt mit Haltbarkeit 5. Ersetzt ein bestehendes Konstrukt. Keine Fetzladung. Bei Schildgewinn: entferne optional eine Marke von dir. (verstärkt) Verzögerung: Primäreffekt geschieht nicht sofort, sondern zu Beginn deines nächsten Zuges und erhält +2. Katalysator bleibt bis zur Auflösung. Überformel: Primär +2 (fester Slice-1-Bonus). Überformel: Fetzladung wird verbraucht. Formelabwehr −1.",
+    "primary": {
+      "kind": "summon_construct",
+      "value": 5,
+      "target": "self"
+    },
+    "rider": {
+      "id": "rider-reinigen-licht",
+      "summary": "Bei Schildgewinn: entferne optional eine Marke von dir. (verstärkt)",
+      "defenseSuppressible": false
+    },
+    "intensity": null,
+    "transformId": "xform-verzoegerung",
+    "grantsFetz": false,
+    "catalystConsumed": false,
+    "overformulaPrimaryBonus": 2,
+    "overformulaIntensityBonus": null,
+    "formulaDefensePenalty": -1,
+    "summonConstructDefId": "v6-konstrukt-spieltest-schattenpuppe",
+    "timingMode": "delay",
+    "echoAmount": null,
+    "delayBonus": 2
   },
   {
     "recipeId": "v6-tek-beschwoerungsritual-licht-sofortzuender",
@@ -16754,7 +26879,10 @@ export const V6_GENERATED_FORMULA_RECIPES: readonly V6GeneratedFormulaRecipe[] =
     "overformulaPrimaryBonus": null,
     "overformulaIntensityBonus": null,
     "formulaDefensePenalty": null,
-    "summonConstructDefId": "v6-konstrukt-spieltest-schattenpuppe"
+    "summonConstructDefId": "v6-konstrukt-spieltest-schattenpuppe",
+    "timingMode": "immediate",
+    "echoAmount": null,
+    "delayBonus": null
   },
   {
     "recipeId": "v6-over-beschwoerungsritual-licht-sofortzuender",
@@ -16782,7 +26910,10 @@ export const V6_GENERATED_FORMULA_RECIPES: readonly V6GeneratedFormulaRecipe[] =
     "overformulaPrimaryBonus": 2,
     "overformulaIntensityBonus": null,
     "formulaDefensePenalty": -1,
-    "summonConstructDefId": "v6-konstrukt-spieltest-schattenpuppe"
+    "summonConstructDefId": "v6-konstrukt-spieltest-schattenpuppe",
+    "timingMode": "immediate",
+    "echoAmount": null,
+    "delayBonus": null
   },
   {
     "recipeId": "v6-tek-beschwoerungsritual-licht-opfergabe",
@@ -16810,7 +26941,10 @@ export const V6_GENERATED_FORMULA_RECIPES: readonly V6GeneratedFormulaRecipe[] =
     "overformulaPrimaryBonus": null,
     "overformulaIntensityBonus": null,
     "formulaDefensePenalty": null,
-    "summonConstructDefId": "v6-konstrukt-spieltest-schattenpuppe"
+    "summonConstructDefId": "v6-konstrukt-spieltest-schattenpuppe",
+    "timingMode": "immediate",
+    "echoAmount": null,
+    "delayBonus": null
   },
   {
     "recipeId": "v6-over-beschwoerungsritual-licht-opfergabe",
@@ -16838,7 +26972,72 @@ export const V6_GENERATED_FORMULA_RECIPES: readonly V6GeneratedFormulaRecipe[] =
     "overformulaPrimaryBonus": 2,
     "overformulaIntensityBonus": null,
     "formulaDefensePenalty": -1,
-    "summonConstructDefId": "v6-konstrukt-spieltest-schattenpuppe"
+    "summonConstructDefId": "v6-konstrukt-spieltest-schattenpuppe",
+    "timingMode": "immediate",
+    "echoAmount": null,
+    "delayBonus": null
+  },
+  {
+    "recipeId": "v6-tek-beschwoerungsritual-schatten-echo",
+    "kind": "tek",
+    "catalogSlice": "slice1",
+    "techniqueId": "v6-technik-beschwoerungsritual",
+    "essenceId": "v6-essenz-schatten",
+    "catalystId": "v6-katalysator-echo",
+    "name": "Schattenbeschwörung · Echo",
+    "effectSummary": "Beschwöre ein Konstrukt mit Haltbarkeit 3. Ersetzt ein bestehendes Konstrukt. Keine Fetzladung. Bei Treffer: erschöpfe optional 1 gegnerische Formelkomponente. Echo: zu Beginn deines nächsten Zuges wiederhole 1 Punkt des Primärwerts. Katalysator bleibt bis zur Echo-Auflösung. TEK-Beschwörung: keine Fetzladung.",
+    "primary": {
+      "kind": "summon_construct",
+      "value": 3,
+      "target": "self"
+    },
+    "rider": {
+      "id": "rider-fluch",
+      "summary": "Bei Treffer: erschöpfe optional 1 gegnerische Formelkomponente.",
+      "defenseSuppressible": true
+    },
+    "intensity": null,
+    "transformId": "xform-echo",
+    "grantsFetz": false,
+    "catalystConsumed": false,
+    "overformulaPrimaryBonus": null,
+    "overformulaIntensityBonus": null,
+    "formulaDefensePenalty": null,
+    "summonConstructDefId": "v6-konstrukt-spieltest-schattenpuppe",
+    "timingMode": "echo",
+    "echoAmount": 1,
+    "delayBonus": null
+  },
+  {
+    "recipeId": "v6-over-beschwoerungsritual-schatten-echo",
+    "kind": "overformula",
+    "catalogSlice": "slice1",
+    "techniqueId": "v6-technik-beschwoerungsritual",
+    "essenceId": "v6-essenz-schatten",
+    "catalystId": "v6-katalysator-echo",
+    "name": "Überformel Schattenbeschwörung · Echo",
+    "effectSummary": "Beschwöre ein Konstrukt mit Haltbarkeit 5. Ersetzt ein bestehendes Konstrukt. Keine Fetzladung. Bei Treffer: erschöpfe optional 1 gegnerische Formelkomponente. (verstärkt) Echo: zu Beginn deines nächsten Zuges wiederhole 1 Punkt des Primärwerts. Katalysator bleibt bis zur Echo-Auflösung. Überformel: Primär +2 (fester Slice-1-Bonus). Überformel: Fetzladung wird verbraucht. Formelabwehr −1.",
+    "primary": {
+      "kind": "summon_construct",
+      "value": 5,
+      "target": "self"
+    },
+    "rider": {
+      "id": "rider-fluch",
+      "summary": "Bei Treffer: erschöpfe optional 1 gegnerische Formelkomponente. (verstärkt)",
+      "defenseSuppressible": true
+    },
+    "intensity": null,
+    "transformId": "xform-echo",
+    "grantsFetz": false,
+    "catalystConsumed": false,
+    "overformulaPrimaryBonus": 2,
+    "overformulaIntensityBonus": null,
+    "formulaDefensePenalty": -1,
+    "summonConstructDefId": "v6-konstrukt-spieltest-schattenpuppe",
+    "timingMode": "echo",
+    "echoAmount": 1,
+    "delayBonus": null
   },
   {
     "recipeId": "v6-tek-beschwoerungsritual-schatten-ueberladung",
@@ -16866,7 +27065,10 @@ export const V6_GENERATED_FORMULA_RECIPES: readonly V6GeneratedFormulaRecipe[] =
     "overformulaPrimaryBonus": null,
     "overformulaIntensityBonus": null,
     "formulaDefensePenalty": null,
-    "summonConstructDefId": "v6-konstrukt-spieltest-schattenpuppe"
+    "summonConstructDefId": "v6-konstrukt-spieltest-schattenpuppe",
+    "timingMode": "immediate",
+    "echoAmount": null,
+    "delayBonus": null
   },
   {
     "recipeId": "v6-over-beschwoerungsritual-schatten-ueberladung",
@@ -16894,7 +27096,10 @@ export const V6_GENERATED_FORMULA_RECIPES: readonly V6GeneratedFormulaRecipe[] =
     "overformulaPrimaryBonus": 2,
     "overformulaIntensityBonus": null,
     "formulaDefensePenalty": -1,
-    "summonConstructDefId": "v6-konstrukt-spieltest-schattenpuppe"
+    "summonConstructDefId": "v6-konstrukt-spieltest-schattenpuppe",
+    "timingMode": "immediate",
+    "echoAmount": null,
+    "delayBonus": null
   },
   {
     "recipeId": "v6-tek-beschwoerungsritual-schatten-verdichtung",
@@ -16922,7 +27127,10 @@ export const V6_GENERATED_FORMULA_RECIPES: readonly V6GeneratedFormulaRecipe[] =
     "overformulaPrimaryBonus": null,
     "overformulaIntensityBonus": null,
     "formulaDefensePenalty": null,
-    "summonConstructDefId": "v6-konstrukt-spieltest-schattenpuppe"
+    "summonConstructDefId": "v6-konstrukt-spieltest-schattenpuppe",
+    "timingMode": "immediate",
+    "echoAmount": null,
+    "delayBonus": null
   },
   {
     "recipeId": "v6-over-beschwoerungsritual-schatten-verdichtung",
@@ -16950,7 +27158,72 @@ export const V6_GENERATED_FORMULA_RECIPES: readonly V6GeneratedFormulaRecipe[] =
     "overformulaPrimaryBonus": 2,
     "overformulaIntensityBonus": null,
     "formulaDefensePenalty": -1,
-    "summonConstructDefId": "v6-konstrukt-spieltest-schattenpuppe"
+    "summonConstructDefId": "v6-konstrukt-spieltest-schattenpuppe",
+    "timingMode": "immediate",
+    "echoAmount": null,
+    "delayBonus": null
+  },
+  {
+    "recipeId": "v6-tek-beschwoerungsritual-schatten-verzoegerung",
+    "kind": "tek",
+    "catalogSlice": "slice1",
+    "techniqueId": "v6-technik-beschwoerungsritual",
+    "essenceId": "v6-essenz-schatten",
+    "catalystId": "v6-katalysator-verzoegerung",
+    "name": "Schattenbeschwörung · Verzögerung",
+    "effectSummary": "Beschwöre ein Konstrukt mit Haltbarkeit 3. Ersetzt ein bestehendes Konstrukt. Keine Fetzladung. Bei Treffer: erschöpfe optional 1 gegnerische Formelkomponente. Verzögerung: Primäreffekt geschieht nicht sofort, sondern zu Beginn deines nächsten Zuges und erhält +2. Katalysator bleibt bis zur Auflösung. TEK-Beschwörung: keine Fetzladung.",
+    "primary": {
+      "kind": "summon_construct",
+      "value": 3,
+      "target": "self"
+    },
+    "rider": {
+      "id": "rider-fluch",
+      "summary": "Bei Treffer: erschöpfe optional 1 gegnerische Formelkomponente.",
+      "defenseSuppressible": true
+    },
+    "intensity": null,
+    "transformId": "xform-verzoegerung",
+    "grantsFetz": false,
+    "catalystConsumed": false,
+    "overformulaPrimaryBonus": null,
+    "overformulaIntensityBonus": null,
+    "formulaDefensePenalty": null,
+    "summonConstructDefId": "v6-konstrukt-spieltest-schattenpuppe",
+    "timingMode": "delay",
+    "echoAmount": null,
+    "delayBonus": 2
+  },
+  {
+    "recipeId": "v6-over-beschwoerungsritual-schatten-verzoegerung",
+    "kind": "overformula",
+    "catalogSlice": "slice1",
+    "techniqueId": "v6-technik-beschwoerungsritual",
+    "essenceId": "v6-essenz-schatten",
+    "catalystId": "v6-katalysator-verzoegerung",
+    "name": "Überformel Schattenbeschwörung · Verzögerung",
+    "effectSummary": "Beschwöre ein Konstrukt mit Haltbarkeit 5. Ersetzt ein bestehendes Konstrukt. Keine Fetzladung. Bei Treffer: erschöpfe optional 1 gegnerische Formelkomponente. (verstärkt) Verzögerung: Primäreffekt geschieht nicht sofort, sondern zu Beginn deines nächsten Zuges und erhält +2. Katalysator bleibt bis zur Auflösung. Überformel: Primär +2 (fester Slice-1-Bonus). Überformel: Fetzladung wird verbraucht. Formelabwehr −1.",
+    "primary": {
+      "kind": "summon_construct",
+      "value": 5,
+      "target": "self"
+    },
+    "rider": {
+      "id": "rider-fluch",
+      "summary": "Bei Treffer: erschöpfe optional 1 gegnerische Formelkomponente. (verstärkt)",
+      "defenseSuppressible": true
+    },
+    "intensity": null,
+    "transformId": "xform-verzoegerung",
+    "grantsFetz": false,
+    "catalystConsumed": false,
+    "overformulaPrimaryBonus": 2,
+    "overformulaIntensityBonus": null,
+    "formulaDefensePenalty": -1,
+    "summonConstructDefId": "v6-konstrukt-spieltest-schattenpuppe",
+    "timingMode": "delay",
+    "echoAmount": null,
+    "delayBonus": 2
   },
   {
     "recipeId": "v6-tek-beschwoerungsritual-schatten-sofortzuender",
@@ -16978,7 +27251,10 @@ export const V6_GENERATED_FORMULA_RECIPES: readonly V6GeneratedFormulaRecipe[] =
     "overformulaPrimaryBonus": null,
     "overformulaIntensityBonus": null,
     "formulaDefensePenalty": null,
-    "summonConstructDefId": "v6-konstrukt-spieltest-schattenpuppe"
+    "summonConstructDefId": "v6-konstrukt-spieltest-schattenpuppe",
+    "timingMode": "immediate",
+    "echoAmount": null,
+    "delayBonus": null
   },
   {
     "recipeId": "v6-over-beschwoerungsritual-schatten-sofortzuender",
@@ -17006,7 +27282,10 @@ export const V6_GENERATED_FORMULA_RECIPES: readonly V6GeneratedFormulaRecipe[] =
     "overformulaPrimaryBonus": 2,
     "overformulaIntensityBonus": null,
     "formulaDefensePenalty": -1,
-    "summonConstructDefId": "v6-konstrukt-spieltest-schattenpuppe"
+    "summonConstructDefId": "v6-konstrukt-spieltest-schattenpuppe",
+    "timingMode": "immediate",
+    "echoAmount": null,
+    "delayBonus": null
   },
   {
     "recipeId": "v6-tek-beschwoerungsritual-schatten-opfergabe",
@@ -17034,7 +27313,10 @@ export const V6_GENERATED_FORMULA_RECIPES: readonly V6GeneratedFormulaRecipe[] =
     "overformulaPrimaryBonus": null,
     "overformulaIntensityBonus": null,
     "formulaDefensePenalty": null,
-    "summonConstructDefId": "v6-konstrukt-spieltest-schattenpuppe"
+    "summonConstructDefId": "v6-konstrukt-spieltest-schattenpuppe",
+    "timingMode": "immediate",
+    "echoAmount": null,
+    "delayBonus": null
   },
   {
     "recipeId": "v6-over-beschwoerungsritual-schatten-opfergabe",
@@ -17062,10 +27344,13 @@ export const V6_GENERATED_FORMULA_RECIPES: readonly V6GeneratedFormulaRecipe[] =
     "overformulaPrimaryBonus": 2,
     "overformulaIntensityBonus": null,
     "formulaDefensePenalty": -1,
-    "summonConstructDefId": "v6-konstrukt-spieltest-schattenpuppe"
+    "summonConstructDefId": "v6-konstrukt-spieltest-schattenpuppe",
+    "timingMode": "immediate",
+    "echoAmount": null,
+    "delayBonus": null
   }
 ] as const;
 
 export const V6_GENERATED_CATALOG_VERSION = 1 as const;
 
-export const V6_GENERATED_RECIPE_COUNT = 604 as const;
+export const V6_GENERATED_RECIPE_COUNT = 876 as const;

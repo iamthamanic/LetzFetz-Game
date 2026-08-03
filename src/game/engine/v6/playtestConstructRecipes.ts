@@ -40,6 +40,8 @@ export const V6_PLAYTEST_CONSTRUCT_RECIPES: readonly V6LookupRecipe[] = [
     overformulaIntensityBonus: null,
     formulaDefensePenalty: null,
     timingMode: 'immediate',
+    echoAmount: null,
+    delayBonus: null,
     summonConstructDefId: V6_PLAYTEST_CONSTRUCT_DEF_ID,
   },
 ];

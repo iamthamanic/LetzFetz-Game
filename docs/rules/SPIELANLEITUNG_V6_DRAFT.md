@@ -94,7 +94,8 @@ Genau 1 Karte. Stapel leer → Ablage mischen. Negative Sofort-Glitches nicht im
 Technik + Essenz erschöpfen. Rezepte = Authoring/Generator — keine Textaddition.
 
 **Essenzen (6):** Feuer Druck · Wasser Heilung · Erde Stabilität · Luft Tempo · Licht Schild · Schatten Fluch.  
-**Techniken (10):** Impulsgeschoss … Beschwörungsritual (#381). Slice-1 Katalog **10T×6E×4K = 604** Rezepte; volle 10×10-Matrix später (#383).
+**Techniken (10):** Impulsgeschoss … Beschwörungsritual (#381).  
+**Katalysatoren (10):** Echo … Opfergabe (#382). Slice-1 Katalog **10T×6E×6K = 876** Rezepte (6 matrix-supported Katalysatoren; 4 unsupported bis #383).
 
 Nach **offensiver TEK** in derselben Aktionsphase: **kein** Angriff und **keine** Herausforderung (selbstgerichtete Fusion sperrt nicht).
 

@@ -2,9 +2,9 @@
  * Slice-1 formula authoring SoT (TE / TK / EK bases + catalyst transforms).
  * Location: src/content/v6/formulaAuthoring.slice1.ts
  *
- * Current catalog: 10 Techniken × 6 Essenzen × 4 Katalysatoren → 604 generated recipes.
- * Generator expands TE×catalyst → TEK + Überformel. Missing required keys fail closed.
- * Full 10T×10K matrix is catalog-expansion (#383) — do not invent unsupported catalysts.
+ * Catalog: 10 Techniken × 6 Essenzen × 6 matrix Katalysatoren → generated recipes.
+ * All 10 catalysts have explicit transforms; 4 are `unsupported` (no TEK invent, #383).
+ * Generator expands TE×supported-catalyst → TEK + Überformel. Missing keys fail closed.
  */
 import type {
   V6CatalystTransformAuthoring,
@@ -15,25 +15,27 @@ import type {
   V6TkBaseAuthoring,
 } from './schemas/formulaRecipeAuthoring';
 import {
-  V6_SLICE1_CATALYST_IDS,
+  V6_MATRIX_CATALYST_IDS,
   V6_SLICE1_ESSENCE_IDS,
   V6_SLICE1_TECHNIQUE_IDS,
+  type V6MatrixCatalystId,
+  type V6Slice1CatalystId,
 } from './slice1Ids';
 import { V6_PLAYTEST_CONSTRUCT_DEF_ID } from './cards/playtestConstructCards';
 
 type TechId = (typeof V6_SLICE1_TECHNIQUE_IDS)[number];
 type EssId = (typeof V6_SLICE1_ESSENCE_IDS)[number];
-type CatId = (typeof V6_SLICE1_CATALYST_IDS)[number];
+type MatrixCatId = V6MatrixCatalystId;
 
 function teId(t: TechId, e: EssId): string {
   return `v6-te-${t.replace('v6-technik-', '')}-${e.replace('v6-essenz-', '')}`;
 }
 
-function tkId(t: TechId, c: CatId): string {
+function tkId(t: TechId, c: MatrixCatId): string {
   return `v6-tk-${t.replace('v6-technik-', '')}-${c.replace('v6-katalysator-', '')}`;
 }
 
-function ekId(e: EssId, c: CatId): string {
+function ekId(e: EssId, c: MatrixCatId): string {
   return `v6-ek-${e.replace('v6-essenz-', '')}-${c.replace('v6-katalysator-', '')}`;
 }
 
@@ -242,120 +244,158 @@ const ESSENCE_RIDERS: Record<
   },
 };
 
-/** Proper German TK display names (not machine Tech·Cat labels). */
-const TK_NAMES: Record<TechId, Record<CatId, string>> = {
+/** Proper German TK display names (not machine Tech·Cat labels). Matrix catalysts only. */
+const TK_NAMES: Record<TechId, Record<MatrixCatId, string>> = {
   'v6-technik-impulsgeschoss': {
+    'v6-katalysator-echo': 'Echoimpuls',
     'v6-katalysator-ueberladung': 'Überimpuls',
     'v6-katalysator-verdichtung': 'Dichtimpuls',
+    'v6-katalysator-verzoegerung': 'Delayimpuls',
     'v6-katalysator-sofortzuender': 'Zündimpuls',
     'v6-katalysator-opfergabe': 'Opferimpuls',
   },
   'v6-technik-adrenalinschrei': {
+    'v6-katalysator-echo': 'Echoschrei',
     'v6-katalysator-ueberladung': 'Überschrei',
     'v6-katalysator-verdichtung': 'Dichtschrei',
+    'v6-katalysator-verzoegerung': 'Delayschrei',
     'v6-katalysator-sofortzuender': 'Zündschrei',
     'v6-katalysator-opfergabe': 'Opferschrei',
   },
   'v6-technik-fintenschnitt': {
+    'v6-katalysator-echo': 'Echofinte',
     'v6-katalysator-ueberladung': 'Überfinte',
     'v6-katalysator-verdichtung': 'Dichtfinte',
+    'v6-katalysator-verzoegerung': 'Delayfinte',
     'v6-katalysator-sofortzuender': 'Zündfinte',
     'v6-katalysator-opfergabe': 'Opferfinte',
   },
   'v6-technik-brechschlag': {
+    'v6-katalysator-echo': 'Echobruch',
     'v6-katalysator-ueberladung': 'Überbruch',
     'v6-katalysator-verdichtung': 'Dichtbruch',
+    'v6-katalysator-verzoegerung': 'Delaybruch',
     'v6-katalysator-sofortzuender': 'Zündbruch',
     'v6-katalysator-opfergabe': 'Opferbruch',
   },
   'v6-technik-kettenfessel': {
+    'v6-katalysator-echo': 'Echokette',
     'v6-katalysator-ueberladung': 'Überkette',
     'v6-katalysator-verdichtung': 'Dichtkette',
+    'v6-katalysator-verzoegerung': 'Delaykette',
     'v6-katalysator-sofortzuender': 'Zündkette',
     'v6-katalysator-opfergabe': 'Opferkette',
   },
   'v6-technik-bannkreis': {
+    'v6-katalysator-echo': 'Echokreis',
     'v6-katalysator-ueberladung': 'Überkreis',
     'v6-katalysator-verdichtung': 'Dichtkreis',
+    'v6-katalysator-verzoegerung': 'Delaykreis',
     'v6-katalysator-sofortzuender': 'Zündkreis',
     'v6-katalysator-opfergabe': 'Opferkreis',
   },
   'v6-technik-ueberraschungsangriff': {
+    'v6-katalysator-echo': 'Echostoß',
     'v6-katalysator-ueberladung': 'Überfallstoß',
     'v6-katalysator-verdichtung': 'Dichtstoß',
+    'v6-katalysator-verzoegerung': 'Delaystoß',
     'v6-katalysator-sofortzuender': 'Zündstoß',
     'v6-katalysator-opfergabe': 'Opferstoß',
   },
   'v6-technik-schicksalmanifestation': {
+    'v6-katalysator-echo': 'Echoschicksal',
     'v6-katalysator-ueberladung': 'Überschicksal',
     'v6-katalysator-verdichtung': 'Dichtschicksal',
+    'v6-katalysator-verzoegerung': 'Delayschicksal',
     'v6-katalysator-sofortzuender': 'Zündschicksal',
     'v6-katalysator-opfergabe': 'Opferschicksal',
   },
   'v6-technik-magiepanzer': {
+    'v6-katalysator-echo': 'Echopanzer',
     'v6-katalysator-ueberladung': 'Überpanzer',
     'v6-katalysator-verdichtung': 'Dichtpanzer',
+    'v6-katalysator-verzoegerung': 'Delaypanzer',
     'v6-katalysator-sofortzuender': 'Zündpanzer',
     'v6-katalysator-opfergabe': 'Opferpanzer',
   },
   'v6-technik-beschwoerungsritual': {
+    'v6-katalysator-echo': 'Echoritual',
     'v6-katalysator-ueberladung': 'Überritual',
     'v6-katalysator-verdichtung': 'Dichtritual',
+    'v6-katalysator-verzoegerung': 'Delayritual',
     'v6-katalysator-sofortzuender': 'Zündritual',
     'v6-katalysator-opfergabe': 'Opferritual',
   },
 };
 
-/** Proper German EK display names (not Ritual·Cat compounds). */
-const EK_NAMES: Record<EssId, Record<CatId, string>> = {
+/** Proper German EK display names (not Ritual·Cat compounds). Matrix catalysts only. */
+const EK_NAMES: Record<EssId, Record<MatrixCatId, string>> = {
   'v6-essenz-feuer': {
+    'v6-katalysator-echo': 'Glutecho',
     'v6-katalysator-ueberladung': 'Glutüberladung',
     'v6-katalysator-verdichtung': 'Glutverdichtung',
+    'v6-katalysator-verzoegerung': 'Glutverzögerung',
     'v6-katalysator-sofortzuender': 'Funkenzünder',
     'v6-katalysator-opfergabe': 'Brandopfer',
   },
   'v6-essenz-wasser': {
+    'v6-katalysator-echo': 'Wellenecho',
     'v6-katalysator-ueberladung': 'Flutüberladung',
     'v6-katalysator-verdichtung': 'Quellverdichtung',
+    'v6-katalysator-verzoegerung': 'Wellenverzögerung',
     'v6-katalysator-sofortzuender': 'Spritzzünder',
     'v6-katalysator-opfergabe': 'Wellenopfer',
   },
   'v6-essenz-erde': {
+    'v6-katalysator-echo': 'Felsecho',
     'v6-katalysator-ueberladung': 'Felsüberladung',
     'v6-katalysator-verdichtung': 'Felsverdichtung',
+    'v6-katalysator-verzoegerung': 'Felsverzögerung',
     'v6-katalysator-sofortzuender': 'Felszünder',
     'v6-katalysator-opfergabe': 'Felsopfer',
   },
   'v6-essenz-luft': {
+    'v6-katalysator-echo': 'Windecho',
     'v6-katalysator-ueberladung': 'Sturmüberladung',
     'v6-katalysator-verdichtung': 'Windverdichtung',
+    'v6-katalysator-verzoegerung': 'Windverzögerung',
     'v6-katalysator-sofortzuender': 'Windzünder',
     'v6-katalysator-opfergabe': 'Luftopfer',
   },
   'v6-essenz-licht': {
+    'v6-katalysator-echo': 'Lichtecho',
     'v6-katalysator-ueberladung': 'Lichtüberladung',
     'v6-katalysator-verdichtung': 'Lichtverdichtung',
+    'v6-katalysator-verzoegerung': 'Lichtverzögerung',
     'v6-katalysator-sofortzuender': 'Lichtzünder',
     'v6-katalysator-opfergabe': 'Lichtopfer',
   },
   'v6-essenz-schatten': {
+    'v6-katalysator-echo': 'Schattenecho',
     'v6-katalysator-ueberladung': 'Schattenüberladung',
     'v6-katalysator-verdichtung': 'Schattenverdichtung',
+    'v6-katalysator-verzoegerung': 'Schattenverzögerung',
     'v6-katalysator-sofortzuender': 'Schattenzünder',
     'v6-katalysator-opfergabe': 'Schattenopfer',
   },
 };
 
-const CAT_SHORT: Record<CatId, string> = {
+const CAT_SHORT: Record<V6Slice1CatalystId, string> = {
+  'v6-katalysator-echo': 'Echo',
   'v6-katalysator-ueberladung': 'Überladung',
   'v6-katalysator-verdichtung': 'Verdichtung',
+  'v6-katalysator-ausbreitung': 'Ausbreitung',
+  'v6-katalysator-kettenkopplung': 'Kettenkopplung',
+  'v6-katalysator-verzoegerung': 'Verzögerung',
   'v6-katalysator-sofortzuender': 'Sofortzünder',
+  'v6-katalysator-spiegelung': 'Spiegelung',
+  'v6-katalysator-umkehrung': 'Umkehrung',
   'v6-katalysator-opfergabe': 'Opfergabe',
 };
 
 export function v6Slice1CatalystShortName(catalystId: string): string {
   if (catalystId in CAT_SHORT) {
-    return CAT_SHORT[catalystId as CatId];
+    return CAT_SHORT[catalystId as V6Slice1CatalystId];
   }
   return catalystId;
 }
@@ -427,7 +467,7 @@ function buildTkBases(): V6TkBaseAuthoring[] {
     },
   };
   for (const t of V6_SLICE1_TECHNIQUE_IDS) {
-    for (const c of V6_SLICE1_CATALYST_IDS) {
+    for (const c of V6_MATRIX_CATALYST_IDS) {
       rows.push({
         recipeId: tkId(t, c),
         techniqueId: t,
@@ -452,7 +492,7 @@ function buildEkBases(): V6EkBaseAuthoring[] {
     'v6-essenz-schatten': { kind: 'damage', value: 2, target: 'opponent', offensive: true },
   };
   for (const e of V6_SLICE1_ESSENCE_IDS) {
-    for (const c of V6_SLICE1_CATALYST_IDS) {
+    for (const c of V6_MATRIX_CATALYST_IDS) {
       rows.push({
         recipeId: ekId(e, c),
         essenceId: e,
@@ -469,8 +509,19 @@ function buildEkBases(): V6EkBaseAuthoring[] {
 function buildCatalystTransforms(): V6CatalystTransformAuthoring[] {
   return [
     {
+      transformId: 'xform-echo',
+      catalystId: 'v6-katalysator-echo',
+      availability: 'supported',
+      primaryDelta: 0,
+      timingMode: 'echo',
+      echoAmount: 1,
+      summary:
+        'Echo: zu Beginn deines nächsten Zuges wiederhole 1 Punkt des Primärwerts. Katalysator bleibt bis zur Echo-Auflösung.',
+    },
+    {
       transformId: 'xform-ueberladung',
       catalystId: 'v6-katalysator-ueberladung',
+      availability: 'supported',
       primaryDelta: 2,
       selfDamage: 1,
       summary: 'Primärwert +2; danach erleidest du 1 Selbstschaden.',
@@ -478,20 +529,65 @@ function buildCatalystTransforms(): V6CatalystTransformAuthoring[] {
     {
       transformId: 'xform-verdichtung',
       catalystId: 'v6-katalysator-verdichtung',
+      availability: 'supported',
       primaryDelta: 1,
       stabilityBuffUsed: 1,
       summary: 'Primärwert +1; verwendete Komponenten erhalten +1 Stabilität.',
     },
     {
+      transformId: 'xform-ausbreitung',
+      catalystId: 'v6-katalysator-ausbreitung',
+      availability: 'unsupported',
+      primaryDelta: 0,
+      summary:
+        'Ausbreitung: Spread-Ziele nur per approved Authoring — generische Matrix gesperrt (#383).',
+    },
+    {
+      transformId: 'xform-kettenkopplung',
+      catalystId: 'v6-katalysator-kettenkopplung',
+      availability: 'unsupported',
+      primaryDelta: 0,
+      summary:
+        'Kettenkopplung: Folgeaktions-Bonus nur per approved Authoring — generische Matrix gesperrt (#383).',
+    },
+    {
+      transformId: 'xform-verzoegerung',
+      catalystId: 'v6-katalysator-verzoegerung',
+      availability: 'supported',
+      primaryDelta: 0,
+      timingMode: 'delay',
+      delayBonus: 2,
+      summary:
+        'Verzögerung: Primäreffekt geschieht nicht sofort, sondern zu Beginn deines nächsten Zuges und erhält +2. Katalysator bleibt bis zur Auflösung.',
+    },
+    {
       transformId: 'xform-sofortzuender',
       catalystId: 'v6-katalysator-sofortzuender',
+      availability: 'supported',
       primaryDelta: -1,
       drawDiscardAfter: true,
       summary: 'Primärwert −1; danach ziehe 1 und wirf 1 ab.',
     },
     {
+      transformId: 'xform-spiegelung',
+      catalystId: 'v6-katalysator-spiegelung',
+      availability: 'unsupported',
+      primaryDelta: 0,
+      summary:
+        'Spiegelung: Offensiv/Defensiv-Rider nur per approved Authoring — generische Matrix gesperrt (#383).',
+    },
+    {
+      transformId: 'xform-umkehrung',
+      catalystId: 'v6-katalysator-umkehrung',
+      availability: 'unsupported',
+      primaryDelta: 0,
+      summary:
+        'Umkehrung: Schaden↔Heilung nie generisch geraten — nur approved Authoring (#383).',
+    },
+    {
       transformId: 'xform-opfergabe',
       catalystId: 'v6-katalysator-opfergabe',
+      availability: 'supported',
       primaryDelta: 0,
       offerDiscardBonus: 2,
       summary: 'Optional: wirf 1 Handkarte ab für Primärwert +2.',

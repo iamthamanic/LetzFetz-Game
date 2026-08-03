@@ -74,13 +74,13 @@ describe('V6 Techniken auf 10 (#381)', () => {
     expect(ritual?.effectText).toMatch(/Konstrukt/);
   });
 
-  it('authoring + generated catalog cover 10T×6E×4K (fail-closed size)', () => {
+  it('authoring + generated catalog cover 10T×6E×6K (fail-closed size)', () => {
     expect(V6_FORMULA_AUTHORING_SLICE1.teBases).toHaveLength(60);
-    expect(V6_FORMULA_AUTHORING_SLICE1.tkBases).toHaveLength(40);
-    expect(V6_FORMULA_AUTHORING_SLICE1.ekBases).toHaveLength(24);
-    expect(V6_GENERATED_RECIPE_COUNT).toBe(604);
-    expect(V6_SLICE1_RECIPE_CATALOG.recipeCount).toBe(604);
-    expect(V6_SLICE1_RECIPE_CATALOG.label).toMatch(/10T×6E×4K/);
+    expect(V6_FORMULA_AUTHORING_SLICE1.tkBases).toHaveLength(60);
+    expect(V6_FORMULA_AUTHORING_SLICE1.ekBases).toHaveLength(36);
+    expect(V6_GENERATED_RECIPE_COUNT).toBe(876);
+    expect(V6_SLICE1_RECIPE_CATALOG.recipeCount).toBe(876);
+    expect(V6_SLICE1_RECIPE_CATALOG.label).toMatch(/10T×6E×6K/);
     for (const id of EXPECTED_TEN) {
       expect(V6_FORMULA_AUTHORING_SLICE1.teBases.some((r) => r.techniqueId === id)).toBe(true);
       expect(V6_GENERATED_FORMULA_RECIPES.some((r) => r.techniqueId === id)).toBe(true);
