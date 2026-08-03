@@ -1,3 +1,6 @@
+# Letz Fetz — verify-ui + test-gate project config (app repo)
+# Workspace wrapper may also keep a copy with appRoot; this file is authoritative in-git.
+
 name: LetzFetz-Game
 stack: vite-react-tailwind
 checks:
@@ -5,5 +8,45 @@ checks:
 defaultBranch: main
 uiLanguage: de
 commitLanguage: en
+
+checksCommand: npm run checks
+checksSnippet: npm run fallow
+e2eCommand: npm run test:e2e
+
+styleguide: docs/UI_STYLEGUIDE.md
+designBrief: DESIGN.md
+locale: de
+
+typedStrict:
+  languages: [typescript]
+
 security:
   checklist: secure-by-default
+
+# Fallow FAIL policy:
+# - Always run via `npm run checks` / `npm run fallow`.
+# - Gate FAIL when fallow exits non-zero (crash or `--fail-on-regression`).
+# - Baseline: .qa/fallow-regression.baseline.json
+# - Scoped Biome lint covers V6 paths + Panel; full-repo biome deferred.
+testGate:
+  profile: vite-react
+  depthDefault: standard
+  runner: scripts
+  primaryLanguage: ts
+  appKind: spa
+  always:
+    - typedStrict
+    - secureByDefault
+    - rgSecretsDiff
+    - fallow
+    - typecheck
+    - lint
+  never:
+    - aiReview
+    - explanationCheck
+    - updateReadme
+    - mutation
+  commands:
+    fallow: "npm run fallow"
+    typecheck: "npm run typecheck"
+    lint: "npm run lint"

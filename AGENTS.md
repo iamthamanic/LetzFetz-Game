@@ -256,7 +256,8 @@ Kurzablauf Feature:
 
 **Definition of Done** (vor PR oder „fertig“):
 
-- `cd Letz-Fetz-Game && npm run checks` grün (build + unit tests)
+- `cd Letz-Fetz-Game && npm run checks` grün (build + unit tests + V6 isolation + fallow)
+- `npm run typecheck` und `npm run lint` grün (lint ist V6-scoped Biome)
 - Änderungen an `src/game/` → passende Vitest-Tests
 - UI-Änderungen → Styleguide + Primitives; bei Sprint-Features Evidence in `.qa/evidence/` wenn Acceptance es verlangt
 - Keine Secrets in Git; UGC/Karten vor Engine-Nutzung validieren
@@ -265,12 +266,12 @@ Vor größeren Änderungen:
 
 ```bash
 cd Letz-Fetz-Game
-npm run checks   # build + unit tests
+npm run checks   # build + unit tests + V6 checks + fallow
 ```
 
-Einzeln: `npm run build`, `npm test`
+Einzeln: `npm run build`, `npm test`, `npm run typecheck`, `npm run lint`, `npm run fallow`
 
-Code-Qualität: `npx fallow` im `Letz-Fetz-Game/`-Ordner.
+Code-Qualität: `npm run fallow` / `npx fallow -c fallow.jsonc` — Teil von `npm run checks` und `@test-gate` (siehe `.qa/project.yaml`).
 
 Neue Game-Logik **muss** Unit-Tests in `src/game/` haben.
 

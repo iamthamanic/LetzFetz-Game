@@ -179,7 +179,7 @@ function pickBestBuild(state: GameState, pack: ContentPack, actions: GameAction[
     if (action.discardBoundId) {
       const bound = state.players[BOT_ID].bound.find((b) => b.instanceId === action.discardBoundId);
       const boundDef = bound ? findElementDef(pack, bound.defId) : undefined;
-      if (boundDef) {
+      if (bound && boundDef) {
         score -= boundDef.value * 0.5;
         if (bound.exhausted) score += 2;
       }

@@ -343,7 +343,7 @@ export function buildGameViewModel(
     return {
       instanceId: card.instanceId,
       defId: card.defId,
-      def,
+      def: def ?? null,
       glitchName: glitch?.name ?? formula?.name ?? null,
       glitchDef: glitch,
       isPlayable,

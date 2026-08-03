@@ -28,7 +28,7 @@ function applyPrimary(
   plan: FormulaActivationPlan,
   ruleset: RulesetConfig,
 ): GameState {
-  let next = cloneState(state);
+  const next = cloneState(state);
   const actor = plan.actorId;
   const foe = opponentOf(actor);
   const value = plan.primary.value;

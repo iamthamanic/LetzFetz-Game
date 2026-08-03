@@ -11,6 +11,9 @@ interface PanelProps {
   dense?: boolean;
   /** `game` = brand blood border + dark grunge surface; `editor` = default stone */
   tone?: 'editor' | 'game';
+  role?: React.AriaRole;
+  'aria-live'?: 'off' | 'assertive' | 'polite';
+  'data-testid'?: string;
 }
 
 export function Panel({
@@ -19,6 +22,9 @@ export function Panel({
   title,
   dense = false,
   tone = 'editor',
+  role,
+  'aria-live': ariaLive,
+  'data-testid': testId,
 }: PanelProps) {
   const toneClass =
     tone === 'game'
@@ -28,6 +34,9 @@ export function Panel({
   return (
     <div
       className={`${toneClass} shadow-xl ${dense ? 'p-3' : 'p-4'} ${className}`}
+      role={role}
+      aria-live={ariaLive}
+      data-testid={testId}
     >
       {title && (
         <h3 className="mb-3 border-b border-stone-800 pb-2 text-xs font-semibold uppercase tracking-wider text-stone-400">

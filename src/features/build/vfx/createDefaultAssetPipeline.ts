@@ -221,7 +221,8 @@ export function createDefaultAssetPipeline(
       source: DEFAULT_PIPELINE_NODE_IDS.socket,
       target: DEFAULT_PIPELINE_NODE_IDS.preset,
       type: 'smoothstep',
-      pathOptions: { offset: wrapOffset, borderRadius: 16 },
+      // XYFlow edge path tweak — not on the base Edge type in this package version.
+      ...({ pathOptions: { offset: wrapOffset, borderRadius: 16 } } as object),
       deletable: false,
       selectable: false,
     },

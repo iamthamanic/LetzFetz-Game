@@ -105,11 +105,11 @@ function getGlbFromUpstream(
     for (const edge of incoming) {
       const source = nodes.find((n) => n.id === edge.source);
       if (!source) continue;
-      const data = source.data as VfxMeshyNodeData | VfxNormalizeNodeData | VfxSocketNodeData;
-      if ('modelAsset' in data && data.modelAsset?.glbUrl) {
-        return data.modelAsset.glbUrl;
-      }
-      if ('glbUrl' in data && data.glbUrl) return data.glbUrl;
+      const data = source.data as Record<string, unknown>;
+      const modelAsset = data.modelAsset as { glbUrl?: string | null } | null | undefined;
+      if (modelAsset?.glbUrl) return modelAsset.glbUrl;
+      const glbUrl = data.glbUrl;
+      if (typeof glbUrl === 'string' && glbUrl) return glbUrl;
       queue.push(source.id);
     }
   }

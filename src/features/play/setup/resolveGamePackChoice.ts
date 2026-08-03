@@ -12,6 +12,7 @@ import {
   V6_CORE_PACK,
   V6_PACK_RULESET,
   type ContentPack,
+  type PlaytestHpCap,
   type RulesetConfig,
 } from '../../../game';
 import { mergeFormulaPlayOverlay } from '../../../game/packs/mergeFormulaPlayOverlay';
@@ -24,7 +25,7 @@ export type GamePackChoice = 'base' | 'p100' | 'v3' | 'v5' | 'v6';
 export interface ResolvedGamePackChoice {
   pack: ContentPack;
   ruleset: RulesetConfig | undefined;
-  playtestHpCap: number | undefined;
+  playtestHpCap: PlaytestHpCap | undefined;
 }
 
 /** Resolve Kartenset tile to engine pack + optional ruleset / playtest HP cap. */

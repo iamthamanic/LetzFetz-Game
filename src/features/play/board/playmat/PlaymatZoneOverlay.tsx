@@ -153,7 +153,6 @@ export function PlaymatZoneOverlay({
         textAnchor="middle"
         fill="#e9d5ff"
         fontSize={16}
-        fontWeight={600}
         {...LABEL_STYLE}
       >
         HAND
@@ -180,7 +179,6 @@ export function PlaymatZoneOverlay({
           textAnchor="middle"
           fill="#fca5a5"
           fontSize={14}
-          fontWeight={600}
           {...LABEL_STYLE}
         >
           GEGNER-ENGINE
@@ -208,7 +206,6 @@ export function PlaymatZoneOverlay({
           textAnchor="middle"
           fill="#6ee7b7"
           fontSize={14}
-          fontWeight={600}
           {...LABEL_STYLE}
         >
           DEINE ENGINE
