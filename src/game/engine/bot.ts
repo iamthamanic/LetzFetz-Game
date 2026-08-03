@@ -13,6 +13,8 @@ import {
 } from './formulaChallenge';
 import { getCharacterElements } from './helpers';
 import { pickBeneficialV6AffinityMode } from './v6BotPlaybook';
+import { pickBotOverformulaBonusChoice } from './v6/overformula';
+import { isFormulaResolvable } from './formulaCharge';
 
 const BOT_ID: PlayerId = 'p2';
 const HUMAN_ID: PlayerId = 'p1';
@@ -145,7 +147,37 @@ function pickBestBuild(state: GameState, pack: ContentPack, actions: GameAction[
       const fetzFull =
         isV6FormulaEnabled(ruleset) &&
         state.players[BOT_ID].fetzCharge >= 3;
-      if (filled >= 2 || fetzFull) return activate;
+      if (filled >= 2 || fetzFull) {
+        if (fetzFull && isV6FormulaEnabled(ruleset) && isFormulaResolvable(board)) {
+          const kindGuess =
+            board.technik && board.essenz && board.katalysator
+              ? 'damage'
+              : 'prep_attack';
+          // Prefer primary for full TEK life effects; intensity for prep/fessel boards.
+          let primaryKind = kindGuess;
+          try {
+            // Lightweight: damage if Impuls/Brech/etc. on board via defId slug.
+            const techId = board.technik?.defId ?? '';
+            if (
+              techId.includes('adrenalinschrei') ||
+              techId.includes('fintenschnitt') ||
+              techId.includes('schicksal') ||
+              techId.includes('kettenfessel')
+            ) {
+              primaryKind = techId.includes('kettenfessel') ? 'fessel' : 'prep_attack';
+            } else {
+              primaryKind = 'damage';
+            }
+          } catch {
+            primaryKind = 'damage';
+          }
+          return {
+            type: 'FORMULA_ACTIVATE',
+            overformulaBonusChoice: pickBotOverformulaBonusChoice(primaryKind),
+          };
+        }
+        return activate;
+      }
     }
 
     const builds = actions.filter(

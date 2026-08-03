@@ -216,6 +216,7 @@ export type PendingChoice =
       formulaAsOverformula?: boolean;
       formulaOfferDiscard?: boolean;
       formulaIntensity?: number | null;
+      formulaOverformulaBonusChoice?: 'primary' | 'intensity';
     }
   | {
       /** V6 Fessel / Kettenfessel: attacker picks occupied opponent formula slot. */

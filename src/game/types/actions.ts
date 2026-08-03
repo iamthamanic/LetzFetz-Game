@@ -58,8 +58,8 @@ export type GameAction =
     }
   /** V6 Formelphase: return a formula component to hand — ends Formelphase, no activate. */
   | { type: 'FORMULA_RETURN'; formulaInstanceId: string }
-  /** V5 Formelphase: activate upright non-disturbed components (exhaust; full resolve #221). */
-  | { type: 'FORMULA_ACTIVATE' }
+  /** V5/V6 Formelphase: activate upright components. V6 Überformel: optional bonus choice. */
+  | { type: 'FORMULA_ACTIVATE'; overformulaBonusChoice?: 'primary' | 'intensity' }
   /** V5 Formelphase: discard formula card from hand for one-shot (stub effect until #221). */
   | { type: 'FORMULA_SCHNELLMIX'; cardInstanceId: string }
   | { type: 'END_TURN' }

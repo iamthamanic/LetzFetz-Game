@@ -286,7 +286,7 @@ Reaktionsmatrix: für ersten V6-Playtest übernehmbar; geändert wird vor allem,
 
 **Fetz:** nur TEK → genau +1; max 1/Zug; max 3. TE/TK/EK/Echo/Verzögerung/Überformel erzeugen keine (zusätzliche) Ladung. Abgewehrte Fusion gibt trotzdem Ladung. Überformel setzt auf 0.
 
-**Überformel:** bei 3 Fetz + legaler aufrechter TEK: verstärkte Version derselben Fusion. **Slice-1 Play-Default (locked):** fest **+2 Primär** (kein Spielerwahl +2 Primär vs +1 Intensität). Verstärkter Rider; Formelabwehr −1. Keine charaktergebundenen Großformeln im Standard. Play-UI: Button „Überformel aktivieren“ + Confirm + Preview (#348).
+**Überformel:** bei 3 Fetz + legaler aufrechter TEK: verstärkte Version derselben Fusion. **Spielerwahl (#385):** +2 Primär **XOR** +1 Intensität (Preview zeigt Variante; ohne Wahl → Fallback +2 Primär). Verstärkter Rider; Formelabwehr −1. Keine charaktergebundenen Großformeln im Standard. Play-UI: Button „Überformel aktivieren“ + Confirm mit Bonus-Wahl (#348/#385).
 
 Kosmetik (Name/Animation) darf charakterabhängig sein; Mechanik nicht.
 
@@ -526,7 +526,7 @@ Bitte abhaken / korrigieren:
 
 - [x] Passive-Modell: **B feste Charakter-Mikro-Passiven** (Playtest-Default #349). A Pool deferred → Issue **#384**.  
 - [ ] Ob Passive-Pool **vor** Charakterwahl, **danach**, oder parallel zur Arena-Reveal *(nur relevant für #384)*  
-- [x] Erste playable Version **enthält Überformel** (#348); fest +2 Primär. Spielerwahl → Issue **#385**.  
+- [x] Erste playable Version **enthält Überformel** (#348); Spielerwahl +2 Primär XOR +1 Intensität (#385).  
 - [x] `V6_PACK` unter `src/content/v6` + `src/generated/v6` (Pfad ok).  
 - [x] Generator-Output: **TS** (`formulaRecipes.generated.ts`).  
 - [ ] Heldenmodus: nur Notiz oder Flag → Issue **#387**  
@@ -573,3 +573,4 @@ Bitte abhaken / korrigieren:
 | 2026-08-03 | #381 Techniken auf 10 (inkl. Beschwörungsritual Katalog-TE); Katalog 10T×6E×4K = 604 |
 | 2026-08-03 | #382 Katalysatoren auf 10 (Echo…Opfergabe); Echo/Delay in Katalog; 4 unsupported Transforms |
 | 2026-08-03 | #383 Katalog-Expansion 10T×6E×10K = 1420; unsupported explizit; Material-Seed; Play fail-closed |
+| 2026-08-03 | #385 Überformel Spielerwahl: +2 Primär XOR +1 Intensität; Bot-Heuristik; Fallback +2 Primär |

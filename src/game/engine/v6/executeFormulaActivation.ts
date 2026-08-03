@@ -322,6 +322,7 @@ export function applyV6FormulaActivate(
     offerDiscard?: boolean;
     affinityAdjustedPrimary?: number;
     affinityAdjustedIntensity?: number | null;
+    overformulaBonusChoice?: 'primary' | 'intensity';
   },
 ): GameState {
   const input: PlanFormulaActivationInput = {
@@ -335,6 +336,7 @@ export function applyV6FormulaActivate(
     offerDiscard: opts?.offerDiscard,
     affinityAdjustedPrimary: opts?.affinityAdjustedPrimary,
     affinityAdjustedIntensity: opts?.affinityAdjustedIntensity,
+    overformulaBonusChoice: opts?.overformulaBonusChoice,
   };
   const plan = planFormulaActivation(input);
   return executeFormulaActivation(plan, input);
