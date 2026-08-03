@@ -60,6 +60,7 @@ describe('DISCARD_DRAW', () => {
     );
     expect(state.players.p1.hand.length).toBe(handBefore - 1 + 2);
     expect(state.phase).toBe('end');
+    expect(state.lastEvent).toContain('Improvisieren');
   });
 });
 

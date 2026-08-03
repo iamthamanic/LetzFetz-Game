@@ -1085,6 +1085,7 @@ export function PlayView({
               inputLocked={presentation.isInputLocked || !coachFooterReveal}
               v5Formula={isV5FormulaEnabled(rulesetFromState(state))}
               onStartAction={() => setPendingIntent({ type: 'action-select' })}
+              onStartImprovise={() => setPendingIntent({ type: 'improvise' })}
               onDirectAttack={() => {
                 if (pendingIntent?.type !== 'attack') return;
                 playAttack(pendingIntent.attackInstanceId);
