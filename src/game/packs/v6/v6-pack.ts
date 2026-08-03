@@ -1,13 +1,19 @@
 /**
- * V6 core pack stub — INTERNAL foundation (not Play-Default).
+ * V6 core pack — Slice-1 INTERNAL (not Play-Default).
  * Location: src/game/packs/v6/v6-pack.ts
  *
- * Content/recipes will grow via `src/content/v6` → generator → `src/generated/v6`.
+ * Content/recipes from `src/content/v6` → generator → `src/generated/v6`.
  * Must not import V5 formula combination tables.
  */
 import type { ContentPack, RulesetConfig } from '../../types';
 import { V6_RULESET } from '../../types';
 import { BASE_PACK } from '../base-pack';
+import {
+  V6_SLICE1_ARENAS,
+  V6_SLICE1_CATALYSTS,
+  V6_SLICE1_ESSENCES,
+  V6_SLICE1_TECHNIQUES,
+} from '../../../content/v6/cards/slice1Cards';
 
 /** V6 pack ruleset identity — INTERNAL only until PLAYABLE cutover. */
 export const V6_PACK_RULESET: RulesetConfig = {
@@ -15,22 +21,22 @@ export const V6_PACK_RULESET: RulesetConfig = {
 };
 
 /**
- * Minimal INTERNAL pack: reuses base characters/arenas/elements/glitches;
- * formula slots empty until content slices fill them.
+ * Slice-1 INTERNAL pack: Slice-1 formula cards + Späti/Vulkan;
+ * reuses base characters/elements/glitches for match scaffolding (no V5 passives wired).
  */
 export function buildV6CorePack(): ContentPack {
   return {
     id: 'v6-core',
-    name: 'V6 Core (INTERNAL)',
-    version: '0.0.1',
+    name: 'V6 Core Slice-1 (INTERNAL)',
+    version: '0.1.0-slice1',
     characters: BASE_PACK.characters,
-    ultimates: BASE_PACK.ultimates,
-    arenas: BASE_PACK.arenas,
+    ultimates: [],
+    arenas: V6_SLICE1_ARENAS,
     elementCards: BASE_PACK.elementCards,
-    glitches: BASE_PACK.glitches,
-    techniques: [],
-    essences: [],
-    catalysts: [],
+    glitches: BASE_PACK.glitches.filter((g) => g.glitchType !== 'instant'),
+    techniques: V6_SLICE1_TECHNIQUES,
+    essences: V6_SLICE1_ESSENCES,
+    catalysts: V6_SLICE1_CATALYSTS,
     items: [],
   };
 }

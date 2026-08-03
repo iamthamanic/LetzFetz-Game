@@ -6,6 +6,8 @@
 
 **Slice 0 tracking (GitHub):** #310 ruleset identity · #311 content/pack stub · #312 recipe generator CI · #313 import-boundary probes + AGENTS note. Play-Default remains **V5** until PLAYABLE cutover.
 
+**Slice 1 tracking (GitHub):** #318 authoring/recipes · #319 engine plan/execute · #320 match lifecycle · #321 UI preview=plan · #322 Setup INTERNAL smoke (flag). Play-Default remains **V5** (no AGENTS cutover in Slice 1).
+
 > **Leitsatz:** Der Charakter bestimmt den Rahmen. Die Karten bestimmen die Möglichkeiten. Der Spieler bestimmt das Ergebnis.
 
 Dieses Dokument hält fest, was für Integration und Playtest **als geklärt gilt**. Offene Punkte stehen am Ende unter §99. Es ersetzt noch nicht die Engine-Prosa (`SPIELANLEITUNG_V6_*`) — die entsteht nach Finalisierung.
@@ -514,3 +516,4 @@ Nach deiner finalen Form: dieses Doc auf **verbindlich** setzen und `SPIELANLEIT
 |-------|----------|
 | 2026-08-03 | Erster DRAFT aus V6-Vollkonzept + Grill-Antworten 1b/2/3/4/5/6 + Passive-Pool-Empfehlung |
 | 2026-08-03 | Slice 0 Issues #310–#313 getrackt; Play-Default bleibt V5 bis PLAYABLE |
+| 2026-08-03 | Slice 1 Issues #318–#322 getrackt; Play-Default bleibt V5 |
