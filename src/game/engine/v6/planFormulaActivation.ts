@@ -18,6 +18,12 @@ import {
   V6_ECHO_DEFAULT_AMOUNT,
   type V6RecipeTimingMode,
 } from './echoDelay';
+import {
+  resolveOverformulaBonusChoice,
+  V6_OVERFORMULA_DEFAULT_INTENSITY_BONUS,
+  V6_OVERFORMULA_DEFAULT_PRIMARY_BONUS,
+  type V6OverformulaBonusChoice,
+} from './overformula';
 
 export interface PlanFormulaActivationInput {
   state: GameState;
@@ -27,6 +33,8 @@ export interface PlanFormulaActivationInput {
   rng: Rng;
   /** Force Überformel when legal (3 Fetz + full TEK). */
   asOverformula?: boolean;
+  /** Überformel: +2 Primär XOR +1 Intensität (#385). Omits → primary fallback. */
+  overformulaBonusChoice?: V6OverformulaBonusChoice;
   /** Natural defense roll override for tests. */
   defenseRoll?: number;
   /** Opfergabe: player chose to discard. */
@@ -129,6 +137,34 @@ export function planFormulaActivation(input: PlanFormulaActivationInput): Formul
     );
   }
 
+  const overChoice =
+    kind === 'overformula'
+      ? resolveOverformulaBonusChoice(input.overformulaBonusChoice)
+      : null;
+
+  let recipePrimaryValue = recipe.primary.value;
+  let recipeIntensity: number | null = recipe.intensity ?? null;
+  let overPrimaryBonus: number | null = recipe.overformulaPrimaryBonus ?? null;
+  let overIntensityBonus: number | null = recipe.overformulaIntensityBonus ?? null;
+
+  if (kind === 'overformula' && overChoice === 'intensity') {
+    // Rebuild from TEK base: no baked +2 Primär; +1 Intensität instead.
+    const tek = findV6Recipe({
+      kind: 'tek',
+      techniqueId,
+      essenceId,
+      catalystId,
+    });
+    recipePrimaryValue = tek.primary.value;
+    const baseInt = tek.intensity ?? (tek.primary.kind === 'fessel' ? tek.primary.value : 0);
+    recipeIntensity = Math.max(0, baseInt + V6_OVERFORMULA_DEFAULT_INTENSITY_BONUS);
+    overPrimaryBonus = 0;
+    overIntensityBonus = V6_OVERFORMULA_DEFAULT_INTENSITY_BONUS;
+  } else if (kind === 'overformula' && overChoice === 'primary') {
+    overPrimaryBonus = overPrimaryBonus ?? V6_OVERFORMULA_DEFAULT_PRIMARY_BONUS;
+    overIntensityBonus = overIntensityBonus ?? 0;
+  }
+
   const xform = catalystId ? catalystTransformMeta(catalystId) : {
     selfDamage: 0,
     drawDiscardAfter: false,
@@ -139,7 +175,7 @@ export function planFormulaActivation(input: PlanFormulaActivationInput): Formul
   const offerBonus =
     input.offerDiscard === true && xform.offerDiscardBonus > 0 ? xform.offerDiscardBonus : 0;
 
-  let primaryValue = recipe.primary.value + offerBonus;
+  let primaryValue = recipePrimaryValue + offerBonus;
   const offensive = recipe.primary.offensive === true;
   const needsDefense = recipe.primary.target === 'opponent';
   const primaryKind = asPrimaryKind(recipe.primary.kind);
@@ -149,7 +185,11 @@ export function planFormulaActivation(input: PlanFormulaActivationInput): Formul
   let riderSuppressed = false;
   const defensePenalty = recipe.formulaDefensePenalty ?? 0;
   let intensityAfterDefense: number | null =
-    recipe.intensity != null ? recipe.intensity : primaryKind === 'fessel' ? primaryValue : null;
+    recipeIntensity != null
+      ? recipeIntensity
+      : primaryKind === 'fessel'
+        ? primaryValue
+        : null;
 
   if (needsDefense) {
     defenseRoll = input.defenseRoll ?? rollD6(rng);
@@ -220,6 +260,11 @@ export function planFormulaActivation(input: PlanFormulaActivationInput): Formul
     `V6 ${recipe.name}`,
     `(${recipe.kind})`,
     primaryLabel,
+    overChoice === 'primary'
+      ? `Überformel +${V6_OVERFORMULA_DEFAULT_PRIMARY_BONUS} Primär`
+      : overChoice === 'intensity'
+        ? `Überformel +${V6_OVERFORMULA_DEFAULT_INTENSITY_BONUS} Intensität`
+        : null,
     catalystConsumed ? 'Katalysator verbraucht' : timingMode !== 'immediate' ? 'Katalysator bleibt' : null,
     timingLabel,
     fetzDelta > 0 ? `+${fetzDelta} Fetz` : null,
@@ -246,8 +291,9 @@ export function planFormulaActivation(input: PlanFormulaActivationInput): Formul
     grantsFetz,
     fetzDelta,
     spendAllFetz: recipe.kind === 'overformula',
-    overformulaPrimaryBonus: recipe.overformulaPrimaryBonus ?? null,
-    overformulaIntensityBonus: recipe.overformulaIntensityBonus ?? null,
+    overformulaPrimaryBonus: overPrimaryBonus,
+    overformulaIntensityBonus: overIntensityBonus,
+    overformulaBonusChoice: overChoice,
     postFormulaActionLock: lock,
     formulaDefense:
       defenseRoll == null
@@ -280,6 +326,7 @@ export function revalidateFormulaPlan(
   const next = planFormulaActivation({
     ...input,
     asOverformula: plan.kind === 'overformula',
+    overformulaBonusChoice: plan.overformulaBonusChoice ?? input.overformulaBonusChoice,
     defenseRoll: plan.formulaDefense?.naturalRoll,
     offerDiscard: plan.offerDiscardBonus > 0 && input.offerDiscard === true,
   });

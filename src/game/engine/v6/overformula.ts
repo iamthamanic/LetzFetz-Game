@@ -1,11 +1,39 @@
 /**
- * V6 Überformel locked Slice-1 defaults (spielkonzept §26–27).
+ * V6 Überformel bonus choice (#385).
  * Location: src/game/engine/v6/overformula.ts
  *
- * First playable slice: always +2 Primär for numeric primary kinds.
- * Player choice (+2 Primär vs +1 Intensität) is out of scope until a later ticket.
+ * Player picks +2 Primär XOR +1 Intensität. Omitted choice → primary fallback.
  */
+export type V6OverformulaBonusChoice = 'primary' | 'intensity';
+
 export const V6_OVERFORMULA_DEFAULT_PRIMARY_BONUS = 2;
 
-/** Intensity bump when primary kind is not damage/heal/shield (prep / fessel). */
+/** Intensity bump when player chooses intensity (or prep/fessel fallback path). */
 export const V6_OVERFORMULA_DEFAULT_INTENSITY_BONUS = 1;
+
+/** Fallback when UI/bot omits an explicit choice. */
+export const V6_OVERFORMULA_FALLBACK_CHOICE: V6OverformulaBonusChoice = 'primary';
+
+export function resolveOverformulaBonusChoice(
+  choice: V6OverformulaBonusChoice | null | undefined,
+): V6OverformulaBonusChoice {
+  return choice === 'intensity' || choice === 'primary'
+    ? choice
+    : V6_OVERFORMULA_FALLBACK_CHOICE;
+}
+
+/**
+ * Bot heuristic: numeric life-effect primaries prefer +2 Primär;
+ * prep / fessel prefer +1 Intensität.
+ */
+export function pickBotOverformulaBonusChoice(primaryKind: string): V6OverformulaBonusChoice {
+  if (
+    primaryKind === 'prep_attack' ||
+    primaryKind === 'prep_block' ||
+    primaryKind === 'prep_boost' ||
+    primaryKind === 'fessel'
+  ) {
+    return 'intensity';
+  }
+  return 'primary';
+}

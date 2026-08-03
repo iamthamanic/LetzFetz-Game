@@ -519,6 +519,7 @@ function finalizeV6AffinityFormula(
     offerDiscard: pending.formulaOfferDiscard,
     affinityAdjustedPrimary: applied.value,
     affinityAdjustedIntensity: intensityAdjusted,
+    overformulaBonusChoice: pending.formulaOverformulaBonusChoice,
   });
   if (applied.spent) {
     next.lastEvent = `${next.lastEvent ?? 'Formel aktiviert.'} [Affinität]`;
@@ -1883,6 +1884,7 @@ function applyFormulaActivate(
   playerId: PlayerId,
   ruleset: RulesetConfig,
   rng: () => number,
+  overformulaBonusChoice?: 'primary' | 'intensity',
 ): GameState {
   if (!isFormulaResolvable(state.players[playerId].formula)) {
     throw new Error('Formula resolve requires at least two filled slots');
@@ -1894,6 +1896,7 @@ function applyFormulaActivate(
       playerId,
       ruleset,
       rng,
+      overformulaBonusChoice,
     });
     const el = formulaAffinityElement(pack, state, playerId);
     if (el && shouldOfferV6Affinity(state, pack, playerId, el, ruleset)) {
@@ -1910,11 +1913,13 @@ function applyFormulaActivate(
         formulaDefenseRoll: plan.formulaDefense?.naturalRoll,
         formulaAsOverformula: plan.kind === 'overformula',
         formulaIntensity: plan.intensity,
+        formulaOverformulaBonusChoice: plan.overformulaBonusChoice ?? undefined,
       }, ruleset);
     }
     return applyV6FormulaActivate(state, pack, playerId, ruleset, rng, {
       asOverformula: plan.kind === 'overformula',
       defenseRoll: plan.formulaDefense?.naturalRoll,
+      overformulaBonusChoice: plan.overformulaBonusChoice ?? overformulaBonusChoice,
     });
   }
   const wasFull = isFullFormulaActivatable(state.players[playerId].formula);
@@ -2313,7 +2318,14 @@ export function applyAction(
       if (!isFormulaBoardEnabled(ruleset)) {
         throw new Error('FORMULA_ACTIVATE requires v5Formula or v6Formula');
       }
-      return applyFormulaActivate(state, pack, playerId, ruleset, rng);
+      return applyFormulaActivate(
+        state,
+        pack,
+        playerId,
+        ruleset,
+        rng,
+        action.overformulaBonusChoice,
+      );
     }
     case 'FORMULA_SCHNELLMIX': {
       if (state.phase !== 'build') throw new Error('Not in build phase');

@@ -105,7 +105,7 @@ Angriff · Boost · Gegenstand · Aktions-Glitch · Herausforderung · Improvisi
 
 **Gegenstände (§37–40):** Ausrüstung (Kaputter Rückspiegel, Werkzeugkoffer, Gezinkter Würfel) belegt bis zu **2 Slots** neben dem Formelgestell. Verbrauch (Energy, Pilz, Kabelbinder, Rostiger Nagel, Nasser Socken) von der Hand — **max 1 Verbrauch / eigener Zug**; Nagel/Socken belegen **keinen** dauerhaften Slot.
 
-**Kein** Charakter-Ulti / V5-Großformel. **Überformel** = TEK bei Fetz=3 (fest +2 Primär).
+**Kein** Charakter-Ulti / V5-Großformel. **Überformel** = TEK bei Fetz=3; Spieler wählt **+2 Primär XOR +1 Intensität** (Fallback +2 Primär).
 
 ### Elementkarten (Hand-only)
 
@@ -158,7 +158,7 @@ Spend auf eigenen Angriff / Herausforderung / Formelaktivierung; Block-Affinitä
 ## 8. Fetzladung & Überformel
 
 Nur TEK → +1 Fetz (auch wenn abgewehrte Fusion). Max 3.  
-Bei 3 Fetz + legaler aufrechter TEK: **Überformel** = dieselbe Fusion mit fest **+2 Primär**; Ladung auf 0; Formelabwehr −1.
+Bei 3 Fetz + legaler aufrechter TEK: **Überformel** = dieselbe Fusion; Spieler wählt **+2 Primär XOR +1 Intensität** (ohne Wahl → Fallback +2 Primär); Ladung auf 0; Formelabwehr −1.
 
 ---
 

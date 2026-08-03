@@ -24,3 +24,11 @@ export {
   constructDisplayName,
   V6_PLAYTEST_BESCHWOERUNG_CATALYST_ID,
 } from './constructs';
+export {
+  V6_OVERFORMULA_DEFAULT_PRIMARY_BONUS,
+  V6_OVERFORMULA_DEFAULT_INTENSITY_BONUS,
+  V6_OVERFORMULA_FALLBACK_CHOICE,
+  resolveOverformulaBonusChoice,
+  pickBotOverformulaBonusChoice,
+} from './overformula';
+export type { V6OverformulaBonusChoice } from './overformula';

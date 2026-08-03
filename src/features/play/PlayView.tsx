@@ -189,6 +189,9 @@ export function PlayView({
   /** Bumped when PhaseCoachFooter docks — PlaymatBoard scrolls hand into view. */
   const [footerDockSignal, setFooterDockSignal] = useState(0);
   const [ueberformelConfirmOpen, setUeberformelConfirmOpen] = useState(false);
+  const [ueberformelBonusChoice, setUeberformelBonusChoice] = useState<'primary' | 'intensity'>(
+    'primary',
+  );
   const coachFooterReveal = turnStartAnnounceDone;
 
   const presentation = usePresentationQueue({
@@ -1288,6 +1291,8 @@ export function PlayView({
           <UeberformelConfirmModal
             open={ueberformelConfirmOpen}
             chargeBefore={state.players[HUMAN].fetzCharge}
+            selectedChoice={ueberformelBonusChoice}
+            onSelectChoice={setUeberformelBonusChoice}
             preview={(() => {
               if (!ueberformelConfirmOpen) return null;
               try {
@@ -1297,6 +1302,7 @@ export function PlayView({
                   playerId: HUMAN,
                   ruleset: rulesetFromState(state),
                   rng: () => 0.5,
+                  overformulaBonusChoice: ueberformelBonusChoice,
                 });
                 return formatV6FormulaPlanPreview(plan);
               } catch {
@@ -1304,9 +1310,9 @@ export function PlayView({
               }
             })()}
             onCancel={() => setUeberformelConfirmOpen(false)}
-            onConfirm={() => {
+            onConfirm={(choice) => {
               setUeberformelConfirmOpen(false);
-              handleDispatch({ type: 'FORMULA_ACTIVATE' });
+              handleDispatch({ type: 'FORMULA_ACTIVATE', overformulaBonusChoice: choice });
               setPendingIntent(null);
             }}
           />
