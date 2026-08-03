@@ -101,17 +101,30 @@ export const V6_SLICE1_CATALYSTS: CatalystCardDef[] = [
   },
 ];
 
-/** Späti + Vulkan only (Slice-1 arenas). Owned copies — no pack import. */
+/**
+ * V6 core arenas (#350) — owned copies, no V5/Base import, no V1 d6Variants.
+ * Art: public/cards/arena/{id}.png
+ */
 export const V6_SLICE1_ARENAS: ArenaCardDef[] = [
   {
     id: 'arena-spaeti',
     name: 'Späti der Erleuchtung',
     kind: 'arena',
-    role: 'Boosts, Kartenfilter, flexible Züge',
+    role: 'Boosts, Kartenfilter',
     baseEffect:
       'Nach dem ersten Boost eines Spielers in dessen Zug: 1 ziehen, dann 1 abwerfen (max 1×/Zug).',
-    trigger: 'Wenn ein Spieler seinen dritten Boost der Partie spielt, muss er sofort 1 Karte bauen.',
-    specialRule: 'Boosts, die Schaden machen, verursachen maximal 3 Schaden.',
+    trigger: 'Erster Boost des eigenen Zuges.',
+    specialRule:
+      'Boosts, die Schaden machen, verursachen maximal 3 Schaden. Unter Formelboard kein Bound-Extra-Bau.',
+  },
+  {
+    id: 'arena-kristall',
+    name: 'Kristallkathedrale',
+    kind: 'arena',
+    role: 'Heilung, Licht',
+    baseEffect: 'Die erste Heilung jedes Spielers pro eigenem Zug wird um 1 erhöht.',
+    trigger: 'Erste Heilung des Zuges.',
+    specialRule: 'Licht-Essenzen besitzen +1 Stabilität.',
   },
   {
     id: 'arena-vulkan',
@@ -124,5 +137,34 @@ export const V6_SLICE1_ARENAS: ArenaCardDef[] = [
       'Wenn ein Spieler in seinem Zug keinen Angriff spielt und keine gegnerische gebaute Karte herausfordert, verliert er am Ende seines Zuges 1 Leben.',
     specialRule:
       'Wenn ein einzelner Angriff nach allen Boni einen Angriffswert von 9 oder höher erreicht, verliert der Angreifer nach der Abrechnung 1 Leben.',
+  },
+  {
+    id: 'arena-sumpf',
+    name: 'Sumpf der passiv-aggressiven Heilung',
+    kind: 'arena',
+    role: 'Block, Defensive',
+    baseEffect: 'Jeder Vollblock gibt 1 Schild.',
+    trigger: 'Vollblock im Aktionskampf.',
+    specialRule: 'Eine Formelkomponente wird erst bei Differenz 4 oder mehr direkt zerstört.',
+  },
+  {
+    id: 'arena-club',
+    name: 'Club der fliegenden Backpfeifen',
+    kind: 'arena',
+    role: 'Luft, Umbau',
+    baseEffect:
+      'Luft-Angriffe und Luft-Blocks erhalten +1 Arena-Wert (W6-Bonus-Proxy). Bewusstes ±1 auf den W6 zusätzlich über Affinität, wenn Luft Affinität ist.',
+    trigger: 'Nach einem Formelersatz.',
+    specialRule: 'Nach FORMULA_REPLACE: 1 ziehen und 1 abwerfen.',
+  },
+  {
+    id: 'arena-schattenbasar',
+    name: 'Schattenbasar der toxischen Angebote',
+    kind: 'arena',
+    role: 'Herausfordern, Sabotage',
+    baseEffect:
+      'Bei erfolgreicher Herausforderung (gestört) darf der Angreifer 1 Leben zahlen, um sofort zu zerstören.',
+    trigger: 'Nach Formel-Herausforderung mit Ergebnis gestört.',
+    specialRule: 'Zahlung optional; sonst bleibt gestört.',
   },
 ];

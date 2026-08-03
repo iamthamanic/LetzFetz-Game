@@ -27,15 +27,22 @@ export interface V3CombatHooks {
 }
 
 export function readV3CombatHooks(meta: MatchMeta): V3CombatHooks {
+  const defaultLimit = DEFAULT_REACTION_LIMIT;
+  // V6: hard-cap 1 reaction / timing — ignore ulti/blueprint double hooks.
+  const limit =
+    meta.v6FormulaEnabled === true
+      ? DEFAULT_REACTION_LIMIT
+      : (meta.v3ReactionLimitThisAction ?? defaultLimit);
   return {
-    reactionLimit: meta.v3ReactionLimitThisAction ?? DEFAULT_REACTION_LIMIT,
+    reactionLimit: limit,
     dampfBecomesDichterNebel: meta.v3DampfBecomesDichterNebel === true,
     preserveFirstConsumedMark: meta.v3PreserveFirstConsumedMark === true,
   };
 }
 
-/** Ulti stub: allow two reactions this action. */
+/** Ulti stub: allow two reactions this action — no-op under v6Formula. */
 export function enableDoubleReactionThisAction(state: GameState): GameState {
+  if (state.meta.v6FormulaEnabled === true) return state;
   const next = cloneState(state);
   next.meta = {
     ...next.meta,

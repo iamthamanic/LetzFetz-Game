@@ -153,7 +153,7 @@ export type PendingChoice =
       /** After draw(s) — must discard 1 (player chooses). */
       type: 'must-discard';
       playerId: PlayerId;
-      source: 'spaeti' | 'sumpf-full-block' | 'air' | 'dripministerin';
+      source: 'spaeti' | 'sumpf-full-block' | 'air' | 'dripministerin' | 'club-formula-replace';
     }
   | {
       type: 'spaeti-extra-build';
@@ -208,6 +208,14 @@ export type PendingChoice =
       playerId: PlayerId;
       targetPlayerId: PlayerId;
       intensity: number;
+    }
+  | {
+      /** V6 Schattenbasar: pay 1 life to upgrade disturb → destroy (optional). */
+      type: 'v6-basar-pay-destroy';
+      playerId: PlayerId;
+      defenderId: PlayerId;
+      targetInstanceId: string;
+      targetName: string;
     };
 
 export function createEmptyMeta(): MatchMeta {

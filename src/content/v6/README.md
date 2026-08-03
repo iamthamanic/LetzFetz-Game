@@ -9,7 +9,7 @@ Structured authoring tables and schemas for the V6 formula recipe generator.
   - 3 Essenzen: Feuer / Wasser / Luft
   - 4 Katalysatoren: Überladung / Verdichtung / Sofortzünder / Opfergabe
   - Breakdown: 9 TE + 12 TK + 12 EK + 36 TEK + 36 Überformel
-  - Arenas: Späti / Vulkan
+  - Arenas: Späti / Kristall / Vulkan / Sumpf / Club / Schattenbasar (V6-adapted, #350)
 - **Out of scope here:** full 60-TE matrix, extra T/E/K cards beyond Slice-1 — later catalog issues.
 - **Echo/Delay (#344):** engine queues + 2 playtest TEK hooks (`v6-katalysator-echo` / `v6-katalysator-verzoegerung`); not in the locked 105 catalog.
 

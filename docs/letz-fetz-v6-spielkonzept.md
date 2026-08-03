@@ -355,6 +355,8 @@ Charakter-feste Texte aus dem Grill-Antwortblock bleiben als **Backup-Liste für
 
 Immer aktiv, symmetrisch. Kern-Arenen laut V6-Doc (Späti, Kristall, Vulkan, Sumpf, Club, Schattenbasar) mit V6-Anpassungen (Vulkan: nur erster gegnergerichteter Schadenseffekt/Zug; Club: Luft-W6 bewusst ±1, etc.).
 
+**Engine (#350):** V6-Core-Pack shippt alle 6 Arenen (keine V1-`d6Variants`). Vulkan: erster Angriffsschaden/Zug +1; ohne Lebensschaden → Angreifer −1. Sumpf: Vollblock +1 Schild; Formel-Zerstörung ab Diff ≥4. Kristall: erste Heilung +1; Licht-Essenz +1 Stabilität. Club: Luft-Angriff/Block +1 Arena-Wert; nach FORMULA_REPLACE ziehen/abwerfen (bewusstes W6 ±1 zusätzlich über Affinität). Schattenbasar: nach Formel-Störung optional 1 Leben → zerstören. Späti: erster Boost → ziehen/abwerfen; kein Bound-Extra-Bau. Elementreaktionen: max 1 / Timing (kein Ulti-Double unter `v6Formula`).
+
 **Riss in der Realität:** Hauptaktion — Arena ablegen, neue zufällig; gilt sofort; alte Trigger nicht rückgängig.
 
 ---
