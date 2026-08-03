@@ -45,6 +45,10 @@ export interface MatchMeta {
    * Mutually exclusive with `v5FormulaEnabled`.
    */
   v6FormulaEnabled?: boolean;
+  /** V6: Fetzladung already gained this own turn (max 1 from TEK). */
+  v6FetzGainedThisTurn?: Record<PlayerId, boolean>;
+  /** V6 Post-Formula-Action-Policy after last formula activate. */
+  v6PostFormulaActionLock?: Record<PlayerId, 'none' | 'attack_and_challenge'>;
   /** V3: reactions resolved in the current main action (max 1 by default). */
   v3ReactionsThisAction?: number;
   /** V3 Finsternis: block new shield until current action ends. */

@@ -50,6 +50,11 @@ import {
   isFormulaResolvable,
   isFullFormulaActivatable,
 } from './formulaCharge';
+import { applyV6FormulaActivate } from './v6';
+
+function isFormulaBoardEnabled(ruleset: RulesetConfig): boolean {
+  return isV5FormulaEnabled(ruleset) || isV6FormulaEnabled(ruleset);
+}
 import {
   destroyFormulaComponent,
   disturbFormulaComponent,
@@ -79,7 +84,7 @@ import {
 } from './status/fetzgeraetEffects';
 import { canSpendFetzCharge, gainFetzCharge } from './status/fetzCharge';
 import type { Element } from '../types';
-import { isV3CombatEnabled, isV5FormulaEnabled, maxFetzChargeFor } from '../types';
+import { isV3CombatEnabled, isV5FormulaEnabled, isV6FormulaEnabled, maxFetzChargeFor } from '../types';
 import type { ReactionId } from './status/reactions';
 import {
   canBuildBoost,
@@ -1032,7 +1037,7 @@ export function getLegalActions(state: GameState, ctx: PackContext): GameAction[
   }
 
   if (state.phase === 'build') {
-    if (isV5FormulaEnabled(ruleset)) {
+    if (isFormulaBoardEnabled(ruleset)) {
       actions.push(...listFormulaPhaseActions(state, ctx.pack, ctx.playerId));
     } else {
       actions.push({ type: 'SKIP_BUILD' });
@@ -1082,18 +1087,25 @@ export function getLegalActions(state: GameState, ctx: PackContext): GameAction[
     const opponent = opponentOf(ctx.playerId);
     const oppBound = state.players[opponent].bound;
     const v5 = isV5FormulaEnabled(ruleset);
+    const v6 = isV6FormulaEnabled(ruleset);
+    const formulaLock =
+      v6 && state.meta.v6PostFormulaActionLock?.[ctx.playerId] === 'attack_and_challenge';
 
     for (const card of hand) {
       const def = findElementDef(ctx.pack, card.defId);
       if (def?.cardType === 'attack') {
-        actions.push({ type: 'PLAY_ATTACK', cardInstanceId: card.instanceId });
-        if (v5) {
-          for (const comp of listFormulaComponents(state.players[opponent].formula)) {
-            actions.push({
-              type: 'CHALLENGE',
-              attackCardInstanceId: card.instanceId,
-              targetBoundInstanceId: comp.instanceId,
-            });
+        if (!formulaLock) {
+          actions.push({ type: 'PLAY_ATTACK', cardInstanceId: card.instanceId });
+        }
+        if (v5 || v6) {
+          if (!formulaLock) {
+            for (const comp of listFormulaComponents(state.players[opponent].formula)) {
+              actions.push({
+                type: 'CHALLENGE',
+                attackCardInstanceId: card.instanceId,
+                targetBoundInstanceId: comp.instanceId,
+              });
+            }
           }
         } else {
           for (const bound of oppBound) {
@@ -1335,7 +1347,7 @@ function applyFormulaReplace(
 }
 
 /**
- * V5 activate: Technik → Essenz → Katalysator resolve + prep hooks.
+ * V5/V6 activate: V5 uses resolveFormulaActivate; V6 uses plan→execute.
  */
 function applyFormulaActivate(
   state: GameState,
@@ -1346,6 +1358,9 @@ function applyFormulaActivate(
 ): GameState {
   if (!isFormulaResolvable(state.players[playerId].formula)) {
     throw new Error('Formula resolve requires at least two filled slots');
+  }
+  if (isV6FormulaEnabled(ruleset)) {
+    return applyV6FormulaActivate(state, pack, playerId, ruleset, rng);
   }
   const wasFull = isFullFormulaActivatable(state.players[playerId].formula);
   let next = resolveFormulaActivate(state, pack, playerId, ruleset, rng);
@@ -1597,12 +1612,14 @@ export function applyAction(
       if (state.phase !== 'build') throw new Error('Not in build phase');
       next = cloneState(state);
       next.phase = 'action';
-      next.lastEvent = isV5FormulaEnabled(ruleset) ? 'Formelphase gepasst.' : 'Keine Karte gebaut.';
+      next.lastEvent = isFormulaBoardEnabled(ruleset) ? 'Formelphase gepasst.' : 'Keine Karte gebaut.';
       return next;
     }
     case 'FORMULA_BUILD': {
       if (state.phase !== 'build') throw new Error('Not in build phase');
-      if (!isV5FormulaEnabled(ruleset)) throw new Error('FORMULA_BUILD requires v5Formula');
+      if (!isFormulaBoardEnabled(ruleset)) {
+        throw new Error('FORMULA_BUILD requires v5Formula or v6Formula');
+      }
       next = applyFormulaBuild(state, pack, playerId, action.cardInstanceId);
       const builtId = listFormulaComponents(next.players[playerId].formula).find(
         (c) => c.instanceId === action.cardInstanceId,
@@ -1614,7 +1631,9 @@ export function applyAction(
     }
     case 'FORMULA_REPLACE': {
       if (state.phase !== 'build') throw new Error('Not in build phase');
-      if (!isV5FormulaEnabled(ruleset)) throw new Error('FORMULA_REPLACE requires v5Formula');
+      if (!isFormulaBoardEnabled(ruleset)) {
+        throw new Error('FORMULA_REPLACE requires v5Formula or v6Formula');
+      }
       next = applyFormulaReplace(state, pack, playerId, action.cardInstanceId);
       const builtId = listFormulaComponents(next.players[playerId].formula).find(
         (c) => c.instanceId === action.cardInstanceId,
@@ -1626,7 +1645,9 @@ export function applyAction(
     }
     case 'FORMULA_ACTIVATE': {
       if (state.phase !== 'build') throw new Error('Not in build phase');
-      if (!isV5FormulaEnabled(ruleset)) throw new Error('FORMULA_ACTIVATE requires v5Formula');
+      if (!isFormulaBoardEnabled(ruleset)) {
+        throw new Error('FORMULA_ACTIVATE requires v5Formula or v6Formula');
+      }
       return applyFormulaActivate(state, pack, playerId, ruleset, rng);
     }
     case 'FORMULA_SCHNELLMIX': {
@@ -2078,6 +2099,17 @@ export function applyAction(
         phase: 'start',
         turnNumber: playerId === 'p2' ? next.turnNumber + 1 : next.turnNumber,
         lastEvent: 'Zug beendet.',
+        meta: {
+          ...next.meta,
+          v6FetzGainedThisTurn: {
+            ...(next.meta.v6FetzGainedThisTurn ?? { p1: false, p2: false }),
+            [playerId]: false,
+          },
+          v6PostFormulaActionLock: {
+            ...(next.meta.v6PostFormulaActionLock ?? { p1: 'none', p2: 'none' }),
+            [playerId]: 'none',
+          },
+        },
       };
       return checkWinner(next);
     }
