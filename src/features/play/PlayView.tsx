@@ -15,6 +15,8 @@ import {
   rollD6,
   rulesetFromState,
   isV5FormulaEnabled,
+  isV6FormulaEnabled,
+  planFormulaActivation,
   type GameState,
   type GameAction,
   type PlayerId,
@@ -42,6 +44,8 @@ import { buildV3HookSurface } from './board/v3HookSurface';
 import { ActionBar } from './board/ActionBar';
 import { ActionPhaseBar, actionPhaseLegalFlags } from './board/ActionPhaseBar';
 import { BuildPhaseBar } from './board/BuildPhaseBar';
+import { V6FormulaActivationPreview } from './board/V6FormulaActivationPreview';
+import { formatV6FormulaPlanPreview } from './presentation/v6FormulaPlanPreview';
 import { PlaymatBoard } from './board/PlaymatBoard';
 import { MatchIntro } from './setup/MatchIntro';
 import { buildGameViewModel } from './board/buildGameViewModel';
@@ -581,16 +585,20 @@ export function PlayView({ onBattleMusicActiveChange }: PlayViewProps) {
   const matchUsesV5Formula = state
     ? isV5FormulaEnabled(rulesetFromState(state))
     : false;
+  const matchUsesFormulaBoard = state
+    ? isV5FormulaEnabled(rulesetFromState(state)) ||
+      isV6FormulaEnabled(rulesetFromState(state))
+    : false;
   const humanBoundRecipe = state ? boundToRecipe(state.players[HUMAN].bound) : null;
   const boundEnginePreviewEligible = Boolean(
-    !matchUsesV5Formula &&
+    !matchUsesFormulaBoard &&
       humanBoundRecipe &&
       validateRecipe(humanBoundRecipe).active &&
       recipeHasRegistryAsset(humanBoundRecipe),
   );
-  /** Live-3D recipe for legacy Bound matches only (soft-retire under V5). */
+  /** Live-3D recipe for legacy Bound matches only (soft-retire under V5/V6). */
   const liveEngineRecipe =
-    matchUsesV5Formula
+    matchUsesFormulaBoard
       ? null
       : enginePreviewMvp
         ? MVP_DEMO_RECIPE
@@ -1022,7 +1030,29 @@ export function PlayView({ onBattleMusicActiveChange }: PlayViewProps) {
                 pendingIntent?.type === 'build-select' || pendingIntent?.type === 'build'
               }
               inputLocked={presentation.isInputLocked || !coachFooterReveal}
-              v5Formula={isV5FormulaEnabled(rulesetFromState(state))}
+              formulaBoard={
+                isV5FormulaEnabled(rulesetFromState(state)) ||
+                isV6FormulaEnabled(rulesetFromState(state))
+              }
+              previewSlot={(() => {
+                if (!isV6FormulaEnabled(rulesetFromState(state))) return null;
+                if (!view.legalActions.some((a) => a.type === 'FORMULA_ACTIVATE')) return null;
+                try {
+                  const plan = planFormulaActivation({
+                    state,
+                    pack: matchPack,
+                    playerId: HUMAN,
+                    ruleset: rulesetFromState(state),
+                    rng: () => 0.5,
+                    asOverformula: false,
+                  });
+                  return (
+                    <V6FormulaActivationPreview lines={formatV6FormulaPlanPreview(plan)} />
+                  );
+                } catch {
+                  return null;
+                }
+              })()}
               onStartBuild={() => setPendingIntent({ type: 'build-select' })}
               onActivateFormula={() => {
                 handleDispatch({ type: 'FORMULA_ACTIVATE' });

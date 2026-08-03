@@ -4,7 +4,7 @@
  */
 import React, { useState } from 'react';
 import type { ContentPack, GameAction, GameState, PlayerId } from '../../../game';
-import { findElementDef, findEnginePartDef, isV2Pack, isV5FormulaEnabled } from '../../../game';
+import { findElementDef, findEnginePartDef, isV2Pack, isV5FormulaEnabled, isV6FormulaEnabled } from '../../../game';
 import { rulesetFromState } from '../../../game/engine/rulesetFromState';
 import { partActivateCost, peekCharge } from '../../../game/engine/status';
 import type { EngineRecipe } from '../../../game/types/engineVisual';
@@ -97,6 +97,8 @@ export function PlaymatBoard({
 }: PlaymatBoardProps) {
   const humanId = view.human;
   const v5Formula = isV5FormulaEnabled(rulesetFromState(state));
+  const formulaBoard =
+    v5Formula || isV6FormulaEnabled(rulesetFromState(state));
   const [chargeConfirm, setChargeConfirm] = useState<{
     boundInstanceId: string;
     partName: string;
@@ -307,6 +309,7 @@ export function PlaymatBoard({
       className="flex min-h-0 flex-1 flex-col overflow-hidden"
       data-testid="playmat-board"
       data-v5-formula={v5Formula ? 'true' : 'false'}
+      data-formula-board={formulaBoard ? 'true' : 'false'}
     >
       {/* Mobile character badges — outside absolute playmat layer to avoid overlap */}
       <div className="flex flex-none items-stretch gap-2 border-b border-stone-800/80 bg-stone-950/90 px-2 py-1.5 sm:hidden">
@@ -470,7 +473,7 @@ export function PlaymatBoard({
           )}
 
           <section className="flex flex-none flex-col gap-2">
-            {shouldShowFormulaGestellCompose(v5Formula) ? (
+            {shouldShowFormulaGestellCompose(formulaBoard) ? (
               <FormulaRig
                 label="Gegner-Formel"
                 formula={state.players[botId].formula}
@@ -517,7 +520,7 @@ export function PlaymatBoard({
           </section>
 
           <section className="flex min-w-0 flex-none flex-col gap-2 border-t border-stone-800/80 pt-3">
-            {shouldShowFormulaGestellCompose(v5Formula) ? (
+            {shouldShowFormulaGestellCompose(formulaBoard) ? (
               <FormulaRig
                 label="Deine Formel"
                 formula={state.players[humanId].formula}
@@ -542,7 +545,7 @@ export function PlaymatBoard({
               />
             )}
 
-            {shouldShowBoardEngineLiveZone(v5Formula) ? (
+            {shouldShowBoardEngineLiveZone(formulaBoard) ? (
               <BoardEngineLiveZone
                 recipe={liveEngineRecipe}
                 heading={liveEngineRecipe ? 'Fetzgerät Live-3D (Legacy)' : 'Live-3D (Legacy)'}
