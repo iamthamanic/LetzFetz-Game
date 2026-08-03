@@ -42,6 +42,7 @@ export const V6_PLAYTEST_CONSTRUCT_RECIPES: readonly V6LookupRecipe[] = [
     timingMode: 'immediate',
     echoAmount: null,
     delayBonus: null,
+    availability: 'supported',
     summonConstructDefId: V6_PLAYTEST_CONSTRUCT_DEF_ID,
   },
 ];

@@ -57,6 +57,8 @@ interface GeneratedRecipe {
   timingMode: 'immediate' | 'echo' | 'delay' | null;
   echoAmount: number | null;
   delayBonus: number | null;
+  /** supported = playable; unsupported = explicit gap (§50.3), not invent. */
+  availability: 'supported' | 'unsupported';
 }
 
 function clampPrimary(p: V6PrimaryEffectAuthoring): V6PrimaryEffectAuthoring {
@@ -174,15 +176,20 @@ function applyOverformulaBonus(
 function main(): void {
   assertV6FormulaAuthoring(V6_FORMULA_AUTHORING_SLICE1);
   const auth = V6_FORMULA_AUTHORING_SLICE1;
-  const supportedXforms = auth.catalystTransforms.filter((t) => t.availability === 'supported');
-  if (supportedXforms.length === 0) {
-    throw new Error('V6_AUTHORING_INVALID: no supported catalyst transforms');
+  const allXforms = auth.catalystTransforms;
+  if (allXforms.length === 0) {
+    throw new Error('V6_AUTHORING_INVALID: no catalyst transforms');
   }
-  for (const x of auth.catalystTransforms) {
-    if (x.availability === 'unsupported') continue;
-    if (x.catalystId.includes('umkehrung') || x.catalystId.includes('ausbreitung')) {
+  // Fail closed: never promote Umkehrung/Ausbreitung/Spiegelung/Kettenkopplung to supported without explicit engine authoring.
+  for (const x of allXforms) {
+    const banned =
+      x.catalystId.includes('umkehrung') ||
+      x.catalystId.includes('ausbreitung') ||
+      x.catalystId.includes('spiegelung') ||
+      x.catalystId.includes('kettenkopplung');
+    if (banned && x.availability === 'supported') {
       throw new Error(
-        `V6_AUTHORING_INVALID: ${x.catalystId} must stay unsupported until explicit TEK authoring (#383)`,
+        `V6_AUTHORING_INVALID: ${x.catalystId} must stay unsupported — do not invent transforms (§50.3)`,
       );
     }
   }
@@ -220,11 +227,12 @@ function main(): void {
       timingMode: null,
       echoAmount: null,
       delayBonus: null,
+      availability: 'supported',
     });
   }
 
   for (const tk of auth.tkBases) {
-    const xform = supportedXforms.find((t) => t.catalystId === tk.catalystId);
+    const xform = allXforms.find((t) => t.catalystId === tk.catalystId);
     if (!xform) {
       throw new Error(`V6_AUTHORING_INVALID: no supported transform for TK catalyst ${tk.catalystId}`);
     }
@@ -263,11 +271,12 @@ function main(): void {
       timingMode,
       echoAmount: timingMode === 'echo' ? (xform.echoAmount ?? 1) : null,
       delayBonus: timingMode === 'delay' ? (xform.delayBonus ?? 2) : null,
+      availability: xform.availability,
     });
   }
 
   for (const ek of auth.ekBases) {
-    const xform = supportedXforms.find((t) => t.catalystId === ek.catalystId);
+    const xform = allXforms.find((t) => t.catalystId === ek.catalystId);
     if (!xform) {
       throw new Error(`V6_AUTHORING_INVALID: no supported transform for EK catalyst ${ek.catalystId}`);
     }
@@ -303,13 +312,14 @@ function main(): void {
       timingMode,
       echoAmount: timingMode === 'echo' ? (xform.echoAmount ?? 1) : null,
       delayBonus: timingMode === 'delay' ? (xform.delayBonus ?? 2) : null,
+      availability: xform.availability,
     });
   }
 
   for (const te of auth.teBases) {
     const teSummonId =
       te.primary.kind === 'summon_construct' ? (te.summonConstructDefId ?? null) : null;
-    for (const xform of supportedXforms) {
+    for (const xform of allXforms) {
       const catShort = v6Slice1CatalystShortName(xform.catalystId);
       const applied = applyCatalystToTe(te, xform);
       const isSummon = applied.primary.kind === 'summon_construct';
@@ -348,6 +358,7 @@ function main(): void {
         timingMode,
         echoAmount: timingMode === 'echo' ? (xform.echoAmount ?? 1) : null,
         delayBonus: timingMode === 'delay' ? (xform.delayBonus ?? 2) : null,
+        availability: xform.availability,
       };
       recipes.push(tek);
 
@@ -392,6 +403,7 @@ function main(): void {
         timingMode,
         echoAmount: timingMode === 'echo' ? (xform.echoAmount ?? 1) : null,
         delayBonus: timingMode === 'delay' ? (xform.delayBonus ?? 2) : null,
+        availability: xform.availability,
       });
     }
   }
@@ -410,7 +422,7 @@ function main(): void {
     }
   }
 
-  const expectedTek = auth.teBases.length * supportedXforms.length;
+  const expectedTek = auth.teBases.length * allXforms.length;
   const expectedOver = expectedTek;
   const expected =
     auth.teBases.length +
@@ -437,10 +449,10 @@ function main(): void {
  * Produced by scripts/generate-v6-formula-recipes.ts
  * Location: src/generated/v6/formulaRecipes.generated.ts
  *
- * Catalog: V6 Slice-1 (10 Techniken × 6 Essenzen × 6 matrix Katalysatoren).
+ * Catalog: V6 Slice-1 (10 Techniken × 6 Essenzen × 10 Katalysatoren).
  * These ${recipes.length} recipes are the locked current set — later expansion
  * adds new ids; do not renumber or replace Slice-1 recipeIds.
- * Four catalysts remain availability:unsupported until #383 (no invented TEK).
+ * Four catalysts emit availability:unsupported recipes (no invented effects §50.3).
  */
 
 export type V6GeneratedRecipeKind = 'te' | 'tk' | 'ek' | 'tek' | 'overformula';
@@ -482,12 +494,13 @@ export interface V6GeneratedFormulaRecipe {
   timingMode: 'immediate' | 'echo' | 'delay' | null;
   echoAmount: number | null;
   delayBonus: number | null;
+  availability: 'supported' | 'unsupported';
 }
 
-/** Meta for the locked Slice-1 recipe catalog (not the future 10T×10K matrix). */
+/** Meta for the locked Slice-1 recipe catalog (10T×6E×10K; unsupported = explicit). */
 export const V6_SLICE1_RECIPE_CATALOG = {
   id: 'v6-slice1',
-  label: 'V6 Slice-1 Formelkatalog (10T×6E×6K)',
+  label: 'V6 Slice-1 Formelkatalog (10T×6E×10K)',
   recipeCount: ${recipes.length},
   breakdown: ${JSON.stringify(byKind)},
 } as const;

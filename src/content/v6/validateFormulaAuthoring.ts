@@ -216,15 +216,11 @@ export function validateV6Slice1Completeness(catalog: V6FormulaAuthoringCatalog)
 
   const matrixSet = new Set<string>(V6_MATRIX_CATALYST_IDS);
   for (const x of catalog.catalystTransforms) {
-    if (matrixSet.has(x.catalystId) && x.availability !== 'supported') {
-      errors.push(
-        `matrix catalyst ${x.catalystId} must have availability supported (got ${x.availability})`,
-      );
+    if (!matrixSet.has(x.catalystId)) {
+      errors.push(`catalyst transform ${x.catalystId} is not in V6_MATRIX_CATALYST_IDS`);
     }
-    if (!matrixSet.has(x.catalystId) && x.availability !== 'unsupported') {
-      errors.push(
-        `non-matrix catalyst ${x.catalystId} must be availability unsupported until #383 (got ${x.availability})`,
-      );
+    if (x.availability !== 'supported' && x.availability !== 'unsupported') {
+      errors.push(`catalyst ${x.catalystId} availability must be supported|unsupported`);
     }
   }
 

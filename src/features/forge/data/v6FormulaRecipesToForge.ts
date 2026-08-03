@@ -59,6 +59,9 @@ export function v6GeneratedRecipeToForgeCard(recipe: V6GeneratedFormulaRecipe): 
       'Rolle: Kombination',
       'Quelle: V6 Katalog',
       `Art: ${KIND_LABEL_DE[recipe.kind]}`,
+      recipe.availability === 'unsupported'
+        ? 'Status: Nicht freigeschaltet (Authoring/Engine ausstehend)'
+        : 'Status: Freigeschaltet',
       `Effekt: ${recipe.effectSummary}`,
       ...slotLines,
     ],

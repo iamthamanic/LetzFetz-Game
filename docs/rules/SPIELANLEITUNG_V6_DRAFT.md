@@ -95,7 +95,7 @@ Technik + Essenz erschöpfen. Rezepte = Authoring/Generator — keine Textadditi
 
 **Essenzen (6):** Feuer Druck · Wasser Heilung · Erde Stabilität · Luft Tempo · Licht Schild · Schatten Fluch.  
 **Techniken (10):** Impulsgeschoss … Beschwörungsritual (#381).  
-**Katalysatoren (10):** Echo … Opfergabe (#382). Slice-1 Katalog **10T×6E×6K = 876** Rezepte (6 matrix-supported Katalysatoren; 4 unsupported bis #383).
+**Katalysatoren (10):** Echo … Opfergabe (#382). Slice-1 Katalog **10T×6E×10K = 1420** Rezepte (#383): 6 supported spielbar; 4 unsupported explizit (Play fail-closed, keine erfundenen Effekte).
 
 Nach **offensiver TEK** in derselben Aktionsphase: **kein** Angriff und **keine** Herausforderung (selbstgerichtete Fusion sperrt nicht).
 

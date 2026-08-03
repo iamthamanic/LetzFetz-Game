@@ -8,7 +8,7 @@
 
 **Full integration (GitHub, closed):** #341 Affinität ±1 Engine · #342 Fessel-UI · #343 recipe catalog (Slice-1) · #344 Echo/Delay · #345 Echo UI · #346 Konstrukte · #347 Konstrukt UI · #348 Überformel · #349 Passives (A/B) · #350 Arenas · #351 Bot · #352 SPIELANLEITUNG · #353 Default cutover · #354 V5 Legacy.
 
-**Playtest-Slice-1:** done (Default V6, **876** Rezepte mit 6 Essenzen + 6 matrix Katalysatoren, Kern-Mechaniken). **Noch offen bis Konzept-Vollständigkeit** (priorisierte Queue):
+**Playtest-Slice-1:** done (Default V6, **1420** Rezepte = 10T×6E×10K, Kern-Mechaniken). **Noch offen bis Konzept-Vollständigkeit** (priorisierte Queue):
 
 | Prio | Issues |
 |------|--------|
@@ -378,7 +378,8 @@ Essenz-Identitäten (Designregel): Feuer Druck · Wasser Heilung/Reinigung · Er
 
 **Engine (#380):** Slice-1 shippt alle **6 Essenzen** (Erde/Licht/Schatten ergänzt). Art unter `public/cards/formula/{erde,licht,schatten}.png`.  
 **Engine (#381):** Slice-1 shippt alle **10 Techniken** (V5-Neun + Beschwörungsritual). Beschwörung als Katalog-Technik mit `summon_construct`-TE; Art-Reuse.  
-**Engine (#382):** Slice-1 shippt alle **10 Katalysatoren** (Echo … Opfergabe; ohne Doppelecho/Sicherheitsventil). Matrix-Expansion nur für **6 supported** Transforms (4 locked + Echo + Verzögerung) → Katalog **10T×6E×6K = 876**. Ausbreitung/Kettenkopplung/Spiegelung/Umkehrung: Karten + `availability: unsupported` — keine erfundenen TEK (§50.3). Volle 10T×10K-Matrix bleibt Katalog-Expansion (#383).
+**Engine (#382):** Slice-1 shippt alle **10 Katalysatoren** (Echo … Opfergabe; ohne Doppelecho/Sicherheitsventil). Echo/Verzögerung in Katalog-Authoring.  
+**Engine (#383):** Katalog-Expansion **10T×6E×10K = 1420** Rezepte. Sechs Katalysatoren `supported` (spielbar); Ausbreitung/Kettenkopplung/Spiegelung/Umkehrung: explizite `availability: unsupported` Rezepte — Play fail-closed, keine erfundenen Effekte (§50.3). Material Formeln seedet den vollen Katalog.
 
 ---
 
@@ -570,4 +571,5 @@ Bitte abhaken / korrigieren:
 | 2026-08-03 | #378 Standard-Glitches: 7 playable mit Timing Aktionsphase/Reaktion; Formelziele; kein Sofort-Negativ (Chaos #386) |
 | 2026-08-03 | #380 Essenzen Erde/Licht/Schatten; Katalog 3T×6E×4K = 198 |
 | 2026-08-03 | #381 Techniken auf 10 (inkl. Beschwörungsritual Katalog-TE); Katalog 10T×6E×4K = 604 |
-| 2026-08-03 | #382 Katalysatoren auf 10 (Echo…Opfergabe); Matrix 6 supported → 10T×6E×6K = 876; 4 unsupported bis #383 |
+| 2026-08-03 | #382 Katalysatoren auf 10 (Echo…Opfergabe); Echo/Delay in Katalog; 4 unsupported Transforms |
+| 2026-08-03 | #383 Katalog-Expansion 10T×6E×10K = 1420; unsupported explizit; Material-Seed; Play fail-closed |
