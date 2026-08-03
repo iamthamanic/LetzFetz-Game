@@ -1,5 +1,5 @@
 /**
- * V6 setup smoke — pack tile visible only behind playable flag.
+ * V6 setup after Play-Default cutover (#353).
  * Evidence: ../.qa/evidence/v6-setup-flag/
  */
 import { test, expect } from '@playwright/test';
@@ -14,26 +14,23 @@ function shot(page: import('@playwright/test').Page, name: string) {
   return page.screenshot({ path: join(EVIDENCE, name), fullPage: true });
 }
 
-test.describe('V6 setup playable flag', () => {
-  test('hides V6 tile by default', async ({ page }) => {
-    await openPlaySetup(page);
-    await selectBotMode(page);
-    await expect(page.getByTestId('game-pack-v5')).toBeVisible();
-    await expect(page.getByTestId('game-pack-v6')).toHaveCount(0);
-    await shot(page, '01-v6-hidden.png');
-  });
-
-  test('shows V6 tile when localStorage flag is set but keeps V5 selected', async ({ page }) => {
-    await page.addInitScript(() => {
-      localStorage.setItem('letz-fetz:v6-playable', '1');
-    });
+test.describe('V6 setup Play-Default cutover', () => {
+  test('shows V6 as default and V5 as Legacy', async ({ page }) => {
     await openPlaySetup(page);
     await selectBotMode(page);
     await expect(page.getByTestId('game-pack-v6')).toBeVisible();
-    await expect(page.getByTestId('game-setup-v6-flag-hint')).toBeVisible();
-    await expect(page.getByTestId('game-pack-v5')).toHaveAttribute('aria-pressed', 'true');
-    await page.getByTestId('game-pack-v6').click();
+    await expect(page.getByTestId('game-pack-v5')).toBeVisible();
     await expect(page.getByTestId('game-pack-v6')).toHaveAttribute('aria-pressed', 'true');
-    await shot(page, '02-v6-visible.png');
+    await expect(page.getByTestId('game-setup-v6-default-hint')).toBeVisible();
+    await shot(page, '01-v6-default.png');
+  });
+
+  test('allows selecting V5 Legacy', async ({ page }) => {
+    await openPlaySetup(page);
+    await selectBotMode(page);
+    await page.getByTestId('game-pack-v5').click();
+    await expect(page.getByTestId('game-pack-v5')).toHaveAttribute('aria-pressed', 'true');
+    await expect(page.getByTestId('game-pack-v6')).toHaveAttribute('aria-pressed', 'false');
+    await shot(page, '02-v5-legacy.png');
   });
 });

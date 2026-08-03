@@ -29,8 +29,8 @@ export interface RulesetConfig {
    */
   v5Formula?: boolean;
   /**
-   * When true, V6 Formel ruleset identity is active (INTERNAL foundation).
-   * Mutually exclusive with `v5Formula`. Not Play-Default until PLAYABLE cutover.
+   * When true, V6 Formel ruleset identity is active (Play-Default after #353).
+   * Mutually exclusive with `v5Formula`.
    * See docs/letz-fetz-v6-spielkonzept.md §0.
    */
   v6Formula?: boolean;
@@ -88,8 +88,8 @@ export const V5_RULESET: RulesetConfig = {
 };
 
 /**
- * V6 formula INTERNAL defaults (combat + v6Formula, charge max 3).
- * Not Play-Default until PLAYABLE cutover — tests/helpers only for Slice 0.
+ * V6 formula defaults (combat + v6Formula, charge max 3).
+ * Play-Default after cutover #353.
  */
 export const V6_RULESET: RulesetConfig = {
   ...DEFAULT_RULESET,

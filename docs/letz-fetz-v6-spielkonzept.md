@@ -1,22 +1,18 @@
 # Letz Fetz V6 — Spielkonzept & Integrationsvertrag
 
-**Status:** DRAFT zur Review — finale Form folgt nach User-Abnahme  
+**Status:** Verbindlich für Playtest — Play-Default = V6 (`v6Formula`) nach Cutover #353  
 **Stand:** 2026-08-03  
 **Basis:** V6-Vollkonzept + Grill-Antworten (Cutover, Generator, UI-Gates, Passiven)  
 
-**Slice 0 tracking (GitHub):** #310 ruleset identity · #311 content/pack stub · #312 recipe generator CI · #313 import-boundary probes + AGENTS note. Play-Default remains **V5** until PLAYABLE cutover.
-
-**Slice 1 tracking (GitHub):** #318 authoring/recipes · #319 engine plan/execute · #320 match lifecycle · #321 UI preview=plan · #322 Setup INTERNAL smoke (flag). Play-Default remains **V5** (no AGENTS cutover in Slice 1).
-
-**PLAYABLE-Prep tracking (GitHub):** #333 characters/affinity scaffold · #334 recipe authoring harden · #335 Spielregeln/Katalog V6 · #336 setup flag polish. Play-Default remains **V5**.
+**Slice 0–1 / Prep (historisch):** #310–#336 INTERNAL scaffolding; Play-Default war V5 bis Cutover.
 
 **Full integration (GitHub):** #341 Affinität ±1 Engine · #342 Fessel-UI · #343 recipe catalog · #344 Echo/Delay · #345 Echo UI · #346 Konstrukte · #347 Konstrukt UI · #348 Überformel · #349 Passives (A/B) · #350 Arenas · #351 Bot · #352 SPIELANLEITUNG · #353 Default cutover · #354 V5 Legacy.
 
-**V6_PLAYABLE:** Setup tile `v6` only when `VITE_V6_PLAYABLE=true` or `localStorage['letz-fetz:v6-playable']='1'`. Default pack choice stays **V5** even when the tile is visible (flag ≠ cutover). Combo visual = T+E+K component arts (not a blocker).
+**Play-Default (#353):** Neue Matches starten auf **V6** (`defaultPackChoice` → `v6`). V5 bleibt als Legacy-Kachel. `VITE_V6_PLAYABLE` / localStorage-Flag nicht mehr nötig für die V6-Kachel (Test-Override bleibt für Isolation).
 
 > **Leitsatz:** Der Charakter bestimmt den Rahmen. Die Karten bestimmen die Möglichkeiten. Der Spieler bestimmt das Ergebnis.
 
-Dieses Dokument hält fest, was für Integration und Playtest **als geklärt gilt**. Offene Punkte stehen am Ende unter §99. Es ersetzt noch nicht die Engine-Prosa (`SPIELANLEITUNG_V6_*`) — die entsteht nach Finalisierung.
+Dieses Dokument hält fest, was für Integration und Playtest **als geklärt gilt**. Offene Punkte stehen am Ende unter §99. Engine-Prosa: [`SPIELANLEITUNG_V6_DRAFT.md`](rules/SPIELANLEITUNG_V6_DRAFT.md).
 
 ---
 
@@ -530,6 +526,7 @@ Bitte abhaken / korrigieren:
 - [x] Passives / Macken (#349): **Option B feste Macken** end-to-end (Daten + Engine-Hooks + DE-UI); Pool A deferred.
 - [x] Bot Affinity / V6 priorities (#351): Playbook + Digest; Heuristik spendet Affinität nur bei Wertgewinn; LLM-Prompt unter `v6Formula`.
 - [x] SPIELANLEITUNG_V6_DRAFT + AGENTS Kurzreferenz (#352).
+- [x] Play-Default cutover (#353): `defaultPackChoice` → `v6`; V5 Legacy-Kachel; Flag nicht mehr required.
 
 Nach deiner finalen Form: dieses Doc auf **verbindlich** setzen und `SPIELANLEITUNG_V6_DRAFT.md` + AGENTS-Kurzreferenz nachziehen.
 
@@ -555,3 +552,4 @@ Nach deiner finalen Form: dieses Doc auf **verbindlich** setzen und `SPIELANLEIT
 | 2026-08-03 | #349 Passives: **Option B feste Macken** gelockt; Engine-Hooks + DE-UI; Pool A deferred |
 | 2026-08-03 | #351 Solo-Bot: Affinität beneficial + V6 Playbook Digest (`V6_BOT_PLAYBOOK.md`) |
 | 2026-08-03 | #352 `SPIELANLEITUNG_V6_DRAFT.md` + AGENTS / `.cursor/rules` Kurzreferenz |
+| 2026-08-03 | #353 Play-Default → V6; V5 Legacy-Kachel; `VITE_V6_PLAYABLE` relaxed |

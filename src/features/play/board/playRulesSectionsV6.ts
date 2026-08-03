@@ -2,7 +2,7 @@
  * Concise V6 play-rules sections for the Spielregeln modal (Slice-1 PLAYABLE-Prep).
  * Location: src/features/play/board/playRulesSectionsV6.ts
  *
- * Source: docs/letz-fetz-v6-spielkonzept.md — not a full SPIELANLEITUNG_V6_DRAFT yet.
+ * Source: docs/rules/SPIELANLEITUNG_V6_DRAFT.md + docs/letz-fetz-v6-spielkonzept.md
  */
 import type { RulesSection } from './playRulesSections';
 
@@ -17,7 +17,8 @@ export const V6_PLAY_RULE_SECTIONS: RulesSection[] = [
     [
       'V6 ersetzt die Funktionsweise der Formeln (Rezepte), nicht das Grundspiel.',
       'Ein Match ist strikt V6 oder strikt V5 — nie gemischt.',
-      'Play-Default bleibt V5, bis der PLAYABLE-Cutover kommt. Diese Ansicht gilt nur für V6-Partien.',
+      'Play-Default ist V6 (`v6Formula`). V5 bleibt als Legacy/Regression wählbar.',
+      'Diese Ansicht gilt nur für V6-Partien.',
       '30 Leben · max 5 Schild · Handlimit 6 · 3 Formelplätze (Technik · Essenz · Katalysator).',
     ].join('\n'),
   ),

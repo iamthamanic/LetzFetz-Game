@@ -18,12 +18,13 @@ describe('V6 Setup INTERNAL smoke', () => {
     setV6PlayableTestOverride(null);
   });
 
-  it('rejects v6 choice when flag off', () => {
+  it('rejects v6 choice when test override forces flag off', () => {
     setV6PlayableTestOverride(false);
     expect(() => resolveGamePackChoice('v6')).toThrow(/V6_PLAYABLE/);
   });
 
-  it('resolves v6 pack behind flag and activates TEK with plan preview hard-gate', () => {
+  it('resolves v6 pack by default after cutover and activates TEK with plan preview hard-gate', () => {
+    setV6PlayableTestOverride(null);
     const resolved = resolveGamePackChoice('v6');
     expect(resolved.ruleset?.v6Formula).toBe(true);
     expect(resolved.pack.id).toBe('v6-core');
