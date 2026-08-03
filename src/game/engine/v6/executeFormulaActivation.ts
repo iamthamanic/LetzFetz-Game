@@ -15,7 +15,7 @@ import {
   revalidateFormulaPlan,
   type PlanFormulaActivationInput,
 } from './planFormulaActivation';
-import { applyFesselToPlayer } from './fessel';
+import { occupiedFesselSlots } from './fessel';
 
 function ensureV6Meta(state: GameState): GameState {
   const next = cloneState(state);
@@ -146,9 +146,18 @@ export function executeFormulaActivation(
   let next = ensureV6Meta(input.state);
   next = applyPrimary(next, validated, ruleset);
 
+  let pendingFessel:
+    | { chooserId: PlayerId; targetPlayerId: PlayerId; intensity: number }
+    | null = null;
   if (validated.primary.kind === 'fessel' && validated.primary.value > 0) {
     const foe = opponentOf(validated.actorId);
-    next = applyFesselToPlayer(next, foe, validated.primary.value);
+    if (occupiedFesselSlots(next.players[foe].formula).length > 0) {
+      pendingFessel = {
+        chooserId: validated.actorId,
+        targetPlayerId: foe,
+        intensity: validated.primary.value,
+      };
+    }
   }
 
   if (validated.selfDamage > 0) {
@@ -200,10 +209,20 @@ export function executeFormulaActivation(
   };
 
   next.phase = 'action';
-  next.lastEvent =
-    validated.primary.kind === 'fessel' && validated.primary.value > 0
-      ? `${validated.eventSummary} · Fessel ${validated.primary.value}`
-      : validated.eventSummary;
+  if (pendingFessel) {
+    next.pendingChoice = {
+      type: 'v6-fessel-target',
+      playerId: pendingFessel.chooserId,
+      targetPlayerId: pendingFessel.targetPlayerId,
+      intensity: pendingFessel.intensity,
+    };
+    next.lastEvent = `${validated.eventSummary} · Fessel ${pendingFessel.intensity} — Ziel wählen.`;
+  } else {
+    next.lastEvent =
+      validated.primary.kind === 'fessel' && validated.primary.value > 0
+        ? `${validated.eventSummary} · Fessel ${validated.primary.value} (kein Ziel)`
+        : validated.eventSummary;
+  }
   return next;
 }
 

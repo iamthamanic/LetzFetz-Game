@@ -31,7 +31,7 @@ import {
 } from './v6/affinity';
 import { planFormulaActivation } from './v6/planFormulaActivation';
 import { applyV6FormulaActivate } from './v6/executeFormulaActivation';
-import { tickFesselAndRestoreOwnerFormulaV6 } from './v6/fessel';
+import { applyFesselToPlayer, occupiedFesselSlots, tickFesselAndRestoreOwnerFormulaV6 } from './v6/fessel';
 import {
   cloneState,
   discardFromHand,
@@ -998,6 +998,8 @@ function pendingChoicePlayer(pending: PendingChoice): PlayerId {
       return pending.playerId;
     case 'v6-affinity':
       return pending.playerId;
+    case 'v6-fessel-target':
+      return pending.playerId;
     case 'pick-reaction':
       return pending.chooserId;
   }
@@ -1155,6 +1157,13 @@ function getPendingLegalActions(state: GameState, ctx: PackContext): GameAction[
         { type: 'PICK_V6_AFFINITY', mode: 'dice-minus' },
       );
       break;
+    case 'v6-fessel-target': {
+      const board = state.players[pending.targetPlayerId].formula;
+      for (const slot of occupiedFesselSlots(board)) {
+        actions.push({ type: 'PICK_V6_FESSEL_TARGET', slot });
+      }
+      break;
+    }
   }
 
   return actions;
@@ -1639,6 +1648,7 @@ function applyPendingChoiceAction(
         case 'pillendoktora-boost':
         case 'mysterium-element':
         case 'v6-affinity':
+        case 'v6-fessel-target':
           throw new Error('Arena effect cannot be skipped');
       }
       break;
@@ -1695,6 +1705,19 @@ function applyPendingChoiceAction(
         ruleset,
         rng,
       );
+    }
+    case 'PICK_V6_FESSEL_TARGET': {
+      if (pending.type !== 'v6-fessel-target') throw new Error('Wrong pending type');
+      const legal = occupiedFesselSlots(state.players[pending.targetPlayerId].formula);
+      if (!legal.includes(action.slot)) {
+        throw new Error('Fessel target slot empty or illegal');
+      }
+      let next = cloneState(state);
+      next.pendingChoice = null;
+      next = applyFesselToPlayer(next, pending.targetPlayerId, pending.intensity, {
+        slot: action.slot,
+      });
+      return checkWinner(next);
     }
     case 'TAKE_OPTIONAL_DRAW': {
       if (pending.type !== 'optional-draw-discard') throw new Error('Wrong pending type');

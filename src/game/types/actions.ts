@@ -77,6 +77,11 @@ export type GameAction =
       /** V6 Affinity after W6: skip or spend ±1. */
       type: 'PICK_V6_AFFINITY';
       mode: 'none' | 'value-plus' | 'dice-plus' | 'dice-minus';
+    }
+  | {
+      /** V6 Fessel: pick occupied opponent formula slot. */
+      type: 'PICK_V6_FESSEL_TARGET';
+      slot: import('./cards').FormulaSlot;
     };
 
 export interface ActionContext {

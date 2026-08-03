@@ -259,7 +259,8 @@ Kein Block. Modifizierter W6:
 | 3–4 | Primärwert/Intensität −1 |
 | 5–6 | Primärwert/Intensität −2; gegnergerichteter Essenz-Rider entfällt |
 
-Minimum 0. Nichtnumerische Effekte über Intensitätsstufen (z. B. Fessel 1–3).
+Minimum 0. Nichtnumerische Effekte über Intensitätsstufen (z. B. Fessel 1–3).  
+**Fessel-Zielwahl:** manuell — Angreifer wählt einen **besetzten** gegnerischen Formelplatz (leere Plätze ungültig).
 
 ---
 
@@ -510,7 +511,8 @@ Bitte abhaken / korrigieren:
 - [ ] Generator-Output: JSON vs TS  
 - [ ] Heldenmodus: nur Notiz oder schon Flag-Name reservieren  
 - [ ] Ob V5-Menü-Kachel sofort „Legacy“ heißt oder „V5 Regression“  
-- [x] Exact Start: Affinität „pro Runde“ = **einmal pro eigenem Zug/Durchlauf** (Reset eigene Startphase; Spend auf eigenen Angriff/Challenge **oder Formelaktivierung**; Block-Affinität **nur im eigenen Aktionszug**, nicht bei Verteidigung gegen den Gegner). Playtest-Default via #341 / #356. 
+- [x] Exact Start: Affinität „pro Runde“ = **einmal pro eigenem Zug/Durchlauf** (Reset eigene Startphase; Spend auf eigenen Angriff/Challenge **oder Formelaktivierung**; Block-Affinität **nur im eigenen Aktionszug**, nicht bei Verteidigung gegen den Gegner). Playtest-Default via #341 / #356.  
+- [x] Fessel / Kettenfessel **Zielwahl manuell**: Angreifer wählt einen **besetzten** gegnerischen Formelplatz (Technik / Essenz / Katalysator) via Pending-Choice (`PICK_V6_FESSEL_TARGET`); leere Plätze ungültig. Kein Auto Technik→Essenz→Katalysator. Bot-Heuristik: Katalysator → Essenz → Technik.
 
 Nach deiner finalen Form: dieses Doc auf **verbindlich** setzen und `SPIELANLEITUNG_V6_DRAFT.md` + AGENTS-Kurzreferenz nachziehen.
 
@@ -525,3 +527,4 @@ Nach deiner finalen Form: dieses Doc auf **verbindlich** setzen und `SPIELANLEIT
 | 2026-08-03 | Slice 1 Issues #318–#322 getrackt; Play-Default bleibt V5 |
 | 2026-08-03 | #341 Affinität ±1 Engine: „pro Runde“ = eigener Zug/Durchlauf (§99 locked playtest default) |
 | 2026-08-03 | #342 Fessel Engine+UI (Stufen 1–3, Startphase-Tick); #356 Affinität auf Formel + Block nur eigener Aktionszug |
+| 2026-08-03 | Fessel/Kettenfessel Zielwahl **manuell** (besetzte Formelplätze; Pending `PICK_V6_FESSEL_TARGET`; §99) |
