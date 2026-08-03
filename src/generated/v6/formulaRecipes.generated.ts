@@ -943,7 +943,7 @@ export const V6_GENERATED_FORMULA_RECIPES: readonly V6GeneratedFormulaRecipe[] =
     "essenceId": "v6-essenz-feuer",
     "catalystId": "v6-katalysator-ueberladung",
     "name": "Überformel Glutimpuls · Überladung",
-    "effectSummary": "Verursache 7 Schaden am Gegner. Bei Lebensschaden: Brennen, falls keine Reaktion. (verstärkt) Primärwert +2; danach erleidest du 1 Selbstschaden. Überformel: Fetzladung wird verbraucht. Formelabwehr −1.",
+    "effectSummary": "Verursache 7 Schaden am Gegner. Bei Lebensschaden: Brennen, falls keine Reaktion. (verstärkt) Primärwert +2; danach erleidest du 1 Selbstschaden. Überformel: Primär +2 (fester Slice-1-Bonus). Überformel: Fetzladung wird verbraucht. Formelabwehr −1.",
     "primary": {
       "kind": "damage",
       "value": 7,
@@ -999,7 +999,7 @@ export const V6_GENERATED_FORMULA_RECIPES: readonly V6GeneratedFormulaRecipe[] =
     "essenceId": "v6-essenz-feuer",
     "catalystId": "v6-katalysator-verdichtung",
     "name": "Überformel Glutimpuls · Verdichtung",
-    "effectSummary": "Verursache 6 Schaden am Gegner. Bei Lebensschaden: Brennen, falls keine Reaktion. (verstärkt) Primärwert +1; verwendete Komponenten erhalten +1 Stabilität. Überformel: Fetzladung wird verbraucht. Formelabwehr −1.",
+    "effectSummary": "Verursache 6 Schaden am Gegner. Bei Lebensschaden: Brennen, falls keine Reaktion. (verstärkt) Primärwert +1; verwendete Komponenten erhalten +1 Stabilität. Überformel: Primär +2 (fester Slice-1-Bonus). Überformel: Fetzladung wird verbraucht. Formelabwehr −1.",
     "primary": {
       "kind": "damage",
       "value": 6,
@@ -1055,7 +1055,7 @@ export const V6_GENERATED_FORMULA_RECIPES: readonly V6GeneratedFormulaRecipe[] =
     "essenceId": "v6-essenz-feuer",
     "catalystId": "v6-katalysator-sofortzuender",
     "name": "Überformel Glutimpuls · Sofortzünder",
-    "effectSummary": "Verursache 4 Schaden am Gegner. Bei Lebensschaden: Brennen, falls keine Reaktion. (verstärkt) Primärwert −1; danach ziehe 1 und wirf 1 ab. Überformel: Fetzladung wird verbraucht. Formelabwehr −1.",
+    "effectSummary": "Verursache 4 Schaden am Gegner. Bei Lebensschaden: Brennen, falls keine Reaktion. (verstärkt) Primärwert −1; danach ziehe 1 und wirf 1 ab. Überformel: Primär +2 (fester Slice-1-Bonus). Überformel: Fetzladung wird verbraucht. Formelabwehr −1.",
     "primary": {
       "kind": "damage",
       "value": 4,
@@ -1111,7 +1111,7 @@ export const V6_GENERATED_FORMULA_RECIPES: readonly V6GeneratedFormulaRecipe[] =
     "essenceId": "v6-essenz-feuer",
     "catalystId": "v6-katalysator-opfergabe",
     "name": "Überformel Glutimpuls · Opfergabe",
-    "effectSummary": "Verursache 5 Schaden am Gegner. Bei Lebensschaden: Brennen, falls keine Reaktion. (verstärkt) Optional: wirf 1 Handkarte ab für Primärwert +2. Überformel: Fetzladung wird verbraucht. Formelabwehr −1.",
+    "effectSummary": "Verursache 5 Schaden am Gegner. Bei Lebensschaden: Brennen, falls keine Reaktion. (verstärkt) Optional: wirf 1 Handkarte ab für Primärwert +2. Überformel: Primär +2 (fester Slice-1-Bonus). Überformel: Fetzladung wird verbraucht. Formelabwehr −1.",
     "primary": {
       "kind": "damage",
       "value": 5,
@@ -1167,7 +1167,7 @@ export const V6_GENERATED_FORMULA_RECIPES: readonly V6GeneratedFormulaRecipe[] =
     "essenceId": "v6-essenz-wasser",
     "catalystId": "v6-katalysator-ueberladung",
     "name": "Überformel Spritzschuss · Überladung",
-    "effectSummary": "Verursache 6 Schaden am Gegner. Bei Heilung oder Schildgewinn: entferne optional eine Marke von dir. (verstärkt) Primärwert +2; danach erleidest du 1 Selbstschaden. Überformel: Fetzladung wird verbraucht. Formelabwehr −1.",
+    "effectSummary": "Verursache 6 Schaden am Gegner. Bei Heilung oder Schildgewinn: entferne optional eine Marke von dir. (verstärkt) Primärwert +2; danach erleidest du 1 Selbstschaden. Überformel: Primär +2 (fester Slice-1-Bonus). Überformel: Fetzladung wird verbraucht. Formelabwehr −1.",
     "primary": {
       "kind": "damage",
       "value": 6,
@@ -1223,7 +1223,7 @@ export const V6_GENERATED_FORMULA_RECIPES: readonly V6GeneratedFormulaRecipe[] =
     "essenceId": "v6-essenz-wasser",
     "catalystId": "v6-katalysator-verdichtung",
     "name": "Überformel Spritzschuss · Verdichtung",
-    "effectSummary": "Verursache 5 Schaden am Gegner. Bei Heilung oder Schildgewinn: entferne optional eine Marke von dir. (verstärkt) Primärwert +1; verwendete Komponenten erhalten +1 Stabilität. Überformel: Fetzladung wird verbraucht. Formelabwehr −1.",
+    "effectSummary": "Verursache 5 Schaden am Gegner. Bei Heilung oder Schildgewinn: entferne optional eine Marke von dir. (verstärkt) Primärwert +1; verwendete Komponenten erhalten +1 Stabilität. Überformel: Primär +2 (fester Slice-1-Bonus). Überformel: Fetzladung wird verbraucht. Formelabwehr −1.",
     "primary": {
       "kind": "damage",
       "value": 5,
@@ -1279,7 +1279,7 @@ export const V6_GENERATED_FORMULA_RECIPES: readonly V6GeneratedFormulaRecipe[] =
     "essenceId": "v6-essenz-wasser",
     "catalystId": "v6-katalysator-sofortzuender",
     "name": "Überformel Spritzschuss · Sofortzünder",
-    "effectSummary": "Verursache 3 Schaden am Gegner. Bei Heilung oder Schildgewinn: entferne optional eine Marke von dir. (verstärkt) Primärwert −1; danach ziehe 1 und wirf 1 ab. Überformel: Fetzladung wird verbraucht. Formelabwehr −1.",
+    "effectSummary": "Verursache 3 Schaden am Gegner. Bei Heilung oder Schildgewinn: entferne optional eine Marke von dir. (verstärkt) Primärwert −1; danach ziehe 1 und wirf 1 ab. Überformel: Primär +2 (fester Slice-1-Bonus). Überformel: Fetzladung wird verbraucht. Formelabwehr −1.",
     "primary": {
       "kind": "damage",
       "value": 3,
@@ -1335,7 +1335,7 @@ export const V6_GENERATED_FORMULA_RECIPES: readonly V6GeneratedFormulaRecipe[] =
     "essenceId": "v6-essenz-wasser",
     "catalystId": "v6-katalysator-opfergabe",
     "name": "Überformel Spritzschuss · Opfergabe",
-    "effectSummary": "Verursache 4 Schaden am Gegner. Bei Heilung oder Schildgewinn: entferne optional eine Marke von dir. (verstärkt) Optional: wirf 1 Handkarte ab für Primärwert +2. Überformel: Fetzladung wird verbraucht. Formelabwehr −1.",
+    "effectSummary": "Verursache 4 Schaden am Gegner. Bei Heilung oder Schildgewinn: entferne optional eine Marke von dir. (verstärkt) Optional: wirf 1 Handkarte ab für Primärwert +2. Überformel: Primär +2 (fester Slice-1-Bonus). Überformel: Fetzladung wird verbraucht. Formelabwehr −1.",
     "primary": {
       "kind": "damage",
       "value": 4,
@@ -1391,7 +1391,7 @@ export const V6_GENERATED_FORMULA_RECIPES: readonly V6GeneratedFormulaRecipe[] =
     "essenceId": "v6-essenz-luft",
     "catalystId": "v6-katalysator-ueberladung",
     "name": "Überformel Luftnadel · Überladung",
-    "effectSummary": "Verursache 6 Schaden am Gegner. Nächster eigener Aktions-W6 +1 (max +2). (verstärkt) Primärwert +2; danach erleidest du 1 Selbstschaden. Überformel: Fetzladung wird verbraucht. Formelabwehr −1.",
+    "effectSummary": "Verursache 6 Schaden am Gegner. Nächster eigener Aktions-W6 +1 (max +2). (verstärkt) Primärwert +2; danach erleidest du 1 Selbstschaden. Überformel: Primär +2 (fester Slice-1-Bonus). Überformel: Fetzladung wird verbraucht. Formelabwehr −1.",
     "primary": {
       "kind": "damage",
       "value": 6,
@@ -1447,7 +1447,7 @@ export const V6_GENERATED_FORMULA_RECIPES: readonly V6GeneratedFormulaRecipe[] =
     "essenceId": "v6-essenz-luft",
     "catalystId": "v6-katalysator-verdichtung",
     "name": "Überformel Luftnadel · Verdichtung",
-    "effectSummary": "Verursache 5 Schaden am Gegner. Nächster eigener Aktions-W6 +1 (max +2). (verstärkt) Primärwert +1; verwendete Komponenten erhalten +1 Stabilität. Überformel: Fetzladung wird verbraucht. Formelabwehr −1.",
+    "effectSummary": "Verursache 5 Schaden am Gegner. Nächster eigener Aktions-W6 +1 (max +2). (verstärkt) Primärwert +1; verwendete Komponenten erhalten +1 Stabilität. Überformel: Primär +2 (fester Slice-1-Bonus). Überformel: Fetzladung wird verbraucht. Formelabwehr −1.",
     "primary": {
       "kind": "damage",
       "value": 5,
@@ -1503,7 +1503,7 @@ export const V6_GENERATED_FORMULA_RECIPES: readonly V6GeneratedFormulaRecipe[] =
     "essenceId": "v6-essenz-luft",
     "catalystId": "v6-katalysator-sofortzuender",
     "name": "Überformel Luftnadel · Sofortzünder",
-    "effectSummary": "Verursache 3 Schaden am Gegner. Nächster eigener Aktions-W6 +1 (max +2). (verstärkt) Primärwert −1; danach ziehe 1 und wirf 1 ab. Überformel: Fetzladung wird verbraucht. Formelabwehr −1.",
+    "effectSummary": "Verursache 3 Schaden am Gegner. Nächster eigener Aktions-W6 +1 (max +2). (verstärkt) Primärwert −1; danach ziehe 1 und wirf 1 ab. Überformel: Primär +2 (fester Slice-1-Bonus). Überformel: Fetzladung wird verbraucht. Formelabwehr −1.",
     "primary": {
       "kind": "damage",
       "value": 3,
@@ -1559,7 +1559,7 @@ export const V6_GENERATED_FORMULA_RECIPES: readonly V6GeneratedFormulaRecipe[] =
     "essenceId": "v6-essenz-luft",
     "catalystId": "v6-katalysator-opfergabe",
     "name": "Überformel Luftnadel · Opfergabe",
-    "effectSummary": "Verursache 4 Schaden am Gegner. Nächster eigener Aktions-W6 +1 (max +2). (verstärkt) Optional: wirf 1 Handkarte ab für Primärwert +2. Überformel: Fetzladung wird verbraucht. Formelabwehr −1.",
+    "effectSummary": "Verursache 4 Schaden am Gegner. Nächster eigener Aktions-W6 +1 (max +2). (verstärkt) Optional: wirf 1 Handkarte ab für Primärwert +2. Überformel: Primär +2 (fester Slice-1-Bonus). Überformel: Fetzladung wird verbraucht. Formelabwehr −1.",
     "primary": {
       "kind": "damage",
       "value": 4,
@@ -1614,7 +1614,7 @@ export const V6_GENERATED_FORMULA_RECIPES: readonly V6GeneratedFormulaRecipe[] =
     "essenceId": "v6-essenz-feuer",
     "catalystId": "v6-katalysator-ueberladung",
     "name": "Überformel Kampfschrei · Überladung",
-    "effectSummary": "Bereite Angriff +4 vor. Bei Lebensschaden: Brennen, falls keine Reaktion. (verstärkt) Primärwert +2; danach erleidest du 1 Selbstschaden. Überformel: Fetzladung wird verbraucht. Formelabwehr −1.",
+    "effectSummary": "Bereite Angriff +4 vor. Bei Lebensschaden: Brennen, falls keine Reaktion. (verstärkt) Primärwert +2; danach erleidest du 1 Selbstschaden. Überformel: Intensität +1 (fester Slice-1-Bonus). Überformel: Fetzladung wird verbraucht. Formelabwehr −1.",
     "primary": {
       "kind": "prep_attack",
       "value": 4,
@@ -1668,7 +1668,7 @@ export const V6_GENERATED_FORMULA_RECIPES: readonly V6GeneratedFormulaRecipe[] =
     "essenceId": "v6-essenz-feuer",
     "catalystId": "v6-katalysator-verdichtung",
     "name": "Überformel Kampfschrei · Verdichtung",
-    "effectSummary": "Bereite Angriff +3 vor. Bei Lebensschaden: Brennen, falls keine Reaktion. (verstärkt) Primärwert +1; verwendete Komponenten erhalten +1 Stabilität. Überformel: Fetzladung wird verbraucht. Formelabwehr −1.",
+    "effectSummary": "Bereite Angriff +3 vor. Bei Lebensschaden: Brennen, falls keine Reaktion. (verstärkt) Primärwert +1; verwendete Komponenten erhalten +1 Stabilität. Überformel: Intensität +1 (fester Slice-1-Bonus). Überformel: Fetzladung wird verbraucht. Formelabwehr −1.",
     "primary": {
       "kind": "prep_attack",
       "value": 3,
@@ -1722,7 +1722,7 @@ export const V6_GENERATED_FORMULA_RECIPES: readonly V6GeneratedFormulaRecipe[] =
     "essenceId": "v6-essenz-feuer",
     "catalystId": "v6-katalysator-sofortzuender",
     "name": "Überformel Kampfschrei · Sofortzünder",
-    "effectSummary": "Bereite Angriff +1 vor. Bei Lebensschaden: Brennen, falls keine Reaktion. (verstärkt) Primärwert −1; danach ziehe 1 und wirf 1 ab. Überformel: Fetzladung wird verbraucht. Formelabwehr −1.",
+    "effectSummary": "Bereite Angriff +1 vor. Bei Lebensschaden: Brennen, falls keine Reaktion. (verstärkt) Primärwert −1; danach ziehe 1 und wirf 1 ab. Überformel: Intensität +1 (fester Slice-1-Bonus). Überformel: Fetzladung wird verbraucht. Formelabwehr −1.",
     "primary": {
       "kind": "prep_attack",
       "value": 1,
@@ -1776,7 +1776,7 @@ export const V6_GENERATED_FORMULA_RECIPES: readonly V6GeneratedFormulaRecipe[] =
     "essenceId": "v6-essenz-feuer",
     "catalystId": "v6-katalysator-opfergabe",
     "name": "Überformel Kampfschrei · Opfergabe",
-    "effectSummary": "Bereite Angriff +2 vor. Bei Lebensschaden: Brennen, falls keine Reaktion. (verstärkt) Optional: wirf 1 Handkarte ab für Primärwert +2. Überformel: Fetzladung wird verbraucht. Formelabwehr −1.",
+    "effectSummary": "Bereite Angriff +2 vor. Bei Lebensschaden: Brennen, falls keine Reaktion. (verstärkt) Optional: wirf 1 Handkarte ab für Primärwert +2. Überformel: Intensität +1 (fester Slice-1-Bonus). Überformel: Fetzladung wird verbraucht. Formelabwehr −1.",
     "primary": {
       "kind": "prep_attack",
       "value": 2,
@@ -1830,7 +1830,7 @@ export const V6_GENERATED_FORMULA_RECIPES: readonly V6GeneratedFormulaRecipe[] =
     "essenceId": "v6-essenz-wasser",
     "catalystId": "v6-katalysator-ueberladung",
     "name": "Überformel Klärschrei · Überladung",
-    "effectSummary": "Bereite Boost +4 vor. Bei Heilung oder Schildgewinn: entferne optional eine Marke von dir. (verstärkt) Primärwert +2; danach erleidest du 1 Selbstschaden. Überformel: Fetzladung wird verbraucht. Formelabwehr −1.",
+    "effectSummary": "Bereite Boost +4 vor. Bei Heilung oder Schildgewinn: entferne optional eine Marke von dir. (verstärkt) Primärwert +2; danach erleidest du 1 Selbstschaden. Überformel: Intensität +1 (fester Slice-1-Bonus). Überformel: Fetzladung wird verbraucht. Formelabwehr −1.",
     "primary": {
       "kind": "prep_boost",
       "value": 4,
@@ -1884,7 +1884,7 @@ export const V6_GENERATED_FORMULA_RECIPES: readonly V6GeneratedFormulaRecipe[] =
     "essenceId": "v6-essenz-wasser",
     "catalystId": "v6-katalysator-verdichtung",
     "name": "Überformel Klärschrei · Verdichtung",
-    "effectSummary": "Bereite Boost +3 vor. Bei Heilung oder Schildgewinn: entferne optional eine Marke von dir. (verstärkt) Primärwert +1; verwendete Komponenten erhalten +1 Stabilität. Überformel: Fetzladung wird verbraucht. Formelabwehr −1.",
+    "effectSummary": "Bereite Boost +3 vor. Bei Heilung oder Schildgewinn: entferne optional eine Marke von dir. (verstärkt) Primärwert +1; verwendete Komponenten erhalten +1 Stabilität. Überformel: Intensität +1 (fester Slice-1-Bonus). Überformel: Fetzladung wird verbraucht. Formelabwehr −1.",
     "primary": {
       "kind": "prep_boost",
       "value": 3,
@@ -1938,7 +1938,7 @@ export const V6_GENERATED_FORMULA_RECIPES: readonly V6GeneratedFormulaRecipe[] =
     "essenceId": "v6-essenz-wasser",
     "catalystId": "v6-katalysator-sofortzuender",
     "name": "Überformel Klärschrei · Sofortzünder",
-    "effectSummary": "Bereite Boost +1 vor. Bei Heilung oder Schildgewinn: entferne optional eine Marke von dir. (verstärkt) Primärwert −1; danach ziehe 1 und wirf 1 ab. Überformel: Fetzladung wird verbraucht. Formelabwehr −1.",
+    "effectSummary": "Bereite Boost +1 vor. Bei Heilung oder Schildgewinn: entferne optional eine Marke von dir. (verstärkt) Primärwert −1; danach ziehe 1 und wirf 1 ab. Überformel: Intensität +1 (fester Slice-1-Bonus). Überformel: Fetzladung wird verbraucht. Formelabwehr −1.",
     "primary": {
       "kind": "prep_boost",
       "value": 1,
@@ -1992,7 +1992,7 @@ export const V6_GENERATED_FORMULA_RECIPES: readonly V6GeneratedFormulaRecipe[] =
     "essenceId": "v6-essenz-wasser",
     "catalystId": "v6-katalysator-opfergabe",
     "name": "Überformel Klärschrei · Opfergabe",
-    "effectSummary": "Bereite Boost +2 vor. Bei Heilung oder Schildgewinn: entferne optional eine Marke von dir. (verstärkt) Optional: wirf 1 Handkarte ab für Primärwert +2. Überformel: Fetzladung wird verbraucht. Formelabwehr −1.",
+    "effectSummary": "Bereite Boost +2 vor. Bei Heilung oder Schildgewinn: entferne optional eine Marke von dir. (verstärkt) Optional: wirf 1 Handkarte ab für Primärwert +2. Überformel: Intensität +1 (fester Slice-1-Bonus). Überformel: Fetzladung wird verbraucht. Formelabwehr −1.",
     "primary": {
       "kind": "prep_boost",
       "value": 2,
@@ -2046,7 +2046,7 @@ export const V6_GENERATED_FORMULA_RECIPES: readonly V6GeneratedFormulaRecipe[] =
     "essenceId": "v6-essenz-luft",
     "catalystId": "v6-katalysator-ueberladung",
     "name": "Überformel Tempeschrei · Überladung",
-    "effectSummary": "Bereite Angriff +4 vor. Nächster eigener Aktions-W6 +1 (max +2). (verstärkt) Primärwert +2; danach erleidest du 1 Selbstschaden. Überformel: Fetzladung wird verbraucht. Formelabwehr −1.",
+    "effectSummary": "Bereite Angriff +4 vor. Nächster eigener Aktions-W6 +1 (max +2). (verstärkt) Primärwert +2; danach erleidest du 1 Selbstschaden. Überformel: Intensität +1 (fester Slice-1-Bonus). Überformel: Fetzladung wird verbraucht. Formelabwehr −1.",
     "primary": {
       "kind": "prep_attack",
       "value": 4,
@@ -2100,7 +2100,7 @@ export const V6_GENERATED_FORMULA_RECIPES: readonly V6GeneratedFormulaRecipe[] =
     "essenceId": "v6-essenz-luft",
     "catalystId": "v6-katalysator-verdichtung",
     "name": "Überformel Tempeschrei · Verdichtung",
-    "effectSummary": "Bereite Angriff +3 vor. Nächster eigener Aktions-W6 +1 (max +2). (verstärkt) Primärwert +1; verwendete Komponenten erhalten +1 Stabilität. Überformel: Fetzladung wird verbraucht. Formelabwehr −1.",
+    "effectSummary": "Bereite Angriff +3 vor. Nächster eigener Aktions-W6 +1 (max +2). (verstärkt) Primärwert +1; verwendete Komponenten erhalten +1 Stabilität. Überformel: Intensität +1 (fester Slice-1-Bonus). Überformel: Fetzladung wird verbraucht. Formelabwehr −1.",
     "primary": {
       "kind": "prep_attack",
       "value": 3,
@@ -2154,7 +2154,7 @@ export const V6_GENERATED_FORMULA_RECIPES: readonly V6GeneratedFormulaRecipe[] =
     "essenceId": "v6-essenz-luft",
     "catalystId": "v6-katalysator-sofortzuender",
     "name": "Überformel Tempeschrei · Sofortzünder",
-    "effectSummary": "Bereite Angriff +1 vor. Nächster eigener Aktions-W6 +1 (max +2). (verstärkt) Primärwert −1; danach ziehe 1 und wirf 1 ab. Überformel: Fetzladung wird verbraucht. Formelabwehr −1.",
+    "effectSummary": "Bereite Angriff +1 vor. Nächster eigener Aktions-W6 +1 (max +2). (verstärkt) Primärwert −1; danach ziehe 1 und wirf 1 ab. Überformel: Intensität +1 (fester Slice-1-Bonus). Überformel: Fetzladung wird verbraucht. Formelabwehr −1.",
     "primary": {
       "kind": "prep_attack",
       "value": 1,
@@ -2208,7 +2208,7 @@ export const V6_GENERATED_FORMULA_RECIPES: readonly V6GeneratedFormulaRecipe[] =
     "essenceId": "v6-essenz-luft",
     "catalystId": "v6-katalysator-opfergabe",
     "name": "Überformel Tempeschrei · Opfergabe",
-    "effectSummary": "Bereite Angriff +2 vor. Nächster eigener Aktions-W6 +1 (max +2). (verstärkt) Optional: wirf 1 Handkarte ab für Primärwert +2. Überformel: Fetzladung wird verbraucht. Formelabwehr −1.",
+    "effectSummary": "Bereite Angriff +2 vor. Nächster eigener Aktions-W6 +1 (max +2). (verstärkt) Optional: wirf 1 Handkarte ab für Primärwert +2. Überformel: Intensität +1 (fester Slice-1-Bonus). Überformel: Fetzladung wird verbraucht. Formelabwehr −1.",
     "primary": {
       "kind": "prep_attack",
       "value": 2,
@@ -2263,7 +2263,7 @@ export const V6_GENERATED_FORMULA_RECIPES: readonly V6GeneratedFormulaRecipe[] =
     "essenceId": "v6-essenz-feuer",
     "catalystId": "v6-katalysator-ueberladung",
     "name": "Überformel Glutfessel · Überladung",
-    "effectSummary": "Fessel Intensität 5 auf einen besetzten gegnerischen Formelplatz (manuelle Wahl). Bei Lebensschaden: Brennen, falls keine Reaktion. (verstärkt) Primärwert +2; danach erleidest du 1 Selbstschaden. Überformel: Fetzladung wird verbraucht. Formelabwehr −1.",
+    "effectSummary": "Fessel Intensität 5 auf einen besetzten gegnerischen Formelplatz (manuelle Wahl). Bei Lebensschaden: Brennen, falls keine Reaktion. (verstärkt) Primärwert +2; danach erleidest du 1 Selbstschaden. Überformel: Intensität +1 (fester Slice-1-Bonus). Überformel: Fetzladung wird verbraucht. Formelabwehr −1.",
     "primary": {
       "kind": "fessel",
       "value": 5,
@@ -2319,7 +2319,7 @@ export const V6_GENERATED_FORMULA_RECIPES: readonly V6GeneratedFormulaRecipe[] =
     "essenceId": "v6-essenz-feuer",
     "catalystId": "v6-katalysator-verdichtung",
     "name": "Überformel Glutfessel · Verdichtung",
-    "effectSummary": "Fessel Intensität 4 auf einen besetzten gegnerischen Formelplatz (manuelle Wahl). Bei Lebensschaden: Brennen, falls keine Reaktion. (verstärkt) Primärwert +1; verwendete Komponenten erhalten +1 Stabilität. Überformel: Fetzladung wird verbraucht. Formelabwehr −1.",
+    "effectSummary": "Fessel Intensität 4 auf einen besetzten gegnerischen Formelplatz (manuelle Wahl). Bei Lebensschaden: Brennen, falls keine Reaktion. (verstärkt) Primärwert +1; verwendete Komponenten erhalten +1 Stabilität. Überformel: Intensität +1 (fester Slice-1-Bonus). Überformel: Fetzladung wird verbraucht. Formelabwehr −1.",
     "primary": {
       "kind": "fessel",
       "value": 4,
@@ -2375,7 +2375,7 @@ export const V6_GENERATED_FORMULA_RECIPES: readonly V6GeneratedFormulaRecipe[] =
     "essenceId": "v6-essenz-feuer",
     "catalystId": "v6-katalysator-sofortzuender",
     "name": "Überformel Glutfessel · Sofortzünder",
-    "effectSummary": "Fessel Intensität 2 auf einen besetzten gegnerischen Formelplatz (manuelle Wahl). Bei Lebensschaden: Brennen, falls keine Reaktion. (verstärkt) Primärwert −1; danach ziehe 1 und wirf 1 ab. Überformel: Fetzladung wird verbraucht. Formelabwehr −1.",
+    "effectSummary": "Fessel Intensität 2 auf einen besetzten gegnerischen Formelplatz (manuelle Wahl). Bei Lebensschaden: Brennen, falls keine Reaktion. (verstärkt) Primärwert −1; danach ziehe 1 und wirf 1 ab. Überformel: Intensität +1 (fester Slice-1-Bonus). Überformel: Fetzladung wird verbraucht. Formelabwehr −1.",
     "primary": {
       "kind": "fessel",
       "value": 2,
@@ -2431,7 +2431,7 @@ export const V6_GENERATED_FORMULA_RECIPES: readonly V6GeneratedFormulaRecipe[] =
     "essenceId": "v6-essenz-feuer",
     "catalystId": "v6-katalysator-opfergabe",
     "name": "Überformel Glutfessel · Opfergabe",
-    "effectSummary": "Fessel Intensität 3 auf einen besetzten gegnerischen Formelplatz (manuelle Wahl). Bei Lebensschaden: Brennen, falls keine Reaktion. (verstärkt) Optional: wirf 1 Handkarte ab für Primärwert +2. Überformel: Fetzladung wird verbraucht. Formelabwehr −1.",
+    "effectSummary": "Fessel Intensität 3 auf einen besetzten gegnerischen Formelplatz (manuelle Wahl). Bei Lebensschaden: Brennen, falls keine Reaktion. (verstärkt) Optional: wirf 1 Handkarte ab für Primärwert +2. Überformel: Intensität +1 (fester Slice-1-Bonus). Überformel: Fetzladung wird verbraucht. Formelabwehr −1.",
     "primary": {
       "kind": "fessel",
       "value": 3,
@@ -2486,7 +2486,7 @@ export const V6_GENERATED_FORMULA_RECIPES: readonly V6GeneratedFormulaRecipe[] =
     "essenceId": "v6-essenz-wasser",
     "catalystId": "v6-katalysator-ueberladung",
     "name": "Überformel Nasspanzer · Überladung",
-    "effectSummary": "Heile 6 Leben. Bei Heilung oder Schildgewinn: entferne optional eine Marke von dir. (verstärkt) Primärwert +2; danach erleidest du 1 Selbstschaden. Überformel: Fetzladung wird verbraucht. Formelabwehr −1.",
+    "effectSummary": "Heile 6 Leben. Bei Heilung oder Schildgewinn: entferne optional eine Marke von dir. (verstärkt) Primärwert +2; danach erleidest du 1 Selbstschaden. Überformel: Primär +2 (fester Slice-1-Bonus). Überformel: Fetzladung wird verbraucht. Formelabwehr −1.",
     "primary": {
       "kind": "heal",
       "value": 6,
@@ -2540,7 +2540,7 @@ export const V6_GENERATED_FORMULA_RECIPES: readonly V6GeneratedFormulaRecipe[] =
     "essenceId": "v6-essenz-wasser",
     "catalystId": "v6-katalysator-verdichtung",
     "name": "Überformel Nasspanzer · Verdichtung",
-    "effectSummary": "Heile 5 Leben. Bei Heilung oder Schildgewinn: entferne optional eine Marke von dir. (verstärkt) Primärwert +1; verwendete Komponenten erhalten +1 Stabilität. Überformel: Fetzladung wird verbraucht. Formelabwehr −1.",
+    "effectSummary": "Heile 5 Leben. Bei Heilung oder Schildgewinn: entferne optional eine Marke von dir. (verstärkt) Primärwert +1; verwendete Komponenten erhalten +1 Stabilität. Überformel: Primär +2 (fester Slice-1-Bonus). Überformel: Fetzladung wird verbraucht. Formelabwehr −1.",
     "primary": {
       "kind": "heal",
       "value": 5,
@@ -2594,7 +2594,7 @@ export const V6_GENERATED_FORMULA_RECIPES: readonly V6GeneratedFormulaRecipe[] =
     "essenceId": "v6-essenz-wasser",
     "catalystId": "v6-katalysator-sofortzuender",
     "name": "Überformel Nasspanzer · Sofortzünder",
-    "effectSummary": "Heile 3 Leben. Bei Heilung oder Schildgewinn: entferne optional eine Marke von dir. (verstärkt) Primärwert −1; danach ziehe 1 und wirf 1 ab. Überformel: Fetzladung wird verbraucht. Formelabwehr −1.",
+    "effectSummary": "Heile 3 Leben. Bei Heilung oder Schildgewinn: entferne optional eine Marke von dir. (verstärkt) Primärwert −1; danach ziehe 1 und wirf 1 ab. Überformel: Primär +2 (fester Slice-1-Bonus). Überformel: Fetzladung wird verbraucht. Formelabwehr −1.",
     "primary": {
       "kind": "heal",
       "value": 3,
@@ -2648,7 +2648,7 @@ export const V6_GENERATED_FORMULA_RECIPES: readonly V6GeneratedFormulaRecipe[] =
     "essenceId": "v6-essenz-wasser",
     "catalystId": "v6-katalysator-opfergabe",
     "name": "Überformel Nasspanzer · Opfergabe",
-    "effectSummary": "Heile 4 Leben. Bei Heilung oder Schildgewinn: entferne optional eine Marke von dir. (verstärkt) Optional: wirf 1 Handkarte ab für Primärwert +2. Überformel: Fetzladung wird verbraucht. Formelabwehr −1.",
+    "effectSummary": "Heile 4 Leben. Bei Heilung oder Schildgewinn: entferne optional eine Marke von dir. (verstärkt) Optional: wirf 1 Handkarte ab für Primärwert +2. Überformel: Primär +2 (fester Slice-1-Bonus). Überformel: Fetzladung wird verbraucht. Formelabwehr −1.",
     "primary": {
       "kind": "heal",
       "value": 4,
@@ -2702,7 +2702,7 @@ export const V6_GENERATED_FORMULA_RECIPES: readonly V6GeneratedFormulaRecipe[] =
     "essenceId": "v6-essenz-luft",
     "catalystId": "v6-katalysator-ueberladung",
     "name": "Überformel Windpanzer · Überladung",
-    "effectSummary": "Gewinne 6 Schild. Nächster eigener Aktions-W6 +1 (max +2). (verstärkt) Primärwert +2; danach erleidest du 1 Selbstschaden. Überformel: Fetzladung wird verbraucht. Formelabwehr −1.",
+    "effectSummary": "Gewinne 6 Schild. Nächster eigener Aktions-W6 +1 (max +2). (verstärkt) Primärwert +2; danach erleidest du 1 Selbstschaden. Überformel: Primär +2 (fester Slice-1-Bonus). Überformel: Fetzladung wird verbraucht. Formelabwehr −1.",
     "primary": {
       "kind": "shield",
       "value": 6,
@@ -2756,7 +2756,7 @@ export const V6_GENERATED_FORMULA_RECIPES: readonly V6GeneratedFormulaRecipe[] =
     "essenceId": "v6-essenz-luft",
     "catalystId": "v6-katalysator-verdichtung",
     "name": "Überformel Windpanzer · Verdichtung",
-    "effectSummary": "Gewinne 5 Schild. Nächster eigener Aktions-W6 +1 (max +2). (verstärkt) Primärwert +1; verwendete Komponenten erhalten +1 Stabilität. Überformel: Fetzladung wird verbraucht. Formelabwehr −1.",
+    "effectSummary": "Gewinne 5 Schild. Nächster eigener Aktions-W6 +1 (max +2). (verstärkt) Primärwert +1; verwendete Komponenten erhalten +1 Stabilität. Überformel: Primär +2 (fester Slice-1-Bonus). Überformel: Fetzladung wird verbraucht. Formelabwehr −1.",
     "primary": {
       "kind": "shield",
       "value": 5,
@@ -2810,7 +2810,7 @@ export const V6_GENERATED_FORMULA_RECIPES: readonly V6GeneratedFormulaRecipe[] =
     "essenceId": "v6-essenz-luft",
     "catalystId": "v6-katalysator-sofortzuender",
     "name": "Überformel Windpanzer · Sofortzünder",
-    "effectSummary": "Gewinne 3 Schild. Nächster eigener Aktions-W6 +1 (max +2). (verstärkt) Primärwert −1; danach ziehe 1 und wirf 1 ab. Überformel: Fetzladung wird verbraucht. Formelabwehr −1.",
+    "effectSummary": "Gewinne 3 Schild. Nächster eigener Aktions-W6 +1 (max +2). (verstärkt) Primärwert −1; danach ziehe 1 und wirf 1 ab. Überformel: Primär +2 (fester Slice-1-Bonus). Überformel: Fetzladung wird verbraucht. Formelabwehr −1.",
     "primary": {
       "kind": "shield",
       "value": 3,
@@ -2864,7 +2864,7 @@ export const V6_GENERATED_FORMULA_RECIPES: readonly V6GeneratedFormulaRecipe[] =
     "essenceId": "v6-essenz-luft",
     "catalystId": "v6-katalysator-opfergabe",
     "name": "Überformel Windpanzer · Opfergabe",
-    "effectSummary": "Gewinne 4 Schild. Nächster eigener Aktions-W6 +1 (max +2). (verstärkt) Optional: wirf 1 Handkarte ab für Primärwert +2. Überformel: Fetzladung wird verbraucht. Formelabwehr −1.",
+    "effectSummary": "Gewinne 4 Schild. Nächster eigener Aktions-W6 +1 (max +2). (verstärkt) Optional: wirf 1 Handkarte ab für Primärwert +2. Überformel: Primär +2 (fester Slice-1-Bonus). Überformel: Fetzladung wird verbraucht. Formelabwehr −1.",
     "primary": {
       "kind": "shield",
       "value": 4,

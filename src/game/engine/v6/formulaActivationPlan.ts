@@ -56,6 +56,10 @@ export interface FormulaActivationPlan {
   fetzDelta: number;
   /** Spend all charge when firing Überformel. */
   spendAllFetz: boolean;
+  /** Slice-1 locked +2 Primär when kind is overformula (damage/heal/shield). */
+  overformulaPrimaryBonus: number | null;
+  /** Intensity bump for prep/fessel overformula (no player choice yet). */
+  overformulaIntensityBonus: number | null;
   postFormulaActionLock: 'none' | 'attack_and_challenge';
   formulaDefense: V6FormulaDefensePreview | null;
   offerDiscardRequired: boolean;

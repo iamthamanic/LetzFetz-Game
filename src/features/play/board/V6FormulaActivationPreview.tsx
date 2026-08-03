@@ -40,6 +40,11 @@ export function V6FormulaActivationPreview({ lines }: V6FormulaActivationPreview
           {lines.fetzLine}
         </p>
       ) : null}
+      {lines.overformulaLine ? (
+        <p className="mt-1 text-sm text-amber-300" data-testid="v6-preview-overformula">
+          {lines.overformulaLine}
+        </p>
+      ) : null}
       {lines.lockLine ? (
         <p className="mt-1 text-sm text-orange-300" data-testid="v6-preview-lock">
           {lines.lockLine}

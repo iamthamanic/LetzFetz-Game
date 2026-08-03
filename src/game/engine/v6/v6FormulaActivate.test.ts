@@ -145,6 +145,67 @@ describe('V6 planFormulaActivation / execute', () => {
     expect(state.players.p1.fetzCharge).toBe(0);
   });
 
+  it('FORMULA_ACTIVATE at Fetz=3 plans Überformel (+2 Primär) and clears charge', () => {
+    let state = createGame({
+      pack: V6_CORE_PACK,
+      p1CharacterId: V6_CORE_PACK.characters[0].id,
+      p2CharacterId: V6_CORE_PACK.characters[1]?.id ?? V6_CORE_PACK.characters[0].id,
+      ruleset: V6_PACK_RULESET,
+      seed: 11,
+    });
+    state = place(state, 'p1', 'technik', 'v6-technik-impulsgeschoss', 't1');
+    state = place(state, 'p1', 'essenz', 'v6-essenz-feuer', 'e1');
+    state = place(state, 'p1', 'katalysator', 'v6-katalysator-verdichtung', 'k1');
+    state.players.p1.fetzCharge = 3;
+
+    const planTek = planFormulaActivation({
+      state,
+      pack: V6_CORE_PACK,
+      playerId: 'p1',
+      ruleset: V6_PACK_RULESET,
+      rng: () => 0.01,
+      defenseRoll: 1,
+      asOverformula: false,
+    });
+    const planOver = planFormulaActivation({
+      state,
+      pack: V6_CORE_PACK,
+      playerId: 'p1',
+      ruleset: V6_PACK_RULESET,
+      rng: () => 0.01,
+      defenseRoll: 1,
+    });
+    expect(planOver.kind).toBe('overformula');
+    expect(planOver.overformulaPrimaryBonus).toBe(2);
+    expect(planOver.primary.value).toBe(planTek.primary.value + 2);
+    expect(planOver.spendAllFetz).toBe(true);
+
+    const direct = applyV6FormulaActivate(
+      state,
+      V6_CORE_PACK,
+      'p1',
+      V6_PACK_RULESET,
+      () => 0.01,
+      { defenseRoll: 1 },
+    );
+    expect(direct.players.p1.fetzCharge).toBe(0);
+    expect(direct.lastEvent).toMatch(/overformula|Überformel/i);
+
+    const ctx = {
+      pack: V6_CORE_PACK,
+      ruleset: V6_PACK_RULESET,
+      rng: () => 0.01,
+      playerId: 'p1' as const,
+    };
+    state = applyAction(state, { type: 'FORMULA_ACTIVATE' }, 'p1', ctx);
+    if (state.pendingChoice?.type === 'v6-affinity') {
+      expect(state.pendingChoice.formulaAsOverformula).toBe(true);
+      state = applyAction(state, { type: 'PICK_V6_AFFINITY', mode: 'none' }, 'p1', ctx);
+    }
+    expect(state.players.p1.fetzCharge).toBe(0);
+    expect(state.lastEvent).toMatch(/overformula|Überformel/i);
+  });
+
   it('does not import V5 formulaCombinations from v6 engine modules', () => {
     const sources = [
       join(here, 'planFormulaActivation.ts'),

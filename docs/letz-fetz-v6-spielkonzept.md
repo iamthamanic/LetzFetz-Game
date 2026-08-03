@@ -281,7 +281,7 @@ Reaktionsmatrix: für ersten V6-Playtest übernehmbar; geändert wird vor allem,
 
 **Fetz:** nur TEK → genau +1; max 1/Zug; max 3. TE/TK/EK/Echo/Verzögerung/Überformel erzeugen keine (zusätzliche) Ladung. Abgewehrte Fusion gibt trotzdem Ladung. Überformel setzt auf 0.
 
-**Überformel:** bei 3 Fetz + legaler aufrechter TEK: verstärkte Version derselben Fusion (+2 Primär **oder** +1 Intensität; verstärkter Rider; Formelabwehr −1). Keine charaktergebundenen Großformeln im Standard.
+**Überformel:** bei 3 Fetz + legaler aufrechter TEK: verstärkte Version derselben Fusion. **Slice-1 Play-Default (locked):** fest **+2 Primär** (kein Spielerwahl +2 Primär vs +1 Intensität). Verstärkter Rider; Formelabwehr −1. Keine charaktergebundenen Großformeln im Standard. Play-UI: Button „Überformel aktivieren“ + Confirm + Preview (#348).
 
 Kosmetik (Name/Animation) darf charakterabhängig sein; Mechanik nicht.
 
@@ -523,6 +523,7 @@ Bitte abhaken / korrigieren:
 - [x] Echo/Delay Play-UI (#345): Queue-Chips + Katalysator „bleibt bis Auflösung“; feste Echo-1 / Delay-+2.
 - [x] Konstrukte Engine (#346): `player.construct`; Startphase Haltbarkeit −1; Playtest-EK Beschwörung; Herausfordern stören/zerstören; 105-Katalog unverändert.
 - [x] Konstrukt Play-UI (#347): Zone am Playmat; Haltbarkeit sichtbar; gestört-Overlay; Ziel-Button; Toast bei Ersetzen; Aktivierung über Formel aktivieren.
+- [x] Überformel Play-UI (#348): Button/Confirm/Preview bei Fetz=3 + TEK; fester +2 Primär; generische Overlay-Texte; resolve via Engine.
 
 Nach deiner finalen Form: dieses Doc auf **verbindlich** setzen und `SPIELANLEITUNG_V6_DRAFT.md` + AGENTS-Kurzreferenz nachziehen.
 

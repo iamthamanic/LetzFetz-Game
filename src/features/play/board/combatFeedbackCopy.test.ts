@@ -93,4 +93,16 @@ describe('combatFeedbackCopy', () => {
       )[0]?.title,
     ).toBe('Konstrukt ersetzt');
   });
+
+  it('emits Überformel toast from overformula lastEvent', () => {
+    expect(
+      parseCombatFeedbackToasts(
+        'V6 Überformel Glutimpuls · Verdichtung (overformula) damage 6 · Katalysator verbraucht [Impulsgeschoss]',
+      )[0],
+    ).toMatchObject({
+      kind: 'ueberformel',
+      title: 'Überformel',
+      testId: 'combat-feedback-ueberformel',
+    });
+  });
 });

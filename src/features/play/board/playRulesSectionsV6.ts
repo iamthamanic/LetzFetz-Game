@@ -39,8 +39,9 @@ export const V6_PLAY_RULE_SECTIONS: RulesSection[] = [
       'Echo: Primär sofort, dann fest +1 desselben Primärs in der nächsten Startphase. Verzögerung: Primär + fester +2 in der nächsten Startphase.',
       'Konstrukte: max 1 pro Spieler; eigene Zone neben dem Formelgestell. Beschwörung (EK) über „Formel aktivieren“. Haltbarkeit −1 in der Startphase; herausforderbar (stören/zerstören, kein LP-Schaden). Neu ersetzt alt.',
       'Fetzladung +1 nur durch vollständige TEK-Fusion (max 3; max 1 / eigener Zug).',
-      'Nach offensiver TEK: in derselben Aktionsphase kein normaler Angriff und keine Herausforderung.',
-      'Keine charaktergebundenen Großformeln / Ultis — Überformel folgt später aus aktueller TEK.',
+      'Überformel: bei 3 Fetz + aufrechter TEK — verstärkte aktuelle Fusion (fester Slice-1-Bonus +2 Primär). Fetz → 0. Keine charaktergebundenen Ultis.',
+      'Nach offensiver TEK/Überformel: in derselben Aktionsphase kein normaler Angriff und keine Herausforderung.',
+      'Keine charaktergebundenen Großformeln / Ultis — nur Überformel aus aktueller TEK.',
     ].join('\n'),
   ),
   section(

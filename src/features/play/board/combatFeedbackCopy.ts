@@ -9,7 +9,8 @@ export type CombatFeedbackKind =
   | 'shield-absorb'
   | 'echo-resolve'
   | 'delay-resolve'
-  | 'construct-summon';
+  | 'construct-summon'
+  | 'ueberformel';
 
 export interface CombatFeedbackToastItem {
   kind: CombatFeedbackKind;
@@ -102,6 +103,15 @@ export function parseCombatFeedbackToasts(
         ? 'Neues Konstrukt steht — das vorherige wurde abgelegt.'
         : lastEvent.replace(/^.*?(Konstrukt beschworen)/, 'Konstrukt beschworen').trim(),
       testId: 'combat-feedback-construct',
+    });
+  }
+
+  if (/\(overformula\)/i.test(lastEvent) || lastEvent.includes('Überformel')) {
+    toasts.push({
+      kind: 'ueberformel',
+      title: 'Überformel',
+      body: 'Verstärkte Fusion aus aktueller TEK — Fetzladung verbraucht.',
+      testId: 'combat-feedback-ueberformel',
     });
   }
 

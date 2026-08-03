@@ -22,6 +22,10 @@ import type {
   V6RiderAuthoring,
   V6TeBaseAuthoring,
 } from '../src/content/v6/schemas/formulaRecipeAuthoring';
+import {
+  V6_OVERFORMULA_DEFAULT_INTENSITY_BONUS,
+  V6_OVERFORMULA_DEFAULT_PRIMARY_BONUS,
+} from '../src/game/engine/v6/overformula';
 
 const root = join(dirname(fileURLToPath(import.meta.url)), '..');
 const outPath = join(root, 'src/generated/v6/formulaRecipes.generated.ts');
@@ -131,7 +135,7 @@ function applyOverformulaBonus(
   overformulaIntensityBonus: number;
 } {
   if (primary.kind === 'damage' || primary.kind === 'heal' || primary.kind === 'shield') {
-    const bonus = 2;
+    const bonus = V6_OVERFORMULA_DEFAULT_PRIMARY_BONUS;
     return {
       primary: clampPrimary({ ...primary, value: primary.value + bonus }),
       intensity,
@@ -141,20 +145,20 @@ function applyOverformulaBonus(
   }
   if (primary.kind === 'fessel') {
     const baseInt = intensity ?? primary.value;
-    const next = Math.max(0, baseInt + 1);
+    const next = Math.max(0, baseInt + V6_OVERFORMULA_DEFAULT_INTENSITY_BONUS);
     return {
       primary: { ...primary, value: next },
       intensity: next,
       overformulaPrimaryBonus: 0,
-      overformulaIntensityBonus: 1,
+      overformulaIntensityBonus: V6_OVERFORMULA_DEFAULT_INTENSITY_BONUS,
     };
   }
-  const nextIntensity = (intensity ?? 0) + 1;
+  const nextIntensity = (intensity ?? 0) + V6_OVERFORMULA_DEFAULT_INTENSITY_BONUS;
   return {
     primary,
     intensity: nextIntensity,
     overformulaPrimaryBonus: 0,
-    overformulaIntensityBonus: 1,
+    overformulaIntensityBonus: V6_OVERFORMULA_DEFAULT_INTENSITY_BONUS,
   };
 }
 
@@ -314,6 +318,11 @@ function main(): void {
           rider: overRider,
           transformSummary: xform.summary,
           extras: [
+            over.overformulaPrimaryBonus > 0
+              ? `Überformel: Primär +${over.overformulaPrimaryBonus} (fester Slice-1-Bonus).`
+              : over.overformulaIntensityBonus > 0
+                ? `Überformel: Intensität +${over.overformulaIntensityBonus} (fester Slice-1-Bonus).`
+                : 'Überformel: verstärkt.',
             'Überformel: Fetzladung wird verbraucht.',
             'Formelabwehr −1.',
           ],
