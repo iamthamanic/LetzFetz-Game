@@ -181,6 +181,8 @@ export function PlayView({
   const [openingDealFinished, setOpeningDealFinished] = useState(false);
   /** After deal: show "Du beginnst" / "Gegner beginnt", then materialize footer. */
   const [turnStartAnnounceDone, setTurnStartAnnounceDone] = useState(false);
+  /** Bumped when PhaseCoachFooter docks — PlaymatBoard scrolls hand into view. */
+  const [footerDockSignal, setFooterDockSignal] = useState(0);
   const coachFooterReveal = turnStartAnnounceDone;
 
   const presentation = usePresentationQueue({
@@ -483,6 +485,7 @@ export function PlayView({
       setOpeningDealStarted(false);
       setOpeningDealFinished(false);
       setTurnStartAnnounceDone(false);
+      setFooterDockSignal(0);
       setDealReveal({ p1: 0, p2: 0 });
       setHeldBackHandCards({});
       prevStateRef.current = null;
@@ -895,6 +898,7 @@ export function PlayView({
           onLiveEngineSnapshotWarmed={() => {
             setEngineSnapshotEpoch((n) => n + 1);
           }}
+          footerDockSignal={footerDockSignal}
           onDispatch={handleDispatch}
           onPlayAttack={playAttack}
           onPlayChallenge={playChallenge}
@@ -909,6 +913,7 @@ export function PlayView({
             setOpeningDealStarted(false);
             setOpeningDealFinished(false);
             setTurnStartAnnounceDone(false);
+            setFooterDockSignal(0);
             setDealReveal({ p1: 0, p2: 0 });
             setHeldBackHandCards({});
             prevStateRef.current = null;
@@ -1033,6 +1038,7 @@ export function PlayView({
       </div>
       <PhaseCoachFooter
         reveal={coachFooterReveal}
+        onDocked={() => setFooterDockSignal((n) => n + 1)}
         phases={
           <PhaseCoachBanner
             currentPhase={state.phase}
