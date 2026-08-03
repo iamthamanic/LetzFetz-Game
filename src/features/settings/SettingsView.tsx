@@ -15,6 +15,8 @@ interface SettingsViewProps {
   /** Full-page back action; omit when embedded in a modal. */
   onBack?: () => void;
   onOpenNotes: () => void;
+  /** Opens the shared Spielregeln modal (composition root). */
+  onOpenRules?: () => void;
   /** When true, skip page chrome (shell + title) for modal embedding. */
   embedded?: boolean;
 }
@@ -75,7 +77,13 @@ function ToggleRow({
   );
 }
 
-function SettingsPanels({ onOpenNotes }: { onOpenNotes: () => void }) {
+function SettingsPanels({
+  onOpenNotes,
+  onOpenRules,
+}: {
+  onOpenNotes: () => void;
+  onOpenRules?: () => void;
+}) {
   const { settings, updateSettings, resetSettings } = useSettings();
 
   return (
@@ -203,20 +211,32 @@ function SettingsPanels({ onOpenNotes }: { onOpenNotes: () => void }) {
         </Panel>
       </div>
 
-      <Panel className="space-y-4">
+      <Panel className="space-y-4" data-testid="settings-section-rules-notes">
         <div>
-          <h2 className="text-sm font-semibold text-stone-200">Notizen</h2>
+          <h2 className="text-sm font-semibold text-stone-200">Spielregeln & Notizen</h2>
           <p className="mt-1 text-xs text-stone-400">
-            Spielnotizen und Ideen — lokal im Browser.
+            V5 Playtest-Regeln und Spielnotizen mit Zeitstempel — lokal im Browser.
           </p>
-          <Button
-            variant="secondary"
-            size="sm"
-            className="mt-3"
-            onClick={onOpenNotes}
-          >
-            Notizen öffnen
-          </Button>
+          <div className="mt-3 flex flex-wrap gap-2">
+            {onOpenRules ? (
+              <Button
+                variant="secondary"
+                size="sm"
+                onClick={onOpenRules}
+                data-testid="settings-open-rules"
+              >
+                Spielregeln öffnen
+              </Button>
+            ) : null}
+            <Button
+              variant="secondary"
+              size="sm"
+              onClick={onOpenNotes}
+              data-testid="settings-open-notes"
+            >
+              Notizen öffnen
+            </Button>
+          </div>
         </div>
         <div className="border-t border-stone-700 pt-4">
           <h2 className="text-sm font-semibold text-stone-200">Über Letz Fetz</h2>
@@ -242,11 +262,16 @@ function SettingsPanels({ onOpenNotes }: { onOpenNotes: () => void }) {
   );
 }
 
-export function SettingsView({ onBack, onOpenNotes, embedded = false }: SettingsViewProps) {
+export function SettingsView({
+  onBack,
+  onOpenNotes,
+  onOpenRules,
+  embedded = false,
+}: SettingsViewProps) {
   if (embedded) {
     return (
       <div data-testid="settings-view" className="text-stone-100">
-        <SettingsPanels onOpenNotes={onOpenNotes} />
+        <SettingsPanels onOpenNotes={onOpenNotes} onOpenRules={onOpenRules} />
       </div>
     );
   }
@@ -274,7 +299,7 @@ export function SettingsView({ onBack, onOpenNotes, embedded = false }: Settings
               Einstellungen
             </BrandLogoText>
           </div>
-          <SettingsPanels onOpenNotes={onOpenNotes} />
+          <SettingsPanels onOpenNotes={onOpenNotes} onOpenRules={onOpenRules} />
         </div>
       </div>
     </GrungeAppShell>
