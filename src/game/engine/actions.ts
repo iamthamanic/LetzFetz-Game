@@ -32,6 +32,7 @@ import {
 import { planFormulaActivation } from './v6/planFormulaActivation';
 import { applyV6FormulaActivate } from './v6/executeFormulaActivation';
 import { applyFesselToPlayer, occupiedFesselSlots, tickFesselAndRestoreOwnerFormulaV6 } from './v6/fessel';
+import { tickV6EchoAndDelayAtStart } from './v6/echoDelay';
 import {
   cloneState,
   discardFromHand,
@@ -196,10 +197,15 @@ function runStartPhase(
     }
   } else if (isV6FormulaEnabled(ruleset)) {
     next = cloneState(next);
+    // §8: Echo (3) → verzögerte Formeln (4) → … → Fessel/Aufrichten (6–7)
+    next = tickV6EchoAndDelayAtStart(next, playerId, ruleset);
+    next = checkWinner(next);
+    if (next.winner) return next;
     const fesselTick = tickFesselAndRestoreOwnerFormulaV6(next.players[playerId].formula);
     next.players[playerId].formula = fesselTick.board;
     if (fesselTick.notes.length > 0) {
-      next.lastEvent = `Fessel aktualisiert: ${fesselTick.notes.join('; ')}`;
+      const prefix = next.lastEvent ? `${next.lastEvent} · ` : '';
+      next.lastEvent = `${prefix}Fessel aktualisiert: ${fesselTick.notes.join('; ')}`;
     }
   }
   next.phase = 'draw';

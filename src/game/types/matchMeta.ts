@@ -1,6 +1,7 @@
 import type { PlayerId } from './ruleset';
 import type { Element } from './elements';
 import type { PrimaryMarkId } from './status';
+import type { V6DelayQueueEntry, V6EchoQueueEntry } from './v6EchoDelay';
 
 /** How the match ends: LP to 0 (default) or wall-clock timer. */
 export type MatchEndMode = 'standard' | 'timed';
@@ -57,6 +58,10 @@ export interface MatchMeta {
    * Missing / true = available; false = already spent this cycle.
    */
   v6AffinityAvailable?: Record<PlayerId, boolean>;
+  /** V6 Echo queue — resolve in own Startphase (§8 step 3). */
+  v6EchoQueue?: Record<PlayerId, V6EchoQueueEntry[]>;
+  /** V6 Delay queue — resolve in own Startphase (§8 step 4). */
+  v6DelayQueue?: Record<PlayerId, V6DelayQueueEntry[]>;
   /** V3: reactions resolved in the current main action (max 1 by default). */
   v3ReactionsThisAction?: number;
   /** V3 Finsternis: block new shield until current action ends. */

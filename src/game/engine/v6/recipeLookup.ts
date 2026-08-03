@@ -1,18 +1,24 @@
 /**
- * Lookup helpers for generated V6 formula recipes.
+ * Lookup helpers for generated V6 formula recipes (+ playtest Echo/Delay hooks).
  * Location: src/game/engine/v6/recipeLookup.ts
  */
 import {
   V6_GENERATED_FORMULA_RECIPES,
-  type V6GeneratedFormulaRecipe,
   type V6GeneratedRecipeKind,
 } from '../../../generated/v6/formulaRecipes.generated';
+import {
+  V6_PLAYTEST_ECHO_DELAY_RECIPES,
+  type V6LookupRecipe,
+} from './playtestEchoDelayRecipes';
 
-const BY_ID = new Map<string, V6GeneratedFormulaRecipe>(
-  V6_GENERATED_FORMULA_RECIPES.map((r) => [r.recipeId, r]),
-);
+const ALL_RECIPES: readonly V6LookupRecipe[] = [
+  ...V6_GENERATED_FORMULA_RECIPES,
+  ...V6_PLAYTEST_ECHO_DELAY_RECIPES,
+];
 
-export function getV6RecipeById(recipeId: string): V6GeneratedFormulaRecipe | undefined {
+const BY_ID = new Map<string, V6LookupRecipe>(ALL_RECIPES.map((r) => [r.recipeId, r]));
+
+export function getV6RecipeById(recipeId: string): V6LookupRecipe | undefined {
   return BY_ID.get(recipeId);
 }
 
@@ -21,8 +27,8 @@ export function findV6Recipe(input: {
   techniqueId: string | null;
   essenceId: string | null;
   catalystId: string | null;
-}): V6GeneratedFormulaRecipe {
-  const match = V6_GENERATED_FORMULA_RECIPES.find(
+}): V6LookupRecipe {
+  const match = ALL_RECIPES.find(
     (r) =>
       r.kind === input.kind &&
       r.techniqueId === input.techniqueId &&
