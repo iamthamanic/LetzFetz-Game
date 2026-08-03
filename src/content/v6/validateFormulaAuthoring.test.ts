@@ -53,4 +53,41 @@ describe('validateV6FormulaAuthoring', () => {
     expect(V6_FORMULA_AUTHORING_SLICE1.catalystTransforms).toHaveLength(4);
     expect(validateV6Slice1Completeness(V6_FORMULA_AUTHORING_SLICE1)).toEqual([]);
   });
+
+  it('rejects stub placeholders and TK/EK machine labels in copy', () => {
+    const bad = {
+      ...V6_FORMULA_AUTHORING_SLICE1,
+      tkBases: [
+        {
+          ...V6_FORMULA_AUTHORING_SLICE1.tkBases[0],
+          name: 'TK impulsgeschoss+ueberladung',
+        },
+      ],
+      catalystTransforms: [
+        {
+          ...V6_FORMULA_AUTHORING_SLICE1.catalystTransforms[0],
+          summary: 'Primär +2 (Slice-1 stub).',
+        },
+      ],
+    };
+    const errors = validateV6FormulaAuthoring(bad);
+    expect(errors.some((e) => e.includes('German display name'))).toBe(true);
+    expect(errors.some((e) => e.includes('stub placeholders'))).toBe(true);
+  });
+
+  it('ships German TK/EK names without stub rider copy', () => {
+    for (const row of V6_FORMULA_AUTHORING_SLICE1.tkBases) {
+      expect(row.name).not.toMatch(/^TK /);
+      expect(row.name).toMatch(/·/);
+    }
+    for (const row of V6_FORMULA_AUTHORING_SLICE1.ekBases) {
+      expect(row.name).not.toMatch(/^EK /);
+      expect(row.name).toMatch(/Ritual/);
+    }
+    const wasser = V6_FORMULA_AUTHORING_SLICE1.teBases.find(
+      (r) => r.essenceId === 'v6-essenz-wasser',
+    );
+    expect(wasser?.rider?.summary).toBeDefined();
+    expect(wasser?.rider?.summary).not.toMatch(/stub/i);
+  });
 });

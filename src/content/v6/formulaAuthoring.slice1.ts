@@ -82,7 +82,7 @@ const ESSENCE_RIDERS: Record<
   },
   'v6-essenz-wasser': {
     id: 'rider-reinigen',
-    summary: 'Bei Heilung/Schild: optional Marke entfernen (Slice-1 stub).',
+    summary: 'Bei Heilung oder Schildgewinn: entferne optional eine Marke von dir.',
     defenseSuppressible: false,
   },
   'v6-essenz-luft': {
@@ -90,6 +90,25 @@ const ESSENCE_RIDERS: Record<
     summary: 'Nächster eigener Aktions-W6 +1 (max +2).',
     defenseSuppressible: true,
   },
+};
+
+const TECH_SHORT: Record<TechId, string> = {
+  'v6-technik-impulsgeschoss': 'Impuls',
+  'v6-technik-adrenalinschrei': 'Schrei',
+  'v6-technik-magiepanzer': 'Panzer',
+};
+
+const ESS_SHORT: Record<EssId, string> = {
+  'v6-essenz-feuer': 'Feuer',
+  'v6-essenz-wasser': 'Wasser',
+  'v6-essenz-luft': 'Luft',
+};
+
+const CAT_SHORT: Record<CatId, string> = {
+  'v6-katalysator-ueberladung': 'Überladung',
+  'v6-katalysator-verdichtung': 'Verdichtung',
+  'v6-katalysator-sofortzuender': 'Sofortzünder',
+  'v6-katalysator-opfergabe': 'Opfergabe',
 };
 
 function buildTeBases(): V6TeBaseAuthoring[] {
@@ -129,7 +148,7 @@ function buildTkBases(): V6TkBaseAuthoring[] {
         recipeId: tkId(t, c),
         techniqueId: t,
         catalystId: c,
-        name: `TK ${t.replace('v6-technik-', '')}+${c.replace('v6-katalysator-', '')}`,
+        name: `${TECH_SHORT[t]} · ${CAT_SHORT[c]}`,
         primary: { ...techPrimary[t] },
       });
     }
@@ -150,7 +169,7 @@ function buildEkBases(): V6EkBaseAuthoring[] {
         recipeId: ekId(e, c),
         essenceId: e,
         catalystId: c,
-        name: `EK ${e.replace('v6-essenz-', '')}+${c.replace('v6-katalysator-', '')}`,
+        name: `${ESS_SHORT[e]}-Ritual · ${CAT_SHORT[c]}`,
         primary: { ...essPrimary[e] },
         rider: ESSENCE_RIDERS[e],
       });
@@ -166,28 +185,28 @@ function buildCatalystTransforms(): V6CatalystTransformAuthoring[] {
       catalystId: 'v6-katalysator-ueberladung',
       primaryDelta: 2,
       selfDamage: 1,
-      summary: 'Primär +2; danach 1 Selbstschaden.',
+      summary: 'Primärwert +2; danach erleidest du 1 Selbstschaden.',
     },
     {
       transformId: 'xform-verdichtung',
       catalystId: 'v6-katalysator-verdichtung',
       primaryDelta: 1,
       stabilityBuffUsed: 1,
-      summary: 'Primär +1; verwendete Komponenten +1 Stabilität.',
+      summary: 'Primärwert +1; verwendete Komponenten erhalten +1 Stabilität.',
     },
     {
       transformId: 'xform-sofortzuender',
       catalystId: 'v6-katalysator-sofortzuender',
       primaryDelta: -1,
       drawDiscardAfter: true,
-      summary: 'Primär −1; danach ziehen+abwerfen.',
+      summary: 'Primärwert −1; danach ziehe 1 und wirf 1 ab.',
     },
     {
       transformId: 'xform-opfergabe',
       catalystId: 'v6-katalysator-opfergabe',
       primaryDelta: 0,
       offerDiscardBonus: 2,
-      summary: 'Optional Handabwurf: Primär +2.',
+      summary: 'Optional: wirf 1 Handkarte ab für Primärwert +2.',
     },
   ];
 }
