@@ -53,7 +53,7 @@ export const V6_PLAY_RULE_SECTIONS: RulesSection[] = [
     'v6-charakter',
     'Charakter & Affinität',
     [
-      'Zwei Affinitätselemente pro Charakter (Scaffold). Affinität ±1 Engine folgt in einem späteren Slice.',
+      'Zwei Affinitätselemente pro Charakter. 1× pro eigenem Zug/Durchlauf: Wert +1 oder eigenen W6 ±1 auf passende Elementkarte (nach dem Wurf).',
       'Keine V5-Charakterpassiven und keine Ultis in V6.',
       'Mikro-Passive / Macken-Pool: noch nicht spielbar (Konzept §28).',
     ].join('\n'),

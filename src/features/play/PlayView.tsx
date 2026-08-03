@@ -1293,6 +1293,27 @@ export function PlayView({
             }}
           />
         )}
+      {state?.pendingChoice?.type === 'v6-affinity' &&
+        state.pendingChoice.playerId === HUMAN && (
+          <PassiveChoiceModal
+            open
+            title="Affinität"
+            description={`Würfel ${state.pendingChoice.diceRoll} — einmal pro eigenem Zug: Wert +1 oder W6 ±1 (passendes Affinitätselement).`}
+            testId="v6-affinity-choice-modal"
+            options={[
+              { id: 'value-plus', labelDe: 'Wert +1' },
+              { id: 'dice-plus', labelDe: 'W6 +1' },
+              { id: 'dice-minus', labelDe: 'W6 −1' },
+              { id: 'none', labelDe: 'Keine Affinität' },
+            ]}
+            onPick={(id) => {
+              handleDispatch({
+                type: 'PICK_V6_AFFINITY',
+                mode: id as 'none' | 'value-plus' | 'dice-plus' | 'dice-minus',
+              });
+            }}
+          />
+        )}
       {state && <CombatFeedbackToasts lastEvent={state.lastEvent} />}
       </div>
     </GrungeAppShell>

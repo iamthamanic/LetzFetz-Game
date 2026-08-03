@@ -2,7 +2,7 @@
  * V6 character defs — affinity scaffold, no V5 passives/ultimates.
  * Location: src/game/packs/v6/characters.ts
  *
- * Affinity = CharacterCardDef.elements (two elements). Engine Affinity ±1 is a later slice.
+ * Affinity = CharacterCardDef.elements (two elements). Engine Affinity ±1 via PICK_V6_AFFINITY.
  */
 import type { CharacterCardDef, Element } from '../../types';
 import { BASE_PACK } from '../base-pack';
@@ -20,8 +20,8 @@ function affinityScaffoldText(elements: [Element, Element]): string {
   const a = ELEMENT_DE[elements[0]];
   const b = ELEMENT_DE[elements[1]];
   return (
-    `Affinität ${a}/${b} (Scaffold): 1× pro Runde ±1 auf Wert oder eigenen W6 ` +
-    `dieser Elemente — Engine folgt. Keine V5-Passive, keine charaktergebundene Ulti.`
+    `Affinität ${a}/${b}: 1× pro eigenem Zug/Durchlauf ±1 auf Wert oder eigenen W6 ` +
+    `einer Karte/Formel dieser Elemente (nach dem Wurf). Keine V5-Passive, keine Ulti.`
   );
 }
 

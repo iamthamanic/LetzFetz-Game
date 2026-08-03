@@ -398,6 +398,17 @@ export function chooseBotAction(state: GameState, pack: ContentPack): GameAction
       }
       return myst[0];
     }
+    const affinity = actions.filter(
+      (a): a is Extract<GameAction, { type: 'PICK_V6_AFFINITY' }> =>
+        a.type === 'PICK_V6_AFFINITY',
+    );
+    if (affinity.length > 0) {
+      return (
+        affinity.find((a) => a.mode === 'value-plus') ??
+        affinity.find((a) => a.mode === 'dice-plus') ??
+        affinity[0]
+      );
+    }
     return (
       actions.find((a) => a.type === 'TAKE_OPTIONAL_DRAW') ??
       actions.find((a) => a.type === 'RESOLVE_DRAW_DISCARD') ??

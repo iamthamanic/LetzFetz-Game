@@ -18,6 +18,7 @@ function actingPlayerForStep(state: GameState): PlayerId {
       case 'spaeti-extra-build':
       case 'pillendoktora-boost':
       case 'mysterium-element':
+      case 'v6-affinity':
         return state.pendingChoice.playerId;
       case 'pick-reaction':
         return state.pendingChoice.chooserId;
