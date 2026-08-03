@@ -43,13 +43,27 @@ function joinBlocks(parts: string[]): string {
   return parts.filter((p) => p.trim().length > 0).join('\n\n');
 }
 
-function formatElementCard(card: ElementCardDef): string {
-  return joinBlocks([
+const VALUE_ROLE_DE: Record<NonNullable<ElementCardDef['valueRole']>, string> = {
+  starter: 'Starter',
+  standard: 'Standard',
+  payoff: 'bedingter Payoff',
+  drawback: 'Rohwert mit Nachteil',
+};
+
+function formatElementCard(card: ElementCardDef, variant: PlayRulesPackVariant): string {
+  const role =
+    card.valueRole != null ? ` · Rolle ${VALUE_ROLE_DE[card.valueRole]}` : '';
+  const lines = [
     `### ${card.name}`,
-    `Typ: Elementkarte · ${ELEMENT_LABEL_DE[card.element]} · ${ELEMENT_CARD_TYPE_DE[card.cardType]} · Wert ${card.value}`,
+    `Typ: Elementkarte · ${ELEMENT_LABEL_DE[card.element]} · ${ELEMENT_CARD_TYPE_DE[card.cardType]} · Wert ${card.value}${role}`,
     `Sofort: ${card.instantText}`,
-    `Bound / Aktivieren: ${card.boundText}`,
-  ]);
+  ];
+  if (variant === 'v6' || !card.boundText) {
+    lines.push('Handaktion — nicht auf Formelplätze baubar (kein Bound/Aktivieren).');
+  } else {
+    lines.push(`Bound / Aktivieren: ${card.boundText}`);
+  }
+  return joinBlocks(lines);
 }
 
 function formatGlitch(card: GlitchCardDef): string {
@@ -173,8 +187,10 @@ export function buildPlayRulesCardSections(
       'karten-element',
       `Elementkarten (${pack.elementCards.length})`,
       joinBlocks([
-        'Kampfkarten (Angriff/Block/Boost). Sofort-Text gilt in der Aktionsphase; Bound-Text nach dem Bauen (Aktivieren).',
-        ...pack.elementCards.map(formatElementCard),
+        variant === 'v6'
+          ? 'Kampfkarten (Angriff/Block/Boost) nur als Handaktionen. Kein Bauen auf Formelplätze, kein Bound/Aktivieren. Wertrollen: 2 Starter · 3 Standard · 4 Payoff · 6 Rohwert mit Nachteil.'
+          : 'Kampfkarten (Angriff/Block/Boost). Sofort-Text gilt in der Aktionsphase; Bound-Text nach dem Bauen (Aktivieren).',
+        ...pack.elementCards.map((c) => formatElementCard(c, variant)),
       ]),
     ),
     section(

@@ -13,7 +13,7 @@ export function classifyCombatAttackKind(
 ): CombatAttackKind | null {
   if (!attackDef) return null;
   if (attackDef.elementImpulse) return 'element';
-  const text = `${attackDef.instantText} ${attackDef.boundText}`.toLowerCase();
+  const text = `${attackDef.instantText} ${attackDef.boundText ?? ''}`.toLowerCase();
   if (text.includes('reaktion')) return 'reaction';
   if (
     text.includes('status') ||

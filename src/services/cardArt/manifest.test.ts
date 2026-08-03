@@ -48,6 +48,9 @@ describe('card art manifest', () => {
     expect(illustrationKeyForCardId('fire-attack-6')).toBe('fire-attack');
     expect(illustrationKeyForCardId('fire-boost-5a')).toBe('fire-boost');
     expect(illustrationKeyForCardId('shadow-block-4')).toBe('shadow-block');
+    expect(illustrationKeyForCardId('v6-fire-attack-2')).toBe('fire-attack');
+    expect(illustrationKeyForCardId('v6-water-block-4')).toBe('water-block');
+    expect(illustrationKeyForCardId('v6-air-boost-3')).toBe('air-boost');
   });
 
   it('resolves V5 formula component art under /cards/formula/', () => {

@@ -71,6 +71,14 @@ export const V6_PLAY_RULE_SECTIONS: RulesSection[] = [
     ].join('\n'),
   ),
   section(
+    'v6-element',
+    'Elementkarten (Hand-only)',
+    [
+      'Nur Handaktionen: Angriff, Block, Boost. Nicht auf Formelplätze baubar; kein Bound/Aktivieren.',
+      'Wertrollen: 2 Starter · 3 Standard · 4 bedingter Payoff (+1 wenn Gegner Fessel hat) · 6 Rohwert mit Nachteil (−1 Leben nach dem Kampf).',
+    ].join('\n'),
+  ),
+  section(
     'v6-arenen',
     'Arenen (V6)',
     [

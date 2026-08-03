@@ -87,7 +87,7 @@ describe('V6 Schattenbasar pay-destroy', () => {
     let state = freshV6('arena-schattenbasar');
     state.phase = 'action';
     state.activePlayer = 'p1';
-    state.players.p1.hand = [{ instanceId: 'atk', defId: 'fire-attack-6' }];
+    state.players.p1.hand = [{ instanceId: 'atk', defId: 'v6-fire-attack-6' }];
     state.players.p2.formula = {
       technik: null,
       essenz: {

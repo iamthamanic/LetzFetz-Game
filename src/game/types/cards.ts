@@ -4,6 +4,9 @@ import type { ElementImpulseKeyword } from './impulseSchema';
 export type ElementCardType = 'attack' | 'block' | 'boost';
 export type GlitchTiming = 'playable' | 'instant';
 
+/** V6 §36 value roles — absent on V1/V5 element defs. */
+export type ElementValueRole = 'starter' | 'standard' | 'payoff' | 'drawback';
+
 export interface CardBase {
   id: string;
   name: string;
@@ -15,7 +18,13 @@ export interface ElementCardDef extends CardBase {
   cardType: ElementCardType;
   value: number;
   instantText: string;
-  boundText: string;
+  /**
+   * Bound / activate copy after building the card.
+   * Optional: V6 hand-only element cards omit this (no bound-build path).
+   */
+  boundText?: string;
+  /** V6 §36: 2 starter · 3 standard · 4 payoff · 6 drawback. */
+  valueRole?: ElementValueRole;
   /** V3: typed impulse keyword (optional; legacy cards omit). */
   elementImpulse?: ElementImpulseKeyword;
 }
