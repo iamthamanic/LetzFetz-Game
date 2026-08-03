@@ -3,7 +3,7 @@
  * Location: src/features/play/setup/v6SetupSmoke.test.ts
  */
 import { describe, expect, it, beforeEach, afterEach } from 'vitest';
-import { applyAction, createGame } from '../../../game';
+import { applyAction, createGame, getLegalActions } from '../../../game';
 import { formatV6FormulaPlanPreview, assertPreviewMatchesPlan } from '../presentation/v6FormulaPlanPreview';
 import { planFormulaActivation } from '../../../game/engine/v6';
 import type { FormulaComponentInstance, GameState } from '../../../game/types';
@@ -89,6 +89,26 @@ describe('V6 Setup INTERNAL smoke', () => {
         'p1',
         { pack: resolved.pack, ruleset: resolved.ruleset, rng: () => 0.01, playerId: 'p1' },
       );
+    }
+    if (state.pendingChoice?.type === 'v6-fessel-target') {
+      const legal = getLegalActions(state, {
+        pack: resolved.pack,
+        ruleset: resolved.ruleset,
+        rng: () => 0.01,
+        playerId: 'p1',
+      });
+      const pick = legal.find(
+        (a): a is Extract<(typeof legal)[number], { type: 'PICK_V6_FESSEL_TARGET' }> =>
+          a.type === 'PICK_V6_FESSEL_TARGET',
+      );
+      if (pick) {
+        state = applyAction(state, pick, 'p1', {
+          pack: resolved.pack,
+          ruleset: resolved.ruleset,
+          rng: () => 0.01,
+          playerId: 'p1',
+        });
+      }
     }
     expect(state.players.p1.formula.katalysator).toBeNull();
     expect(state.players.p1.fetzCharge).toBe(1);

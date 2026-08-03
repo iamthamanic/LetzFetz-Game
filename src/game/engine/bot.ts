@@ -1,5 +1,6 @@
 import type { ContentPack, ElementCardDef, GameAction, GameState, PlayerId } from '../types';
 import { getLegalActions, findElementDef, applyAction, type PackContext } from './actions';
+import { FESSEL_BOT_SLOT_PRIORITY } from './v6/fessel';
 import { rulesetFromState } from './rulesetFromState';
 import { diceBonusFromRoll, rollD6 } from './dice';
 import { DEFAULT_RULESET, isV5FormulaEnabled } from '../types';
@@ -408,6 +409,18 @@ export function chooseBotAction(state: GameState, pack: ContentPack): GameAction
         affinity.find((a) => a.mode === 'dice-plus') ??
         affinity[0]
       );
+    }
+    // Fessel target: prefer Katalysator (timing/one-shot), then Essenz, then Technik.
+    const fesselTargets = actions.filter(
+      (a): a is Extract<GameAction, { type: 'PICK_V6_FESSEL_TARGET' }> =>
+        a.type === 'PICK_V6_FESSEL_TARGET',
+    );
+    if (fesselTargets.length > 0) {
+      for (const slot of FESSEL_BOT_SLOT_PRIORITY) {
+        const hit = fesselTargets.find((a) => a.slot === slot);
+        if (hit) return hit;
+      }
+      return fesselTargets[0];
     }
     return (
       actions.find((a) => a.type === 'TAKE_OPTIONAL_DRAW') ??

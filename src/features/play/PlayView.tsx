@@ -1320,6 +1320,31 @@ export function PlayView({
             }}
           />
         )}
+      {state?.pendingChoice?.type === 'v6-fessel-target' &&
+        state.pendingChoice.playerId === HUMAN && (() => {
+          const fesselPending = state.pendingChoice;
+          const board = state.players[fesselPending.targetPlayerId].formula;
+          const slotLabels = [
+            { id: 'technik' as const, labelDe: 'Technik' },
+            { id: 'essenz' as const, labelDe: 'Essenz' },
+            { id: 'katalysator' as const, labelDe: 'Katalysator' },
+          ];
+          return (
+            <PassiveChoiceModal
+              open
+              title="Fessel-Ziel"
+              description={`Fessel ${fesselPending.intensity} — wähle einen besetzten Formelplatz des Gegners.`}
+              testId="v6-fessel-target-modal"
+              options={slotLabels.filter((opt) => board[opt.id] != null)}
+              onPick={(id) => {
+                handleDispatch({
+                  type: 'PICK_V6_FESSEL_TARGET',
+                  slot: id as 'technik' | 'essenz' | 'katalysator',
+                });
+              }}
+            />
+          );
+        })()}
       {state && <CombatFeedbackToasts lastEvent={state.lastEvent} />}
       </div>
     </GrungeAppShell>

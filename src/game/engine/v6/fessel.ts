@@ -1,5 +1,6 @@
 /**
  * V6 Fessel (intensity locks on formula components) — spielkonzept §33.5 / §50.6.
+ * Target selection is manual (PICK_V6_FESSEL_TARGET); empty slots are never legal.
  * Location: src/game/engine/v6/fessel.ts
  */
 import type { FormulaBoard, FormulaComponentInstance, FormulaSlot, GameState, PlayerId } from '../../types';
@@ -7,10 +8,18 @@ import { cloneState } from '../helpers';
 
 const FORMULA_SLOTS: FormulaSlot[] = ['technik', 'essenz', 'katalysator'];
 
+/** Bot / docs: prefer Katalysator (one-shot timing), then Essenz, then Technik. */
+export const FESSEL_BOT_SLOT_PRIORITY: FormulaSlot[] = ['katalysator', 'essenz', 'technik'];
+
 export const MAX_FESSEL_INTENSITY = 3;
 
 export function clampFesselIntensity(value: number): number {
   return Math.max(0, Math.min(MAX_FESSEL_INTENSITY, Math.floor(value)));
+}
+
+/** Occupied formula slots that may receive Fessel (empty = invalid). */
+export function occupiedFesselSlots(board: FormulaBoard): FormulaSlot[] {
+  return FORMULA_SLOTS.filter((slot) => board[slot] != null);
 }
 
 /** Defense stages reduce Fessel intensity (same bands as numeric primary). */
@@ -35,29 +44,31 @@ function mapBoard(
   return next;
 }
 
+function resolveFesselTargetId(
+  board: FormulaBoard,
+  target: { instanceId: string } | { slot: FormulaSlot },
+): string | null {
+  if ('instanceId' in target) {
+    return target.instanceId;
+  }
+  return board[target.slot]?.instanceId ?? null;
+}
+
 /**
- * Apply Fessel intensity onto a component (max with existing).
- * Target order when instanceId omitted: technik → essenz → katalysator.
+ * Apply Fessel intensity onto a chosen occupied component (max with existing).
+ * Caller must supply instanceId or slot — no auto T→E→K fallback.
  */
 export function applyFesselToBoard(
   board: FormulaBoard,
   intensity: number,
-  instanceId?: string,
+  target: { instanceId: string } | { slot: FormulaSlot },
 ): { board: FormulaBoard; appliedTo: FormulaComponentInstance | null; intensity: number } {
   const level = clampFesselIntensity(intensity);
   if (level <= 0) {
     return { board, appliedTo: null, intensity: 0 };
   }
 
-  let targetId = instanceId;
-  if (!targetId) {
-    for (const slot of FORMULA_SLOTS) {
-      if (board[slot]) {
-        targetId = board[slot]!.instanceId;
-        break;
-      }
-    }
-  }
+  const targetId = resolveFesselTargetId(board, target);
   if (!targetId) {
     return { board, appliedTo: null, intensity: 0 };
   }
@@ -79,9 +90,9 @@ export function applyFesselToPlayer(
   state: GameState,
   targetPlayerId: PlayerId,
   intensity: number,
-  instanceId?: string,
+  target: { instanceId: string } | { slot: FormulaSlot },
 ): GameState {
-  const result = applyFesselToBoard(state.players[targetPlayerId].formula, intensity, instanceId);
+  const result = applyFesselToBoard(state.players[targetPlayerId].formula, intensity, target);
   if (!result.appliedTo) return state;
   const next = cloneState(state);
   next.players[targetPlayerId].formula = result.board;

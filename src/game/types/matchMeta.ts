@@ -196,6 +196,13 @@ export type PendingChoice =
       formulaAsOverformula?: boolean;
       formulaOfferDiscard?: boolean;
       formulaIntensity?: number | null;
+    }
+  | {
+      /** V6 Fessel / Kettenfessel: attacker picks occupied opponent formula slot. */
+      type: 'v6-fessel-target';
+      playerId: PlayerId;
+      targetPlayerId: PlayerId;
+      intensity: number;
     };
 
 export function createEmptyMeta(): MatchMeta {
