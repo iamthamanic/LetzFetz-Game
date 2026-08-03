@@ -61,6 +61,7 @@ function asPrimaryKind(kind: string): V6PrimaryKind {
     case 'prep_block':
     case 'prep_boost':
     case 'fessel':
+    case 'summon_construct':
       return kind;
     default:
       throw new Error(`V6_RECIPE_INVALID_PRIMARY_KIND: ${kind}`);
@@ -203,12 +204,16 @@ export function planFormulaActivation(input: PlanFormulaActivationInput): Formul
       : timingMode === 'delay'
         ? `Verzögert (+${delayBonus} nächste Startphase)`
         : null;
+  const primaryLabel =
+    primaryKind === 'summon_construct'
+      ? `Beschwörung Haltbarkeit ${primaryValue}`
+      : timingMode === 'delay'
+        ? `${recipe.primary.kind} ${primaryValue + delayBonus} (verzögert)`
+        : `${recipe.primary.kind} ${primaryValue}`;
   const eventSummary = [
     `V6 ${recipe.name}`,
     `(${recipe.kind})`,
-    timingMode === 'delay'
-      ? `${recipe.primary.kind} ${primaryValue + delayBonus} (verzögert)`
-      : `${recipe.primary.kind} ${primaryValue}`,
+    primaryLabel,
     catalystConsumed ? 'Katalysator verbraucht' : timingMode !== 'immediate' ? 'Katalysator bleibt' : null,
     timingLabel,
     fetzDelta > 0 ? `+${fetzDelta} Fetz` : null,
@@ -255,6 +260,7 @@ export function planFormulaActivation(input: PlanFormulaActivationInput): Formul
     timingMode,
     echoAmount,
     delayBonus,
+    summonConstructDefId: recipe.summonConstructDefId ?? null,
     eventSummary: `${eventSummary} [${techName}]`,
   };
 }

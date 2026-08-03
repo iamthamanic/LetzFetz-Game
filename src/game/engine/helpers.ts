@@ -42,6 +42,7 @@ export function cloneState(state: GameState): GameState {
         statuses: (src.players.p1.statuses ?? []).map((s) => ({ ...s })),
         shield: src.players.p1.shield ?? 0,
         fetzCharge: src.players.p1.fetzCharge ?? 0,
+        construct: src.players.p1.construct ? { ...src.players.p1.construct } : null,
       },
       p2: {
         ...src.players.p2,
@@ -54,6 +55,7 @@ export function cloneState(state: GameState): GameState {
         statuses: (src.players.p2.statuses ?? []).map((s) => ({ ...s })),
         shield: src.players.p2.shield ?? 0,
         fetzCharge: src.players.p2.fetzCharge ?? 0,
+        construct: src.players.p2.construct ? { ...src.players.p2.construct } : null,
       },
     },
     piles: {

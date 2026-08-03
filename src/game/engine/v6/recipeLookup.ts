@@ -10,10 +10,12 @@ import {
   V6_PLAYTEST_ECHO_DELAY_RECIPES,
   type V6LookupRecipe,
 } from './playtestEchoDelayRecipes';
+import { V6_PLAYTEST_CONSTRUCT_RECIPES } from './playtestConstructRecipes';
 
 const ALL_RECIPES: readonly V6LookupRecipe[] = [
   ...V6_GENERATED_FORMULA_RECIPES,
   ...V6_PLAYTEST_ECHO_DELAY_RECIPES,
+  ...V6_PLAYTEST_CONSTRUCT_RECIPES,
 ];
 
 const BY_ID = new Map<string, V6LookupRecipe>(ALL_RECIPES.map((r) => [r.recipeId, r]));

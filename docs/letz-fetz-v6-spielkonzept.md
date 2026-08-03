@@ -149,6 +149,8 @@ Startphase → Ziehphase → Formelphase → Aktionsphase → Endphase
 
 **Verzögerung (Engine + Play-UI):** Primäreffekt geschieht **nicht** sofort; zu Beginn des nächsten eigenen Zuges mit festem **+2** auf den (bereits abwehrreduzierten) Primärwert. Keine zusätzliche Fetzladung. Katalysator bleibt bis Auflösung, dann Ablage — gleiche UI-Pattern wie Echo.
 
+**Konstrukte (Engine #346):** Max 1 pro Spieler auf `player.construct` (instanceId + defId + Haltbarkeit). Einstieg Playtest-EK „Beschwörung“ (außerhalb 105-Katalog). Startphase Schritt 5: Haltbarkeit −1; bei 0 Ablage. Neu ersetzt alt sofort. Herausfordern: Kampfwert vs Haltbarkeit → stören/zerstören (Margin wie Formel); kein Lebensschaden. Keine Fetz; nicht Ausrüstung/Formelkomponente. Play-UI → #347.
+
 ---
 
 ## 9. Ziehphase
@@ -388,9 +390,9 @@ Wertrollen: 2 Starter · 3 Standard · 4 bedingter Payoff · 6 Rohwert mit Nacht
 
 ## 41–42. Herausfordern & Konstrukte
 
-Herausforderung: Wert vs Stabilität/Haltbarkeit (+ Mods). Differenz → stören / zerstören; kein Lebensschaden. Offensive TEK sperrt Herausforderung im Zug.
+Herausforderung: Wert vs Stabilität/Haltbarkeit (+ Mods). Differenz → stören / zerstören; kein Lebensschaden. Offensive TEK sperrt Herausforderung im Zug. Bei aktivem gegnerischem Konstrukt ist das Konstrukt ein eigenes Herausforderungsziel (nicht Formelkomponente).
 
-Konstrukte: max 1; Haltbarkeit; herausforderbar; keine Fetz; nicht Ausrüstung/Formelkomponente. Neu ersetzt alt. Einstieg über Beschwörungsritual.
+Konstrukte: max 1; Feld `player.construct`; Haltbarkeit; herausforderbar; keine Fetz; nicht Ausrüstung/Formelkomponente. Neu ersetzt alt. Einstieg über Beschwörungsritual (Playtest-EK-Hook bis Matrix). Startphase: Haltbarkeit −1.
 
 ---
 
@@ -519,6 +521,7 @@ Bitte abhaken / korrigieren:
 - [x] Fessel / Kettenfessel **Zielwahl manuell**: Angreifer wählt einen **besetzten** gegnerischen Formelplatz (Technik / Essenz / Katalysator) via Pending-Choice (`PICK_V6_FESSEL_TARGET`); leere Plätze ungültig. Kein Auto Technik→Essenz→Katalysator. Bot-Heuristik: Katalysator → Essenz → Technik.  
 - [x] Echo/Delay Engine (#344): Warteschlangen in Meta; Startphase Echo → Verzögerung; Katalysator-Ablage nach Auflösung; Playtest-Hooks (volle Katalysator-Matrix später).
 - [x] Echo/Delay Play-UI (#345): Queue-Chips + Katalysator „bleibt bis Auflösung“; feste Echo-1 / Delay-+2.
+- [x] Konstrukte Engine (#346): `player.construct`; Startphase Haltbarkeit −1; Playtest-EK Beschwörung; Herausfordern stören/zerstören; 105-Katalog unverändert.
 
 Nach deiner finalen Form: dieses Doc auf **verbindlich** setzen und `SPIELANLEITUNG_V6_DRAFT.md` + AGENTS-Kurzreferenz nachziehen.
 
@@ -537,3 +540,4 @@ Nach deiner finalen Form: dieses Doc auf **verbindlich** setzen und `SPIELANLEIT
 | 2026-08-03 | #343 retarget: Slice-1 **105**-Rezept-Katalog gehärtet (DE Namen + effectSummary); volle 60×K-Matrix deferred |
 | 2026-08-03 | #344 Echo/Delay Engine: Warteschlangen + Startphase §8 Schritte 3–4; Katalysator-Ablage nach Auflösung; 2 Playtest-Rezepte (kein Matrix-Expand) |
 | 2026-08-03 | #345 Echo/Delay Play-UI: Queue-Anzeige + Katalysator-Badge; feste Echo-1 / Delay-+2 |
+| 2026-08-03 | #346 Konstrukte Engine: Board-Feld, Startphase-Tick, Playtest-Beschwörung, Herausfordern vs Haltbarkeit |

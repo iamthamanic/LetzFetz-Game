@@ -9,6 +9,7 @@ import type {
 } from './matchMeta';
 import type { PlayerId, TurnPhase } from './ruleset';
 import type { StatusInstance } from './status';
+import type { ConstructInstance } from './v6Construct';
 
 export interface PlaytestSettings {
   hpCap?: PlaytestHpCap;
@@ -41,6 +42,11 @@ export interface PlayerState {
   shield: number;
   /** Shared charge pool: V3 max 6, V5 Fetzladung max 3. */
   fetzCharge: number;
+  /**
+   * V6 Konstrukt zone — max 1; not equipment / not formula component.
+   * Null when empty. Startphase Haltbarkeit tick; herausforderbar.
+   */
+  construct: ConstructInstance | null;
 }
 
 export interface SharedPiles {

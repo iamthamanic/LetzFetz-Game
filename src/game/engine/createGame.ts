@@ -160,6 +160,7 @@ export function createGame(config: CreateGameConfig): GameState {
     statuses: [] as GameState['players']['p1']['statuses'],
     shield: 0,
     fetzCharge: 0,
+    construct: null,
   });
 
   const state: GameState = {
