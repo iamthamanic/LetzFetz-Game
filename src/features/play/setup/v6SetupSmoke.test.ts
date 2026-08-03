@@ -82,6 +82,14 @@ describe('V6 Setup INTERNAL smoke', () => {
       'p1',
       { pack: resolved.pack, ruleset: resolved.ruleset, rng: () => 0.01, playerId: 'p1' },
     );
+    if (state.pendingChoice?.type === 'v6-affinity') {
+      state = applyAction(
+        state,
+        { type: 'PICK_V6_AFFINITY', mode: 'none' },
+        'p1',
+        { pack: resolved.pack, ruleset: resolved.ruleset, rng: () => 0.01, playerId: 'p1' },
+      );
+    }
     expect(state.players.p1.formula.katalysator).toBeNull();
     expect(state.players.p1.fetzCharge).toBe(1);
   });

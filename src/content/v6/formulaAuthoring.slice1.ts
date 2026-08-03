@@ -47,7 +47,8 @@ const TE_PRIMARY: Record<TechId, Record<EssId, V6PrimaryEffectAuthoring>> = {
     'v6-essenz-luft': { kind: 'prep_attack', value: 1, target: 'self' },
   },
   'v6-technik-magiepanzer': {
-    'v6-essenz-feuer': { kind: 'shield', value: 1, target: 'self' },
+    /** Playtest Fessel TE (Slice-2) — Kettenfessel stand-in until full catalog. */
+    'v6-essenz-feuer': { kind: 'fessel', value: 1, target: 'opponent', offensive: true },
     'v6-essenz-wasser': { kind: 'heal', value: 2, target: 'self' },
     'v6-essenz-luft': { kind: 'shield', value: 2, target: 'self' },
   },
@@ -65,7 +66,7 @@ const TE_NAMES: Record<TechId, Record<EssId, string>> = {
     'v6-essenz-luft': 'Tempeschrei',
   },
   'v6-technik-magiepanzer': {
-    'v6-essenz-feuer': 'Hitzepanzer',
+    'v6-essenz-feuer': 'Glutfessel',
     'v6-essenz-wasser': 'Nasspanzer',
     'v6-essenz-luft': 'Windpanzer',
   },
@@ -123,7 +124,12 @@ function buildTeBases(): V6TeBaseAuthoring[] {
         name: TE_NAMES[t][e],
         primary,
         rider: primary.target === 'opponent' ? ESSENCE_RIDERS[e] : ESSENCE_RIDERS[e],
-        intensity: primary.kind === 'damage' ? undefined : 1,
+        intensity:
+          primary.kind === 'damage'
+            ? undefined
+            : primary.kind === 'fessel'
+              ? primary.value
+              : 1,
       });
     }
   }

@@ -10,6 +10,7 @@ import type { Rng } from '../deck';
 import { rollD6 } from '../dice';
 import type { FormulaActivationPlan, V6PrimaryKind } from './formulaActivationPlan';
 import { applyV6DefenseToPrimary, v6DefenseStagesFromRoll } from './formulaDefense';
+import { applyV6DefenseToIntensity, formulaComponentUsableForActivation } from './fessel';
 import { findV6Recipe } from './recipeLookup';
 import { V6_FORMULA_AUTHORING_SLICE1 } from '../../../content/v6/formulaAuthoring.slice1';
 
@@ -25,6 +26,10 @@ export interface PlanFormulaActivationInput {
   defenseRoll?: number;
   /** Opfergabe: player chose to discard. */
   offerDiscard?: boolean;
+  /** Affinity spend: override primary after revalidate. */
+  affinityAdjustedPrimary?: number;
+  /** Affinity spend: override intensity after revalidate. */
+  affinityAdjustedIntensity?: number | null;
 }
 
 function catalystTransformMeta(catalystId: string): {
@@ -50,6 +55,7 @@ function asPrimaryKind(kind: string): V6PrimaryKind {
     case 'prep_attack':
     case 'prep_block':
     case 'prep_boost':
+    case 'fessel':
       return kind;
     default:
       throw new Error(`V6_RECIPE_INVALID_PRIMARY_KIND: ${kind}`);
@@ -67,14 +73,17 @@ export function planFormulaActivation(input: PlanFormulaActivationInput): Formul
   const ess = formula.essenz;
   const kat = formula.katalysator;
 
-  const filled = listFormulaComponents(formula).filter((c) => !c.exhausted && !c.disturbed);
+  const filled = listFormulaComponents(formula).filter((c) =>
+    formulaComponentUsableForActivation(c),
+  );
   if (filled.length < 2) {
     throw new Error('Formula resolve requires at least two filled upright slots');
   }
 
-  const techniqueId = tech && !tech.exhausted && !tech.disturbed ? tech.defId : null;
-  const essenceId = ess && !ess.exhausted && !ess.disturbed ? ess.defId : null;
-  const catalystId = kat && !kat.exhausted && !kat.disturbed ? kat.defId : null;
+  const techniqueId =
+    tech && formulaComponentUsableForActivation(tech) ? tech.defId : null;
+  const essenceId = ess && formulaComponentUsableForActivation(ess) ? ess.defId : null;
+  const catalystId = kat && formulaComponentUsableForActivation(kat) ? kat.defId : null;
 
   let kind: 'te' | 'tk' | 'ek' | 'tek' | 'overformula';
   if (techniqueId && essenceId && catalystId) {
@@ -121,17 +130,32 @@ export function planFormulaActivation(input: PlanFormulaActivationInput): Formul
   let primaryValue = recipe.primary.value + offerBonus;
   const offensive = recipe.primary.offensive === true;
   const needsDefense = recipe.primary.target === 'opponent';
+  const primaryKind = asPrimaryKind(recipe.primary.kind);
 
   let defenseRoll: number | null = null;
   let stages: 0 | 1 | 2 = 0;
   let riderSuppressed = false;
   const defensePenalty = recipe.formulaDefensePenalty ?? 0;
+  let intensityAfterDefense: number | null =
+    recipe.intensity != null ? recipe.intensity : primaryKind === 'fessel' ? primaryValue : null;
 
   if (needsDefense) {
     defenseRoll = input.defenseRoll ?? rollD6(rng);
     stages = v6DefenseStagesFromRoll(defenseRoll);
     primaryValue = applyV6DefenseToPrimary(primaryValue, stages, defensePenalty);
+    if (intensityAfterDefense != null) {
+      intensityAfterDefense = applyV6DefenseToIntensity(
+        intensityAfterDefense,
+        stages,
+        defensePenalty,
+      );
+    }
+    if (primaryKind === 'fessel') {
+      primaryValue = intensityAfterDefense ?? 0;
+    }
     riderSuppressed = stages === 2;
+  } else if (primaryKind === 'fessel') {
+    primaryValue = intensityAfterDefense ?? primaryValue;
   }
 
   const rawRider = recipe.rider;
@@ -178,13 +202,13 @@ export function planFormulaActivation(input: PlanFormulaActivationInput): Formul
     name: recipe.name,
     actorId: playerId,
     primary: {
-      kind: asPrimaryKind(recipe.primary.kind),
+      kind: primaryKind,
       value: primaryValue,
       target: recipe.primary.target,
       offensive,
     },
     rider,
-    intensity: recipe.intensity,
+    intensity: intensityAfterDefense,
     catalystConsumed: recipe.catalystConsumed,
     catalystInstanceId: kat?.instanceId ?? null,
     grantsFetz,
@@ -198,6 +222,7 @@ export function planFormulaActivation(input: PlanFormulaActivationInput): Formul
             naturalRoll: defenseRoll,
             stages,
             primaryAfterDefense: primaryValue,
+            intensityAfterDefense,
             riderSuppressed,
           },
     offerDiscardRequired: false,

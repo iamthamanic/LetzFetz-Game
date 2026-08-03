@@ -40,13 +40,15 @@ export function FormulaSlotFace({
   const theme = FORMULA_SLOT_THEME[role];
   const filled = Boolean(occupant);
   const card = occupant?.card ?? null;
-  const stateNote = occupant?.disturbed
-    ? 'gestört'
-    : occupant?.elementalCharge
-      ? 'GELADEN'
-      : occupant?.exhausted
-        ? 'erschöpft'
-        : null;
+  const stateNote = occupant?.fesselIntensity
+    ? `Fessel ${occupant.fesselIntensity}`
+    : occupant?.disturbed
+      ? 'gestört'
+      : occupant?.elementalCharge
+        ? 'GELADEN'
+        : occupant?.exhausted
+          ? 'erschöpft'
+          : null;
 
   const handleOpenDetail = () => {
     onOpenDetail?.();
@@ -86,20 +88,32 @@ export function FormulaSlotFace({
         {stateNote ? (
           <span
             className={`text-[8px] uppercase tracking-wide sm:text-[9px] ${
-              occupant?.elementalCharge && !occupant?.disturbed
-                ? 'font-bold text-amber-300'
-                : 'text-rose-300'
+              occupant?.fesselIntensity
+                ? 'font-bold text-violet-300'
+                : occupant?.elementalCharge && !occupant?.disturbed
+                  ? 'font-bold text-amber-300'
+                  : 'text-rose-300'
             }`}
             data-testid={
-              occupant?.elementalCharge ? `${testIdPrefix}-elemental-charge` : undefined
+              occupant?.fesselIntensity
+                ? `${testIdPrefix}-fessel`
+                : occupant?.elementalCharge
+                  ? `${testIdPrefix}-elemental-charge`
+                  : undefined
             }
             title={
-              occupant?.elementalCharge
-                ? 'Elementarladung — nur passende Aktionsangriffe'
-                : undefined
+              occupant?.fesselIntensity
+                ? `Fesselstufe ${occupant.fesselIntensity} — Startphase aktualisiert`
+                : occupant?.elementalCharge
+                  ? 'Elementarladung — nur passende Aktionsangriffe'
+                  : undefined
             }
           >
-            {occupant?.elementalCharge && !occupant?.disturbed ? '⚡ ELEMENTARLADUNG' : stateNote}
+            {occupant?.fesselIntensity
+              ? `⛓ Fessel ${occupant.fesselIntensity}`
+              : occupant?.elementalCharge && !occupant?.disturbed
+                ? '⚡ ELEMENTARLADUNG'
+                : stateNote}
           </span>
         ) : null}
         {targetable && onSelect ? (

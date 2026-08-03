@@ -197,11 +197,12 @@ export const V6_GENERATED_FORMULA_RECIPES: readonly V6GeneratedFormulaRecipe[] =
     "techniqueId": "v6-technik-magiepanzer",
     "essenceId": "v6-essenz-feuer",
     "catalystId": null,
-    "name": "Hitzepanzer",
+    "name": "Glutfessel",
     "primary": {
-      "kind": "shield",
+      "kind": "fessel",
       "value": 1,
-      "target": "self"
+      "target": "opponent",
+      "offensive": true
     },
     "rider": {
       "id": "rider-brennen",
@@ -2056,11 +2057,12 @@ export const V6_GENERATED_FORMULA_RECIPES: readonly V6GeneratedFormulaRecipe[] =
     "techniqueId": "v6-technik-magiepanzer",
     "essenceId": "v6-essenz-feuer",
     "catalystId": "v6-katalysator-ueberladung",
-    "name": "Hitzepanzer · Fusion",
+    "name": "Glutfessel · Fusion",
     "primary": {
-      "kind": "shield",
+      "kind": "fessel",
       "value": 3,
-      "target": "self"
+      "target": "opponent",
+      "offensive": true
     },
     "rider": {
       "id": "rider-brennen",
@@ -2081,23 +2083,24 @@ export const V6_GENERATED_FORMULA_RECIPES: readonly V6GeneratedFormulaRecipe[] =
     "techniqueId": "v6-technik-magiepanzer",
     "essenceId": "v6-essenz-feuer",
     "catalystId": "v6-katalysator-ueberladung",
-    "name": "Hitzepanzer · Überformel",
+    "name": "Glutfessel · Überformel",
     "primary": {
-      "kind": "shield",
-      "value": 5,
-      "target": "self"
+      "kind": "fessel",
+      "value": 3,
+      "target": "opponent",
+      "offensive": true
     },
     "rider": {
       "id": "rider-brennen",
       "summary": "Bei Lebensschaden: Brennen, falls keine Reaktion. (verstärkt)",
       "defenseSuppressible": true
     },
-    "intensity": 1,
+    "intensity": 2,
     "transformId": "xform-ueberladung",
     "grantsFetz": false,
     "catalystConsumed": true,
-    "overformulaPrimaryBonus": 2,
-    "overformulaIntensityBonus": null,
+    "overformulaPrimaryBonus": null,
+    "overformulaIntensityBonus": 1,
     "formulaDefensePenalty": -1
   },
   {
@@ -2106,11 +2109,12 @@ export const V6_GENERATED_FORMULA_RECIPES: readonly V6GeneratedFormulaRecipe[] =
     "techniqueId": "v6-technik-magiepanzer",
     "essenceId": "v6-essenz-feuer",
     "catalystId": "v6-katalysator-verdichtung",
-    "name": "Hitzepanzer · Fusion",
+    "name": "Glutfessel · Fusion",
     "primary": {
-      "kind": "shield",
+      "kind": "fessel",
       "value": 2,
-      "target": "self"
+      "target": "opponent",
+      "offensive": true
     },
     "rider": {
       "id": "rider-brennen",
@@ -2131,23 +2135,24 @@ export const V6_GENERATED_FORMULA_RECIPES: readonly V6GeneratedFormulaRecipe[] =
     "techniqueId": "v6-technik-magiepanzer",
     "essenceId": "v6-essenz-feuer",
     "catalystId": "v6-katalysator-verdichtung",
-    "name": "Hitzepanzer · Überformel",
+    "name": "Glutfessel · Überformel",
     "primary": {
-      "kind": "shield",
-      "value": 4,
-      "target": "self"
+      "kind": "fessel",
+      "value": 2,
+      "target": "opponent",
+      "offensive": true
     },
     "rider": {
       "id": "rider-brennen",
       "summary": "Bei Lebensschaden: Brennen, falls keine Reaktion. (verstärkt)",
       "defenseSuppressible": true
     },
-    "intensity": 1,
+    "intensity": 2,
     "transformId": "xform-verdichtung",
     "grantsFetz": false,
     "catalystConsumed": true,
-    "overformulaPrimaryBonus": 2,
-    "overformulaIntensityBonus": null,
+    "overformulaPrimaryBonus": null,
+    "overformulaIntensityBonus": 1,
     "formulaDefensePenalty": -1
   },
   {
@@ -2156,11 +2161,12 @@ export const V6_GENERATED_FORMULA_RECIPES: readonly V6GeneratedFormulaRecipe[] =
     "techniqueId": "v6-technik-magiepanzer",
     "essenceId": "v6-essenz-feuer",
     "catalystId": "v6-katalysator-sofortzuender",
-    "name": "Hitzepanzer · Fusion",
+    "name": "Glutfessel · Fusion",
     "primary": {
-      "kind": "shield",
+      "kind": "fessel",
       "value": 0,
-      "target": "self"
+      "target": "opponent",
+      "offensive": true
     },
     "rider": {
       "id": "rider-brennen",
@@ -2181,23 +2187,24 @@ export const V6_GENERATED_FORMULA_RECIPES: readonly V6GeneratedFormulaRecipe[] =
     "techniqueId": "v6-technik-magiepanzer",
     "essenceId": "v6-essenz-feuer",
     "catalystId": "v6-katalysator-sofortzuender",
-    "name": "Hitzepanzer · Überformel",
+    "name": "Glutfessel · Überformel",
     "primary": {
-      "kind": "shield",
-      "value": 2,
-      "target": "self"
+      "kind": "fessel",
+      "value": 0,
+      "target": "opponent",
+      "offensive": true
     },
     "rider": {
       "id": "rider-brennen",
       "summary": "Bei Lebensschaden: Brennen, falls keine Reaktion. (verstärkt)",
       "defenseSuppressible": true
     },
-    "intensity": 1,
+    "intensity": 2,
     "transformId": "xform-sofortzuender",
     "grantsFetz": false,
     "catalystConsumed": true,
-    "overformulaPrimaryBonus": 2,
-    "overformulaIntensityBonus": null,
+    "overformulaPrimaryBonus": null,
+    "overformulaIntensityBonus": 1,
     "formulaDefensePenalty": -1
   },
   {
@@ -2206,11 +2213,12 @@ export const V6_GENERATED_FORMULA_RECIPES: readonly V6GeneratedFormulaRecipe[] =
     "techniqueId": "v6-technik-magiepanzer",
     "essenceId": "v6-essenz-feuer",
     "catalystId": "v6-katalysator-opfergabe",
-    "name": "Hitzepanzer · Fusion",
+    "name": "Glutfessel · Fusion",
     "primary": {
-      "kind": "shield",
+      "kind": "fessel",
       "value": 1,
-      "target": "self"
+      "target": "opponent",
+      "offensive": true
     },
     "rider": {
       "id": "rider-brennen",
@@ -2231,23 +2239,24 @@ export const V6_GENERATED_FORMULA_RECIPES: readonly V6GeneratedFormulaRecipe[] =
     "techniqueId": "v6-technik-magiepanzer",
     "essenceId": "v6-essenz-feuer",
     "catalystId": "v6-katalysator-opfergabe",
-    "name": "Hitzepanzer · Überformel",
+    "name": "Glutfessel · Überformel",
     "primary": {
-      "kind": "shield",
-      "value": 3,
-      "target": "self"
+      "kind": "fessel",
+      "value": 1,
+      "target": "opponent",
+      "offensive": true
     },
     "rider": {
       "id": "rider-brennen",
       "summary": "Bei Lebensschaden: Brennen, falls keine Reaktion. (verstärkt)",
       "defenseSuppressible": true
     },
-    "intensity": 1,
+    "intensity": 2,
     "transformId": "xform-opfergabe",
     "grantsFetz": false,
     "catalystConsumed": true,
-    "overformulaPrimaryBonus": 2,
-    "overformulaIntensityBonus": null,
+    "overformulaPrimaryBonus": null,
+    "overformulaIntensityBonus": 1,
     "formulaDefensePenalty": -1
   },
   {

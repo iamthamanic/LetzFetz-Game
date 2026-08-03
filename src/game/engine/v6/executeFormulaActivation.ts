@@ -15,6 +15,7 @@ import {
   revalidateFormulaPlan,
   type PlanFormulaActivationInput,
 } from './planFormulaActivation';
+import { applyFesselToPlayer } from './fessel';
 
 function ensureV6Meta(state: GameState): GameState {
   const next = cloneState(state);
@@ -85,6 +86,10 @@ function applyPrimary(
       };
       break;
     }
+    case 'fessel': {
+      // Applied after plan in executeFormulaActivation (needs foe board).
+      break;
+    }
     default:
       break;
   }
@@ -125,11 +130,26 @@ export function executeFormulaActivation(
   plan: FormulaActivationPlan,
   input: PlanFormulaActivationInput,
 ): GameState {
-  const validated = revalidateFormulaPlan(plan, input);
+  let validated = revalidateFormulaPlan(plan, input);
+  if (input.affinityAdjustedPrimary != null) {
+    validated = {
+      ...validated,
+      primary: { ...validated.primary, value: input.affinityAdjustedPrimary },
+      intensity:
+        input.affinityAdjustedIntensity !== undefined
+          ? input.affinityAdjustedIntensity
+          : validated.intensity,
+    };
+  }
   const { pack, playerId, ruleset, rng } = input;
 
   let next = ensureV6Meta(input.state);
   next = applyPrimary(next, validated, ruleset);
+
+  if (validated.primary.kind === 'fessel' && validated.primary.value > 0) {
+    const foe = opponentOf(validated.actorId);
+    next = applyFesselToPlayer(next, foe, validated.primary.value);
+  }
 
   if (validated.selfDamage > 0) {
     next.players[playerId].hp = clampHp(
@@ -180,7 +200,10 @@ export function executeFormulaActivation(
   };
 
   next.phase = 'action';
-  next.lastEvent = validated.eventSummary;
+  next.lastEvent =
+    validated.primary.kind === 'fessel' && validated.primary.value > 0
+      ? `${validated.eventSummary} · Fessel ${validated.primary.value}`
+      : validated.eventSummary;
   return next;
 }
 
@@ -191,7 +214,13 @@ export function applyV6FormulaActivate(
   playerId: PlayerId,
   ruleset: RulesetConfig,
   rng: () => number,
-  opts?: { asOverformula?: boolean; defenseRoll?: number; offerDiscard?: boolean },
+  opts?: {
+    asOverformula?: boolean;
+    defenseRoll?: number;
+    offerDiscard?: boolean;
+    affinityAdjustedPrimary?: number;
+    affinityAdjustedIntensity?: number | null;
+  },
 ): GameState {
   const input: PlanFormulaActivationInput = {
     state,
@@ -202,6 +231,8 @@ export function applyV6FormulaActivate(
     asOverformula: opts?.asOverformula,
     defenseRoll: opts?.defenseRoll,
     offerDiscard: opts?.offerDiscard,
+    affinityAdjustedPrimary: opts?.affinityAdjustedPrimary,
+    affinityAdjustedIntensity: opts?.affinityAdjustedIntensity,
   };
   const plan = planFormulaActivation(input);
   return executeFormulaActivation(plan, input);

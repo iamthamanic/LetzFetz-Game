@@ -35,4 +35,6 @@ export interface FormulaSlotOccupant {
   disturbed: boolean;
   /** V5 Elementarladung on Essenz (public board). */
   elementalCharge?: boolean;
+  /** V6 Fessel intensity 1–3 when present. */
+  fesselIntensity?: number;
 }

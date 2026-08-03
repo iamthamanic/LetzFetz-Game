@@ -23,10 +23,15 @@ import { resolveTimedMatchExpiry } from './timedMatch';
 import {
   applyV6AffinityMode,
   characterElementsForCombat,
+  formulaAffinityElement,
   markV6AffinitySpent,
   shouldOfferV6Affinity,
+  shouldOfferV6AffinityOnBlock,
   type V6AffinityMode,
 } from './v6/affinity';
+import { planFormulaActivation } from './v6/planFormulaActivation';
+import { applyV6FormulaActivate } from './v6/executeFormulaActivation';
+import { tickFesselAndRestoreOwnerFormulaV6 } from './v6/fessel';
 import {
   cloneState,
   discardFromHand,
@@ -57,7 +62,6 @@ import {
   isFormulaResolvable,
   isFullFormulaActivatable,
 } from './formulaCharge';
-import { applyV6FormulaActivate } from './v6';
 
 function isFormulaBoardEnabled(ruleset: RulesetConfig): boolean {
   return isV5FormulaEnabled(ruleset) || isV6FormulaEnabled(ruleset);
@@ -71,7 +75,6 @@ import {
   formulaComponentStability,
   listFormulaComponents,
   restoreOwnerFormulaAtStart,
-  restoreOwnerFormulaAtStartV6,
 } from './formulaChallenge';
 import { applyDamageThroughShield } from './status/shield';
 import { pickReaction, resolveImpulseReactions } from './status/reactionChoice';
@@ -193,7 +196,11 @@ function runStartPhase(
     }
   } else if (isV6FormulaEnabled(ruleset)) {
     next = cloneState(next);
-    next.players[playerId].formula = restoreOwnerFormulaAtStartV6(next.players[playerId].formula);
+    const fesselTick = tickFesselAndRestoreOwnerFormulaV6(next.players[playerId].formula);
+    next.players[playerId].formula = fesselTick.board;
+    if (fesselTick.notes.length > 0) {
+      next.lastEvent = `Fessel aktualisiert: ${fesselTick.notes.join('; ')}`;
+    }
   }
   next.phase = 'draw';
   return next;
@@ -402,6 +409,44 @@ function finalizeV6AffinityBlock(
     next.lastEvent = `Block ${applied.value} (Würfel ${applied.diceRoll})${
       applied.spent ? ' [Affinität]' : ''
     }. ${next.lastEvent}`;
+  }
+  return next;
+}
+
+function finalizeV6AffinityFormula(
+  state: GameState,
+  pack: ContentPack,
+  playerId: PlayerId,
+  pending: Extract<PendingChoice, { type: 'v6-affinity' }>,
+  mode: V6AffinityMode,
+  ruleset: RulesetConfig,
+  rng: () => number,
+): GameState {
+  const applied = applyV6AffinityMode(pending.diceRoll, pending.baseValue, mode, ruleset);
+  let next = cloneState(state);
+  next.pendingChoice = null;
+  if (applied.spent) {
+    next = markV6AffinitySpent(next, playerId);
+  }
+  const intensityBase = pending.formulaIntensity ?? null;
+  const intensityAdjusted =
+    intensityBase == null
+      ? null
+      : mode === 'value-plus'
+        ? intensityBase + 1
+        : mode === 'none'
+          ? intensityBase
+          : Math.max(0, intensityBase + (applied.value - pending.baseValue));
+
+  next = applyV6FormulaActivate(next, pack, playerId, ruleset, rng, {
+    asOverformula: pending.formulaAsOverformula,
+    defenseRoll: pending.formulaDefenseRoll,
+    offerDiscard: pending.formulaOfferDiscard,
+    affinityAdjustedPrimary: applied.value,
+    affinityAdjustedIntensity: intensityAdjusted,
+  });
+  if (applied.spent) {
+    next.lastEvent = `${next.lastEvent ?? 'Formel aktiviert.'} [Affinität]`;
   }
   return next;
 }
@@ -1482,7 +1527,34 @@ function applyFormulaActivate(
     throw new Error('Formula resolve requires at least two filled slots');
   }
   if (isV6FormulaEnabled(ruleset)) {
-    return applyV6FormulaActivate(state, pack, playerId, ruleset, rng);
+    const plan = planFormulaActivation({
+      state,
+      pack,
+      playerId,
+      ruleset,
+      rng,
+    });
+    const el = formulaAffinityElement(pack, state, playerId);
+    if (el && shouldOfferV6Affinity(state, pack, playerId, el, ruleset)) {
+      const ess = state.players[playerId].formula.essenz;
+      return openV6AffinityPending(state, playerId, {
+        type: 'v6-affinity',
+        playerId,
+        kind: 'formula',
+        cardInstanceId: ess?.instanceId ?? plan.recipeId,
+        cardDefId: ess?.defId ?? plan.recipeId,
+        cardElement: el,
+        diceRoll: plan.formulaDefense?.naturalRoll ?? 4,
+        baseValue: plan.primary.value,
+        formulaDefenseRoll: plan.formulaDefense?.naturalRoll,
+        formulaAsOverformula: plan.kind === 'overformula',
+        formulaIntensity: plan.intensity,
+      });
+    }
+    return applyV6FormulaActivate(state, pack, playerId, ruleset, rng, {
+      asOverformula: plan.kind === 'overformula',
+      defenseRoll: plan.formulaDefense?.naturalRoll,
+    });
   }
   const wasFull = isFullFormulaActivatable(state.players[playerId].formula);
   let next = resolveFormulaActivate(state, pack, playerId, ruleset, rng);
@@ -1594,6 +1666,17 @@ function applyPendingChoiceAction(
       if (pending.type !== 'v6-affinity') throw new Error('Wrong pending type');
       if (pending.kind === 'block') {
         return finalizeV6AffinityBlock(
+          state,
+          pack,
+          playerId,
+          pending,
+          action.mode,
+          ruleset,
+          rng,
+        );
+      }
+      if (pending.kind === 'formula') {
+        return finalizeV6AffinityFormula(
           state,
           pack,
           playerId,
@@ -2406,7 +2489,7 @@ function applyCombatResponse(
     }
 
     const blockElement = peekMysteriumElement(working, playerId) ?? def.element;
-    if (shouldOfferV6Affinity(working, pack, playerId, blockElement, ruleset)) {
+    if (shouldOfferV6AffinityOnBlock(working, pack, playerId, blockElement, ruleset)) {
       return openV6AffinityPending(working, playerId, {
         type: 'v6-affinity',
         playerId,

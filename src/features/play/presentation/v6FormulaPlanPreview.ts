@@ -22,11 +22,16 @@ export function formatV6FormulaPlanPreview(plan: FormulaActivationPlan): V6Formu
     prep_attack: 'Angriffsvorbereitung',
     prep_block: 'Blockvorbereitung',
     prep_boost: 'Boostvorbereitung',
+    fessel: 'Fessel',
   };
   const targetDe = plan.primary.target === 'opponent' ? 'Gegner' : 'Du';
+  const intensityNote =
+    plan.intensity != null && plan.intensity > 0
+      ? ` · Intensität ${plan.intensity}`
+      : '';
   return {
     title: plan.name,
-    primaryLine: `${primaryKindDe[plan.primary.kind] ?? plan.primary.kind} ${plan.primary.value} → ${targetDe}`,
+    primaryLine: `${primaryKindDe[plan.primary.kind] ?? plan.primary.kind} ${plan.primary.value} → ${targetDe}${intensityNote}`,
     catalystLine: plan.catalystConsumed
       ? 'Dieser Katalysator wird verbraucht (Ablage).'
       : null,
@@ -41,7 +46,11 @@ export function formatV6FormulaPlanPreview(plan: FormulaActivationPlan): V6Formu
         ? 'Danach: Angriff und Herausfordern gesperrt'
         : null,
     defenseLine: plan.formulaDefense
-      ? `Formelabwehr W6=${plan.formulaDefense.naturalRoll} → Stufe ${plan.formulaDefense.stages}`
+      ? `Formelabwehr W6=${plan.formulaDefense.naturalRoll} → Stufe ${plan.formulaDefense.stages}${
+          plan.formulaDefense.intensityAfterDefense != null
+            ? ` · Intensität ${plan.formulaDefense.intensityAfterDefense}`
+            : ''
+        }`
       : null,
     eventSummary: plan.eventSummary,
   };
