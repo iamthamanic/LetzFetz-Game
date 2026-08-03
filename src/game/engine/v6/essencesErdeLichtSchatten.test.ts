@@ -36,9 +36,9 @@ describe('V6 Essenzen Erde / Licht / Schatten (#380)', () => {
 
   it('authoring + generated catalog cover new essence ids (fail-closed size)', () => {
     expect(V6_FORMULA_AUTHORING_SLICE1.teBases).toHaveLength(60);
-    expect(V6_FORMULA_AUTHORING_SLICE1.ekBases).toHaveLength(36);
-    expect(V6_GENERATED_RECIPE_COUNT).toBe(876);
-    expect(V6_SLICE1_RECIPE_CATALOG.recipeCount).toBe(876);
+    expect(V6_FORMULA_AUTHORING_SLICE1.ekBases).toHaveLength(60);
+    expect(V6_GENERATED_RECIPE_COUNT).toBe(1420);
+    expect(V6_SLICE1_RECIPE_CATALOG.recipeCount).toBe(1420);
     for (const id of ['v6-essenz-erde', 'v6-essenz-licht', 'v6-essenz-schatten'] as const) {
       expect(V6_FORMULA_AUTHORING_SLICE1.teBases.some((r) => r.essenceId === id)).toBe(true);
       expect(V6_GENERATED_FORMULA_RECIPES.some((r) => r.essenceId === id)).toBe(true);

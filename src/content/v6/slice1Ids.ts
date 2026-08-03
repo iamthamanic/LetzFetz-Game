@@ -2,10 +2,8 @@
  * Binding Slice-1 card id set (V6 Rules Contract Slice 1).
  * Location: src/content/v6/slice1Ids.ts
  *
- * These ids define the locked recipe catalog in
- * `src/generated/v6/formulaRecipes.generated.ts`.
- * Full 10T×10K matrix (#383) expands unsupported catalysts into TEK —
- * do not invent generic transforms for them here.
+ * Catalog (#383): 10T×6E×10K — supported catalysts playable; unsupported
+ * catalysts emit explicit `availability: unsupported` recipes (no invent §50.3).
  */
 
 export const V6_SLICE1_TECHNIQUE_IDS = [
@@ -32,7 +30,6 @@ export const V6_SLICE1_ESSENCE_IDS = [
 
 /**
  * All ten V6 core Katalysatoren (Echo … Opfergabe).
- * Pack ships every id; matrix expansion uses {@link V6_MATRIX_CATALYST_IDS} only.
  */
 export const V6_SLICE1_CATALYST_IDS = [
   'v6-katalysator-echo',
@@ -48,18 +45,10 @@ export const V6_SLICE1_CATALYST_IDS = [
 ] as const;
 
 /**
- * Catalysts with supported transforms that expand into TK/EK/TEK(+Überformel).
- * Echo + Verzögerung joined the prior Slice-1 four (#382). Remaining four are
- * authored as `unsupported` until catalog-expansion (#383).
+ * Catalysts that expand into the recipe matrix (#383 = all ten).
+ * Playable vs unsupported is decided per transform `availability`.
  */
-export const V6_MATRIX_CATALYST_IDS = [
-  'v6-katalysator-echo',
-  'v6-katalysator-ueberladung',
-  'v6-katalysator-verdichtung',
-  'v6-katalysator-verzoegerung',
-  'v6-katalysator-sofortzuender',
-  'v6-katalysator-opfergabe',
-] as const;
+export const V6_MATRIX_CATALYST_IDS = V6_SLICE1_CATALYST_IDS;
 
 /** V6 core arenas (#350) — full set under v6Formula; not tied to recipe lock. */
 export const V6_SLICE1_ARENA_IDS = [

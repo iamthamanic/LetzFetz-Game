@@ -123,6 +123,12 @@ export function planFormulaActivation(input: PlanFormulaActivationInput): Formul
     catalystId,
   });
 
+  if (recipe.availability === 'unsupported') {
+    throw new Error(
+      `Diese Katalysator-Kombination ist noch nicht freigeschaltet (${recipe.name}). Keine generische Transformation — Authoring fehlt (§50.3).`,
+    );
+  }
+
   const xform = catalystId ? catalystTransformMeta(catalystId) : {
     selfDamage: 0,
     drawDiscardAfter: false,

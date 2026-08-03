@@ -46,10 +46,10 @@ describe('validateV6FormulaAuthoring', () => {
     ).toThrow(/V6_AUTHORING_INVALID/);
   });
 
-  it('covers full Slice-1 TE/TK/EK matrix + 10 catalyst transforms (6 supported)', () => {
+  it('covers full Slice-1 TE/TK/EK matrix + 10 catalyst transforms (6 supported / 4 unsupported matrix)', () => {
     expect(V6_FORMULA_AUTHORING_SLICE1.teBases).toHaveLength(60);
-    expect(V6_FORMULA_AUTHORING_SLICE1.tkBases).toHaveLength(60);
-    expect(V6_FORMULA_AUTHORING_SLICE1.ekBases).toHaveLength(36);
+    expect(V6_FORMULA_AUTHORING_SLICE1.tkBases).toHaveLength(100);
+    expect(V6_FORMULA_AUTHORING_SLICE1.ekBases).toHaveLength(60);
     expect(V6_FORMULA_AUTHORING_SLICE1.catalystTransforms).toHaveLength(10);
     expect(
       V6_FORMULA_AUTHORING_SLICE1.catalystTransforms.filter((t) => t.availability === 'supported'),

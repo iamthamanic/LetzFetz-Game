@@ -71,7 +71,7 @@ describe('V6 Katalysatoren auf 10 (#382)', () => {
   it('ships all ten catalysts in pack + ids', () => {
     expect([...V6_SLICE1_CATALYST_IDS]).toEqual([...EXPECTED_TEN]);
     expect(V6_CORE_PACK.catalysts?.slice(0, 10).map((c) => c.id)).toEqual([...EXPECTED_TEN]);
-    expect(V6_MATRIX_CATALYST_IDS).toHaveLength(6);
+    expect(V6_MATRIX_CATALYST_IDS).toHaveLength(10);
   });
 
   it('authoring: 10 transforms, 6 supported / 4 unsupported — no invent', () => {
@@ -84,9 +84,7 @@ describe('V6 Katalysatoren auf 10 (#382)', () => {
         (t) => t.availability === 'unsupported',
       ),
     };
-    expect(byAvail.supported.map((t) => t.catalystId).sort()).toEqual(
-      [...V6_MATRIX_CATALYST_IDS].sort(),
-    );
+    expect(byAvail.supported).toHaveLength(6);
     expect(byAvail.unsupported.map((t) => t.catalystId).sort()).toEqual(
       [
         'v6-katalysator-ausbreitung',
@@ -95,16 +93,18 @@ describe('V6 Katalysatoren auf 10 (#382)', () => {
         'v6-katalysator-umkehrung',
       ].sort(),
     );
-    // Fail-closed: no TEK rows for unsupported catalysts
+    // Fail-closed: unsupported catalysts only emit availability:unsupported recipes
     for (const id of byAvail.unsupported.map((t) => t.catalystId)) {
-      expect(V6_GENERATED_FORMULA_RECIPES.some((r) => r.catalystId === id)).toBe(false);
+      const rows = V6_GENERATED_FORMULA_RECIPES.filter((r) => r.catalystId === id);
+      expect(rows.length).toBeGreaterThan(0);
+      expect(rows.every((r) => r.availability === 'unsupported')).toBe(true);
     }
   });
 
-  it('catalog is 10T×6E×6K = 876; prior 4K recipe ids stable', () => {
-    expect(V6_GENERATED_RECIPE_COUNT).toBe(876);
-    expect(V6_SLICE1_RECIPE_CATALOG.recipeCount).toBe(876);
-    expect(V6_SLICE1_RECIPE_CATALOG.label).toMatch(/10T×6E×6K/);
+  it('catalog is 10T×6E×10K = 1420; prior 4K recipe ids stable', () => {
+    expect(V6_GENERATED_RECIPE_COUNT).toBe(1420);
+    expect(V6_SLICE1_RECIPE_CATALOG.recipeCount).toBe(1420);
+    expect(V6_SLICE1_RECIPE_CATALOG.label).toMatch(/10T×6E×10K/);
     expect(
       V6_GENERATED_FORMULA_RECIPES.some((r) => r.recipeId === 'v6-tek-impulsgeschoss-feuer-ueberladung'),
     ).toBe(true);
