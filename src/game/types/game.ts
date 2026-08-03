@@ -1,15 +1,14 @@
 import type { BoundCardInstance, CardInstance, FormulaComponentInstance } from './cards';
 import type { Element } from './elements';
 import type { FormulaPrepState } from './formulaEffects';
-import type { MatchMeta, PendingChoice } from './matchMeta';
+import type {
+  MatchMeta,
+  MonoBonusMode,
+  PendingChoice,
+  PlaytestHpCap,
+} from './matchMeta';
 import type { PlayerId, TurnPhase } from './ruleset';
 import type { StatusInstance } from './status';
-
-/** Playtest LP caps (D35 / O11). Cap = start; heals clamp here. */
-export type PlaytestHpCap = 20 | 25 | 30;
-
-/** Playtest mono bonus modes (D32 / D35). Engine applies after V2 release. */
-export type MonoBonusMode = 'mb1' | 'mb2' | 'mb3' | 'mb4';
 
 export interface PlaytestSettings {
   hpCap?: PlaytestHpCap;

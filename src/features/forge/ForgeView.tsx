@@ -169,7 +169,7 @@ export function ForgeView() {
       );
       if (response.ok) {
         await loadCards();
-        handleCloseEditor();
+        handleClosePreview();
       }
     } catch (error) {
       console.error('Error deleting card:', error);

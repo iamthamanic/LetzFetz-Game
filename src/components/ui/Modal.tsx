@@ -11,16 +11,19 @@ interface ModalProps {
   onClose: () => void;
   title: string;
   children: React.ReactNode;
-  size?: 'sm' | 'md' | 'lg';
+  size?: 'sm' | 'md' | 'lg' | 'full';
   footer?: React.ReactNode;
   /** Optional test id on the dialog root. */
   testId?: string;
+  /** Extra classes for the scrollable body. */
+  bodyClassName?: string;
 }
 
 const sizeClasses = {
   sm: 'max-w-sm',
   md: 'max-w-md',
   lg: 'max-w-2xl',
+  full: 'max-w-[min(96vw,72rem)]',
 };
 
 export function Modal({
@@ -31,6 +34,7 @@ export function Modal({
   size = 'md',
   footer,
   testId,
+  bodyClassName = '',
 }: ModalProps) {
   useEffect(() => {
     if (!open) return;
@@ -66,7 +70,9 @@ export function Modal({
             aria-label="Schließen"
           />
         </div>
-        <div className="max-h-[70vh] overflow-y-auto p-4">{children}</div>
+        <div className={`max-h-[70vh] overflow-y-auto p-4 ${bodyClassName}`.trim()}>
+          {children}
+        </div>
         {footer && <div className="border-t border-stone-800 px-4 py-3">{footer}</div>}
       </div>
     </div>

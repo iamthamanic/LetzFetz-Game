@@ -64,6 +64,8 @@ export interface LetzFetzCardProps {
   elementImpulse?: ElementImpulseKeyword | null;
   /** Skip top parchment icon bar (library grid — more art). */
   hideHeader?: boolean;
+  /** Hint for portrait / character cards to prefer animated art when available. */
+  animateIllustration?: boolean;
   className?: string;
   imageFit?: 'cover' | 'contain';
   'data-testid'?: string;

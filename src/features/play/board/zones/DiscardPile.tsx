@@ -42,7 +42,7 @@ export function DiscardPile({ count, topCard, className = '', style }: DiscardPi
           Leer
         </div>
       )}
-      <Badge variant="secondary" className="text-[10px] tabular-nums">
+      <Badge variant="default" className="text-[10px] tabular-nums">
         {count}
       </Badge>
     </div>

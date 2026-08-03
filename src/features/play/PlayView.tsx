@@ -397,7 +397,9 @@ export function PlayView({ onBattleMusicActiveChange }: PlayViewProps) {
             instanceId,
             defId,
             state.combat.mode === 'challenge' ? 'challenge' : 'direct',
-            targetSlotIndex >= 0 ? targetSlotIndex : undefined,
+            targetSlotIndex !== undefined && targetSlotIndex >= 0
+              ? targetSlotIndex
+              : undefined,
           ),
         );
       }

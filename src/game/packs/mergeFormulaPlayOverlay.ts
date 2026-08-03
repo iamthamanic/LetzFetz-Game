@@ -45,7 +45,7 @@ function stubEssence(entry: DeckOptInEntry): EssenceCardDef {
     kind: 'essence',
     id: entry.cardId,
     name: entry.name,
-    element: 'Neutral',
+    element: 'shadow',
     stability: 2,
     effectText:
       'Studio-Baustein — Effekt wird in einer späteren Engine-Version angebunden.',

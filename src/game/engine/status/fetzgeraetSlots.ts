@@ -74,7 +74,10 @@ export function resolveBuildSlots(
     }
     const slot = findFirstFreePhraseSlot(bound);
     if (!slot) throw new Error('No free phrase slot');
-    return { phraseSlot: slot, fetzSlot: PHRASE_TO_FETZ[slot] };
+    return {
+      phraseSlot: slot,
+      fetzSlot: slot === 'charge' ? undefined : PHRASE_TO_FETZ[slot],
+    };
   }
 
   const element = findElementDef(pack, defId);

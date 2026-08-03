@@ -3,6 +3,7 @@
  * Location: src/features/play/board/V6FormulaActivationPreview.tsx
  */
 import React from 'react';
+import { Panel } from '../../../components/ui/Panel';
 import type { V6FormulaPreviewLines } from '../presentation/v6FormulaPlanPreview';
 
 interface V6FormulaActivationPreviewProps {
@@ -11,30 +12,34 @@ interface V6FormulaActivationPreviewProps {
 
 export function V6FormulaActivationPreview({ lines }: V6FormulaActivationPreviewProps) {
   return (
-    <div
+    <Panel
+      tone="game"
+      dense
+      className="border-amber-500/40"
       data-testid="v6-formula-activation-preview"
-      className="rounded-lg border border-amber-500/40 bg-zinc-950/80 px-3 py-2 text-sm text-zinc-100"
       role="status"
       aria-live="polite"
     >
-      <p className="font-semibold text-amber-200">{lines.title}</p>
-      <p className="mt-1">{lines.primaryLine}</p>
-      {lines.defenseLine ? <p className="mt-1 text-zinc-300">{lines.defenseLine}</p> : null}
+      <p className="text-sm font-semibold text-amber-200">{lines.title}</p>
+      <p className="mt-1 text-sm text-stone-100">{lines.primaryLine}</p>
+      {lines.defenseLine ? (
+        <p className="mt-1 text-sm text-stone-300">{lines.defenseLine}</p>
+      ) : null}
       {lines.catalystLine ? (
-        <p className="mt-1 text-rose-300" data-testid="v6-preview-catalyst">
+        <p className="mt-1 text-sm text-rose-300" data-testid="v6-preview-catalyst">
           {lines.catalystLine}
         </p>
       ) : null}
       {lines.fetzLine ? (
-        <p className="mt-1 text-emerald-300" data-testid="v6-preview-fetz">
+        <p className="mt-1 text-sm text-emerald-300" data-testid="v6-preview-fetz">
           {lines.fetzLine}
         </p>
       ) : null}
       {lines.lockLine ? (
-        <p className="mt-1 text-orange-300" data-testid="v6-preview-lock">
+        <p className="mt-1 text-sm text-orange-300" data-testid="v6-preview-lock">
           {lines.lockLine}
         </p>
       ) : null}
-    </div>
+    </Panel>
   );
 }

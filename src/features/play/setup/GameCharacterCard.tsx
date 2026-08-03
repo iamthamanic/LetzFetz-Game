@@ -23,7 +23,7 @@ export function GameCharacterCard(
       image_asset={cardProps.image_asset}
       size={size}
       interactive={false}
-      footerNote={footerNote ?? cardProps.footerNote}
+      footerNote={footerNote}
     />
   );
 }
