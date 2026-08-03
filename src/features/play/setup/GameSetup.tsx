@@ -234,7 +234,7 @@ export function GameSetup({
     packChoice === 'v6'
       ? 'V6 Formel (Standard)'
       : packChoice === 'v5'
-        ? 'V5 Formel'
+        ? 'V5 Formel (Legacy)'
         : packChoice === 'p100'
           ? 'V2 P100 (Legacy)'
           : packChoice === 'v3'
@@ -436,7 +436,7 @@ export function GameSetup({
                     />
                   </div>
                   <p className="text-xs text-stone-500" data-testid="game-setup-v6-default-hint">
-                    V6 ist Standard. V5 bleibt als Legacy/Regression wählbar (kein Hard-Delete).
+                    V6 ist Standard. V5 bleibt als Legacy / Regression wählbar (kein Hard-Delete).
                   </p>
                   <button
                     type="button"

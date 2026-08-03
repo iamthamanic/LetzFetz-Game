@@ -514,7 +514,7 @@ Bitte abhaken / korrigieren:
 - [ ] Ob `V6_PACK` physisch unter `src/content/v6` + `src/generated/v6` liegt (Pfad ok?)  
 - [ ] Generator-Output: JSON vs TS  
 - [ ] Heldenmodus: nur Notiz oder schon Flag-Name reservieren  
-- [ ] Ob V5-Menü-Kachel sofort „Legacy“ heißt oder „V5 Regression“  
+- [x] V5-Menü-Kachel (#354): Badge **„Legacy“**; Subtitle **„Legacy / Regression“**; Pack-Summary **„V5 Formel (Legacy)“** — nicht nur Titel „V5 Regression“.  
 - [x] Exact Start: Affinität „pro Runde“ = **einmal pro eigenem Zug/Durchlauf** (Reset eigene Startphase; Spend auf eigenen Angriff/Challenge **oder Formelaktivierung**; Block-Affinität **nur im eigenen Aktionszug**, nicht bei Verteidigung gegen den Gegner). Playtest-Default via #341 / #356.  
 - [x] Fessel / Kettenfessel **Zielwahl manuell**: Angreifer wählt einen **besetzten** gegnerischen Formelplatz (Technik / Essenz / Katalysator) via Pending-Choice (`PICK_V6_FESSEL_TARGET`); leere Plätze ungültig. Kein Auto Technik→Essenz→Katalysator. Bot-Heuristik: Katalysator → Essenz → Technik.  
 - [x] Echo/Delay Engine (#344): Warteschlangen in Meta; Startphase Echo → Verzögerung; Katalysator-Ablage nach Auflösung; Playtest-Hooks (volle Katalysator-Matrix später).
@@ -553,3 +553,4 @@ Nach deiner finalen Form: dieses Doc auf **verbindlich** setzen und `SPIELANLEIT
 | 2026-08-03 | #351 Solo-Bot: Affinität beneficial + V6 Playbook Digest (`V6_BOT_PLAYBOOK.md`) |
 | 2026-08-03 | #352 `SPIELANLEITUNG_V6_DRAFT.md` + AGENTS / `.cursor/rules` Kurzreferenz |
 | 2026-08-03 | #353 Play-Default → V6; V5 Legacy-Kachel; `VITE_V6_PLAYABLE` relaxed |
+| 2026-08-03 | #354 V5 Legacy-Labels final (§99): Badge Legacy + Legacy/Regression; Pack-Summary „V5 Formel (Legacy)“ |
