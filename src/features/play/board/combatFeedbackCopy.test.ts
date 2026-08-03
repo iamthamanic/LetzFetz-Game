@@ -56,4 +56,24 @@ describe('combatFeedbackCopy', () => {
   it('labels resolve outcome as Vollblock', () => {
     expect(formatVollblockOutcomeLabel()).toBe('Vollblock');
   });
+
+  it('emits Echo queue / resolve toasts', () => {
+    expect(
+      parseCombatFeedbackToasts('V6 Foo · Echo in Warteschlange (1).').map(
+        (t) => t.kind,
+      ),
+    ).toEqual(['echo-resolve']);
+    expect(
+      parseCombatFeedbackToasts('Echo: Glutimpuls-Echo: damage 1').map(
+        (t) => t.title,
+      ),
+    ).toEqual(['Echo aufgelöst']);
+  });
+
+  it('emits Verzögerung queue toast', () => {
+    expect(
+      parseCombatFeedbackToasts('V6 Bar · Verzögerung in Warteschlange (1).')[0]
+        ?.kind,
+    ).toBe('delay-resolve');
+  });
 });

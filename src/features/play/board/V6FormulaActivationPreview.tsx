@@ -25,6 +25,11 @@ export function V6FormulaActivationPreview({ lines }: V6FormulaActivationPreview
       {lines.defenseLine ? (
         <p className="mt-1 text-sm text-stone-300">{lines.defenseLine}</p>
       ) : null}
+      {lines.timingLine ? (
+        <p className="mt-1 text-sm text-cyan-200" data-testid="v6-preview-timing">
+          {lines.timingLine}
+        </p>
+      ) : null}
       {lines.catalystLine ? (
         <p className="mt-1 text-sm text-rose-300" data-testid="v6-preview-catalyst">
           {lines.catalystLine}

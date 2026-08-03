@@ -3,7 +3,7 @@
  * Location: src/features/play/board/FormulaRig.tsx
  *
  * Shows three Formelplatz card faces + catalog combo preview + equipment strip.
- * Public board info only (own and opponent).
+ * Public board info only (own and opponent). V6: Echo/Delay queue chips + catalyst badge.
  */
 import React from 'react';
 import type { CardInstance, ContentPack, FormulaBoard } from '../../../game';
@@ -16,6 +16,8 @@ import {
   type FormulaSlotRole,
 } from '../../../components/cards/formula';
 import { DroppableFormulaSlot } from './DndPlaymat';
+import { EchoDelayQueueChips } from './EchoDelayQueueChips';
+import type { V6EchoDelayChip, V6EchoDelayKind } from './v6EchoDelaySurface';
 
 interface FormulaRigProps {
   label: string;
@@ -33,6 +35,10 @@ interface FormulaRigProps {
   onEquipmentClick?: (item: EquipmentDisplayCard) => void;
   equipmentActivatableIds?: string[];
   equipmentReplaceTargetIds?: string[];
+  /** V6 pending Echo / Verzögerung queue chips. */
+  echoDelayChips?: V6EchoDelayChip[];
+  /** V6: seated catalyst waiting for Echo/Delay Startphase resolve. */
+  pendingCatalystTiming?: V6EchoDelayKind | null;
 }
 
 export function FormulaRig({
@@ -48,8 +54,16 @@ export function FormulaRig({
   onEquipmentClick,
   equipmentActivatableIds = [],
   equipmentReplaceTargetIds = [],
+  echoDelayChips = [],
+  pendingCatalystTiming = null,
 }: FormulaRigProps) {
   const slots = mapFormulaSlotsForDisplay(pack, formula);
+  if (pendingCatalystTiming && slots.katalysator) {
+    slots.katalysator = {
+      ...slots.katalysator,
+      pendingTiming: pendingCatalystTiming,
+    };
+  }
   const equipmentCards = mapEquipmentForDisplay(pack, equipment);
   const catalogCombination = findComboForFilledSlots(slots);
 
@@ -62,21 +76,24 @@ export function FormulaRig({
     : undefined;
 
   return (
-    <FormulaBoardRack
-      label={label}
-      testId={testId}
-      slots={slots}
-      equipment={equipmentCards}
-      catalogCombination={catalogCombination}
-      targetableInstanceIds={targetableInstanceIds}
-      selectedTargetId={selectedTargetId}
-      onComponentClick={onComponentClick}
-      wrapSlot={wrapSlot}
-      compact
-      showEquipment
-      onEquipmentClick={onEquipmentClick}
-      equipmentActivatableIds={equipmentActivatableIds}
-      equipmentReplaceTargetIds={equipmentReplaceTargetIds}
-    />
+    <div className="flex flex-col gap-1.5">
+      <EchoDelayQueueChips chips={echoDelayChips} testId={`${testId}-echo-delay`} />
+      <FormulaBoardRack
+        label={label}
+        testId={testId}
+        slots={slots}
+        equipment={equipmentCards}
+        catalogCombination={catalogCombination}
+        targetableInstanceIds={targetableInstanceIds}
+        selectedTargetId={selectedTargetId}
+        onComponentClick={onComponentClick}
+        wrapSlot={wrapSlot}
+        compact
+        showEquipment
+        onEquipmentClick={onEquipmentClick}
+        equipmentActivatableIds={equipmentActivatableIds}
+        equipmentReplaceTargetIds={equipmentReplaceTargetIds}
+      />
+    </div>
   );
 }

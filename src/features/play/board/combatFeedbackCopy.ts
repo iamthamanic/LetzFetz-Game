@@ -1,9 +1,14 @@
 /**
- * German combat feedback toast copy (Vollblock / Auto-Reaktion / Schild).
+ * German combat feedback toast copy (Vollblock / Auto-Reaktion / Schild / Echo).
  * Location: src/features/play/board/combatFeedbackCopy.ts
  */
 
-export type CombatFeedbackKind = 'vollblock' | 'auto-reaction' | 'shield-absorb';
+export type CombatFeedbackKind =
+  | 'vollblock'
+  | 'auto-reaction'
+  | 'shield-absorb'
+  | 'echo-resolve'
+  | 'delay-resolve';
 
 export interface CombatFeedbackToastItem {
   kind: CombatFeedbackKind;
@@ -57,6 +62,33 @@ export function parseCombatFeedbackToasts(
       title: 'Schild',
       body: `${amount} Schaden vom Schild absorbiert.`,
       testId: 'combat-feedback-shield-absorb',
+    });
+  }
+
+  if (/\bEcho:/.test(lastEvent) || lastEvent.includes('Echo in Warteschlange')) {
+    const queued = lastEvent.includes('Warteschlange');
+    toasts.push({
+      kind: 'echo-resolve',
+      title: queued ? 'Echo geplant' : 'Echo aufgelöst',
+      body: queued
+        ? 'Primäreffekt jetzt; Wiederholung in der nächsten Startphase. Katalysator bleibt.'
+        : lastEvent.replace(/^.*?(Echo:)/, '$1').trim(),
+      testId: 'combat-feedback-echo',
+    });
+  }
+
+  if (
+    /\bVerzögerung:/.test(lastEvent) ||
+    lastEvent.includes('Verzögerung in Warteschlange')
+  ) {
+    const queued = lastEvent.includes('Warteschlange');
+    toasts.push({
+      kind: 'delay-resolve',
+      title: queued ? 'Verzögerung geplant' : 'Verzögerung aufgelöst',
+      body: queued
+        ? 'Primäreffekt in der nächsten Startphase. Katalysator bleibt bis Auflösung.'
+        : lastEvent.replace(/^.*?(Verzögerung:)/, '$1').trim(),
+      testId: 'combat-feedback-delay',
     });
   }
 

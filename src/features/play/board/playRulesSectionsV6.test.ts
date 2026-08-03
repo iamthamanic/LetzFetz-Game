@@ -11,6 +11,7 @@ describe('V6_PLAY_RULE_SECTIONS', () => {
     const blob = V6_PLAY_RULE_SECTIONS.map((s) => `${s.title}\n${s.body}`).join('\n');
     expect(blob).toMatch(/Rezept/);
     expect(blob).toMatch(/Katalysator/);
+    expect(blob).toMatch(/Echo/);
     expect(blob).toMatch(/Affinität/);
     expect(blob).toMatch(/keine charaktergebundenen Großformeln/i);
   });

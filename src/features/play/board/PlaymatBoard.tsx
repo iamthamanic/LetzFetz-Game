@@ -35,6 +35,10 @@ import { FetzChargeConfirmModal } from './FetzChargeConfirmModal';
 import { BoardEngineLiveZone } from '../engine3d/BoardEngineLiveZone';
 import { shouldShowBoardEngineLiveZone, shouldShowFormulaGestellCompose } from './boardEngineLive';
 import { prefersReducedMotion } from '../presentation/prefersReducedMotion';
+import {
+  buildV6EchoDelaySurface,
+  pendingCatalystTiming,
+} from './v6EchoDelaySurface';
 
 /** Read optional V5 equipment slots until engine PlayerState carries them natively. */
 function readPlayerEquipment(player: PlayerState): CardInstance[] {
@@ -107,8 +111,8 @@ export function PlaymatBoard({
 }: PlaymatBoardProps) {
   const humanId = view.human;
   const v5Formula = isV5FormulaEnabled(rulesetFromState(state));
-  const formulaBoard =
-    v5Formula || isV6FormulaEnabled(rulesetFromState(state));
+  const v6Formula = isV6FormulaEnabled(rulesetFromState(state));
+  const formulaBoard = v5Formula || v6Formula;
   const duelTableauRef = useRef<HTMLDivElement>(null);
   const [chargeConfirm, setChargeConfirm] = useState<{
     boundInstanceId: string;
@@ -137,6 +141,26 @@ export function PlaymatBoard({
     };
   }, [footerDockSignal]);
   const botId = view.bot;
+  const humanEchoDelayChips = v6Formula
+    ? buildV6EchoDelaySurface(state, humanId)
+    : [];
+  const botEchoDelayChips = v6Formula
+    ? buildV6EchoDelaySurface(state, botId)
+    : [];
+  const humanPendingCatalyst = v6Formula
+    ? pendingCatalystTiming(
+        state,
+        humanId,
+        state.players[humanId].formula.katalysator?.instanceId,
+      )
+    : null;
+  const botPendingCatalyst = v6Formula
+    ? pendingCatalystTiming(
+        state,
+        botId,
+        state.players[botId].formula.katalysator?.instanceId,
+      )
+    : null;
   const damageFreezeHp =
     activePresentationStep && isDamageHitStep(activePresentationStep)
       ? {
@@ -518,6 +542,8 @@ export function PlaymatBoard({
                   pending?.type === 'attack' ? pending.targetBoundInstanceId : null
                 }
                 onComponentClick={handleFormulaChallengeClick}
+                echoDelayChips={botEchoDelayChips}
+                pendingCatalystTiming={botPendingCatalyst}
               />
             ) : (
               <BoundCardRow
@@ -577,6 +603,8 @@ export function PlaymatBoard({
                       a.type === 'FORMULA_SCHNELLMIX',
                   )
                 }
+                echoDelayChips={humanEchoDelayChips}
+                pendingCatalystTiming={humanPendingCatalyst}
               />
             ) : (
               <BoundCardRow
