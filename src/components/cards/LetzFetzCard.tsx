@@ -272,14 +272,17 @@ export function LetzFetzCard({
           data-testid="formula-combo-component-images"
         >
           {comboImages.map((src, index) => (
-            <div key={`${src}-${index}`} className="min-w-0 flex-1 overflow-hidden rounded-[1px]">
+            <div
+              key={`${src}-${index}`}
+              className="flex min-h-0 min-w-0 flex-1 items-center justify-center overflow-hidden rounded-[1px] bg-[#090807]"
+            >
               <ImageWithFallback
                 src={src}
                 alt=""
                 aria-hidden
-                className={`h-full w-full object-center ${
-                  fit === 'contain' ? 'object-contain' : 'object-cover'
-                } ${size === 'sm' ? 'opacity-90' : ''}`}
+                className={`max-h-full max-w-full object-contain object-center ${
+                  size === 'sm' ? 'opacity-90' : ''
+                }`}
                 loading="lazy"
               />
             </div>

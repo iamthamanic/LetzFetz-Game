@@ -101,11 +101,21 @@ export function illustrationKeyForCardId(cardId: string): string | null {
   return null;
 }
 
+/**
+ * Pack id slug → committed PNG slug when filenames diverge.
+ * Keep tiny; prefer shipping `/cards/formula/{slug}.png` under the pack id slug.
+ */
+const FORMULA_ART_SLUG_ALIASES: Readonly<Record<string, string>> = {
+  // Playtest Beschwörung (#346) — no dedicated PNG yet; reuse ritual catalyst art.
+  beschwoerung: 'opfergabe',
+};
+
 /** Public path for a V5/V6 Formelkomponente PNG under `/cards/formula/`. */
 export function resolveFormulaCardArtPath(cardId: string): string {
   const match = cardId.match(/^v[56]-(?:technik|essenz|katalysator)-([a-z0-9-]+)$/);
   if (!match) return '';
-  return publicAssetUrl(`/cards/formula/${match[1]}.png`);
+  const slug = FORMULA_ART_SLUG_ALIASES[match[1]] ?? match[1];
+  return publicAssetUrl(`/cards/formula/${slug}.png`);
 }
 
 /**
