@@ -6,7 +6,12 @@ import type {
   PlayerId,
   RulesetConfig,
 } from '../types';
-import { DEFAULT_RULESET, assertExclusiveFormulaRuleset, createEmptyMeta } from '../types';
+import {
+  DEFAULT_RULESET,
+  assertExclusiveFormulaRuleset,
+  createEmptyMeta,
+  isV6FormulaEnabled,
+} from '../types';
 import {
   buildMainDeckInstances,
   shuffle,
@@ -136,6 +141,8 @@ export function createGame(config: CreateGameConfig): GameState {
       : Math.floor((rollW6(rng) - 1) / 2)
     : null;
 
+  const ultimateAvailable = !isV6FormulaEnabled(ruleset);
+
   const emptyPlayer = (characterId: string) => ({
     characterId,
     hp: ruleset.startingHp,
@@ -147,7 +154,7 @@ export function createGame(config: CreateGameConfig): GameState {
       katalysator: null,
     } as GameState['players']['p1']['formula'],
     formulaPrep: null,
-    ultimateAvailable: true,
+    ultimateAvailable,
     doubleNextAttack: false,
     notes: '',
     statuses: [] as GameState['players']['p1']['statuses'],

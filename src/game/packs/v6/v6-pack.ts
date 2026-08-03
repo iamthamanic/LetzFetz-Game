@@ -14,6 +14,7 @@ import {
   V6_SLICE1_ESSENCES,
   V6_SLICE1_TECHNIQUES,
 } from '../../../content/v6/cards/slice1Cards';
+import { V6_CHARACTERS } from './characters';
 
 /** V6 pack ruleset identity — INTERNAL only until PLAYABLE cutover. */
 export const V6_PACK_RULESET: RulesetConfig = {
@@ -22,14 +23,14 @@ export const V6_PACK_RULESET: RulesetConfig = {
 
 /**
  * Slice-1 INTERNAL pack: Slice-1 formula cards + Späti/Vulkan;
- * reuses base characters/elements/glitches for match scaffolding (no V5 passives wired).
+ * V6 characters (affinity scaffold, no V5 passives/ultis); base elements/glitches for scaffolding.
  */
 export function buildV6CorePack(): ContentPack {
   return {
     id: 'v6-core',
     name: 'V6 Core Slice-1 (INTERNAL)',
     version: '0.1.0-slice1',
-    characters: BASE_PACK.characters,
+    characters: V6_CHARACTERS,
     ultimates: [],
     arenas: V6_SLICE1_ARENAS,
     elementCards: BASE_PACK.elementCards,
