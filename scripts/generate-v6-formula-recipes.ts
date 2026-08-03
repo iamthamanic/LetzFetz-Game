@@ -53,6 +53,10 @@ interface GeneratedRecipe {
   formulaDefensePenalty: number | null;
   /** Catalog construct summon (#381); null when not a summon recipe. */
   summonConstructDefId: string | null;
+  /** Echo / Delay timing — null means immediate. */
+  timingMode: 'immediate' | 'echo' | 'delay' | null;
+  echoAmount: number | null;
+  delayBonus: number | null;
 }
 
 function clampPrimary(p: V6PrimaryEffectAuthoring): V6PrimaryEffectAuthoring {
@@ -170,6 +174,18 @@ function applyOverformulaBonus(
 function main(): void {
   assertV6FormulaAuthoring(V6_FORMULA_AUTHORING_SLICE1);
   const auth = V6_FORMULA_AUTHORING_SLICE1;
+  const supportedXforms = auth.catalystTransforms.filter((t) => t.availability === 'supported');
+  if (supportedXforms.length === 0) {
+    throw new Error('V6_AUTHORING_INVALID: no supported catalyst transforms');
+  }
+  for (const x of auth.catalystTransforms) {
+    if (x.availability === 'unsupported') continue;
+    if (x.catalystId.includes('umkehrung') || x.catalystId.includes('ausbreitung')) {
+      throw new Error(
+        `V6_AUTHORING_INVALID: ${x.catalystId} must stay unsupported until explicit TEK authoring (#383)`,
+      );
+    }
+  }
   const recipes: GeneratedRecipe[] = [];
 
   for (const te of auth.teBases) {
@@ -201,14 +217,18 @@ function main(): void {
       overformulaIntensityBonus: null,
       formulaDefensePenalty: null,
       summonConstructDefId: summonId,
+      timingMode: null,
+      echoAmount: null,
+      delayBonus: null,
     });
   }
 
   for (const tk of auth.tkBases) {
-    const xform = auth.catalystTransforms.find((t) => t.catalystId === tk.catalystId);
+    const xform = supportedXforms.find((t) => t.catalystId === tk.catalystId);
     if (!xform) {
-      throw new Error(`V6_AUTHORING_INVALID: no transform for TK catalyst ${tk.catalystId}`);
+      throw new Error(`V6_AUTHORING_INVALID: no supported transform for TK catalyst ${tk.catalystId}`);
     }
+    const timingMode = xform.timingMode ?? 'immediate';
     const primary = clampPrimary({
       ...tk.primary,
       value: tk.primary.value + xform.primaryDelta,
@@ -235,19 +255,23 @@ function main(): void {
       intensity: tkIntensity,
       transformId: xform.transformId,
       grantsFetz: false,
-      catalystConsumed: true,
+      catalystConsumed: timingMode === 'immediate',
       overformulaPrimaryBonus: null,
       overformulaIntensityBonus: null,
       formulaDefensePenalty: null,
       summonConstructDefId: tkSummon,
+      timingMode,
+      echoAmount: timingMode === 'echo' ? (xform.echoAmount ?? 1) : null,
+      delayBonus: timingMode === 'delay' ? (xform.delayBonus ?? 2) : null,
     });
   }
 
   for (const ek of auth.ekBases) {
-    const xform = auth.catalystTransforms.find((t) => t.catalystId === ek.catalystId);
+    const xform = supportedXforms.find((t) => t.catalystId === ek.catalystId);
     if (!xform) {
-      throw new Error(`V6_AUTHORING_INVALID: no transform for EK catalyst ${ek.catalystId}`);
+      throw new Error(`V6_AUTHORING_INVALID: no supported transform for EK catalyst ${ek.catalystId}`);
     }
+    const timingMode = xform.timingMode ?? 'immediate';
     const primary = clampPrimary({
       ...ek.primary,
       value: ek.primary.value + xform.primaryDelta,
@@ -271,21 +295,25 @@ function main(): void {
       intensity: null,
       transformId: xform.transformId,
       grantsFetz: false,
-      catalystConsumed: true,
+      catalystConsumed: timingMode === 'immediate',
       overformulaPrimaryBonus: null,
       overformulaIntensityBonus: null,
       formulaDefensePenalty: null,
       summonConstructDefId: null,
+      timingMode,
+      echoAmount: timingMode === 'echo' ? (xform.echoAmount ?? 1) : null,
+      delayBonus: timingMode === 'delay' ? (xform.delayBonus ?? 2) : null,
     });
   }
 
   for (const te of auth.teBases) {
     const teSummonId =
       te.primary.kind === 'summon_construct' ? (te.summonConstructDefId ?? null) : null;
-    for (const xform of auth.catalystTransforms) {
+    for (const xform of supportedXforms) {
       const catShort = v6Slice1CatalystShortName(xform.catalystId);
       const applied = applyCatalystToTe(te, xform);
       const isSummon = applied.primary.kind === 'summon_construct';
+      const timingMode = xform.timingMode ?? 'immediate';
       const tekId = `v6-tek-${te.recipeId.replace(/^v6-te-/, '')}-${xform.catalystId.replace(
         'v6-katalysator-',
         '',
@@ -311,13 +339,15 @@ function main(): void {
         rider: te.rider ?? null,
         intensity: applied.intensity,
         transformId: xform.transformId,
-        /** Constructs never grant Fetz (§41–42). */
         grantsFetz: isSummon ? false : true,
-        catalystConsumed: true,
+        catalystConsumed: timingMode === 'immediate',
         overformulaPrimaryBonus: null,
         overformulaIntensityBonus: null,
         formulaDefensePenalty: null,
         summonConstructDefId: teSummonId,
+        timingMode,
+        echoAmount: timingMode === 'echo' ? (xform.echoAmount ?? 1) : null,
+        delayBonus: timingMode === 'delay' ? (xform.delayBonus ?? 2) : null,
       };
       recipes.push(tek);
 
@@ -354,11 +384,14 @@ function main(): void {
         intensity: over.intensity,
         transformId: xform.transformId,
         grantsFetz: false,
-        catalystConsumed: true,
+        catalystConsumed: timingMode === 'immediate',
         overformulaPrimaryBonus: over.overformulaPrimaryBonus || null,
         overformulaIntensityBonus: over.overformulaIntensityBonus || null,
         formulaDefensePenalty: -1,
         summonConstructDefId: teSummonId,
+        timingMode,
+        echoAmount: timingMode === 'echo' ? (xform.echoAmount ?? 1) : null,
+        delayBonus: timingMode === 'delay' ? (xform.delayBonus ?? 2) : null,
       });
     }
   }
@@ -377,7 +410,7 @@ function main(): void {
     }
   }
 
-  const expectedTek = auth.teBases.length * auth.catalystTransforms.length;
+  const expectedTek = auth.teBases.length * supportedXforms.length;
   const expectedOver = expectedTek;
   const expected =
     auth.teBases.length +
@@ -404,9 +437,10 @@ function main(): void {
  * Produced by scripts/generate-v6-formula-recipes.ts
  * Location: src/generated/v6/formulaRecipes.generated.ts
  *
- * Catalog: V6 Slice-1 (10 Techniken × 6 Essenzen × 4 Katalysatoren).
+ * Catalog: V6 Slice-1 (10 Techniken × 6 Essenzen × 6 matrix Katalysatoren).
  * These ${recipes.length} recipes are the locked current set — later expansion
  * adds new ids; do not renumber or replace Slice-1 recipeIds.
+ * Four catalysts remain availability:unsupported until #383 (no invented TEK).
  */
 
 export type V6GeneratedRecipeKind = 'te' | 'tk' | 'ek' | 'tek' | 'overformula';
@@ -444,12 +478,16 @@ export interface V6GeneratedFormulaRecipe {
   formulaDefensePenalty: number | null;
   /** Catalog construct summon (#381); null when not a summon recipe. */
   summonConstructDefId: string | null;
+  /** Echo / Delay timing — null means immediate (or TE without catalyst). */
+  timingMode: 'immediate' | 'echo' | 'delay' | null;
+  echoAmount: number | null;
+  delayBonus: number | null;
 }
 
-/** Meta for the locked Slice-1 recipe catalog (not the future 60×10K matrix). */
+/** Meta for the locked Slice-1 recipe catalog (not the future 10T×10K matrix). */
 export const V6_SLICE1_RECIPE_CATALOG = {
   id: 'v6-slice1',
-  label: 'V6 Slice-1 Formelkatalog (10T×6E×4K)',
+  label: 'V6 Slice-1 Formelkatalog (10T×6E×6K)',
   recipeCount: ${recipes.length},
   breakdown: ${JSON.stringify(byKind)},
 } as const;

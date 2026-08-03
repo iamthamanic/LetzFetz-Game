@@ -1,8 +1,8 @@
 {
   "runMode": "loop",
   "paused": false,
-  "activeIssue": 381,
-  "phase": "commit",
+  "activeIssue": 382,
+  "phase": "verify",
   "completedIssues": [
     130,
     131,

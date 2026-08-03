@@ -4,6 +4,7 @@
  */
 import type { V6FormulaAuthoringCatalog } from './schemas/formulaRecipeAuthoring';
 import {
+  V6_MATRIX_CATALYST_IDS,
   V6_SLICE1_CATALYST_IDS,
   V6_SLICE1_ESSENCE_IDS,
   V6_SLICE1_TECHNIQUE_IDS,
@@ -155,6 +156,11 @@ export function validateV6FormulaAuthoring(catalog: unknown): string[] {
       if (!isNonEmptyString(r.catalystId)) {
         errors.push(`catalystTransforms[${i}].catalystId is required`);
       }
+      if (r.availability !== 'supported' && r.availability !== 'unsupported') {
+        errors.push(
+          `catalystTransforms[${i}].availability must be supported|unsupported`,
+        );
+      }
       if (typeof r.primaryDelta !== 'number' || !Number.isFinite(r.primaryDelta)) {
         errors.push(`catalystTransforms[${i}].primaryDelta must be a number`);
       }
@@ -162,6 +168,14 @@ export function validateV6FormulaAuthoring(catalog: unknown): string[] {
         errors.push(`catalystTransforms[${i}].summary is required`);
       }
       assertPlayableCopy(`catalystTransforms[${i}].summary`, r.summary, errors);
+      if (r.availability === 'supported') {
+        const timing = r.timingMode ?? 'immediate';
+        if (timing !== 'immediate' && timing !== 'echo' && timing !== 'delay') {
+          errors.push(
+            `catalystTransforms[${i}].timingMode must be immediate|echo|delay`,
+          );
+        }
+      }
     });
   }
 
@@ -181,7 +195,7 @@ export function validateV6Slice1Completeness(catalog: V6FormulaAuthoringCatalog)
 
   const tkKeys = new Set(catalog.tkBases.map((r) => `${r.techniqueId}::${r.catalystId}`));
   for (const t of V6_SLICE1_TECHNIQUE_IDS) {
-    for (const c of V6_SLICE1_CATALYST_IDS) {
+    for (const c of V6_MATRIX_CATALYST_IDS) {
       const key = `${t}::${c}`;
       if (!tkKeys.has(key)) errors.push(`missing TK base for ${key}`);
     }
@@ -189,7 +203,7 @@ export function validateV6Slice1Completeness(catalog: V6FormulaAuthoringCatalog)
 
   const ekKeys = new Set(catalog.ekBases.map((r) => `${r.essenceId}::${r.catalystId}`));
   for (const e of V6_SLICE1_ESSENCE_IDS) {
-    for (const c of V6_SLICE1_CATALYST_IDS) {
+    for (const c of V6_MATRIX_CATALYST_IDS) {
       const key = `${e}::${c}`;
       if (!ekKeys.has(key)) errors.push(`missing EK base for ${key}`);
     }
@@ -200,9 +214,23 @@ export function validateV6Slice1Completeness(catalog: V6FormulaAuthoringCatalog)
     if (!catIds.has(c)) errors.push(`missing catalyst transform for ${c}`);
   }
 
+  const matrixSet = new Set<string>(V6_MATRIX_CATALYST_IDS);
+  for (const x of catalog.catalystTransforms) {
+    if (matrixSet.has(x.catalystId) && x.availability !== 'supported') {
+      errors.push(
+        `matrix catalyst ${x.catalystId} must have availability supported (got ${x.availability})`,
+      );
+    }
+    if (!matrixSet.has(x.catalystId) && x.availability !== 'unsupported') {
+      errors.push(
+        `non-matrix catalyst ${x.catalystId} must be availability unsupported until #383 (got ${x.availability})`,
+      );
+    }
+  }
+
   const expectedTe = V6_SLICE1_TECHNIQUE_IDS.length * V6_SLICE1_ESSENCE_IDS.length;
-  const expectedTk = V6_SLICE1_TECHNIQUE_IDS.length * V6_SLICE1_CATALYST_IDS.length;
-  const expectedEk = V6_SLICE1_ESSENCE_IDS.length * V6_SLICE1_CATALYST_IDS.length;
+  const expectedTk = V6_SLICE1_TECHNIQUE_IDS.length * V6_MATRIX_CATALYST_IDS.length;
+  const expectedEk = V6_SLICE1_ESSENCE_IDS.length * V6_MATRIX_CATALYST_IDS.length;
   if (catalog.teBases.length !== expectedTe) {
     errors.push(`teBases length ${catalog.teBases.length} !== ${expectedTe}`);
   }

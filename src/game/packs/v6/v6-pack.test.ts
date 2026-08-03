@@ -31,8 +31,6 @@ describe('V6_CORE_PACK Slice-1 (INTERNAL)', () => {
     expect(V6_CORE_PACK.essences?.map((e) => e.id)).toEqual([...V6_SLICE1_ESSENCE_IDS]);
     expect(V6_CORE_PACK.catalysts?.map((c) => c.id)).toEqual([
       ...V6_SLICE1_CATALYST_IDS,
-      'v6-katalysator-echo',
-      'v6-katalysator-verzoegerung',
       'v6-katalysator-beschwoerung',
     ]);
     expect(V6_CORE_PACK.arenas.map((a) => a.id).sort()).toEqual([...V6_SLICE1_ARENA_IDS].sort());
@@ -78,8 +76,8 @@ describe('V6_CORE_PACK Slice-1 (INTERNAL)', () => {
 
   it('ships Slice-1 authoring + generated TE/TK/EK/TEK/overformula recipes', () => {
     expect(V6_FORMULA_AUTHORING_SLICE1.teBases).toHaveLength(60);
-    expect(V6_GENERATED_RECIPE_COUNT).toBe(604);
-    expect(V6_GENERATED_FORMULA_RECIPES).toHaveLength(604);
+    expect(V6_GENERATED_RECIPE_COUNT).toBe(876);
+    expect(V6_GENERATED_FORMULA_RECIPES).toHaveLength(876);
     const kinds = new Set(V6_GENERATED_FORMULA_RECIPES.map((r) => r.kind));
     expect(kinds).toEqual(new Set(['te', 'tk', 'ek', 'tek', 'overformula']));
     expect(
@@ -93,16 +91,24 @@ describe('V6_CORE_PACK Slice-1 (INTERNAL)', () => {
       ).every((r) => r.grantsFetz === false),
     ).toBe(true);
     expect(
-      V6_GENERATED_FORMULA_RECIPES.filter((r) => r.catalystId).every((r) => r.catalystConsumed),
+      V6_GENERATED_FORMULA_RECIPES.filter(
+        (r) => r.catalystId && (r.timingMode === 'immediate' || r.timingMode == null),
+      ).every((r) => r.catalystConsumed),
     ).toBe(true);
-    expect(V6_SLICE1_RECIPE_CATALOG.recipeCount).toBe(604);
+    expect(
+      V6_GENERATED_FORMULA_RECIPES.filter(
+        (r) => r.timingMode === 'echo' || r.timingMode === 'delay',
+      ).every((r) => r.catalystConsumed === false),
+    ).toBe(true);
+    expect(V6_SLICE1_RECIPE_CATALOG.recipeCount).toBe(876);
     expect(V6_SLICE1_RECIPE_CATALOG.breakdown).toEqual({
       te: 60,
-      tk: 40,
-      ek: 24,
-      tek: 240,
-      overformula: 240,
+      tk: 60,
+      ek: 36,
+      tek: 360,
+      overformula: 360,
     });
+    expect(V6_SLICE1_RECIPE_CATALOG.label).toMatch(/10T×6E×6K/);
     for (const recipe of V6_GENERATED_FORMULA_RECIPES) {
       expect(recipe.catalogSlice).toBe('slice1');
       expect(recipe.name.trim().length).toBeGreaterThan(2);

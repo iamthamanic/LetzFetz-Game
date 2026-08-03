@@ -171,7 +171,7 @@ describe('V6 Echo / Delay (#344)', () => {
 
   it('does not put Echo/Delay into locked Slice-1 recipe catalog', async () => {
     const mod = await import('../../../generated/v6/formulaRecipes.generated');
-    expect(mod.V6_GENERATED_FORMULA_RECIPES).toHaveLength(604);
-    expect(mod.V6_SLICE1_RECIPE_CATALOG.recipeCount).toBe(604);
+    expect(mod.V6_GENERATED_FORMULA_RECIPES).toHaveLength(876);
+    expect(mod.V6_SLICE1_RECIPE_CATALOG.recipeCount).toBe(876);
   });
 });

@@ -214,7 +214,7 @@ describe('V6 Constructs (#346)', () => {
 
   it('does not put Constructs into locked Slice-1 recipe catalog', async () => {
     const mod = await import('../../../generated/v6/formulaRecipes.generated');
-    expect(mod.V6_GENERATED_FORMULA_RECIPES).toHaveLength(604);
-    expect(mod.V6_SLICE1_RECIPE_CATALOG.recipeCount).toBe(604);
+    expect(mod.V6_GENERATED_FORMULA_RECIPES).toHaveLength(876);
+    expect(mod.V6_SLICE1_RECIPE_CATALOG.recipeCount).toBe(876);
   });
 });

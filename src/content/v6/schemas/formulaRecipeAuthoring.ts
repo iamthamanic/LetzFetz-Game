@@ -70,6 +70,12 @@ export interface V6EkBaseAuthoring {
   rider?: V6RiderAuthoring;
 }
 
+/** Fail-closed: unsupported catalysts must not invent TEK rows (§50.3). */
+export type V6CatalystTransformAvailability = 'supported' | 'unsupported';
+
+/** Timing overlay for Echo / Verzögerung (fixed amounts — no invent). */
+export type V6CatalystTimingMode = 'immediate' | 'echo' | 'delay';
+
 /**
  * Katalysator transform overlay applied onto TE bases at generate-time
  * to produce TEK (+ Überformel) recipes. Must be explicit per catalyst.
@@ -77,13 +83,24 @@ export interface V6EkBaseAuthoring {
 export interface V6CatalystTransformAuthoring {
   transformId: string;
   catalystId: string;
-  /** Delta applied to TE primary.value (may be negative). */
+  /**
+   * `supported` → matrix TEK expansion.
+   * `unsupported` → card + authoring row only; generator skips TEK (§50.3).
+   */
+  availability: V6CatalystTransformAvailability;
+  /** Delta applied to TE primary.value (may be negative). Ignored when unsupported. */
   primaryDelta: number;
   selfDamage?: number;
   stabilityBuffUsed?: number;
   drawDiscardAfter?: boolean;
   /** Opfergabe: optional hand discard for this bonus (engine resolves choice). */
   offerDiscardBonus?: number;
+  /** Echo / Verzögerung timing (defaults immediate). */
+  timingMode?: V6CatalystTimingMode;
+  /** Fixed Echo replay amount (default 1 when timingMode === echo). */
+  echoAmount?: number;
+  /** Fixed Delay primary bonus (default 2 when timingMode === delay). */
+  delayBonus?: number;
   summary: string;
 }
 
