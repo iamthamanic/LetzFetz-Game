@@ -68,6 +68,9 @@ describe('card art manifest', () => {
     );
     expect(resolveCardArtPath('v6-katalysator-ueberladung')).toBe('/cards/formula/ueberladung.png');
     expect(resolveCardArtPath('v6-katalysator-beschwoerung')).toBe('/cards/formula/opfergabe.png');
+    expect(resolveCardArtPath('v6-technik-beschwoerungsritual')).toBe(
+      '/cards/formula/opfergabe.png',
+    );
   });
 
   it('resolves V5 formula combination art from catalog slug', () => {

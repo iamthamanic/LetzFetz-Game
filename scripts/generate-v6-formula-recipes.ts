@@ -15,6 +15,7 @@ import {
   V6_FORMULA_AUTHORING_SLICE1,
   v6Slice1CatalystShortName,
 } from '../src/content/v6/formulaAuthoring.slice1';
+import { V6_PLAYTEST_CONSTRUCT_DEF_ID } from '../src/content/v6/cards/playtestConstructCards';
 import { assertV6FormulaAuthoring } from '../src/content/v6/validateFormulaAuthoring';
 import type {
   V6CatalystTransformAuthoring,
@@ -50,6 +51,8 @@ interface GeneratedRecipe {
   overformulaPrimaryBonus: number | null;
   overformulaIntensityBonus: number | null;
   formulaDefensePenalty: number | null;
+  /** Catalog construct summon (#381); null when not a summon recipe. */
+  summonConstructDefId: string | null;
 }
 
 function clampPrimary(p: V6PrimaryEffectAuthoring): V6PrimaryEffectAuthoring {
@@ -75,6 +78,8 @@ function formatPrimaryDe(primary: V6PrimaryEffectAuthoring, intensity: number | 
       const n = intensity ?? primary.value;
       return `Fessel Intensität ${n} auf einen besetzten gegnerischen Formelplatz (manuelle Wahl).`;
     }
+    case 'summon_construct':
+      return `Beschwöre ein Konstrukt mit Haltbarkeit ${primary.value}. Ersetzt ein bestehendes Konstrukt. Keine Fetzladung.`;
     default:
       return `${primary.kind} ${primary.value} → ${target}.`;
   }
@@ -134,7 +139,7 @@ function applyOverformulaBonus(
   overformulaPrimaryBonus: number;
   overformulaIntensityBonus: number;
 } {
-  if (primary.kind === 'damage' || primary.kind === 'heal' || primary.kind === 'shield') {
+  if (primary.kind === 'damage' || primary.kind === 'heal' || primary.kind === 'shield' || primary.kind === 'summon_construct') {
     const bonus = V6_OVERFORMULA_DEFAULT_PRIMARY_BONUS;
     return {
       primary: clampPrimary({ ...primary, value: primary.value + bonus }),
@@ -169,6 +174,10 @@ function main(): void {
 
   for (const te of auth.teBases) {
     const intensity = te.intensity ?? null;
+    const summonId = te.primary.kind === 'summon_construct' ? (te.summonConstructDefId ?? null) : null;
+    if (te.primary.kind === 'summon_construct' && !summonId) {
+      throw new Error(`V6_AUTHORING_INVALID: summon TE ${te.recipeId} missing summonConstructDefId`);
+    }
     recipes.push({
       recipeId: te.recipeId,
       kind: 'te',
@@ -191,6 +200,7 @@ function main(): void {
       overformulaPrimaryBonus: null,
       overformulaIntensityBonus: null,
       formulaDefensePenalty: null,
+      summonConstructDefId: summonId,
     });
   }
 
@@ -203,6 +213,9 @@ function main(): void {
       ...tk.primary,
       value: tk.primary.value + xform.primaryDelta,
     });
+    const tkIntensity = primary.kind === 'fessel' ? primary.value : null;
+    const tkSummon =
+      primary.kind === 'summon_construct' ? V6_PLAYTEST_CONSTRUCT_DEF_ID : null;
     recipes.push({
       recipeId: tk.recipeId,
       kind: 'tk',
@@ -213,19 +226,20 @@ function main(): void {
       name: tk.name,
       effectSummary: buildEffectSummary({
         primary,
-        intensity: null,
+        intensity: tkIntensity,
         rider: null,
         transformSummary: xform.summary,
       }),
       primary,
       rider: null,
-      intensity: null,
+      intensity: tkIntensity,
       transformId: xform.transformId,
       grantsFetz: false,
       catalystConsumed: true,
       overformulaPrimaryBonus: null,
       overformulaIntensityBonus: null,
       formulaDefensePenalty: null,
+      summonConstructDefId: tkSummon,
     });
   }
 
@@ -261,13 +275,17 @@ function main(): void {
       overformulaPrimaryBonus: null,
       overformulaIntensityBonus: null,
       formulaDefensePenalty: null,
+      summonConstructDefId: null,
     });
   }
 
   for (const te of auth.teBases) {
+    const teSummonId =
+      te.primary.kind === 'summon_construct' ? (te.summonConstructDefId ?? null) : null;
     for (const xform of auth.catalystTransforms) {
       const catShort = v6Slice1CatalystShortName(xform.catalystId);
       const applied = applyCatalystToTe(te, xform);
+      const isSummon = applied.primary.kind === 'summon_construct';
       const tekId = `v6-tek-${te.recipeId.replace(/^v6-te-/, '')}-${xform.catalystId.replace(
         'v6-katalysator-',
         '',
@@ -285,17 +303,21 @@ function main(): void {
           intensity: applied.intensity,
           rider: te.rider ?? null,
           transformSummary: xform.summary,
-          extras: ['TEK: +1 Fetzladung (max 1×/Zug).'],
+          extras: isSummon
+            ? ['TEK-Beschwörung: keine Fetzladung.']
+            : ['TEK: +1 Fetzladung (max 1×/Zug).'],
         }),
         primary: applied.primary,
         rider: te.rider ?? null,
         intensity: applied.intensity,
         transformId: xform.transformId,
-        grantsFetz: true,
+        /** Constructs never grant Fetz (§41–42). */
+        grantsFetz: isSummon ? false : true,
         catalystConsumed: true,
         overformulaPrimaryBonus: null,
         overformulaIntensityBonus: null,
         formulaDefensePenalty: null,
+        summonConstructDefId: teSummonId,
       };
       recipes.push(tek);
 
@@ -336,6 +358,7 @@ function main(): void {
         overformulaPrimaryBonus: over.overformulaPrimaryBonus || null,
         overformulaIntensityBonus: over.overformulaIntensityBonus || null,
         formulaDefensePenalty: -1,
+        summonConstructDefId: teSummonId,
       });
     }
   }
@@ -381,7 +404,7 @@ function main(): void {
  * Produced by scripts/generate-v6-formula-recipes.ts
  * Location: src/generated/v6/formulaRecipes.generated.ts
  *
- * Catalog: V6 Slice-1 (3 Techniken × 6 Essenzen × 4 Katalysatoren).
+ * Catalog: V6 Slice-1 (10 Techniken × 6 Essenzen × 4 Katalysatoren).
  * These ${recipes.length} recipes are the locked current set — later expansion
  * adds new ids; do not renumber or replace Slice-1 recipeIds.
  */
@@ -419,12 +442,14 @@ export interface V6GeneratedFormulaRecipe {
   overformulaPrimaryBonus: number | null;
   overformulaIntensityBonus: number | null;
   formulaDefensePenalty: number | null;
+  /** Catalog construct summon (#381); null when not a summon recipe. */
+  summonConstructDefId: string | null;
 }
 
-/** Meta for the locked Slice-1 recipe catalog (not the future 60×K matrix). */
+/** Meta for the locked Slice-1 recipe catalog (not the future 60×10K matrix). */
 export const V6_SLICE1_RECIPE_CATALOG = {
   id: 'v6-slice1',
-  label: 'V6 Slice-1 Formelkatalog (3T×6E×4K)',
+  label: 'V6 Slice-1 Formelkatalog (10T×6E×4K)',
   recipeCount: ${recipes.length},
   breakdown: ${JSON.stringify(byKind)},
 } as const;

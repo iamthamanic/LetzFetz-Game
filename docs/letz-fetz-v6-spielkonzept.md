@@ -8,7 +8,7 @@
 
 **Full integration (GitHub, closed):** #341 Affinität ±1 Engine · #342 Fessel-UI · #343 recipe catalog (Slice-1) · #344 Echo/Delay · #345 Echo UI · #346 Konstrukte · #347 Konstrukt UI · #348 Überformel · #349 Passives (A/B) · #350 Arenas · #351 Bot · #352 SPIELANLEITUNG · #353 Default cutover · #354 V5 Legacy.
 
-**Playtest-Slice-1:** done (Default V6, **198** Rezepte mit 6 Essenzen, Kern-Mechaniken). **Noch offen bis Konzept-Vollständigkeit** (priorisierte Queue):
+**Playtest-Slice-1:** done (Default V6, **604** Rezepte mit 6 Essenzen, Kern-Mechaniken). **Noch offen bis Konzept-Vollständigkeit** (priorisierte Queue):
 
 | Prio | Issues |
 |------|--------|
@@ -154,7 +154,7 @@ Startphase → Ziehphase → Formelphase → Aktionsphase → Endphase
 
 **Verzögerung (Engine + Play-UI):** Primäreffekt geschieht **nicht** sofort; zu Beginn des nächsten eigenen Zuges mit festem **+2** auf den (bereits abwehrreduzierten) Primärwert. Keine zusätzliche Fetzladung. Katalysator bleibt bis Auflösung, dann Ablage — gleiche UI-Pattern wie Echo.
 
-**Konstrukte (Engine #346 + Play-UI #347):** Max 1 pro Spieler auf `player.construct` (instanceId + defId + Haltbarkeit). Einstieg Playtest-EK „Beschwörung“ (außerhalb 105-Katalog). Startphase Schritt 5: Haltbarkeit −1; bei 0 Ablage. Neu ersetzt alt sofort. Herausfordern: Kampfwert vs Haltbarkeit → stören/zerstören (Margin wie Formel); kein Lebensschaden. Keine Fetz; nicht Ausrüstung/Formelkomponente. Play: eigene Zone neben Formelgestell; Ziel-Button; gestört-Overlay; Toast bei Ersetzen.
+**Konstrukte (Engine #346 + Play-UI #347 + Katalog #381):** Max 1 pro Spieler auf `player.construct` (instanceId + defId + Haltbarkeit). Einstieg über Katalog-Technik **Beschwörungsritual** (TE `summon_construct`); Playtest-EK „Beschwörung“ bleibt optional. Startphase Schritt 5: Haltbarkeit −1; bei 0 Ablage. Neu ersetzt alt sofort. Herausfordern: Kampfwert vs Haltbarkeit → stören/zerstören (Margin wie Formel); kein Lebensschaden. Keine Fetz; nicht Ausrüstung/Formelkomponente. Play: eigene Zone neben Formelgestell; Ziel-Button; gestört-Overlay; Toast bei Ersetzen.
 
 ---
 
@@ -376,7 +376,8 @@ Vollständige Kartentabellen: Quelle ist das Authoring unter `src/content/v6/` (
 
 Essenz-Identitäten (Designregel): Feuer Druck · Wasser Heilung/Reinigung · Erde Stabilität · Luft Tempo/Würfel · Licht Schild/Reinigung · Schatten Fluch/Erschöpfung.
 
-**Engine (#380):** Slice-1 shippt alle **6 Essenzen** (Erde/Licht/Schatten ergänzt). Art unter `public/cards/formula/{erde,licht,schatten}.png`. Locked Katalog **3T×6E×4K = 198** Rezepte (bestehende Feuer/Wasser/Luft-IDs stabil). Volle 10T×10K-Matrix bleibt Katalog-Expansion.
+**Engine (#380):** Slice-1 shippt alle **6 Essenzen** (Erde/Licht/Schatten ergänzt). Art unter `public/cards/formula/{erde,licht,schatten}.png`.  
+**Engine (#381):** Slice-1 shippt alle **10 Techniken** (V5-Neun + Beschwörungsritual). Beschwörung als Katalog-Technik mit `summon_construct`-TE; Art-Reuse. Locked Katalog **10T×6E×4K = 604** Rezepte (bestehende Impuls/Adrenalin/Magiepanzer-IDs stabil). Volle 10T×10K-Matrix bleibt Katalog-Expansion (#383).
 
 ---
 
@@ -403,7 +404,7 @@ Wertrollen: 2 Starter · 3 Standard · 4 bedingter Payoff · 6 Rohwert mit Nacht
 
 Herausforderung: Wert vs Stabilität/Haltbarkeit (+ Mods). Differenz → stören / zerstören; kein Lebensschaden. Offensive TEK sperrt Herausforderung im Zug. Bei aktivem gegnerischem Konstrukt ist das Konstrukt ein eigenes Herausforderungsziel (nicht Formelkomponente).
 
-Konstrukte: max 1; Feld `player.construct`; Haltbarkeit; herausforderbar; keine Fetz; nicht Ausrüstung/Formelkomponente. Neu ersetzt alt. Einstieg über Beschwörungsritual (Playtest-EK-Hook bis Matrix). Startphase: Haltbarkeit −1.
+Konstrukte: max 1; Feld `player.construct`; Haltbarkeit; herausforderbar; keine Fetz; nicht Ausrüstung/Formelkomponente. Neu ersetzt alt. Einstieg über Katalog-Technik **Beschwörungsritual** (TE `summon_construct`); Playtest-EK-Hook bleibt optional. Startphase: Haltbarkeit −1.
 
 ---
 
@@ -566,3 +567,5 @@ Bitte abhaken / korrigieren:
 | 2026-08-03 | #374 Improvisieren Play-UI: Button + pending-Modus; `DISCARD_DRAW` lastEvent „Improvisieren…“ |
 | 2026-08-03 | #375 Formelphase: max 2 Änderungen (2. kostet Abwurf); Rückbau beendet ohne Aktivierung; V6 bleibt in `build` |
 | 2026-08-03 | #378 Standard-Glitches: 7 playable mit Timing Aktionsphase/Reaktion; Formelziele; kein Sofort-Negativ (Chaos #386) |
+| 2026-08-03 | #380 Essenzen Erde/Licht/Schatten; Katalog 3T×6E×4K = 198 |
+| 2026-08-03 | #381 Techniken auf 10 (inkl. Beschwörungsritual Katalog-TE); Katalog 10T×6E×4K = 604 |

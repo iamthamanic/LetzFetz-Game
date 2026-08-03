@@ -3,8 +3,8 @@
  * Produced by scripts/generate-v6-formula-recipes.ts
  * Location: src/generated/v6/formulaRecipes.generated.ts
  *
- * Catalog: V6 Slice-1 (3 Techniken × 6 Essenzen × 4 Katalysatoren).
- * These 198 recipes are the locked current set — later expansion
+ * Catalog: V6 Slice-1 (10 Techniken × 6 Essenzen × 4 Katalysatoren).
+ * These 604 recipes are the locked current set — later expansion
  * adds new ids; do not renumber or replace Slice-1 recipeIds.
  */
 
@@ -41,14 +41,16 @@ export interface V6GeneratedFormulaRecipe {
   overformulaPrimaryBonus: number | null;
   overformulaIntensityBonus: number | null;
   formulaDefensePenalty: number | null;
+  /** Catalog construct summon (#381); null when not a summon recipe. */
+  summonConstructDefId: string | null;
 }
 
-/** Meta for the locked Slice-1 recipe catalog (not the future 60×K matrix). */
+/** Meta for the locked Slice-1 recipe catalog (not the future 60×10K matrix). */
 export const V6_SLICE1_RECIPE_CATALOG = {
   id: 'v6-slice1',
-  label: 'V6 Slice-1 Formelkatalog (3T×6E×4K)',
-  recipeCount: 198,
-  breakdown: {"te":18,"tk":12,"ek":24,"tek":72,"overformula":72},
+  label: 'V6 Slice-1 Formelkatalog (10T×6E×4K)',
+  recipeCount: 604,
+  breakdown: {"te":60,"tk":40,"ek":24,"tek":240,"overformula":240},
 } as const;
 
 export const V6_GENERATED_FORMULA_RECIPES: readonly V6GeneratedFormulaRecipe[] = [
@@ -78,7 +80,8 @@ export const V6_GENERATED_FORMULA_RECIPES: readonly V6GeneratedFormulaRecipe[] =
     "catalystConsumed": false,
     "overformulaPrimaryBonus": null,
     "overformulaIntensityBonus": null,
-    "formulaDefensePenalty": null
+    "formulaDefensePenalty": null,
+    "summonConstructDefId": null
   },
   {
     "recipeId": "v6-te-impulsgeschoss-wasser",
@@ -106,7 +109,8 @@ export const V6_GENERATED_FORMULA_RECIPES: readonly V6GeneratedFormulaRecipe[] =
     "catalystConsumed": false,
     "overformulaPrimaryBonus": null,
     "overformulaIntensityBonus": null,
-    "formulaDefensePenalty": null
+    "formulaDefensePenalty": null,
+    "summonConstructDefId": null
   },
   {
     "recipeId": "v6-te-impulsgeschoss-erde",
@@ -134,7 +138,8 @@ export const V6_GENERATED_FORMULA_RECIPES: readonly V6GeneratedFormulaRecipe[] =
     "catalystConsumed": false,
     "overformulaPrimaryBonus": null,
     "overformulaIntensityBonus": null,
-    "formulaDefensePenalty": null
+    "formulaDefensePenalty": null,
+    "summonConstructDefId": null
   },
   {
     "recipeId": "v6-te-impulsgeschoss-luft",
@@ -162,7 +167,8 @@ export const V6_GENERATED_FORMULA_RECIPES: readonly V6GeneratedFormulaRecipe[] =
     "catalystConsumed": false,
     "overformulaPrimaryBonus": null,
     "overformulaIntensityBonus": null,
-    "formulaDefensePenalty": null
+    "formulaDefensePenalty": null,
+    "summonConstructDefId": null
   },
   {
     "recipeId": "v6-te-impulsgeschoss-licht",
@@ -190,7 +196,8 @@ export const V6_GENERATED_FORMULA_RECIPES: readonly V6GeneratedFormulaRecipe[] =
     "catalystConsumed": false,
     "overformulaPrimaryBonus": null,
     "overformulaIntensityBonus": null,
-    "formulaDefensePenalty": null
+    "formulaDefensePenalty": null,
+    "summonConstructDefId": null
   },
   {
     "recipeId": "v6-te-impulsgeschoss-schatten",
@@ -218,7 +225,8 @@ export const V6_GENERATED_FORMULA_RECIPES: readonly V6GeneratedFormulaRecipe[] =
     "catalystConsumed": false,
     "overformulaPrimaryBonus": null,
     "overformulaIntensityBonus": null,
-    "formulaDefensePenalty": null
+    "formulaDefensePenalty": null,
+    "summonConstructDefId": null
   },
   {
     "recipeId": "v6-te-adrenalinschrei-feuer",
@@ -245,7 +253,8 @@ export const V6_GENERATED_FORMULA_RECIPES: readonly V6GeneratedFormulaRecipe[] =
     "catalystConsumed": false,
     "overformulaPrimaryBonus": null,
     "overformulaIntensityBonus": null,
-    "formulaDefensePenalty": null
+    "formulaDefensePenalty": null,
+    "summonConstructDefId": null
   },
   {
     "recipeId": "v6-te-adrenalinschrei-wasser",
@@ -272,7 +281,8 @@ export const V6_GENERATED_FORMULA_RECIPES: readonly V6GeneratedFormulaRecipe[] =
     "catalystConsumed": false,
     "overformulaPrimaryBonus": null,
     "overformulaIntensityBonus": null,
-    "formulaDefensePenalty": null
+    "formulaDefensePenalty": null,
+    "summonConstructDefId": null
   },
   {
     "recipeId": "v6-te-adrenalinschrei-erde",
@@ -299,7 +309,8 @@ export const V6_GENERATED_FORMULA_RECIPES: readonly V6GeneratedFormulaRecipe[] =
     "catalystConsumed": false,
     "overformulaPrimaryBonus": null,
     "overformulaIntensityBonus": null,
-    "formulaDefensePenalty": null
+    "formulaDefensePenalty": null,
+    "summonConstructDefId": null
   },
   {
     "recipeId": "v6-te-adrenalinschrei-luft",
@@ -326,7 +337,8 @@ export const V6_GENERATED_FORMULA_RECIPES: readonly V6GeneratedFormulaRecipe[] =
     "catalystConsumed": false,
     "overformulaPrimaryBonus": null,
     "overformulaIntensityBonus": null,
-    "formulaDefensePenalty": null
+    "formulaDefensePenalty": null,
+    "summonConstructDefId": null
   },
   {
     "recipeId": "v6-te-adrenalinschrei-licht",
@@ -353,7 +365,8 @@ export const V6_GENERATED_FORMULA_RECIPES: readonly V6GeneratedFormulaRecipe[] =
     "catalystConsumed": false,
     "overformulaPrimaryBonus": null,
     "overformulaIntensityBonus": null,
-    "formulaDefensePenalty": null
+    "formulaDefensePenalty": null,
+    "summonConstructDefId": null
   },
   {
     "recipeId": "v6-te-adrenalinschrei-schatten",
@@ -380,7 +393,1034 @@ export const V6_GENERATED_FORMULA_RECIPES: readonly V6GeneratedFormulaRecipe[] =
     "catalystConsumed": false,
     "overformulaPrimaryBonus": null,
     "overformulaIntensityBonus": null,
-    "formulaDefensePenalty": null
+    "formulaDefensePenalty": null,
+    "summonConstructDefId": null
+  },
+  {
+    "recipeId": "v6-te-fintenschnitt-feuer",
+    "kind": "te",
+    "catalogSlice": "slice1",
+    "techniqueId": "v6-technik-fintenschnitt",
+    "essenceId": "v6-essenz-feuer",
+    "catalystId": null,
+    "name": "Glutfinte",
+    "effectSummary": "Bereite Block +2 vor. Bei Lebensschaden: Brennen, falls keine Reaktion.",
+    "primary": {
+      "kind": "prep_block",
+      "value": 2,
+      "target": "self"
+    },
+    "rider": {
+      "id": "rider-brennen",
+      "summary": "Bei Lebensschaden: Brennen, falls keine Reaktion.",
+      "defenseSuppressible": true
+    },
+    "intensity": 1,
+    "transformId": null,
+    "grantsFetz": false,
+    "catalystConsumed": false,
+    "overformulaPrimaryBonus": null,
+    "overformulaIntensityBonus": null,
+    "formulaDefensePenalty": null,
+    "summonConstructDefId": null
+  },
+  {
+    "recipeId": "v6-te-fintenschnitt-wasser",
+    "kind": "te",
+    "catalogSlice": "slice1",
+    "techniqueId": "v6-technik-fintenschnitt",
+    "essenceId": "v6-essenz-wasser",
+    "catalystId": null,
+    "name": "Wellenfinte",
+    "effectSummary": "Bereite Block +2 vor. Bei Heilung oder Schildgewinn: entferne optional eine Marke von dir.",
+    "primary": {
+      "kind": "prep_block",
+      "value": 2,
+      "target": "self"
+    },
+    "rider": {
+      "id": "rider-reinigen",
+      "summary": "Bei Heilung oder Schildgewinn: entferne optional eine Marke von dir.",
+      "defenseSuppressible": false
+    },
+    "intensity": 1,
+    "transformId": null,
+    "grantsFetz": false,
+    "catalystConsumed": false,
+    "overformulaPrimaryBonus": null,
+    "overformulaIntensityBonus": null,
+    "formulaDefensePenalty": null,
+    "summonConstructDefId": null
+  },
+  {
+    "recipeId": "v6-te-fintenschnitt-erde",
+    "kind": "te",
+    "catalogSlice": "slice1",
+    "techniqueId": "v6-technik-fintenschnitt",
+    "essenceId": "v6-essenz-erde",
+    "catalystId": null,
+    "name": "Felsfinte",
+    "effectSummary": "Bereite Block +2 vor. Verwendete Komponenten +1 Stabilität bis nächste Startphase.",
+    "primary": {
+      "kind": "prep_block",
+      "value": 2,
+      "target": "self"
+    },
+    "rider": {
+      "id": "rider-stabilitaet",
+      "summary": "Verwendete Komponenten +1 Stabilität bis nächste Startphase.",
+      "defenseSuppressible": false
+    },
+    "intensity": 1,
+    "transformId": null,
+    "grantsFetz": false,
+    "catalystConsumed": false,
+    "overformulaPrimaryBonus": null,
+    "overformulaIntensityBonus": null,
+    "formulaDefensePenalty": null,
+    "summonConstructDefId": null
+  },
+  {
+    "recipeId": "v6-te-fintenschnitt-luft",
+    "kind": "te",
+    "catalogSlice": "slice1",
+    "techniqueId": "v6-technik-fintenschnitt",
+    "essenceId": "v6-essenz-luft",
+    "catalystId": null,
+    "name": "Windfinte",
+    "effectSummary": "Bereite Block +2 vor. Nächster eigener Aktions-W6 +1 (max +2).",
+    "primary": {
+      "kind": "prep_block",
+      "value": 2,
+      "target": "self"
+    },
+    "rider": {
+      "id": "rider-w6",
+      "summary": "Nächster eigener Aktions-W6 +1 (max +2).",
+      "defenseSuppressible": true
+    },
+    "intensity": 1,
+    "transformId": null,
+    "grantsFetz": false,
+    "catalystConsumed": false,
+    "overformulaPrimaryBonus": null,
+    "overformulaIntensityBonus": null,
+    "formulaDefensePenalty": null,
+    "summonConstructDefId": null
+  },
+  {
+    "recipeId": "v6-te-fintenschnitt-licht",
+    "kind": "te",
+    "catalogSlice": "slice1",
+    "techniqueId": "v6-technik-fintenschnitt",
+    "essenceId": "v6-essenz-licht",
+    "catalystId": null,
+    "name": "Lichtfinte",
+    "effectSummary": "Bereite Block +2 vor. Bei Schildgewinn: entferne optional eine Marke von dir.",
+    "primary": {
+      "kind": "prep_block",
+      "value": 2,
+      "target": "self"
+    },
+    "rider": {
+      "id": "rider-reinigen-licht",
+      "summary": "Bei Schildgewinn: entferne optional eine Marke von dir.",
+      "defenseSuppressible": false
+    },
+    "intensity": 1,
+    "transformId": null,
+    "grantsFetz": false,
+    "catalystConsumed": false,
+    "overformulaPrimaryBonus": null,
+    "overformulaIntensityBonus": null,
+    "formulaDefensePenalty": null,
+    "summonConstructDefId": null
+  },
+  {
+    "recipeId": "v6-te-fintenschnitt-schatten",
+    "kind": "te",
+    "catalogSlice": "slice1",
+    "techniqueId": "v6-technik-fintenschnitt",
+    "essenceId": "v6-essenz-schatten",
+    "catalystId": null,
+    "name": "Schattenfinte",
+    "effectSummary": "Bereite Block +2 vor. Bei Treffer: erschöpfe optional 1 gegnerische Formelkomponente.",
+    "primary": {
+      "kind": "prep_block",
+      "value": 2,
+      "target": "self"
+    },
+    "rider": {
+      "id": "rider-fluch",
+      "summary": "Bei Treffer: erschöpfe optional 1 gegnerische Formelkomponente.",
+      "defenseSuppressible": true
+    },
+    "intensity": 1,
+    "transformId": null,
+    "grantsFetz": false,
+    "catalystConsumed": false,
+    "overformulaPrimaryBonus": null,
+    "overformulaIntensityBonus": null,
+    "formulaDefensePenalty": null,
+    "summonConstructDefId": null
+  },
+  {
+    "recipeId": "v6-te-brechschlag-feuer",
+    "kind": "te",
+    "catalogSlice": "slice1",
+    "techniqueId": "v6-technik-brechschlag",
+    "essenceId": "v6-essenz-feuer",
+    "catalystId": null,
+    "name": "Glutbruch",
+    "effectSummary": "Verursache 3 Schaden am Gegner. Bei Lebensschaden: Brennen, falls keine Reaktion.",
+    "primary": {
+      "kind": "damage",
+      "value": 3,
+      "target": "opponent",
+      "offensive": true
+    },
+    "rider": {
+      "id": "rider-brennen",
+      "summary": "Bei Lebensschaden: Brennen, falls keine Reaktion.",
+      "defenseSuppressible": true
+    },
+    "intensity": null,
+    "transformId": null,
+    "grantsFetz": false,
+    "catalystConsumed": false,
+    "overformulaPrimaryBonus": null,
+    "overformulaIntensityBonus": null,
+    "formulaDefensePenalty": null,
+    "summonConstructDefId": null
+  },
+  {
+    "recipeId": "v6-te-brechschlag-wasser",
+    "kind": "te",
+    "catalogSlice": "slice1",
+    "techniqueId": "v6-technik-brechschlag",
+    "essenceId": "v6-essenz-wasser",
+    "catalystId": null,
+    "name": "Wellenbruch",
+    "effectSummary": "Verursache 2 Schaden am Gegner. Bei Heilung oder Schildgewinn: entferne optional eine Marke von dir.",
+    "primary": {
+      "kind": "damage",
+      "value": 2,
+      "target": "opponent",
+      "offensive": true
+    },
+    "rider": {
+      "id": "rider-reinigen",
+      "summary": "Bei Heilung oder Schildgewinn: entferne optional eine Marke von dir.",
+      "defenseSuppressible": false
+    },
+    "intensity": null,
+    "transformId": null,
+    "grantsFetz": false,
+    "catalystConsumed": false,
+    "overformulaPrimaryBonus": null,
+    "overformulaIntensityBonus": null,
+    "formulaDefensePenalty": null,
+    "summonConstructDefId": null
+  },
+  {
+    "recipeId": "v6-te-brechschlag-erde",
+    "kind": "te",
+    "catalogSlice": "slice1",
+    "techniqueId": "v6-technik-brechschlag",
+    "essenceId": "v6-essenz-erde",
+    "catalystId": null,
+    "name": "Felsbruch",
+    "effectSummary": "Verursache 3 Schaden am Gegner. Verwendete Komponenten +1 Stabilität bis nächste Startphase.",
+    "primary": {
+      "kind": "damage",
+      "value": 3,
+      "target": "opponent",
+      "offensive": true
+    },
+    "rider": {
+      "id": "rider-stabilitaet",
+      "summary": "Verwendete Komponenten +1 Stabilität bis nächste Startphase.",
+      "defenseSuppressible": false
+    },
+    "intensity": null,
+    "transformId": null,
+    "grantsFetz": false,
+    "catalystConsumed": false,
+    "overformulaPrimaryBonus": null,
+    "overformulaIntensityBonus": null,
+    "formulaDefensePenalty": null,
+    "summonConstructDefId": null
+  },
+  {
+    "recipeId": "v6-te-brechschlag-luft",
+    "kind": "te",
+    "catalogSlice": "slice1",
+    "techniqueId": "v6-technik-brechschlag",
+    "essenceId": "v6-essenz-luft",
+    "catalystId": null,
+    "name": "Windbruch",
+    "effectSummary": "Verursache 2 Schaden am Gegner. Nächster eigener Aktions-W6 +1 (max +2).",
+    "primary": {
+      "kind": "damage",
+      "value": 2,
+      "target": "opponent",
+      "offensive": true
+    },
+    "rider": {
+      "id": "rider-w6",
+      "summary": "Nächster eigener Aktions-W6 +1 (max +2).",
+      "defenseSuppressible": true
+    },
+    "intensity": null,
+    "transformId": null,
+    "grantsFetz": false,
+    "catalystConsumed": false,
+    "overformulaPrimaryBonus": null,
+    "overformulaIntensityBonus": null,
+    "formulaDefensePenalty": null,
+    "summonConstructDefId": null
+  },
+  {
+    "recipeId": "v6-te-brechschlag-licht",
+    "kind": "te",
+    "catalogSlice": "slice1",
+    "techniqueId": "v6-technik-brechschlag",
+    "essenceId": "v6-essenz-licht",
+    "catalystId": null,
+    "name": "Lichtbruch",
+    "effectSummary": "Verursache 2 Schaden am Gegner. Bei Schildgewinn: entferne optional eine Marke von dir.",
+    "primary": {
+      "kind": "damage",
+      "value": 2,
+      "target": "opponent",
+      "offensive": true
+    },
+    "rider": {
+      "id": "rider-reinigen-licht",
+      "summary": "Bei Schildgewinn: entferne optional eine Marke von dir.",
+      "defenseSuppressible": false
+    },
+    "intensity": null,
+    "transformId": null,
+    "grantsFetz": false,
+    "catalystConsumed": false,
+    "overformulaPrimaryBonus": null,
+    "overformulaIntensityBonus": null,
+    "formulaDefensePenalty": null,
+    "summonConstructDefId": null
+  },
+  {
+    "recipeId": "v6-te-brechschlag-schatten",
+    "kind": "te",
+    "catalogSlice": "slice1",
+    "techniqueId": "v6-technik-brechschlag",
+    "essenceId": "v6-essenz-schatten",
+    "catalystId": null,
+    "name": "Schattenbruch",
+    "effectSummary": "Verursache 2 Schaden am Gegner. Bei Treffer: erschöpfe optional 1 gegnerische Formelkomponente.",
+    "primary": {
+      "kind": "damage",
+      "value": 2,
+      "target": "opponent",
+      "offensive": true
+    },
+    "rider": {
+      "id": "rider-fluch",
+      "summary": "Bei Treffer: erschöpfe optional 1 gegnerische Formelkomponente.",
+      "defenseSuppressible": true
+    },
+    "intensity": null,
+    "transformId": null,
+    "grantsFetz": false,
+    "catalystConsumed": false,
+    "overformulaPrimaryBonus": null,
+    "overformulaIntensityBonus": null,
+    "formulaDefensePenalty": null,
+    "summonConstructDefId": null
+  },
+  {
+    "recipeId": "v6-te-kettenfessel-feuer",
+    "kind": "te",
+    "catalogSlice": "slice1",
+    "techniqueId": "v6-technik-kettenfessel",
+    "essenceId": "v6-essenz-feuer",
+    "catalystId": null,
+    "name": "Glutkette",
+    "effectSummary": "Fessel Intensität 2 auf einen besetzten gegnerischen Formelplatz (manuelle Wahl). Bei Lebensschaden: Brennen, falls keine Reaktion.",
+    "primary": {
+      "kind": "fessel",
+      "value": 2,
+      "target": "opponent",
+      "offensive": true
+    },
+    "rider": {
+      "id": "rider-brennen",
+      "summary": "Bei Lebensschaden: Brennen, falls keine Reaktion.",
+      "defenseSuppressible": true
+    },
+    "intensity": 2,
+    "transformId": null,
+    "grantsFetz": false,
+    "catalystConsumed": false,
+    "overformulaPrimaryBonus": null,
+    "overformulaIntensityBonus": null,
+    "formulaDefensePenalty": null,
+    "summonConstructDefId": null
+  },
+  {
+    "recipeId": "v6-te-kettenfessel-wasser",
+    "kind": "te",
+    "catalogSlice": "slice1",
+    "techniqueId": "v6-technik-kettenfessel",
+    "essenceId": "v6-essenz-wasser",
+    "catalystId": null,
+    "name": "Wellenkette",
+    "effectSummary": "Fessel Intensität 2 auf einen besetzten gegnerischen Formelplatz (manuelle Wahl). Bei Heilung oder Schildgewinn: entferne optional eine Marke von dir.",
+    "primary": {
+      "kind": "fessel",
+      "value": 2,
+      "target": "opponent",
+      "offensive": true
+    },
+    "rider": {
+      "id": "rider-reinigen",
+      "summary": "Bei Heilung oder Schildgewinn: entferne optional eine Marke von dir.",
+      "defenseSuppressible": false
+    },
+    "intensity": 2,
+    "transformId": null,
+    "grantsFetz": false,
+    "catalystConsumed": false,
+    "overformulaPrimaryBonus": null,
+    "overformulaIntensityBonus": null,
+    "formulaDefensePenalty": null,
+    "summonConstructDefId": null
+  },
+  {
+    "recipeId": "v6-te-kettenfessel-erde",
+    "kind": "te",
+    "catalogSlice": "slice1",
+    "techniqueId": "v6-technik-kettenfessel",
+    "essenceId": "v6-essenz-erde",
+    "catalystId": null,
+    "name": "Felskette",
+    "effectSummary": "Fessel Intensität 2 auf einen besetzten gegnerischen Formelplatz (manuelle Wahl). Verwendete Komponenten +1 Stabilität bis nächste Startphase.",
+    "primary": {
+      "kind": "fessel",
+      "value": 2,
+      "target": "opponent",
+      "offensive": true
+    },
+    "rider": {
+      "id": "rider-stabilitaet",
+      "summary": "Verwendete Komponenten +1 Stabilität bis nächste Startphase.",
+      "defenseSuppressible": false
+    },
+    "intensity": 2,
+    "transformId": null,
+    "grantsFetz": false,
+    "catalystConsumed": false,
+    "overformulaPrimaryBonus": null,
+    "overformulaIntensityBonus": null,
+    "formulaDefensePenalty": null,
+    "summonConstructDefId": null
+  },
+  {
+    "recipeId": "v6-te-kettenfessel-luft",
+    "kind": "te",
+    "catalogSlice": "slice1",
+    "techniqueId": "v6-technik-kettenfessel",
+    "essenceId": "v6-essenz-luft",
+    "catalystId": null,
+    "name": "Windkette",
+    "effectSummary": "Fessel Intensität 2 auf einen besetzten gegnerischen Formelplatz (manuelle Wahl). Nächster eigener Aktions-W6 +1 (max +2).",
+    "primary": {
+      "kind": "fessel",
+      "value": 2,
+      "target": "opponent",
+      "offensive": true
+    },
+    "rider": {
+      "id": "rider-w6",
+      "summary": "Nächster eigener Aktions-W6 +1 (max +2).",
+      "defenseSuppressible": true
+    },
+    "intensity": 2,
+    "transformId": null,
+    "grantsFetz": false,
+    "catalystConsumed": false,
+    "overformulaPrimaryBonus": null,
+    "overformulaIntensityBonus": null,
+    "formulaDefensePenalty": null,
+    "summonConstructDefId": null
+  },
+  {
+    "recipeId": "v6-te-kettenfessel-licht",
+    "kind": "te",
+    "catalogSlice": "slice1",
+    "techniqueId": "v6-technik-kettenfessel",
+    "essenceId": "v6-essenz-licht",
+    "catalystId": null,
+    "name": "Lichtkette",
+    "effectSummary": "Fessel Intensität 2 auf einen besetzten gegnerischen Formelplatz (manuelle Wahl). Bei Schildgewinn: entferne optional eine Marke von dir.",
+    "primary": {
+      "kind": "fessel",
+      "value": 2,
+      "target": "opponent",
+      "offensive": true
+    },
+    "rider": {
+      "id": "rider-reinigen-licht",
+      "summary": "Bei Schildgewinn: entferne optional eine Marke von dir.",
+      "defenseSuppressible": false
+    },
+    "intensity": 2,
+    "transformId": null,
+    "grantsFetz": false,
+    "catalystConsumed": false,
+    "overformulaPrimaryBonus": null,
+    "overformulaIntensityBonus": null,
+    "formulaDefensePenalty": null,
+    "summonConstructDefId": null
+  },
+  {
+    "recipeId": "v6-te-kettenfessel-schatten",
+    "kind": "te",
+    "catalogSlice": "slice1",
+    "techniqueId": "v6-technik-kettenfessel",
+    "essenceId": "v6-essenz-schatten",
+    "catalystId": null,
+    "name": "Schattenkette",
+    "effectSummary": "Fessel Intensität 2 auf einen besetzten gegnerischen Formelplatz (manuelle Wahl). Bei Treffer: erschöpfe optional 1 gegnerische Formelkomponente.",
+    "primary": {
+      "kind": "fessel",
+      "value": 2,
+      "target": "opponent",
+      "offensive": true
+    },
+    "rider": {
+      "id": "rider-fluch",
+      "summary": "Bei Treffer: erschöpfe optional 1 gegnerische Formelkomponente.",
+      "defenseSuppressible": true
+    },
+    "intensity": 2,
+    "transformId": null,
+    "grantsFetz": false,
+    "catalystConsumed": false,
+    "overformulaPrimaryBonus": null,
+    "overformulaIntensityBonus": null,
+    "formulaDefensePenalty": null,
+    "summonConstructDefId": null
+  },
+  {
+    "recipeId": "v6-te-bannkreis-feuer",
+    "kind": "te",
+    "catalogSlice": "slice1",
+    "techniqueId": "v6-technik-bannkreis",
+    "essenceId": "v6-essenz-feuer",
+    "catalystId": null,
+    "name": "Glutkreis",
+    "effectSummary": "Gewinne 2 Schild. Bei Lebensschaden: Brennen, falls keine Reaktion.",
+    "primary": {
+      "kind": "shield",
+      "value": 2,
+      "target": "self"
+    },
+    "rider": {
+      "id": "rider-brennen",
+      "summary": "Bei Lebensschaden: Brennen, falls keine Reaktion.",
+      "defenseSuppressible": true
+    },
+    "intensity": 1,
+    "transformId": null,
+    "grantsFetz": false,
+    "catalystConsumed": false,
+    "overformulaPrimaryBonus": null,
+    "overformulaIntensityBonus": null,
+    "formulaDefensePenalty": null,
+    "summonConstructDefId": null
+  },
+  {
+    "recipeId": "v6-te-bannkreis-wasser",
+    "kind": "te",
+    "catalogSlice": "slice1",
+    "techniqueId": "v6-technik-bannkreis",
+    "essenceId": "v6-essenz-wasser",
+    "catalystId": null,
+    "name": "Wellenkreis",
+    "effectSummary": "Heile 2 Leben. Bei Heilung oder Schildgewinn: entferne optional eine Marke von dir.",
+    "primary": {
+      "kind": "heal",
+      "value": 2,
+      "target": "self"
+    },
+    "rider": {
+      "id": "rider-reinigen",
+      "summary": "Bei Heilung oder Schildgewinn: entferne optional eine Marke von dir.",
+      "defenseSuppressible": false
+    },
+    "intensity": 1,
+    "transformId": null,
+    "grantsFetz": false,
+    "catalystConsumed": false,
+    "overformulaPrimaryBonus": null,
+    "overformulaIntensityBonus": null,
+    "formulaDefensePenalty": null,
+    "summonConstructDefId": null
+  },
+  {
+    "recipeId": "v6-te-bannkreis-erde",
+    "kind": "te",
+    "catalogSlice": "slice1",
+    "techniqueId": "v6-technik-bannkreis",
+    "essenceId": "v6-essenz-erde",
+    "catalystId": null,
+    "name": "Felskreis",
+    "effectSummary": "Gewinne 2 Schild. Verwendete Komponenten +1 Stabilität bis nächste Startphase.",
+    "primary": {
+      "kind": "shield",
+      "value": 2,
+      "target": "self"
+    },
+    "rider": {
+      "id": "rider-stabilitaet",
+      "summary": "Verwendete Komponenten +1 Stabilität bis nächste Startphase.",
+      "defenseSuppressible": false
+    },
+    "intensity": 1,
+    "transformId": null,
+    "grantsFetz": false,
+    "catalystConsumed": false,
+    "overformulaPrimaryBonus": null,
+    "overformulaIntensityBonus": null,
+    "formulaDefensePenalty": null,
+    "summonConstructDefId": null
+  },
+  {
+    "recipeId": "v6-te-bannkreis-luft",
+    "kind": "te",
+    "catalogSlice": "slice1",
+    "techniqueId": "v6-technik-bannkreis",
+    "essenceId": "v6-essenz-luft",
+    "catalystId": null,
+    "name": "Windkreis",
+    "effectSummary": "Gewinne 2 Schild. Nächster eigener Aktions-W6 +1 (max +2).",
+    "primary": {
+      "kind": "shield",
+      "value": 2,
+      "target": "self"
+    },
+    "rider": {
+      "id": "rider-w6",
+      "summary": "Nächster eigener Aktions-W6 +1 (max +2).",
+      "defenseSuppressible": true
+    },
+    "intensity": 1,
+    "transformId": null,
+    "grantsFetz": false,
+    "catalystConsumed": false,
+    "overformulaPrimaryBonus": null,
+    "overformulaIntensityBonus": null,
+    "formulaDefensePenalty": null,
+    "summonConstructDefId": null
+  },
+  {
+    "recipeId": "v6-te-bannkreis-licht",
+    "kind": "te",
+    "catalogSlice": "slice1",
+    "techniqueId": "v6-technik-bannkreis",
+    "essenceId": "v6-essenz-licht",
+    "catalystId": null,
+    "name": "Lichtkreis",
+    "effectSummary": "Gewinne 2 Schild. Bei Schildgewinn: entferne optional eine Marke von dir.",
+    "primary": {
+      "kind": "shield",
+      "value": 2,
+      "target": "self"
+    },
+    "rider": {
+      "id": "rider-reinigen-licht",
+      "summary": "Bei Schildgewinn: entferne optional eine Marke von dir.",
+      "defenseSuppressible": false
+    },
+    "intensity": 1,
+    "transformId": null,
+    "grantsFetz": false,
+    "catalystConsumed": false,
+    "overformulaPrimaryBonus": null,
+    "overformulaIntensityBonus": null,
+    "formulaDefensePenalty": null,
+    "summonConstructDefId": null
+  },
+  {
+    "recipeId": "v6-te-bannkreis-schatten",
+    "kind": "te",
+    "catalogSlice": "slice1",
+    "techniqueId": "v6-technik-bannkreis",
+    "essenceId": "v6-essenz-schatten",
+    "catalystId": null,
+    "name": "Schattenkreis",
+    "effectSummary": "Gewinne 2 Schild. Bei Treffer: erschöpfe optional 1 gegnerische Formelkomponente.",
+    "primary": {
+      "kind": "shield",
+      "value": 2,
+      "target": "self"
+    },
+    "rider": {
+      "id": "rider-fluch",
+      "summary": "Bei Treffer: erschöpfe optional 1 gegnerische Formelkomponente.",
+      "defenseSuppressible": true
+    },
+    "intensity": 1,
+    "transformId": null,
+    "grantsFetz": false,
+    "catalystConsumed": false,
+    "overformulaPrimaryBonus": null,
+    "overformulaIntensityBonus": null,
+    "formulaDefensePenalty": null,
+    "summonConstructDefId": null
+  },
+  {
+    "recipeId": "v6-te-ueberraschungsangriff-feuer",
+    "kind": "te",
+    "catalogSlice": "slice1",
+    "techniqueId": "v6-technik-ueberraschungsangriff",
+    "essenceId": "v6-essenz-feuer",
+    "catalystId": null,
+    "name": "Glutüberraschung",
+    "effectSummary": "Verursache 3 Schaden am Gegner. Bei Lebensschaden: Brennen, falls keine Reaktion.",
+    "primary": {
+      "kind": "damage",
+      "value": 3,
+      "target": "opponent",
+      "offensive": true
+    },
+    "rider": {
+      "id": "rider-brennen",
+      "summary": "Bei Lebensschaden: Brennen, falls keine Reaktion.",
+      "defenseSuppressible": true
+    },
+    "intensity": null,
+    "transformId": null,
+    "grantsFetz": false,
+    "catalystConsumed": false,
+    "overformulaPrimaryBonus": null,
+    "overformulaIntensityBonus": null,
+    "formulaDefensePenalty": null,
+    "summonConstructDefId": null
+  },
+  {
+    "recipeId": "v6-te-ueberraschungsangriff-wasser",
+    "kind": "te",
+    "catalogSlice": "slice1",
+    "techniqueId": "v6-technik-ueberraschungsangriff",
+    "essenceId": "v6-essenz-wasser",
+    "catalystId": null,
+    "name": "Wellenüberraschung",
+    "effectSummary": "Verursache 2 Schaden am Gegner. Bei Heilung oder Schildgewinn: entferne optional eine Marke von dir.",
+    "primary": {
+      "kind": "damage",
+      "value": 2,
+      "target": "opponent",
+      "offensive": true
+    },
+    "rider": {
+      "id": "rider-reinigen",
+      "summary": "Bei Heilung oder Schildgewinn: entferne optional eine Marke von dir.",
+      "defenseSuppressible": false
+    },
+    "intensity": null,
+    "transformId": null,
+    "grantsFetz": false,
+    "catalystConsumed": false,
+    "overformulaPrimaryBonus": null,
+    "overformulaIntensityBonus": null,
+    "formulaDefensePenalty": null,
+    "summonConstructDefId": null
+  },
+  {
+    "recipeId": "v6-te-ueberraschungsangriff-erde",
+    "kind": "te",
+    "catalogSlice": "slice1",
+    "techniqueId": "v6-technik-ueberraschungsangriff",
+    "essenceId": "v6-essenz-erde",
+    "catalystId": null,
+    "name": "Felsüberraschung",
+    "effectSummary": "Verursache 2 Schaden am Gegner. Verwendete Komponenten +1 Stabilität bis nächste Startphase.",
+    "primary": {
+      "kind": "damage",
+      "value": 2,
+      "target": "opponent",
+      "offensive": true
+    },
+    "rider": {
+      "id": "rider-stabilitaet",
+      "summary": "Verwendete Komponenten +1 Stabilität bis nächste Startphase.",
+      "defenseSuppressible": false
+    },
+    "intensity": null,
+    "transformId": null,
+    "grantsFetz": false,
+    "catalystConsumed": false,
+    "overformulaPrimaryBonus": null,
+    "overformulaIntensityBonus": null,
+    "formulaDefensePenalty": null,
+    "summonConstructDefId": null
+  },
+  {
+    "recipeId": "v6-te-ueberraschungsangriff-luft",
+    "kind": "te",
+    "catalogSlice": "slice1",
+    "techniqueId": "v6-technik-ueberraschungsangriff",
+    "essenceId": "v6-essenz-luft",
+    "catalystId": null,
+    "name": "Windüberraschung",
+    "effectSummary": "Verursache 3 Schaden am Gegner. Nächster eigener Aktions-W6 +1 (max +2).",
+    "primary": {
+      "kind": "damage",
+      "value": 3,
+      "target": "opponent",
+      "offensive": true
+    },
+    "rider": {
+      "id": "rider-w6",
+      "summary": "Nächster eigener Aktions-W6 +1 (max +2).",
+      "defenseSuppressible": true
+    },
+    "intensity": null,
+    "transformId": null,
+    "grantsFetz": false,
+    "catalystConsumed": false,
+    "overformulaPrimaryBonus": null,
+    "overformulaIntensityBonus": null,
+    "formulaDefensePenalty": null,
+    "summonConstructDefId": null
+  },
+  {
+    "recipeId": "v6-te-ueberraschungsangriff-licht",
+    "kind": "te",
+    "catalogSlice": "slice1",
+    "techniqueId": "v6-technik-ueberraschungsangriff",
+    "essenceId": "v6-essenz-licht",
+    "catalystId": null,
+    "name": "Lichtüberraschung",
+    "effectSummary": "Verursache 2 Schaden am Gegner. Bei Schildgewinn: entferne optional eine Marke von dir.",
+    "primary": {
+      "kind": "damage",
+      "value": 2,
+      "target": "opponent",
+      "offensive": true
+    },
+    "rider": {
+      "id": "rider-reinigen-licht",
+      "summary": "Bei Schildgewinn: entferne optional eine Marke von dir.",
+      "defenseSuppressible": false
+    },
+    "intensity": null,
+    "transformId": null,
+    "grantsFetz": false,
+    "catalystConsumed": false,
+    "overformulaPrimaryBonus": null,
+    "overformulaIntensityBonus": null,
+    "formulaDefensePenalty": null,
+    "summonConstructDefId": null
+  },
+  {
+    "recipeId": "v6-te-ueberraschungsangriff-schatten",
+    "kind": "te",
+    "catalogSlice": "slice1",
+    "techniqueId": "v6-technik-ueberraschungsangriff",
+    "essenceId": "v6-essenz-schatten",
+    "catalystId": null,
+    "name": "Schattenüberraschung",
+    "effectSummary": "Verursache 3 Schaden am Gegner. Bei Treffer: erschöpfe optional 1 gegnerische Formelkomponente.",
+    "primary": {
+      "kind": "damage",
+      "value": 3,
+      "target": "opponent",
+      "offensive": true
+    },
+    "rider": {
+      "id": "rider-fluch",
+      "summary": "Bei Treffer: erschöpfe optional 1 gegnerische Formelkomponente.",
+      "defenseSuppressible": true
+    },
+    "intensity": null,
+    "transformId": null,
+    "grantsFetz": false,
+    "catalystConsumed": false,
+    "overformulaPrimaryBonus": null,
+    "overformulaIntensityBonus": null,
+    "formulaDefensePenalty": null,
+    "summonConstructDefId": null
+  },
+  {
+    "recipeId": "v6-te-schicksalmanifestation-feuer",
+    "kind": "te",
+    "catalogSlice": "slice1",
+    "techniqueId": "v6-technik-schicksalmanifestation",
+    "essenceId": "v6-essenz-feuer",
+    "catalystId": null,
+    "name": "Glutschicksal",
+    "effectSummary": "Bereite Boost +2 vor. Bei Lebensschaden: Brennen, falls keine Reaktion.",
+    "primary": {
+      "kind": "prep_boost",
+      "value": 2,
+      "target": "self"
+    },
+    "rider": {
+      "id": "rider-brennen",
+      "summary": "Bei Lebensschaden: Brennen, falls keine Reaktion.",
+      "defenseSuppressible": true
+    },
+    "intensity": 1,
+    "transformId": null,
+    "grantsFetz": false,
+    "catalystConsumed": false,
+    "overformulaPrimaryBonus": null,
+    "overformulaIntensityBonus": null,
+    "formulaDefensePenalty": null,
+    "summonConstructDefId": null
+  },
+  {
+    "recipeId": "v6-te-schicksalmanifestation-wasser",
+    "kind": "te",
+    "catalogSlice": "slice1",
+    "techniqueId": "v6-technik-schicksalmanifestation",
+    "essenceId": "v6-essenz-wasser",
+    "catalystId": null,
+    "name": "Wellenschicksal",
+    "effectSummary": "Bereite Boost +2 vor. Bei Heilung oder Schildgewinn: entferne optional eine Marke von dir.",
+    "primary": {
+      "kind": "prep_boost",
+      "value": 2,
+      "target": "self"
+    },
+    "rider": {
+      "id": "rider-reinigen",
+      "summary": "Bei Heilung oder Schildgewinn: entferne optional eine Marke von dir.",
+      "defenseSuppressible": false
+    },
+    "intensity": 1,
+    "transformId": null,
+    "grantsFetz": false,
+    "catalystConsumed": false,
+    "overformulaPrimaryBonus": null,
+    "overformulaIntensityBonus": null,
+    "formulaDefensePenalty": null,
+    "summonConstructDefId": null
+  },
+  {
+    "recipeId": "v6-te-schicksalmanifestation-erde",
+    "kind": "te",
+    "catalogSlice": "slice1",
+    "techniqueId": "v6-technik-schicksalmanifestation",
+    "essenceId": "v6-essenz-erde",
+    "catalystId": null,
+    "name": "Felsschicksal",
+    "effectSummary": "Bereite Boost +2 vor. Verwendete Komponenten +1 Stabilität bis nächste Startphase.",
+    "primary": {
+      "kind": "prep_boost",
+      "value": 2,
+      "target": "self"
+    },
+    "rider": {
+      "id": "rider-stabilitaet",
+      "summary": "Verwendete Komponenten +1 Stabilität bis nächste Startphase.",
+      "defenseSuppressible": false
+    },
+    "intensity": 1,
+    "transformId": null,
+    "grantsFetz": false,
+    "catalystConsumed": false,
+    "overformulaPrimaryBonus": null,
+    "overformulaIntensityBonus": null,
+    "formulaDefensePenalty": null,
+    "summonConstructDefId": null
+  },
+  {
+    "recipeId": "v6-te-schicksalmanifestation-luft",
+    "kind": "te",
+    "catalogSlice": "slice1",
+    "techniqueId": "v6-technik-schicksalmanifestation",
+    "essenceId": "v6-essenz-luft",
+    "catalystId": null,
+    "name": "Windschicksal",
+    "effectSummary": "Bereite Boost +2 vor. Nächster eigener Aktions-W6 +1 (max +2).",
+    "primary": {
+      "kind": "prep_boost",
+      "value": 2,
+      "target": "self"
+    },
+    "rider": {
+      "id": "rider-w6",
+      "summary": "Nächster eigener Aktions-W6 +1 (max +2).",
+      "defenseSuppressible": true
+    },
+    "intensity": 1,
+    "transformId": null,
+    "grantsFetz": false,
+    "catalystConsumed": false,
+    "overformulaPrimaryBonus": null,
+    "overformulaIntensityBonus": null,
+    "formulaDefensePenalty": null,
+    "summonConstructDefId": null
+  },
+  {
+    "recipeId": "v6-te-schicksalmanifestation-licht",
+    "kind": "te",
+    "catalogSlice": "slice1",
+    "techniqueId": "v6-technik-schicksalmanifestation",
+    "essenceId": "v6-essenz-licht",
+    "catalystId": null,
+    "name": "Lichtschicksal",
+    "effectSummary": "Bereite Boost +2 vor. Bei Schildgewinn: entferne optional eine Marke von dir.",
+    "primary": {
+      "kind": "prep_boost",
+      "value": 2,
+      "target": "self"
+    },
+    "rider": {
+      "id": "rider-reinigen-licht",
+      "summary": "Bei Schildgewinn: entferne optional eine Marke von dir.",
+      "defenseSuppressible": false
+    },
+    "intensity": 1,
+    "transformId": null,
+    "grantsFetz": false,
+    "catalystConsumed": false,
+    "overformulaPrimaryBonus": null,
+    "overformulaIntensityBonus": null,
+    "formulaDefensePenalty": null,
+    "summonConstructDefId": null
+  },
+  {
+    "recipeId": "v6-te-schicksalmanifestation-schatten",
+    "kind": "te",
+    "catalogSlice": "slice1",
+    "techniqueId": "v6-technik-schicksalmanifestation",
+    "essenceId": "v6-essenz-schatten",
+    "catalystId": null,
+    "name": "Schattenschicksal",
+    "effectSummary": "Bereite Boost +2 vor. Bei Treffer: erschöpfe optional 1 gegnerische Formelkomponente.",
+    "primary": {
+      "kind": "prep_boost",
+      "value": 2,
+      "target": "self"
+    },
+    "rider": {
+      "id": "rider-fluch",
+      "summary": "Bei Treffer: erschöpfe optional 1 gegnerische Formelkomponente.",
+      "defenseSuppressible": true
+    },
+    "intensity": 1,
+    "transformId": null,
+    "grantsFetz": false,
+    "catalystConsumed": false,
+    "overformulaPrimaryBonus": null,
+    "overformulaIntensityBonus": null,
+    "formulaDefensePenalty": null,
+    "summonConstructDefId": null
   },
   {
     "recipeId": "v6-te-magiepanzer-feuer",
@@ -408,7 +1448,8 @@ export const V6_GENERATED_FORMULA_RECIPES: readonly V6GeneratedFormulaRecipe[] =
     "catalystConsumed": false,
     "overformulaPrimaryBonus": null,
     "overformulaIntensityBonus": null,
-    "formulaDefensePenalty": null
+    "formulaDefensePenalty": null,
+    "summonConstructDefId": null
   },
   {
     "recipeId": "v6-te-magiepanzer-wasser",
@@ -435,7 +1476,8 @@ export const V6_GENERATED_FORMULA_RECIPES: readonly V6GeneratedFormulaRecipe[] =
     "catalystConsumed": false,
     "overformulaPrimaryBonus": null,
     "overformulaIntensityBonus": null,
-    "formulaDefensePenalty": null
+    "formulaDefensePenalty": null,
+    "summonConstructDefId": null
   },
   {
     "recipeId": "v6-te-magiepanzer-erde",
@@ -462,7 +1504,8 @@ export const V6_GENERATED_FORMULA_RECIPES: readonly V6GeneratedFormulaRecipe[] =
     "catalystConsumed": false,
     "overformulaPrimaryBonus": null,
     "overformulaIntensityBonus": null,
-    "formulaDefensePenalty": null
+    "formulaDefensePenalty": null,
+    "summonConstructDefId": null
   },
   {
     "recipeId": "v6-te-magiepanzer-luft",
@@ -489,7 +1532,8 @@ export const V6_GENERATED_FORMULA_RECIPES: readonly V6GeneratedFormulaRecipe[] =
     "catalystConsumed": false,
     "overformulaPrimaryBonus": null,
     "overformulaIntensityBonus": null,
-    "formulaDefensePenalty": null
+    "formulaDefensePenalty": null,
+    "summonConstructDefId": null
   },
   {
     "recipeId": "v6-te-magiepanzer-licht",
@@ -516,7 +1560,8 @@ export const V6_GENERATED_FORMULA_RECIPES: readonly V6GeneratedFormulaRecipe[] =
     "catalystConsumed": false,
     "overformulaPrimaryBonus": null,
     "overformulaIntensityBonus": null,
-    "formulaDefensePenalty": null
+    "formulaDefensePenalty": null,
+    "summonConstructDefId": null
   },
   {
     "recipeId": "v6-te-magiepanzer-schatten",
@@ -544,7 +1589,176 @@ export const V6_GENERATED_FORMULA_RECIPES: readonly V6GeneratedFormulaRecipe[] =
     "catalystConsumed": false,
     "overformulaPrimaryBonus": null,
     "overformulaIntensityBonus": null,
-    "formulaDefensePenalty": null
+    "formulaDefensePenalty": null,
+    "summonConstructDefId": null
+  },
+  {
+    "recipeId": "v6-te-beschwoerungsritual-feuer",
+    "kind": "te",
+    "catalogSlice": "slice1",
+    "techniqueId": "v6-technik-beschwoerungsritual",
+    "essenceId": "v6-essenz-feuer",
+    "catalystId": null,
+    "name": "Glutbeschwörung",
+    "effectSummary": "Beschwöre ein Konstrukt mit Haltbarkeit 3. Ersetzt ein bestehendes Konstrukt. Keine Fetzladung. Bei Lebensschaden: Brennen, falls keine Reaktion.",
+    "primary": {
+      "kind": "summon_construct",
+      "value": 3,
+      "target": "self"
+    },
+    "rider": {
+      "id": "rider-brennen",
+      "summary": "Bei Lebensschaden: Brennen, falls keine Reaktion.",
+      "defenseSuppressible": true
+    },
+    "intensity": null,
+    "transformId": null,
+    "grantsFetz": false,
+    "catalystConsumed": false,
+    "overformulaPrimaryBonus": null,
+    "overformulaIntensityBonus": null,
+    "formulaDefensePenalty": null,
+    "summonConstructDefId": "v6-konstrukt-spieltest-schattenpuppe"
+  },
+  {
+    "recipeId": "v6-te-beschwoerungsritual-wasser",
+    "kind": "te",
+    "catalogSlice": "slice1",
+    "techniqueId": "v6-technik-beschwoerungsritual",
+    "essenceId": "v6-essenz-wasser",
+    "catalystId": null,
+    "name": "Wellenbeschwörung",
+    "effectSummary": "Beschwöre ein Konstrukt mit Haltbarkeit 3. Ersetzt ein bestehendes Konstrukt. Keine Fetzladung. Bei Heilung oder Schildgewinn: entferne optional eine Marke von dir.",
+    "primary": {
+      "kind": "summon_construct",
+      "value": 3,
+      "target": "self"
+    },
+    "rider": {
+      "id": "rider-reinigen",
+      "summary": "Bei Heilung oder Schildgewinn: entferne optional eine Marke von dir.",
+      "defenseSuppressible": false
+    },
+    "intensity": null,
+    "transformId": null,
+    "grantsFetz": false,
+    "catalystConsumed": false,
+    "overformulaPrimaryBonus": null,
+    "overformulaIntensityBonus": null,
+    "formulaDefensePenalty": null,
+    "summonConstructDefId": "v6-konstrukt-spieltest-schattenpuppe"
+  },
+  {
+    "recipeId": "v6-te-beschwoerungsritual-erde",
+    "kind": "te",
+    "catalogSlice": "slice1",
+    "techniqueId": "v6-technik-beschwoerungsritual",
+    "essenceId": "v6-essenz-erde",
+    "catalystId": null,
+    "name": "Felsbeschwörung",
+    "effectSummary": "Beschwöre ein Konstrukt mit Haltbarkeit 3. Ersetzt ein bestehendes Konstrukt. Keine Fetzladung. Verwendete Komponenten +1 Stabilität bis nächste Startphase.",
+    "primary": {
+      "kind": "summon_construct",
+      "value": 3,
+      "target": "self"
+    },
+    "rider": {
+      "id": "rider-stabilitaet",
+      "summary": "Verwendete Komponenten +1 Stabilität bis nächste Startphase.",
+      "defenseSuppressible": false
+    },
+    "intensity": null,
+    "transformId": null,
+    "grantsFetz": false,
+    "catalystConsumed": false,
+    "overformulaPrimaryBonus": null,
+    "overformulaIntensityBonus": null,
+    "formulaDefensePenalty": null,
+    "summonConstructDefId": "v6-konstrukt-spieltest-schattenpuppe"
+  },
+  {
+    "recipeId": "v6-te-beschwoerungsritual-luft",
+    "kind": "te",
+    "catalogSlice": "slice1",
+    "techniqueId": "v6-technik-beschwoerungsritual",
+    "essenceId": "v6-essenz-luft",
+    "catalystId": null,
+    "name": "Windbeschwörung",
+    "effectSummary": "Beschwöre ein Konstrukt mit Haltbarkeit 3. Ersetzt ein bestehendes Konstrukt. Keine Fetzladung. Nächster eigener Aktions-W6 +1 (max +2).",
+    "primary": {
+      "kind": "summon_construct",
+      "value": 3,
+      "target": "self"
+    },
+    "rider": {
+      "id": "rider-w6",
+      "summary": "Nächster eigener Aktions-W6 +1 (max +2).",
+      "defenseSuppressible": true
+    },
+    "intensity": null,
+    "transformId": null,
+    "grantsFetz": false,
+    "catalystConsumed": false,
+    "overformulaPrimaryBonus": null,
+    "overformulaIntensityBonus": null,
+    "formulaDefensePenalty": null,
+    "summonConstructDefId": "v6-konstrukt-spieltest-schattenpuppe"
+  },
+  {
+    "recipeId": "v6-te-beschwoerungsritual-licht",
+    "kind": "te",
+    "catalogSlice": "slice1",
+    "techniqueId": "v6-technik-beschwoerungsritual",
+    "essenceId": "v6-essenz-licht",
+    "catalystId": null,
+    "name": "Lichtbeschwörung",
+    "effectSummary": "Beschwöre ein Konstrukt mit Haltbarkeit 3. Ersetzt ein bestehendes Konstrukt. Keine Fetzladung. Bei Schildgewinn: entferne optional eine Marke von dir.",
+    "primary": {
+      "kind": "summon_construct",
+      "value": 3,
+      "target": "self"
+    },
+    "rider": {
+      "id": "rider-reinigen-licht",
+      "summary": "Bei Schildgewinn: entferne optional eine Marke von dir.",
+      "defenseSuppressible": false
+    },
+    "intensity": null,
+    "transformId": null,
+    "grantsFetz": false,
+    "catalystConsumed": false,
+    "overformulaPrimaryBonus": null,
+    "overformulaIntensityBonus": null,
+    "formulaDefensePenalty": null,
+    "summonConstructDefId": "v6-konstrukt-spieltest-schattenpuppe"
+  },
+  {
+    "recipeId": "v6-te-beschwoerungsritual-schatten",
+    "kind": "te",
+    "catalogSlice": "slice1",
+    "techniqueId": "v6-technik-beschwoerungsritual",
+    "essenceId": "v6-essenz-schatten",
+    "catalystId": null,
+    "name": "Schattenbeschwörung",
+    "effectSummary": "Beschwöre ein Konstrukt mit Haltbarkeit 3. Ersetzt ein bestehendes Konstrukt. Keine Fetzladung. Bei Treffer: erschöpfe optional 1 gegnerische Formelkomponente.",
+    "primary": {
+      "kind": "summon_construct",
+      "value": 3,
+      "target": "self"
+    },
+    "rider": {
+      "id": "rider-fluch",
+      "summary": "Bei Treffer: erschöpfe optional 1 gegnerische Formelkomponente.",
+      "defenseSuppressible": true
+    },
+    "intensity": null,
+    "transformId": null,
+    "grantsFetz": false,
+    "catalystConsumed": false,
+    "overformulaPrimaryBonus": null,
+    "overformulaIntensityBonus": null,
+    "formulaDefensePenalty": null,
+    "summonConstructDefId": "v6-konstrukt-spieltest-schattenpuppe"
   },
   {
     "recipeId": "v6-tk-impulsgeschoss-ueberladung",
@@ -568,7 +1782,8 @@ export const V6_GENERATED_FORMULA_RECIPES: readonly V6GeneratedFormulaRecipe[] =
     "catalystConsumed": true,
     "overformulaPrimaryBonus": null,
     "overformulaIntensityBonus": null,
-    "formulaDefensePenalty": null
+    "formulaDefensePenalty": null,
+    "summonConstructDefId": null
   },
   {
     "recipeId": "v6-tk-impulsgeschoss-verdichtung",
@@ -592,7 +1807,8 @@ export const V6_GENERATED_FORMULA_RECIPES: readonly V6GeneratedFormulaRecipe[] =
     "catalystConsumed": true,
     "overformulaPrimaryBonus": null,
     "overformulaIntensityBonus": null,
-    "formulaDefensePenalty": null
+    "formulaDefensePenalty": null,
+    "summonConstructDefId": null
   },
   {
     "recipeId": "v6-tk-impulsgeschoss-sofortzuender",
@@ -616,7 +1832,8 @@ export const V6_GENERATED_FORMULA_RECIPES: readonly V6GeneratedFormulaRecipe[] =
     "catalystConsumed": true,
     "overformulaPrimaryBonus": null,
     "overformulaIntensityBonus": null,
-    "formulaDefensePenalty": null
+    "formulaDefensePenalty": null,
+    "summonConstructDefId": null
   },
   {
     "recipeId": "v6-tk-impulsgeschoss-opfergabe",
@@ -640,7 +1857,8 @@ export const V6_GENERATED_FORMULA_RECIPES: readonly V6GeneratedFormulaRecipe[] =
     "catalystConsumed": true,
     "overformulaPrimaryBonus": null,
     "overformulaIntensityBonus": null,
-    "formulaDefensePenalty": null
+    "formulaDefensePenalty": null,
+    "summonConstructDefId": null
   },
   {
     "recipeId": "v6-tk-adrenalinschrei-ueberladung",
@@ -663,7 +1881,8 @@ export const V6_GENERATED_FORMULA_RECIPES: readonly V6GeneratedFormulaRecipe[] =
     "catalystConsumed": true,
     "overformulaPrimaryBonus": null,
     "overformulaIntensityBonus": null,
-    "formulaDefensePenalty": null
+    "formulaDefensePenalty": null,
+    "summonConstructDefId": null
   },
   {
     "recipeId": "v6-tk-adrenalinschrei-verdichtung",
@@ -686,7 +1905,8 @@ export const V6_GENERATED_FORMULA_RECIPES: readonly V6GeneratedFormulaRecipe[] =
     "catalystConsumed": true,
     "overformulaPrimaryBonus": null,
     "overformulaIntensityBonus": null,
-    "formulaDefensePenalty": null
+    "formulaDefensePenalty": null,
+    "summonConstructDefId": null
   },
   {
     "recipeId": "v6-tk-adrenalinschrei-sofortzuender",
@@ -709,7 +1929,8 @@ export const V6_GENERATED_FORMULA_RECIPES: readonly V6GeneratedFormulaRecipe[] =
     "catalystConsumed": true,
     "overformulaPrimaryBonus": null,
     "overformulaIntensityBonus": null,
-    "formulaDefensePenalty": null
+    "formulaDefensePenalty": null,
+    "summonConstructDefId": null
   },
   {
     "recipeId": "v6-tk-adrenalinschrei-opfergabe",
@@ -732,7 +1953,596 @@ export const V6_GENERATED_FORMULA_RECIPES: readonly V6GeneratedFormulaRecipe[] =
     "catalystConsumed": true,
     "overformulaPrimaryBonus": null,
     "overformulaIntensityBonus": null,
-    "formulaDefensePenalty": null
+    "formulaDefensePenalty": null,
+    "summonConstructDefId": null
+  },
+  {
+    "recipeId": "v6-tk-fintenschnitt-ueberladung",
+    "kind": "tk",
+    "catalogSlice": "slice1",
+    "techniqueId": "v6-technik-fintenschnitt",
+    "essenceId": null,
+    "catalystId": "v6-katalysator-ueberladung",
+    "name": "Überfinte",
+    "effectSummary": "Bereite Block +4 vor. Primärwert +2; danach erleidest du 1 Selbstschaden.",
+    "primary": {
+      "kind": "prep_block",
+      "value": 4,
+      "target": "self"
+    },
+    "rider": null,
+    "intensity": null,
+    "transformId": "xform-ueberladung",
+    "grantsFetz": false,
+    "catalystConsumed": true,
+    "overformulaPrimaryBonus": null,
+    "overformulaIntensityBonus": null,
+    "formulaDefensePenalty": null,
+    "summonConstructDefId": null
+  },
+  {
+    "recipeId": "v6-tk-fintenschnitt-verdichtung",
+    "kind": "tk",
+    "catalogSlice": "slice1",
+    "techniqueId": "v6-technik-fintenschnitt",
+    "essenceId": null,
+    "catalystId": "v6-katalysator-verdichtung",
+    "name": "Dichtfinte",
+    "effectSummary": "Bereite Block +3 vor. Primärwert +1; verwendete Komponenten erhalten +1 Stabilität.",
+    "primary": {
+      "kind": "prep_block",
+      "value": 3,
+      "target": "self"
+    },
+    "rider": null,
+    "intensity": null,
+    "transformId": "xform-verdichtung",
+    "grantsFetz": false,
+    "catalystConsumed": true,
+    "overformulaPrimaryBonus": null,
+    "overformulaIntensityBonus": null,
+    "formulaDefensePenalty": null,
+    "summonConstructDefId": null
+  },
+  {
+    "recipeId": "v6-tk-fintenschnitt-sofortzuender",
+    "kind": "tk",
+    "catalogSlice": "slice1",
+    "techniqueId": "v6-technik-fintenschnitt",
+    "essenceId": null,
+    "catalystId": "v6-katalysator-sofortzuender",
+    "name": "Zündfinte",
+    "effectSummary": "Bereite Block +1 vor. Primärwert −1; danach ziehe 1 und wirf 1 ab.",
+    "primary": {
+      "kind": "prep_block",
+      "value": 1,
+      "target": "self"
+    },
+    "rider": null,
+    "intensity": null,
+    "transformId": "xform-sofortzuender",
+    "grantsFetz": false,
+    "catalystConsumed": true,
+    "overformulaPrimaryBonus": null,
+    "overformulaIntensityBonus": null,
+    "formulaDefensePenalty": null,
+    "summonConstructDefId": null
+  },
+  {
+    "recipeId": "v6-tk-fintenschnitt-opfergabe",
+    "kind": "tk",
+    "catalogSlice": "slice1",
+    "techniqueId": "v6-technik-fintenschnitt",
+    "essenceId": null,
+    "catalystId": "v6-katalysator-opfergabe",
+    "name": "Opferfinte",
+    "effectSummary": "Bereite Block +2 vor. Optional: wirf 1 Handkarte ab für Primärwert +2.",
+    "primary": {
+      "kind": "prep_block",
+      "value": 2,
+      "target": "self"
+    },
+    "rider": null,
+    "intensity": null,
+    "transformId": "xform-opfergabe",
+    "grantsFetz": false,
+    "catalystConsumed": true,
+    "overformulaPrimaryBonus": null,
+    "overformulaIntensityBonus": null,
+    "formulaDefensePenalty": null,
+    "summonConstructDefId": null
+  },
+  {
+    "recipeId": "v6-tk-brechschlag-ueberladung",
+    "kind": "tk",
+    "catalogSlice": "slice1",
+    "techniqueId": "v6-technik-brechschlag",
+    "essenceId": null,
+    "catalystId": "v6-katalysator-ueberladung",
+    "name": "Überbruch",
+    "effectSummary": "Verursache 4 Schaden am Gegner. Primärwert +2; danach erleidest du 1 Selbstschaden.",
+    "primary": {
+      "kind": "damage",
+      "value": 4,
+      "target": "opponent",
+      "offensive": true
+    },
+    "rider": null,
+    "intensity": null,
+    "transformId": "xform-ueberladung",
+    "grantsFetz": false,
+    "catalystConsumed": true,
+    "overformulaPrimaryBonus": null,
+    "overformulaIntensityBonus": null,
+    "formulaDefensePenalty": null,
+    "summonConstructDefId": null
+  },
+  {
+    "recipeId": "v6-tk-brechschlag-verdichtung",
+    "kind": "tk",
+    "catalogSlice": "slice1",
+    "techniqueId": "v6-technik-brechschlag",
+    "essenceId": null,
+    "catalystId": "v6-katalysator-verdichtung",
+    "name": "Dichtbruch",
+    "effectSummary": "Verursache 3 Schaden am Gegner. Primärwert +1; verwendete Komponenten erhalten +1 Stabilität.",
+    "primary": {
+      "kind": "damage",
+      "value": 3,
+      "target": "opponent",
+      "offensive": true
+    },
+    "rider": null,
+    "intensity": null,
+    "transformId": "xform-verdichtung",
+    "grantsFetz": false,
+    "catalystConsumed": true,
+    "overformulaPrimaryBonus": null,
+    "overformulaIntensityBonus": null,
+    "formulaDefensePenalty": null,
+    "summonConstructDefId": null
+  },
+  {
+    "recipeId": "v6-tk-brechschlag-sofortzuender",
+    "kind": "tk",
+    "catalogSlice": "slice1",
+    "techniqueId": "v6-technik-brechschlag",
+    "essenceId": null,
+    "catalystId": "v6-katalysator-sofortzuender",
+    "name": "Zündbruch",
+    "effectSummary": "Verursache 1 Schaden am Gegner. Primärwert −1; danach ziehe 1 und wirf 1 ab.",
+    "primary": {
+      "kind": "damage",
+      "value": 1,
+      "target": "opponent",
+      "offensive": true
+    },
+    "rider": null,
+    "intensity": null,
+    "transformId": "xform-sofortzuender",
+    "grantsFetz": false,
+    "catalystConsumed": true,
+    "overformulaPrimaryBonus": null,
+    "overformulaIntensityBonus": null,
+    "formulaDefensePenalty": null,
+    "summonConstructDefId": null
+  },
+  {
+    "recipeId": "v6-tk-brechschlag-opfergabe",
+    "kind": "tk",
+    "catalogSlice": "slice1",
+    "techniqueId": "v6-technik-brechschlag",
+    "essenceId": null,
+    "catalystId": "v6-katalysator-opfergabe",
+    "name": "Opferbruch",
+    "effectSummary": "Verursache 2 Schaden am Gegner. Optional: wirf 1 Handkarte ab für Primärwert +2.",
+    "primary": {
+      "kind": "damage",
+      "value": 2,
+      "target": "opponent",
+      "offensive": true
+    },
+    "rider": null,
+    "intensity": null,
+    "transformId": "xform-opfergabe",
+    "grantsFetz": false,
+    "catalystConsumed": true,
+    "overformulaPrimaryBonus": null,
+    "overformulaIntensityBonus": null,
+    "formulaDefensePenalty": null,
+    "summonConstructDefId": null
+  },
+  {
+    "recipeId": "v6-tk-kettenfessel-ueberladung",
+    "kind": "tk",
+    "catalogSlice": "slice1",
+    "techniqueId": "v6-technik-kettenfessel",
+    "essenceId": null,
+    "catalystId": "v6-katalysator-ueberladung",
+    "name": "Überkette",
+    "effectSummary": "Fessel Intensität 4 auf einen besetzten gegnerischen Formelplatz (manuelle Wahl). Primärwert +2; danach erleidest du 1 Selbstschaden.",
+    "primary": {
+      "kind": "fessel",
+      "value": 4,
+      "target": "opponent",
+      "offensive": true
+    },
+    "rider": null,
+    "intensity": 4,
+    "transformId": "xform-ueberladung",
+    "grantsFetz": false,
+    "catalystConsumed": true,
+    "overformulaPrimaryBonus": null,
+    "overformulaIntensityBonus": null,
+    "formulaDefensePenalty": null,
+    "summonConstructDefId": null
+  },
+  {
+    "recipeId": "v6-tk-kettenfessel-verdichtung",
+    "kind": "tk",
+    "catalogSlice": "slice1",
+    "techniqueId": "v6-technik-kettenfessel",
+    "essenceId": null,
+    "catalystId": "v6-katalysator-verdichtung",
+    "name": "Dichtkette",
+    "effectSummary": "Fessel Intensität 3 auf einen besetzten gegnerischen Formelplatz (manuelle Wahl). Primärwert +1; verwendete Komponenten erhalten +1 Stabilität.",
+    "primary": {
+      "kind": "fessel",
+      "value": 3,
+      "target": "opponent",
+      "offensive": true
+    },
+    "rider": null,
+    "intensity": 3,
+    "transformId": "xform-verdichtung",
+    "grantsFetz": false,
+    "catalystConsumed": true,
+    "overformulaPrimaryBonus": null,
+    "overformulaIntensityBonus": null,
+    "formulaDefensePenalty": null,
+    "summonConstructDefId": null
+  },
+  {
+    "recipeId": "v6-tk-kettenfessel-sofortzuender",
+    "kind": "tk",
+    "catalogSlice": "slice1",
+    "techniqueId": "v6-technik-kettenfessel",
+    "essenceId": null,
+    "catalystId": "v6-katalysator-sofortzuender",
+    "name": "Zündkette",
+    "effectSummary": "Fessel Intensität 1 auf einen besetzten gegnerischen Formelplatz (manuelle Wahl). Primärwert −1; danach ziehe 1 und wirf 1 ab.",
+    "primary": {
+      "kind": "fessel",
+      "value": 1,
+      "target": "opponent",
+      "offensive": true
+    },
+    "rider": null,
+    "intensity": 1,
+    "transformId": "xform-sofortzuender",
+    "grantsFetz": false,
+    "catalystConsumed": true,
+    "overformulaPrimaryBonus": null,
+    "overformulaIntensityBonus": null,
+    "formulaDefensePenalty": null,
+    "summonConstructDefId": null
+  },
+  {
+    "recipeId": "v6-tk-kettenfessel-opfergabe",
+    "kind": "tk",
+    "catalogSlice": "slice1",
+    "techniqueId": "v6-technik-kettenfessel",
+    "essenceId": null,
+    "catalystId": "v6-katalysator-opfergabe",
+    "name": "Opferkette",
+    "effectSummary": "Fessel Intensität 2 auf einen besetzten gegnerischen Formelplatz (manuelle Wahl). Optional: wirf 1 Handkarte ab für Primärwert +2.",
+    "primary": {
+      "kind": "fessel",
+      "value": 2,
+      "target": "opponent",
+      "offensive": true
+    },
+    "rider": null,
+    "intensity": 2,
+    "transformId": "xform-opfergabe",
+    "grantsFetz": false,
+    "catalystConsumed": true,
+    "overformulaPrimaryBonus": null,
+    "overformulaIntensityBonus": null,
+    "formulaDefensePenalty": null,
+    "summonConstructDefId": null
+  },
+  {
+    "recipeId": "v6-tk-bannkreis-ueberladung",
+    "kind": "tk",
+    "catalogSlice": "slice1",
+    "techniqueId": "v6-technik-bannkreis",
+    "essenceId": null,
+    "catalystId": "v6-katalysator-ueberladung",
+    "name": "Überkreis",
+    "effectSummary": "Gewinne 4 Schild. Primärwert +2; danach erleidest du 1 Selbstschaden.",
+    "primary": {
+      "kind": "shield",
+      "value": 4,
+      "target": "self"
+    },
+    "rider": null,
+    "intensity": null,
+    "transformId": "xform-ueberladung",
+    "grantsFetz": false,
+    "catalystConsumed": true,
+    "overformulaPrimaryBonus": null,
+    "overformulaIntensityBonus": null,
+    "formulaDefensePenalty": null,
+    "summonConstructDefId": null
+  },
+  {
+    "recipeId": "v6-tk-bannkreis-verdichtung",
+    "kind": "tk",
+    "catalogSlice": "slice1",
+    "techniqueId": "v6-technik-bannkreis",
+    "essenceId": null,
+    "catalystId": "v6-katalysator-verdichtung",
+    "name": "Dichtkreis",
+    "effectSummary": "Gewinne 3 Schild. Primärwert +1; verwendete Komponenten erhalten +1 Stabilität.",
+    "primary": {
+      "kind": "shield",
+      "value": 3,
+      "target": "self"
+    },
+    "rider": null,
+    "intensity": null,
+    "transformId": "xform-verdichtung",
+    "grantsFetz": false,
+    "catalystConsumed": true,
+    "overformulaPrimaryBonus": null,
+    "overformulaIntensityBonus": null,
+    "formulaDefensePenalty": null,
+    "summonConstructDefId": null
+  },
+  {
+    "recipeId": "v6-tk-bannkreis-sofortzuender",
+    "kind": "tk",
+    "catalogSlice": "slice1",
+    "techniqueId": "v6-technik-bannkreis",
+    "essenceId": null,
+    "catalystId": "v6-katalysator-sofortzuender",
+    "name": "Zündkreis",
+    "effectSummary": "Gewinne 1 Schild. Primärwert −1; danach ziehe 1 und wirf 1 ab.",
+    "primary": {
+      "kind": "shield",
+      "value": 1,
+      "target": "self"
+    },
+    "rider": null,
+    "intensity": null,
+    "transformId": "xform-sofortzuender",
+    "grantsFetz": false,
+    "catalystConsumed": true,
+    "overformulaPrimaryBonus": null,
+    "overformulaIntensityBonus": null,
+    "formulaDefensePenalty": null,
+    "summonConstructDefId": null
+  },
+  {
+    "recipeId": "v6-tk-bannkreis-opfergabe",
+    "kind": "tk",
+    "catalogSlice": "slice1",
+    "techniqueId": "v6-technik-bannkreis",
+    "essenceId": null,
+    "catalystId": "v6-katalysator-opfergabe",
+    "name": "Opferkreis",
+    "effectSummary": "Gewinne 2 Schild. Optional: wirf 1 Handkarte ab für Primärwert +2.",
+    "primary": {
+      "kind": "shield",
+      "value": 2,
+      "target": "self"
+    },
+    "rider": null,
+    "intensity": null,
+    "transformId": "xform-opfergabe",
+    "grantsFetz": false,
+    "catalystConsumed": true,
+    "overformulaPrimaryBonus": null,
+    "overformulaIntensityBonus": null,
+    "formulaDefensePenalty": null,
+    "summonConstructDefId": null
+  },
+  {
+    "recipeId": "v6-tk-ueberraschungsangriff-ueberladung",
+    "kind": "tk",
+    "catalogSlice": "slice1",
+    "techniqueId": "v6-technik-ueberraschungsangriff",
+    "essenceId": null,
+    "catalystId": "v6-katalysator-ueberladung",
+    "name": "Überfallstoß",
+    "effectSummary": "Verursache 4 Schaden am Gegner. Primärwert +2; danach erleidest du 1 Selbstschaden.",
+    "primary": {
+      "kind": "damage",
+      "value": 4,
+      "target": "opponent",
+      "offensive": true
+    },
+    "rider": null,
+    "intensity": null,
+    "transformId": "xform-ueberladung",
+    "grantsFetz": false,
+    "catalystConsumed": true,
+    "overformulaPrimaryBonus": null,
+    "overformulaIntensityBonus": null,
+    "formulaDefensePenalty": null,
+    "summonConstructDefId": null
+  },
+  {
+    "recipeId": "v6-tk-ueberraschungsangriff-verdichtung",
+    "kind": "tk",
+    "catalogSlice": "slice1",
+    "techniqueId": "v6-technik-ueberraschungsangriff",
+    "essenceId": null,
+    "catalystId": "v6-katalysator-verdichtung",
+    "name": "Dichtstoß",
+    "effectSummary": "Verursache 3 Schaden am Gegner. Primärwert +1; verwendete Komponenten erhalten +1 Stabilität.",
+    "primary": {
+      "kind": "damage",
+      "value": 3,
+      "target": "opponent",
+      "offensive": true
+    },
+    "rider": null,
+    "intensity": null,
+    "transformId": "xform-verdichtung",
+    "grantsFetz": false,
+    "catalystConsumed": true,
+    "overformulaPrimaryBonus": null,
+    "overformulaIntensityBonus": null,
+    "formulaDefensePenalty": null,
+    "summonConstructDefId": null
+  },
+  {
+    "recipeId": "v6-tk-ueberraschungsangriff-sofortzuender",
+    "kind": "tk",
+    "catalogSlice": "slice1",
+    "techniqueId": "v6-technik-ueberraschungsangriff",
+    "essenceId": null,
+    "catalystId": "v6-katalysator-sofortzuender",
+    "name": "Zündstoß",
+    "effectSummary": "Verursache 1 Schaden am Gegner. Primärwert −1; danach ziehe 1 und wirf 1 ab.",
+    "primary": {
+      "kind": "damage",
+      "value": 1,
+      "target": "opponent",
+      "offensive": true
+    },
+    "rider": null,
+    "intensity": null,
+    "transformId": "xform-sofortzuender",
+    "grantsFetz": false,
+    "catalystConsumed": true,
+    "overformulaPrimaryBonus": null,
+    "overformulaIntensityBonus": null,
+    "formulaDefensePenalty": null,
+    "summonConstructDefId": null
+  },
+  {
+    "recipeId": "v6-tk-ueberraschungsangriff-opfergabe",
+    "kind": "tk",
+    "catalogSlice": "slice1",
+    "techniqueId": "v6-technik-ueberraschungsangriff",
+    "essenceId": null,
+    "catalystId": "v6-katalysator-opfergabe",
+    "name": "Opferstoß",
+    "effectSummary": "Verursache 2 Schaden am Gegner. Optional: wirf 1 Handkarte ab für Primärwert +2.",
+    "primary": {
+      "kind": "damage",
+      "value": 2,
+      "target": "opponent",
+      "offensive": true
+    },
+    "rider": null,
+    "intensity": null,
+    "transformId": "xform-opfergabe",
+    "grantsFetz": false,
+    "catalystConsumed": true,
+    "overformulaPrimaryBonus": null,
+    "overformulaIntensityBonus": null,
+    "formulaDefensePenalty": null,
+    "summonConstructDefId": null
+  },
+  {
+    "recipeId": "v6-tk-schicksalmanifestation-ueberladung",
+    "kind": "tk",
+    "catalogSlice": "slice1",
+    "techniqueId": "v6-technik-schicksalmanifestation",
+    "essenceId": null,
+    "catalystId": "v6-katalysator-ueberladung",
+    "name": "Überschicksal",
+    "effectSummary": "Bereite Boost +4 vor. Primärwert +2; danach erleidest du 1 Selbstschaden.",
+    "primary": {
+      "kind": "prep_boost",
+      "value": 4,
+      "target": "self"
+    },
+    "rider": null,
+    "intensity": null,
+    "transformId": "xform-ueberladung",
+    "grantsFetz": false,
+    "catalystConsumed": true,
+    "overformulaPrimaryBonus": null,
+    "overformulaIntensityBonus": null,
+    "formulaDefensePenalty": null,
+    "summonConstructDefId": null
+  },
+  {
+    "recipeId": "v6-tk-schicksalmanifestation-verdichtung",
+    "kind": "tk",
+    "catalogSlice": "slice1",
+    "techniqueId": "v6-technik-schicksalmanifestation",
+    "essenceId": null,
+    "catalystId": "v6-katalysator-verdichtung",
+    "name": "Dichtschicksal",
+    "effectSummary": "Bereite Boost +3 vor. Primärwert +1; verwendete Komponenten erhalten +1 Stabilität.",
+    "primary": {
+      "kind": "prep_boost",
+      "value": 3,
+      "target": "self"
+    },
+    "rider": null,
+    "intensity": null,
+    "transformId": "xform-verdichtung",
+    "grantsFetz": false,
+    "catalystConsumed": true,
+    "overformulaPrimaryBonus": null,
+    "overformulaIntensityBonus": null,
+    "formulaDefensePenalty": null,
+    "summonConstructDefId": null
+  },
+  {
+    "recipeId": "v6-tk-schicksalmanifestation-sofortzuender",
+    "kind": "tk",
+    "catalogSlice": "slice1",
+    "techniqueId": "v6-technik-schicksalmanifestation",
+    "essenceId": null,
+    "catalystId": "v6-katalysator-sofortzuender",
+    "name": "Zündschicksal",
+    "effectSummary": "Bereite Boost +1 vor. Primärwert −1; danach ziehe 1 und wirf 1 ab.",
+    "primary": {
+      "kind": "prep_boost",
+      "value": 1,
+      "target": "self"
+    },
+    "rider": null,
+    "intensity": null,
+    "transformId": "xform-sofortzuender",
+    "grantsFetz": false,
+    "catalystConsumed": true,
+    "overformulaPrimaryBonus": null,
+    "overformulaIntensityBonus": null,
+    "formulaDefensePenalty": null,
+    "summonConstructDefId": null
+  },
+  {
+    "recipeId": "v6-tk-schicksalmanifestation-opfergabe",
+    "kind": "tk",
+    "catalogSlice": "slice1",
+    "techniqueId": "v6-technik-schicksalmanifestation",
+    "essenceId": null,
+    "catalystId": "v6-katalysator-opfergabe",
+    "name": "Opferschicksal",
+    "effectSummary": "Bereite Boost +2 vor. Optional: wirf 1 Handkarte ab für Primärwert +2.",
+    "primary": {
+      "kind": "prep_boost",
+      "value": 2,
+      "target": "self"
+    },
+    "rider": null,
+    "intensity": null,
+    "transformId": "xform-opfergabe",
+    "grantsFetz": false,
+    "catalystConsumed": true,
+    "overformulaPrimaryBonus": null,
+    "overformulaIntensityBonus": null,
+    "formulaDefensePenalty": null,
+    "summonConstructDefId": null
   },
   {
     "recipeId": "v6-tk-magiepanzer-ueberladung",
@@ -755,7 +2565,8 @@ export const V6_GENERATED_FORMULA_RECIPES: readonly V6GeneratedFormulaRecipe[] =
     "catalystConsumed": true,
     "overformulaPrimaryBonus": null,
     "overformulaIntensityBonus": null,
-    "formulaDefensePenalty": null
+    "formulaDefensePenalty": null,
+    "summonConstructDefId": null
   },
   {
     "recipeId": "v6-tk-magiepanzer-verdichtung",
@@ -778,7 +2589,8 @@ export const V6_GENERATED_FORMULA_RECIPES: readonly V6GeneratedFormulaRecipe[] =
     "catalystConsumed": true,
     "overformulaPrimaryBonus": null,
     "overformulaIntensityBonus": null,
-    "formulaDefensePenalty": null
+    "formulaDefensePenalty": null,
+    "summonConstructDefId": null
   },
   {
     "recipeId": "v6-tk-magiepanzer-sofortzuender",
@@ -801,7 +2613,8 @@ export const V6_GENERATED_FORMULA_RECIPES: readonly V6GeneratedFormulaRecipe[] =
     "catalystConsumed": true,
     "overformulaPrimaryBonus": null,
     "overformulaIntensityBonus": null,
-    "formulaDefensePenalty": null
+    "formulaDefensePenalty": null,
+    "summonConstructDefId": null
   },
   {
     "recipeId": "v6-tk-magiepanzer-opfergabe",
@@ -824,7 +2637,104 @@ export const V6_GENERATED_FORMULA_RECIPES: readonly V6GeneratedFormulaRecipe[] =
     "catalystConsumed": true,
     "overformulaPrimaryBonus": null,
     "overformulaIntensityBonus": null,
-    "formulaDefensePenalty": null
+    "formulaDefensePenalty": null,
+    "summonConstructDefId": null
+  },
+  {
+    "recipeId": "v6-tk-beschwoerungsritual-ueberladung",
+    "kind": "tk",
+    "catalogSlice": "slice1",
+    "techniqueId": "v6-technik-beschwoerungsritual",
+    "essenceId": null,
+    "catalystId": "v6-katalysator-ueberladung",
+    "name": "Überritual",
+    "effectSummary": "Beschwöre ein Konstrukt mit Haltbarkeit 5. Ersetzt ein bestehendes Konstrukt. Keine Fetzladung. Primärwert +2; danach erleidest du 1 Selbstschaden.",
+    "primary": {
+      "kind": "summon_construct",
+      "value": 5,
+      "target": "self"
+    },
+    "rider": null,
+    "intensity": null,
+    "transformId": "xform-ueberladung",
+    "grantsFetz": false,
+    "catalystConsumed": true,
+    "overformulaPrimaryBonus": null,
+    "overformulaIntensityBonus": null,
+    "formulaDefensePenalty": null,
+    "summonConstructDefId": "v6-konstrukt-spieltest-schattenpuppe"
+  },
+  {
+    "recipeId": "v6-tk-beschwoerungsritual-verdichtung",
+    "kind": "tk",
+    "catalogSlice": "slice1",
+    "techniqueId": "v6-technik-beschwoerungsritual",
+    "essenceId": null,
+    "catalystId": "v6-katalysator-verdichtung",
+    "name": "Dichtritual",
+    "effectSummary": "Beschwöre ein Konstrukt mit Haltbarkeit 4. Ersetzt ein bestehendes Konstrukt. Keine Fetzladung. Primärwert +1; verwendete Komponenten erhalten +1 Stabilität.",
+    "primary": {
+      "kind": "summon_construct",
+      "value": 4,
+      "target": "self"
+    },
+    "rider": null,
+    "intensity": null,
+    "transformId": "xform-verdichtung",
+    "grantsFetz": false,
+    "catalystConsumed": true,
+    "overformulaPrimaryBonus": null,
+    "overformulaIntensityBonus": null,
+    "formulaDefensePenalty": null,
+    "summonConstructDefId": "v6-konstrukt-spieltest-schattenpuppe"
+  },
+  {
+    "recipeId": "v6-tk-beschwoerungsritual-sofortzuender",
+    "kind": "tk",
+    "catalogSlice": "slice1",
+    "techniqueId": "v6-technik-beschwoerungsritual",
+    "essenceId": null,
+    "catalystId": "v6-katalysator-sofortzuender",
+    "name": "Zündritual",
+    "effectSummary": "Beschwöre ein Konstrukt mit Haltbarkeit 2. Ersetzt ein bestehendes Konstrukt. Keine Fetzladung. Primärwert −1; danach ziehe 1 und wirf 1 ab.",
+    "primary": {
+      "kind": "summon_construct",
+      "value": 2,
+      "target": "self"
+    },
+    "rider": null,
+    "intensity": null,
+    "transformId": "xform-sofortzuender",
+    "grantsFetz": false,
+    "catalystConsumed": true,
+    "overformulaPrimaryBonus": null,
+    "overformulaIntensityBonus": null,
+    "formulaDefensePenalty": null,
+    "summonConstructDefId": "v6-konstrukt-spieltest-schattenpuppe"
+  },
+  {
+    "recipeId": "v6-tk-beschwoerungsritual-opfergabe",
+    "kind": "tk",
+    "catalogSlice": "slice1",
+    "techniqueId": "v6-technik-beschwoerungsritual",
+    "essenceId": null,
+    "catalystId": "v6-katalysator-opfergabe",
+    "name": "Opferritual",
+    "effectSummary": "Beschwöre ein Konstrukt mit Haltbarkeit 3. Ersetzt ein bestehendes Konstrukt. Keine Fetzladung. Optional: wirf 1 Handkarte ab für Primärwert +2.",
+    "primary": {
+      "kind": "summon_construct",
+      "value": 3,
+      "target": "self"
+    },
+    "rider": null,
+    "intensity": null,
+    "transformId": "xform-opfergabe",
+    "grantsFetz": false,
+    "catalystConsumed": true,
+    "overformulaPrimaryBonus": null,
+    "overformulaIntensityBonus": null,
+    "formulaDefensePenalty": null,
+    "summonConstructDefId": "v6-konstrukt-spieltest-schattenpuppe"
   },
   {
     "recipeId": "v6-ek-feuer-ueberladung",
@@ -852,7 +2762,8 @@ export const V6_GENERATED_FORMULA_RECIPES: readonly V6GeneratedFormulaRecipe[] =
     "catalystConsumed": true,
     "overformulaPrimaryBonus": null,
     "overformulaIntensityBonus": null,
-    "formulaDefensePenalty": null
+    "formulaDefensePenalty": null,
+    "summonConstructDefId": null
   },
   {
     "recipeId": "v6-ek-feuer-verdichtung",
@@ -880,7 +2791,8 @@ export const V6_GENERATED_FORMULA_RECIPES: readonly V6GeneratedFormulaRecipe[] =
     "catalystConsumed": true,
     "overformulaPrimaryBonus": null,
     "overformulaIntensityBonus": null,
-    "formulaDefensePenalty": null
+    "formulaDefensePenalty": null,
+    "summonConstructDefId": null
   },
   {
     "recipeId": "v6-ek-feuer-sofortzuender",
@@ -908,7 +2820,8 @@ export const V6_GENERATED_FORMULA_RECIPES: readonly V6GeneratedFormulaRecipe[] =
     "catalystConsumed": true,
     "overformulaPrimaryBonus": null,
     "overformulaIntensityBonus": null,
-    "formulaDefensePenalty": null
+    "formulaDefensePenalty": null,
+    "summonConstructDefId": null
   },
   {
     "recipeId": "v6-ek-feuer-opfergabe",
@@ -936,7 +2849,8 @@ export const V6_GENERATED_FORMULA_RECIPES: readonly V6GeneratedFormulaRecipe[] =
     "catalystConsumed": true,
     "overformulaPrimaryBonus": null,
     "overformulaIntensityBonus": null,
-    "formulaDefensePenalty": null
+    "formulaDefensePenalty": null,
+    "summonConstructDefId": null
   },
   {
     "recipeId": "v6-ek-wasser-ueberladung",
@@ -963,7 +2877,8 @@ export const V6_GENERATED_FORMULA_RECIPES: readonly V6GeneratedFormulaRecipe[] =
     "catalystConsumed": true,
     "overformulaPrimaryBonus": null,
     "overformulaIntensityBonus": null,
-    "formulaDefensePenalty": null
+    "formulaDefensePenalty": null,
+    "summonConstructDefId": null
   },
   {
     "recipeId": "v6-ek-wasser-verdichtung",
@@ -990,7 +2905,8 @@ export const V6_GENERATED_FORMULA_RECIPES: readonly V6GeneratedFormulaRecipe[] =
     "catalystConsumed": true,
     "overformulaPrimaryBonus": null,
     "overformulaIntensityBonus": null,
-    "formulaDefensePenalty": null
+    "formulaDefensePenalty": null,
+    "summonConstructDefId": null
   },
   {
     "recipeId": "v6-ek-wasser-sofortzuender",
@@ -1017,7 +2933,8 @@ export const V6_GENERATED_FORMULA_RECIPES: readonly V6GeneratedFormulaRecipe[] =
     "catalystConsumed": true,
     "overformulaPrimaryBonus": null,
     "overformulaIntensityBonus": null,
-    "formulaDefensePenalty": null
+    "formulaDefensePenalty": null,
+    "summonConstructDefId": null
   },
   {
     "recipeId": "v6-ek-wasser-opfergabe",
@@ -1044,7 +2961,8 @@ export const V6_GENERATED_FORMULA_RECIPES: readonly V6GeneratedFormulaRecipe[] =
     "catalystConsumed": true,
     "overformulaPrimaryBonus": null,
     "overformulaIntensityBonus": null,
-    "formulaDefensePenalty": null
+    "formulaDefensePenalty": null,
+    "summonConstructDefId": null
   },
   {
     "recipeId": "v6-ek-erde-ueberladung",
@@ -1071,7 +2989,8 @@ export const V6_GENERATED_FORMULA_RECIPES: readonly V6GeneratedFormulaRecipe[] =
     "catalystConsumed": true,
     "overformulaPrimaryBonus": null,
     "overformulaIntensityBonus": null,
-    "formulaDefensePenalty": null
+    "formulaDefensePenalty": null,
+    "summonConstructDefId": null
   },
   {
     "recipeId": "v6-ek-erde-verdichtung",
@@ -1098,7 +3017,8 @@ export const V6_GENERATED_FORMULA_RECIPES: readonly V6GeneratedFormulaRecipe[] =
     "catalystConsumed": true,
     "overformulaPrimaryBonus": null,
     "overformulaIntensityBonus": null,
-    "formulaDefensePenalty": null
+    "formulaDefensePenalty": null,
+    "summonConstructDefId": null
   },
   {
     "recipeId": "v6-ek-erde-sofortzuender",
@@ -1125,7 +3045,8 @@ export const V6_GENERATED_FORMULA_RECIPES: readonly V6GeneratedFormulaRecipe[] =
     "catalystConsumed": true,
     "overformulaPrimaryBonus": null,
     "overformulaIntensityBonus": null,
-    "formulaDefensePenalty": null
+    "formulaDefensePenalty": null,
+    "summonConstructDefId": null
   },
   {
     "recipeId": "v6-ek-erde-opfergabe",
@@ -1152,7 +3073,8 @@ export const V6_GENERATED_FORMULA_RECIPES: readonly V6GeneratedFormulaRecipe[] =
     "catalystConsumed": true,
     "overformulaPrimaryBonus": null,
     "overformulaIntensityBonus": null,
-    "formulaDefensePenalty": null
+    "formulaDefensePenalty": null,
+    "summonConstructDefId": null
   },
   {
     "recipeId": "v6-ek-luft-ueberladung",
@@ -1179,7 +3101,8 @@ export const V6_GENERATED_FORMULA_RECIPES: readonly V6GeneratedFormulaRecipe[] =
     "catalystConsumed": true,
     "overformulaPrimaryBonus": null,
     "overformulaIntensityBonus": null,
-    "formulaDefensePenalty": null
+    "formulaDefensePenalty": null,
+    "summonConstructDefId": null
   },
   {
     "recipeId": "v6-ek-luft-verdichtung",
@@ -1206,7 +3129,8 @@ export const V6_GENERATED_FORMULA_RECIPES: readonly V6GeneratedFormulaRecipe[] =
     "catalystConsumed": true,
     "overformulaPrimaryBonus": null,
     "overformulaIntensityBonus": null,
-    "formulaDefensePenalty": null
+    "formulaDefensePenalty": null,
+    "summonConstructDefId": null
   },
   {
     "recipeId": "v6-ek-luft-sofortzuender",
@@ -1233,7 +3157,8 @@ export const V6_GENERATED_FORMULA_RECIPES: readonly V6GeneratedFormulaRecipe[] =
     "catalystConsumed": true,
     "overformulaPrimaryBonus": null,
     "overformulaIntensityBonus": null,
-    "formulaDefensePenalty": null
+    "formulaDefensePenalty": null,
+    "summonConstructDefId": null
   },
   {
     "recipeId": "v6-ek-luft-opfergabe",
@@ -1260,7 +3185,8 @@ export const V6_GENERATED_FORMULA_RECIPES: readonly V6GeneratedFormulaRecipe[] =
     "catalystConsumed": true,
     "overformulaPrimaryBonus": null,
     "overformulaIntensityBonus": null,
-    "formulaDefensePenalty": null
+    "formulaDefensePenalty": null,
+    "summonConstructDefId": null
   },
   {
     "recipeId": "v6-ek-licht-ueberladung",
@@ -1287,7 +3213,8 @@ export const V6_GENERATED_FORMULA_RECIPES: readonly V6GeneratedFormulaRecipe[] =
     "catalystConsumed": true,
     "overformulaPrimaryBonus": null,
     "overformulaIntensityBonus": null,
-    "formulaDefensePenalty": null
+    "formulaDefensePenalty": null,
+    "summonConstructDefId": null
   },
   {
     "recipeId": "v6-ek-licht-verdichtung",
@@ -1314,7 +3241,8 @@ export const V6_GENERATED_FORMULA_RECIPES: readonly V6GeneratedFormulaRecipe[] =
     "catalystConsumed": true,
     "overformulaPrimaryBonus": null,
     "overformulaIntensityBonus": null,
-    "formulaDefensePenalty": null
+    "formulaDefensePenalty": null,
+    "summonConstructDefId": null
   },
   {
     "recipeId": "v6-ek-licht-sofortzuender",
@@ -1341,7 +3269,8 @@ export const V6_GENERATED_FORMULA_RECIPES: readonly V6GeneratedFormulaRecipe[] =
     "catalystConsumed": true,
     "overformulaPrimaryBonus": null,
     "overformulaIntensityBonus": null,
-    "formulaDefensePenalty": null
+    "formulaDefensePenalty": null,
+    "summonConstructDefId": null
   },
   {
     "recipeId": "v6-ek-licht-opfergabe",
@@ -1368,7 +3297,8 @@ export const V6_GENERATED_FORMULA_RECIPES: readonly V6GeneratedFormulaRecipe[] =
     "catalystConsumed": true,
     "overformulaPrimaryBonus": null,
     "overformulaIntensityBonus": null,
-    "formulaDefensePenalty": null
+    "formulaDefensePenalty": null,
+    "summonConstructDefId": null
   },
   {
     "recipeId": "v6-ek-schatten-ueberladung",
@@ -1396,7 +3326,8 @@ export const V6_GENERATED_FORMULA_RECIPES: readonly V6GeneratedFormulaRecipe[] =
     "catalystConsumed": true,
     "overformulaPrimaryBonus": null,
     "overformulaIntensityBonus": null,
-    "formulaDefensePenalty": null
+    "formulaDefensePenalty": null,
+    "summonConstructDefId": null
   },
   {
     "recipeId": "v6-ek-schatten-verdichtung",
@@ -1424,7 +3355,8 @@ export const V6_GENERATED_FORMULA_RECIPES: readonly V6GeneratedFormulaRecipe[] =
     "catalystConsumed": true,
     "overformulaPrimaryBonus": null,
     "overformulaIntensityBonus": null,
-    "formulaDefensePenalty": null
+    "formulaDefensePenalty": null,
+    "summonConstructDefId": null
   },
   {
     "recipeId": "v6-ek-schatten-sofortzuender",
@@ -1452,7 +3384,8 @@ export const V6_GENERATED_FORMULA_RECIPES: readonly V6GeneratedFormulaRecipe[] =
     "catalystConsumed": true,
     "overformulaPrimaryBonus": null,
     "overformulaIntensityBonus": null,
-    "formulaDefensePenalty": null
+    "formulaDefensePenalty": null,
+    "summonConstructDefId": null
   },
   {
     "recipeId": "v6-ek-schatten-opfergabe",
@@ -1480,7 +3413,8 @@ export const V6_GENERATED_FORMULA_RECIPES: readonly V6GeneratedFormulaRecipe[] =
     "catalystConsumed": true,
     "overformulaPrimaryBonus": null,
     "overformulaIntensityBonus": null,
-    "formulaDefensePenalty": null
+    "formulaDefensePenalty": null,
+    "summonConstructDefId": null
   },
   {
     "recipeId": "v6-tek-impulsgeschoss-feuer-ueberladung",
@@ -1508,7 +3442,8 @@ export const V6_GENERATED_FORMULA_RECIPES: readonly V6GeneratedFormulaRecipe[] =
     "catalystConsumed": true,
     "overformulaPrimaryBonus": null,
     "overformulaIntensityBonus": null,
-    "formulaDefensePenalty": null
+    "formulaDefensePenalty": null,
+    "summonConstructDefId": null
   },
   {
     "recipeId": "v6-over-impulsgeschoss-feuer-ueberladung",
@@ -1536,7 +3471,8 @@ export const V6_GENERATED_FORMULA_RECIPES: readonly V6GeneratedFormulaRecipe[] =
     "catalystConsumed": true,
     "overformulaPrimaryBonus": 2,
     "overformulaIntensityBonus": null,
-    "formulaDefensePenalty": -1
+    "formulaDefensePenalty": -1,
+    "summonConstructDefId": null
   },
   {
     "recipeId": "v6-tek-impulsgeschoss-feuer-verdichtung",
@@ -1564,7 +3500,8 @@ export const V6_GENERATED_FORMULA_RECIPES: readonly V6GeneratedFormulaRecipe[] =
     "catalystConsumed": true,
     "overformulaPrimaryBonus": null,
     "overformulaIntensityBonus": null,
-    "formulaDefensePenalty": null
+    "formulaDefensePenalty": null,
+    "summonConstructDefId": null
   },
   {
     "recipeId": "v6-over-impulsgeschoss-feuer-verdichtung",
@@ -1592,7 +3529,8 @@ export const V6_GENERATED_FORMULA_RECIPES: readonly V6GeneratedFormulaRecipe[] =
     "catalystConsumed": true,
     "overformulaPrimaryBonus": 2,
     "overformulaIntensityBonus": null,
-    "formulaDefensePenalty": -1
+    "formulaDefensePenalty": -1,
+    "summonConstructDefId": null
   },
   {
     "recipeId": "v6-tek-impulsgeschoss-feuer-sofortzuender",
@@ -1620,7 +3558,8 @@ export const V6_GENERATED_FORMULA_RECIPES: readonly V6GeneratedFormulaRecipe[] =
     "catalystConsumed": true,
     "overformulaPrimaryBonus": null,
     "overformulaIntensityBonus": null,
-    "formulaDefensePenalty": null
+    "formulaDefensePenalty": null,
+    "summonConstructDefId": null
   },
   {
     "recipeId": "v6-over-impulsgeschoss-feuer-sofortzuender",
@@ -1648,7 +3587,8 @@ export const V6_GENERATED_FORMULA_RECIPES: readonly V6GeneratedFormulaRecipe[] =
     "catalystConsumed": true,
     "overformulaPrimaryBonus": 2,
     "overformulaIntensityBonus": null,
-    "formulaDefensePenalty": -1
+    "formulaDefensePenalty": -1,
+    "summonConstructDefId": null
   },
   {
     "recipeId": "v6-tek-impulsgeschoss-feuer-opfergabe",
@@ -1676,7 +3616,8 @@ export const V6_GENERATED_FORMULA_RECIPES: readonly V6GeneratedFormulaRecipe[] =
     "catalystConsumed": true,
     "overformulaPrimaryBonus": null,
     "overformulaIntensityBonus": null,
-    "formulaDefensePenalty": null
+    "formulaDefensePenalty": null,
+    "summonConstructDefId": null
   },
   {
     "recipeId": "v6-over-impulsgeschoss-feuer-opfergabe",
@@ -1704,7 +3645,8 @@ export const V6_GENERATED_FORMULA_RECIPES: readonly V6GeneratedFormulaRecipe[] =
     "catalystConsumed": true,
     "overformulaPrimaryBonus": 2,
     "overformulaIntensityBonus": null,
-    "formulaDefensePenalty": -1
+    "formulaDefensePenalty": -1,
+    "summonConstructDefId": null
   },
   {
     "recipeId": "v6-tek-impulsgeschoss-wasser-ueberladung",
@@ -1732,7 +3674,8 @@ export const V6_GENERATED_FORMULA_RECIPES: readonly V6GeneratedFormulaRecipe[] =
     "catalystConsumed": true,
     "overformulaPrimaryBonus": null,
     "overformulaIntensityBonus": null,
-    "formulaDefensePenalty": null
+    "formulaDefensePenalty": null,
+    "summonConstructDefId": null
   },
   {
     "recipeId": "v6-over-impulsgeschoss-wasser-ueberladung",
@@ -1760,7 +3703,8 @@ export const V6_GENERATED_FORMULA_RECIPES: readonly V6GeneratedFormulaRecipe[] =
     "catalystConsumed": true,
     "overformulaPrimaryBonus": 2,
     "overformulaIntensityBonus": null,
-    "formulaDefensePenalty": -1
+    "formulaDefensePenalty": -1,
+    "summonConstructDefId": null
   },
   {
     "recipeId": "v6-tek-impulsgeschoss-wasser-verdichtung",
@@ -1788,7 +3732,8 @@ export const V6_GENERATED_FORMULA_RECIPES: readonly V6GeneratedFormulaRecipe[] =
     "catalystConsumed": true,
     "overformulaPrimaryBonus": null,
     "overformulaIntensityBonus": null,
-    "formulaDefensePenalty": null
+    "formulaDefensePenalty": null,
+    "summonConstructDefId": null
   },
   {
     "recipeId": "v6-over-impulsgeschoss-wasser-verdichtung",
@@ -1816,7 +3761,8 @@ export const V6_GENERATED_FORMULA_RECIPES: readonly V6GeneratedFormulaRecipe[] =
     "catalystConsumed": true,
     "overformulaPrimaryBonus": 2,
     "overformulaIntensityBonus": null,
-    "formulaDefensePenalty": -1
+    "formulaDefensePenalty": -1,
+    "summonConstructDefId": null
   },
   {
     "recipeId": "v6-tek-impulsgeschoss-wasser-sofortzuender",
@@ -1844,7 +3790,8 @@ export const V6_GENERATED_FORMULA_RECIPES: readonly V6GeneratedFormulaRecipe[] =
     "catalystConsumed": true,
     "overformulaPrimaryBonus": null,
     "overformulaIntensityBonus": null,
-    "formulaDefensePenalty": null
+    "formulaDefensePenalty": null,
+    "summonConstructDefId": null
   },
   {
     "recipeId": "v6-over-impulsgeschoss-wasser-sofortzuender",
@@ -1872,7 +3819,8 @@ export const V6_GENERATED_FORMULA_RECIPES: readonly V6GeneratedFormulaRecipe[] =
     "catalystConsumed": true,
     "overformulaPrimaryBonus": 2,
     "overformulaIntensityBonus": null,
-    "formulaDefensePenalty": -1
+    "formulaDefensePenalty": -1,
+    "summonConstructDefId": null
   },
   {
     "recipeId": "v6-tek-impulsgeschoss-wasser-opfergabe",
@@ -1900,7 +3848,8 @@ export const V6_GENERATED_FORMULA_RECIPES: readonly V6GeneratedFormulaRecipe[] =
     "catalystConsumed": true,
     "overformulaPrimaryBonus": null,
     "overformulaIntensityBonus": null,
-    "formulaDefensePenalty": null
+    "formulaDefensePenalty": null,
+    "summonConstructDefId": null
   },
   {
     "recipeId": "v6-over-impulsgeschoss-wasser-opfergabe",
@@ -1928,7 +3877,8 @@ export const V6_GENERATED_FORMULA_RECIPES: readonly V6GeneratedFormulaRecipe[] =
     "catalystConsumed": true,
     "overformulaPrimaryBonus": 2,
     "overformulaIntensityBonus": null,
-    "formulaDefensePenalty": -1
+    "formulaDefensePenalty": -1,
+    "summonConstructDefId": null
   },
   {
     "recipeId": "v6-tek-impulsgeschoss-erde-ueberladung",
@@ -1956,7 +3906,8 @@ export const V6_GENERATED_FORMULA_RECIPES: readonly V6GeneratedFormulaRecipe[] =
     "catalystConsumed": true,
     "overformulaPrimaryBonus": null,
     "overformulaIntensityBonus": null,
-    "formulaDefensePenalty": null
+    "formulaDefensePenalty": null,
+    "summonConstructDefId": null
   },
   {
     "recipeId": "v6-over-impulsgeschoss-erde-ueberladung",
@@ -1984,7 +3935,8 @@ export const V6_GENERATED_FORMULA_RECIPES: readonly V6GeneratedFormulaRecipe[] =
     "catalystConsumed": true,
     "overformulaPrimaryBonus": 2,
     "overformulaIntensityBonus": null,
-    "formulaDefensePenalty": -1
+    "formulaDefensePenalty": -1,
+    "summonConstructDefId": null
   },
   {
     "recipeId": "v6-tek-impulsgeschoss-erde-verdichtung",
@@ -2012,7 +3964,8 @@ export const V6_GENERATED_FORMULA_RECIPES: readonly V6GeneratedFormulaRecipe[] =
     "catalystConsumed": true,
     "overformulaPrimaryBonus": null,
     "overformulaIntensityBonus": null,
-    "formulaDefensePenalty": null
+    "formulaDefensePenalty": null,
+    "summonConstructDefId": null
   },
   {
     "recipeId": "v6-over-impulsgeschoss-erde-verdichtung",
@@ -2040,7 +3993,8 @@ export const V6_GENERATED_FORMULA_RECIPES: readonly V6GeneratedFormulaRecipe[] =
     "catalystConsumed": true,
     "overformulaPrimaryBonus": 2,
     "overformulaIntensityBonus": null,
-    "formulaDefensePenalty": -1
+    "formulaDefensePenalty": -1,
+    "summonConstructDefId": null
   },
   {
     "recipeId": "v6-tek-impulsgeschoss-erde-sofortzuender",
@@ -2068,7 +4022,8 @@ export const V6_GENERATED_FORMULA_RECIPES: readonly V6GeneratedFormulaRecipe[] =
     "catalystConsumed": true,
     "overformulaPrimaryBonus": null,
     "overformulaIntensityBonus": null,
-    "formulaDefensePenalty": null
+    "formulaDefensePenalty": null,
+    "summonConstructDefId": null
   },
   {
     "recipeId": "v6-over-impulsgeschoss-erde-sofortzuender",
@@ -2096,7 +4051,8 @@ export const V6_GENERATED_FORMULA_RECIPES: readonly V6GeneratedFormulaRecipe[] =
     "catalystConsumed": true,
     "overformulaPrimaryBonus": 2,
     "overformulaIntensityBonus": null,
-    "formulaDefensePenalty": -1
+    "formulaDefensePenalty": -1,
+    "summonConstructDefId": null
   },
   {
     "recipeId": "v6-tek-impulsgeschoss-erde-opfergabe",
@@ -2124,7 +4080,8 @@ export const V6_GENERATED_FORMULA_RECIPES: readonly V6GeneratedFormulaRecipe[] =
     "catalystConsumed": true,
     "overformulaPrimaryBonus": null,
     "overformulaIntensityBonus": null,
-    "formulaDefensePenalty": null
+    "formulaDefensePenalty": null,
+    "summonConstructDefId": null
   },
   {
     "recipeId": "v6-over-impulsgeschoss-erde-opfergabe",
@@ -2152,7 +4109,8 @@ export const V6_GENERATED_FORMULA_RECIPES: readonly V6GeneratedFormulaRecipe[] =
     "catalystConsumed": true,
     "overformulaPrimaryBonus": 2,
     "overformulaIntensityBonus": null,
-    "formulaDefensePenalty": -1
+    "formulaDefensePenalty": -1,
+    "summonConstructDefId": null
   },
   {
     "recipeId": "v6-tek-impulsgeschoss-luft-ueberladung",
@@ -2180,7 +4138,8 @@ export const V6_GENERATED_FORMULA_RECIPES: readonly V6GeneratedFormulaRecipe[] =
     "catalystConsumed": true,
     "overformulaPrimaryBonus": null,
     "overformulaIntensityBonus": null,
-    "formulaDefensePenalty": null
+    "formulaDefensePenalty": null,
+    "summonConstructDefId": null
   },
   {
     "recipeId": "v6-over-impulsgeschoss-luft-ueberladung",
@@ -2208,7 +4167,8 @@ export const V6_GENERATED_FORMULA_RECIPES: readonly V6GeneratedFormulaRecipe[] =
     "catalystConsumed": true,
     "overformulaPrimaryBonus": 2,
     "overformulaIntensityBonus": null,
-    "formulaDefensePenalty": -1
+    "formulaDefensePenalty": -1,
+    "summonConstructDefId": null
   },
   {
     "recipeId": "v6-tek-impulsgeschoss-luft-verdichtung",
@@ -2236,7 +4196,8 @@ export const V6_GENERATED_FORMULA_RECIPES: readonly V6GeneratedFormulaRecipe[] =
     "catalystConsumed": true,
     "overformulaPrimaryBonus": null,
     "overformulaIntensityBonus": null,
-    "formulaDefensePenalty": null
+    "formulaDefensePenalty": null,
+    "summonConstructDefId": null
   },
   {
     "recipeId": "v6-over-impulsgeschoss-luft-verdichtung",
@@ -2264,7 +4225,8 @@ export const V6_GENERATED_FORMULA_RECIPES: readonly V6GeneratedFormulaRecipe[] =
     "catalystConsumed": true,
     "overformulaPrimaryBonus": 2,
     "overformulaIntensityBonus": null,
-    "formulaDefensePenalty": -1
+    "formulaDefensePenalty": -1,
+    "summonConstructDefId": null
   },
   {
     "recipeId": "v6-tek-impulsgeschoss-luft-sofortzuender",
@@ -2292,7 +4254,8 @@ export const V6_GENERATED_FORMULA_RECIPES: readonly V6GeneratedFormulaRecipe[] =
     "catalystConsumed": true,
     "overformulaPrimaryBonus": null,
     "overformulaIntensityBonus": null,
-    "formulaDefensePenalty": null
+    "formulaDefensePenalty": null,
+    "summonConstructDefId": null
   },
   {
     "recipeId": "v6-over-impulsgeschoss-luft-sofortzuender",
@@ -2320,7 +4283,8 @@ export const V6_GENERATED_FORMULA_RECIPES: readonly V6GeneratedFormulaRecipe[] =
     "catalystConsumed": true,
     "overformulaPrimaryBonus": 2,
     "overformulaIntensityBonus": null,
-    "formulaDefensePenalty": -1
+    "formulaDefensePenalty": -1,
+    "summonConstructDefId": null
   },
   {
     "recipeId": "v6-tek-impulsgeschoss-luft-opfergabe",
@@ -2348,7 +4312,8 @@ export const V6_GENERATED_FORMULA_RECIPES: readonly V6GeneratedFormulaRecipe[] =
     "catalystConsumed": true,
     "overformulaPrimaryBonus": null,
     "overformulaIntensityBonus": null,
-    "formulaDefensePenalty": null
+    "formulaDefensePenalty": null,
+    "summonConstructDefId": null
   },
   {
     "recipeId": "v6-over-impulsgeschoss-luft-opfergabe",
@@ -2376,7 +4341,8 @@ export const V6_GENERATED_FORMULA_RECIPES: readonly V6GeneratedFormulaRecipe[] =
     "catalystConsumed": true,
     "overformulaPrimaryBonus": 2,
     "overformulaIntensityBonus": null,
-    "formulaDefensePenalty": -1
+    "formulaDefensePenalty": -1,
+    "summonConstructDefId": null
   },
   {
     "recipeId": "v6-tek-impulsgeschoss-licht-ueberladung",
@@ -2404,7 +4370,8 @@ export const V6_GENERATED_FORMULA_RECIPES: readonly V6GeneratedFormulaRecipe[] =
     "catalystConsumed": true,
     "overformulaPrimaryBonus": null,
     "overformulaIntensityBonus": null,
-    "formulaDefensePenalty": null
+    "formulaDefensePenalty": null,
+    "summonConstructDefId": null
   },
   {
     "recipeId": "v6-over-impulsgeschoss-licht-ueberladung",
@@ -2432,7 +4399,8 @@ export const V6_GENERATED_FORMULA_RECIPES: readonly V6GeneratedFormulaRecipe[] =
     "catalystConsumed": true,
     "overformulaPrimaryBonus": 2,
     "overformulaIntensityBonus": null,
-    "formulaDefensePenalty": -1
+    "formulaDefensePenalty": -1,
+    "summonConstructDefId": null
   },
   {
     "recipeId": "v6-tek-impulsgeschoss-licht-verdichtung",
@@ -2460,7 +4428,8 @@ export const V6_GENERATED_FORMULA_RECIPES: readonly V6GeneratedFormulaRecipe[] =
     "catalystConsumed": true,
     "overformulaPrimaryBonus": null,
     "overformulaIntensityBonus": null,
-    "formulaDefensePenalty": null
+    "formulaDefensePenalty": null,
+    "summonConstructDefId": null
   },
   {
     "recipeId": "v6-over-impulsgeschoss-licht-verdichtung",
@@ -2488,7 +4457,8 @@ export const V6_GENERATED_FORMULA_RECIPES: readonly V6GeneratedFormulaRecipe[] =
     "catalystConsumed": true,
     "overformulaPrimaryBonus": 2,
     "overformulaIntensityBonus": null,
-    "formulaDefensePenalty": -1
+    "formulaDefensePenalty": -1,
+    "summonConstructDefId": null
   },
   {
     "recipeId": "v6-tek-impulsgeschoss-licht-sofortzuender",
@@ -2516,7 +4486,8 @@ export const V6_GENERATED_FORMULA_RECIPES: readonly V6GeneratedFormulaRecipe[] =
     "catalystConsumed": true,
     "overformulaPrimaryBonus": null,
     "overformulaIntensityBonus": null,
-    "formulaDefensePenalty": null
+    "formulaDefensePenalty": null,
+    "summonConstructDefId": null
   },
   {
     "recipeId": "v6-over-impulsgeschoss-licht-sofortzuender",
@@ -2544,7 +4515,8 @@ export const V6_GENERATED_FORMULA_RECIPES: readonly V6GeneratedFormulaRecipe[] =
     "catalystConsumed": true,
     "overformulaPrimaryBonus": 2,
     "overformulaIntensityBonus": null,
-    "formulaDefensePenalty": -1
+    "formulaDefensePenalty": -1,
+    "summonConstructDefId": null
   },
   {
     "recipeId": "v6-tek-impulsgeschoss-licht-opfergabe",
@@ -2572,7 +4544,8 @@ export const V6_GENERATED_FORMULA_RECIPES: readonly V6GeneratedFormulaRecipe[] =
     "catalystConsumed": true,
     "overformulaPrimaryBonus": null,
     "overformulaIntensityBonus": null,
-    "formulaDefensePenalty": null
+    "formulaDefensePenalty": null,
+    "summonConstructDefId": null
   },
   {
     "recipeId": "v6-over-impulsgeschoss-licht-opfergabe",
@@ -2600,7 +4573,8 @@ export const V6_GENERATED_FORMULA_RECIPES: readonly V6GeneratedFormulaRecipe[] =
     "catalystConsumed": true,
     "overformulaPrimaryBonus": 2,
     "overformulaIntensityBonus": null,
-    "formulaDefensePenalty": -1
+    "formulaDefensePenalty": -1,
+    "summonConstructDefId": null
   },
   {
     "recipeId": "v6-tek-impulsgeschoss-schatten-ueberladung",
@@ -2628,7 +4602,8 @@ export const V6_GENERATED_FORMULA_RECIPES: readonly V6GeneratedFormulaRecipe[] =
     "catalystConsumed": true,
     "overformulaPrimaryBonus": null,
     "overformulaIntensityBonus": null,
-    "formulaDefensePenalty": null
+    "formulaDefensePenalty": null,
+    "summonConstructDefId": null
   },
   {
     "recipeId": "v6-over-impulsgeschoss-schatten-ueberladung",
@@ -2656,7 +4631,8 @@ export const V6_GENERATED_FORMULA_RECIPES: readonly V6GeneratedFormulaRecipe[] =
     "catalystConsumed": true,
     "overformulaPrimaryBonus": 2,
     "overformulaIntensityBonus": null,
-    "formulaDefensePenalty": -1
+    "formulaDefensePenalty": -1,
+    "summonConstructDefId": null
   },
   {
     "recipeId": "v6-tek-impulsgeschoss-schatten-verdichtung",
@@ -2684,7 +4660,8 @@ export const V6_GENERATED_FORMULA_RECIPES: readonly V6GeneratedFormulaRecipe[] =
     "catalystConsumed": true,
     "overformulaPrimaryBonus": null,
     "overformulaIntensityBonus": null,
-    "formulaDefensePenalty": null
+    "formulaDefensePenalty": null,
+    "summonConstructDefId": null
   },
   {
     "recipeId": "v6-over-impulsgeschoss-schatten-verdichtung",
@@ -2712,7 +4689,8 @@ export const V6_GENERATED_FORMULA_RECIPES: readonly V6GeneratedFormulaRecipe[] =
     "catalystConsumed": true,
     "overformulaPrimaryBonus": 2,
     "overformulaIntensityBonus": null,
-    "formulaDefensePenalty": -1
+    "formulaDefensePenalty": -1,
+    "summonConstructDefId": null
   },
   {
     "recipeId": "v6-tek-impulsgeschoss-schatten-sofortzuender",
@@ -2740,7 +4718,8 @@ export const V6_GENERATED_FORMULA_RECIPES: readonly V6GeneratedFormulaRecipe[] =
     "catalystConsumed": true,
     "overformulaPrimaryBonus": null,
     "overformulaIntensityBonus": null,
-    "formulaDefensePenalty": null
+    "formulaDefensePenalty": null,
+    "summonConstructDefId": null
   },
   {
     "recipeId": "v6-over-impulsgeschoss-schatten-sofortzuender",
@@ -2768,7 +4747,8 @@ export const V6_GENERATED_FORMULA_RECIPES: readonly V6GeneratedFormulaRecipe[] =
     "catalystConsumed": true,
     "overformulaPrimaryBonus": 2,
     "overformulaIntensityBonus": null,
-    "formulaDefensePenalty": -1
+    "formulaDefensePenalty": -1,
+    "summonConstructDefId": null
   },
   {
     "recipeId": "v6-tek-impulsgeschoss-schatten-opfergabe",
@@ -2796,7 +4776,8 @@ export const V6_GENERATED_FORMULA_RECIPES: readonly V6GeneratedFormulaRecipe[] =
     "catalystConsumed": true,
     "overformulaPrimaryBonus": null,
     "overformulaIntensityBonus": null,
-    "formulaDefensePenalty": null
+    "formulaDefensePenalty": null,
+    "summonConstructDefId": null
   },
   {
     "recipeId": "v6-over-impulsgeschoss-schatten-opfergabe",
@@ -2824,7 +4805,8 @@ export const V6_GENERATED_FORMULA_RECIPES: readonly V6GeneratedFormulaRecipe[] =
     "catalystConsumed": true,
     "overformulaPrimaryBonus": 2,
     "overformulaIntensityBonus": null,
-    "formulaDefensePenalty": -1
+    "formulaDefensePenalty": -1,
+    "summonConstructDefId": null
   },
   {
     "recipeId": "v6-tek-adrenalinschrei-feuer-ueberladung",
@@ -2851,7 +4833,8 @@ export const V6_GENERATED_FORMULA_RECIPES: readonly V6GeneratedFormulaRecipe[] =
     "catalystConsumed": true,
     "overformulaPrimaryBonus": null,
     "overformulaIntensityBonus": null,
-    "formulaDefensePenalty": null
+    "formulaDefensePenalty": null,
+    "summonConstructDefId": null
   },
   {
     "recipeId": "v6-over-adrenalinschrei-feuer-ueberladung",
@@ -2878,7 +4861,8 @@ export const V6_GENERATED_FORMULA_RECIPES: readonly V6GeneratedFormulaRecipe[] =
     "catalystConsumed": true,
     "overformulaPrimaryBonus": null,
     "overformulaIntensityBonus": 1,
-    "formulaDefensePenalty": -1
+    "formulaDefensePenalty": -1,
+    "summonConstructDefId": null
   },
   {
     "recipeId": "v6-tek-adrenalinschrei-feuer-verdichtung",
@@ -2905,7 +4889,8 @@ export const V6_GENERATED_FORMULA_RECIPES: readonly V6GeneratedFormulaRecipe[] =
     "catalystConsumed": true,
     "overformulaPrimaryBonus": null,
     "overformulaIntensityBonus": null,
-    "formulaDefensePenalty": null
+    "formulaDefensePenalty": null,
+    "summonConstructDefId": null
   },
   {
     "recipeId": "v6-over-adrenalinschrei-feuer-verdichtung",
@@ -2932,7 +4917,8 @@ export const V6_GENERATED_FORMULA_RECIPES: readonly V6GeneratedFormulaRecipe[] =
     "catalystConsumed": true,
     "overformulaPrimaryBonus": null,
     "overformulaIntensityBonus": 1,
-    "formulaDefensePenalty": -1
+    "formulaDefensePenalty": -1,
+    "summonConstructDefId": null
   },
   {
     "recipeId": "v6-tek-adrenalinschrei-feuer-sofortzuender",
@@ -2959,7 +4945,8 @@ export const V6_GENERATED_FORMULA_RECIPES: readonly V6GeneratedFormulaRecipe[] =
     "catalystConsumed": true,
     "overformulaPrimaryBonus": null,
     "overformulaIntensityBonus": null,
-    "formulaDefensePenalty": null
+    "formulaDefensePenalty": null,
+    "summonConstructDefId": null
   },
   {
     "recipeId": "v6-over-adrenalinschrei-feuer-sofortzuender",
@@ -2986,7 +4973,8 @@ export const V6_GENERATED_FORMULA_RECIPES: readonly V6GeneratedFormulaRecipe[] =
     "catalystConsumed": true,
     "overformulaPrimaryBonus": null,
     "overformulaIntensityBonus": 1,
-    "formulaDefensePenalty": -1
+    "formulaDefensePenalty": -1,
+    "summonConstructDefId": null
   },
   {
     "recipeId": "v6-tek-adrenalinschrei-feuer-opfergabe",
@@ -3013,7 +5001,8 @@ export const V6_GENERATED_FORMULA_RECIPES: readonly V6GeneratedFormulaRecipe[] =
     "catalystConsumed": true,
     "overformulaPrimaryBonus": null,
     "overformulaIntensityBonus": null,
-    "formulaDefensePenalty": null
+    "formulaDefensePenalty": null,
+    "summonConstructDefId": null
   },
   {
     "recipeId": "v6-over-adrenalinschrei-feuer-opfergabe",
@@ -3040,7 +5029,8 @@ export const V6_GENERATED_FORMULA_RECIPES: readonly V6GeneratedFormulaRecipe[] =
     "catalystConsumed": true,
     "overformulaPrimaryBonus": null,
     "overformulaIntensityBonus": 1,
-    "formulaDefensePenalty": -1
+    "formulaDefensePenalty": -1,
+    "summonConstructDefId": null
   },
   {
     "recipeId": "v6-tek-adrenalinschrei-wasser-ueberladung",
@@ -3067,7 +5057,8 @@ export const V6_GENERATED_FORMULA_RECIPES: readonly V6GeneratedFormulaRecipe[] =
     "catalystConsumed": true,
     "overformulaPrimaryBonus": null,
     "overformulaIntensityBonus": null,
-    "formulaDefensePenalty": null
+    "formulaDefensePenalty": null,
+    "summonConstructDefId": null
   },
   {
     "recipeId": "v6-over-adrenalinschrei-wasser-ueberladung",
@@ -3094,7 +5085,8 @@ export const V6_GENERATED_FORMULA_RECIPES: readonly V6GeneratedFormulaRecipe[] =
     "catalystConsumed": true,
     "overformulaPrimaryBonus": null,
     "overformulaIntensityBonus": 1,
-    "formulaDefensePenalty": -1
+    "formulaDefensePenalty": -1,
+    "summonConstructDefId": null
   },
   {
     "recipeId": "v6-tek-adrenalinschrei-wasser-verdichtung",
@@ -3121,7 +5113,8 @@ export const V6_GENERATED_FORMULA_RECIPES: readonly V6GeneratedFormulaRecipe[] =
     "catalystConsumed": true,
     "overformulaPrimaryBonus": null,
     "overformulaIntensityBonus": null,
-    "formulaDefensePenalty": null
+    "formulaDefensePenalty": null,
+    "summonConstructDefId": null
   },
   {
     "recipeId": "v6-over-adrenalinschrei-wasser-verdichtung",
@@ -3148,7 +5141,8 @@ export const V6_GENERATED_FORMULA_RECIPES: readonly V6GeneratedFormulaRecipe[] =
     "catalystConsumed": true,
     "overformulaPrimaryBonus": null,
     "overformulaIntensityBonus": 1,
-    "formulaDefensePenalty": -1
+    "formulaDefensePenalty": -1,
+    "summonConstructDefId": null
   },
   {
     "recipeId": "v6-tek-adrenalinschrei-wasser-sofortzuender",
@@ -3175,7 +5169,8 @@ export const V6_GENERATED_FORMULA_RECIPES: readonly V6GeneratedFormulaRecipe[] =
     "catalystConsumed": true,
     "overformulaPrimaryBonus": null,
     "overformulaIntensityBonus": null,
-    "formulaDefensePenalty": null
+    "formulaDefensePenalty": null,
+    "summonConstructDefId": null
   },
   {
     "recipeId": "v6-over-adrenalinschrei-wasser-sofortzuender",
@@ -3202,7 +5197,8 @@ export const V6_GENERATED_FORMULA_RECIPES: readonly V6GeneratedFormulaRecipe[] =
     "catalystConsumed": true,
     "overformulaPrimaryBonus": null,
     "overformulaIntensityBonus": 1,
-    "formulaDefensePenalty": -1
+    "formulaDefensePenalty": -1,
+    "summonConstructDefId": null
   },
   {
     "recipeId": "v6-tek-adrenalinschrei-wasser-opfergabe",
@@ -3229,7 +5225,8 @@ export const V6_GENERATED_FORMULA_RECIPES: readonly V6GeneratedFormulaRecipe[] =
     "catalystConsumed": true,
     "overformulaPrimaryBonus": null,
     "overformulaIntensityBonus": null,
-    "formulaDefensePenalty": null
+    "formulaDefensePenalty": null,
+    "summonConstructDefId": null
   },
   {
     "recipeId": "v6-over-adrenalinschrei-wasser-opfergabe",
@@ -3256,7 +5253,8 @@ export const V6_GENERATED_FORMULA_RECIPES: readonly V6GeneratedFormulaRecipe[] =
     "catalystConsumed": true,
     "overformulaPrimaryBonus": null,
     "overformulaIntensityBonus": 1,
-    "formulaDefensePenalty": -1
+    "formulaDefensePenalty": -1,
+    "summonConstructDefId": null
   },
   {
     "recipeId": "v6-tek-adrenalinschrei-erde-ueberladung",
@@ -3283,7 +5281,8 @@ export const V6_GENERATED_FORMULA_RECIPES: readonly V6GeneratedFormulaRecipe[] =
     "catalystConsumed": true,
     "overformulaPrimaryBonus": null,
     "overformulaIntensityBonus": null,
-    "formulaDefensePenalty": null
+    "formulaDefensePenalty": null,
+    "summonConstructDefId": null
   },
   {
     "recipeId": "v6-over-adrenalinschrei-erde-ueberladung",
@@ -3310,7 +5309,8 @@ export const V6_GENERATED_FORMULA_RECIPES: readonly V6GeneratedFormulaRecipe[] =
     "catalystConsumed": true,
     "overformulaPrimaryBonus": null,
     "overformulaIntensityBonus": 1,
-    "formulaDefensePenalty": -1
+    "formulaDefensePenalty": -1,
+    "summonConstructDefId": null
   },
   {
     "recipeId": "v6-tek-adrenalinschrei-erde-verdichtung",
@@ -3337,7 +5337,8 @@ export const V6_GENERATED_FORMULA_RECIPES: readonly V6GeneratedFormulaRecipe[] =
     "catalystConsumed": true,
     "overformulaPrimaryBonus": null,
     "overformulaIntensityBonus": null,
-    "formulaDefensePenalty": null
+    "formulaDefensePenalty": null,
+    "summonConstructDefId": null
   },
   {
     "recipeId": "v6-over-adrenalinschrei-erde-verdichtung",
@@ -3364,7 +5365,8 @@ export const V6_GENERATED_FORMULA_RECIPES: readonly V6GeneratedFormulaRecipe[] =
     "catalystConsumed": true,
     "overformulaPrimaryBonus": null,
     "overformulaIntensityBonus": 1,
-    "formulaDefensePenalty": -1
+    "formulaDefensePenalty": -1,
+    "summonConstructDefId": null
   },
   {
     "recipeId": "v6-tek-adrenalinschrei-erde-sofortzuender",
@@ -3391,7 +5393,8 @@ export const V6_GENERATED_FORMULA_RECIPES: readonly V6GeneratedFormulaRecipe[] =
     "catalystConsumed": true,
     "overformulaPrimaryBonus": null,
     "overformulaIntensityBonus": null,
-    "formulaDefensePenalty": null
+    "formulaDefensePenalty": null,
+    "summonConstructDefId": null
   },
   {
     "recipeId": "v6-over-adrenalinschrei-erde-sofortzuender",
@@ -3418,7 +5421,8 @@ export const V6_GENERATED_FORMULA_RECIPES: readonly V6GeneratedFormulaRecipe[] =
     "catalystConsumed": true,
     "overformulaPrimaryBonus": null,
     "overformulaIntensityBonus": 1,
-    "formulaDefensePenalty": -1
+    "formulaDefensePenalty": -1,
+    "summonConstructDefId": null
   },
   {
     "recipeId": "v6-tek-adrenalinschrei-erde-opfergabe",
@@ -3445,7 +5449,8 @@ export const V6_GENERATED_FORMULA_RECIPES: readonly V6GeneratedFormulaRecipe[] =
     "catalystConsumed": true,
     "overformulaPrimaryBonus": null,
     "overformulaIntensityBonus": null,
-    "formulaDefensePenalty": null
+    "formulaDefensePenalty": null,
+    "summonConstructDefId": null
   },
   {
     "recipeId": "v6-over-adrenalinschrei-erde-opfergabe",
@@ -3472,7 +5477,8 @@ export const V6_GENERATED_FORMULA_RECIPES: readonly V6GeneratedFormulaRecipe[] =
     "catalystConsumed": true,
     "overformulaPrimaryBonus": null,
     "overformulaIntensityBonus": 1,
-    "formulaDefensePenalty": -1
+    "formulaDefensePenalty": -1,
+    "summonConstructDefId": null
   },
   {
     "recipeId": "v6-tek-adrenalinschrei-luft-ueberladung",
@@ -3499,7 +5505,8 @@ export const V6_GENERATED_FORMULA_RECIPES: readonly V6GeneratedFormulaRecipe[] =
     "catalystConsumed": true,
     "overformulaPrimaryBonus": null,
     "overformulaIntensityBonus": null,
-    "formulaDefensePenalty": null
+    "formulaDefensePenalty": null,
+    "summonConstructDefId": null
   },
   {
     "recipeId": "v6-over-adrenalinschrei-luft-ueberladung",
@@ -3526,7 +5533,8 @@ export const V6_GENERATED_FORMULA_RECIPES: readonly V6GeneratedFormulaRecipe[] =
     "catalystConsumed": true,
     "overformulaPrimaryBonus": null,
     "overformulaIntensityBonus": 1,
-    "formulaDefensePenalty": -1
+    "formulaDefensePenalty": -1,
+    "summonConstructDefId": null
   },
   {
     "recipeId": "v6-tek-adrenalinschrei-luft-verdichtung",
@@ -3553,7 +5561,8 @@ export const V6_GENERATED_FORMULA_RECIPES: readonly V6GeneratedFormulaRecipe[] =
     "catalystConsumed": true,
     "overformulaPrimaryBonus": null,
     "overformulaIntensityBonus": null,
-    "formulaDefensePenalty": null
+    "formulaDefensePenalty": null,
+    "summonConstructDefId": null
   },
   {
     "recipeId": "v6-over-adrenalinschrei-luft-verdichtung",
@@ -3580,7 +5589,8 @@ export const V6_GENERATED_FORMULA_RECIPES: readonly V6GeneratedFormulaRecipe[] =
     "catalystConsumed": true,
     "overformulaPrimaryBonus": null,
     "overformulaIntensityBonus": 1,
-    "formulaDefensePenalty": -1
+    "formulaDefensePenalty": -1,
+    "summonConstructDefId": null
   },
   {
     "recipeId": "v6-tek-adrenalinschrei-luft-sofortzuender",
@@ -3607,7 +5617,8 @@ export const V6_GENERATED_FORMULA_RECIPES: readonly V6GeneratedFormulaRecipe[] =
     "catalystConsumed": true,
     "overformulaPrimaryBonus": null,
     "overformulaIntensityBonus": null,
-    "formulaDefensePenalty": null
+    "formulaDefensePenalty": null,
+    "summonConstructDefId": null
   },
   {
     "recipeId": "v6-over-adrenalinschrei-luft-sofortzuender",
@@ -3634,7 +5645,8 @@ export const V6_GENERATED_FORMULA_RECIPES: readonly V6GeneratedFormulaRecipe[] =
     "catalystConsumed": true,
     "overformulaPrimaryBonus": null,
     "overformulaIntensityBonus": 1,
-    "formulaDefensePenalty": -1
+    "formulaDefensePenalty": -1,
+    "summonConstructDefId": null
   },
   {
     "recipeId": "v6-tek-adrenalinschrei-luft-opfergabe",
@@ -3661,7 +5673,8 @@ export const V6_GENERATED_FORMULA_RECIPES: readonly V6GeneratedFormulaRecipe[] =
     "catalystConsumed": true,
     "overformulaPrimaryBonus": null,
     "overformulaIntensityBonus": null,
-    "formulaDefensePenalty": null
+    "formulaDefensePenalty": null,
+    "summonConstructDefId": null
   },
   {
     "recipeId": "v6-over-adrenalinschrei-luft-opfergabe",
@@ -3688,7 +5701,8 @@ export const V6_GENERATED_FORMULA_RECIPES: readonly V6GeneratedFormulaRecipe[] =
     "catalystConsumed": true,
     "overformulaPrimaryBonus": null,
     "overformulaIntensityBonus": 1,
-    "formulaDefensePenalty": -1
+    "formulaDefensePenalty": -1,
+    "summonConstructDefId": null
   },
   {
     "recipeId": "v6-tek-adrenalinschrei-licht-ueberladung",
@@ -3715,7 +5729,8 @@ export const V6_GENERATED_FORMULA_RECIPES: readonly V6GeneratedFormulaRecipe[] =
     "catalystConsumed": true,
     "overformulaPrimaryBonus": null,
     "overformulaIntensityBonus": null,
-    "formulaDefensePenalty": null
+    "formulaDefensePenalty": null,
+    "summonConstructDefId": null
   },
   {
     "recipeId": "v6-over-adrenalinschrei-licht-ueberladung",
@@ -3742,7 +5757,8 @@ export const V6_GENERATED_FORMULA_RECIPES: readonly V6GeneratedFormulaRecipe[] =
     "catalystConsumed": true,
     "overformulaPrimaryBonus": null,
     "overformulaIntensityBonus": 1,
-    "formulaDefensePenalty": -1
+    "formulaDefensePenalty": -1,
+    "summonConstructDefId": null
   },
   {
     "recipeId": "v6-tek-adrenalinschrei-licht-verdichtung",
@@ -3769,7 +5785,8 @@ export const V6_GENERATED_FORMULA_RECIPES: readonly V6GeneratedFormulaRecipe[] =
     "catalystConsumed": true,
     "overformulaPrimaryBonus": null,
     "overformulaIntensityBonus": null,
-    "formulaDefensePenalty": null
+    "formulaDefensePenalty": null,
+    "summonConstructDefId": null
   },
   {
     "recipeId": "v6-over-adrenalinschrei-licht-verdichtung",
@@ -3796,7 +5813,8 @@ export const V6_GENERATED_FORMULA_RECIPES: readonly V6GeneratedFormulaRecipe[] =
     "catalystConsumed": true,
     "overformulaPrimaryBonus": null,
     "overformulaIntensityBonus": 1,
-    "formulaDefensePenalty": -1
+    "formulaDefensePenalty": -1,
+    "summonConstructDefId": null
   },
   {
     "recipeId": "v6-tek-adrenalinschrei-licht-sofortzuender",
@@ -3823,7 +5841,8 @@ export const V6_GENERATED_FORMULA_RECIPES: readonly V6GeneratedFormulaRecipe[] =
     "catalystConsumed": true,
     "overformulaPrimaryBonus": null,
     "overformulaIntensityBonus": null,
-    "formulaDefensePenalty": null
+    "formulaDefensePenalty": null,
+    "summonConstructDefId": null
   },
   {
     "recipeId": "v6-over-adrenalinschrei-licht-sofortzuender",
@@ -3850,7 +5869,8 @@ export const V6_GENERATED_FORMULA_RECIPES: readonly V6GeneratedFormulaRecipe[] =
     "catalystConsumed": true,
     "overformulaPrimaryBonus": null,
     "overformulaIntensityBonus": 1,
-    "formulaDefensePenalty": -1
+    "formulaDefensePenalty": -1,
+    "summonConstructDefId": null
   },
   {
     "recipeId": "v6-tek-adrenalinschrei-licht-opfergabe",
@@ -3877,7 +5897,8 @@ export const V6_GENERATED_FORMULA_RECIPES: readonly V6GeneratedFormulaRecipe[] =
     "catalystConsumed": true,
     "overformulaPrimaryBonus": null,
     "overformulaIntensityBonus": null,
-    "formulaDefensePenalty": null
+    "formulaDefensePenalty": null,
+    "summonConstructDefId": null
   },
   {
     "recipeId": "v6-over-adrenalinschrei-licht-opfergabe",
@@ -3904,7 +5925,8 @@ export const V6_GENERATED_FORMULA_RECIPES: readonly V6GeneratedFormulaRecipe[] =
     "catalystConsumed": true,
     "overformulaPrimaryBonus": null,
     "overformulaIntensityBonus": 1,
-    "formulaDefensePenalty": -1
+    "formulaDefensePenalty": -1,
+    "summonConstructDefId": null
   },
   {
     "recipeId": "v6-tek-adrenalinschrei-schatten-ueberladung",
@@ -3931,7 +5953,8 @@ export const V6_GENERATED_FORMULA_RECIPES: readonly V6GeneratedFormulaRecipe[] =
     "catalystConsumed": true,
     "overformulaPrimaryBonus": null,
     "overformulaIntensityBonus": null,
-    "formulaDefensePenalty": null
+    "formulaDefensePenalty": null,
+    "summonConstructDefId": null
   },
   {
     "recipeId": "v6-over-adrenalinschrei-schatten-ueberladung",
@@ -3958,7 +5981,8 @@ export const V6_GENERATED_FORMULA_RECIPES: readonly V6GeneratedFormulaRecipe[] =
     "catalystConsumed": true,
     "overformulaPrimaryBonus": null,
     "overformulaIntensityBonus": 1,
-    "formulaDefensePenalty": -1
+    "formulaDefensePenalty": -1,
+    "summonConstructDefId": null
   },
   {
     "recipeId": "v6-tek-adrenalinschrei-schatten-verdichtung",
@@ -3985,7 +6009,8 @@ export const V6_GENERATED_FORMULA_RECIPES: readonly V6GeneratedFormulaRecipe[] =
     "catalystConsumed": true,
     "overformulaPrimaryBonus": null,
     "overformulaIntensityBonus": null,
-    "formulaDefensePenalty": null
+    "formulaDefensePenalty": null,
+    "summonConstructDefId": null
   },
   {
     "recipeId": "v6-over-adrenalinschrei-schatten-verdichtung",
@@ -4012,7 +6037,8 @@ export const V6_GENERATED_FORMULA_RECIPES: readonly V6GeneratedFormulaRecipe[] =
     "catalystConsumed": true,
     "overformulaPrimaryBonus": null,
     "overformulaIntensityBonus": 1,
-    "formulaDefensePenalty": -1
+    "formulaDefensePenalty": -1,
+    "summonConstructDefId": null
   },
   {
     "recipeId": "v6-tek-adrenalinschrei-schatten-sofortzuender",
@@ -4039,7 +6065,8 @@ export const V6_GENERATED_FORMULA_RECIPES: readonly V6GeneratedFormulaRecipe[] =
     "catalystConsumed": true,
     "overformulaPrimaryBonus": null,
     "overformulaIntensityBonus": null,
-    "formulaDefensePenalty": null
+    "formulaDefensePenalty": null,
+    "summonConstructDefId": null
   },
   {
     "recipeId": "v6-over-adrenalinschrei-schatten-sofortzuender",
@@ -4066,7 +6093,8 @@ export const V6_GENERATED_FORMULA_RECIPES: readonly V6GeneratedFormulaRecipe[] =
     "catalystConsumed": true,
     "overformulaPrimaryBonus": null,
     "overformulaIntensityBonus": 1,
-    "formulaDefensePenalty": -1
+    "formulaDefensePenalty": -1,
+    "summonConstructDefId": null
   },
   {
     "recipeId": "v6-tek-adrenalinschrei-schatten-opfergabe",
@@ -4093,7 +6121,8 @@ export const V6_GENERATED_FORMULA_RECIPES: readonly V6GeneratedFormulaRecipe[] =
     "catalystConsumed": true,
     "overformulaPrimaryBonus": null,
     "overformulaIntensityBonus": null,
-    "formulaDefensePenalty": null
+    "formulaDefensePenalty": null,
+    "summonConstructDefId": null
   },
   {
     "recipeId": "v6-over-adrenalinschrei-schatten-opfergabe",
@@ -4120,7 +6149,8216 @@ export const V6_GENERATED_FORMULA_RECIPES: readonly V6GeneratedFormulaRecipe[] =
     "catalystConsumed": true,
     "overformulaPrimaryBonus": null,
     "overformulaIntensityBonus": 1,
-    "formulaDefensePenalty": -1
+    "formulaDefensePenalty": -1,
+    "summonConstructDefId": null
+  },
+  {
+    "recipeId": "v6-tek-fintenschnitt-feuer-ueberladung",
+    "kind": "tek",
+    "catalogSlice": "slice1",
+    "techniqueId": "v6-technik-fintenschnitt",
+    "essenceId": "v6-essenz-feuer",
+    "catalystId": "v6-katalysator-ueberladung",
+    "name": "Glutfinte · Überladung",
+    "effectSummary": "Bereite Block +4 vor. Bei Lebensschaden: Brennen, falls keine Reaktion. Primärwert +2; danach erleidest du 1 Selbstschaden. TEK: +1 Fetzladung (max 1×/Zug).",
+    "primary": {
+      "kind": "prep_block",
+      "value": 4,
+      "target": "self"
+    },
+    "rider": {
+      "id": "rider-brennen",
+      "summary": "Bei Lebensschaden: Brennen, falls keine Reaktion.",
+      "defenseSuppressible": true
+    },
+    "intensity": 1,
+    "transformId": "xform-ueberladung",
+    "grantsFetz": true,
+    "catalystConsumed": true,
+    "overformulaPrimaryBonus": null,
+    "overformulaIntensityBonus": null,
+    "formulaDefensePenalty": null,
+    "summonConstructDefId": null
+  },
+  {
+    "recipeId": "v6-over-fintenschnitt-feuer-ueberladung",
+    "kind": "overformula",
+    "catalogSlice": "slice1",
+    "techniqueId": "v6-technik-fintenschnitt",
+    "essenceId": "v6-essenz-feuer",
+    "catalystId": "v6-katalysator-ueberladung",
+    "name": "Überformel Glutfinte · Überladung",
+    "effectSummary": "Bereite Block +4 vor. Bei Lebensschaden: Brennen, falls keine Reaktion. (verstärkt) Primärwert +2; danach erleidest du 1 Selbstschaden. Überformel: Intensität +1 (fester Slice-1-Bonus). Überformel: Fetzladung wird verbraucht. Formelabwehr −1.",
+    "primary": {
+      "kind": "prep_block",
+      "value": 4,
+      "target": "self"
+    },
+    "rider": {
+      "id": "rider-brennen",
+      "summary": "Bei Lebensschaden: Brennen, falls keine Reaktion. (verstärkt)",
+      "defenseSuppressible": true
+    },
+    "intensity": 2,
+    "transformId": "xform-ueberladung",
+    "grantsFetz": false,
+    "catalystConsumed": true,
+    "overformulaPrimaryBonus": null,
+    "overformulaIntensityBonus": 1,
+    "formulaDefensePenalty": -1,
+    "summonConstructDefId": null
+  },
+  {
+    "recipeId": "v6-tek-fintenschnitt-feuer-verdichtung",
+    "kind": "tek",
+    "catalogSlice": "slice1",
+    "techniqueId": "v6-technik-fintenschnitt",
+    "essenceId": "v6-essenz-feuer",
+    "catalystId": "v6-katalysator-verdichtung",
+    "name": "Glutfinte · Verdichtung",
+    "effectSummary": "Bereite Block +3 vor. Bei Lebensschaden: Brennen, falls keine Reaktion. Primärwert +1; verwendete Komponenten erhalten +1 Stabilität. TEK: +1 Fetzladung (max 1×/Zug).",
+    "primary": {
+      "kind": "prep_block",
+      "value": 3,
+      "target": "self"
+    },
+    "rider": {
+      "id": "rider-brennen",
+      "summary": "Bei Lebensschaden: Brennen, falls keine Reaktion.",
+      "defenseSuppressible": true
+    },
+    "intensity": 1,
+    "transformId": "xform-verdichtung",
+    "grantsFetz": true,
+    "catalystConsumed": true,
+    "overformulaPrimaryBonus": null,
+    "overformulaIntensityBonus": null,
+    "formulaDefensePenalty": null,
+    "summonConstructDefId": null
+  },
+  {
+    "recipeId": "v6-over-fintenschnitt-feuer-verdichtung",
+    "kind": "overformula",
+    "catalogSlice": "slice1",
+    "techniqueId": "v6-technik-fintenschnitt",
+    "essenceId": "v6-essenz-feuer",
+    "catalystId": "v6-katalysator-verdichtung",
+    "name": "Überformel Glutfinte · Verdichtung",
+    "effectSummary": "Bereite Block +3 vor. Bei Lebensschaden: Brennen, falls keine Reaktion. (verstärkt) Primärwert +1; verwendete Komponenten erhalten +1 Stabilität. Überformel: Intensität +1 (fester Slice-1-Bonus). Überformel: Fetzladung wird verbraucht. Formelabwehr −1.",
+    "primary": {
+      "kind": "prep_block",
+      "value": 3,
+      "target": "self"
+    },
+    "rider": {
+      "id": "rider-brennen",
+      "summary": "Bei Lebensschaden: Brennen, falls keine Reaktion. (verstärkt)",
+      "defenseSuppressible": true
+    },
+    "intensity": 2,
+    "transformId": "xform-verdichtung",
+    "grantsFetz": false,
+    "catalystConsumed": true,
+    "overformulaPrimaryBonus": null,
+    "overformulaIntensityBonus": 1,
+    "formulaDefensePenalty": -1,
+    "summonConstructDefId": null
+  },
+  {
+    "recipeId": "v6-tek-fintenschnitt-feuer-sofortzuender",
+    "kind": "tek",
+    "catalogSlice": "slice1",
+    "techniqueId": "v6-technik-fintenschnitt",
+    "essenceId": "v6-essenz-feuer",
+    "catalystId": "v6-katalysator-sofortzuender",
+    "name": "Glutfinte · Sofortzünder",
+    "effectSummary": "Bereite Block +1 vor. Bei Lebensschaden: Brennen, falls keine Reaktion. Primärwert −1; danach ziehe 1 und wirf 1 ab. TEK: +1 Fetzladung (max 1×/Zug).",
+    "primary": {
+      "kind": "prep_block",
+      "value": 1,
+      "target": "self"
+    },
+    "rider": {
+      "id": "rider-brennen",
+      "summary": "Bei Lebensschaden: Brennen, falls keine Reaktion.",
+      "defenseSuppressible": true
+    },
+    "intensity": 1,
+    "transformId": "xform-sofortzuender",
+    "grantsFetz": true,
+    "catalystConsumed": true,
+    "overformulaPrimaryBonus": null,
+    "overformulaIntensityBonus": null,
+    "formulaDefensePenalty": null,
+    "summonConstructDefId": null
+  },
+  {
+    "recipeId": "v6-over-fintenschnitt-feuer-sofortzuender",
+    "kind": "overformula",
+    "catalogSlice": "slice1",
+    "techniqueId": "v6-technik-fintenschnitt",
+    "essenceId": "v6-essenz-feuer",
+    "catalystId": "v6-katalysator-sofortzuender",
+    "name": "Überformel Glutfinte · Sofortzünder",
+    "effectSummary": "Bereite Block +1 vor. Bei Lebensschaden: Brennen, falls keine Reaktion. (verstärkt) Primärwert −1; danach ziehe 1 und wirf 1 ab. Überformel: Intensität +1 (fester Slice-1-Bonus). Überformel: Fetzladung wird verbraucht. Formelabwehr −1.",
+    "primary": {
+      "kind": "prep_block",
+      "value": 1,
+      "target": "self"
+    },
+    "rider": {
+      "id": "rider-brennen",
+      "summary": "Bei Lebensschaden: Brennen, falls keine Reaktion. (verstärkt)",
+      "defenseSuppressible": true
+    },
+    "intensity": 2,
+    "transformId": "xform-sofortzuender",
+    "grantsFetz": false,
+    "catalystConsumed": true,
+    "overformulaPrimaryBonus": null,
+    "overformulaIntensityBonus": 1,
+    "formulaDefensePenalty": -1,
+    "summonConstructDefId": null
+  },
+  {
+    "recipeId": "v6-tek-fintenschnitt-feuer-opfergabe",
+    "kind": "tek",
+    "catalogSlice": "slice1",
+    "techniqueId": "v6-technik-fintenschnitt",
+    "essenceId": "v6-essenz-feuer",
+    "catalystId": "v6-katalysator-opfergabe",
+    "name": "Glutfinte · Opfergabe",
+    "effectSummary": "Bereite Block +2 vor. Bei Lebensschaden: Brennen, falls keine Reaktion. Optional: wirf 1 Handkarte ab für Primärwert +2. TEK: +1 Fetzladung (max 1×/Zug).",
+    "primary": {
+      "kind": "prep_block",
+      "value": 2,
+      "target": "self"
+    },
+    "rider": {
+      "id": "rider-brennen",
+      "summary": "Bei Lebensschaden: Brennen, falls keine Reaktion.",
+      "defenseSuppressible": true
+    },
+    "intensity": 1,
+    "transformId": "xform-opfergabe",
+    "grantsFetz": true,
+    "catalystConsumed": true,
+    "overformulaPrimaryBonus": null,
+    "overformulaIntensityBonus": null,
+    "formulaDefensePenalty": null,
+    "summonConstructDefId": null
+  },
+  {
+    "recipeId": "v6-over-fintenschnitt-feuer-opfergabe",
+    "kind": "overformula",
+    "catalogSlice": "slice1",
+    "techniqueId": "v6-technik-fintenschnitt",
+    "essenceId": "v6-essenz-feuer",
+    "catalystId": "v6-katalysator-opfergabe",
+    "name": "Überformel Glutfinte · Opfergabe",
+    "effectSummary": "Bereite Block +2 vor. Bei Lebensschaden: Brennen, falls keine Reaktion. (verstärkt) Optional: wirf 1 Handkarte ab für Primärwert +2. Überformel: Intensität +1 (fester Slice-1-Bonus). Überformel: Fetzladung wird verbraucht. Formelabwehr −1.",
+    "primary": {
+      "kind": "prep_block",
+      "value": 2,
+      "target": "self"
+    },
+    "rider": {
+      "id": "rider-brennen",
+      "summary": "Bei Lebensschaden: Brennen, falls keine Reaktion. (verstärkt)",
+      "defenseSuppressible": true
+    },
+    "intensity": 2,
+    "transformId": "xform-opfergabe",
+    "grantsFetz": false,
+    "catalystConsumed": true,
+    "overformulaPrimaryBonus": null,
+    "overformulaIntensityBonus": 1,
+    "formulaDefensePenalty": -1,
+    "summonConstructDefId": null
+  },
+  {
+    "recipeId": "v6-tek-fintenschnitt-wasser-ueberladung",
+    "kind": "tek",
+    "catalogSlice": "slice1",
+    "techniqueId": "v6-technik-fintenschnitt",
+    "essenceId": "v6-essenz-wasser",
+    "catalystId": "v6-katalysator-ueberladung",
+    "name": "Wellenfinte · Überladung",
+    "effectSummary": "Bereite Block +4 vor. Bei Heilung oder Schildgewinn: entferne optional eine Marke von dir. Primärwert +2; danach erleidest du 1 Selbstschaden. TEK: +1 Fetzladung (max 1×/Zug).",
+    "primary": {
+      "kind": "prep_block",
+      "value": 4,
+      "target": "self"
+    },
+    "rider": {
+      "id": "rider-reinigen",
+      "summary": "Bei Heilung oder Schildgewinn: entferne optional eine Marke von dir.",
+      "defenseSuppressible": false
+    },
+    "intensity": 1,
+    "transformId": "xform-ueberladung",
+    "grantsFetz": true,
+    "catalystConsumed": true,
+    "overformulaPrimaryBonus": null,
+    "overformulaIntensityBonus": null,
+    "formulaDefensePenalty": null,
+    "summonConstructDefId": null
+  },
+  {
+    "recipeId": "v6-over-fintenschnitt-wasser-ueberladung",
+    "kind": "overformula",
+    "catalogSlice": "slice1",
+    "techniqueId": "v6-technik-fintenschnitt",
+    "essenceId": "v6-essenz-wasser",
+    "catalystId": "v6-katalysator-ueberladung",
+    "name": "Überformel Wellenfinte · Überladung",
+    "effectSummary": "Bereite Block +4 vor. Bei Heilung oder Schildgewinn: entferne optional eine Marke von dir. (verstärkt) Primärwert +2; danach erleidest du 1 Selbstschaden. Überformel: Intensität +1 (fester Slice-1-Bonus). Überformel: Fetzladung wird verbraucht. Formelabwehr −1.",
+    "primary": {
+      "kind": "prep_block",
+      "value": 4,
+      "target": "self"
+    },
+    "rider": {
+      "id": "rider-reinigen",
+      "summary": "Bei Heilung oder Schildgewinn: entferne optional eine Marke von dir. (verstärkt)",
+      "defenseSuppressible": false
+    },
+    "intensity": 2,
+    "transformId": "xform-ueberladung",
+    "grantsFetz": false,
+    "catalystConsumed": true,
+    "overformulaPrimaryBonus": null,
+    "overformulaIntensityBonus": 1,
+    "formulaDefensePenalty": -1,
+    "summonConstructDefId": null
+  },
+  {
+    "recipeId": "v6-tek-fintenschnitt-wasser-verdichtung",
+    "kind": "tek",
+    "catalogSlice": "slice1",
+    "techniqueId": "v6-technik-fintenschnitt",
+    "essenceId": "v6-essenz-wasser",
+    "catalystId": "v6-katalysator-verdichtung",
+    "name": "Wellenfinte · Verdichtung",
+    "effectSummary": "Bereite Block +3 vor. Bei Heilung oder Schildgewinn: entferne optional eine Marke von dir. Primärwert +1; verwendete Komponenten erhalten +1 Stabilität. TEK: +1 Fetzladung (max 1×/Zug).",
+    "primary": {
+      "kind": "prep_block",
+      "value": 3,
+      "target": "self"
+    },
+    "rider": {
+      "id": "rider-reinigen",
+      "summary": "Bei Heilung oder Schildgewinn: entferne optional eine Marke von dir.",
+      "defenseSuppressible": false
+    },
+    "intensity": 1,
+    "transformId": "xform-verdichtung",
+    "grantsFetz": true,
+    "catalystConsumed": true,
+    "overformulaPrimaryBonus": null,
+    "overformulaIntensityBonus": null,
+    "formulaDefensePenalty": null,
+    "summonConstructDefId": null
+  },
+  {
+    "recipeId": "v6-over-fintenschnitt-wasser-verdichtung",
+    "kind": "overformula",
+    "catalogSlice": "slice1",
+    "techniqueId": "v6-technik-fintenschnitt",
+    "essenceId": "v6-essenz-wasser",
+    "catalystId": "v6-katalysator-verdichtung",
+    "name": "Überformel Wellenfinte · Verdichtung",
+    "effectSummary": "Bereite Block +3 vor. Bei Heilung oder Schildgewinn: entferne optional eine Marke von dir. (verstärkt) Primärwert +1; verwendete Komponenten erhalten +1 Stabilität. Überformel: Intensität +1 (fester Slice-1-Bonus). Überformel: Fetzladung wird verbraucht. Formelabwehr −1.",
+    "primary": {
+      "kind": "prep_block",
+      "value": 3,
+      "target": "self"
+    },
+    "rider": {
+      "id": "rider-reinigen",
+      "summary": "Bei Heilung oder Schildgewinn: entferne optional eine Marke von dir. (verstärkt)",
+      "defenseSuppressible": false
+    },
+    "intensity": 2,
+    "transformId": "xform-verdichtung",
+    "grantsFetz": false,
+    "catalystConsumed": true,
+    "overformulaPrimaryBonus": null,
+    "overformulaIntensityBonus": 1,
+    "formulaDefensePenalty": -1,
+    "summonConstructDefId": null
+  },
+  {
+    "recipeId": "v6-tek-fintenschnitt-wasser-sofortzuender",
+    "kind": "tek",
+    "catalogSlice": "slice1",
+    "techniqueId": "v6-technik-fintenschnitt",
+    "essenceId": "v6-essenz-wasser",
+    "catalystId": "v6-katalysator-sofortzuender",
+    "name": "Wellenfinte · Sofortzünder",
+    "effectSummary": "Bereite Block +1 vor. Bei Heilung oder Schildgewinn: entferne optional eine Marke von dir. Primärwert −1; danach ziehe 1 und wirf 1 ab. TEK: +1 Fetzladung (max 1×/Zug).",
+    "primary": {
+      "kind": "prep_block",
+      "value": 1,
+      "target": "self"
+    },
+    "rider": {
+      "id": "rider-reinigen",
+      "summary": "Bei Heilung oder Schildgewinn: entferne optional eine Marke von dir.",
+      "defenseSuppressible": false
+    },
+    "intensity": 1,
+    "transformId": "xform-sofortzuender",
+    "grantsFetz": true,
+    "catalystConsumed": true,
+    "overformulaPrimaryBonus": null,
+    "overformulaIntensityBonus": null,
+    "formulaDefensePenalty": null,
+    "summonConstructDefId": null
+  },
+  {
+    "recipeId": "v6-over-fintenschnitt-wasser-sofortzuender",
+    "kind": "overformula",
+    "catalogSlice": "slice1",
+    "techniqueId": "v6-technik-fintenschnitt",
+    "essenceId": "v6-essenz-wasser",
+    "catalystId": "v6-katalysator-sofortzuender",
+    "name": "Überformel Wellenfinte · Sofortzünder",
+    "effectSummary": "Bereite Block +1 vor. Bei Heilung oder Schildgewinn: entferne optional eine Marke von dir. (verstärkt) Primärwert −1; danach ziehe 1 und wirf 1 ab. Überformel: Intensität +1 (fester Slice-1-Bonus). Überformel: Fetzladung wird verbraucht. Formelabwehr −1.",
+    "primary": {
+      "kind": "prep_block",
+      "value": 1,
+      "target": "self"
+    },
+    "rider": {
+      "id": "rider-reinigen",
+      "summary": "Bei Heilung oder Schildgewinn: entferne optional eine Marke von dir. (verstärkt)",
+      "defenseSuppressible": false
+    },
+    "intensity": 2,
+    "transformId": "xform-sofortzuender",
+    "grantsFetz": false,
+    "catalystConsumed": true,
+    "overformulaPrimaryBonus": null,
+    "overformulaIntensityBonus": 1,
+    "formulaDefensePenalty": -1,
+    "summonConstructDefId": null
+  },
+  {
+    "recipeId": "v6-tek-fintenschnitt-wasser-opfergabe",
+    "kind": "tek",
+    "catalogSlice": "slice1",
+    "techniqueId": "v6-technik-fintenschnitt",
+    "essenceId": "v6-essenz-wasser",
+    "catalystId": "v6-katalysator-opfergabe",
+    "name": "Wellenfinte · Opfergabe",
+    "effectSummary": "Bereite Block +2 vor. Bei Heilung oder Schildgewinn: entferne optional eine Marke von dir. Optional: wirf 1 Handkarte ab für Primärwert +2. TEK: +1 Fetzladung (max 1×/Zug).",
+    "primary": {
+      "kind": "prep_block",
+      "value": 2,
+      "target": "self"
+    },
+    "rider": {
+      "id": "rider-reinigen",
+      "summary": "Bei Heilung oder Schildgewinn: entferne optional eine Marke von dir.",
+      "defenseSuppressible": false
+    },
+    "intensity": 1,
+    "transformId": "xform-opfergabe",
+    "grantsFetz": true,
+    "catalystConsumed": true,
+    "overformulaPrimaryBonus": null,
+    "overformulaIntensityBonus": null,
+    "formulaDefensePenalty": null,
+    "summonConstructDefId": null
+  },
+  {
+    "recipeId": "v6-over-fintenschnitt-wasser-opfergabe",
+    "kind": "overformula",
+    "catalogSlice": "slice1",
+    "techniqueId": "v6-technik-fintenschnitt",
+    "essenceId": "v6-essenz-wasser",
+    "catalystId": "v6-katalysator-opfergabe",
+    "name": "Überformel Wellenfinte · Opfergabe",
+    "effectSummary": "Bereite Block +2 vor. Bei Heilung oder Schildgewinn: entferne optional eine Marke von dir. (verstärkt) Optional: wirf 1 Handkarte ab für Primärwert +2. Überformel: Intensität +1 (fester Slice-1-Bonus). Überformel: Fetzladung wird verbraucht. Formelabwehr −1.",
+    "primary": {
+      "kind": "prep_block",
+      "value": 2,
+      "target": "self"
+    },
+    "rider": {
+      "id": "rider-reinigen",
+      "summary": "Bei Heilung oder Schildgewinn: entferne optional eine Marke von dir. (verstärkt)",
+      "defenseSuppressible": false
+    },
+    "intensity": 2,
+    "transformId": "xform-opfergabe",
+    "grantsFetz": false,
+    "catalystConsumed": true,
+    "overformulaPrimaryBonus": null,
+    "overformulaIntensityBonus": 1,
+    "formulaDefensePenalty": -1,
+    "summonConstructDefId": null
+  },
+  {
+    "recipeId": "v6-tek-fintenschnitt-erde-ueberladung",
+    "kind": "tek",
+    "catalogSlice": "slice1",
+    "techniqueId": "v6-technik-fintenschnitt",
+    "essenceId": "v6-essenz-erde",
+    "catalystId": "v6-katalysator-ueberladung",
+    "name": "Felsfinte · Überladung",
+    "effectSummary": "Bereite Block +4 vor. Verwendete Komponenten +1 Stabilität bis nächste Startphase. Primärwert +2; danach erleidest du 1 Selbstschaden. TEK: +1 Fetzladung (max 1×/Zug).",
+    "primary": {
+      "kind": "prep_block",
+      "value": 4,
+      "target": "self"
+    },
+    "rider": {
+      "id": "rider-stabilitaet",
+      "summary": "Verwendete Komponenten +1 Stabilität bis nächste Startphase.",
+      "defenseSuppressible": false
+    },
+    "intensity": 1,
+    "transformId": "xform-ueberladung",
+    "grantsFetz": true,
+    "catalystConsumed": true,
+    "overformulaPrimaryBonus": null,
+    "overformulaIntensityBonus": null,
+    "formulaDefensePenalty": null,
+    "summonConstructDefId": null
+  },
+  {
+    "recipeId": "v6-over-fintenschnitt-erde-ueberladung",
+    "kind": "overformula",
+    "catalogSlice": "slice1",
+    "techniqueId": "v6-technik-fintenschnitt",
+    "essenceId": "v6-essenz-erde",
+    "catalystId": "v6-katalysator-ueberladung",
+    "name": "Überformel Felsfinte · Überladung",
+    "effectSummary": "Bereite Block +4 vor. Verwendete Komponenten +1 Stabilität bis nächste Startphase. (verstärkt) Primärwert +2; danach erleidest du 1 Selbstschaden. Überformel: Intensität +1 (fester Slice-1-Bonus). Überformel: Fetzladung wird verbraucht. Formelabwehr −1.",
+    "primary": {
+      "kind": "prep_block",
+      "value": 4,
+      "target": "self"
+    },
+    "rider": {
+      "id": "rider-stabilitaet",
+      "summary": "Verwendete Komponenten +1 Stabilität bis nächste Startphase. (verstärkt)",
+      "defenseSuppressible": false
+    },
+    "intensity": 2,
+    "transformId": "xform-ueberladung",
+    "grantsFetz": false,
+    "catalystConsumed": true,
+    "overformulaPrimaryBonus": null,
+    "overformulaIntensityBonus": 1,
+    "formulaDefensePenalty": -1,
+    "summonConstructDefId": null
+  },
+  {
+    "recipeId": "v6-tek-fintenschnitt-erde-verdichtung",
+    "kind": "tek",
+    "catalogSlice": "slice1",
+    "techniqueId": "v6-technik-fintenschnitt",
+    "essenceId": "v6-essenz-erde",
+    "catalystId": "v6-katalysator-verdichtung",
+    "name": "Felsfinte · Verdichtung",
+    "effectSummary": "Bereite Block +3 vor. Verwendete Komponenten +1 Stabilität bis nächste Startphase. Primärwert +1; verwendete Komponenten erhalten +1 Stabilität. TEK: +1 Fetzladung (max 1×/Zug).",
+    "primary": {
+      "kind": "prep_block",
+      "value": 3,
+      "target": "self"
+    },
+    "rider": {
+      "id": "rider-stabilitaet",
+      "summary": "Verwendete Komponenten +1 Stabilität bis nächste Startphase.",
+      "defenseSuppressible": false
+    },
+    "intensity": 1,
+    "transformId": "xform-verdichtung",
+    "grantsFetz": true,
+    "catalystConsumed": true,
+    "overformulaPrimaryBonus": null,
+    "overformulaIntensityBonus": null,
+    "formulaDefensePenalty": null,
+    "summonConstructDefId": null
+  },
+  {
+    "recipeId": "v6-over-fintenschnitt-erde-verdichtung",
+    "kind": "overformula",
+    "catalogSlice": "slice1",
+    "techniqueId": "v6-technik-fintenschnitt",
+    "essenceId": "v6-essenz-erde",
+    "catalystId": "v6-katalysator-verdichtung",
+    "name": "Überformel Felsfinte · Verdichtung",
+    "effectSummary": "Bereite Block +3 vor. Verwendete Komponenten +1 Stabilität bis nächste Startphase. (verstärkt) Primärwert +1; verwendete Komponenten erhalten +1 Stabilität. Überformel: Intensität +1 (fester Slice-1-Bonus). Überformel: Fetzladung wird verbraucht. Formelabwehr −1.",
+    "primary": {
+      "kind": "prep_block",
+      "value": 3,
+      "target": "self"
+    },
+    "rider": {
+      "id": "rider-stabilitaet",
+      "summary": "Verwendete Komponenten +1 Stabilität bis nächste Startphase. (verstärkt)",
+      "defenseSuppressible": false
+    },
+    "intensity": 2,
+    "transformId": "xform-verdichtung",
+    "grantsFetz": false,
+    "catalystConsumed": true,
+    "overformulaPrimaryBonus": null,
+    "overformulaIntensityBonus": 1,
+    "formulaDefensePenalty": -1,
+    "summonConstructDefId": null
+  },
+  {
+    "recipeId": "v6-tek-fintenschnitt-erde-sofortzuender",
+    "kind": "tek",
+    "catalogSlice": "slice1",
+    "techniqueId": "v6-technik-fintenschnitt",
+    "essenceId": "v6-essenz-erde",
+    "catalystId": "v6-katalysator-sofortzuender",
+    "name": "Felsfinte · Sofortzünder",
+    "effectSummary": "Bereite Block +1 vor. Verwendete Komponenten +1 Stabilität bis nächste Startphase. Primärwert −1; danach ziehe 1 und wirf 1 ab. TEK: +1 Fetzladung (max 1×/Zug).",
+    "primary": {
+      "kind": "prep_block",
+      "value": 1,
+      "target": "self"
+    },
+    "rider": {
+      "id": "rider-stabilitaet",
+      "summary": "Verwendete Komponenten +1 Stabilität bis nächste Startphase.",
+      "defenseSuppressible": false
+    },
+    "intensity": 1,
+    "transformId": "xform-sofortzuender",
+    "grantsFetz": true,
+    "catalystConsumed": true,
+    "overformulaPrimaryBonus": null,
+    "overformulaIntensityBonus": null,
+    "formulaDefensePenalty": null,
+    "summonConstructDefId": null
+  },
+  {
+    "recipeId": "v6-over-fintenschnitt-erde-sofortzuender",
+    "kind": "overformula",
+    "catalogSlice": "slice1",
+    "techniqueId": "v6-technik-fintenschnitt",
+    "essenceId": "v6-essenz-erde",
+    "catalystId": "v6-katalysator-sofortzuender",
+    "name": "Überformel Felsfinte · Sofortzünder",
+    "effectSummary": "Bereite Block +1 vor. Verwendete Komponenten +1 Stabilität bis nächste Startphase. (verstärkt) Primärwert −1; danach ziehe 1 und wirf 1 ab. Überformel: Intensität +1 (fester Slice-1-Bonus). Überformel: Fetzladung wird verbraucht. Formelabwehr −1.",
+    "primary": {
+      "kind": "prep_block",
+      "value": 1,
+      "target": "self"
+    },
+    "rider": {
+      "id": "rider-stabilitaet",
+      "summary": "Verwendete Komponenten +1 Stabilität bis nächste Startphase. (verstärkt)",
+      "defenseSuppressible": false
+    },
+    "intensity": 2,
+    "transformId": "xform-sofortzuender",
+    "grantsFetz": false,
+    "catalystConsumed": true,
+    "overformulaPrimaryBonus": null,
+    "overformulaIntensityBonus": 1,
+    "formulaDefensePenalty": -1,
+    "summonConstructDefId": null
+  },
+  {
+    "recipeId": "v6-tek-fintenschnitt-erde-opfergabe",
+    "kind": "tek",
+    "catalogSlice": "slice1",
+    "techniqueId": "v6-technik-fintenschnitt",
+    "essenceId": "v6-essenz-erde",
+    "catalystId": "v6-katalysator-opfergabe",
+    "name": "Felsfinte · Opfergabe",
+    "effectSummary": "Bereite Block +2 vor. Verwendete Komponenten +1 Stabilität bis nächste Startphase. Optional: wirf 1 Handkarte ab für Primärwert +2. TEK: +1 Fetzladung (max 1×/Zug).",
+    "primary": {
+      "kind": "prep_block",
+      "value": 2,
+      "target": "self"
+    },
+    "rider": {
+      "id": "rider-stabilitaet",
+      "summary": "Verwendete Komponenten +1 Stabilität bis nächste Startphase.",
+      "defenseSuppressible": false
+    },
+    "intensity": 1,
+    "transformId": "xform-opfergabe",
+    "grantsFetz": true,
+    "catalystConsumed": true,
+    "overformulaPrimaryBonus": null,
+    "overformulaIntensityBonus": null,
+    "formulaDefensePenalty": null,
+    "summonConstructDefId": null
+  },
+  {
+    "recipeId": "v6-over-fintenschnitt-erde-opfergabe",
+    "kind": "overformula",
+    "catalogSlice": "slice1",
+    "techniqueId": "v6-technik-fintenschnitt",
+    "essenceId": "v6-essenz-erde",
+    "catalystId": "v6-katalysator-opfergabe",
+    "name": "Überformel Felsfinte · Opfergabe",
+    "effectSummary": "Bereite Block +2 vor. Verwendete Komponenten +1 Stabilität bis nächste Startphase. (verstärkt) Optional: wirf 1 Handkarte ab für Primärwert +2. Überformel: Intensität +1 (fester Slice-1-Bonus). Überformel: Fetzladung wird verbraucht. Formelabwehr −1.",
+    "primary": {
+      "kind": "prep_block",
+      "value": 2,
+      "target": "self"
+    },
+    "rider": {
+      "id": "rider-stabilitaet",
+      "summary": "Verwendete Komponenten +1 Stabilität bis nächste Startphase. (verstärkt)",
+      "defenseSuppressible": false
+    },
+    "intensity": 2,
+    "transformId": "xform-opfergabe",
+    "grantsFetz": false,
+    "catalystConsumed": true,
+    "overformulaPrimaryBonus": null,
+    "overformulaIntensityBonus": 1,
+    "formulaDefensePenalty": -1,
+    "summonConstructDefId": null
+  },
+  {
+    "recipeId": "v6-tek-fintenschnitt-luft-ueberladung",
+    "kind": "tek",
+    "catalogSlice": "slice1",
+    "techniqueId": "v6-technik-fintenschnitt",
+    "essenceId": "v6-essenz-luft",
+    "catalystId": "v6-katalysator-ueberladung",
+    "name": "Windfinte · Überladung",
+    "effectSummary": "Bereite Block +4 vor. Nächster eigener Aktions-W6 +1 (max +2). Primärwert +2; danach erleidest du 1 Selbstschaden. TEK: +1 Fetzladung (max 1×/Zug).",
+    "primary": {
+      "kind": "prep_block",
+      "value": 4,
+      "target": "self"
+    },
+    "rider": {
+      "id": "rider-w6",
+      "summary": "Nächster eigener Aktions-W6 +1 (max +2).",
+      "defenseSuppressible": true
+    },
+    "intensity": 1,
+    "transformId": "xform-ueberladung",
+    "grantsFetz": true,
+    "catalystConsumed": true,
+    "overformulaPrimaryBonus": null,
+    "overformulaIntensityBonus": null,
+    "formulaDefensePenalty": null,
+    "summonConstructDefId": null
+  },
+  {
+    "recipeId": "v6-over-fintenschnitt-luft-ueberladung",
+    "kind": "overformula",
+    "catalogSlice": "slice1",
+    "techniqueId": "v6-technik-fintenschnitt",
+    "essenceId": "v6-essenz-luft",
+    "catalystId": "v6-katalysator-ueberladung",
+    "name": "Überformel Windfinte · Überladung",
+    "effectSummary": "Bereite Block +4 vor. Nächster eigener Aktions-W6 +1 (max +2). (verstärkt) Primärwert +2; danach erleidest du 1 Selbstschaden. Überformel: Intensität +1 (fester Slice-1-Bonus). Überformel: Fetzladung wird verbraucht. Formelabwehr −1.",
+    "primary": {
+      "kind": "prep_block",
+      "value": 4,
+      "target": "self"
+    },
+    "rider": {
+      "id": "rider-w6",
+      "summary": "Nächster eigener Aktions-W6 +1 (max +2). (verstärkt)",
+      "defenseSuppressible": true
+    },
+    "intensity": 2,
+    "transformId": "xform-ueberladung",
+    "grantsFetz": false,
+    "catalystConsumed": true,
+    "overformulaPrimaryBonus": null,
+    "overformulaIntensityBonus": 1,
+    "formulaDefensePenalty": -1,
+    "summonConstructDefId": null
+  },
+  {
+    "recipeId": "v6-tek-fintenschnitt-luft-verdichtung",
+    "kind": "tek",
+    "catalogSlice": "slice1",
+    "techniqueId": "v6-technik-fintenschnitt",
+    "essenceId": "v6-essenz-luft",
+    "catalystId": "v6-katalysator-verdichtung",
+    "name": "Windfinte · Verdichtung",
+    "effectSummary": "Bereite Block +3 vor. Nächster eigener Aktions-W6 +1 (max +2). Primärwert +1; verwendete Komponenten erhalten +1 Stabilität. TEK: +1 Fetzladung (max 1×/Zug).",
+    "primary": {
+      "kind": "prep_block",
+      "value": 3,
+      "target": "self"
+    },
+    "rider": {
+      "id": "rider-w6",
+      "summary": "Nächster eigener Aktions-W6 +1 (max +2).",
+      "defenseSuppressible": true
+    },
+    "intensity": 1,
+    "transformId": "xform-verdichtung",
+    "grantsFetz": true,
+    "catalystConsumed": true,
+    "overformulaPrimaryBonus": null,
+    "overformulaIntensityBonus": null,
+    "formulaDefensePenalty": null,
+    "summonConstructDefId": null
+  },
+  {
+    "recipeId": "v6-over-fintenschnitt-luft-verdichtung",
+    "kind": "overformula",
+    "catalogSlice": "slice1",
+    "techniqueId": "v6-technik-fintenschnitt",
+    "essenceId": "v6-essenz-luft",
+    "catalystId": "v6-katalysator-verdichtung",
+    "name": "Überformel Windfinte · Verdichtung",
+    "effectSummary": "Bereite Block +3 vor. Nächster eigener Aktions-W6 +1 (max +2). (verstärkt) Primärwert +1; verwendete Komponenten erhalten +1 Stabilität. Überformel: Intensität +1 (fester Slice-1-Bonus). Überformel: Fetzladung wird verbraucht. Formelabwehr −1.",
+    "primary": {
+      "kind": "prep_block",
+      "value": 3,
+      "target": "self"
+    },
+    "rider": {
+      "id": "rider-w6",
+      "summary": "Nächster eigener Aktions-W6 +1 (max +2). (verstärkt)",
+      "defenseSuppressible": true
+    },
+    "intensity": 2,
+    "transformId": "xform-verdichtung",
+    "grantsFetz": false,
+    "catalystConsumed": true,
+    "overformulaPrimaryBonus": null,
+    "overformulaIntensityBonus": 1,
+    "formulaDefensePenalty": -1,
+    "summonConstructDefId": null
+  },
+  {
+    "recipeId": "v6-tek-fintenschnitt-luft-sofortzuender",
+    "kind": "tek",
+    "catalogSlice": "slice1",
+    "techniqueId": "v6-technik-fintenschnitt",
+    "essenceId": "v6-essenz-luft",
+    "catalystId": "v6-katalysator-sofortzuender",
+    "name": "Windfinte · Sofortzünder",
+    "effectSummary": "Bereite Block +1 vor. Nächster eigener Aktions-W6 +1 (max +2). Primärwert −1; danach ziehe 1 und wirf 1 ab. TEK: +1 Fetzladung (max 1×/Zug).",
+    "primary": {
+      "kind": "prep_block",
+      "value": 1,
+      "target": "self"
+    },
+    "rider": {
+      "id": "rider-w6",
+      "summary": "Nächster eigener Aktions-W6 +1 (max +2).",
+      "defenseSuppressible": true
+    },
+    "intensity": 1,
+    "transformId": "xform-sofortzuender",
+    "grantsFetz": true,
+    "catalystConsumed": true,
+    "overformulaPrimaryBonus": null,
+    "overformulaIntensityBonus": null,
+    "formulaDefensePenalty": null,
+    "summonConstructDefId": null
+  },
+  {
+    "recipeId": "v6-over-fintenschnitt-luft-sofortzuender",
+    "kind": "overformula",
+    "catalogSlice": "slice1",
+    "techniqueId": "v6-technik-fintenschnitt",
+    "essenceId": "v6-essenz-luft",
+    "catalystId": "v6-katalysator-sofortzuender",
+    "name": "Überformel Windfinte · Sofortzünder",
+    "effectSummary": "Bereite Block +1 vor. Nächster eigener Aktions-W6 +1 (max +2). (verstärkt) Primärwert −1; danach ziehe 1 und wirf 1 ab. Überformel: Intensität +1 (fester Slice-1-Bonus). Überformel: Fetzladung wird verbraucht. Formelabwehr −1.",
+    "primary": {
+      "kind": "prep_block",
+      "value": 1,
+      "target": "self"
+    },
+    "rider": {
+      "id": "rider-w6",
+      "summary": "Nächster eigener Aktions-W6 +1 (max +2). (verstärkt)",
+      "defenseSuppressible": true
+    },
+    "intensity": 2,
+    "transformId": "xform-sofortzuender",
+    "grantsFetz": false,
+    "catalystConsumed": true,
+    "overformulaPrimaryBonus": null,
+    "overformulaIntensityBonus": 1,
+    "formulaDefensePenalty": -1,
+    "summonConstructDefId": null
+  },
+  {
+    "recipeId": "v6-tek-fintenschnitt-luft-opfergabe",
+    "kind": "tek",
+    "catalogSlice": "slice1",
+    "techniqueId": "v6-technik-fintenschnitt",
+    "essenceId": "v6-essenz-luft",
+    "catalystId": "v6-katalysator-opfergabe",
+    "name": "Windfinte · Opfergabe",
+    "effectSummary": "Bereite Block +2 vor. Nächster eigener Aktions-W6 +1 (max +2). Optional: wirf 1 Handkarte ab für Primärwert +2. TEK: +1 Fetzladung (max 1×/Zug).",
+    "primary": {
+      "kind": "prep_block",
+      "value": 2,
+      "target": "self"
+    },
+    "rider": {
+      "id": "rider-w6",
+      "summary": "Nächster eigener Aktions-W6 +1 (max +2).",
+      "defenseSuppressible": true
+    },
+    "intensity": 1,
+    "transformId": "xform-opfergabe",
+    "grantsFetz": true,
+    "catalystConsumed": true,
+    "overformulaPrimaryBonus": null,
+    "overformulaIntensityBonus": null,
+    "formulaDefensePenalty": null,
+    "summonConstructDefId": null
+  },
+  {
+    "recipeId": "v6-over-fintenschnitt-luft-opfergabe",
+    "kind": "overformula",
+    "catalogSlice": "slice1",
+    "techniqueId": "v6-technik-fintenschnitt",
+    "essenceId": "v6-essenz-luft",
+    "catalystId": "v6-katalysator-opfergabe",
+    "name": "Überformel Windfinte · Opfergabe",
+    "effectSummary": "Bereite Block +2 vor. Nächster eigener Aktions-W6 +1 (max +2). (verstärkt) Optional: wirf 1 Handkarte ab für Primärwert +2. Überformel: Intensität +1 (fester Slice-1-Bonus). Überformel: Fetzladung wird verbraucht. Formelabwehr −1.",
+    "primary": {
+      "kind": "prep_block",
+      "value": 2,
+      "target": "self"
+    },
+    "rider": {
+      "id": "rider-w6",
+      "summary": "Nächster eigener Aktions-W6 +1 (max +2). (verstärkt)",
+      "defenseSuppressible": true
+    },
+    "intensity": 2,
+    "transformId": "xform-opfergabe",
+    "grantsFetz": false,
+    "catalystConsumed": true,
+    "overformulaPrimaryBonus": null,
+    "overformulaIntensityBonus": 1,
+    "formulaDefensePenalty": -1,
+    "summonConstructDefId": null
+  },
+  {
+    "recipeId": "v6-tek-fintenschnitt-licht-ueberladung",
+    "kind": "tek",
+    "catalogSlice": "slice1",
+    "techniqueId": "v6-technik-fintenschnitt",
+    "essenceId": "v6-essenz-licht",
+    "catalystId": "v6-katalysator-ueberladung",
+    "name": "Lichtfinte · Überladung",
+    "effectSummary": "Bereite Block +4 vor. Bei Schildgewinn: entferne optional eine Marke von dir. Primärwert +2; danach erleidest du 1 Selbstschaden. TEK: +1 Fetzladung (max 1×/Zug).",
+    "primary": {
+      "kind": "prep_block",
+      "value": 4,
+      "target": "self"
+    },
+    "rider": {
+      "id": "rider-reinigen-licht",
+      "summary": "Bei Schildgewinn: entferne optional eine Marke von dir.",
+      "defenseSuppressible": false
+    },
+    "intensity": 1,
+    "transformId": "xform-ueberladung",
+    "grantsFetz": true,
+    "catalystConsumed": true,
+    "overformulaPrimaryBonus": null,
+    "overformulaIntensityBonus": null,
+    "formulaDefensePenalty": null,
+    "summonConstructDefId": null
+  },
+  {
+    "recipeId": "v6-over-fintenschnitt-licht-ueberladung",
+    "kind": "overformula",
+    "catalogSlice": "slice1",
+    "techniqueId": "v6-technik-fintenschnitt",
+    "essenceId": "v6-essenz-licht",
+    "catalystId": "v6-katalysator-ueberladung",
+    "name": "Überformel Lichtfinte · Überladung",
+    "effectSummary": "Bereite Block +4 vor. Bei Schildgewinn: entferne optional eine Marke von dir. (verstärkt) Primärwert +2; danach erleidest du 1 Selbstschaden. Überformel: Intensität +1 (fester Slice-1-Bonus). Überformel: Fetzladung wird verbraucht. Formelabwehr −1.",
+    "primary": {
+      "kind": "prep_block",
+      "value": 4,
+      "target": "self"
+    },
+    "rider": {
+      "id": "rider-reinigen-licht",
+      "summary": "Bei Schildgewinn: entferne optional eine Marke von dir. (verstärkt)",
+      "defenseSuppressible": false
+    },
+    "intensity": 2,
+    "transformId": "xform-ueberladung",
+    "grantsFetz": false,
+    "catalystConsumed": true,
+    "overformulaPrimaryBonus": null,
+    "overformulaIntensityBonus": 1,
+    "formulaDefensePenalty": -1,
+    "summonConstructDefId": null
+  },
+  {
+    "recipeId": "v6-tek-fintenschnitt-licht-verdichtung",
+    "kind": "tek",
+    "catalogSlice": "slice1",
+    "techniqueId": "v6-technik-fintenschnitt",
+    "essenceId": "v6-essenz-licht",
+    "catalystId": "v6-katalysator-verdichtung",
+    "name": "Lichtfinte · Verdichtung",
+    "effectSummary": "Bereite Block +3 vor. Bei Schildgewinn: entferne optional eine Marke von dir. Primärwert +1; verwendete Komponenten erhalten +1 Stabilität. TEK: +1 Fetzladung (max 1×/Zug).",
+    "primary": {
+      "kind": "prep_block",
+      "value": 3,
+      "target": "self"
+    },
+    "rider": {
+      "id": "rider-reinigen-licht",
+      "summary": "Bei Schildgewinn: entferne optional eine Marke von dir.",
+      "defenseSuppressible": false
+    },
+    "intensity": 1,
+    "transformId": "xform-verdichtung",
+    "grantsFetz": true,
+    "catalystConsumed": true,
+    "overformulaPrimaryBonus": null,
+    "overformulaIntensityBonus": null,
+    "formulaDefensePenalty": null,
+    "summonConstructDefId": null
+  },
+  {
+    "recipeId": "v6-over-fintenschnitt-licht-verdichtung",
+    "kind": "overformula",
+    "catalogSlice": "slice1",
+    "techniqueId": "v6-technik-fintenschnitt",
+    "essenceId": "v6-essenz-licht",
+    "catalystId": "v6-katalysator-verdichtung",
+    "name": "Überformel Lichtfinte · Verdichtung",
+    "effectSummary": "Bereite Block +3 vor. Bei Schildgewinn: entferne optional eine Marke von dir. (verstärkt) Primärwert +1; verwendete Komponenten erhalten +1 Stabilität. Überformel: Intensität +1 (fester Slice-1-Bonus). Überformel: Fetzladung wird verbraucht. Formelabwehr −1.",
+    "primary": {
+      "kind": "prep_block",
+      "value": 3,
+      "target": "self"
+    },
+    "rider": {
+      "id": "rider-reinigen-licht",
+      "summary": "Bei Schildgewinn: entferne optional eine Marke von dir. (verstärkt)",
+      "defenseSuppressible": false
+    },
+    "intensity": 2,
+    "transformId": "xform-verdichtung",
+    "grantsFetz": false,
+    "catalystConsumed": true,
+    "overformulaPrimaryBonus": null,
+    "overformulaIntensityBonus": 1,
+    "formulaDefensePenalty": -1,
+    "summonConstructDefId": null
+  },
+  {
+    "recipeId": "v6-tek-fintenschnitt-licht-sofortzuender",
+    "kind": "tek",
+    "catalogSlice": "slice1",
+    "techniqueId": "v6-technik-fintenschnitt",
+    "essenceId": "v6-essenz-licht",
+    "catalystId": "v6-katalysator-sofortzuender",
+    "name": "Lichtfinte · Sofortzünder",
+    "effectSummary": "Bereite Block +1 vor. Bei Schildgewinn: entferne optional eine Marke von dir. Primärwert −1; danach ziehe 1 und wirf 1 ab. TEK: +1 Fetzladung (max 1×/Zug).",
+    "primary": {
+      "kind": "prep_block",
+      "value": 1,
+      "target": "self"
+    },
+    "rider": {
+      "id": "rider-reinigen-licht",
+      "summary": "Bei Schildgewinn: entferne optional eine Marke von dir.",
+      "defenseSuppressible": false
+    },
+    "intensity": 1,
+    "transformId": "xform-sofortzuender",
+    "grantsFetz": true,
+    "catalystConsumed": true,
+    "overformulaPrimaryBonus": null,
+    "overformulaIntensityBonus": null,
+    "formulaDefensePenalty": null,
+    "summonConstructDefId": null
+  },
+  {
+    "recipeId": "v6-over-fintenschnitt-licht-sofortzuender",
+    "kind": "overformula",
+    "catalogSlice": "slice1",
+    "techniqueId": "v6-technik-fintenschnitt",
+    "essenceId": "v6-essenz-licht",
+    "catalystId": "v6-katalysator-sofortzuender",
+    "name": "Überformel Lichtfinte · Sofortzünder",
+    "effectSummary": "Bereite Block +1 vor. Bei Schildgewinn: entferne optional eine Marke von dir. (verstärkt) Primärwert −1; danach ziehe 1 und wirf 1 ab. Überformel: Intensität +1 (fester Slice-1-Bonus). Überformel: Fetzladung wird verbraucht. Formelabwehr −1.",
+    "primary": {
+      "kind": "prep_block",
+      "value": 1,
+      "target": "self"
+    },
+    "rider": {
+      "id": "rider-reinigen-licht",
+      "summary": "Bei Schildgewinn: entferne optional eine Marke von dir. (verstärkt)",
+      "defenseSuppressible": false
+    },
+    "intensity": 2,
+    "transformId": "xform-sofortzuender",
+    "grantsFetz": false,
+    "catalystConsumed": true,
+    "overformulaPrimaryBonus": null,
+    "overformulaIntensityBonus": 1,
+    "formulaDefensePenalty": -1,
+    "summonConstructDefId": null
+  },
+  {
+    "recipeId": "v6-tek-fintenschnitt-licht-opfergabe",
+    "kind": "tek",
+    "catalogSlice": "slice1",
+    "techniqueId": "v6-technik-fintenschnitt",
+    "essenceId": "v6-essenz-licht",
+    "catalystId": "v6-katalysator-opfergabe",
+    "name": "Lichtfinte · Opfergabe",
+    "effectSummary": "Bereite Block +2 vor. Bei Schildgewinn: entferne optional eine Marke von dir. Optional: wirf 1 Handkarte ab für Primärwert +2. TEK: +1 Fetzladung (max 1×/Zug).",
+    "primary": {
+      "kind": "prep_block",
+      "value": 2,
+      "target": "self"
+    },
+    "rider": {
+      "id": "rider-reinigen-licht",
+      "summary": "Bei Schildgewinn: entferne optional eine Marke von dir.",
+      "defenseSuppressible": false
+    },
+    "intensity": 1,
+    "transformId": "xform-opfergabe",
+    "grantsFetz": true,
+    "catalystConsumed": true,
+    "overformulaPrimaryBonus": null,
+    "overformulaIntensityBonus": null,
+    "formulaDefensePenalty": null,
+    "summonConstructDefId": null
+  },
+  {
+    "recipeId": "v6-over-fintenschnitt-licht-opfergabe",
+    "kind": "overformula",
+    "catalogSlice": "slice1",
+    "techniqueId": "v6-technik-fintenschnitt",
+    "essenceId": "v6-essenz-licht",
+    "catalystId": "v6-katalysator-opfergabe",
+    "name": "Überformel Lichtfinte · Opfergabe",
+    "effectSummary": "Bereite Block +2 vor. Bei Schildgewinn: entferne optional eine Marke von dir. (verstärkt) Optional: wirf 1 Handkarte ab für Primärwert +2. Überformel: Intensität +1 (fester Slice-1-Bonus). Überformel: Fetzladung wird verbraucht. Formelabwehr −1.",
+    "primary": {
+      "kind": "prep_block",
+      "value": 2,
+      "target": "self"
+    },
+    "rider": {
+      "id": "rider-reinigen-licht",
+      "summary": "Bei Schildgewinn: entferne optional eine Marke von dir. (verstärkt)",
+      "defenseSuppressible": false
+    },
+    "intensity": 2,
+    "transformId": "xform-opfergabe",
+    "grantsFetz": false,
+    "catalystConsumed": true,
+    "overformulaPrimaryBonus": null,
+    "overformulaIntensityBonus": 1,
+    "formulaDefensePenalty": -1,
+    "summonConstructDefId": null
+  },
+  {
+    "recipeId": "v6-tek-fintenschnitt-schatten-ueberladung",
+    "kind": "tek",
+    "catalogSlice": "slice1",
+    "techniqueId": "v6-technik-fintenschnitt",
+    "essenceId": "v6-essenz-schatten",
+    "catalystId": "v6-katalysator-ueberladung",
+    "name": "Schattenfinte · Überladung",
+    "effectSummary": "Bereite Block +4 vor. Bei Treffer: erschöpfe optional 1 gegnerische Formelkomponente. Primärwert +2; danach erleidest du 1 Selbstschaden. TEK: +1 Fetzladung (max 1×/Zug).",
+    "primary": {
+      "kind": "prep_block",
+      "value": 4,
+      "target": "self"
+    },
+    "rider": {
+      "id": "rider-fluch",
+      "summary": "Bei Treffer: erschöpfe optional 1 gegnerische Formelkomponente.",
+      "defenseSuppressible": true
+    },
+    "intensity": 1,
+    "transformId": "xform-ueberladung",
+    "grantsFetz": true,
+    "catalystConsumed": true,
+    "overformulaPrimaryBonus": null,
+    "overformulaIntensityBonus": null,
+    "formulaDefensePenalty": null,
+    "summonConstructDefId": null
+  },
+  {
+    "recipeId": "v6-over-fintenschnitt-schatten-ueberladung",
+    "kind": "overformula",
+    "catalogSlice": "slice1",
+    "techniqueId": "v6-technik-fintenschnitt",
+    "essenceId": "v6-essenz-schatten",
+    "catalystId": "v6-katalysator-ueberladung",
+    "name": "Überformel Schattenfinte · Überladung",
+    "effectSummary": "Bereite Block +4 vor. Bei Treffer: erschöpfe optional 1 gegnerische Formelkomponente. (verstärkt) Primärwert +2; danach erleidest du 1 Selbstschaden. Überformel: Intensität +1 (fester Slice-1-Bonus). Überformel: Fetzladung wird verbraucht. Formelabwehr −1.",
+    "primary": {
+      "kind": "prep_block",
+      "value": 4,
+      "target": "self"
+    },
+    "rider": {
+      "id": "rider-fluch",
+      "summary": "Bei Treffer: erschöpfe optional 1 gegnerische Formelkomponente. (verstärkt)",
+      "defenseSuppressible": true
+    },
+    "intensity": 2,
+    "transformId": "xform-ueberladung",
+    "grantsFetz": false,
+    "catalystConsumed": true,
+    "overformulaPrimaryBonus": null,
+    "overformulaIntensityBonus": 1,
+    "formulaDefensePenalty": -1,
+    "summonConstructDefId": null
+  },
+  {
+    "recipeId": "v6-tek-fintenschnitt-schatten-verdichtung",
+    "kind": "tek",
+    "catalogSlice": "slice1",
+    "techniqueId": "v6-technik-fintenschnitt",
+    "essenceId": "v6-essenz-schatten",
+    "catalystId": "v6-katalysator-verdichtung",
+    "name": "Schattenfinte · Verdichtung",
+    "effectSummary": "Bereite Block +3 vor. Bei Treffer: erschöpfe optional 1 gegnerische Formelkomponente. Primärwert +1; verwendete Komponenten erhalten +1 Stabilität. TEK: +1 Fetzladung (max 1×/Zug).",
+    "primary": {
+      "kind": "prep_block",
+      "value": 3,
+      "target": "self"
+    },
+    "rider": {
+      "id": "rider-fluch",
+      "summary": "Bei Treffer: erschöpfe optional 1 gegnerische Formelkomponente.",
+      "defenseSuppressible": true
+    },
+    "intensity": 1,
+    "transformId": "xform-verdichtung",
+    "grantsFetz": true,
+    "catalystConsumed": true,
+    "overformulaPrimaryBonus": null,
+    "overformulaIntensityBonus": null,
+    "formulaDefensePenalty": null,
+    "summonConstructDefId": null
+  },
+  {
+    "recipeId": "v6-over-fintenschnitt-schatten-verdichtung",
+    "kind": "overformula",
+    "catalogSlice": "slice1",
+    "techniqueId": "v6-technik-fintenschnitt",
+    "essenceId": "v6-essenz-schatten",
+    "catalystId": "v6-katalysator-verdichtung",
+    "name": "Überformel Schattenfinte · Verdichtung",
+    "effectSummary": "Bereite Block +3 vor. Bei Treffer: erschöpfe optional 1 gegnerische Formelkomponente. (verstärkt) Primärwert +1; verwendete Komponenten erhalten +1 Stabilität. Überformel: Intensität +1 (fester Slice-1-Bonus). Überformel: Fetzladung wird verbraucht. Formelabwehr −1.",
+    "primary": {
+      "kind": "prep_block",
+      "value": 3,
+      "target": "self"
+    },
+    "rider": {
+      "id": "rider-fluch",
+      "summary": "Bei Treffer: erschöpfe optional 1 gegnerische Formelkomponente. (verstärkt)",
+      "defenseSuppressible": true
+    },
+    "intensity": 2,
+    "transformId": "xform-verdichtung",
+    "grantsFetz": false,
+    "catalystConsumed": true,
+    "overformulaPrimaryBonus": null,
+    "overformulaIntensityBonus": 1,
+    "formulaDefensePenalty": -1,
+    "summonConstructDefId": null
+  },
+  {
+    "recipeId": "v6-tek-fintenschnitt-schatten-sofortzuender",
+    "kind": "tek",
+    "catalogSlice": "slice1",
+    "techniqueId": "v6-technik-fintenschnitt",
+    "essenceId": "v6-essenz-schatten",
+    "catalystId": "v6-katalysator-sofortzuender",
+    "name": "Schattenfinte · Sofortzünder",
+    "effectSummary": "Bereite Block +1 vor. Bei Treffer: erschöpfe optional 1 gegnerische Formelkomponente. Primärwert −1; danach ziehe 1 und wirf 1 ab. TEK: +1 Fetzladung (max 1×/Zug).",
+    "primary": {
+      "kind": "prep_block",
+      "value": 1,
+      "target": "self"
+    },
+    "rider": {
+      "id": "rider-fluch",
+      "summary": "Bei Treffer: erschöpfe optional 1 gegnerische Formelkomponente.",
+      "defenseSuppressible": true
+    },
+    "intensity": 1,
+    "transformId": "xform-sofortzuender",
+    "grantsFetz": true,
+    "catalystConsumed": true,
+    "overformulaPrimaryBonus": null,
+    "overformulaIntensityBonus": null,
+    "formulaDefensePenalty": null,
+    "summonConstructDefId": null
+  },
+  {
+    "recipeId": "v6-over-fintenschnitt-schatten-sofortzuender",
+    "kind": "overformula",
+    "catalogSlice": "slice1",
+    "techniqueId": "v6-technik-fintenschnitt",
+    "essenceId": "v6-essenz-schatten",
+    "catalystId": "v6-katalysator-sofortzuender",
+    "name": "Überformel Schattenfinte · Sofortzünder",
+    "effectSummary": "Bereite Block +1 vor. Bei Treffer: erschöpfe optional 1 gegnerische Formelkomponente. (verstärkt) Primärwert −1; danach ziehe 1 und wirf 1 ab. Überformel: Intensität +1 (fester Slice-1-Bonus). Überformel: Fetzladung wird verbraucht. Formelabwehr −1.",
+    "primary": {
+      "kind": "prep_block",
+      "value": 1,
+      "target": "self"
+    },
+    "rider": {
+      "id": "rider-fluch",
+      "summary": "Bei Treffer: erschöpfe optional 1 gegnerische Formelkomponente. (verstärkt)",
+      "defenseSuppressible": true
+    },
+    "intensity": 2,
+    "transformId": "xform-sofortzuender",
+    "grantsFetz": false,
+    "catalystConsumed": true,
+    "overformulaPrimaryBonus": null,
+    "overformulaIntensityBonus": 1,
+    "formulaDefensePenalty": -1,
+    "summonConstructDefId": null
+  },
+  {
+    "recipeId": "v6-tek-fintenschnitt-schatten-opfergabe",
+    "kind": "tek",
+    "catalogSlice": "slice1",
+    "techniqueId": "v6-technik-fintenschnitt",
+    "essenceId": "v6-essenz-schatten",
+    "catalystId": "v6-katalysator-opfergabe",
+    "name": "Schattenfinte · Opfergabe",
+    "effectSummary": "Bereite Block +2 vor. Bei Treffer: erschöpfe optional 1 gegnerische Formelkomponente. Optional: wirf 1 Handkarte ab für Primärwert +2. TEK: +1 Fetzladung (max 1×/Zug).",
+    "primary": {
+      "kind": "prep_block",
+      "value": 2,
+      "target": "self"
+    },
+    "rider": {
+      "id": "rider-fluch",
+      "summary": "Bei Treffer: erschöpfe optional 1 gegnerische Formelkomponente.",
+      "defenseSuppressible": true
+    },
+    "intensity": 1,
+    "transformId": "xform-opfergabe",
+    "grantsFetz": true,
+    "catalystConsumed": true,
+    "overformulaPrimaryBonus": null,
+    "overformulaIntensityBonus": null,
+    "formulaDefensePenalty": null,
+    "summonConstructDefId": null
+  },
+  {
+    "recipeId": "v6-over-fintenschnitt-schatten-opfergabe",
+    "kind": "overformula",
+    "catalogSlice": "slice1",
+    "techniqueId": "v6-technik-fintenschnitt",
+    "essenceId": "v6-essenz-schatten",
+    "catalystId": "v6-katalysator-opfergabe",
+    "name": "Überformel Schattenfinte · Opfergabe",
+    "effectSummary": "Bereite Block +2 vor. Bei Treffer: erschöpfe optional 1 gegnerische Formelkomponente. (verstärkt) Optional: wirf 1 Handkarte ab für Primärwert +2. Überformel: Intensität +1 (fester Slice-1-Bonus). Überformel: Fetzladung wird verbraucht. Formelabwehr −1.",
+    "primary": {
+      "kind": "prep_block",
+      "value": 2,
+      "target": "self"
+    },
+    "rider": {
+      "id": "rider-fluch",
+      "summary": "Bei Treffer: erschöpfe optional 1 gegnerische Formelkomponente. (verstärkt)",
+      "defenseSuppressible": true
+    },
+    "intensity": 2,
+    "transformId": "xform-opfergabe",
+    "grantsFetz": false,
+    "catalystConsumed": true,
+    "overformulaPrimaryBonus": null,
+    "overformulaIntensityBonus": 1,
+    "formulaDefensePenalty": -1,
+    "summonConstructDefId": null
+  },
+  {
+    "recipeId": "v6-tek-brechschlag-feuer-ueberladung",
+    "kind": "tek",
+    "catalogSlice": "slice1",
+    "techniqueId": "v6-technik-brechschlag",
+    "essenceId": "v6-essenz-feuer",
+    "catalystId": "v6-katalysator-ueberladung",
+    "name": "Glutbruch · Überladung",
+    "effectSummary": "Verursache 5 Schaden am Gegner. Bei Lebensschaden: Brennen, falls keine Reaktion. Primärwert +2; danach erleidest du 1 Selbstschaden. TEK: +1 Fetzladung (max 1×/Zug).",
+    "primary": {
+      "kind": "damage",
+      "value": 5,
+      "target": "opponent",
+      "offensive": true
+    },
+    "rider": {
+      "id": "rider-brennen",
+      "summary": "Bei Lebensschaden: Brennen, falls keine Reaktion.",
+      "defenseSuppressible": true
+    },
+    "intensity": null,
+    "transformId": "xform-ueberladung",
+    "grantsFetz": true,
+    "catalystConsumed": true,
+    "overformulaPrimaryBonus": null,
+    "overformulaIntensityBonus": null,
+    "formulaDefensePenalty": null,
+    "summonConstructDefId": null
+  },
+  {
+    "recipeId": "v6-over-brechschlag-feuer-ueberladung",
+    "kind": "overformula",
+    "catalogSlice": "slice1",
+    "techniqueId": "v6-technik-brechschlag",
+    "essenceId": "v6-essenz-feuer",
+    "catalystId": "v6-katalysator-ueberladung",
+    "name": "Überformel Glutbruch · Überladung",
+    "effectSummary": "Verursache 7 Schaden am Gegner. Bei Lebensschaden: Brennen, falls keine Reaktion. (verstärkt) Primärwert +2; danach erleidest du 1 Selbstschaden. Überformel: Primär +2 (fester Slice-1-Bonus). Überformel: Fetzladung wird verbraucht. Formelabwehr −1.",
+    "primary": {
+      "kind": "damage",
+      "value": 7,
+      "target": "opponent",
+      "offensive": true
+    },
+    "rider": {
+      "id": "rider-brennen",
+      "summary": "Bei Lebensschaden: Brennen, falls keine Reaktion. (verstärkt)",
+      "defenseSuppressible": true
+    },
+    "intensity": null,
+    "transformId": "xform-ueberladung",
+    "grantsFetz": false,
+    "catalystConsumed": true,
+    "overformulaPrimaryBonus": 2,
+    "overformulaIntensityBonus": null,
+    "formulaDefensePenalty": -1,
+    "summonConstructDefId": null
+  },
+  {
+    "recipeId": "v6-tek-brechschlag-feuer-verdichtung",
+    "kind": "tek",
+    "catalogSlice": "slice1",
+    "techniqueId": "v6-technik-brechschlag",
+    "essenceId": "v6-essenz-feuer",
+    "catalystId": "v6-katalysator-verdichtung",
+    "name": "Glutbruch · Verdichtung",
+    "effectSummary": "Verursache 4 Schaden am Gegner. Bei Lebensschaden: Brennen, falls keine Reaktion. Primärwert +1; verwendete Komponenten erhalten +1 Stabilität. TEK: +1 Fetzladung (max 1×/Zug).",
+    "primary": {
+      "kind": "damage",
+      "value": 4,
+      "target": "opponent",
+      "offensive": true
+    },
+    "rider": {
+      "id": "rider-brennen",
+      "summary": "Bei Lebensschaden: Brennen, falls keine Reaktion.",
+      "defenseSuppressible": true
+    },
+    "intensity": null,
+    "transformId": "xform-verdichtung",
+    "grantsFetz": true,
+    "catalystConsumed": true,
+    "overformulaPrimaryBonus": null,
+    "overformulaIntensityBonus": null,
+    "formulaDefensePenalty": null,
+    "summonConstructDefId": null
+  },
+  {
+    "recipeId": "v6-over-brechschlag-feuer-verdichtung",
+    "kind": "overformula",
+    "catalogSlice": "slice1",
+    "techniqueId": "v6-technik-brechschlag",
+    "essenceId": "v6-essenz-feuer",
+    "catalystId": "v6-katalysator-verdichtung",
+    "name": "Überformel Glutbruch · Verdichtung",
+    "effectSummary": "Verursache 6 Schaden am Gegner. Bei Lebensschaden: Brennen, falls keine Reaktion. (verstärkt) Primärwert +1; verwendete Komponenten erhalten +1 Stabilität. Überformel: Primär +2 (fester Slice-1-Bonus). Überformel: Fetzladung wird verbraucht. Formelabwehr −1.",
+    "primary": {
+      "kind": "damage",
+      "value": 6,
+      "target": "opponent",
+      "offensive": true
+    },
+    "rider": {
+      "id": "rider-brennen",
+      "summary": "Bei Lebensschaden: Brennen, falls keine Reaktion. (verstärkt)",
+      "defenseSuppressible": true
+    },
+    "intensity": null,
+    "transformId": "xform-verdichtung",
+    "grantsFetz": false,
+    "catalystConsumed": true,
+    "overformulaPrimaryBonus": 2,
+    "overformulaIntensityBonus": null,
+    "formulaDefensePenalty": -1,
+    "summonConstructDefId": null
+  },
+  {
+    "recipeId": "v6-tek-brechschlag-feuer-sofortzuender",
+    "kind": "tek",
+    "catalogSlice": "slice1",
+    "techniqueId": "v6-technik-brechschlag",
+    "essenceId": "v6-essenz-feuer",
+    "catalystId": "v6-katalysator-sofortzuender",
+    "name": "Glutbruch · Sofortzünder",
+    "effectSummary": "Verursache 2 Schaden am Gegner. Bei Lebensschaden: Brennen, falls keine Reaktion. Primärwert −1; danach ziehe 1 und wirf 1 ab. TEK: +1 Fetzladung (max 1×/Zug).",
+    "primary": {
+      "kind": "damage",
+      "value": 2,
+      "target": "opponent",
+      "offensive": true
+    },
+    "rider": {
+      "id": "rider-brennen",
+      "summary": "Bei Lebensschaden: Brennen, falls keine Reaktion.",
+      "defenseSuppressible": true
+    },
+    "intensity": null,
+    "transformId": "xform-sofortzuender",
+    "grantsFetz": true,
+    "catalystConsumed": true,
+    "overformulaPrimaryBonus": null,
+    "overformulaIntensityBonus": null,
+    "formulaDefensePenalty": null,
+    "summonConstructDefId": null
+  },
+  {
+    "recipeId": "v6-over-brechschlag-feuer-sofortzuender",
+    "kind": "overformula",
+    "catalogSlice": "slice1",
+    "techniqueId": "v6-technik-brechschlag",
+    "essenceId": "v6-essenz-feuer",
+    "catalystId": "v6-katalysator-sofortzuender",
+    "name": "Überformel Glutbruch · Sofortzünder",
+    "effectSummary": "Verursache 4 Schaden am Gegner. Bei Lebensschaden: Brennen, falls keine Reaktion. (verstärkt) Primärwert −1; danach ziehe 1 und wirf 1 ab. Überformel: Primär +2 (fester Slice-1-Bonus). Überformel: Fetzladung wird verbraucht. Formelabwehr −1.",
+    "primary": {
+      "kind": "damage",
+      "value": 4,
+      "target": "opponent",
+      "offensive": true
+    },
+    "rider": {
+      "id": "rider-brennen",
+      "summary": "Bei Lebensschaden: Brennen, falls keine Reaktion. (verstärkt)",
+      "defenseSuppressible": true
+    },
+    "intensity": null,
+    "transformId": "xform-sofortzuender",
+    "grantsFetz": false,
+    "catalystConsumed": true,
+    "overformulaPrimaryBonus": 2,
+    "overformulaIntensityBonus": null,
+    "formulaDefensePenalty": -1,
+    "summonConstructDefId": null
+  },
+  {
+    "recipeId": "v6-tek-brechschlag-feuer-opfergabe",
+    "kind": "tek",
+    "catalogSlice": "slice1",
+    "techniqueId": "v6-technik-brechschlag",
+    "essenceId": "v6-essenz-feuer",
+    "catalystId": "v6-katalysator-opfergabe",
+    "name": "Glutbruch · Opfergabe",
+    "effectSummary": "Verursache 3 Schaden am Gegner. Bei Lebensschaden: Brennen, falls keine Reaktion. Optional: wirf 1 Handkarte ab für Primärwert +2. TEK: +1 Fetzladung (max 1×/Zug).",
+    "primary": {
+      "kind": "damage",
+      "value": 3,
+      "target": "opponent",
+      "offensive": true
+    },
+    "rider": {
+      "id": "rider-brennen",
+      "summary": "Bei Lebensschaden: Brennen, falls keine Reaktion.",
+      "defenseSuppressible": true
+    },
+    "intensity": null,
+    "transformId": "xform-opfergabe",
+    "grantsFetz": true,
+    "catalystConsumed": true,
+    "overformulaPrimaryBonus": null,
+    "overformulaIntensityBonus": null,
+    "formulaDefensePenalty": null,
+    "summonConstructDefId": null
+  },
+  {
+    "recipeId": "v6-over-brechschlag-feuer-opfergabe",
+    "kind": "overformula",
+    "catalogSlice": "slice1",
+    "techniqueId": "v6-technik-brechschlag",
+    "essenceId": "v6-essenz-feuer",
+    "catalystId": "v6-katalysator-opfergabe",
+    "name": "Überformel Glutbruch · Opfergabe",
+    "effectSummary": "Verursache 5 Schaden am Gegner. Bei Lebensschaden: Brennen, falls keine Reaktion. (verstärkt) Optional: wirf 1 Handkarte ab für Primärwert +2. Überformel: Primär +2 (fester Slice-1-Bonus). Überformel: Fetzladung wird verbraucht. Formelabwehr −1.",
+    "primary": {
+      "kind": "damage",
+      "value": 5,
+      "target": "opponent",
+      "offensive": true
+    },
+    "rider": {
+      "id": "rider-brennen",
+      "summary": "Bei Lebensschaden: Brennen, falls keine Reaktion. (verstärkt)",
+      "defenseSuppressible": true
+    },
+    "intensity": null,
+    "transformId": "xform-opfergabe",
+    "grantsFetz": false,
+    "catalystConsumed": true,
+    "overformulaPrimaryBonus": 2,
+    "overformulaIntensityBonus": null,
+    "formulaDefensePenalty": -1,
+    "summonConstructDefId": null
+  },
+  {
+    "recipeId": "v6-tek-brechschlag-wasser-ueberladung",
+    "kind": "tek",
+    "catalogSlice": "slice1",
+    "techniqueId": "v6-technik-brechschlag",
+    "essenceId": "v6-essenz-wasser",
+    "catalystId": "v6-katalysator-ueberladung",
+    "name": "Wellenbruch · Überladung",
+    "effectSummary": "Verursache 4 Schaden am Gegner. Bei Heilung oder Schildgewinn: entferne optional eine Marke von dir. Primärwert +2; danach erleidest du 1 Selbstschaden. TEK: +1 Fetzladung (max 1×/Zug).",
+    "primary": {
+      "kind": "damage",
+      "value": 4,
+      "target": "opponent",
+      "offensive": true
+    },
+    "rider": {
+      "id": "rider-reinigen",
+      "summary": "Bei Heilung oder Schildgewinn: entferne optional eine Marke von dir.",
+      "defenseSuppressible": false
+    },
+    "intensity": null,
+    "transformId": "xform-ueberladung",
+    "grantsFetz": true,
+    "catalystConsumed": true,
+    "overformulaPrimaryBonus": null,
+    "overformulaIntensityBonus": null,
+    "formulaDefensePenalty": null,
+    "summonConstructDefId": null
+  },
+  {
+    "recipeId": "v6-over-brechschlag-wasser-ueberladung",
+    "kind": "overformula",
+    "catalogSlice": "slice1",
+    "techniqueId": "v6-technik-brechschlag",
+    "essenceId": "v6-essenz-wasser",
+    "catalystId": "v6-katalysator-ueberladung",
+    "name": "Überformel Wellenbruch · Überladung",
+    "effectSummary": "Verursache 6 Schaden am Gegner. Bei Heilung oder Schildgewinn: entferne optional eine Marke von dir. (verstärkt) Primärwert +2; danach erleidest du 1 Selbstschaden. Überformel: Primär +2 (fester Slice-1-Bonus). Überformel: Fetzladung wird verbraucht. Formelabwehr −1.",
+    "primary": {
+      "kind": "damage",
+      "value": 6,
+      "target": "opponent",
+      "offensive": true
+    },
+    "rider": {
+      "id": "rider-reinigen",
+      "summary": "Bei Heilung oder Schildgewinn: entferne optional eine Marke von dir. (verstärkt)",
+      "defenseSuppressible": false
+    },
+    "intensity": null,
+    "transformId": "xform-ueberladung",
+    "grantsFetz": false,
+    "catalystConsumed": true,
+    "overformulaPrimaryBonus": 2,
+    "overformulaIntensityBonus": null,
+    "formulaDefensePenalty": -1,
+    "summonConstructDefId": null
+  },
+  {
+    "recipeId": "v6-tek-brechschlag-wasser-verdichtung",
+    "kind": "tek",
+    "catalogSlice": "slice1",
+    "techniqueId": "v6-technik-brechschlag",
+    "essenceId": "v6-essenz-wasser",
+    "catalystId": "v6-katalysator-verdichtung",
+    "name": "Wellenbruch · Verdichtung",
+    "effectSummary": "Verursache 3 Schaden am Gegner. Bei Heilung oder Schildgewinn: entferne optional eine Marke von dir. Primärwert +1; verwendete Komponenten erhalten +1 Stabilität. TEK: +1 Fetzladung (max 1×/Zug).",
+    "primary": {
+      "kind": "damage",
+      "value": 3,
+      "target": "opponent",
+      "offensive": true
+    },
+    "rider": {
+      "id": "rider-reinigen",
+      "summary": "Bei Heilung oder Schildgewinn: entferne optional eine Marke von dir.",
+      "defenseSuppressible": false
+    },
+    "intensity": null,
+    "transformId": "xform-verdichtung",
+    "grantsFetz": true,
+    "catalystConsumed": true,
+    "overformulaPrimaryBonus": null,
+    "overformulaIntensityBonus": null,
+    "formulaDefensePenalty": null,
+    "summonConstructDefId": null
+  },
+  {
+    "recipeId": "v6-over-brechschlag-wasser-verdichtung",
+    "kind": "overformula",
+    "catalogSlice": "slice1",
+    "techniqueId": "v6-technik-brechschlag",
+    "essenceId": "v6-essenz-wasser",
+    "catalystId": "v6-katalysator-verdichtung",
+    "name": "Überformel Wellenbruch · Verdichtung",
+    "effectSummary": "Verursache 5 Schaden am Gegner. Bei Heilung oder Schildgewinn: entferne optional eine Marke von dir. (verstärkt) Primärwert +1; verwendete Komponenten erhalten +1 Stabilität. Überformel: Primär +2 (fester Slice-1-Bonus). Überformel: Fetzladung wird verbraucht. Formelabwehr −1.",
+    "primary": {
+      "kind": "damage",
+      "value": 5,
+      "target": "opponent",
+      "offensive": true
+    },
+    "rider": {
+      "id": "rider-reinigen",
+      "summary": "Bei Heilung oder Schildgewinn: entferne optional eine Marke von dir. (verstärkt)",
+      "defenseSuppressible": false
+    },
+    "intensity": null,
+    "transformId": "xform-verdichtung",
+    "grantsFetz": false,
+    "catalystConsumed": true,
+    "overformulaPrimaryBonus": 2,
+    "overformulaIntensityBonus": null,
+    "formulaDefensePenalty": -1,
+    "summonConstructDefId": null
+  },
+  {
+    "recipeId": "v6-tek-brechschlag-wasser-sofortzuender",
+    "kind": "tek",
+    "catalogSlice": "slice1",
+    "techniqueId": "v6-technik-brechschlag",
+    "essenceId": "v6-essenz-wasser",
+    "catalystId": "v6-katalysator-sofortzuender",
+    "name": "Wellenbruch · Sofortzünder",
+    "effectSummary": "Verursache 1 Schaden am Gegner. Bei Heilung oder Schildgewinn: entferne optional eine Marke von dir. Primärwert −1; danach ziehe 1 und wirf 1 ab. TEK: +1 Fetzladung (max 1×/Zug).",
+    "primary": {
+      "kind": "damage",
+      "value": 1,
+      "target": "opponent",
+      "offensive": true
+    },
+    "rider": {
+      "id": "rider-reinigen",
+      "summary": "Bei Heilung oder Schildgewinn: entferne optional eine Marke von dir.",
+      "defenseSuppressible": false
+    },
+    "intensity": null,
+    "transformId": "xform-sofortzuender",
+    "grantsFetz": true,
+    "catalystConsumed": true,
+    "overformulaPrimaryBonus": null,
+    "overformulaIntensityBonus": null,
+    "formulaDefensePenalty": null,
+    "summonConstructDefId": null
+  },
+  {
+    "recipeId": "v6-over-brechschlag-wasser-sofortzuender",
+    "kind": "overformula",
+    "catalogSlice": "slice1",
+    "techniqueId": "v6-technik-brechschlag",
+    "essenceId": "v6-essenz-wasser",
+    "catalystId": "v6-katalysator-sofortzuender",
+    "name": "Überformel Wellenbruch · Sofortzünder",
+    "effectSummary": "Verursache 3 Schaden am Gegner. Bei Heilung oder Schildgewinn: entferne optional eine Marke von dir. (verstärkt) Primärwert −1; danach ziehe 1 und wirf 1 ab. Überformel: Primär +2 (fester Slice-1-Bonus). Überformel: Fetzladung wird verbraucht. Formelabwehr −1.",
+    "primary": {
+      "kind": "damage",
+      "value": 3,
+      "target": "opponent",
+      "offensive": true
+    },
+    "rider": {
+      "id": "rider-reinigen",
+      "summary": "Bei Heilung oder Schildgewinn: entferne optional eine Marke von dir. (verstärkt)",
+      "defenseSuppressible": false
+    },
+    "intensity": null,
+    "transformId": "xform-sofortzuender",
+    "grantsFetz": false,
+    "catalystConsumed": true,
+    "overformulaPrimaryBonus": 2,
+    "overformulaIntensityBonus": null,
+    "formulaDefensePenalty": -1,
+    "summonConstructDefId": null
+  },
+  {
+    "recipeId": "v6-tek-brechschlag-wasser-opfergabe",
+    "kind": "tek",
+    "catalogSlice": "slice1",
+    "techniqueId": "v6-technik-brechschlag",
+    "essenceId": "v6-essenz-wasser",
+    "catalystId": "v6-katalysator-opfergabe",
+    "name": "Wellenbruch · Opfergabe",
+    "effectSummary": "Verursache 2 Schaden am Gegner. Bei Heilung oder Schildgewinn: entferne optional eine Marke von dir. Optional: wirf 1 Handkarte ab für Primärwert +2. TEK: +1 Fetzladung (max 1×/Zug).",
+    "primary": {
+      "kind": "damage",
+      "value": 2,
+      "target": "opponent",
+      "offensive": true
+    },
+    "rider": {
+      "id": "rider-reinigen",
+      "summary": "Bei Heilung oder Schildgewinn: entferne optional eine Marke von dir.",
+      "defenseSuppressible": false
+    },
+    "intensity": null,
+    "transformId": "xform-opfergabe",
+    "grantsFetz": true,
+    "catalystConsumed": true,
+    "overformulaPrimaryBonus": null,
+    "overformulaIntensityBonus": null,
+    "formulaDefensePenalty": null,
+    "summonConstructDefId": null
+  },
+  {
+    "recipeId": "v6-over-brechschlag-wasser-opfergabe",
+    "kind": "overformula",
+    "catalogSlice": "slice1",
+    "techniqueId": "v6-technik-brechschlag",
+    "essenceId": "v6-essenz-wasser",
+    "catalystId": "v6-katalysator-opfergabe",
+    "name": "Überformel Wellenbruch · Opfergabe",
+    "effectSummary": "Verursache 4 Schaden am Gegner. Bei Heilung oder Schildgewinn: entferne optional eine Marke von dir. (verstärkt) Optional: wirf 1 Handkarte ab für Primärwert +2. Überformel: Primär +2 (fester Slice-1-Bonus). Überformel: Fetzladung wird verbraucht. Formelabwehr −1.",
+    "primary": {
+      "kind": "damage",
+      "value": 4,
+      "target": "opponent",
+      "offensive": true
+    },
+    "rider": {
+      "id": "rider-reinigen",
+      "summary": "Bei Heilung oder Schildgewinn: entferne optional eine Marke von dir. (verstärkt)",
+      "defenseSuppressible": false
+    },
+    "intensity": null,
+    "transformId": "xform-opfergabe",
+    "grantsFetz": false,
+    "catalystConsumed": true,
+    "overformulaPrimaryBonus": 2,
+    "overformulaIntensityBonus": null,
+    "formulaDefensePenalty": -1,
+    "summonConstructDefId": null
+  },
+  {
+    "recipeId": "v6-tek-brechschlag-erde-ueberladung",
+    "kind": "tek",
+    "catalogSlice": "slice1",
+    "techniqueId": "v6-technik-brechschlag",
+    "essenceId": "v6-essenz-erde",
+    "catalystId": "v6-katalysator-ueberladung",
+    "name": "Felsbruch · Überladung",
+    "effectSummary": "Verursache 5 Schaden am Gegner. Verwendete Komponenten +1 Stabilität bis nächste Startphase. Primärwert +2; danach erleidest du 1 Selbstschaden. TEK: +1 Fetzladung (max 1×/Zug).",
+    "primary": {
+      "kind": "damage",
+      "value": 5,
+      "target": "opponent",
+      "offensive": true
+    },
+    "rider": {
+      "id": "rider-stabilitaet",
+      "summary": "Verwendete Komponenten +1 Stabilität bis nächste Startphase.",
+      "defenseSuppressible": false
+    },
+    "intensity": null,
+    "transformId": "xform-ueberladung",
+    "grantsFetz": true,
+    "catalystConsumed": true,
+    "overformulaPrimaryBonus": null,
+    "overformulaIntensityBonus": null,
+    "formulaDefensePenalty": null,
+    "summonConstructDefId": null
+  },
+  {
+    "recipeId": "v6-over-brechschlag-erde-ueberladung",
+    "kind": "overformula",
+    "catalogSlice": "slice1",
+    "techniqueId": "v6-technik-brechschlag",
+    "essenceId": "v6-essenz-erde",
+    "catalystId": "v6-katalysator-ueberladung",
+    "name": "Überformel Felsbruch · Überladung",
+    "effectSummary": "Verursache 7 Schaden am Gegner. Verwendete Komponenten +1 Stabilität bis nächste Startphase. (verstärkt) Primärwert +2; danach erleidest du 1 Selbstschaden. Überformel: Primär +2 (fester Slice-1-Bonus). Überformel: Fetzladung wird verbraucht. Formelabwehr −1.",
+    "primary": {
+      "kind": "damage",
+      "value": 7,
+      "target": "opponent",
+      "offensive": true
+    },
+    "rider": {
+      "id": "rider-stabilitaet",
+      "summary": "Verwendete Komponenten +1 Stabilität bis nächste Startphase. (verstärkt)",
+      "defenseSuppressible": false
+    },
+    "intensity": null,
+    "transformId": "xform-ueberladung",
+    "grantsFetz": false,
+    "catalystConsumed": true,
+    "overformulaPrimaryBonus": 2,
+    "overformulaIntensityBonus": null,
+    "formulaDefensePenalty": -1,
+    "summonConstructDefId": null
+  },
+  {
+    "recipeId": "v6-tek-brechschlag-erde-verdichtung",
+    "kind": "tek",
+    "catalogSlice": "slice1",
+    "techniqueId": "v6-technik-brechschlag",
+    "essenceId": "v6-essenz-erde",
+    "catalystId": "v6-katalysator-verdichtung",
+    "name": "Felsbruch · Verdichtung",
+    "effectSummary": "Verursache 4 Schaden am Gegner. Verwendete Komponenten +1 Stabilität bis nächste Startphase. Primärwert +1; verwendete Komponenten erhalten +1 Stabilität. TEK: +1 Fetzladung (max 1×/Zug).",
+    "primary": {
+      "kind": "damage",
+      "value": 4,
+      "target": "opponent",
+      "offensive": true
+    },
+    "rider": {
+      "id": "rider-stabilitaet",
+      "summary": "Verwendete Komponenten +1 Stabilität bis nächste Startphase.",
+      "defenseSuppressible": false
+    },
+    "intensity": null,
+    "transformId": "xform-verdichtung",
+    "grantsFetz": true,
+    "catalystConsumed": true,
+    "overformulaPrimaryBonus": null,
+    "overformulaIntensityBonus": null,
+    "formulaDefensePenalty": null,
+    "summonConstructDefId": null
+  },
+  {
+    "recipeId": "v6-over-brechschlag-erde-verdichtung",
+    "kind": "overformula",
+    "catalogSlice": "slice1",
+    "techniqueId": "v6-technik-brechschlag",
+    "essenceId": "v6-essenz-erde",
+    "catalystId": "v6-katalysator-verdichtung",
+    "name": "Überformel Felsbruch · Verdichtung",
+    "effectSummary": "Verursache 6 Schaden am Gegner. Verwendete Komponenten +1 Stabilität bis nächste Startphase. (verstärkt) Primärwert +1; verwendete Komponenten erhalten +1 Stabilität. Überformel: Primär +2 (fester Slice-1-Bonus). Überformel: Fetzladung wird verbraucht. Formelabwehr −1.",
+    "primary": {
+      "kind": "damage",
+      "value": 6,
+      "target": "opponent",
+      "offensive": true
+    },
+    "rider": {
+      "id": "rider-stabilitaet",
+      "summary": "Verwendete Komponenten +1 Stabilität bis nächste Startphase. (verstärkt)",
+      "defenseSuppressible": false
+    },
+    "intensity": null,
+    "transformId": "xform-verdichtung",
+    "grantsFetz": false,
+    "catalystConsumed": true,
+    "overformulaPrimaryBonus": 2,
+    "overformulaIntensityBonus": null,
+    "formulaDefensePenalty": -1,
+    "summonConstructDefId": null
+  },
+  {
+    "recipeId": "v6-tek-brechschlag-erde-sofortzuender",
+    "kind": "tek",
+    "catalogSlice": "slice1",
+    "techniqueId": "v6-technik-brechschlag",
+    "essenceId": "v6-essenz-erde",
+    "catalystId": "v6-katalysator-sofortzuender",
+    "name": "Felsbruch · Sofortzünder",
+    "effectSummary": "Verursache 2 Schaden am Gegner. Verwendete Komponenten +1 Stabilität bis nächste Startphase. Primärwert −1; danach ziehe 1 und wirf 1 ab. TEK: +1 Fetzladung (max 1×/Zug).",
+    "primary": {
+      "kind": "damage",
+      "value": 2,
+      "target": "opponent",
+      "offensive": true
+    },
+    "rider": {
+      "id": "rider-stabilitaet",
+      "summary": "Verwendete Komponenten +1 Stabilität bis nächste Startphase.",
+      "defenseSuppressible": false
+    },
+    "intensity": null,
+    "transformId": "xform-sofortzuender",
+    "grantsFetz": true,
+    "catalystConsumed": true,
+    "overformulaPrimaryBonus": null,
+    "overformulaIntensityBonus": null,
+    "formulaDefensePenalty": null,
+    "summonConstructDefId": null
+  },
+  {
+    "recipeId": "v6-over-brechschlag-erde-sofortzuender",
+    "kind": "overformula",
+    "catalogSlice": "slice1",
+    "techniqueId": "v6-technik-brechschlag",
+    "essenceId": "v6-essenz-erde",
+    "catalystId": "v6-katalysator-sofortzuender",
+    "name": "Überformel Felsbruch · Sofortzünder",
+    "effectSummary": "Verursache 4 Schaden am Gegner. Verwendete Komponenten +1 Stabilität bis nächste Startphase. (verstärkt) Primärwert −1; danach ziehe 1 und wirf 1 ab. Überformel: Primär +2 (fester Slice-1-Bonus). Überformel: Fetzladung wird verbraucht. Formelabwehr −1.",
+    "primary": {
+      "kind": "damage",
+      "value": 4,
+      "target": "opponent",
+      "offensive": true
+    },
+    "rider": {
+      "id": "rider-stabilitaet",
+      "summary": "Verwendete Komponenten +1 Stabilität bis nächste Startphase. (verstärkt)",
+      "defenseSuppressible": false
+    },
+    "intensity": null,
+    "transformId": "xform-sofortzuender",
+    "grantsFetz": false,
+    "catalystConsumed": true,
+    "overformulaPrimaryBonus": 2,
+    "overformulaIntensityBonus": null,
+    "formulaDefensePenalty": -1,
+    "summonConstructDefId": null
+  },
+  {
+    "recipeId": "v6-tek-brechschlag-erde-opfergabe",
+    "kind": "tek",
+    "catalogSlice": "slice1",
+    "techniqueId": "v6-technik-brechschlag",
+    "essenceId": "v6-essenz-erde",
+    "catalystId": "v6-katalysator-opfergabe",
+    "name": "Felsbruch · Opfergabe",
+    "effectSummary": "Verursache 3 Schaden am Gegner. Verwendete Komponenten +1 Stabilität bis nächste Startphase. Optional: wirf 1 Handkarte ab für Primärwert +2. TEK: +1 Fetzladung (max 1×/Zug).",
+    "primary": {
+      "kind": "damage",
+      "value": 3,
+      "target": "opponent",
+      "offensive": true
+    },
+    "rider": {
+      "id": "rider-stabilitaet",
+      "summary": "Verwendete Komponenten +1 Stabilität bis nächste Startphase.",
+      "defenseSuppressible": false
+    },
+    "intensity": null,
+    "transformId": "xform-opfergabe",
+    "grantsFetz": true,
+    "catalystConsumed": true,
+    "overformulaPrimaryBonus": null,
+    "overformulaIntensityBonus": null,
+    "formulaDefensePenalty": null,
+    "summonConstructDefId": null
+  },
+  {
+    "recipeId": "v6-over-brechschlag-erde-opfergabe",
+    "kind": "overformula",
+    "catalogSlice": "slice1",
+    "techniqueId": "v6-technik-brechschlag",
+    "essenceId": "v6-essenz-erde",
+    "catalystId": "v6-katalysator-opfergabe",
+    "name": "Überformel Felsbruch · Opfergabe",
+    "effectSummary": "Verursache 5 Schaden am Gegner. Verwendete Komponenten +1 Stabilität bis nächste Startphase. (verstärkt) Optional: wirf 1 Handkarte ab für Primärwert +2. Überformel: Primär +2 (fester Slice-1-Bonus). Überformel: Fetzladung wird verbraucht. Formelabwehr −1.",
+    "primary": {
+      "kind": "damage",
+      "value": 5,
+      "target": "opponent",
+      "offensive": true
+    },
+    "rider": {
+      "id": "rider-stabilitaet",
+      "summary": "Verwendete Komponenten +1 Stabilität bis nächste Startphase. (verstärkt)",
+      "defenseSuppressible": false
+    },
+    "intensity": null,
+    "transformId": "xform-opfergabe",
+    "grantsFetz": false,
+    "catalystConsumed": true,
+    "overformulaPrimaryBonus": 2,
+    "overformulaIntensityBonus": null,
+    "formulaDefensePenalty": -1,
+    "summonConstructDefId": null
+  },
+  {
+    "recipeId": "v6-tek-brechschlag-luft-ueberladung",
+    "kind": "tek",
+    "catalogSlice": "slice1",
+    "techniqueId": "v6-technik-brechschlag",
+    "essenceId": "v6-essenz-luft",
+    "catalystId": "v6-katalysator-ueberladung",
+    "name": "Windbruch · Überladung",
+    "effectSummary": "Verursache 4 Schaden am Gegner. Nächster eigener Aktions-W6 +1 (max +2). Primärwert +2; danach erleidest du 1 Selbstschaden. TEK: +1 Fetzladung (max 1×/Zug).",
+    "primary": {
+      "kind": "damage",
+      "value": 4,
+      "target": "opponent",
+      "offensive": true
+    },
+    "rider": {
+      "id": "rider-w6",
+      "summary": "Nächster eigener Aktions-W6 +1 (max +2).",
+      "defenseSuppressible": true
+    },
+    "intensity": null,
+    "transformId": "xform-ueberladung",
+    "grantsFetz": true,
+    "catalystConsumed": true,
+    "overformulaPrimaryBonus": null,
+    "overformulaIntensityBonus": null,
+    "formulaDefensePenalty": null,
+    "summonConstructDefId": null
+  },
+  {
+    "recipeId": "v6-over-brechschlag-luft-ueberladung",
+    "kind": "overformula",
+    "catalogSlice": "slice1",
+    "techniqueId": "v6-technik-brechschlag",
+    "essenceId": "v6-essenz-luft",
+    "catalystId": "v6-katalysator-ueberladung",
+    "name": "Überformel Windbruch · Überladung",
+    "effectSummary": "Verursache 6 Schaden am Gegner. Nächster eigener Aktions-W6 +1 (max +2). (verstärkt) Primärwert +2; danach erleidest du 1 Selbstschaden. Überformel: Primär +2 (fester Slice-1-Bonus). Überformel: Fetzladung wird verbraucht. Formelabwehr −1.",
+    "primary": {
+      "kind": "damage",
+      "value": 6,
+      "target": "opponent",
+      "offensive": true
+    },
+    "rider": {
+      "id": "rider-w6",
+      "summary": "Nächster eigener Aktions-W6 +1 (max +2). (verstärkt)",
+      "defenseSuppressible": true
+    },
+    "intensity": null,
+    "transformId": "xform-ueberladung",
+    "grantsFetz": false,
+    "catalystConsumed": true,
+    "overformulaPrimaryBonus": 2,
+    "overformulaIntensityBonus": null,
+    "formulaDefensePenalty": -1,
+    "summonConstructDefId": null
+  },
+  {
+    "recipeId": "v6-tek-brechschlag-luft-verdichtung",
+    "kind": "tek",
+    "catalogSlice": "slice1",
+    "techniqueId": "v6-technik-brechschlag",
+    "essenceId": "v6-essenz-luft",
+    "catalystId": "v6-katalysator-verdichtung",
+    "name": "Windbruch · Verdichtung",
+    "effectSummary": "Verursache 3 Schaden am Gegner. Nächster eigener Aktions-W6 +1 (max +2). Primärwert +1; verwendete Komponenten erhalten +1 Stabilität. TEK: +1 Fetzladung (max 1×/Zug).",
+    "primary": {
+      "kind": "damage",
+      "value": 3,
+      "target": "opponent",
+      "offensive": true
+    },
+    "rider": {
+      "id": "rider-w6",
+      "summary": "Nächster eigener Aktions-W6 +1 (max +2).",
+      "defenseSuppressible": true
+    },
+    "intensity": null,
+    "transformId": "xform-verdichtung",
+    "grantsFetz": true,
+    "catalystConsumed": true,
+    "overformulaPrimaryBonus": null,
+    "overformulaIntensityBonus": null,
+    "formulaDefensePenalty": null,
+    "summonConstructDefId": null
+  },
+  {
+    "recipeId": "v6-over-brechschlag-luft-verdichtung",
+    "kind": "overformula",
+    "catalogSlice": "slice1",
+    "techniqueId": "v6-technik-brechschlag",
+    "essenceId": "v6-essenz-luft",
+    "catalystId": "v6-katalysator-verdichtung",
+    "name": "Überformel Windbruch · Verdichtung",
+    "effectSummary": "Verursache 5 Schaden am Gegner. Nächster eigener Aktions-W6 +1 (max +2). (verstärkt) Primärwert +1; verwendete Komponenten erhalten +1 Stabilität. Überformel: Primär +2 (fester Slice-1-Bonus). Überformel: Fetzladung wird verbraucht. Formelabwehr −1.",
+    "primary": {
+      "kind": "damage",
+      "value": 5,
+      "target": "opponent",
+      "offensive": true
+    },
+    "rider": {
+      "id": "rider-w6",
+      "summary": "Nächster eigener Aktions-W6 +1 (max +2). (verstärkt)",
+      "defenseSuppressible": true
+    },
+    "intensity": null,
+    "transformId": "xform-verdichtung",
+    "grantsFetz": false,
+    "catalystConsumed": true,
+    "overformulaPrimaryBonus": 2,
+    "overformulaIntensityBonus": null,
+    "formulaDefensePenalty": -1,
+    "summonConstructDefId": null
+  },
+  {
+    "recipeId": "v6-tek-brechschlag-luft-sofortzuender",
+    "kind": "tek",
+    "catalogSlice": "slice1",
+    "techniqueId": "v6-technik-brechschlag",
+    "essenceId": "v6-essenz-luft",
+    "catalystId": "v6-katalysator-sofortzuender",
+    "name": "Windbruch · Sofortzünder",
+    "effectSummary": "Verursache 1 Schaden am Gegner. Nächster eigener Aktions-W6 +1 (max +2). Primärwert −1; danach ziehe 1 und wirf 1 ab. TEK: +1 Fetzladung (max 1×/Zug).",
+    "primary": {
+      "kind": "damage",
+      "value": 1,
+      "target": "opponent",
+      "offensive": true
+    },
+    "rider": {
+      "id": "rider-w6",
+      "summary": "Nächster eigener Aktions-W6 +1 (max +2).",
+      "defenseSuppressible": true
+    },
+    "intensity": null,
+    "transformId": "xform-sofortzuender",
+    "grantsFetz": true,
+    "catalystConsumed": true,
+    "overformulaPrimaryBonus": null,
+    "overformulaIntensityBonus": null,
+    "formulaDefensePenalty": null,
+    "summonConstructDefId": null
+  },
+  {
+    "recipeId": "v6-over-brechschlag-luft-sofortzuender",
+    "kind": "overformula",
+    "catalogSlice": "slice1",
+    "techniqueId": "v6-technik-brechschlag",
+    "essenceId": "v6-essenz-luft",
+    "catalystId": "v6-katalysator-sofortzuender",
+    "name": "Überformel Windbruch · Sofortzünder",
+    "effectSummary": "Verursache 3 Schaden am Gegner. Nächster eigener Aktions-W6 +1 (max +2). (verstärkt) Primärwert −1; danach ziehe 1 und wirf 1 ab. Überformel: Primär +2 (fester Slice-1-Bonus). Überformel: Fetzladung wird verbraucht. Formelabwehr −1.",
+    "primary": {
+      "kind": "damage",
+      "value": 3,
+      "target": "opponent",
+      "offensive": true
+    },
+    "rider": {
+      "id": "rider-w6",
+      "summary": "Nächster eigener Aktions-W6 +1 (max +2). (verstärkt)",
+      "defenseSuppressible": true
+    },
+    "intensity": null,
+    "transformId": "xform-sofortzuender",
+    "grantsFetz": false,
+    "catalystConsumed": true,
+    "overformulaPrimaryBonus": 2,
+    "overformulaIntensityBonus": null,
+    "formulaDefensePenalty": -1,
+    "summonConstructDefId": null
+  },
+  {
+    "recipeId": "v6-tek-brechschlag-luft-opfergabe",
+    "kind": "tek",
+    "catalogSlice": "slice1",
+    "techniqueId": "v6-technik-brechschlag",
+    "essenceId": "v6-essenz-luft",
+    "catalystId": "v6-katalysator-opfergabe",
+    "name": "Windbruch · Opfergabe",
+    "effectSummary": "Verursache 2 Schaden am Gegner. Nächster eigener Aktions-W6 +1 (max +2). Optional: wirf 1 Handkarte ab für Primärwert +2. TEK: +1 Fetzladung (max 1×/Zug).",
+    "primary": {
+      "kind": "damage",
+      "value": 2,
+      "target": "opponent",
+      "offensive": true
+    },
+    "rider": {
+      "id": "rider-w6",
+      "summary": "Nächster eigener Aktions-W6 +1 (max +2).",
+      "defenseSuppressible": true
+    },
+    "intensity": null,
+    "transformId": "xform-opfergabe",
+    "grantsFetz": true,
+    "catalystConsumed": true,
+    "overformulaPrimaryBonus": null,
+    "overformulaIntensityBonus": null,
+    "formulaDefensePenalty": null,
+    "summonConstructDefId": null
+  },
+  {
+    "recipeId": "v6-over-brechschlag-luft-opfergabe",
+    "kind": "overformula",
+    "catalogSlice": "slice1",
+    "techniqueId": "v6-technik-brechschlag",
+    "essenceId": "v6-essenz-luft",
+    "catalystId": "v6-katalysator-opfergabe",
+    "name": "Überformel Windbruch · Opfergabe",
+    "effectSummary": "Verursache 4 Schaden am Gegner. Nächster eigener Aktions-W6 +1 (max +2). (verstärkt) Optional: wirf 1 Handkarte ab für Primärwert +2. Überformel: Primär +2 (fester Slice-1-Bonus). Überformel: Fetzladung wird verbraucht. Formelabwehr −1.",
+    "primary": {
+      "kind": "damage",
+      "value": 4,
+      "target": "opponent",
+      "offensive": true
+    },
+    "rider": {
+      "id": "rider-w6",
+      "summary": "Nächster eigener Aktions-W6 +1 (max +2). (verstärkt)",
+      "defenseSuppressible": true
+    },
+    "intensity": null,
+    "transformId": "xform-opfergabe",
+    "grantsFetz": false,
+    "catalystConsumed": true,
+    "overformulaPrimaryBonus": 2,
+    "overformulaIntensityBonus": null,
+    "formulaDefensePenalty": -1,
+    "summonConstructDefId": null
+  },
+  {
+    "recipeId": "v6-tek-brechschlag-licht-ueberladung",
+    "kind": "tek",
+    "catalogSlice": "slice1",
+    "techniqueId": "v6-technik-brechschlag",
+    "essenceId": "v6-essenz-licht",
+    "catalystId": "v6-katalysator-ueberladung",
+    "name": "Lichtbruch · Überladung",
+    "effectSummary": "Verursache 4 Schaden am Gegner. Bei Schildgewinn: entferne optional eine Marke von dir. Primärwert +2; danach erleidest du 1 Selbstschaden. TEK: +1 Fetzladung (max 1×/Zug).",
+    "primary": {
+      "kind": "damage",
+      "value": 4,
+      "target": "opponent",
+      "offensive": true
+    },
+    "rider": {
+      "id": "rider-reinigen-licht",
+      "summary": "Bei Schildgewinn: entferne optional eine Marke von dir.",
+      "defenseSuppressible": false
+    },
+    "intensity": null,
+    "transformId": "xform-ueberladung",
+    "grantsFetz": true,
+    "catalystConsumed": true,
+    "overformulaPrimaryBonus": null,
+    "overformulaIntensityBonus": null,
+    "formulaDefensePenalty": null,
+    "summonConstructDefId": null
+  },
+  {
+    "recipeId": "v6-over-brechschlag-licht-ueberladung",
+    "kind": "overformula",
+    "catalogSlice": "slice1",
+    "techniqueId": "v6-technik-brechschlag",
+    "essenceId": "v6-essenz-licht",
+    "catalystId": "v6-katalysator-ueberladung",
+    "name": "Überformel Lichtbruch · Überladung",
+    "effectSummary": "Verursache 6 Schaden am Gegner. Bei Schildgewinn: entferne optional eine Marke von dir. (verstärkt) Primärwert +2; danach erleidest du 1 Selbstschaden. Überformel: Primär +2 (fester Slice-1-Bonus). Überformel: Fetzladung wird verbraucht. Formelabwehr −1.",
+    "primary": {
+      "kind": "damage",
+      "value": 6,
+      "target": "opponent",
+      "offensive": true
+    },
+    "rider": {
+      "id": "rider-reinigen-licht",
+      "summary": "Bei Schildgewinn: entferne optional eine Marke von dir. (verstärkt)",
+      "defenseSuppressible": false
+    },
+    "intensity": null,
+    "transformId": "xform-ueberladung",
+    "grantsFetz": false,
+    "catalystConsumed": true,
+    "overformulaPrimaryBonus": 2,
+    "overformulaIntensityBonus": null,
+    "formulaDefensePenalty": -1,
+    "summonConstructDefId": null
+  },
+  {
+    "recipeId": "v6-tek-brechschlag-licht-verdichtung",
+    "kind": "tek",
+    "catalogSlice": "slice1",
+    "techniqueId": "v6-technik-brechschlag",
+    "essenceId": "v6-essenz-licht",
+    "catalystId": "v6-katalysator-verdichtung",
+    "name": "Lichtbruch · Verdichtung",
+    "effectSummary": "Verursache 3 Schaden am Gegner. Bei Schildgewinn: entferne optional eine Marke von dir. Primärwert +1; verwendete Komponenten erhalten +1 Stabilität. TEK: +1 Fetzladung (max 1×/Zug).",
+    "primary": {
+      "kind": "damage",
+      "value": 3,
+      "target": "opponent",
+      "offensive": true
+    },
+    "rider": {
+      "id": "rider-reinigen-licht",
+      "summary": "Bei Schildgewinn: entferne optional eine Marke von dir.",
+      "defenseSuppressible": false
+    },
+    "intensity": null,
+    "transformId": "xform-verdichtung",
+    "grantsFetz": true,
+    "catalystConsumed": true,
+    "overformulaPrimaryBonus": null,
+    "overformulaIntensityBonus": null,
+    "formulaDefensePenalty": null,
+    "summonConstructDefId": null
+  },
+  {
+    "recipeId": "v6-over-brechschlag-licht-verdichtung",
+    "kind": "overformula",
+    "catalogSlice": "slice1",
+    "techniqueId": "v6-technik-brechschlag",
+    "essenceId": "v6-essenz-licht",
+    "catalystId": "v6-katalysator-verdichtung",
+    "name": "Überformel Lichtbruch · Verdichtung",
+    "effectSummary": "Verursache 5 Schaden am Gegner. Bei Schildgewinn: entferne optional eine Marke von dir. (verstärkt) Primärwert +1; verwendete Komponenten erhalten +1 Stabilität. Überformel: Primär +2 (fester Slice-1-Bonus). Überformel: Fetzladung wird verbraucht. Formelabwehr −1.",
+    "primary": {
+      "kind": "damage",
+      "value": 5,
+      "target": "opponent",
+      "offensive": true
+    },
+    "rider": {
+      "id": "rider-reinigen-licht",
+      "summary": "Bei Schildgewinn: entferne optional eine Marke von dir. (verstärkt)",
+      "defenseSuppressible": false
+    },
+    "intensity": null,
+    "transformId": "xform-verdichtung",
+    "grantsFetz": false,
+    "catalystConsumed": true,
+    "overformulaPrimaryBonus": 2,
+    "overformulaIntensityBonus": null,
+    "formulaDefensePenalty": -1,
+    "summonConstructDefId": null
+  },
+  {
+    "recipeId": "v6-tek-brechschlag-licht-sofortzuender",
+    "kind": "tek",
+    "catalogSlice": "slice1",
+    "techniqueId": "v6-technik-brechschlag",
+    "essenceId": "v6-essenz-licht",
+    "catalystId": "v6-katalysator-sofortzuender",
+    "name": "Lichtbruch · Sofortzünder",
+    "effectSummary": "Verursache 1 Schaden am Gegner. Bei Schildgewinn: entferne optional eine Marke von dir. Primärwert −1; danach ziehe 1 und wirf 1 ab. TEK: +1 Fetzladung (max 1×/Zug).",
+    "primary": {
+      "kind": "damage",
+      "value": 1,
+      "target": "opponent",
+      "offensive": true
+    },
+    "rider": {
+      "id": "rider-reinigen-licht",
+      "summary": "Bei Schildgewinn: entferne optional eine Marke von dir.",
+      "defenseSuppressible": false
+    },
+    "intensity": null,
+    "transformId": "xform-sofortzuender",
+    "grantsFetz": true,
+    "catalystConsumed": true,
+    "overformulaPrimaryBonus": null,
+    "overformulaIntensityBonus": null,
+    "formulaDefensePenalty": null,
+    "summonConstructDefId": null
+  },
+  {
+    "recipeId": "v6-over-brechschlag-licht-sofortzuender",
+    "kind": "overformula",
+    "catalogSlice": "slice1",
+    "techniqueId": "v6-technik-brechschlag",
+    "essenceId": "v6-essenz-licht",
+    "catalystId": "v6-katalysator-sofortzuender",
+    "name": "Überformel Lichtbruch · Sofortzünder",
+    "effectSummary": "Verursache 3 Schaden am Gegner. Bei Schildgewinn: entferne optional eine Marke von dir. (verstärkt) Primärwert −1; danach ziehe 1 und wirf 1 ab. Überformel: Primär +2 (fester Slice-1-Bonus). Überformel: Fetzladung wird verbraucht. Formelabwehr −1.",
+    "primary": {
+      "kind": "damage",
+      "value": 3,
+      "target": "opponent",
+      "offensive": true
+    },
+    "rider": {
+      "id": "rider-reinigen-licht",
+      "summary": "Bei Schildgewinn: entferne optional eine Marke von dir. (verstärkt)",
+      "defenseSuppressible": false
+    },
+    "intensity": null,
+    "transformId": "xform-sofortzuender",
+    "grantsFetz": false,
+    "catalystConsumed": true,
+    "overformulaPrimaryBonus": 2,
+    "overformulaIntensityBonus": null,
+    "formulaDefensePenalty": -1,
+    "summonConstructDefId": null
+  },
+  {
+    "recipeId": "v6-tek-brechschlag-licht-opfergabe",
+    "kind": "tek",
+    "catalogSlice": "slice1",
+    "techniqueId": "v6-technik-brechschlag",
+    "essenceId": "v6-essenz-licht",
+    "catalystId": "v6-katalysator-opfergabe",
+    "name": "Lichtbruch · Opfergabe",
+    "effectSummary": "Verursache 2 Schaden am Gegner. Bei Schildgewinn: entferne optional eine Marke von dir. Optional: wirf 1 Handkarte ab für Primärwert +2. TEK: +1 Fetzladung (max 1×/Zug).",
+    "primary": {
+      "kind": "damage",
+      "value": 2,
+      "target": "opponent",
+      "offensive": true
+    },
+    "rider": {
+      "id": "rider-reinigen-licht",
+      "summary": "Bei Schildgewinn: entferne optional eine Marke von dir.",
+      "defenseSuppressible": false
+    },
+    "intensity": null,
+    "transformId": "xform-opfergabe",
+    "grantsFetz": true,
+    "catalystConsumed": true,
+    "overformulaPrimaryBonus": null,
+    "overformulaIntensityBonus": null,
+    "formulaDefensePenalty": null,
+    "summonConstructDefId": null
+  },
+  {
+    "recipeId": "v6-over-brechschlag-licht-opfergabe",
+    "kind": "overformula",
+    "catalogSlice": "slice1",
+    "techniqueId": "v6-technik-brechschlag",
+    "essenceId": "v6-essenz-licht",
+    "catalystId": "v6-katalysator-opfergabe",
+    "name": "Überformel Lichtbruch · Opfergabe",
+    "effectSummary": "Verursache 4 Schaden am Gegner. Bei Schildgewinn: entferne optional eine Marke von dir. (verstärkt) Optional: wirf 1 Handkarte ab für Primärwert +2. Überformel: Primär +2 (fester Slice-1-Bonus). Überformel: Fetzladung wird verbraucht. Formelabwehr −1.",
+    "primary": {
+      "kind": "damage",
+      "value": 4,
+      "target": "opponent",
+      "offensive": true
+    },
+    "rider": {
+      "id": "rider-reinigen-licht",
+      "summary": "Bei Schildgewinn: entferne optional eine Marke von dir. (verstärkt)",
+      "defenseSuppressible": false
+    },
+    "intensity": null,
+    "transformId": "xform-opfergabe",
+    "grantsFetz": false,
+    "catalystConsumed": true,
+    "overformulaPrimaryBonus": 2,
+    "overformulaIntensityBonus": null,
+    "formulaDefensePenalty": -1,
+    "summonConstructDefId": null
+  },
+  {
+    "recipeId": "v6-tek-brechschlag-schatten-ueberladung",
+    "kind": "tek",
+    "catalogSlice": "slice1",
+    "techniqueId": "v6-technik-brechschlag",
+    "essenceId": "v6-essenz-schatten",
+    "catalystId": "v6-katalysator-ueberladung",
+    "name": "Schattenbruch · Überladung",
+    "effectSummary": "Verursache 4 Schaden am Gegner. Bei Treffer: erschöpfe optional 1 gegnerische Formelkomponente. Primärwert +2; danach erleidest du 1 Selbstschaden. TEK: +1 Fetzladung (max 1×/Zug).",
+    "primary": {
+      "kind": "damage",
+      "value": 4,
+      "target": "opponent",
+      "offensive": true
+    },
+    "rider": {
+      "id": "rider-fluch",
+      "summary": "Bei Treffer: erschöpfe optional 1 gegnerische Formelkomponente.",
+      "defenseSuppressible": true
+    },
+    "intensity": null,
+    "transformId": "xform-ueberladung",
+    "grantsFetz": true,
+    "catalystConsumed": true,
+    "overformulaPrimaryBonus": null,
+    "overformulaIntensityBonus": null,
+    "formulaDefensePenalty": null,
+    "summonConstructDefId": null
+  },
+  {
+    "recipeId": "v6-over-brechschlag-schatten-ueberladung",
+    "kind": "overformula",
+    "catalogSlice": "slice1",
+    "techniqueId": "v6-technik-brechschlag",
+    "essenceId": "v6-essenz-schatten",
+    "catalystId": "v6-katalysator-ueberladung",
+    "name": "Überformel Schattenbruch · Überladung",
+    "effectSummary": "Verursache 6 Schaden am Gegner. Bei Treffer: erschöpfe optional 1 gegnerische Formelkomponente. (verstärkt) Primärwert +2; danach erleidest du 1 Selbstschaden. Überformel: Primär +2 (fester Slice-1-Bonus). Überformel: Fetzladung wird verbraucht. Formelabwehr −1.",
+    "primary": {
+      "kind": "damage",
+      "value": 6,
+      "target": "opponent",
+      "offensive": true
+    },
+    "rider": {
+      "id": "rider-fluch",
+      "summary": "Bei Treffer: erschöpfe optional 1 gegnerische Formelkomponente. (verstärkt)",
+      "defenseSuppressible": true
+    },
+    "intensity": null,
+    "transformId": "xform-ueberladung",
+    "grantsFetz": false,
+    "catalystConsumed": true,
+    "overformulaPrimaryBonus": 2,
+    "overformulaIntensityBonus": null,
+    "formulaDefensePenalty": -1,
+    "summonConstructDefId": null
+  },
+  {
+    "recipeId": "v6-tek-brechschlag-schatten-verdichtung",
+    "kind": "tek",
+    "catalogSlice": "slice1",
+    "techniqueId": "v6-technik-brechschlag",
+    "essenceId": "v6-essenz-schatten",
+    "catalystId": "v6-katalysator-verdichtung",
+    "name": "Schattenbruch · Verdichtung",
+    "effectSummary": "Verursache 3 Schaden am Gegner. Bei Treffer: erschöpfe optional 1 gegnerische Formelkomponente. Primärwert +1; verwendete Komponenten erhalten +1 Stabilität. TEK: +1 Fetzladung (max 1×/Zug).",
+    "primary": {
+      "kind": "damage",
+      "value": 3,
+      "target": "opponent",
+      "offensive": true
+    },
+    "rider": {
+      "id": "rider-fluch",
+      "summary": "Bei Treffer: erschöpfe optional 1 gegnerische Formelkomponente.",
+      "defenseSuppressible": true
+    },
+    "intensity": null,
+    "transformId": "xform-verdichtung",
+    "grantsFetz": true,
+    "catalystConsumed": true,
+    "overformulaPrimaryBonus": null,
+    "overformulaIntensityBonus": null,
+    "formulaDefensePenalty": null,
+    "summonConstructDefId": null
+  },
+  {
+    "recipeId": "v6-over-brechschlag-schatten-verdichtung",
+    "kind": "overformula",
+    "catalogSlice": "slice1",
+    "techniqueId": "v6-technik-brechschlag",
+    "essenceId": "v6-essenz-schatten",
+    "catalystId": "v6-katalysator-verdichtung",
+    "name": "Überformel Schattenbruch · Verdichtung",
+    "effectSummary": "Verursache 5 Schaden am Gegner. Bei Treffer: erschöpfe optional 1 gegnerische Formelkomponente. (verstärkt) Primärwert +1; verwendete Komponenten erhalten +1 Stabilität. Überformel: Primär +2 (fester Slice-1-Bonus). Überformel: Fetzladung wird verbraucht. Formelabwehr −1.",
+    "primary": {
+      "kind": "damage",
+      "value": 5,
+      "target": "opponent",
+      "offensive": true
+    },
+    "rider": {
+      "id": "rider-fluch",
+      "summary": "Bei Treffer: erschöpfe optional 1 gegnerische Formelkomponente. (verstärkt)",
+      "defenseSuppressible": true
+    },
+    "intensity": null,
+    "transformId": "xform-verdichtung",
+    "grantsFetz": false,
+    "catalystConsumed": true,
+    "overformulaPrimaryBonus": 2,
+    "overformulaIntensityBonus": null,
+    "formulaDefensePenalty": -1,
+    "summonConstructDefId": null
+  },
+  {
+    "recipeId": "v6-tek-brechschlag-schatten-sofortzuender",
+    "kind": "tek",
+    "catalogSlice": "slice1",
+    "techniqueId": "v6-technik-brechschlag",
+    "essenceId": "v6-essenz-schatten",
+    "catalystId": "v6-katalysator-sofortzuender",
+    "name": "Schattenbruch · Sofortzünder",
+    "effectSummary": "Verursache 1 Schaden am Gegner. Bei Treffer: erschöpfe optional 1 gegnerische Formelkomponente. Primärwert −1; danach ziehe 1 und wirf 1 ab. TEK: +1 Fetzladung (max 1×/Zug).",
+    "primary": {
+      "kind": "damage",
+      "value": 1,
+      "target": "opponent",
+      "offensive": true
+    },
+    "rider": {
+      "id": "rider-fluch",
+      "summary": "Bei Treffer: erschöpfe optional 1 gegnerische Formelkomponente.",
+      "defenseSuppressible": true
+    },
+    "intensity": null,
+    "transformId": "xform-sofortzuender",
+    "grantsFetz": true,
+    "catalystConsumed": true,
+    "overformulaPrimaryBonus": null,
+    "overformulaIntensityBonus": null,
+    "formulaDefensePenalty": null,
+    "summonConstructDefId": null
+  },
+  {
+    "recipeId": "v6-over-brechschlag-schatten-sofortzuender",
+    "kind": "overformula",
+    "catalogSlice": "slice1",
+    "techniqueId": "v6-technik-brechschlag",
+    "essenceId": "v6-essenz-schatten",
+    "catalystId": "v6-katalysator-sofortzuender",
+    "name": "Überformel Schattenbruch · Sofortzünder",
+    "effectSummary": "Verursache 3 Schaden am Gegner. Bei Treffer: erschöpfe optional 1 gegnerische Formelkomponente. (verstärkt) Primärwert −1; danach ziehe 1 und wirf 1 ab. Überformel: Primär +2 (fester Slice-1-Bonus). Überformel: Fetzladung wird verbraucht. Formelabwehr −1.",
+    "primary": {
+      "kind": "damage",
+      "value": 3,
+      "target": "opponent",
+      "offensive": true
+    },
+    "rider": {
+      "id": "rider-fluch",
+      "summary": "Bei Treffer: erschöpfe optional 1 gegnerische Formelkomponente. (verstärkt)",
+      "defenseSuppressible": true
+    },
+    "intensity": null,
+    "transformId": "xform-sofortzuender",
+    "grantsFetz": false,
+    "catalystConsumed": true,
+    "overformulaPrimaryBonus": 2,
+    "overformulaIntensityBonus": null,
+    "formulaDefensePenalty": -1,
+    "summonConstructDefId": null
+  },
+  {
+    "recipeId": "v6-tek-brechschlag-schatten-opfergabe",
+    "kind": "tek",
+    "catalogSlice": "slice1",
+    "techniqueId": "v6-technik-brechschlag",
+    "essenceId": "v6-essenz-schatten",
+    "catalystId": "v6-katalysator-opfergabe",
+    "name": "Schattenbruch · Opfergabe",
+    "effectSummary": "Verursache 2 Schaden am Gegner. Bei Treffer: erschöpfe optional 1 gegnerische Formelkomponente. Optional: wirf 1 Handkarte ab für Primärwert +2. TEK: +1 Fetzladung (max 1×/Zug).",
+    "primary": {
+      "kind": "damage",
+      "value": 2,
+      "target": "opponent",
+      "offensive": true
+    },
+    "rider": {
+      "id": "rider-fluch",
+      "summary": "Bei Treffer: erschöpfe optional 1 gegnerische Formelkomponente.",
+      "defenseSuppressible": true
+    },
+    "intensity": null,
+    "transformId": "xform-opfergabe",
+    "grantsFetz": true,
+    "catalystConsumed": true,
+    "overformulaPrimaryBonus": null,
+    "overformulaIntensityBonus": null,
+    "formulaDefensePenalty": null,
+    "summonConstructDefId": null
+  },
+  {
+    "recipeId": "v6-over-brechschlag-schatten-opfergabe",
+    "kind": "overformula",
+    "catalogSlice": "slice1",
+    "techniqueId": "v6-technik-brechschlag",
+    "essenceId": "v6-essenz-schatten",
+    "catalystId": "v6-katalysator-opfergabe",
+    "name": "Überformel Schattenbruch · Opfergabe",
+    "effectSummary": "Verursache 4 Schaden am Gegner. Bei Treffer: erschöpfe optional 1 gegnerische Formelkomponente. (verstärkt) Optional: wirf 1 Handkarte ab für Primärwert +2. Überformel: Primär +2 (fester Slice-1-Bonus). Überformel: Fetzladung wird verbraucht. Formelabwehr −1.",
+    "primary": {
+      "kind": "damage",
+      "value": 4,
+      "target": "opponent",
+      "offensive": true
+    },
+    "rider": {
+      "id": "rider-fluch",
+      "summary": "Bei Treffer: erschöpfe optional 1 gegnerische Formelkomponente. (verstärkt)",
+      "defenseSuppressible": true
+    },
+    "intensity": null,
+    "transformId": "xform-opfergabe",
+    "grantsFetz": false,
+    "catalystConsumed": true,
+    "overformulaPrimaryBonus": 2,
+    "overformulaIntensityBonus": null,
+    "formulaDefensePenalty": -1,
+    "summonConstructDefId": null
+  },
+  {
+    "recipeId": "v6-tek-kettenfessel-feuer-ueberladung",
+    "kind": "tek",
+    "catalogSlice": "slice1",
+    "techniqueId": "v6-technik-kettenfessel",
+    "essenceId": "v6-essenz-feuer",
+    "catalystId": "v6-katalysator-ueberladung",
+    "name": "Glutkette · Überladung",
+    "effectSummary": "Fessel Intensität 4 auf einen besetzten gegnerischen Formelplatz (manuelle Wahl). Bei Lebensschaden: Brennen, falls keine Reaktion. Primärwert +2; danach erleidest du 1 Selbstschaden. TEK: +1 Fetzladung (max 1×/Zug).",
+    "primary": {
+      "kind": "fessel",
+      "value": 4,
+      "target": "opponent",
+      "offensive": true
+    },
+    "rider": {
+      "id": "rider-brennen",
+      "summary": "Bei Lebensschaden: Brennen, falls keine Reaktion.",
+      "defenseSuppressible": true
+    },
+    "intensity": 4,
+    "transformId": "xform-ueberladung",
+    "grantsFetz": true,
+    "catalystConsumed": true,
+    "overformulaPrimaryBonus": null,
+    "overformulaIntensityBonus": null,
+    "formulaDefensePenalty": null,
+    "summonConstructDefId": null
+  },
+  {
+    "recipeId": "v6-over-kettenfessel-feuer-ueberladung",
+    "kind": "overformula",
+    "catalogSlice": "slice1",
+    "techniqueId": "v6-technik-kettenfessel",
+    "essenceId": "v6-essenz-feuer",
+    "catalystId": "v6-katalysator-ueberladung",
+    "name": "Überformel Glutkette · Überladung",
+    "effectSummary": "Fessel Intensität 5 auf einen besetzten gegnerischen Formelplatz (manuelle Wahl). Bei Lebensschaden: Brennen, falls keine Reaktion. (verstärkt) Primärwert +2; danach erleidest du 1 Selbstschaden. Überformel: Intensität +1 (fester Slice-1-Bonus). Überformel: Fetzladung wird verbraucht. Formelabwehr −1.",
+    "primary": {
+      "kind": "fessel",
+      "value": 5,
+      "target": "opponent",
+      "offensive": true
+    },
+    "rider": {
+      "id": "rider-brennen",
+      "summary": "Bei Lebensschaden: Brennen, falls keine Reaktion. (verstärkt)",
+      "defenseSuppressible": true
+    },
+    "intensity": 5,
+    "transformId": "xform-ueberladung",
+    "grantsFetz": false,
+    "catalystConsumed": true,
+    "overformulaPrimaryBonus": null,
+    "overformulaIntensityBonus": 1,
+    "formulaDefensePenalty": -1,
+    "summonConstructDefId": null
+  },
+  {
+    "recipeId": "v6-tek-kettenfessel-feuer-verdichtung",
+    "kind": "tek",
+    "catalogSlice": "slice1",
+    "techniqueId": "v6-technik-kettenfessel",
+    "essenceId": "v6-essenz-feuer",
+    "catalystId": "v6-katalysator-verdichtung",
+    "name": "Glutkette · Verdichtung",
+    "effectSummary": "Fessel Intensität 3 auf einen besetzten gegnerischen Formelplatz (manuelle Wahl). Bei Lebensschaden: Brennen, falls keine Reaktion. Primärwert +1; verwendete Komponenten erhalten +1 Stabilität. TEK: +1 Fetzladung (max 1×/Zug).",
+    "primary": {
+      "kind": "fessel",
+      "value": 3,
+      "target": "opponent",
+      "offensive": true
+    },
+    "rider": {
+      "id": "rider-brennen",
+      "summary": "Bei Lebensschaden: Brennen, falls keine Reaktion.",
+      "defenseSuppressible": true
+    },
+    "intensity": 3,
+    "transformId": "xform-verdichtung",
+    "grantsFetz": true,
+    "catalystConsumed": true,
+    "overformulaPrimaryBonus": null,
+    "overformulaIntensityBonus": null,
+    "formulaDefensePenalty": null,
+    "summonConstructDefId": null
+  },
+  {
+    "recipeId": "v6-over-kettenfessel-feuer-verdichtung",
+    "kind": "overformula",
+    "catalogSlice": "slice1",
+    "techniqueId": "v6-technik-kettenfessel",
+    "essenceId": "v6-essenz-feuer",
+    "catalystId": "v6-katalysator-verdichtung",
+    "name": "Überformel Glutkette · Verdichtung",
+    "effectSummary": "Fessel Intensität 4 auf einen besetzten gegnerischen Formelplatz (manuelle Wahl). Bei Lebensschaden: Brennen, falls keine Reaktion. (verstärkt) Primärwert +1; verwendete Komponenten erhalten +1 Stabilität. Überformel: Intensität +1 (fester Slice-1-Bonus). Überformel: Fetzladung wird verbraucht. Formelabwehr −1.",
+    "primary": {
+      "kind": "fessel",
+      "value": 4,
+      "target": "opponent",
+      "offensive": true
+    },
+    "rider": {
+      "id": "rider-brennen",
+      "summary": "Bei Lebensschaden: Brennen, falls keine Reaktion. (verstärkt)",
+      "defenseSuppressible": true
+    },
+    "intensity": 4,
+    "transformId": "xform-verdichtung",
+    "grantsFetz": false,
+    "catalystConsumed": true,
+    "overformulaPrimaryBonus": null,
+    "overformulaIntensityBonus": 1,
+    "formulaDefensePenalty": -1,
+    "summonConstructDefId": null
+  },
+  {
+    "recipeId": "v6-tek-kettenfessel-feuer-sofortzuender",
+    "kind": "tek",
+    "catalogSlice": "slice1",
+    "techniqueId": "v6-technik-kettenfessel",
+    "essenceId": "v6-essenz-feuer",
+    "catalystId": "v6-katalysator-sofortzuender",
+    "name": "Glutkette · Sofortzünder",
+    "effectSummary": "Fessel Intensität 1 auf einen besetzten gegnerischen Formelplatz (manuelle Wahl). Bei Lebensschaden: Brennen, falls keine Reaktion. Primärwert −1; danach ziehe 1 und wirf 1 ab. TEK: +1 Fetzladung (max 1×/Zug).",
+    "primary": {
+      "kind": "fessel",
+      "value": 1,
+      "target": "opponent",
+      "offensive": true
+    },
+    "rider": {
+      "id": "rider-brennen",
+      "summary": "Bei Lebensschaden: Brennen, falls keine Reaktion.",
+      "defenseSuppressible": true
+    },
+    "intensity": 1,
+    "transformId": "xform-sofortzuender",
+    "grantsFetz": true,
+    "catalystConsumed": true,
+    "overformulaPrimaryBonus": null,
+    "overformulaIntensityBonus": null,
+    "formulaDefensePenalty": null,
+    "summonConstructDefId": null
+  },
+  {
+    "recipeId": "v6-over-kettenfessel-feuer-sofortzuender",
+    "kind": "overformula",
+    "catalogSlice": "slice1",
+    "techniqueId": "v6-technik-kettenfessel",
+    "essenceId": "v6-essenz-feuer",
+    "catalystId": "v6-katalysator-sofortzuender",
+    "name": "Überformel Glutkette · Sofortzünder",
+    "effectSummary": "Fessel Intensität 2 auf einen besetzten gegnerischen Formelplatz (manuelle Wahl). Bei Lebensschaden: Brennen, falls keine Reaktion. (verstärkt) Primärwert −1; danach ziehe 1 und wirf 1 ab. Überformel: Intensität +1 (fester Slice-1-Bonus). Überformel: Fetzladung wird verbraucht. Formelabwehr −1.",
+    "primary": {
+      "kind": "fessel",
+      "value": 2,
+      "target": "opponent",
+      "offensive": true
+    },
+    "rider": {
+      "id": "rider-brennen",
+      "summary": "Bei Lebensschaden: Brennen, falls keine Reaktion. (verstärkt)",
+      "defenseSuppressible": true
+    },
+    "intensity": 2,
+    "transformId": "xform-sofortzuender",
+    "grantsFetz": false,
+    "catalystConsumed": true,
+    "overformulaPrimaryBonus": null,
+    "overformulaIntensityBonus": 1,
+    "formulaDefensePenalty": -1,
+    "summonConstructDefId": null
+  },
+  {
+    "recipeId": "v6-tek-kettenfessel-feuer-opfergabe",
+    "kind": "tek",
+    "catalogSlice": "slice1",
+    "techniqueId": "v6-technik-kettenfessel",
+    "essenceId": "v6-essenz-feuer",
+    "catalystId": "v6-katalysator-opfergabe",
+    "name": "Glutkette · Opfergabe",
+    "effectSummary": "Fessel Intensität 2 auf einen besetzten gegnerischen Formelplatz (manuelle Wahl). Bei Lebensschaden: Brennen, falls keine Reaktion. Optional: wirf 1 Handkarte ab für Primärwert +2. TEK: +1 Fetzladung (max 1×/Zug).",
+    "primary": {
+      "kind": "fessel",
+      "value": 2,
+      "target": "opponent",
+      "offensive": true
+    },
+    "rider": {
+      "id": "rider-brennen",
+      "summary": "Bei Lebensschaden: Brennen, falls keine Reaktion.",
+      "defenseSuppressible": true
+    },
+    "intensity": 2,
+    "transformId": "xform-opfergabe",
+    "grantsFetz": true,
+    "catalystConsumed": true,
+    "overformulaPrimaryBonus": null,
+    "overformulaIntensityBonus": null,
+    "formulaDefensePenalty": null,
+    "summonConstructDefId": null
+  },
+  {
+    "recipeId": "v6-over-kettenfessel-feuer-opfergabe",
+    "kind": "overformula",
+    "catalogSlice": "slice1",
+    "techniqueId": "v6-technik-kettenfessel",
+    "essenceId": "v6-essenz-feuer",
+    "catalystId": "v6-katalysator-opfergabe",
+    "name": "Überformel Glutkette · Opfergabe",
+    "effectSummary": "Fessel Intensität 3 auf einen besetzten gegnerischen Formelplatz (manuelle Wahl). Bei Lebensschaden: Brennen, falls keine Reaktion. (verstärkt) Optional: wirf 1 Handkarte ab für Primärwert +2. Überformel: Intensität +1 (fester Slice-1-Bonus). Überformel: Fetzladung wird verbraucht. Formelabwehr −1.",
+    "primary": {
+      "kind": "fessel",
+      "value": 3,
+      "target": "opponent",
+      "offensive": true
+    },
+    "rider": {
+      "id": "rider-brennen",
+      "summary": "Bei Lebensschaden: Brennen, falls keine Reaktion. (verstärkt)",
+      "defenseSuppressible": true
+    },
+    "intensity": 3,
+    "transformId": "xform-opfergabe",
+    "grantsFetz": false,
+    "catalystConsumed": true,
+    "overformulaPrimaryBonus": null,
+    "overformulaIntensityBonus": 1,
+    "formulaDefensePenalty": -1,
+    "summonConstructDefId": null
+  },
+  {
+    "recipeId": "v6-tek-kettenfessel-wasser-ueberladung",
+    "kind": "tek",
+    "catalogSlice": "slice1",
+    "techniqueId": "v6-technik-kettenfessel",
+    "essenceId": "v6-essenz-wasser",
+    "catalystId": "v6-katalysator-ueberladung",
+    "name": "Wellenkette · Überladung",
+    "effectSummary": "Fessel Intensität 4 auf einen besetzten gegnerischen Formelplatz (manuelle Wahl). Bei Heilung oder Schildgewinn: entferne optional eine Marke von dir. Primärwert +2; danach erleidest du 1 Selbstschaden. TEK: +1 Fetzladung (max 1×/Zug).",
+    "primary": {
+      "kind": "fessel",
+      "value": 4,
+      "target": "opponent",
+      "offensive": true
+    },
+    "rider": {
+      "id": "rider-reinigen",
+      "summary": "Bei Heilung oder Schildgewinn: entferne optional eine Marke von dir.",
+      "defenseSuppressible": false
+    },
+    "intensity": 4,
+    "transformId": "xform-ueberladung",
+    "grantsFetz": true,
+    "catalystConsumed": true,
+    "overformulaPrimaryBonus": null,
+    "overformulaIntensityBonus": null,
+    "formulaDefensePenalty": null,
+    "summonConstructDefId": null
+  },
+  {
+    "recipeId": "v6-over-kettenfessel-wasser-ueberladung",
+    "kind": "overformula",
+    "catalogSlice": "slice1",
+    "techniqueId": "v6-technik-kettenfessel",
+    "essenceId": "v6-essenz-wasser",
+    "catalystId": "v6-katalysator-ueberladung",
+    "name": "Überformel Wellenkette · Überladung",
+    "effectSummary": "Fessel Intensität 5 auf einen besetzten gegnerischen Formelplatz (manuelle Wahl). Bei Heilung oder Schildgewinn: entferne optional eine Marke von dir. (verstärkt) Primärwert +2; danach erleidest du 1 Selbstschaden. Überformel: Intensität +1 (fester Slice-1-Bonus). Überformel: Fetzladung wird verbraucht. Formelabwehr −1.",
+    "primary": {
+      "kind": "fessel",
+      "value": 5,
+      "target": "opponent",
+      "offensive": true
+    },
+    "rider": {
+      "id": "rider-reinigen",
+      "summary": "Bei Heilung oder Schildgewinn: entferne optional eine Marke von dir. (verstärkt)",
+      "defenseSuppressible": false
+    },
+    "intensity": 5,
+    "transformId": "xform-ueberladung",
+    "grantsFetz": false,
+    "catalystConsumed": true,
+    "overformulaPrimaryBonus": null,
+    "overformulaIntensityBonus": 1,
+    "formulaDefensePenalty": -1,
+    "summonConstructDefId": null
+  },
+  {
+    "recipeId": "v6-tek-kettenfessel-wasser-verdichtung",
+    "kind": "tek",
+    "catalogSlice": "slice1",
+    "techniqueId": "v6-technik-kettenfessel",
+    "essenceId": "v6-essenz-wasser",
+    "catalystId": "v6-katalysator-verdichtung",
+    "name": "Wellenkette · Verdichtung",
+    "effectSummary": "Fessel Intensität 3 auf einen besetzten gegnerischen Formelplatz (manuelle Wahl). Bei Heilung oder Schildgewinn: entferne optional eine Marke von dir. Primärwert +1; verwendete Komponenten erhalten +1 Stabilität. TEK: +1 Fetzladung (max 1×/Zug).",
+    "primary": {
+      "kind": "fessel",
+      "value": 3,
+      "target": "opponent",
+      "offensive": true
+    },
+    "rider": {
+      "id": "rider-reinigen",
+      "summary": "Bei Heilung oder Schildgewinn: entferne optional eine Marke von dir.",
+      "defenseSuppressible": false
+    },
+    "intensity": 3,
+    "transformId": "xform-verdichtung",
+    "grantsFetz": true,
+    "catalystConsumed": true,
+    "overformulaPrimaryBonus": null,
+    "overformulaIntensityBonus": null,
+    "formulaDefensePenalty": null,
+    "summonConstructDefId": null
+  },
+  {
+    "recipeId": "v6-over-kettenfessel-wasser-verdichtung",
+    "kind": "overformula",
+    "catalogSlice": "slice1",
+    "techniqueId": "v6-technik-kettenfessel",
+    "essenceId": "v6-essenz-wasser",
+    "catalystId": "v6-katalysator-verdichtung",
+    "name": "Überformel Wellenkette · Verdichtung",
+    "effectSummary": "Fessel Intensität 4 auf einen besetzten gegnerischen Formelplatz (manuelle Wahl). Bei Heilung oder Schildgewinn: entferne optional eine Marke von dir. (verstärkt) Primärwert +1; verwendete Komponenten erhalten +1 Stabilität. Überformel: Intensität +1 (fester Slice-1-Bonus). Überformel: Fetzladung wird verbraucht. Formelabwehr −1.",
+    "primary": {
+      "kind": "fessel",
+      "value": 4,
+      "target": "opponent",
+      "offensive": true
+    },
+    "rider": {
+      "id": "rider-reinigen",
+      "summary": "Bei Heilung oder Schildgewinn: entferne optional eine Marke von dir. (verstärkt)",
+      "defenseSuppressible": false
+    },
+    "intensity": 4,
+    "transformId": "xform-verdichtung",
+    "grantsFetz": false,
+    "catalystConsumed": true,
+    "overformulaPrimaryBonus": null,
+    "overformulaIntensityBonus": 1,
+    "formulaDefensePenalty": -1,
+    "summonConstructDefId": null
+  },
+  {
+    "recipeId": "v6-tek-kettenfessel-wasser-sofortzuender",
+    "kind": "tek",
+    "catalogSlice": "slice1",
+    "techniqueId": "v6-technik-kettenfessel",
+    "essenceId": "v6-essenz-wasser",
+    "catalystId": "v6-katalysator-sofortzuender",
+    "name": "Wellenkette · Sofortzünder",
+    "effectSummary": "Fessel Intensität 1 auf einen besetzten gegnerischen Formelplatz (manuelle Wahl). Bei Heilung oder Schildgewinn: entferne optional eine Marke von dir. Primärwert −1; danach ziehe 1 und wirf 1 ab. TEK: +1 Fetzladung (max 1×/Zug).",
+    "primary": {
+      "kind": "fessel",
+      "value": 1,
+      "target": "opponent",
+      "offensive": true
+    },
+    "rider": {
+      "id": "rider-reinigen",
+      "summary": "Bei Heilung oder Schildgewinn: entferne optional eine Marke von dir.",
+      "defenseSuppressible": false
+    },
+    "intensity": 1,
+    "transformId": "xform-sofortzuender",
+    "grantsFetz": true,
+    "catalystConsumed": true,
+    "overformulaPrimaryBonus": null,
+    "overformulaIntensityBonus": null,
+    "formulaDefensePenalty": null,
+    "summonConstructDefId": null
+  },
+  {
+    "recipeId": "v6-over-kettenfessel-wasser-sofortzuender",
+    "kind": "overformula",
+    "catalogSlice": "slice1",
+    "techniqueId": "v6-technik-kettenfessel",
+    "essenceId": "v6-essenz-wasser",
+    "catalystId": "v6-katalysator-sofortzuender",
+    "name": "Überformel Wellenkette · Sofortzünder",
+    "effectSummary": "Fessel Intensität 2 auf einen besetzten gegnerischen Formelplatz (manuelle Wahl). Bei Heilung oder Schildgewinn: entferne optional eine Marke von dir. (verstärkt) Primärwert −1; danach ziehe 1 und wirf 1 ab. Überformel: Intensität +1 (fester Slice-1-Bonus). Überformel: Fetzladung wird verbraucht. Formelabwehr −1.",
+    "primary": {
+      "kind": "fessel",
+      "value": 2,
+      "target": "opponent",
+      "offensive": true
+    },
+    "rider": {
+      "id": "rider-reinigen",
+      "summary": "Bei Heilung oder Schildgewinn: entferne optional eine Marke von dir. (verstärkt)",
+      "defenseSuppressible": false
+    },
+    "intensity": 2,
+    "transformId": "xform-sofortzuender",
+    "grantsFetz": false,
+    "catalystConsumed": true,
+    "overformulaPrimaryBonus": null,
+    "overformulaIntensityBonus": 1,
+    "formulaDefensePenalty": -1,
+    "summonConstructDefId": null
+  },
+  {
+    "recipeId": "v6-tek-kettenfessel-wasser-opfergabe",
+    "kind": "tek",
+    "catalogSlice": "slice1",
+    "techniqueId": "v6-technik-kettenfessel",
+    "essenceId": "v6-essenz-wasser",
+    "catalystId": "v6-katalysator-opfergabe",
+    "name": "Wellenkette · Opfergabe",
+    "effectSummary": "Fessel Intensität 2 auf einen besetzten gegnerischen Formelplatz (manuelle Wahl). Bei Heilung oder Schildgewinn: entferne optional eine Marke von dir. Optional: wirf 1 Handkarte ab für Primärwert +2. TEK: +1 Fetzladung (max 1×/Zug).",
+    "primary": {
+      "kind": "fessel",
+      "value": 2,
+      "target": "opponent",
+      "offensive": true
+    },
+    "rider": {
+      "id": "rider-reinigen",
+      "summary": "Bei Heilung oder Schildgewinn: entferne optional eine Marke von dir.",
+      "defenseSuppressible": false
+    },
+    "intensity": 2,
+    "transformId": "xform-opfergabe",
+    "grantsFetz": true,
+    "catalystConsumed": true,
+    "overformulaPrimaryBonus": null,
+    "overformulaIntensityBonus": null,
+    "formulaDefensePenalty": null,
+    "summonConstructDefId": null
+  },
+  {
+    "recipeId": "v6-over-kettenfessel-wasser-opfergabe",
+    "kind": "overformula",
+    "catalogSlice": "slice1",
+    "techniqueId": "v6-technik-kettenfessel",
+    "essenceId": "v6-essenz-wasser",
+    "catalystId": "v6-katalysator-opfergabe",
+    "name": "Überformel Wellenkette · Opfergabe",
+    "effectSummary": "Fessel Intensität 3 auf einen besetzten gegnerischen Formelplatz (manuelle Wahl). Bei Heilung oder Schildgewinn: entferne optional eine Marke von dir. (verstärkt) Optional: wirf 1 Handkarte ab für Primärwert +2. Überformel: Intensität +1 (fester Slice-1-Bonus). Überformel: Fetzladung wird verbraucht. Formelabwehr −1.",
+    "primary": {
+      "kind": "fessel",
+      "value": 3,
+      "target": "opponent",
+      "offensive": true
+    },
+    "rider": {
+      "id": "rider-reinigen",
+      "summary": "Bei Heilung oder Schildgewinn: entferne optional eine Marke von dir. (verstärkt)",
+      "defenseSuppressible": false
+    },
+    "intensity": 3,
+    "transformId": "xform-opfergabe",
+    "grantsFetz": false,
+    "catalystConsumed": true,
+    "overformulaPrimaryBonus": null,
+    "overformulaIntensityBonus": 1,
+    "formulaDefensePenalty": -1,
+    "summonConstructDefId": null
+  },
+  {
+    "recipeId": "v6-tek-kettenfessel-erde-ueberladung",
+    "kind": "tek",
+    "catalogSlice": "slice1",
+    "techniqueId": "v6-technik-kettenfessel",
+    "essenceId": "v6-essenz-erde",
+    "catalystId": "v6-katalysator-ueberladung",
+    "name": "Felskette · Überladung",
+    "effectSummary": "Fessel Intensität 4 auf einen besetzten gegnerischen Formelplatz (manuelle Wahl). Verwendete Komponenten +1 Stabilität bis nächste Startphase. Primärwert +2; danach erleidest du 1 Selbstschaden. TEK: +1 Fetzladung (max 1×/Zug).",
+    "primary": {
+      "kind": "fessel",
+      "value": 4,
+      "target": "opponent",
+      "offensive": true
+    },
+    "rider": {
+      "id": "rider-stabilitaet",
+      "summary": "Verwendete Komponenten +1 Stabilität bis nächste Startphase.",
+      "defenseSuppressible": false
+    },
+    "intensity": 4,
+    "transformId": "xform-ueberladung",
+    "grantsFetz": true,
+    "catalystConsumed": true,
+    "overformulaPrimaryBonus": null,
+    "overformulaIntensityBonus": null,
+    "formulaDefensePenalty": null,
+    "summonConstructDefId": null
+  },
+  {
+    "recipeId": "v6-over-kettenfessel-erde-ueberladung",
+    "kind": "overformula",
+    "catalogSlice": "slice1",
+    "techniqueId": "v6-technik-kettenfessel",
+    "essenceId": "v6-essenz-erde",
+    "catalystId": "v6-katalysator-ueberladung",
+    "name": "Überformel Felskette · Überladung",
+    "effectSummary": "Fessel Intensität 5 auf einen besetzten gegnerischen Formelplatz (manuelle Wahl). Verwendete Komponenten +1 Stabilität bis nächste Startphase. (verstärkt) Primärwert +2; danach erleidest du 1 Selbstschaden. Überformel: Intensität +1 (fester Slice-1-Bonus). Überformel: Fetzladung wird verbraucht. Formelabwehr −1.",
+    "primary": {
+      "kind": "fessel",
+      "value": 5,
+      "target": "opponent",
+      "offensive": true
+    },
+    "rider": {
+      "id": "rider-stabilitaet",
+      "summary": "Verwendete Komponenten +1 Stabilität bis nächste Startphase. (verstärkt)",
+      "defenseSuppressible": false
+    },
+    "intensity": 5,
+    "transformId": "xform-ueberladung",
+    "grantsFetz": false,
+    "catalystConsumed": true,
+    "overformulaPrimaryBonus": null,
+    "overformulaIntensityBonus": 1,
+    "formulaDefensePenalty": -1,
+    "summonConstructDefId": null
+  },
+  {
+    "recipeId": "v6-tek-kettenfessel-erde-verdichtung",
+    "kind": "tek",
+    "catalogSlice": "slice1",
+    "techniqueId": "v6-technik-kettenfessel",
+    "essenceId": "v6-essenz-erde",
+    "catalystId": "v6-katalysator-verdichtung",
+    "name": "Felskette · Verdichtung",
+    "effectSummary": "Fessel Intensität 3 auf einen besetzten gegnerischen Formelplatz (manuelle Wahl). Verwendete Komponenten +1 Stabilität bis nächste Startphase. Primärwert +1; verwendete Komponenten erhalten +1 Stabilität. TEK: +1 Fetzladung (max 1×/Zug).",
+    "primary": {
+      "kind": "fessel",
+      "value": 3,
+      "target": "opponent",
+      "offensive": true
+    },
+    "rider": {
+      "id": "rider-stabilitaet",
+      "summary": "Verwendete Komponenten +1 Stabilität bis nächste Startphase.",
+      "defenseSuppressible": false
+    },
+    "intensity": 3,
+    "transformId": "xform-verdichtung",
+    "grantsFetz": true,
+    "catalystConsumed": true,
+    "overformulaPrimaryBonus": null,
+    "overformulaIntensityBonus": null,
+    "formulaDefensePenalty": null,
+    "summonConstructDefId": null
+  },
+  {
+    "recipeId": "v6-over-kettenfessel-erde-verdichtung",
+    "kind": "overformula",
+    "catalogSlice": "slice1",
+    "techniqueId": "v6-technik-kettenfessel",
+    "essenceId": "v6-essenz-erde",
+    "catalystId": "v6-katalysator-verdichtung",
+    "name": "Überformel Felskette · Verdichtung",
+    "effectSummary": "Fessel Intensität 4 auf einen besetzten gegnerischen Formelplatz (manuelle Wahl). Verwendete Komponenten +1 Stabilität bis nächste Startphase. (verstärkt) Primärwert +1; verwendete Komponenten erhalten +1 Stabilität. Überformel: Intensität +1 (fester Slice-1-Bonus). Überformel: Fetzladung wird verbraucht. Formelabwehr −1.",
+    "primary": {
+      "kind": "fessel",
+      "value": 4,
+      "target": "opponent",
+      "offensive": true
+    },
+    "rider": {
+      "id": "rider-stabilitaet",
+      "summary": "Verwendete Komponenten +1 Stabilität bis nächste Startphase. (verstärkt)",
+      "defenseSuppressible": false
+    },
+    "intensity": 4,
+    "transformId": "xform-verdichtung",
+    "grantsFetz": false,
+    "catalystConsumed": true,
+    "overformulaPrimaryBonus": null,
+    "overformulaIntensityBonus": 1,
+    "formulaDefensePenalty": -1,
+    "summonConstructDefId": null
+  },
+  {
+    "recipeId": "v6-tek-kettenfessel-erde-sofortzuender",
+    "kind": "tek",
+    "catalogSlice": "slice1",
+    "techniqueId": "v6-technik-kettenfessel",
+    "essenceId": "v6-essenz-erde",
+    "catalystId": "v6-katalysator-sofortzuender",
+    "name": "Felskette · Sofortzünder",
+    "effectSummary": "Fessel Intensität 1 auf einen besetzten gegnerischen Formelplatz (manuelle Wahl). Verwendete Komponenten +1 Stabilität bis nächste Startphase. Primärwert −1; danach ziehe 1 und wirf 1 ab. TEK: +1 Fetzladung (max 1×/Zug).",
+    "primary": {
+      "kind": "fessel",
+      "value": 1,
+      "target": "opponent",
+      "offensive": true
+    },
+    "rider": {
+      "id": "rider-stabilitaet",
+      "summary": "Verwendete Komponenten +1 Stabilität bis nächste Startphase.",
+      "defenseSuppressible": false
+    },
+    "intensity": 1,
+    "transformId": "xform-sofortzuender",
+    "grantsFetz": true,
+    "catalystConsumed": true,
+    "overformulaPrimaryBonus": null,
+    "overformulaIntensityBonus": null,
+    "formulaDefensePenalty": null,
+    "summonConstructDefId": null
+  },
+  {
+    "recipeId": "v6-over-kettenfessel-erde-sofortzuender",
+    "kind": "overformula",
+    "catalogSlice": "slice1",
+    "techniqueId": "v6-technik-kettenfessel",
+    "essenceId": "v6-essenz-erde",
+    "catalystId": "v6-katalysator-sofortzuender",
+    "name": "Überformel Felskette · Sofortzünder",
+    "effectSummary": "Fessel Intensität 2 auf einen besetzten gegnerischen Formelplatz (manuelle Wahl). Verwendete Komponenten +1 Stabilität bis nächste Startphase. (verstärkt) Primärwert −1; danach ziehe 1 und wirf 1 ab. Überformel: Intensität +1 (fester Slice-1-Bonus). Überformel: Fetzladung wird verbraucht. Formelabwehr −1.",
+    "primary": {
+      "kind": "fessel",
+      "value": 2,
+      "target": "opponent",
+      "offensive": true
+    },
+    "rider": {
+      "id": "rider-stabilitaet",
+      "summary": "Verwendete Komponenten +1 Stabilität bis nächste Startphase. (verstärkt)",
+      "defenseSuppressible": false
+    },
+    "intensity": 2,
+    "transformId": "xform-sofortzuender",
+    "grantsFetz": false,
+    "catalystConsumed": true,
+    "overformulaPrimaryBonus": null,
+    "overformulaIntensityBonus": 1,
+    "formulaDefensePenalty": -1,
+    "summonConstructDefId": null
+  },
+  {
+    "recipeId": "v6-tek-kettenfessel-erde-opfergabe",
+    "kind": "tek",
+    "catalogSlice": "slice1",
+    "techniqueId": "v6-technik-kettenfessel",
+    "essenceId": "v6-essenz-erde",
+    "catalystId": "v6-katalysator-opfergabe",
+    "name": "Felskette · Opfergabe",
+    "effectSummary": "Fessel Intensität 2 auf einen besetzten gegnerischen Formelplatz (manuelle Wahl). Verwendete Komponenten +1 Stabilität bis nächste Startphase. Optional: wirf 1 Handkarte ab für Primärwert +2. TEK: +1 Fetzladung (max 1×/Zug).",
+    "primary": {
+      "kind": "fessel",
+      "value": 2,
+      "target": "opponent",
+      "offensive": true
+    },
+    "rider": {
+      "id": "rider-stabilitaet",
+      "summary": "Verwendete Komponenten +1 Stabilität bis nächste Startphase.",
+      "defenseSuppressible": false
+    },
+    "intensity": 2,
+    "transformId": "xform-opfergabe",
+    "grantsFetz": true,
+    "catalystConsumed": true,
+    "overformulaPrimaryBonus": null,
+    "overformulaIntensityBonus": null,
+    "formulaDefensePenalty": null,
+    "summonConstructDefId": null
+  },
+  {
+    "recipeId": "v6-over-kettenfessel-erde-opfergabe",
+    "kind": "overformula",
+    "catalogSlice": "slice1",
+    "techniqueId": "v6-technik-kettenfessel",
+    "essenceId": "v6-essenz-erde",
+    "catalystId": "v6-katalysator-opfergabe",
+    "name": "Überformel Felskette · Opfergabe",
+    "effectSummary": "Fessel Intensität 3 auf einen besetzten gegnerischen Formelplatz (manuelle Wahl). Verwendete Komponenten +1 Stabilität bis nächste Startphase. (verstärkt) Optional: wirf 1 Handkarte ab für Primärwert +2. Überformel: Intensität +1 (fester Slice-1-Bonus). Überformel: Fetzladung wird verbraucht. Formelabwehr −1.",
+    "primary": {
+      "kind": "fessel",
+      "value": 3,
+      "target": "opponent",
+      "offensive": true
+    },
+    "rider": {
+      "id": "rider-stabilitaet",
+      "summary": "Verwendete Komponenten +1 Stabilität bis nächste Startphase. (verstärkt)",
+      "defenseSuppressible": false
+    },
+    "intensity": 3,
+    "transformId": "xform-opfergabe",
+    "grantsFetz": false,
+    "catalystConsumed": true,
+    "overformulaPrimaryBonus": null,
+    "overformulaIntensityBonus": 1,
+    "formulaDefensePenalty": -1,
+    "summonConstructDefId": null
+  },
+  {
+    "recipeId": "v6-tek-kettenfessel-luft-ueberladung",
+    "kind": "tek",
+    "catalogSlice": "slice1",
+    "techniqueId": "v6-technik-kettenfessel",
+    "essenceId": "v6-essenz-luft",
+    "catalystId": "v6-katalysator-ueberladung",
+    "name": "Windkette · Überladung",
+    "effectSummary": "Fessel Intensität 4 auf einen besetzten gegnerischen Formelplatz (manuelle Wahl). Nächster eigener Aktions-W6 +1 (max +2). Primärwert +2; danach erleidest du 1 Selbstschaden. TEK: +1 Fetzladung (max 1×/Zug).",
+    "primary": {
+      "kind": "fessel",
+      "value": 4,
+      "target": "opponent",
+      "offensive": true
+    },
+    "rider": {
+      "id": "rider-w6",
+      "summary": "Nächster eigener Aktions-W6 +1 (max +2).",
+      "defenseSuppressible": true
+    },
+    "intensity": 4,
+    "transformId": "xform-ueberladung",
+    "grantsFetz": true,
+    "catalystConsumed": true,
+    "overformulaPrimaryBonus": null,
+    "overformulaIntensityBonus": null,
+    "formulaDefensePenalty": null,
+    "summonConstructDefId": null
+  },
+  {
+    "recipeId": "v6-over-kettenfessel-luft-ueberladung",
+    "kind": "overformula",
+    "catalogSlice": "slice1",
+    "techniqueId": "v6-technik-kettenfessel",
+    "essenceId": "v6-essenz-luft",
+    "catalystId": "v6-katalysator-ueberladung",
+    "name": "Überformel Windkette · Überladung",
+    "effectSummary": "Fessel Intensität 5 auf einen besetzten gegnerischen Formelplatz (manuelle Wahl). Nächster eigener Aktions-W6 +1 (max +2). (verstärkt) Primärwert +2; danach erleidest du 1 Selbstschaden. Überformel: Intensität +1 (fester Slice-1-Bonus). Überformel: Fetzladung wird verbraucht. Formelabwehr −1.",
+    "primary": {
+      "kind": "fessel",
+      "value": 5,
+      "target": "opponent",
+      "offensive": true
+    },
+    "rider": {
+      "id": "rider-w6",
+      "summary": "Nächster eigener Aktions-W6 +1 (max +2). (verstärkt)",
+      "defenseSuppressible": true
+    },
+    "intensity": 5,
+    "transformId": "xform-ueberladung",
+    "grantsFetz": false,
+    "catalystConsumed": true,
+    "overformulaPrimaryBonus": null,
+    "overformulaIntensityBonus": 1,
+    "formulaDefensePenalty": -1,
+    "summonConstructDefId": null
+  },
+  {
+    "recipeId": "v6-tek-kettenfessel-luft-verdichtung",
+    "kind": "tek",
+    "catalogSlice": "slice1",
+    "techniqueId": "v6-technik-kettenfessel",
+    "essenceId": "v6-essenz-luft",
+    "catalystId": "v6-katalysator-verdichtung",
+    "name": "Windkette · Verdichtung",
+    "effectSummary": "Fessel Intensität 3 auf einen besetzten gegnerischen Formelplatz (manuelle Wahl). Nächster eigener Aktions-W6 +1 (max +2). Primärwert +1; verwendete Komponenten erhalten +1 Stabilität. TEK: +1 Fetzladung (max 1×/Zug).",
+    "primary": {
+      "kind": "fessel",
+      "value": 3,
+      "target": "opponent",
+      "offensive": true
+    },
+    "rider": {
+      "id": "rider-w6",
+      "summary": "Nächster eigener Aktions-W6 +1 (max +2).",
+      "defenseSuppressible": true
+    },
+    "intensity": 3,
+    "transformId": "xform-verdichtung",
+    "grantsFetz": true,
+    "catalystConsumed": true,
+    "overformulaPrimaryBonus": null,
+    "overformulaIntensityBonus": null,
+    "formulaDefensePenalty": null,
+    "summonConstructDefId": null
+  },
+  {
+    "recipeId": "v6-over-kettenfessel-luft-verdichtung",
+    "kind": "overformula",
+    "catalogSlice": "slice1",
+    "techniqueId": "v6-technik-kettenfessel",
+    "essenceId": "v6-essenz-luft",
+    "catalystId": "v6-katalysator-verdichtung",
+    "name": "Überformel Windkette · Verdichtung",
+    "effectSummary": "Fessel Intensität 4 auf einen besetzten gegnerischen Formelplatz (manuelle Wahl). Nächster eigener Aktions-W6 +1 (max +2). (verstärkt) Primärwert +1; verwendete Komponenten erhalten +1 Stabilität. Überformel: Intensität +1 (fester Slice-1-Bonus). Überformel: Fetzladung wird verbraucht. Formelabwehr −1.",
+    "primary": {
+      "kind": "fessel",
+      "value": 4,
+      "target": "opponent",
+      "offensive": true
+    },
+    "rider": {
+      "id": "rider-w6",
+      "summary": "Nächster eigener Aktions-W6 +1 (max +2). (verstärkt)",
+      "defenseSuppressible": true
+    },
+    "intensity": 4,
+    "transformId": "xform-verdichtung",
+    "grantsFetz": false,
+    "catalystConsumed": true,
+    "overformulaPrimaryBonus": null,
+    "overformulaIntensityBonus": 1,
+    "formulaDefensePenalty": -1,
+    "summonConstructDefId": null
+  },
+  {
+    "recipeId": "v6-tek-kettenfessel-luft-sofortzuender",
+    "kind": "tek",
+    "catalogSlice": "slice1",
+    "techniqueId": "v6-technik-kettenfessel",
+    "essenceId": "v6-essenz-luft",
+    "catalystId": "v6-katalysator-sofortzuender",
+    "name": "Windkette · Sofortzünder",
+    "effectSummary": "Fessel Intensität 1 auf einen besetzten gegnerischen Formelplatz (manuelle Wahl). Nächster eigener Aktions-W6 +1 (max +2). Primärwert −1; danach ziehe 1 und wirf 1 ab. TEK: +1 Fetzladung (max 1×/Zug).",
+    "primary": {
+      "kind": "fessel",
+      "value": 1,
+      "target": "opponent",
+      "offensive": true
+    },
+    "rider": {
+      "id": "rider-w6",
+      "summary": "Nächster eigener Aktions-W6 +1 (max +2).",
+      "defenseSuppressible": true
+    },
+    "intensity": 1,
+    "transformId": "xform-sofortzuender",
+    "grantsFetz": true,
+    "catalystConsumed": true,
+    "overformulaPrimaryBonus": null,
+    "overformulaIntensityBonus": null,
+    "formulaDefensePenalty": null,
+    "summonConstructDefId": null
+  },
+  {
+    "recipeId": "v6-over-kettenfessel-luft-sofortzuender",
+    "kind": "overformula",
+    "catalogSlice": "slice1",
+    "techniqueId": "v6-technik-kettenfessel",
+    "essenceId": "v6-essenz-luft",
+    "catalystId": "v6-katalysator-sofortzuender",
+    "name": "Überformel Windkette · Sofortzünder",
+    "effectSummary": "Fessel Intensität 2 auf einen besetzten gegnerischen Formelplatz (manuelle Wahl). Nächster eigener Aktions-W6 +1 (max +2). (verstärkt) Primärwert −1; danach ziehe 1 und wirf 1 ab. Überformel: Intensität +1 (fester Slice-1-Bonus). Überformel: Fetzladung wird verbraucht. Formelabwehr −1.",
+    "primary": {
+      "kind": "fessel",
+      "value": 2,
+      "target": "opponent",
+      "offensive": true
+    },
+    "rider": {
+      "id": "rider-w6",
+      "summary": "Nächster eigener Aktions-W6 +1 (max +2). (verstärkt)",
+      "defenseSuppressible": true
+    },
+    "intensity": 2,
+    "transformId": "xform-sofortzuender",
+    "grantsFetz": false,
+    "catalystConsumed": true,
+    "overformulaPrimaryBonus": null,
+    "overformulaIntensityBonus": 1,
+    "formulaDefensePenalty": -1,
+    "summonConstructDefId": null
+  },
+  {
+    "recipeId": "v6-tek-kettenfessel-luft-opfergabe",
+    "kind": "tek",
+    "catalogSlice": "slice1",
+    "techniqueId": "v6-technik-kettenfessel",
+    "essenceId": "v6-essenz-luft",
+    "catalystId": "v6-katalysator-opfergabe",
+    "name": "Windkette · Opfergabe",
+    "effectSummary": "Fessel Intensität 2 auf einen besetzten gegnerischen Formelplatz (manuelle Wahl). Nächster eigener Aktions-W6 +1 (max +2). Optional: wirf 1 Handkarte ab für Primärwert +2. TEK: +1 Fetzladung (max 1×/Zug).",
+    "primary": {
+      "kind": "fessel",
+      "value": 2,
+      "target": "opponent",
+      "offensive": true
+    },
+    "rider": {
+      "id": "rider-w6",
+      "summary": "Nächster eigener Aktions-W6 +1 (max +2).",
+      "defenseSuppressible": true
+    },
+    "intensity": 2,
+    "transformId": "xform-opfergabe",
+    "grantsFetz": true,
+    "catalystConsumed": true,
+    "overformulaPrimaryBonus": null,
+    "overformulaIntensityBonus": null,
+    "formulaDefensePenalty": null,
+    "summonConstructDefId": null
+  },
+  {
+    "recipeId": "v6-over-kettenfessel-luft-opfergabe",
+    "kind": "overformula",
+    "catalogSlice": "slice1",
+    "techniqueId": "v6-technik-kettenfessel",
+    "essenceId": "v6-essenz-luft",
+    "catalystId": "v6-katalysator-opfergabe",
+    "name": "Überformel Windkette · Opfergabe",
+    "effectSummary": "Fessel Intensität 3 auf einen besetzten gegnerischen Formelplatz (manuelle Wahl). Nächster eigener Aktions-W6 +1 (max +2). (verstärkt) Optional: wirf 1 Handkarte ab für Primärwert +2. Überformel: Intensität +1 (fester Slice-1-Bonus). Überformel: Fetzladung wird verbraucht. Formelabwehr −1.",
+    "primary": {
+      "kind": "fessel",
+      "value": 3,
+      "target": "opponent",
+      "offensive": true
+    },
+    "rider": {
+      "id": "rider-w6",
+      "summary": "Nächster eigener Aktions-W6 +1 (max +2). (verstärkt)",
+      "defenseSuppressible": true
+    },
+    "intensity": 3,
+    "transformId": "xform-opfergabe",
+    "grantsFetz": false,
+    "catalystConsumed": true,
+    "overformulaPrimaryBonus": null,
+    "overformulaIntensityBonus": 1,
+    "formulaDefensePenalty": -1,
+    "summonConstructDefId": null
+  },
+  {
+    "recipeId": "v6-tek-kettenfessel-licht-ueberladung",
+    "kind": "tek",
+    "catalogSlice": "slice1",
+    "techniqueId": "v6-technik-kettenfessel",
+    "essenceId": "v6-essenz-licht",
+    "catalystId": "v6-katalysator-ueberladung",
+    "name": "Lichtkette · Überladung",
+    "effectSummary": "Fessel Intensität 4 auf einen besetzten gegnerischen Formelplatz (manuelle Wahl). Bei Schildgewinn: entferne optional eine Marke von dir. Primärwert +2; danach erleidest du 1 Selbstschaden. TEK: +1 Fetzladung (max 1×/Zug).",
+    "primary": {
+      "kind": "fessel",
+      "value": 4,
+      "target": "opponent",
+      "offensive": true
+    },
+    "rider": {
+      "id": "rider-reinigen-licht",
+      "summary": "Bei Schildgewinn: entferne optional eine Marke von dir.",
+      "defenseSuppressible": false
+    },
+    "intensity": 4,
+    "transformId": "xform-ueberladung",
+    "grantsFetz": true,
+    "catalystConsumed": true,
+    "overformulaPrimaryBonus": null,
+    "overformulaIntensityBonus": null,
+    "formulaDefensePenalty": null,
+    "summonConstructDefId": null
+  },
+  {
+    "recipeId": "v6-over-kettenfessel-licht-ueberladung",
+    "kind": "overformula",
+    "catalogSlice": "slice1",
+    "techniqueId": "v6-technik-kettenfessel",
+    "essenceId": "v6-essenz-licht",
+    "catalystId": "v6-katalysator-ueberladung",
+    "name": "Überformel Lichtkette · Überladung",
+    "effectSummary": "Fessel Intensität 5 auf einen besetzten gegnerischen Formelplatz (manuelle Wahl). Bei Schildgewinn: entferne optional eine Marke von dir. (verstärkt) Primärwert +2; danach erleidest du 1 Selbstschaden. Überformel: Intensität +1 (fester Slice-1-Bonus). Überformel: Fetzladung wird verbraucht. Formelabwehr −1.",
+    "primary": {
+      "kind": "fessel",
+      "value": 5,
+      "target": "opponent",
+      "offensive": true
+    },
+    "rider": {
+      "id": "rider-reinigen-licht",
+      "summary": "Bei Schildgewinn: entferne optional eine Marke von dir. (verstärkt)",
+      "defenseSuppressible": false
+    },
+    "intensity": 5,
+    "transformId": "xform-ueberladung",
+    "grantsFetz": false,
+    "catalystConsumed": true,
+    "overformulaPrimaryBonus": null,
+    "overformulaIntensityBonus": 1,
+    "formulaDefensePenalty": -1,
+    "summonConstructDefId": null
+  },
+  {
+    "recipeId": "v6-tek-kettenfessel-licht-verdichtung",
+    "kind": "tek",
+    "catalogSlice": "slice1",
+    "techniqueId": "v6-technik-kettenfessel",
+    "essenceId": "v6-essenz-licht",
+    "catalystId": "v6-katalysator-verdichtung",
+    "name": "Lichtkette · Verdichtung",
+    "effectSummary": "Fessel Intensität 3 auf einen besetzten gegnerischen Formelplatz (manuelle Wahl). Bei Schildgewinn: entferne optional eine Marke von dir. Primärwert +1; verwendete Komponenten erhalten +1 Stabilität. TEK: +1 Fetzladung (max 1×/Zug).",
+    "primary": {
+      "kind": "fessel",
+      "value": 3,
+      "target": "opponent",
+      "offensive": true
+    },
+    "rider": {
+      "id": "rider-reinigen-licht",
+      "summary": "Bei Schildgewinn: entferne optional eine Marke von dir.",
+      "defenseSuppressible": false
+    },
+    "intensity": 3,
+    "transformId": "xform-verdichtung",
+    "grantsFetz": true,
+    "catalystConsumed": true,
+    "overformulaPrimaryBonus": null,
+    "overformulaIntensityBonus": null,
+    "formulaDefensePenalty": null,
+    "summonConstructDefId": null
+  },
+  {
+    "recipeId": "v6-over-kettenfessel-licht-verdichtung",
+    "kind": "overformula",
+    "catalogSlice": "slice1",
+    "techniqueId": "v6-technik-kettenfessel",
+    "essenceId": "v6-essenz-licht",
+    "catalystId": "v6-katalysator-verdichtung",
+    "name": "Überformel Lichtkette · Verdichtung",
+    "effectSummary": "Fessel Intensität 4 auf einen besetzten gegnerischen Formelplatz (manuelle Wahl). Bei Schildgewinn: entferne optional eine Marke von dir. (verstärkt) Primärwert +1; verwendete Komponenten erhalten +1 Stabilität. Überformel: Intensität +1 (fester Slice-1-Bonus). Überformel: Fetzladung wird verbraucht. Formelabwehr −1.",
+    "primary": {
+      "kind": "fessel",
+      "value": 4,
+      "target": "opponent",
+      "offensive": true
+    },
+    "rider": {
+      "id": "rider-reinigen-licht",
+      "summary": "Bei Schildgewinn: entferne optional eine Marke von dir. (verstärkt)",
+      "defenseSuppressible": false
+    },
+    "intensity": 4,
+    "transformId": "xform-verdichtung",
+    "grantsFetz": false,
+    "catalystConsumed": true,
+    "overformulaPrimaryBonus": null,
+    "overformulaIntensityBonus": 1,
+    "formulaDefensePenalty": -1,
+    "summonConstructDefId": null
+  },
+  {
+    "recipeId": "v6-tek-kettenfessel-licht-sofortzuender",
+    "kind": "tek",
+    "catalogSlice": "slice1",
+    "techniqueId": "v6-technik-kettenfessel",
+    "essenceId": "v6-essenz-licht",
+    "catalystId": "v6-katalysator-sofortzuender",
+    "name": "Lichtkette · Sofortzünder",
+    "effectSummary": "Fessel Intensität 1 auf einen besetzten gegnerischen Formelplatz (manuelle Wahl). Bei Schildgewinn: entferne optional eine Marke von dir. Primärwert −1; danach ziehe 1 und wirf 1 ab. TEK: +1 Fetzladung (max 1×/Zug).",
+    "primary": {
+      "kind": "fessel",
+      "value": 1,
+      "target": "opponent",
+      "offensive": true
+    },
+    "rider": {
+      "id": "rider-reinigen-licht",
+      "summary": "Bei Schildgewinn: entferne optional eine Marke von dir.",
+      "defenseSuppressible": false
+    },
+    "intensity": 1,
+    "transformId": "xform-sofortzuender",
+    "grantsFetz": true,
+    "catalystConsumed": true,
+    "overformulaPrimaryBonus": null,
+    "overformulaIntensityBonus": null,
+    "formulaDefensePenalty": null,
+    "summonConstructDefId": null
+  },
+  {
+    "recipeId": "v6-over-kettenfessel-licht-sofortzuender",
+    "kind": "overformula",
+    "catalogSlice": "slice1",
+    "techniqueId": "v6-technik-kettenfessel",
+    "essenceId": "v6-essenz-licht",
+    "catalystId": "v6-katalysator-sofortzuender",
+    "name": "Überformel Lichtkette · Sofortzünder",
+    "effectSummary": "Fessel Intensität 2 auf einen besetzten gegnerischen Formelplatz (manuelle Wahl). Bei Schildgewinn: entferne optional eine Marke von dir. (verstärkt) Primärwert −1; danach ziehe 1 und wirf 1 ab. Überformel: Intensität +1 (fester Slice-1-Bonus). Überformel: Fetzladung wird verbraucht. Formelabwehr −1.",
+    "primary": {
+      "kind": "fessel",
+      "value": 2,
+      "target": "opponent",
+      "offensive": true
+    },
+    "rider": {
+      "id": "rider-reinigen-licht",
+      "summary": "Bei Schildgewinn: entferne optional eine Marke von dir. (verstärkt)",
+      "defenseSuppressible": false
+    },
+    "intensity": 2,
+    "transformId": "xform-sofortzuender",
+    "grantsFetz": false,
+    "catalystConsumed": true,
+    "overformulaPrimaryBonus": null,
+    "overformulaIntensityBonus": 1,
+    "formulaDefensePenalty": -1,
+    "summonConstructDefId": null
+  },
+  {
+    "recipeId": "v6-tek-kettenfessel-licht-opfergabe",
+    "kind": "tek",
+    "catalogSlice": "slice1",
+    "techniqueId": "v6-technik-kettenfessel",
+    "essenceId": "v6-essenz-licht",
+    "catalystId": "v6-katalysator-opfergabe",
+    "name": "Lichtkette · Opfergabe",
+    "effectSummary": "Fessel Intensität 2 auf einen besetzten gegnerischen Formelplatz (manuelle Wahl). Bei Schildgewinn: entferne optional eine Marke von dir. Optional: wirf 1 Handkarte ab für Primärwert +2. TEK: +1 Fetzladung (max 1×/Zug).",
+    "primary": {
+      "kind": "fessel",
+      "value": 2,
+      "target": "opponent",
+      "offensive": true
+    },
+    "rider": {
+      "id": "rider-reinigen-licht",
+      "summary": "Bei Schildgewinn: entferne optional eine Marke von dir.",
+      "defenseSuppressible": false
+    },
+    "intensity": 2,
+    "transformId": "xform-opfergabe",
+    "grantsFetz": true,
+    "catalystConsumed": true,
+    "overformulaPrimaryBonus": null,
+    "overformulaIntensityBonus": null,
+    "formulaDefensePenalty": null,
+    "summonConstructDefId": null
+  },
+  {
+    "recipeId": "v6-over-kettenfessel-licht-opfergabe",
+    "kind": "overformula",
+    "catalogSlice": "slice1",
+    "techniqueId": "v6-technik-kettenfessel",
+    "essenceId": "v6-essenz-licht",
+    "catalystId": "v6-katalysator-opfergabe",
+    "name": "Überformel Lichtkette · Opfergabe",
+    "effectSummary": "Fessel Intensität 3 auf einen besetzten gegnerischen Formelplatz (manuelle Wahl). Bei Schildgewinn: entferne optional eine Marke von dir. (verstärkt) Optional: wirf 1 Handkarte ab für Primärwert +2. Überformel: Intensität +1 (fester Slice-1-Bonus). Überformel: Fetzladung wird verbraucht. Formelabwehr −1.",
+    "primary": {
+      "kind": "fessel",
+      "value": 3,
+      "target": "opponent",
+      "offensive": true
+    },
+    "rider": {
+      "id": "rider-reinigen-licht",
+      "summary": "Bei Schildgewinn: entferne optional eine Marke von dir. (verstärkt)",
+      "defenseSuppressible": false
+    },
+    "intensity": 3,
+    "transformId": "xform-opfergabe",
+    "grantsFetz": false,
+    "catalystConsumed": true,
+    "overformulaPrimaryBonus": null,
+    "overformulaIntensityBonus": 1,
+    "formulaDefensePenalty": -1,
+    "summonConstructDefId": null
+  },
+  {
+    "recipeId": "v6-tek-kettenfessel-schatten-ueberladung",
+    "kind": "tek",
+    "catalogSlice": "slice1",
+    "techniqueId": "v6-technik-kettenfessel",
+    "essenceId": "v6-essenz-schatten",
+    "catalystId": "v6-katalysator-ueberladung",
+    "name": "Schattenkette · Überladung",
+    "effectSummary": "Fessel Intensität 4 auf einen besetzten gegnerischen Formelplatz (manuelle Wahl). Bei Treffer: erschöpfe optional 1 gegnerische Formelkomponente. Primärwert +2; danach erleidest du 1 Selbstschaden. TEK: +1 Fetzladung (max 1×/Zug).",
+    "primary": {
+      "kind": "fessel",
+      "value": 4,
+      "target": "opponent",
+      "offensive": true
+    },
+    "rider": {
+      "id": "rider-fluch",
+      "summary": "Bei Treffer: erschöpfe optional 1 gegnerische Formelkomponente.",
+      "defenseSuppressible": true
+    },
+    "intensity": 4,
+    "transformId": "xform-ueberladung",
+    "grantsFetz": true,
+    "catalystConsumed": true,
+    "overformulaPrimaryBonus": null,
+    "overformulaIntensityBonus": null,
+    "formulaDefensePenalty": null,
+    "summonConstructDefId": null
+  },
+  {
+    "recipeId": "v6-over-kettenfessel-schatten-ueberladung",
+    "kind": "overformula",
+    "catalogSlice": "slice1",
+    "techniqueId": "v6-technik-kettenfessel",
+    "essenceId": "v6-essenz-schatten",
+    "catalystId": "v6-katalysator-ueberladung",
+    "name": "Überformel Schattenkette · Überladung",
+    "effectSummary": "Fessel Intensität 5 auf einen besetzten gegnerischen Formelplatz (manuelle Wahl). Bei Treffer: erschöpfe optional 1 gegnerische Formelkomponente. (verstärkt) Primärwert +2; danach erleidest du 1 Selbstschaden. Überformel: Intensität +1 (fester Slice-1-Bonus). Überformel: Fetzladung wird verbraucht. Formelabwehr −1.",
+    "primary": {
+      "kind": "fessel",
+      "value": 5,
+      "target": "opponent",
+      "offensive": true
+    },
+    "rider": {
+      "id": "rider-fluch",
+      "summary": "Bei Treffer: erschöpfe optional 1 gegnerische Formelkomponente. (verstärkt)",
+      "defenseSuppressible": true
+    },
+    "intensity": 5,
+    "transformId": "xform-ueberladung",
+    "grantsFetz": false,
+    "catalystConsumed": true,
+    "overformulaPrimaryBonus": null,
+    "overformulaIntensityBonus": 1,
+    "formulaDefensePenalty": -1,
+    "summonConstructDefId": null
+  },
+  {
+    "recipeId": "v6-tek-kettenfessel-schatten-verdichtung",
+    "kind": "tek",
+    "catalogSlice": "slice1",
+    "techniqueId": "v6-technik-kettenfessel",
+    "essenceId": "v6-essenz-schatten",
+    "catalystId": "v6-katalysator-verdichtung",
+    "name": "Schattenkette · Verdichtung",
+    "effectSummary": "Fessel Intensität 3 auf einen besetzten gegnerischen Formelplatz (manuelle Wahl). Bei Treffer: erschöpfe optional 1 gegnerische Formelkomponente. Primärwert +1; verwendete Komponenten erhalten +1 Stabilität. TEK: +1 Fetzladung (max 1×/Zug).",
+    "primary": {
+      "kind": "fessel",
+      "value": 3,
+      "target": "opponent",
+      "offensive": true
+    },
+    "rider": {
+      "id": "rider-fluch",
+      "summary": "Bei Treffer: erschöpfe optional 1 gegnerische Formelkomponente.",
+      "defenseSuppressible": true
+    },
+    "intensity": 3,
+    "transformId": "xform-verdichtung",
+    "grantsFetz": true,
+    "catalystConsumed": true,
+    "overformulaPrimaryBonus": null,
+    "overformulaIntensityBonus": null,
+    "formulaDefensePenalty": null,
+    "summonConstructDefId": null
+  },
+  {
+    "recipeId": "v6-over-kettenfessel-schatten-verdichtung",
+    "kind": "overformula",
+    "catalogSlice": "slice1",
+    "techniqueId": "v6-technik-kettenfessel",
+    "essenceId": "v6-essenz-schatten",
+    "catalystId": "v6-katalysator-verdichtung",
+    "name": "Überformel Schattenkette · Verdichtung",
+    "effectSummary": "Fessel Intensität 4 auf einen besetzten gegnerischen Formelplatz (manuelle Wahl). Bei Treffer: erschöpfe optional 1 gegnerische Formelkomponente. (verstärkt) Primärwert +1; verwendete Komponenten erhalten +1 Stabilität. Überformel: Intensität +1 (fester Slice-1-Bonus). Überformel: Fetzladung wird verbraucht. Formelabwehr −1.",
+    "primary": {
+      "kind": "fessel",
+      "value": 4,
+      "target": "opponent",
+      "offensive": true
+    },
+    "rider": {
+      "id": "rider-fluch",
+      "summary": "Bei Treffer: erschöpfe optional 1 gegnerische Formelkomponente. (verstärkt)",
+      "defenseSuppressible": true
+    },
+    "intensity": 4,
+    "transformId": "xform-verdichtung",
+    "grantsFetz": false,
+    "catalystConsumed": true,
+    "overformulaPrimaryBonus": null,
+    "overformulaIntensityBonus": 1,
+    "formulaDefensePenalty": -1,
+    "summonConstructDefId": null
+  },
+  {
+    "recipeId": "v6-tek-kettenfessel-schatten-sofortzuender",
+    "kind": "tek",
+    "catalogSlice": "slice1",
+    "techniqueId": "v6-technik-kettenfessel",
+    "essenceId": "v6-essenz-schatten",
+    "catalystId": "v6-katalysator-sofortzuender",
+    "name": "Schattenkette · Sofortzünder",
+    "effectSummary": "Fessel Intensität 1 auf einen besetzten gegnerischen Formelplatz (manuelle Wahl). Bei Treffer: erschöpfe optional 1 gegnerische Formelkomponente. Primärwert −1; danach ziehe 1 und wirf 1 ab. TEK: +1 Fetzladung (max 1×/Zug).",
+    "primary": {
+      "kind": "fessel",
+      "value": 1,
+      "target": "opponent",
+      "offensive": true
+    },
+    "rider": {
+      "id": "rider-fluch",
+      "summary": "Bei Treffer: erschöpfe optional 1 gegnerische Formelkomponente.",
+      "defenseSuppressible": true
+    },
+    "intensity": 1,
+    "transformId": "xform-sofortzuender",
+    "grantsFetz": true,
+    "catalystConsumed": true,
+    "overformulaPrimaryBonus": null,
+    "overformulaIntensityBonus": null,
+    "formulaDefensePenalty": null,
+    "summonConstructDefId": null
+  },
+  {
+    "recipeId": "v6-over-kettenfessel-schatten-sofortzuender",
+    "kind": "overformula",
+    "catalogSlice": "slice1",
+    "techniqueId": "v6-technik-kettenfessel",
+    "essenceId": "v6-essenz-schatten",
+    "catalystId": "v6-katalysator-sofortzuender",
+    "name": "Überformel Schattenkette · Sofortzünder",
+    "effectSummary": "Fessel Intensität 2 auf einen besetzten gegnerischen Formelplatz (manuelle Wahl). Bei Treffer: erschöpfe optional 1 gegnerische Formelkomponente. (verstärkt) Primärwert −1; danach ziehe 1 und wirf 1 ab. Überformel: Intensität +1 (fester Slice-1-Bonus). Überformel: Fetzladung wird verbraucht. Formelabwehr −1.",
+    "primary": {
+      "kind": "fessel",
+      "value": 2,
+      "target": "opponent",
+      "offensive": true
+    },
+    "rider": {
+      "id": "rider-fluch",
+      "summary": "Bei Treffer: erschöpfe optional 1 gegnerische Formelkomponente. (verstärkt)",
+      "defenseSuppressible": true
+    },
+    "intensity": 2,
+    "transformId": "xform-sofortzuender",
+    "grantsFetz": false,
+    "catalystConsumed": true,
+    "overformulaPrimaryBonus": null,
+    "overformulaIntensityBonus": 1,
+    "formulaDefensePenalty": -1,
+    "summonConstructDefId": null
+  },
+  {
+    "recipeId": "v6-tek-kettenfessel-schatten-opfergabe",
+    "kind": "tek",
+    "catalogSlice": "slice1",
+    "techniqueId": "v6-technik-kettenfessel",
+    "essenceId": "v6-essenz-schatten",
+    "catalystId": "v6-katalysator-opfergabe",
+    "name": "Schattenkette · Opfergabe",
+    "effectSummary": "Fessel Intensität 2 auf einen besetzten gegnerischen Formelplatz (manuelle Wahl). Bei Treffer: erschöpfe optional 1 gegnerische Formelkomponente. Optional: wirf 1 Handkarte ab für Primärwert +2. TEK: +1 Fetzladung (max 1×/Zug).",
+    "primary": {
+      "kind": "fessel",
+      "value": 2,
+      "target": "opponent",
+      "offensive": true
+    },
+    "rider": {
+      "id": "rider-fluch",
+      "summary": "Bei Treffer: erschöpfe optional 1 gegnerische Formelkomponente.",
+      "defenseSuppressible": true
+    },
+    "intensity": 2,
+    "transformId": "xform-opfergabe",
+    "grantsFetz": true,
+    "catalystConsumed": true,
+    "overformulaPrimaryBonus": null,
+    "overformulaIntensityBonus": null,
+    "formulaDefensePenalty": null,
+    "summonConstructDefId": null
+  },
+  {
+    "recipeId": "v6-over-kettenfessel-schatten-opfergabe",
+    "kind": "overformula",
+    "catalogSlice": "slice1",
+    "techniqueId": "v6-technik-kettenfessel",
+    "essenceId": "v6-essenz-schatten",
+    "catalystId": "v6-katalysator-opfergabe",
+    "name": "Überformel Schattenkette · Opfergabe",
+    "effectSummary": "Fessel Intensität 3 auf einen besetzten gegnerischen Formelplatz (manuelle Wahl). Bei Treffer: erschöpfe optional 1 gegnerische Formelkomponente. (verstärkt) Optional: wirf 1 Handkarte ab für Primärwert +2. Überformel: Intensität +1 (fester Slice-1-Bonus). Überformel: Fetzladung wird verbraucht. Formelabwehr −1.",
+    "primary": {
+      "kind": "fessel",
+      "value": 3,
+      "target": "opponent",
+      "offensive": true
+    },
+    "rider": {
+      "id": "rider-fluch",
+      "summary": "Bei Treffer: erschöpfe optional 1 gegnerische Formelkomponente. (verstärkt)",
+      "defenseSuppressible": true
+    },
+    "intensity": 3,
+    "transformId": "xform-opfergabe",
+    "grantsFetz": false,
+    "catalystConsumed": true,
+    "overformulaPrimaryBonus": null,
+    "overformulaIntensityBonus": 1,
+    "formulaDefensePenalty": -1,
+    "summonConstructDefId": null
+  },
+  {
+    "recipeId": "v6-tek-bannkreis-feuer-ueberladung",
+    "kind": "tek",
+    "catalogSlice": "slice1",
+    "techniqueId": "v6-technik-bannkreis",
+    "essenceId": "v6-essenz-feuer",
+    "catalystId": "v6-katalysator-ueberladung",
+    "name": "Glutkreis · Überladung",
+    "effectSummary": "Gewinne 4 Schild. Bei Lebensschaden: Brennen, falls keine Reaktion. Primärwert +2; danach erleidest du 1 Selbstschaden. TEK: +1 Fetzladung (max 1×/Zug).",
+    "primary": {
+      "kind": "shield",
+      "value": 4,
+      "target": "self"
+    },
+    "rider": {
+      "id": "rider-brennen",
+      "summary": "Bei Lebensschaden: Brennen, falls keine Reaktion.",
+      "defenseSuppressible": true
+    },
+    "intensity": 1,
+    "transformId": "xform-ueberladung",
+    "grantsFetz": true,
+    "catalystConsumed": true,
+    "overformulaPrimaryBonus": null,
+    "overformulaIntensityBonus": null,
+    "formulaDefensePenalty": null,
+    "summonConstructDefId": null
+  },
+  {
+    "recipeId": "v6-over-bannkreis-feuer-ueberladung",
+    "kind": "overformula",
+    "catalogSlice": "slice1",
+    "techniqueId": "v6-technik-bannkreis",
+    "essenceId": "v6-essenz-feuer",
+    "catalystId": "v6-katalysator-ueberladung",
+    "name": "Überformel Glutkreis · Überladung",
+    "effectSummary": "Gewinne 6 Schild. Bei Lebensschaden: Brennen, falls keine Reaktion. (verstärkt) Primärwert +2; danach erleidest du 1 Selbstschaden. Überformel: Primär +2 (fester Slice-1-Bonus). Überformel: Fetzladung wird verbraucht. Formelabwehr −1.",
+    "primary": {
+      "kind": "shield",
+      "value": 6,
+      "target": "self"
+    },
+    "rider": {
+      "id": "rider-brennen",
+      "summary": "Bei Lebensschaden: Brennen, falls keine Reaktion. (verstärkt)",
+      "defenseSuppressible": true
+    },
+    "intensity": 1,
+    "transformId": "xform-ueberladung",
+    "grantsFetz": false,
+    "catalystConsumed": true,
+    "overformulaPrimaryBonus": 2,
+    "overformulaIntensityBonus": null,
+    "formulaDefensePenalty": -1,
+    "summonConstructDefId": null
+  },
+  {
+    "recipeId": "v6-tek-bannkreis-feuer-verdichtung",
+    "kind": "tek",
+    "catalogSlice": "slice1",
+    "techniqueId": "v6-technik-bannkreis",
+    "essenceId": "v6-essenz-feuer",
+    "catalystId": "v6-katalysator-verdichtung",
+    "name": "Glutkreis · Verdichtung",
+    "effectSummary": "Gewinne 3 Schild. Bei Lebensschaden: Brennen, falls keine Reaktion. Primärwert +1; verwendete Komponenten erhalten +1 Stabilität. TEK: +1 Fetzladung (max 1×/Zug).",
+    "primary": {
+      "kind": "shield",
+      "value": 3,
+      "target": "self"
+    },
+    "rider": {
+      "id": "rider-brennen",
+      "summary": "Bei Lebensschaden: Brennen, falls keine Reaktion.",
+      "defenseSuppressible": true
+    },
+    "intensity": 1,
+    "transformId": "xform-verdichtung",
+    "grantsFetz": true,
+    "catalystConsumed": true,
+    "overformulaPrimaryBonus": null,
+    "overformulaIntensityBonus": null,
+    "formulaDefensePenalty": null,
+    "summonConstructDefId": null
+  },
+  {
+    "recipeId": "v6-over-bannkreis-feuer-verdichtung",
+    "kind": "overformula",
+    "catalogSlice": "slice1",
+    "techniqueId": "v6-technik-bannkreis",
+    "essenceId": "v6-essenz-feuer",
+    "catalystId": "v6-katalysator-verdichtung",
+    "name": "Überformel Glutkreis · Verdichtung",
+    "effectSummary": "Gewinne 5 Schild. Bei Lebensschaden: Brennen, falls keine Reaktion. (verstärkt) Primärwert +1; verwendete Komponenten erhalten +1 Stabilität. Überformel: Primär +2 (fester Slice-1-Bonus). Überformel: Fetzladung wird verbraucht. Formelabwehr −1.",
+    "primary": {
+      "kind": "shield",
+      "value": 5,
+      "target": "self"
+    },
+    "rider": {
+      "id": "rider-brennen",
+      "summary": "Bei Lebensschaden: Brennen, falls keine Reaktion. (verstärkt)",
+      "defenseSuppressible": true
+    },
+    "intensity": 1,
+    "transformId": "xform-verdichtung",
+    "grantsFetz": false,
+    "catalystConsumed": true,
+    "overformulaPrimaryBonus": 2,
+    "overformulaIntensityBonus": null,
+    "formulaDefensePenalty": -1,
+    "summonConstructDefId": null
+  },
+  {
+    "recipeId": "v6-tek-bannkreis-feuer-sofortzuender",
+    "kind": "tek",
+    "catalogSlice": "slice1",
+    "techniqueId": "v6-technik-bannkreis",
+    "essenceId": "v6-essenz-feuer",
+    "catalystId": "v6-katalysator-sofortzuender",
+    "name": "Glutkreis · Sofortzünder",
+    "effectSummary": "Gewinne 1 Schild. Bei Lebensschaden: Brennen, falls keine Reaktion. Primärwert −1; danach ziehe 1 und wirf 1 ab. TEK: +1 Fetzladung (max 1×/Zug).",
+    "primary": {
+      "kind": "shield",
+      "value": 1,
+      "target": "self"
+    },
+    "rider": {
+      "id": "rider-brennen",
+      "summary": "Bei Lebensschaden: Brennen, falls keine Reaktion.",
+      "defenseSuppressible": true
+    },
+    "intensity": 1,
+    "transformId": "xform-sofortzuender",
+    "grantsFetz": true,
+    "catalystConsumed": true,
+    "overformulaPrimaryBonus": null,
+    "overformulaIntensityBonus": null,
+    "formulaDefensePenalty": null,
+    "summonConstructDefId": null
+  },
+  {
+    "recipeId": "v6-over-bannkreis-feuer-sofortzuender",
+    "kind": "overformula",
+    "catalogSlice": "slice1",
+    "techniqueId": "v6-technik-bannkreis",
+    "essenceId": "v6-essenz-feuer",
+    "catalystId": "v6-katalysator-sofortzuender",
+    "name": "Überformel Glutkreis · Sofortzünder",
+    "effectSummary": "Gewinne 3 Schild. Bei Lebensschaden: Brennen, falls keine Reaktion. (verstärkt) Primärwert −1; danach ziehe 1 und wirf 1 ab. Überformel: Primär +2 (fester Slice-1-Bonus). Überformel: Fetzladung wird verbraucht. Formelabwehr −1.",
+    "primary": {
+      "kind": "shield",
+      "value": 3,
+      "target": "self"
+    },
+    "rider": {
+      "id": "rider-brennen",
+      "summary": "Bei Lebensschaden: Brennen, falls keine Reaktion. (verstärkt)",
+      "defenseSuppressible": true
+    },
+    "intensity": 1,
+    "transformId": "xform-sofortzuender",
+    "grantsFetz": false,
+    "catalystConsumed": true,
+    "overformulaPrimaryBonus": 2,
+    "overformulaIntensityBonus": null,
+    "formulaDefensePenalty": -1,
+    "summonConstructDefId": null
+  },
+  {
+    "recipeId": "v6-tek-bannkreis-feuer-opfergabe",
+    "kind": "tek",
+    "catalogSlice": "slice1",
+    "techniqueId": "v6-technik-bannkreis",
+    "essenceId": "v6-essenz-feuer",
+    "catalystId": "v6-katalysator-opfergabe",
+    "name": "Glutkreis · Opfergabe",
+    "effectSummary": "Gewinne 2 Schild. Bei Lebensschaden: Brennen, falls keine Reaktion. Optional: wirf 1 Handkarte ab für Primärwert +2. TEK: +1 Fetzladung (max 1×/Zug).",
+    "primary": {
+      "kind": "shield",
+      "value": 2,
+      "target": "self"
+    },
+    "rider": {
+      "id": "rider-brennen",
+      "summary": "Bei Lebensschaden: Brennen, falls keine Reaktion.",
+      "defenseSuppressible": true
+    },
+    "intensity": 1,
+    "transformId": "xform-opfergabe",
+    "grantsFetz": true,
+    "catalystConsumed": true,
+    "overformulaPrimaryBonus": null,
+    "overformulaIntensityBonus": null,
+    "formulaDefensePenalty": null,
+    "summonConstructDefId": null
+  },
+  {
+    "recipeId": "v6-over-bannkreis-feuer-opfergabe",
+    "kind": "overformula",
+    "catalogSlice": "slice1",
+    "techniqueId": "v6-technik-bannkreis",
+    "essenceId": "v6-essenz-feuer",
+    "catalystId": "v6-katalysator-opfergabe",
+    "name": "Überformel Glutkreis · Opfergabe",
+    "effectSummary": "Gewinne 4 Schild. Bei Lebensschaden: Brennen, falls keine Reaktion. (verstärkt) Optional: wirf 1 Handkarte ab für Primärwert +2. Überformel: Primär +2 (fester Slice-1-Bonus). Überformel: Fetzladung wird verbraucht. Formelabwehr −1.",
+    "primary": {
+      "kind": "shield",
+      "value": 4,
+      "target": "self"
+    },
+    "rider": {
+      "id": "rider-brennen",
+      "summary": "Bei Lebensschaden: Brennen, falls keine Reaktion. (verstärkt)",
+      "defenseSuppressible": true
+    },
+    "intensity": 1,
+    "transformId": "xform-opfergabe",
+    "grantsFetz": false,
+    "catalystConsumed": true,
+    "overformulaPrimaryBonus": 2,
+    "overformulaIntensityBonus": null,
+    "formulaDefensePenalty": -1,
+    "summonConstructDefId": null
+  },
+  {
+    "recipeId": "v6-tek-bannkreis-wasser-ueberladung",
+    "kind": "tek",
+    "catalogSlice": "slice1",
+    "techniqueId": "v6-technik-bannkreis",
+    "essenceId": "v6-essenz-wasser",
+    "catalystId": "v6-katalysator-ueberladung",
+    "name": "Wellenkreis · Überladung",
+    "effectSummary": "Heile 4 Leben. Bei Heilung oder Schildgewinn: entferne optional eine Marke von dir. Primärwert +2; danach erleidest du 1 Selbstschaden. TEK: +1 Fetzladung (max 1×/Zug).",
+    "primary": {
+      "kind": "heal",
+      "value": 4,
+      "target": "self"
+    },
+    "rider": {
+      "id": "rider-reinigen",
+      "summary": "Bei Heilung oder Schildgewinn: entferne optional eine Marke von dir.",
+      "defenseSuppressible": false
+    },
+    "intensity": 1,
+    "transformId": "xform-ueberladung",
+    "grantsFetz": true,
+    "catalystConsumed": true,
+    "overformulaPrimaryBonus": null,
+    "overformulaIntensityBonus": null,
+    "formulaDefensePenalty": null,
+    "summonConstructDefId": null
+  },
+  {
+    "recipeId": "v6-over-bannkreis-wasser-ueberladung",
+    "kind": "overformula",
+    "catalogSlice": "slice1",
+    "techniqueId": "v6-technik-bannkreis",
+    "essenceId": "v6-essenz-wasser",
+    "catalystId": "v6-katalysator-ueberladung",
+    "name": "Überformel Wellenkreis · Überladung",
+    "effectSummary": "Heile 6 Leben. Bei Heilung oder Schildgewinn: entferne optional eine Marke von dir. (verstärkt) Primärwert +2; danach erleidest du 1 Selbstschaden. Überformel: Primär +2 (fester Slice-1-Bonus). Überformel: Fetzladung wird verbraucht. Formelabwehr −1.",
+    "primary": {
+      "kind": "heal",
+      "value": 6,
+      "target": "self"
+    },
+    "rider": {
+      "id": "rider-reinigen",
+      "summary": "Bei Heilung oder Schildgewinn: entferne optional eine Marke von dir. (verstärkt)",
+      "defenseSuppressible": false
+    },
+    "intensity": 1,
+    "transformId": "xform-ueberladung",
+    "grantsFetz": false,
+    "catalystConsumed": true,
+    "overformulaPrimaryBonus": 2,
+    "overformulaIntensityBonus": null,
+    "formulaDefensePenalty": -1,
+    "summonConstructDefId": null
+  },
+  {
+    "recipeId": "v6-tek-bannkreis-wasser-verdichtung",
+    "kind": "tek",
+    "catalogSlice": "slice1",
+    "techniqueId": "v6-technik-bannkreis",
+    "essenceId": "v6-essenz-wasser",
+    "catalystId": "v6-katalysator-verdichtung",
+    "name": "Wellenkreis · Verdichtung",
+    "effectSummary": "Heile 3 Leben. Bei Heilung oder Schildgewinn: entferne optional eine Marke von dir. Primärwert +1; verwendete Komponenten erhalten +1 Stabilität. TEK: +1 Fetzladung (max 1×/Zug).",
+    "primary": {
+      "kind": "heal",
+      "value": 3,
+      "target": "self"
+    },
+    "rider": {
+      "id": "rider-reinigen",
+      "summary": "Bei Heilung oder Schildgewinn: entferne optional eine Marke von dir.",
+      "defenseSuppressible": false
+    },
+    "intensity": 1,
+    "transformId": "xform-verdichtung",
+    "grantsFetz": true,
+    "catalystConsumed": true,
+    "overformulaPrimaryBonus": null,
+    "overformulaIntensityBonus": null,
+    "formulaDefensePenalty": null,
+    "summonConstructDefId": null
+  },
+  {
+    "recipeId": "v6-over-bannkreis-wasser-verdichtung",
+    "kind": "overformula",
+    "catalogSlice": "slice1",
+    "techniqueId": "v6-technik-bannkreis",
+    "essenceId": "v6-essenz-wasser",
+    "catalystId": "v6-katalysator-verdichtung",
+    "name": "Überformel Wellenkreis · Verdichtung",
+    "effectSummary": "Heile 5 Leben. Bei Heilung oder Schildgewinn: entferne optional eine Marke von dir. (verstärkt) Primärwert +1; verwendete Komponenten erhalten +1 Stabilität. Überformel: Primär +2 (fester Slice-1-Bonus). Überformel: Fetzladung wird verbraucht. Formelabwehr −1.",
+    "primary": {
+      "kind": "heal",
+      "value": 5,
+      "target": "self"
+    },
+    "rider": {
+      "id": "rider-reinigen",
+      "summary": "Bei Heilung oder Schildgewinn: entferne optional eine Marke von dir. (verstärkt)",
+      "defenseSuppressible": false
+    },
+    "intensity": 1,
+    "transformId": "xform-verdichtung",
+    "grantsFetz": false,
+    "catalystConsumed": true,
+    "overformulaPrimaryBonus": 2,
+    "overformulaIntensityBonus": null,
+    "formulaDefensePenalty": -1,
+    "summonConstructDefId": null
+  },
+  {
+    "recipeId": "v6-tek-bannkreis-wasser-sofortzuender",
+    "kind": "tek",
+    "catalogSlice": "slice1",
+    "techniqueId": "v6-technik-bannkreis",
+    "essenceId": "v6-essenz-wasser",
+    "catalystId": "v6-katalysator-sofortzuender",
+    "name": "Wellenkreis · Sofortzünder",
+    "effectSummary": "Heile 1 Leben. Bei Heilung oder Schildgewinn: entferne optional eine Marke von dir. Primärwert −1; danach ziehe 1 und wirf 1 ab. TEK: +1 Fetzladung (max 1×/Zug).",
+    "primary": {
+      "kind": "heal",
+      "value": 1,
+      "target": "self"
+    },
+    "rider": {
+      "id": "rider-reinigen",
+      "summary": "Bei Heilung oder Schildgewinn: entferne optional eine Marke von dir.",
+      "defenseSuppressible": false
+    },
+    "intensity": 1,
+    "transformId": "xform-sofortzuender",
+    "grantsFetz": true,
+    "catalystConsumed": true,
+    "overformulaPrimaryBonus": null,
+    "overformulaIntensityBonus": null,
+    "formulaDefensePenalty": null,
+    "summonConstructDefId": null
+  },
+  {
+    "recipeId": "v6-over-bannkreis-wasser-sofortzuender",
+    "kind": "overformula",
+    "catalogSlice": "slice1",
+    "techniqueId": "v6-technik-bannkreis",
+    "essenceId": "v6-essenz-wasser",
+    "catalystId": "v6-katalysator-sofortzuender",
+    "name": "Überformel Wellenkreis · Sofortzünder",
+    "effectSummary": "Heile 3 Leben. Bei Heilung oder Schildgewinn: entferne optional eine Marke von dir. (verstärkt) Primärwert −1; danach ziehe 1 und wirf 1 ab. Überformel: Primär +2 (fester Slice-1-Bonus). Überformel: Fetzladung wird verbraucht. Formelabwehr −1.",
+    "primary": {
+      "kind": "heal",
+      "value": 3,
+      "target": "self"
+    },
+    "rider": {
+      "id": "rider-reinigen",
+      "summary": "Bei Heilung oder Schildgewinn: entferne optional eine Marke von dir. (verstärkt)",
+      "defenseSuppressible": false
+    },
+    "intensity": 1,
+    "transformId": "xform-sofortzuender",
+    "grantsFetz": false,
+    "catalystConsumed": true,
+    "overformulaPrimaryBonus": 2,
+    "overformulaIntensityBonus": null,
+    "formulaDefensePenalty": -1,
+    "summonConstructDefId": null
+  },
+  {
+    "recipeId": "v6-tek-bannkreis-wasser-opfergabe",
+    "kind": "tek",
+    "catalogSlice": "slice1",
+    "techniqueId": "v6-technik-bannkreis",
+    "essenceId": "v6-essenz-wasser",
+    "catalystId": "v6-katalysator-opfergabe",
+    "name": "Wellenkreis · Opfergabe",
+    "effectSummary": "Heile 2 Leben. Bei Heilung oder Schildgewinn: entferne optional eine Marke von dir. Optional: wirf 1 Handkarte ab für Primärwert +2. TEK: +1 Fetzladung (max 1×/Zug).",
+    "primary": {
+      "kind": "heal",
+      "value": 2,
+      "target": "self"
+    },
+    "rider": {
+      "id": "rider-reinigen",
+      "summary": "Bei Heilung oder Schildgewinn: entferne optional eine Marke von dir.",
+      "defenseSuppressible": false
+    },
+    "intensity": 1,
+    "transformId": "xform-opfergabe",
+    "grantsFetz": true,
+    "catalystConsumed": true,
+    "overformulaPrimaryBonus": null,
+    "overformulaIntensityBonus": null,
+    "formulaDefensePenalty": null,
+    "summonConstructDefId": null
+  },
+  {
+    "recipeId": "v6-over-bannkreis-wasser-opfergabe",
+    "kind": "overformula",
+    "catalogSlice": "slice1",
+    "techniqueId": "v6-technik-bannkreis",
+    "essenceId": "v6-essenz-wasser",
+    "catalystId": "v6-katalysator-opfergabe",
+    "name": "Überformel Wellenkreis · Opfergabe",
+    "effectSummary": "Heile 4 Leben. Bei Heilung oder Schildgewinn: entferne optional eine Marke von dir. (verstärkt) Optional: wirf 1 Handkarte ab für Primärwert +2. Überformel: Primär +2 (fester Slice-1-Bonus). Überformel: Fetzladung wird verbraucht. Formelabwehr −1.",
+    "primary": {
+      "kind": "heal",
+      "value": 4,
+      "target": "self"
+    },
+    "rider": {
+      "id": "rider-reinigen",
+      "summary": "Bei Heilung oder Schildgewinn: entferne optional eine Marke von dir. (verstärkt)",
+      "defenseSuppressible": false
+    },
+    "intensity": 1,
+    "transformId": "xform-opfergabe",
+    "grantsFetz": false,
+    "catalystConsumed": true,
+    "overformulaPrimaryBonus": 2,
+    "overformulaIntensityBonus": null,
+    "formulaDefensePenalty": -1,
+    "summonConstructDefId": null
+  },
+  {
+    "recipeId": "v6-tek-bannkreis-erde-ueberladung",
+    "kind": "tek",
+    "catalogSlice": "slice1",
+    "techniqueId": "v6-technik-bannkreis",
+    "essenceId": "v6-essenz-erde",
+    "catalystId": "v6-katalysator-ueberladung",
+    "name": "Felskreis · Überladung",
+    "effectSummary": "Gewinne 4 Schild. Verwendete Komponenten +1 Stabilität bis nächste Startphase. Primärwert +2; danach erleidest du 1 Selbstschaden. TEK: +1 Fetzladung (max 1×/Zug).",
+    "primary": {
+      "kind": "shield",
+      "value": 4,
+      "target": "self"
+    },
+    "rider": {
+      "id": "rider-stabilitaet",
+      "summary": "Verwendete Komponenten +1 Stabilität bis nächste Startphase.",
+      "defenseSuppressible": false
+    },
+    "intensity": 1,
+    "transformId": "xform-ueberladung",
+    "grantsFetz": true,
+    "catalystConsumed": true,
+    "overformulaPrimaryBonus": null,
+    "overformulaIntensityBonus": null,
+    "formulaDefensePenalty": null,
+    "summonConstructDefId": null
+  },
+  {
+    "recipeId": "v6-over-bannkreis-erde-ueberladung",
+    "kind": "overformula",
+    "catalogSlice": "slice1",
+    "techniqueId": "v6-technik-bannkreis",
+    "essenceId": "v6-essenz-erde",
+    "catalystId": "v6-katalysator-ueberladung",
+    "name": "Überformel Felskreis · Überladung",
+    "effectSummary": "Gewinne 6 Schild. Verwendete Komponenten +1 Stabilität bis nächste Startphase. (verstärkt) Primärwert +2; danach erleidest du 1 Selbstschaden. Überformel: Primär +2 (fester Slice-1-Bonus). Überformel: Fetzladung wird verbraucht. Formelabwehr −1.",
+    "primary": {
+      "kind": "shield",
+      "value": 6,
+      "target": "self"
+    },
+    "rider": {
+      "id": "rider-stabilitaet",
+      "summary": "Verwendete Komponenten +1 Stabilität bis nächste Startphase. (verstärkt)",
+      "defenseSuppressible": false
+    },
+    "intensity": 1,
+    "transformId": "xform-ueberladung",
+    "grantsFetz": false,
+    "catalystConsumed": true,
+    "overformulaPrimaryBonus": 2,
+    "overformulaIntensityBonus": null,
+    "formulaDefensePenalty": -1,
+    "summonConstructDefId": null
+  },
+  {
+    "recipeId": "v6-tek-bannkreis-erde-verdichtung",
+    "kind": "tek",
+    "catalogSlice": "slice1",
+    "techniqueId": "v6-technik-bannkreis",
+    "essenceId": "v6-essenz-erde",
+    "catalystId": "v6-katalysator-verdichtung",
+    "name": "Felskreis · Verdichtung",
+    "effectSummary": "Gewinne 3 Schild. Verwendete Komponenten +1 Stabilität bis nächste Startphase. Primärwert +1; verwendete Komponenten erhalten +1 Stabilität. TEK: +1 Fetzladung (max 1×/Zug).",
+    "primary": {
+      "kind": "shield",
+      "value": 3,
+      "target": "self"
+    },
+    "rider": {
+      "id": "rider-stabilitaet",
+      "summary": "Verwendete Komponenten +1 Stabilität bis nächste Startphase.",
+      "defenseSuppressible": false
+    },
+    "intensity": 1,
+    "transformId": "xform-verdichtung",
+    "grantsFetz": true,
+    "catalystConsumed": true,
+    "overformulaPrimaryBonus": null,
+    "overformulaIntensityBonus": null,
+    "formulaDefensePenalty": null,
+    "summonConstructDefId": null
+  },
+  {
+    "recipeId": "v6-over-bannkreis-erde-verdichtung",
+    "kind": "overformula",
+    "catalogSlice": "slice1",
+    "techniqueId": "v6-technik-bannkreis",
+    "essenceId": "v6-essenz-erde",
+    "catalystId": "v6-katalysator-verdichtung",
+    "name": "Überformel Felskreis · Verdichtung",
+    "effectSummary": "Gewinne 5 Schild. Verwendete Komponenten +1 Stabilität bis nächste Startphase. (verstärkt) Primärwert +1; verwendete Komponenten erhalten +1 Stabilität. Überformel: Primär +2 (fester Slice-1-Bonus). Überformel: Fetzladung wird verbraucht. Formelabwehr −1.",
+    "primary": {
+      "kind": "shield",
+      "value": 5,
+      "target": "self"
+    },
+    "rider": {
+      "id": "rider-stabilitaet",
+      "summary": "Verwendete Komponenten +1 Stabilität bis nächste Startphase. (verstärkt)",
+      "defenseSuppressible": false
+    },
+    "intensity": 1,
+    "transformId": "xform-verdichtung",
+    "grantsFetz": false,
+    "catalystConsumed": true,
+    "overformulaPrimaryBonus": 2,
+    "overformulaIntensityBonus": null,
+    "formulaDefensePenalty": -1,
+    "summonConstructDefId": null
+  },
+  {
+    "recipeId": "v6-tek-bannkreis-erde-sofortzuender",
+    "kind": "tek",
+    "catalogSlice": "slice1",
+    "techniqueId": "v6-technik-bannkreis",
+    "essenceId": "v6-essenz-erde",
+    "catalystId": "v6-katalysator-sofortzuender",
+    "name": "Felskreis · Sofortzünder",
+    "effectSummary": "Gewinne 1 Schild. Verwendete Komponenten +1 Stabilität bis nächste Startphase. Primärwert −1; danach ziehe 1 und wirf 1 ab. TEK: +1 Fetzladung (max 1×/Zug).",
+    "primary": {
+      "kind": "shield",
+      "value": 1,
+      "target": "self"
+    },
+    "rider": {
+      "id": "rider-stabilitaet",
+      "summary": "Verwendete Komponenten +1 Stabilität bis nächste Startphase.",
+      "defenseSuppressible": false
+    },
+    "intensity": 1,
+    "transformId": "xform-sofortzuender",
+    "grantsFetz": true,
+    "catalystConsumed": true,
+    "overformulaPrimaryBonus": null,
+    "overformulaIntensityBonus": null,
+    "formulaDefensePenalty": null,
+    "summonConstructDefId": null
+  },
+  {
+    "recipeId": "v6-over-bannkreis-erde-sofortzuender",
+    "kind": "overformula",
+    "catalogSlice": "slice1",
+    "techniqueId": "v6-technik-bannkreis",
+    "essenceId": "v6-essenz-erde",
+    "catalystId": "v6-katalysator-sofortzuender",
+    "name": "Überformel Felskreis · Sofortzünder",
+    "effectSummary": "Gewinne 3 Schild. Verwendete Komponenten +1 Stabilität bis nächste Startphase. (verstärkt) Primärwert −1; danach ziehe 1 und wirf 1 ab. Überformel: Primär +2 (fester Slice-1-Bonus). Überformel: Fetzladung wird verbraucht. Formelabwehr −1.",
+    "primary": {
+      "kind": "shield",
+      "value": 3,
+      "target": "self"
+    },
+    "rider": {
+      "id": "rider-stabilitaet",
+      "summary": "Verwendete Komponenten +1 Stabilität bis nächste Startphase. (verstärkt)",
+      "defenseSuppressible": false
+    },
+    "intensity": 1,
+    "transformId": "xform-sofortzuender",
+    "grantsFetz": false,
+    "catalystConsumed": true,
+    "overformulaPrimaryBonus": 2,
+    "overformulaIntensityBonus": null,
+    "formulaDefensePenalty": -1,
+    "summonConstructDefId": null
+  },
+  {
+    "recipeId": "v6-tek-bannkreis-erde-opfergabe",
+    "kind": "tek",
+    "catalogSlice": "slice1",
+    "techniqueId": "v6-technik-bannkreis",
+    "essenceId": "v6-essenz-erde",
+    "catalystId": "v6-katalysator-opfergabe",
+    "name": "Felskreis · Opfergabe",
+    "effectSummary": "Gewinne 2 Schild. Verwendete Komponenten +1 Stabilität bis nächste Startphase. Optional: wirf 1 Handkarte ab für Primärwert +2. TEK: +1 Fetzladung (max 1×/Zug).",
+    "primary": {
+      "kind": "shield",
+      "value": 2,
+      "target": "self"
+    },
+    "rider": {
+      "id": "rider-stabilitaet",
+      "summary": "Verwendete Komponenten +1 Stabilität bis nächste Startphase.",
+      "defenseSuppressible": false
+    },
+    "intensity": 1,
+    "transformId": "xform-opfergabe",
+    "grantsFetz": true,
+    "catalystConsumed": true,
+    "overformulaPrimaryBonus": null,
+    "overformulaIntensityBonus": null,
+    "formulaDefensePenalty": null,
+    "summonConstructDefId": null
+  },
+  {
+    "recipeId": "v6-over-bannkreis-erde-opfergabe",
+    "kind": "overformula",
+    "catalogSlice": "slice1",
+    "techniqueId": "v6-technik-bannkreis",
+    "essenceId": "v6-essenz-erde",
+    "catalystId": "v6-katalysator-opfergabe",
+    "name": "Überformel Felskreis · Opfergabe",
+    "effectSummary": "Gewinne 4 Schild. Verwendete Komponenten +1 Stabilität bis nächste Startphase. (verstärkt) Optional: wirf 1 Handkarte ab für Primärwert +2. Überformel: Primär +2 (fester Slice-1-Bonus). Überformel: Fetzladung wird verbraucht. Formelabwehr −1.",
+    "primary": {
+      "kind": "shield",
+      "value": 4,
+      "target": "self"
+    },
+    "rider": {
+      "id": "rider-stabilitaet",
+      "summary": "Verwendete Komponenten +1 Stabilität bis nächste Startphase. (verstärkt)",
+      "defenseSuppressible": false
+    },
+    "intensity": 1,
+    "transformId": "xform-opfergabe",
+    "grantsFetz": false,
+    "catalystConsumed": true,
+    "overformulaPrimaryBonus": 2,
+    "overformulaIntensityBonus": null,
+    "formulaDefensePenalty": -1,
+    "summonConstructDefId": null
+  },
+  {
+    "recipeId": "v6-tek-bannkreis-luft-ueberladung",
+    "kind": "tek",
+    "catalogSlice": "slice1",
+    "techniqueId": "v6-technik-bannkreis",
+    "essenceId": "v6-essenz-luft",
+    "catalystId": "v6-katalysator-ueberladung",
+    "name": "Windkreis · Überladung",
+    "effectSummary": "Gewinne 4 Schild. Nächster eigener Aktions-W6 +1 (max +2). Primärwert +2; danach erleidest du 1 Selbstschaden. TEK: +1 Fetzladung (max 1×/Zug).",
+    "primary": {
+      "kind": "shield",
+      "value": 4,
+      "target": "self"
+    },
+    "rider": {
+      "id": "rider-w6",
+      "summary": "Nächster eigener Aktions-W6 +1 (max +2).",
+      "defenseSuppressible": true
+    },
+    "intensity": 1,
+    "transformId": "xform-ueberladung",
+    "grantsFetz": true,
+    "catalystConsumed": true,
+    "overformulaPrimaryBonus": null,
+    "overformulaIntensityBonus": null,
+    "formulaDefensePenalty": null,
+    "summonConstructDefId": null
+  },
+  {
+    "recipeId": "v6-over-bannkreis-luft-ueberladung",
+    "kind": "overformula",
+    "catalogSlice": "slice1",
+    "techniqueId": "v6-technik-bannkreis",
+    "essenceId": "v6-essenz-luft",
+    "catalystId": "v6-katalysator-ueberladung",
+    "name": "Überformel Windkreis · Überladung",
+    "effectSummary": "Gewinne 6 Schild. Nächster eigener Aktions-W6 +1 (max +2). (verstärkt) Primärwert +2; danach erleidest du 1 Selbstschaden. Überformel: Primär +2 (fester Slice-1-Bonus). Überformel: Fetzladung wird verbraucht. Formelabwehr −1.",
+    "primary": {
+      "kind": "shield",
+      "value": 6,
+      "target": "self"
+    },
+    "rider": {
+      "id": "rider-w6",
+      "summary": "Nächster eigener Aktions-W6 +1 (max +2). (verstärkt)",
+      "defenseSuppressible": true
+    },
+    "intensity": 1,
+    "transformId": "xform-ueberladung",
+    "grantsFetz": false,
+    "catalystConsumed": true,
+    "overformulaPrimaryBonus": 2,
+    "overformulaIntensityBonus": null,
+    "formulaDefensePenalty": -1,
+    "summonConstructDefId": null
+  },
+  {
+    "recipeId": "v6-tek-bannkreis-luft-verdichtung",
+    "kind": "tek",
+    "catalogSlice": "slice1",
+    "techniqueId": "v6-technik-bannkreis",
+    "essenceId": "v6-essenz-luft",
+    "catalystId": "v6-katalysator-verdichtung",
+    "name": "Windkreis · Verdichtung",
+    "effectSummary": "Gewinne 3 Schild. Nächster eigener Aktions-W6 +1 (max +2). Primärwert +1; verwendete Komponenten erhalten +1 Stabilität. TEK: +1 Fetzladung (max 1×/Zug).",
+    "primary": {
+      "kind": "shield",
+      "value": 3,
+      "target": "self"
+    },
+    "rider": {
+      "id": "rider-w6",
+      "summary": "Nächster eigener Aktions-W6 +1 (max +2).",
+      "defenseSuppressible": true
+    },
+    "intensity": 1,
+    "transformId": "xform-verdichtung",
+    "grantsFetz": true,
+    "catalystConsumed": true,
+    "overformulaPrimaryBonus": null,
+    "overformulaIntensityBonus": null,
+    "formulaDefensePenalty": null,
+    "summonConstructDefId": null
+  },
+  {
+    "recipeId": "v6-over-bannkreis-luft-verdichtung",
+    "kind": "overformula",
+    "catalogSlice": "slice1",
+    "techniqueId": "v6-technik-bannkreis",
+    "essenceId": "v6-essenz-luft",
+    "catalystId": "v6-katalysator-verdichtung",
+    "name": "Überformel Windkreis · Verdichtung",
+    "effectSummary": "Gewinne 5 Schild. Nächster eigener Aktions-W6 +1 (max +2). (verstärkt) Primärwert +1; verwendete Komponenten erhalten +1 Stabilität. Überformel: Primär +2 (fester Slice-1-Bonus). Überformel: Fetzladung wird verbraucht. Formelabwehr −1.",
+    "primary": {
+      "kind": "shield",
+      "value": 5,
+      "target": "self"
+    },
+    "rider": {
+      "id": "rider-w6",
+      "summary": "Nächster eigener Aktions-W6 +1 (max +2). (verstärkt)",
+      "defenseSuppressible": true
+    },
+    "intensity": 1,
+    "transformId": "xform-verdichtung",
+    "grantsFetz": false,
+    "catalystConsumed": true,
+    "overformulaPrimaryBonus": 2,
+    "overformulaIntensityBonus": null,
+    "formulaDefensePenalty": -1,
+    "summonConstructDefId": null
+  },
+  {
+    "recipeId": "v6-tek-bannkreis-luft-sofortzuender",
+    "kind": "tek",
+    "catalogSlice": "slice1",
+    "techniqueId": "v6-technik-bannkreis",
+    "essenceId": "v6-essenz-luft",
+    "catalystId": "v6-katalysator-sofortzuender",
+    "name": "Windkreis · Sofortzünder",
+    "effectSummary": "Gewinne 1 Schild. Nächster eigener Aktions-W6 +1 (max +2). Primärwert −1; danach ziehe 1 und wirf 1 ab. TEK: +1 Fetzladung (max 1×/Zug).",
+    "primary": {
+      "kind": "shield",
+      "value": 1,
+      "target": "self"
+    },
+    "rider": {
+      "id": "rider-w6",
+      "summary": "Nächster eigener Aktions-W6 +1 (max +2).",
+      "defenseSuppressible": true
+    },
+    "intensity": 1,
+    "transformId": "xform-sofortzuender",
+    "grantsFetz": true,
+    "catalystConsumed": true,
+    "overformulaPrimaryBonus": null,
+    "overformulaIntensityBonus": null,
+    "formulaDefensePenalty": null,
+    "summonConstructDefId": null
+  },
+  {
+    "recipeId": "v6-over-bannkreis-luft-sofortzuender",
+    "kind": "overformula",
+    "catalogSlice": "slice1",
+    "techniqueId": "v6-technik-bannkreis",
+    "essenceId": "v6-essenz-luft",
+    "catalystId": "v6-katalysator-sofortzuender",
+    "name": "Überformel Windkreis · Sofortzünder",
+    "effectSummary": "Gewinne 3 Schild. Nächster eigener Aktions-W6 +1 (max +2). (verstärkt) Primärwert −1; danach ziehe 1 und wirf 1 ab. Überformel: Primär +2 (fester Slice-1-Bonus). Überformel: Fetzladung wird verbraucht. Formelabwehr −1.",
+    "primary": {
+      "kind": "shield",
+      "value": 3,
+      "target": "self"
+    },
+    "rider": {
+      "id": "rider-w6",
+      "summary": "Nächster eigener Aktions-W6 +1 (max +2). (verstärkt)",
+      "defenseSuppressible": true
+    },
+    "intensity": 1,
+    "transformId": "xform-sofortzuender",
+    "grantsFetz": false,
+    "catalystConsumed": true,
+    "overformulaPrimaryBonus": 2,
+    "overformulaIntensityBonus": null,
+    "formulaDefensePenalty": -1,
+    "summonConstructDefId": null
+  },
+  {
+    "recipeId": "v6-tek-bannkreis-luft-opfergabe",
+    "kind": "tek",
+    "catalogSlice": "slice1",
+    "techniqueId": "v6-technik-bannkreis",
+    "essenceId": "v6-essenz-luft",
+    "catalystId": "v6-katalysator-opfergabe",
+    "name": "Windkreis · Opfergabe",
+    "effectSummary": "Gewinne 2 Schild. Nächster eigener Aktions-W6 +1 (max +2). Optional: wirf 1 Handkarte ab für Primärwert +2. TEK: +1 Fetzladung (max 1×/Zug).",
+    "primary": {
+      "kind": "shield",
+      "value": 2,
+      "target": "self"
+    },
+    "rider": {
+      "id": "rider-w6",
+      "summary": "Nächster eigener Aktions-W6 +1 (max +2).",
+      "defenseSuppressible": true
+    },
+    "intensity": 1,
+    "transformId": "xform-opfergabe",
+    "grantsFetz": true,
+    "catalystConsumed": true,
+    "overformulaPrimaryBonus": null,
+    "overformulaIntensityBonus": null,
+    "formulaDefensePenalty": null,
+    "summonConstructDefId": null
+  },
+  {
+    "recipeId": "v6-over-bannkreis-luft-opfergabe",
+    "kind": "overformula",
+    "catalogSlice": "slice1",
+    "techniqueId": "v6-technik-bannkreis",
+    "essenceId": "v6-essenz-luft",
+    "catalystId": "v6-katalysator-opfergabe",
+    "name": "Überformel Windkreis · Opfergabe",
+    "effectSummary": "Gewinne 4 Schild. Nächster eigener Aktions-W6 +1 (max +2). (verstärkt) Optional: wirf 1 Handkarte ab für Primärwert +2. Überformel: Primär +2 (fester Slice-1-Bonus). Überformel: Fetzladung wird verbraucht. Formelabwehr −1.",
+    "primary": {
+      "kind": "shield",
+      "value": 4,
+      "target": "self"
+    },
+    "rider": {
+      "id": "rider-w6",
+      "summary": "Nächster eigener Aktions-W6 +1 (max +2). (verstärkt)",
+      "defenseSuppressible": true
+    },
+    "intensity": 1,
+    "transformId": "xform-opfergabe",
+    "grantsFetz": false,
+    "catalystConsumed": true,
+    "overformulaPrimaryBonus": 2,
+    "overformulaIntensityBonus": null,
+    "formulaDefensePenalty": -1,
+    "summonConstructDefId": null
+  },
+  {
+    "recipeId": "v6-tek-bannkreis-licht-ueberladung",
+    "kind": "tek",
+    "catalogSlice": "slice1",
+    "techniqueId": "v6-technik-bannkreis",
+    "essenceId": "v6-essenz-licht",
+    "catalystId": "v6-katalysator-ueberladung",
+    "name": "Lichtkreis · Überladung",
+    "effectSummary": "Gewinne 4 Schild. Bei Schildgewinn: entferne optional eine Marke von dir. Primärwert +2; danach erleidest du 1 Selbstschaden. TEK: +1 Fetzladung (max 1×/Zug).",
+    "primary": {
+      "kind": "shield",
+      "value": 4,
+      "target": "self"
+    },
+    "rider": {
+      "id": "rider-reinigen-licht",
+      "summary": "Bei Schildgewinn: entferne optional eine Marke von dir.",
+      "defenseSuppressible": false
+    },
+    "intensity": 1,
+    "transformId": "xform-ueberladung",
+    "grantsFetz": true,
+    "catalystConsumed": true,
+    "overformulaPrimaryBonus": null,
+    "overformulaIntensityBonus": null,
+    "formulaDefensePenalty": null,
+    "summonConstructDefId": null
+  },
+  {
+    "recipeId": "v6-over-bannkreis-licht-ueberladung",
+    "kind": "overformula",
+    "catalogSlice": "slice1",
+    "techniqueId": "v6-technik-bannkreis",
+    "essenceId": "v6-essenz-licht",
+    "catalystId": "v6-katalysator-ueberladung",
+    "name": "Überformel Lichtkreis · Überladung",
+    "effectSummary": "Gewinne 6 Schild. Bei Schildgewinn: entferne optional eine Marke von dir. (verstärkt) Primärwert +2; danach erleidest du 1 Selbstschaden. Überformel: Primär +2 (fester Slice-1-Bonus). Überformel: Fetzladung wird verbraucht. Formelabwehr −1.",
+    "primary": {
+      "kind": "shield",
+      "value": 6,
+      "target": "self"
+    },
+    "rider": {
+      "id": "rider-reinigen-licht",
+      "summary": "Bei Schildgewinn: entferne optional eine Marke von dir. (verstärkt)",
+      "defenseSuppressible": false
+    },
+    "intensity": 1,
+    "transformId": "xform-ueberladung",
+    "grantsFetz": false,
+    "catalystConsumed": true,
+    "overformulaPrimaryBonus": 2,
+    "overformulaIntensityBonus": null,
+    "formulaDefensePenalty": -1,
+    "summonConstructDefId": null
+  },
+  {
+    "recipeId": "v6-tek-bannkreis-licht-verdichtung",
+    "kind": "tek",
+    "catalogSlice": "slice1",
+    "techniqueId": "v6-technik-bannkreis",
+    "essenceId": "v6-essenz-licht",
+    "catalystId": "v6-katalysator-verdichtung",
+    "name": "Lichtkreis · Verdichtung",
+    "effectSummary": "Gewinne 3 Schild. Bei Schildgewinn: entferne optional eine Marke von dir. Primärwert +1; verwendete Komponenten erhalten +1 Stabilität. TEK: +1 Fetzladung (max 1×/Zug).",
+    "primary": {
+      "kind": "shield",
+      "value": 3,
+      "target": "self"
+    },
+    "rider": {
+      "id": "rider-reinigen-licht",
+      "summary": "Bei Schildgewinn: entferne optional eine Marke von dir.",
+      "defenseSuppressible": false
+    },
+    "intensity": 1,
+    "transformId": "xform-verdichtung",
+    "grantsFetz": true,
+    "catalystConsumed": true,
+    "overformulaPrimaryBonus": null,
+    "overformulaIntensityBonus": null,
+    "formulaDefensePenalty": null,
+    "summonConstructDefId": null
+  },
+  {
+    "recipeId": "v6-over-bannkreis-licht-verdichtung",
+    "kind": "overformula",
+    "catalogSlice": "slice1",
+    "techniqueId": "v6-technik-bannkreis",
+    "essenceId": "v6-essenz-licht",
+    "catalystId": "v6-katalysator-verdichtung",
+    "name": "Überformel Lichtkreis · Verdichtung",
+    "effectSummary": "Gewinne 5 Schild. Bei Schildgewinn: entferne optional eine Marke von dir. (verstärkt) Primärwert +1; verwendete Komponenten erhalten +1 Stabilität. Überformel: Primär +2 (fester Slice-1-Bonus). Überformel: Fetzladung wird verbraucht. Formelabwehr −1.",
+    "primary": {
+      "kind": "shield",
+      "value": 5,
+      "target": "self"
+    },
+    "rider": {
+      "id": "rider-reinigen-licht",
+      "summary": "Bei Schildgewinn: entferne optional eine Marke von dir. (verstärkt)",
+      "defenseSuppressible": false
+    },
+    "intensity": 1,
+    "transformId": "xform-verdichtung",
+    "grantsFetz": false,
+    "catalystConsumed": true,
+    "overformulaPrimaryBonus": 2,
+    "overformulaIntensityBonus": null,
+    "formulaDefensePenalty": -1,
+    "summonConstructDefId": null
+  },
+  {
+    "recipeId": "v6-tek-bannkreis-licht-sofortzuender",
+    "kind": "tek",
+    "catalogSlice": "slice1",
+    "techniqueId": "v6-technik-bannkreis",
+    "essenceId": "v6-essenz-licht",
+    "catalystId": "v6-katalysator-sofortzuender",
+    "name": "Lichtkreis · Sofortzünder",
+    "effectSummary": "Gewinne 1 Schild. Bei Schildgewinn: entferne optional eine Marke von dir. Primärwert −1; danach ziehe 1 und wirf 1 ab. TEK: +1 Fetzladung (max 1×/Zug).",
+    "primary": {
+      "kind": "shield",
+      "value": 1,
+      "target": "self"
+    },
+    "rider": {
+      "id": "rider-reinigen-licht",
+      "summary": "Bei Schildgewinn: entferne optional eine Marke von dir.",
+      "defenseSuppressible": false
+    },
+    "intensity": 1,
+    "transformId": "xform-sofortzuender",
+    "grantsFetz": true,
+    "catalystConsumed": true,
+    "overformulaPrimaryBonus": null,
+    "overformulaIntensityBonus": null,
+    "formulaDefensePenalty": null,
+    "summonConstructDefId": null
+  },
+  {
+    "recipeId": "v6-over-bannkreis-licht-sofortzuender",
+    "kind": "overformula",
+    "catalogSlice": "slice1",
+    "techniqueId": "v6-technik-bannkreis",
+    "essenceId": "v6-essenz-licht",
+    "catalystId": "v6-katalysator-sofortzuender",
+    "name": "Überformel Lichtkreis · Sofortzünder",
+    "effectSummary": "Gewinne 3 Schild. Bei Schildgewinn: entferne optional eine Marke von dir. (verstärkt) Primärwert −1; danach ziehe 1 und wirf 1 ab. Überformel: Primär +2 (fester Slice-1-Bonus). Überformel: Fetzladung wird verbraucht. Formelabwehr −1.",
+    "primary": {
+      "kind": "shield",
+      "value": 3,
+      "target": "self"
+    },
+    "rider": {
+      "id": "rider-reinigen-licht",
+      "summary": "Bei Schildgewinn: entferne optional eine Marke von dir. (verstärkt)",
+      "defenseSuppressible": false
+    },
+    "intensity": 1,
+    "transformId": "xform-sofortzuender",
+    "grantsFetz": false,
+    "catalystConsumed": true,
+    "overformulaPrimaryBonus": 2,
+    "overformulaIntensityBonus": null,
+    "formulaDefensePenalty": -1,
+    "summonConstructDefId": null
+  },
+  {
+    "recipeId": "v6-tek-bannkreis-licht-opfergabe",
+    "kind": "tek",
+    "catalogSlice": "slice1",
+    "techniqueId": "v6-technik-bannkreis",
+    "essenceId": "v6-essenz-licht",
+    "catalystId": "v6-katalysator-opfergabe",
+    "name": "Lichtkreis · Opfergabe",
+    "effectSummary": "Gewinne 2 Schild. Bei Schildgewinn: entferne optional eine Marke von dir. Optional: wirf 1 Handkarte ab für Primärwert +2. TEK: +1 Fetzladung (max 1×/Zug).",
+    "primary": {
+      "kind": "shield",
+      "value": 2,
+      "target": "self"
+    },
+    "rider": {
+      "id": "rider-reinigen-licht",
+      "summary": "Bei Schildgewinn: entferne optional eine Marke von dir.",
+      "defenseSuppressible": false
+    },
+    "intensity": 1,
+    "transformId": "xform-opfergabe",
+    "grantsFetz": true,
+    "catalystConsumed": true,
+    "overformulaPrimaryBonus": null,
+    "overformulaIntensityBonus": null,
+    "formulaDefensePenalty": null,
+    "summonConstructDefId": null
+  },
+  {
+    "recipeId": "v6-over-bannkreis-licht-opfergabe",
+    "kind": "overformula",
+    "catalogSlice": "slice1",
+    "techniqueId": "v6-technik-bannkreis",
+    "essenceId": "v6-essenz-licht",
+    "catalystId": "v6-katalysator-opfergabe",
+    "name": "Überformel Lichtkreis · Opfergabe",
+    "effectSummary": "Gewinne 4 Schild. Bei Schildgewinn: entferne optional eine Marke von dir. (verstärkt) Optional: wirf 1 Handkarte ab für Primärwert +2. Überformel: Primär +2 (fester Slice-1-Bonus). Überformel: Fetzladung wird verbraucht. Formelabwehr −1.",
+    "primary": {
+      "kind": "shield",
+      "value": 4,
+      "target": "self"
+    },
+    "rider": {
+      "id": "rider-reinigen-licht",
+      "summary": "Bei Schildgewinn: entferne optional eine Marke von dir. (verstärkt)",
+      "defenseSuppressible": false
+    },
+    "intensity": 1,
+    "transformId": "xform-opfergabe",
+    "grantsFetz": false,
+    "catalystConsumed": true,
+    "overformulaPrimaryBonus": 2,
+    "overformulaIntensityBonus": null,
+    "formulaDefensePenalty": -1,
+    "summonConstructDefId": null
+  },
+  {
+    "recipeId": "v6-tek-bannkreis-schatten-ueberladung",
+    "kind": "tek",
+    "catalogSlice": "slice1",
+    "techniqueId": "v6-technik-bannkreis",
+    "essenceId": "v6-essenz-schatten",
+    "catalystId": "v6-katalysator-ueberladung",
+    "name": "Schattenkreis · Überladung",
+    "effectSummary": "Gewinne 4 Schild. Bei Treffer: erschöpfe optional 1 gegnerische Formelkomponente. Primärwert +2; danach erleidest du 1 Selbstschaden. TEK: +1 Fetzladung (max 1×/Zug).",
+    "primary": {
+      "kind": "shield",
+      "value": 4,
+      "target": "self"
+    },
+    "rider": {
+      "id": "rider-fluch",
+      "summary": "Bei Treffer: erschöpfe optional 1 gegnerische Formelkomponente.",
+      "defenseSuppressible": true
+    },
+    "intensity": 1,
+    "transformId": "xform-ueberladung",
+    "grantsFetz": true,
+    "catalystConsumed": true,
+    "overformulaPrimaryBonus": null,
+    "overformulaIntensityBonus": null,
+    "formulaDefensePenalty": null,
+    "summonConstructDefId": null
+  },
+  {
+    "recipeId": "v6-over-bannkreis-schatten-ueberladung",
+    "kind": "overformula",
+    "catalogSlice": "slice1",
+    "techniqueId": "v6-technik-bannkreis",
+    "essenceId": "v6-essenz-schatten",
+    "catalystId": "v6-katalysator-ueberladung",
+    "name": "Überformel Schattenkreis · Überladung",
+    "effectSummary": "Gewinne 6 Schild. Bei Treffer: erschöpfe optional 1 gegnerische Formelkomponente. (verstärkt) Primärwert +2; danach erleidest du 1 Selbstschaden. Überformel: Primär +2 (fester Slice-1-Bonus). Überformel: Fetzladung wird verbraucht. Formelabwehr −1.",
+    "primary": {
+      "kind": "shield",
+      "value": 6,
+      "target": "self"
+    },
+    "rider": {
+      "id": "rider-fluch",
+      "summary": "Bei Treffer: erschöpfe optional 1 gegnerische Formelkomponente. (verstärkt)",
+      "defenseSuppressible": true
+    },
+    "intensity": 1,
+    "transformId": "xform-ueberladung",
+    "grantsFetz": false,
+    "catalystConsumed": true,
+    "overformulaPrimaryBonus": 2,
+    "overformulaIntensityBonus": null,
+    "formulaDefensePenalty": -1,
+    "summonConstructDefId": null
+  },
+  {
+    "recipeId": "v6-tek-bannkreis-schatten-verdichtung",
+    "kind": "tek",
+    "catalogSlice": "slice1",
+    "techniqueId": "v6-technik-bannkreis",
+    "essenceId": "v6-essenz-schatten",
+    "catalystId": "v6-katalysator-verdichtung",
+    "name": "Schattenkreis · Verdichtung",
+    "effectSummary": "Gewinne 3 Schild. Bei Treffer: erschöpfe optional 1 gegnerische Formelkomponente. Primärwert +1; verwendete Komponenten erhalten +1 Stabilität. TEK: +1 Fetzladung (max 1×/Zug).",
+    "primary": {
+      "kind": "shield",
+      "value": 3,
+      "target": "self"
+    },
+    "rider": {
+      "id": "rider-fluch",
+      "summary": "Bei Treffer: erschöpfe optional 1 gegnerische Formelkomponente.",
+      "defenseSuppressible": true
+    },
+    "intensity": 1,
+    "transformId": "xform-verdichtung",
+    "grantsFetz": true,
+    "catalystConsumed": true,
+    "overformulaPrimaryBonus": null,
+    "overformulaIntensityBonus": null,
+    "formulaDefensePenalty": null,
+    "summonConstructDefId": null
+  },
+  {
+    "recipeId": "v6-over-bannkreis-schatten-verdichtung",
+    "kind": "overformula",
+    "catalogSlice": "slice1",
+    "techniqueId": "v6-technik-bannkreis",
+    "essenceId": "v6-essenz-schatten",
+    "catalystId": "v6-katalysator-verdichtung",
+    "name": "Überformel Schattenkreis · Verdichtung",
+    "effectSummary": "Gewinne 5 Schild. Bei Treffer: erschöpfe optional 1 gegnerische Formelkomponente. (verstärkt) Primärwert +1; verwendete Komponenten erhalten +1 Stabilität. Überformel: Primär +2 (fester Slice-1-Bonus). Überformel: Fetzladung wird verbraucht. Formelabwehr −1.",
+    "primary": {
+      "kind": "shield",
+      "value": 5,
+      "target": "self"
+    },
+    "rider": {
+      "id": "rider-fluch",
+      "summary": "Bei Treffer: erschöpfe optional 1 gegnerische Formelkomponente. (verstärkt)",
+      "defenseSuppressible": true
+    },
+    "intensity": 1,
+    "transformId": "xform-verdichtung",
+    "grantsFetz": false,
+    "catalystConsumed": true,
+    "overformulaPrimaryBonus": 2,
+    "overformulaIntensityBonus": null,
+    "formulaDefensePenalty": -1,
+    "summonConstructDefId": null
+  },
+  {
+    "recipeId": "v6-tek-bannkreis-schatten-sofortzuender",
+    "kind": "tek",
+    "catalogSlice": "slice1",
+    "techniqueId": "v6-technik-bannkreis",
+    "essenceId": "v6-essenz-schatten",
+    "catalystId": "v6-katalysator-sofortzuender",
+    "name": "Schattenkreis · Sofortzünder",
+    "effectSummary": "Gewinne 1 Schild. Bei Treffer: erschöpfe optional 1 gegnerische Formelkomponente. Primärwert −1; danach ziehe 1 und wirf 1 ab. TEK: +1 Fetzladung (max 1×/Zug).",
+    "primary": {
+      "kind": "shield",
+      "value": 1,
+      "target": "self"
+    },
+    "rider": {
+      "id": "rider-fluch",
+      "summary": "Bei Treffer: erschöpfe optional 1 gegnerische Formelkomponente.",
+      "defenseSuppressible": true
+    },
+    "intensity": 1,
+    "transformId": "xform-sofortzuender",
+    "grantsFetz": true,
+    "catalystConsumed": true,
+    "overformulaPrimaryBonus": null,
+    "overformulaIntensityBonus": null,
+    "formulaDefensePenalty": null,
+    "summonConstructDefId": null
+  },
+  {
+    "recipeId": "v6-over-bannkreis-schatten-sofortzuender",
+    "kind": "overformula",
+    "catalogSlice": "slice1",
+    "techniqueId": "v6-technik-bannkreis",
+    "essenceId": "v6-essenz-schatten",
+    "catalystId": "v6-katalysator-sofortzuender",
+    "name": "Überformel Schattenkreis · Sofortzünder",
+    "effectSummary": "Gewinne 3 Schild. Bei Treffer: erschöpfe optional 1 gegnerische Formelkomponente. (verstärkt) Primärwert −1; danach ziehe 1 und wirf 1 ab. Überformel: Primär +2 (fester Slice-1-Bonus). Überformel: Fetzladung wird verbraucht. Formelabwehr −1.",
+    "primary": {
+      "kind": "shield",
+      "value": 3,
+      "target": "self"
+    },
+    "rider": {
+      "id": "rider-fluch",
+      "summary": "Bei Treffer: erschöpfe optional 1 gegnerische Formelkomponente. (verstärkt)",
+      "defenseSuppressible": true
+    },
+    "intensity": 1,
+    "transformId": "xform-sofortzuender",
+    "grantsFetz": false,
+    "catalystConsumed": true,
+    "overformulaPrimaryBonus": 2,
+    "overformulaIntensityBonus": null,
+    "formulaDefensePenalty": -1,
+    "summonConstructDefId": null
+  },
+  {
+    "recipeId": "v6-tek-bannkreis-schatten-opfergabe",
+    "kind": "tek",
+    "catalogSlice": "slice1",
+    "techniqueId": "v6-technik-bannkreis",
+    "essenceId": "v6-essenz-schatten",
+    "catalystId": "v6-katalysator-opfergabe",
+    "name": "Schattenkreis · Opfergabe",
+    "effectSummary": "Gewinne 2 Schild. Bei Treffer: erschöpfe optional 1 gegnerische Formelkomponente. Optional: wirf 1 Handkarte ab für Primärwert +2. TEK: +1 Fetzladung (max 1×/Zug).",
+    "primary": {
+      "kind": "shield",
+      "value": 2,
+      "target": "self"
+    },
+    "rider": {
+      "id": "rider-fluch",
+      "summary": "Bei Treffer: erschöpfe optional 1 gegnerische Formelkomponente.",
+      "defenseSuppressible": true
+    },
+    "intensity": 1,
+    "transformId": "xform-opfergabe",
+    "grantsFetz": true,
+    "catalystConsumed": true,
+    "overformulaPrimaryBonus": null,
+    "overformulaIntensityBonus": null,
+    "formulaDefensePenalty": null,
+    "summonConstructDefId": null
+  },
+  {
+    "recipeId": "v6-over-bannkreis-schatten-opfergabe",
+    "kind": "overformula",
+    "catalogSlice": "slice1",
+    "techniqueId": "v6-technik-bannkreis",
+    "essenceId": "v6-essenz-schatten",
+    "catalystId": "v6-katalysator-opfergabe",
+    "name": "Überformel Schattenkreis · Opfergabe",
+    "effectSummary": "Gewinne 4 Schild. Bei Treffer: erschöpfe optional 1 gegnerische Formelkomponente. (verstärkt) Optional: wirf 1 Handkarte ab für Primärwert +2. Überformel: Primär +2 (fester Slice-1-Bonus). Überformel: Fetzladung wird verbraucht. Formelabwehr −1.",
+    "primary": {
+      "kind": "shield",
+      "value": 4,
+      "target": "self"
+    },
+    "rider": {
+      "id": "rider-fluch",
+      "summary": "Bei Treffer: erschöpfe optional 1 gegnerische Formelkomponente. (verstärkt)",
+      "defenseSuppressible": true
+    },
+    "intensity": 1,
+    "transformId": "xform-opfergabe",
+    "grantsFetz": false,
+    "catalystConsumed": true,
+    "overformulaPrimaryBonus": 2,
+    "overformulaIntensityBonus": null,
+    "formulaDefensePenalty": -1,
+    "summonConstructDefId": null
+  },
+  {
+    "recipeId": "v6-tek-ueberraschungsangriff-feuer-ueberladung",
+    "kind": "tek",
+    "catalogSlice": "slice1",
+    "techniqueId": "v6-technik-ueberraschungsangriff",
+    "essenceId": "v6-essenz-feuer",
+    "catalystId": "v6-katalysator-ueberladung",
+    "name": "Glutüberraschung · Überladung",
+    "effectSummary": "Verursache 5 Schaden am Gegner. Bei Lebensschaden: Brennen, falls keine Reaktion. Primärwert +2; danach erleidest du 1 Selbstschaden. TEK: +1 Fetzladung (max 1×/Zug).",
+    "primary": {
+      "kind": "damage",
+      "value": 5,
+      "target": "opponent",
+      "offensive": true
+    },
+    "rider": {
+      "id": "rider-brennen",
+      "summary": "Bei Lebensschaden: Brennen, falls keine Reaktion.",
+      "defenseSuppressible": true
+    },
+    "intensity": null,
+    "transformId": "xform-ueberladung",
+    "grantsFetz": true,
+    "catalystConsumed": true,
+    "overformulaPrimaryBonus": null,
+    "overformulaIntensityBonus": null,
+    "formulaDefensePenalty": null,
+    "summonConstructDefId": null
+  },
+  {
+    "recipeId": "v6-over-ueberraschungsangriff-feuer-ueberladung",
+    "kind": "overformula",
+    "catalogSlice": "slice1",
+    "techniqueId": "v6-technik-ueberraschungsangriff",
+    "essenceId": "v6-essenz-feuer",
+    "catalystId": "v6-katalysator-ueberladung",
+    "name": "Überformel Glutüberraschung · Überladung",
+    "effectSummary": "Verursache 7 Schaden am Gegner. Bei Lebensschaden: Brennen, falls keine Reaktion. (verstärkt) Primärwert +2; danach erleidest du 1 Selbstschaden. Überformel: Primär +2 (fester Slice-1-Bonus). Überformel: Fetzladung wird verbraucht. Formelabwehr −1.",
+    "primary": {
+      "kind": "damage",
+      "value": 7,
+      "target": "opponent",
+      "offensive": true
+    },
+    "rider": {
+      "id": "rider-brennen",
+      "summary": "Bei Lebensschaden: Brennen, falls keine Reaktion. (verstärkt)",
+      "defenseSuppressible": true
+    },
+    "intensity": null,
+    "transformId": "xform-ueberladung",
+    "grantsFetz": false,
+    "catalystConsumed": true,
+    "overformulaPrimaryBonus": 2,
+    "overformulaIntensityBonus": null,
+    "formulaDefensePenalty": -1,
+    "summonConstructDefId": null
+  },
+  {
+    "recipeId": "v6-tek-ueberraschungsangriff-feuer-verdichtung",
+    "kind": "tek",
+    "catalogSlice": "slice1",
+    "techniqueId": "v6-technik-ueberraschungsangriff",
+    "essenceId": "v6-essenz-feuer",
+    "catalystId": "v6-katalysator-verdichtung",
+    "name": "Glutüberraschung · Verdichtung",
+    "effectSummary": "Verursache 4 Schaden am Gegner. Bei Lebensschaden: Brennen, falls keine Reaktion. Primärwert +1; verwendete Komponenten erhalten +1 Stabilität. TEK: +1 Fetzladung (max 1×/Zug).",
+    "primary": {
+      "kind": "damage",
+      "value": 4,
+      "target": "opponent",
+      "offensive": true
+    },
+    "rider": {
+      "id": "rider-brennen",
+      "summary": "Bei Lebensschaden: Brennen, falls keine Reaktion.",
+      "defenseSuppressible": true
+    },
+    "intensity": null,
+    "transformId": "xform-verdichtung",
+    "grantsFetz": true,
+    "catalystConsumed": true,
+    "overformulaPrimaryBonus": null,
+    "overformulaIntensityBonus": null,
+    "formulaDefensePenalty": null,
+    "summonConstructDefId": null
+  },
+  {
+    "recipeId": "v6-over-ueberraschungsangriff-feuer-verdichtung",
+    "kind": "overformula",
+    "catalogSlice": "slice1",
+    "techniqueId": "v6-technik-ueberraschungsangriff",
+    "essenceId": "v6-essenz-feuer",
+    "catalystId": "v6-katalysator-verdichtung",
+    "name": "Überformel Glutüberraschung · Verdichtung",
+    "effectSummary": "Verursache 6 Schaden am Gegner. Bei Lebensschaden: Brennen, falls keine Reaktion. (verstärkt) Primärwert +1; verwendete Komponenten erhalten +1 Stabilität. Überformel: Primär +2 (fester Slice-1-Bonus). Überformel: Fetzladung wird verbraucht. Formelabwehr −1.",
+    "primary": {
+      "kind": "damage",
+      "value": 6,
+      "target": "opponent",
+      "offensive": true
+    },
+    "rider": {
+      "id": "rider-brennen",
+      "summary": "Bei Lebensschaden: Brennen, falls keine Reaktion. (verstärkt)",
+      "defenseSuppressible": true
+    },
+    "intensity": null,
+    "transformId": "xform-verdichtung",
+    "grantsFetz": false,
+    "catalystConsumed": true,
+    "overformulaPrimaryBonus": 2,
+    "overformulaIntensityBonus": null,
+    "formulaDefensePenalty": -1,
+    "summonConstructDefId": null
+  },
+  {
+    "recipeId": "v6-tek-ueberraschungsangriff-feuer-sofortzuender",
+    "kind": "tek",
+    "catalogSlice": "slice1",
+    "techniqueId": "v6-technik-ueberraschungsangriff",
+    "essenceId": "v6-essenz-feuer",
+    "catalystId": "v6-katalysator-sofortzuender",
+    "name": "Glutüberraschung · Sofortzünder",
+    "effectSummary": "Verursache 2 Schaden am Gegner. Bei Lebensschaden: Brennen, falls keine Reaktion. Primärwert −1; danach ziehe 1 und wirf 1 ab. TEK: +1 Fetzladung (max 1×/Zug).",
+    "primary": {
+      "kind": "damage",
+      "value": 2,
+      "target": "opponent",
+      "offensive": true
+    },
+    "rider": {
+      "id": "rider-brennen",
+      "summary": "Bei Lebensschaden: Brennen, falls keine Reaktion.",
+      "defenseSuppressible": true
+    },
+    "intensity": null,
+    "transformId": "xform-sofortzuender",
+    "grantsFetz": true,
+    "catalystConsumed": true,
+    "overformulaPrimaryBonus": null,
+    "overformulaIntensityBonus": null,
+    "formulaDefensePenalty": null,
+    "summonConstructDefId": null
+  },
+  {
+    "recipeId": "v6-over-ueberraschungsangriff-feuer-sofortzuender",
+    "kind": "overformula",
+    "catalogSlice": "slice1",
+    "techniqueId": "v6-technik-ueberraschungsangriff",
+    "essenceId": "v6-essenz-feuer",
+    "catalystId": "v6-katalysator-sofortzuender",
+    "name": "Überformel Glutüberraschung · Sofortzünder",
+    "effectSummary": "Verursache 4 Schaden am Gegner. Bei Lebensschaden: Brennen, falls keine Reaktion. (verstärkt) Primärwert −1; danach ziehe 1 und wirf 1 ab. Überformel: Primär +2 (fester Slice-1-Bonus). Überformel: Fetzladung wird verbraucht. Formelabwehr −1.",
+    "primary": {
+      "kind": "damage",
+      "value": 4,
+      "target": "opponent",
+      "offensive": true
+    },
+    "rider": {
+      "id": "rider-brennen",
+      "summary": "Bei Lebensschaden: Brennen, falls keine Reaktion. (verstärkt)",
+      "defenseSuppressible": true
+    },
+    "intensity": null,
+    "transformId": "xform-sofortzuender",
+    "grantsFetz": false,
+    "catalystConsumed": true,
+    "overformulaPrimaryBonus": 2,
+    "overformulaIntensityBonus": null,
+    "formulaDefensePenalty": -1,
+    "summonConstructDefId": null
+  },
+  {
+    "recipeId": "v6-tek-ueberraschungsangriff-feuer-opfergabe",
+    "kind": "tek",
+    "catalogSlice": "slice1",
+    "techniqueId": "v6-technik-ueberraschungsangriff",
+    "essenceId": "v6-essenz-feuer",
+    "catalystId": "v6-katalysator-opfergabe",
+    "name": "Glutüberraschung · Opfergabe",
+    "effectSummary": "Verursache 3 Schaden am Gegner. Bei Lebensschaden: Brennen, falls keine Reaktion. Optional: wirf 1 Handkarte ab für Primärwert +2. TEK: +1 Fetzladung (max 1×/Zug).",
+    "primary": {
+      "kind": "damage",
+      "value": 3,
+      "target": "opponent",
+      "offensive": true
+    },
+    "rider": {
+      "id": "rider-brennen",
+      "summary": "Bei Lebensschaden: Brennen, falls keine Reaktion.",
+      "defenseSuppressible": true
+    },
+    "intensity": null,
+    "transformId": "xform-opfergabe",
+    "grantsFetz": true,
+    "catalystConsumed": true,
+    "overformulaPrimaryBonus": null,
+    "overformulaIntensityBonus": null,
+    "formulaDefensePenalty": null,
+    "summonConstructDefId": null
+  },
+  {
+    "recipeId": "v6-over-ueberraschungsangriff-feuer-opfergabe",
+    "kind": "overformula",
+    "catalogSlice": "slice1",
+    "techniqueId": "v6-technik-ueberraschungsangriff",
+    "essenceId": "v6-essenz-feuer",
+    "catalystId": "v6-katalysator-opfergabe",
+    "name": "Überformel Glutüberraschung · Opfergabe",
+    "effectSummary": "Verursache 5 Schaden am Gegner. Bei Lebensschaden: Brennen, falls keine Reaktion. (verstärkt) Optional: wirf 1 Handkarte ab für Primärwert +2. Überformel: Primär +2 (fester Slice-1-Bonus). Überformel: Fetzladung wird verbraucht. Formelabwehr −1.",
+    "primary": {
+      "kind": "damage",
+      "value": 5,
+      "target": "opponent",
+      "offensive": true
+    },
+    "rider": {
+      "id": "rider-brennen",
+      "summary": "Bei Lebensschaden: Brennen, falls keine Reaktion. (verstärkt)",
+      "defenseSuppressible": true
+    },
+    "intensity": null,
+    "transformId": "xform-opfergabe",
+    "grantsFetz": false,
+    "catalystConsumed": true,
+    "overformulaPrimaryBonus": 2,
+    "overformulaIntensityBonus": null,
+    "formulaDefensePenalty": -1,
+    "summonConstructDefId": null
+  },
+  {
+    "recipeId": "v6-tek-ueberraschungsangriff-wasser-ueberladung",
+    "kind": "tek",
+    "catalogSlice": "slice1",
+    "techniqueId": "v6-technik-ueberraschungsangriff",
+    "essenceId": "v6-essenz-wasser",
+    "catalystId": "v6-katalysator-ueberladung",
+    "name": "Wellenüberraschung · Überladung",
+    "effectSummary": "Verursache 4 Schaden am Gegner. Bei Heilung oder Schildgewinn: entferne optional eine Marke von dir. Primärwert +2; danach erleidest du 1 Selbstschaden. TEK: +1 Fetzladung (max 1×/Zug).",
+    "primary": {
+      "kind": "damage",
+      "value": 4,
+      "target": "opponent",
+      "offensive": true
+    },
+    "rider": {
+      "id": "rider-reinigen",
+      "summary": "Bei Heilung oder Schildgewinn: entferne optional eine Marke von dir.",
+      "defenseSuppressible": false
+    },
+    "intensity": null,
+    "transformId": "xform-ueberladung",
+    "grantsFetz": true,
+    "catalystConsumed": true,
+    "overformulaPrimaryBonus": null,
+    "overformulaIntensityBonus": null,
+    "formulaDefensePenalty": null,
+    "summonConstructDefId": null
+  },
+  {
+    "recipeId": "v6-over-ueberraschungsangriff-wasser-ueberladung",
+    "kind": "overformula",
+    "catalogSlice": "slice1",
+    "techniqueId": "v6-technik-ueberraschungsangriff",
+    "essenceId": "v6-essenz-wasser",
+    "catalystId": "v6-katalysator-ueberladung",
+    "name": "Überformel Wellenüberraschung · Überladung",
+    "effectSummary": "Verursache 6 Schaden am Gegner. Bei Heilung oder Schildgewinn: entferne optional eine Marke von dir. (verstärkt) Primärwert +2; danach erleidest du 1 Selbstschaden. Überformel: Primär +2 (fester Slice-1-Bonus). Überformel: Fetzladung wird verbraucht. Formelabwehr −1.",
+    "primary": {
+      "kind": "damage",
+      "value": 6,
+      "target": "opponent",
+      "offensive": true
+    },
+    "rider": {
+      "id": "rider-reinigen",
+      "summary": "Bei Heilung oder Schildgewinn: entferne optional eine Marke von dir. (verstärkt)",
+      "defenseSuppressible": false
+    },
+    "intensity": null,
+    "transformId": "xform-ueberladung",
+    "grantsFetz": false,
+    "catalystConsumed": true,
+    "overformulaPrimaryBonus": 2,
+    "overformulaIntensityBonus": null,
+    "formulaDefensePenalty": -1,
+    "summonConstructDefId": null
+  },
+  {
+    "recipeId": "v6-tek-ueberraschungsangriff-wasser-verdichtung",
+    "kind": "tek",
+    "catalogSlice": "slice1",
+    "techniqueId": "v6-technik-ueberraschungsangriff",
+    "essenceId": "v6-essenz-wasser",
+    "catalystId": "v6-katalysator-verdichtung",
+    "name": "Wellenüberraschung · Verdichtung",
+    "effectSummary": "Verursache 3 Schaden am Gegner. Bei Heilung oder Schildgewinn: entferne optional eine Marke von dir. Primärwert +1; verwendete Komponenten erhalten +1 Stabilität. TEK: +1 Fetzladung (max 1×/Zug).",
+    "primary": {
+      "kind": "damage",
+      "value": 3,
+      "target": "opponent",
+      "offensive": true
+    },
+    "rider": {
+      "id": "rider-reinigen",
+      "summary": "Bei Heilung oder Schildgewinn: entferne optional eine Marke von dir.",
+      "defenseSuppressible": false
+    },
+    "intensity": null,
+    "transformId": "xform-verdichtung",
+    "grantsFetz": true,
+    "catalystConsumed": true,
+    "overformulaPrimaryBonus": null,
+    "overformulaIntensityBonus": null,
+    "formulaDefensePenalty": null,
+    "summonConstructDefId": null
+  },
+  {
+    "recipeId": "v6-over-ueberraschungsangriff-wasser-verdichtung",
+    "kind": "overformula",
+    "catalogSlice": "slice1",
+    "techniqueId": "v6-technik-ueberraschungsangriff",
+    "essenceId": "v6-essenz-wasser",
+    "catalystId": "v6-katalysator-verdichtung",
+    "name": "Überformel Wellenüberraschung · Verdichtung",
+    "effectSummary": "Verursache 5 Schaden am Gegner. Bei Heilung oder Schildgewinn: entferne optional eine Marke von dir. (verstärkt) Primärwert +1; verwendete Komponenten erhalten +1 Stabilität. Überformel: Primär +2 (fester Slice-1-Bonus). Überformel: Fetzladung wird verbraucht. Formelabwehr −1.",
+    "primary": {
+      "kind": "damage",
+      "value": 5,
+      "target": "opponent",
+      "offensive": true
+    },
+    "rider": {
+      "id": "rider-reinigen",
+      "summary": "Bei Heilung oder Schildgewinn: entferne optional eine Marke von dir. (verstärkt)",
+      "defenseSuppressible": false
+    },
+    "intensity": null,
+    "transformId": "xform-verdichtung",
+    "grantsFetz": false,
+    "catalystConsumed": true,
+    "overformulaPrimaryBonus": 2,
+    "overformulaIntensityBonus": null,
+    "formulaDefensePenalty": -1,
+    "summonConstructDefId": null
+  },
+  {
+    "recipeId": "v6-tek-ueberraschungsangriff-wasser-sofortzuender",
+    "kind": "tek",
+    "catalogSlice": "slice1",
+    "techniqueId": "v6-technik-ueberraschungsangriff",
+    "essenceId": "v6-essenz-wasser",
+    "catalystId": "v6-katalysator-sofortzuender",
+    "name": "Wellenüberraschung · Sofortzünder",
+    "effectSummary": "Verursache 1 Schaden am Gegner. Bei Heilung oder Schildgewinn: entferne optional eine Marke von dir. Primärwert −1; danach ziehe 1 und wirf 1 ab. TEK: +1 Fetzladung (max 1×/Zug).",
+    "primary": {
+      "kind": "damage",
+      "value": 1,
+      "target": "opponent",
+      "offensive": true
+    },
+    "rider": {
+      "id": "rider-reinigen",
+      "summary": "Bei Heilung oder Schildgewinn: entferne optional eine Marke von dir.",
+      "defenseSuppressible": false
+    },
+    "intensity": null,
+    "transformId": "xform-sofortzuender",
+    "grantsFetz": true,
+    "catalystConsumed": true,
+    "overformulaPrimaryBonus": null,
+    "overformulaIntensityBonus": null,
+    "formulaDefensePenalty": null,
+    "summonConstructDefId": null
+  },
+  {
+    "recipeId": "v6-over-ueberraschungsangriff-wasser-sofortzuender",
+    "kind": "overformula",
+    "catalogSlice": "slice1",
+    "techniqueId": "v6-technik-ueberraschungsangriff",
+    "essenceId": "v6-essenz-wasser",
+    "catalystId": "v6-katalysator-sofortzuender",
+    "name": "Überformel Wellenüberraschung · Sofortzünder",
+    "effectSummary": "Verursache 3 Schaden am Gegner. Bei Heilung oder Schildgewinn: entferne optional eine Marke von dir. (verstärkt) Primärwert −1; danach ziehe 1 und wirf 1 ab. Überformel: Primär +2 (fester Slice-1-Bonus). Überformel: Fetzladung wird verbraucht. Formelabwehr −1.",
+    "primary": {
+      "kind": "damage",
+      "value": 3,
+      "target": "opponent",
+      "offensive": true
+    },
+    "rider": {
+      "id": "rider-reinigen",
+      "summary": "Bei Heilung oder Schildgewinn: entferne optional eine Marke von dir. (verstärkt)",
+      "defenseSuppressible": false
+    },
+    "intensity": null,
+    "transformId": "xform-sofortzuender",
+    "grantsFetz": false,
+    "catalystConsumed": true,
+    "overformulaPrimaryBonus": 2,
+    "overformulaIntensityBonus": null,
+    "formulaDefensePenalty": -1,
+    "summonConstructDefId": null
+  },
+  {
+    "recipeId": "v6-tek-ueberraschungsangriff-wasser-opfergabe",
+    "kind": "tek",
+    "catalogSlice": "slice1",
+    "techniqueId": "v6-technik-ueberraschungsangriff",
+    "essenceId": "v6-essenz-wasser",
+    "catalystId": "v6-katalysator-opfergabe",
+    "name": "Wellenüberraschung · Opfergabe",
+    "effectSummary": "Verursache 2 Schaden am Gegner. Bei Heilung oder Schildgewinn: entferne optional eine Marke von dir. Optional: wirf 1 Handkarte ab für Primärwert +2. TEK: +1 Fetzladung (max 1×/Zug).",
+    "primary": {
+      "kind": "damage",
+      "value": 2,
+      "target": "opponent",
+      "offensive": true
+    },
+    "rider": {
+      "id": "rider-reinigen",
+      "summary": "Bei Heilung oder Schildgewinn: entferne optional eine Marke von dir.",
+      "defenseSuppressible": false
+    },
+    "intensity": null,
+    "transformId": "xform-opfergabe",
+    "grantsFetz": true,
+    "catalystConsumed": true,
+    "overformulaPrimaryBonus": null,
+    "overformulaIntensityBonus": null,
+    "formulaDefensePenalty": null,
+    "summonConstructDefId": null
+  },
+  {
+    "recipeId": "v6-over-ueberraschungsangriff-wasser-opfergabe",
+    "kind": "overformula",
+    "catalogSlice": "slice1",
+    "techniqueId": "v6-technik-ueberraschungsangriff",
+    "essenceId": "v6-essenz-wasser",
+    "catalystId": "v6-katalysator-opfergabe",
+    "name": "Überformel Wellenüberraschung · Opfergabe",
+    "effectSummary": "Verursache 4 Schaden am Gegner. Bei Heilung oder Schildgewinn: entferne optional eine Marke von dir. (verstärkt) Optional: wirf 1 Handkarte ab für Primärwert +2. Überformel: Primär +2 (fester Slice-1-Bonus). Überformel: Fetzladung wird verbraucht. Formelabwehr −1.",
+    "primary": {
+      "kind": "damage",
+      "value": 4,
+      "target": "opponent",
+      "offensive": true
+    },
+    "rider": {
+      "id": "rider-reinigen",
+      "summary": "Bei Heilung oder Schildgewinn: entferne optional eine Marke von dir. (verstärkt)",
+      "defenseSuppressible": false
+    },
+    "intensity": null,
+    "transformId": "xform-opfergabe",
+    "grantsFetz": false,
+    "catalystConsumed": true,
+    "overformulaPrimaryBonus": 2,
+    "overformulaIntensityBonus": null,
+    "formulaDefensePenalty": -1,
+    "summonConstructDefId": null
+  },
+  {
+    "recipeId": "v6-tek-ueberraschungsangriff-erde-ueberladung",
+    "kind": "tek",
+    "catalogSlice": "slice1",
+    "techniqueId": "v6-technik-ueberraschungsangriff",
+    "essenceId": "v6-essenz-erde",
+    "catalystId": "v6-katalysator-ueberladung",
+    "name": "Felsüberraschung · Überladung",
+    "effectSummary": "Verursache 4 Schaden am Gegner. Verwendete Komponenten +1 Stabilität bis nächste Startphase. Primärwert +2; danach erleidest du 1 Selbstschaden. TEK: +1 Fetzladung (max 1×/Zug).",
+    "primary": {
+      "kind": "damage",
+      "value": 4,
+      "target": "opponent",
+      "offensive": true
+    },
+    "rider": {
+      "id": "rider-stabilitaet",
+      "summary": "Verwendete Komponenten +1 Stabilität bis nächste Startphase.",
+      "defenseSuppressible": false
+    },
+    "intensity": null,
+    "transformId": "xform-ueberladung",
+    "grantsFetz": true,
+    "catalystConsumed": true,
+    "overformulaPrimaryBonus": null,
+    "overformulaIntensityBonus": null,
+    "formulaDefensePenalty": null,
+    "summonConstructDefId": null
+  },
+  {
+    "recipeId": "v6-over-ueberraschungsangriff-erde-ueberladung",
+    "kind": "overformula",
+    "catalogSlice": "slice1",
+    "techniqueId": "v6-technik-ueberraschungsangriff",
+    "essenceId": "v6-essenz-erde",
+    "catalystId": "v6-katalysator-ueberladung",
+    "name": "Überformel Felsüberraschung · Überladung",
+    "effectSummary": "Verursache 6 Schaden am Gegner. Verwendete Komponenten +1 Stabilität bis nächste Startphase. (verstärkt) Primärwert +2; danach erleidest du 1 Selbstschaden. Überformel: Primär +2 (fester Slice-1-Bonus). Überformel: Fetzladung wird verbraucht. Formelabwehr −1.",
+    "primary": {
+      "kind": "damage",
+      "value": 6,
+      "target": "opponent",
+      "offensive": true
+    },
+    "rider": {
+      "id": "rider-stabilitaet",
+      "summary": "Verwendete Komponenten +1 Stabilität bis nächste Startphase. (verstärkt)",
+      "defenseSuppressible": false
+    },
+    "intensity": null,
+    "transformId": "xform-ueberladung",
+    "grantsFetz": false,
+    "catalystConsumed": true,
+    "overformulaPrimaryBonus": 2,
+    "overformulaIntensityBonus": null,
+    "formulaDefensePenalty": -1,
+    "summonConstructDefId": null
+  },
+  {
+    "recipeId": "v6-tek-ueberraschungsangriff-erde-verdichtung",
+    "kind": "tek",
+    "catalogSlice": "slice1",
+    "techniqueId": "v6-technik-ueberraschungsangriff",
+    "essenceId": "v6-essenz-erde",
+    "catalystId": "v6-katalysator-verdichtung",
+    "name": "Felsüberraschung · Verdichtung",
+    "effectSummary": "Verursache 3 Schaden am Gegner. Verwendete Komponenten +1 Stabilität bis nächste Startphase. Primärwert +1; verwendete Komponenten erhalten +1 Stabilität. TEK: +1 Fetzladung (max 1×/Zug).",
+    "primary": {
+      "kind": "damage",
+      "value": 3,
+      "target": "opponent",
+      "offensive": true
+    },
+    "rider": {
+      "id": "rider-stabilitaet",
+      "summary": "Verwendete Komponenten +1 Stabilität bis nächste Startphase.",
+      "defenseSuppressible": false
+    },
+    "intensity": null,
+    "transformId": "xform-verdichtung",
+    "grantsFetz": true,
+    "catalystConsumed": true,
+    "overformulaPrimaryBonus": null,
+    "overformulaIntensityBonus": null,
+    "formulaDefensePenalty": null,
+    "summonConstructDefId": null
+  },
+  {
+    "recipeId": "v6-over-ueberraschungsangriff-erde-verdichtung",
+    "kind": "overformula",
+    "catalogSlice": "slice1",
+    "techniqueId": "v6-technik-ueberraschungsangriff",
+    "essenceId": "v6-essenz-erde",
+    "catalystId": "v6-katalysator-verdichtung",
+    "name": "Überformel Felsüberraschung · Verdichtung",
+    "effectSummary": "Verursache 5 Schaden am Gegner. Verwendete Komponenten +1 Stabilität bis nächste Startphase. (verstärkt) Primärwert +1; verwendete Komponenten erhalten +1 Stabilität. Überformel: Primär +2 (fester Slice-1-Bonus). Überformel: Fetzladung wird verbraucht. Formelabwehr −1.",
+    "primary": {
+      "kind": "damage",
+      "value": 5,
+      "target": "opponent",
+      "offensive": true
+    },
+    "rider": {
+      "id": "rider-stabilitaet",
+      "summary": "Verwendete Komponenten +1 Stabilität bis nächste Startphase. (verstärkt)",
+      "defenseSuppressible": false
+    },
+    "intensity": null,
+    "transformId": "xform-verdichtung",
+    "grantsFetz": false,
+    "catalystConsumed": true,
+    "overformulaPrimaryBonus": 2,
+    "overformulaIntensityBonus": null,
+    "formulaDefensePenalty": -1,
+    "summonConstructDefId": null
+  },
+  {
+    "recipeId": "v6-tek-ueberraschungsangriff-erde-sofortzuender",
+    "kind": "tek",
+    "catalogSlice": "slice1",
+    "techniqueId": "v6-technik-ueberraschungsangriff",
+    "essenceId": "v6-essenz-erde",
+    "catalystId": "v6-katalysator-sofortzuender",
+    "name": "Felsüberraschung · Sofortzünder",
+    "effectSummary": "Verursache 1 Schaden am Gegner. Verwendete Komponenten +1 Stabilität bis nächste Startphase. Primärwert −1; danach ziehe 1 und wirf 1 ab. TEK: +1 Fetzladung (max 1×/Zug).",
+    "primary": {
+      "kind": "damage",
+      "value": 1,
+      "target": "opponent",
+      "offensive": true
+    },
+    "rider": {
+      "id": "rider-stabilitaet",
+      "summary": "Verwendete Komponenten +1 Stabilität bis nächste Startphase.",
+      "defenseSuppressible": false
+    },
+    "intensity": null,
+    "transformId": "xform-sofortzuender",
+    "grantsFetz": true,
+    "catalystConsumed": true,
+    "overformulaPrimaryBonus": null,
+    "overformulaIntensityBonus": null,
+    "formulaDefensePenalty": null,
+    "summonConstructDefId": null
+  },
+  {
+    "recipeId": "v6-over-ueberraschungsangriff-erde-sofortzuender",
+    "kind": "overformula",
+    "catalogSlice": "slice1",
+    "techniqueId": "v6-technik-ueberraschungsangriff",
+    "essenceId": "v6-essenz-erde",
+    "catalystId": "v6-katalysator-sofortzuender",
+    "name": "Überformel Felsüberraschung · Sofortzünder",
+    "effectSummary": "Verursache 3 Schaden am Gegner. Verwendete Komponenten +1 Stabilität bis nächste Startphase. (verstärkt) Primärwert −1; danach ziehe 1 und wirf 1 ab. Überformel: Primär +2 (fester Slice-1-Bonus). Überformel: Fetzladung wird verbraucht. Formelabwehr −1.",
+    "primary": {
+      "kind": "damage",
+      "value": 3,
+      "target": "opponent",
+      "offensive": true
+    },
+    "rider": {
+      "id": "rider-stabilitaet",
+      "summary": "Verwendete Komponenten +1 Stabilität bis nächste Startphase. (verstärkt)",
+      "defenseSuppressible": false
+    },
+    "intensity": null,
+    "transformId": "xform-sofortzuender",
+    "grantsFetz": false,
+    "catalystConsumed": true,
+    "overformulaPrimaryBonus": 2,
+    "overformulaIntensityBonus": null,
+    "formulaDefensePenalty": -1,
+    "summonConstructDefId": null
+  },
+  {
+    "recipeId": "v6-tek-ueberraschungsangriff-erde-opfergabe",
+    "kind": "tek",
+    "catalogSlice": "slice1",
+    "techniqueId": "v6-technik-ueberraschungsangriff",
+    "essenceId": "v6-essenz-erde",
+    "catalystId": "v6-katalysator-opfergabe",
+    "name": "Felsüberraschung · Opfergabe",
+    "effectSummary": "Verursache 2 Schaden am Gegner. Verwendete Komponenten +1 Stabilität bis nächste Startphase. Optional: wirf 1 Handkarte ab für Primärwert +2. TEK: +1 Fetzladung (max 1×/Zug).",
+    "primary": {
+      "kind": "damage",
+      "value": 2,
+      "target": "opponent",
+      "offensive": true
+    },
+    "rider": {
+      "id": "rider-stabilitaet",
+      "summary": "Verwendete Komponenten +1 Stabilität bis nächste Startphase.",
+      "defenseSuppressible": false
+    },
+    "intensity": null,
+    "transformId": "xform-opfergabe",
+    "grantsFetz": true,
+    "catalystConsumed": true,
+    "overformulaPrimaryBonus": null,
+    "overformulaIntensityBonus": null,
+    "formulaDefensePenalty": null,
+    "summonConstructDefId": null
+  },
+  {
+    "recipeId": "v6-over-ueberraschungsangriff-erde-opfergabe",
+    "kind": "overformula",
+    "catalogSlice": "slice1",
+    "techniqueId": "v6-technik-ueberraschungsangriff",
+    "essenceId": "v6-essenz-erde",
+    "catalystId": "v6-katalysator-opfergabe",
+    "name": "Überformel Felsüberraschung · Opfergabe",
+    "effectSummary": "Verursache 4 Schaden am Gegner. Verwendete Komponenten +1 Stabilität bis nächste Startphase. (verstärkt) Optional: wirf 1 Handkarte ab für Primärwert +2. Überformel: Primär +2 (fester Slice-1-Bonus). Überformel: Fetzladung wird verbraucht. Formelabwehr −1.",
+    "primary": {
+      "kind": "damage",
+      "value": 4,
+      "target": "opponent",
+      "offensive": true
+    },
+    "rider": {
+      "id": "rider-stabilitaet",
+      "summary": "Verwendete Komponenten +1 Stabilität bis nächste Startphase. (verstärkt)",
+      "defenseSuppressible": false
+    },
+    "intensity": null,
+    "transformId": "xform-opfergabe",
+    "grantsFetz": false,
+    "catalystConsumed": true,
+    "overformulaPrimaryBonus": 2,
+    "overformulaIntensityBonus": null,
+    "formulaDefensePenalty": -1,
+    "summonConstructDefId": null
+  },
+  {
+    "recipeId": "v6-tek-ueberraschungsangriff-luft-ueberladung",
+    "kind": "tek",
+    "catalogSlice": "slice1",
+    "techniqueId": "v6-technik-ueberraschungsangriff",
+    "essenceId": "v6-essenz-luft",
+    "catalystId": "v6-katalysator-ueberladung",
+    "name": "Windüberraschung · Überladung",
+    "effectSummary": "Verursache 5 Schaden am Gegner. Nächster eigener Aktions-W6 +1 (max +2). Primärwert +2; danach erleidest du 1 Selbstschaden. TEK: +1 Fetzladung (max 1×/Zug).",
+    "primary": {
+      "kind": "damage",
+      "value": 5,
+      "target": "opponent",
+      "offensive": true
+    },
+    "rider": {
+      "id": "rider-w6",
+      "summary": "Nächster eigener Aktions-W6 +1 (max +2).",
+      "defenseSuppressible": true
+    },
+    "intensity": null,
+    "transformId": "xform-ueberladung",
+    "grantsFetz": true,
+    "catalystConsumed": true,
+    "overformulaPrimaryBonus": null,
+    "overformulaIntensityBonus": null,
+    "formulaDefensePenalty": null,
+    "summonConstructDefId": null
+  },
+  {
+    "recipeId": "v6-over-ueberraschungsangriff-luft-ueberladung",
+    "kind": "overformula",
+    "catalogSlice": "slice1",
+    "techniqueId": "v6-technik-ueberraschungsangriff",
+    "essenceId": "v6-essenz-luft",
+    "catalystId": "v6-katalysator-ueberladung",
+    "name": "Überformel Windüberraschung · Überladung",
+    "effectSummary": "Verursache 7 Schaden am Gegner. Nächster eigener Aktions-W6 +1 (max +2). (verstärkt) Primärwert +2; danach erleidest du 1 Selbstschaden. Überformel: Primär +2 (fester Slice-1-Bonus). Überformel: Fetzladung wird verbraucht. Formelabwehr −1.",
+    "primary": {
+      "kind": "damage",
+      "value": 7,
+      "target": "opponent",
+      "offensive": true
+    },
+    "rider": {
+      "id": "rider-w6",
+      "summary": "Nächster eigener Aktions-W6 +1 (max +2). (verstärkt)",
+      "defenseSuppressible": true
+    },
+    "intensity": null,
+    "transformId": "xform-ueberladung",
+    "grantsFetz": false,
+    "catalystConsumed": true,
+    "overformulaPrimaryBonus": 2,
+    "overformulaIntensityBonus": null,
+    "formulaDefensePenalty": -1,
+    "summonConstructDefId": null
+  },
+  {
+    "recipeId": "v6-tek-ueberraschungsangriff-luft-verdichtung",
+    "kind": "tek",
+    "catalogSlice": "slice1",
+    "techniqueId": "v6-technik-ueberraschungsangriff",
+    "essenceId": "v6-essenz-luft",
+    "catalystId": "v6-katalysator-verdichtung",
+    "name": "Windüberraschung · Verdichtung",
+    "effectSummary": "Verursache 4 Schaden am Gegner. Nächster eigener Aktions-W6 +1 (max +2). Primärwert +1; verwendete Komponenten erhalten +1 Stabilität. TEK: +1 Fetzladung (max 1×/Zug).",
+    "primary": {
+      "kind": "damage",
+      "value": 4,
+      "target": "opponent",
+      "offensive": true
+    },
+    "rider": {
+      "id": "rider-w6",
+      "summary": "Nächster eigener Aktions-W6 +1 (max +2).",
+      "defenseSuppressible": true
+    },
+    "intensity": null,
+    "transformId": "xform-verdichtung",
+    "grantsFetz": true,
+    "catalystConsumed": true,
+    "overformulaPrimaryBonus": null,
+    "overformulaIntensityBonus": null,
+    "formulaDefensePenalty": null,
+    "summonConstructDefId": null
+  },
+  {
+    "recipeId": "v6-over-ueberraschungsangriff-luft-verdichtung",
+    "kind": "overformula",
+    "catalogSlice": "slice1",
+    "techniqueId": "v6-technik-ueberraschungsangriff",
+    "essenceId": "v6-essenz-luft",
+    "catalystId": "v6-katalysator-verdichtung",
+    "name": "Überformel Windüberraschung · Verdichtung",
+    "effectSummary": "Verursache 6 Schaden am Gegner. Nächster eigener Aktions-W6 +1 (max +2). (verstärkt) Primärwert +1; verwendete Komponenten erhalten +1 Stabilität. Überformel: Primär +2 (fester Slice-1-Bonus). Überformel: Fetzladung wird verbraucht. Formelabwehr −1.",
+    "primary": {
+      "kind": "damage",
+      "value": 6,
+      "target": "opponent",
+      "offensive": true
+    },
+    "rider": {
+      "id": "rider-w6",
+      "summary": "Nächster eigener Aktions-W6 +1 (max +2). (verstärkt)",
+      "defenseSuppressible": true
+    },
+    "intensity": null,
+    "transformId": "xform-verdichtung",
+    "grantsFetz": false,
+    "catalystConsumed": true,
+    "overformulaPrimaryBonus": 2,
+    "overformulaIntensityBonus": null,
+    "formulaDefensePenalty": -1,
+    "summonConstructDefId": null
+  },
+  {
+    "recipeId": "v6-tek-ueberraschungsangriff-luft-sofortzuender",
+    "kind": "tek",
+    "catalogSlice": "slice1",
+    "techniqueId": "v6-technik-ueberraschungsangriff",
+    "essenceId": "v6-essenz-luft",
+    "catalystId": "v6-katalysator-sofortzuender",
+    "name": "Windüberraschung · Sofortzünder",
+    "effectSummary": "Verursache 2 Schaden am Gegner. Nächster eigener Aktions-W6 +1 (max +2). Primärwert −1; danach ziehe 1 und wirf 1 ab. TEK: +1 Fetzladung (max 1×/Zug).",
+    "primary": {
+      "kind": "damage",
+      "value": 2,
+      "target": "opponent",
+      "offensive": true
+    },
+    "rider": {
+      "id": "rider-w6",
+      "summary": "Nächster eigener Aktions-W6 +1 (max +2).",
+      "defenseSuppressible": true
+    },
+    "intensity": null,
+    "transformId": "xform-sofortzuender",
+    "grantsFetz": true,
+    "catalystConsumed": true,
+    "overformulaPrimaryBonus": null,
+    "overformulaIntensityBonus": null,
+    "formulaDefensePenalty": null,
+    "summonConstructDefId": null
+  },
+  {
+    "recipeId": "v6-over-ueberraschungsangriff-luft-sofortzuender",
+    "kind": "overformula",
+    "catalogSlice": "slice1",
+    "techniqueId": "v6-technik-ueberraschungsangriff",
+    "essenceId": "v6-essenz-luft",
+    "catalystId": "v6-katalysator-sofortzuender",
+    "name": "Überformel Windüberraschung · Sofortzünder",
+    "effectSummary": "Verursache 4 Schaden am Gegner. Nächster eigener Aktions-W6 +1 (max +2). (verstärkt) Primärwert −1; danach ziehe 1 und wirf 1 ab. Überformel: Primär +2 (fester Slice-1-Bonus). Überformel: Fetzladung wird verbraucht. Formelabwehr −1.",
+    "primary": {
+      "kind": "damage",
+      "value": 4,
+      "target": "opponent",
+      "offensive": true
+    },
+    "rider": {
+      "id": "rider-w6",
+      "summary": "Nächster eigener Aktions-W6 +1 (max +2). (verstärkt)",
+      "defenseSuppressible": true
+    },
+    "intensity": null,
+    "transformId": "xform-sofortzuender",
+    "grantsFetz": false,
+    "catalystConsumed": true,
+    "overformulaPrimaryBonus": 2,
+    "overformulaIntensityBonus": null,
+    "formulaDefensePenalty": -1,
+    "summonConstructDefId": null
+  },
+  {
+    "recipeId": "v6-tek-ueberraschungsangriff-luft-opfergabe",
+    "kind": "tek",
+    "catalogSlice": "slice1",
+    "techniqueId": "v6-technik-ueberraschungsangriff",
+    "essenceId": "v6-essenz-luft",
+    "catalystId": "v6-katalysator-opfergabe",
+    "name": "Windüberraschung · Opfergabe",
+    "effectSummary": "Verursache 3 Schaden am Gegner. Nächster eigener Aktions-W6 +1 (max +2). Optional: wirf 1 Handkarte ab für Primärwert +2. TEK: +1 Fetzladung (max 1×/Zug).",
+    "primary": {
+      "kind": "damage",
+      "value": 3,
+      "target": "opponent",
+      "offensive": true
+    },
+    "rider": {
+      "id": "rider-w6",
+      "summary": "Nächster eigener Aktions-W6 +1 (max +2).",
+      "defenseSuppressible": true
+    },
+    "intensity": null,
+    "transformId": "xform-opfergabe",
+    "grantsFetz": true,
+    "catalystConsumed": true,
+    "overformulaPrimaryBonus": null,
+    "overformulaIntensityBonus": null,
+    "formulaDefensePenalty": null,
+    "summonConstructDefId": null
+  },
+  {
+    "recipeId": "v6-over-ueberraschungsangriff-luft-opfergabe",
+    "kind": "overformula",
+    "catalogSlice": "slice1",
+    "techniqueId": "v6-technik-ueberraschungsangriff",
+    "essenceId": "v6-essenz-luft",
+    "catalystId": "v6-katalysator-opfergabe",
+    "name": "Überformel Windüberraschung · Opfergabe",
+    "effectSummary": "Verursache 5 Schaden am Gegner. Nächster eigener Aktions-W6 +1 (max +2). (verstärkt) Optional: wirf 1 Handkarte ab für Primärwert +2. Überformel: Primär +2 (fester Slice-1-Bonus). Überformel: Fetzladung wird verbraucht. Formelabwehr −1.",
+    "primary": {
+      "kind": "damage",
+      "value": 5,
+      "target": "opponent",
+      "offensive": true
+    },
+    "rider": {
+      "id": "rider-w6",
+      "summary": "Nächster eigener Aktions-W6 +1 (max +2). (verstärkt)",
+      "defenseSuppressible": true
+    },
+    "intensity": null,
+    "transformId": "xform-opfergabe",
+    "grantsFetz": false,
+    "catalystConsumed": true,
+    "overformulaPrimaryBonus": 2,
+    "overformulaIntensityBonus": null,
+    "formulaDefensePenalty": -1,
+    "summonConstructDefId": null
+  },
+  {
+    "recipeId": "v6-tek-ueberraschungsangriff-licht-ueberladung",
+    "kind": "tek",
+    "catalogSlice": "slice1",
+    "techniqueId": "v6-technik-ueberraschungsangriff",
+    "essenceId": "v6-essenz-licht",
+    "catalystId": "v6-katalysator-ueberladung",
+    "name": "Lichtüberraschung · Überladung",
+    "effectSummary": "Verursache 4 Schaden am Gegner. Bei Schildgewinn: entferne optional eine Marke von dir. Primärwert +2; danach erleidest du 1 Selbstschaden. TEK: +1 Fetzladung (max 1×/Zug).",
+    "primary": {
+      "kind": "damage",
+      "value": 4,
+      "target": "opponent",
+      "offensive": true
+    },
+    "rider": {
+      "id": "rider-reinigen-licht",
+      "summary": "Bei Schildgewinn: entferne optional eine Marke von dir.",
+      "defenseSuppressible": false
+    },
+    "intensity": null,
+    "transformId": "xform-ueberladung",
+    "grantsFetz": true,
+    "catalystConsumed": true,
+    "overformulaPrimaryBonus": null,
+    "overformulaIntensityBonus": null,
+    "formulaDefensePenalty": null,
+    "summonConstructDefId": null
+  },
+  {
+    "recipeId": "v6-over-ueberraschungsangriff-licht-ueberladung",
+    "kind": "overformula",
+    "catalogSlice": "slice1",
+    "techniqueId": "v6-technik-ueberraschungsangriff",
+    "essenceId": "v6-essenz-licht",
+    "catalystId": "v6-katalysator-ueberladung",
+    "name": "Überformel Lichtüberraschung · Überladung",
+    "effectSummary": "Verursache 6 Schaden am Gegner. Bei Schildgewinn: entferne optional eine Marke von dir. (verstärkt) Primärwert +2; danach erleidest du 1 Selbstschaden. Überformel: Primär +2 (fester Slice-1-Bonus). Überformel: Fetzladung wird verbraucht. Formelabwehr −1.",
+    "primary": {
+      "kind": "damage",
+      "value": 6,
+      "target": "opponent",
+      "offensive": true
+    },
+    "rider": {
+      "id": "rider-reinigen-licht",
+      "summary": "Bei Schildgewinn: entferne optional eine Marke von dir. (verstärkt)",
+      "defenseSuppressible": false
+    },
+    "intensity": null,
+    "transformId": "xform-ueberladung",
+    "grantsFetz": false,
+    "catalystConsumed": true,
+    "overformulaPrimaryBonus": 2,
+    "overformulaIntensityBonus": null,
+    "formulaDefensePenalty": -1,
+    "summonConstructDefId": null
+  },
+  {
+    "recipeId": "v6-tek-ueberraschungsangriff-licht-verdichtung",
+    "kind": "tek",
+    "catalogSlice": "slice1",
+    "techniqueId": "v6-technik-ueberraschungsangriff",
+    "essenceId": "v6-essenz-licht",
+    "catalystId": "v6-katalysator-verdichtung",
+    "name": "Lichtüberraschung · Verdichtung",
+    "effectSummary": "Verursache 3 Schaden am Gegner. Bei Schildgewinn: entferne optional eine Marke von dir. Primärwert +1; verwendete Komponenten erhalten +1 Stabilität. TEK: +1 Fetzladung (max 1×/Zug).",
+    "primary": {
+      "kind": "damage",
+      "value": 3,
+      "target": "opponent",
+      "offensive": true
+    },
+    "rider": {
+      "id": "rider-reinigen-licht",
+      "summary": "Bei Schildgewinn: entferne optional eine Marke von dir.",
+      "defenseSuppressible": false
+    },
+    "intensity": null,
+    "transformId": "xform-verdichtung",
+    "grantsFetz": true,
+    "catalystConsumed": true,
+    "overformulaPrimaryBonus": null,
+    "overformulaIntensityBonus": null,
+    "formulaDefensePenalty": null,
+    "summonConstructDefId": null
+  },
+  {
+    "recipeId": "v6-over-ueberraschungsangriff-licht-verdichtung",
+    "kind": "overformula",
+    "catalogSlice": "slice1",
+    "techniqueId": "v6-technik-ueberraschungsangriff",
+    "essenceId": "v6-essenz-licht",
+    "catalystId": "v6-katalysator-verdichtung",
+    "name": "Überformel Lichtüberraschung · Verdichtung",
+    "effectSummary": "Verursache 5 Schaden am Gegner. Bei Schildgewinn: entferne optional eine Marke von dir. (verstärkt) Primärwert +1; verwendete Komponenten erhalten +1 Stabilität. Überformel: Primär +2 (fester Slice-1-Bonus). Überformel: Fetzladung wird verbraucht. Formelabwehr −1.",
+    "primary": {
+      "kind": "damage",
+      "value": 5,
+      "target": "opponent",
+      "offensive": true
+    },
+    "rider": {
+      "id": "rider-reinigen-licht",
+      "summary": "Bei Schildgewinn: entferne optional eine Marke von dir. (verstärkt)",
+      "defenseSuppressible": false
+    },
+    "intensity": null,
+    "transformId": "xform-verdichtung",
+    "grantsFetz": false,
+    "catalystConsumed": true,
+    "overformulaPrimaryBonus": 2,
+    "overformulaIntensityBonus": null,
+    "formulaDefensePenalty": -1,
+    "summonConstructDefId": null
+  },
+  {
+    "recipeId": "v6-tek-ueberraschungsangriff-licht-sofortzuender",
+    "kind": "tek",
+    "catalogSlice": "slice1",
+    "techniqueId": "v6-technik-ueberraschungsangriff",
+    "essenceId": "v6-essenz-licht",
+    "catalystId": "v6-katalysator-sofortzuender",
+    "name": "Lichtüberraschung · Sofortzünder",
+    "effectSummary": "Verursache 1 Schaden am Gegner. Bei Schildgewinn: entferne optional eine Marke von dir. Primärwert −1; danach ziehe 1 und wirf 1 ab. TEK: +1 Fetzladung (max 1×/Zug).",
+    "primary": {
+      "kind": "damage",
+      "value": 1,
+      "target": "opponent",
+      "offensive": true
+    },
+    "rider": {
+      "id": "rider-reinigen-licht",
+      "summary": "Bei Schildgewinn: entferne optional eine Marke von dir.",
+      "defenseSuppressible": false
+    },
+    "intensity": null,
+    "transformId": "xform-sofortzuender",
+    "grantsFetz": true,
+    "catalystConsumed": true,
+    "overformulaPrimaryBonus": null,
+    "overformulaIntensityBonus": null,
+    "formulaDefensePenalty": null,
+    "summonConstructDefId": null
+  },
+  {
+    "recipeId": "v6-over-ueberraschungsangriff-licht-sofortzuender",
+    "kind": "overformula",
+    "catalogSlice": "slice1",
+    "techniqueId": "v6-technik-ueberraschungsangriff",
+    "essenceId": "v6-essenz-licht",
+    "catalystId": "v6-katalysator-sofortzuender",
+    "name": "Überformel Lichtüberraschung · Sofortzünder",
+    "effectSummary": "Verursache 3 Schaden am Gegner. Bei Schildgewinn: entferne optional eine Marke von dir. (verstärkt) Primärwert −1; danach ziehe 1 und wirf 1 ab. Überformel: Primär +2 (fester Slice-1-Bonus). Überformel: Fetzladung wird verbraucht. Formelabwehr −1.",
+    "primary": {
+      "kind": "damage",
+      "value": 3,
+      "target": "opponent",
+      "offensive": true
+    },
+    "rider": {
+      "id": "rider-reinigen-licht",
+      "summary": "Bei Schildgewinn: entferne optional eine Marke von dir. (verstärkt)",
+      "defenseSuppressible": false
+    },
+    "intensity": null,
+    "transformId": "xform-sofortzuender",
+    "grantsFetz": false,
+    "catalystConsumed": true,
+    "overformulaPrimaryBonus": 2,
+    "overformulaIntensityBonus": null,
+    "formulaDefensePenalty": -1,
+    "summonConstructDefId": null
+  },
+  {
+    "recipeId": "v6-tek-ueberraschungsangriff-licht-opfergabe",
+    "kind": "tek",
+    "catalogSlice": "slice1",
+    "techniqueId": "v6-technik-ueberraschungsangriff",
+    "essenceId": "v6-essenz-licht",
+    "catalystId": "v6-katalysator-opfergabe",
+    "name": "Lichtüberraschung · Opfergabe",
+    "effectSummary": "Verursache 2 Schaden am Gegner. Bei Schildgewinn: entferne optional eine Marke von dir. Optional: wirf 1 Handkarte ab für Primärwert +2. TEK: +1 Fetzladung (max 1×/Zug).",
+    "primary": {
+      "kind": "damage",
+      "value": 2,
+      "target": "opponent",
+      "offensive": true
+    },
+    "rider": {
+      "id": "rider-reinigen-licht",
+      "summary": "Bei Schildgewinn: entferne optional eine Marke von dir.",
+      "defenseSuppressible": false
+    },
+    "intensity": null,
+    "transformId": "xform-opfergabe",
+    "grantsFetz": true,
+    "catalystConsumed": true,
+    "overformulaPrimaryBonus": null,
+    "overformulaIntensityBonus": null,
+    "formulaDefensePenalty": null,
+    "summonConstructDefId": null
+  },
+  {
+    "recipeId": "v6-over-ueberraschungsangriff-licht-opfergabe",
+    "kind": "overformula",
+    "catalogSlice": "slice1",
+    "techniqueId": "v6-technik-ueberraschungsangriff",
+    "essenceId": "v6-essenz-licht",
+    "catalystId": "v6-katalysator-opfergabe",
+    "name": "Überformel Lichtüberraschung · Opfergabe",
+    "effectSummary": "Verursache 4 Schaden am Gegner. Bei Schildgewinn: entferne optional eine Marke von dir. (verstärkt) Optional: wirf 1 Handkarte ab für Primärwert +2. Überformel: Primär +2 (fester Slice-1-Bonus). Überformel: Fetzladung wird verbraucht. Formelabwehr −1.",
+    "primary": {
+      "kind": "damage",
+      "value": 4,
+      "target": "opponent",
+      "offensive": true
+    },
+    "rider": {
+      "id": "rider-reinigen-licht",
+      "summary": "Bei Schildgewinn: entferne optional eine Marke von dir. (verstärkt)",
+      "defenseSuppressible": false
+    },
+    "intensity": null,
+    "transformId": "xform-opfergabe",
+    "grantsFetz": false,
+    "catalystConsumed": true,
+    "overformulaPrimaryBonus": 2,
+    "overformulaIntensityBonus": null,
+    "formulaDefensePenalty": -1,
+    "summonConstructDefId": null
+  },
+  {
+    "recipeId": "v6-tek-ueberraschungsangriff-schatten-ueberladung",
+    "kind": "tek",
+    "catalogSlice": "slice1",
+    "techniqueId": "v6-technik-ueberraschungsangriff",
+    "essenceId": "v6-essenz-schatten",
+    "catalystId": "v6-katalysator-ueberladung",
+    "name": "Schattenüberraschung · Überladung",
+    "effectSummary": "Verursache 5 Schaden am Gegner. Bei Treffer: erschöpfe optional 1 gegnerische Formelkomponente. Primärwert +2; danach erleidest du 1 Selbstschaden. TEK: +1 Fetzladung (max 1×/Zug).",
+    "primary": {
+      "kind": "damage",
+      "value": 5,
+      "target": "opponent",
+      "offensive": true
+    },
+    "rider": {
+      "id": "rider-fluch",
+      "summary": "Bei Treffer: erschöpfe optional 1 gegnerische Formelkomponente.",
+      "defenseSuppressible": true
+    },
+    "intensity": null,
+    "transformId": "xform-ueberladung",
+    "grantsFetz": true,
+    "catalystConsumed": true,
+    "overformulaPrimaryBonus": null,
+    "overformulaIntensityBonus": null,
+    "formulaDefensePenalty": null,
+    "summonConstructDefId": null
+  },
+  {
+    "recipeId": "v6-over-ueberraschungsangriff-schatten-ueberladung",
+    "kind": "overformula",
+    "catalogSlice": "slice1",
+    "techniqueId": "v6-technik-ueberraschungsangriff",
+    "essenceId": "v6-essenz-schatten",
+    "catalystId": "v6-katalysator-ueberladung",
+    "name": "Überformel Schattenüberraschung · Überladung",
+    "effectSummary": "Verursache 7 Schaden am Gegner. Bei Treffer: erschöpfe optional 1 gegnerische Formelkomponente. (verstärkt) Primärwert +2; danach erleidest du 1 Selbstschaden. Überformel: Primär +2 (fester Slice-1-Bonus). Überformel: Fetzladung wird verbraucht. Formelabwehr −1.",
+    "primary": {
+      "kind": "damage",
+      "value": 7,
+      "target": "opponent",
+      "offensive": true
+    },
+    "rider": {
+      "id": "rider-fluch",
+      "summary": "Bei Treffer: erschöpfe optional 1 gegnerische Formelkomponente. (verstärkt)",
+      "defenseSuppressible": true
+    },
+    "intensity": null,
+    "transformId": "xform-ueberladung",
+    "grantsFetz": false,
+    "catalystConsumed": true,
+    "overformulaPrimaryBonus": 2,
+    "overformulaIntensityBonus": null,
+    "formulaDefensePenalty": -1,
+    "summonConstructDefId": null
+  },
+  {
+    "recipeId": "v6-tek-ueberraschungsangriff-schatten-verdichtung",
+    "kind": "tek",
+    "catalogSlice": "slice1",
+    "techniqueId": "v6-technik-ueberraschungsangriff",
+    "essenceId": "v6-essenz-schatten",
+    "catalystId": "v6-katalysator-verdichtung",
+    "name": "Schattenüberraschung · Verdichtung",
+    "effectSummary": "Verursache 4 Schaden am Gegner. Bei Treffer: erschöpfe optional 1 gegnerische Formelkomponente. Primärwert +1; verwendete Komponenten erhalten +1 Stabilität. TEK: +1 Fetzladung (max 1×/Zug).",
+    "primary": {
+      "kind": "damage",
+      "value": 4,
+      "target": "opponent",
+      "offensive": true
+    },
+    "rider": {
+      "id": "rider-fluch",
+      "summary": "Bei Treffer: erschöpfe optional 1 gegnerische Formelkomponente.",
+      "defenseSuppressible": true
+    },
+    "intensity": null,
+    "transformId": "xform-verdichtung",
+    "grantsFetz": true,
+    "catalystConsumed": true,
+    "overformulaPrimaryBonus": null,
+    "overformulaIntensityBonus": null,
+    "formulaDefensePenalty": null,
+    "summonConstructDefId": null
+  },
+  {
+    "recipeId": "v6-over-ueberraschungsangriff-schatten-verdichtung",
+    "kind": "overformula",
+    "catalogSlice": "slice1",
+    "techniqueId": "v6-technik-ueberraschungsangriff",
+    "essenceId": "v6-essenz-schatten",
+    "catalystId": "v6-katalysator-verdichtung",
+    "name": "Überformel Schattenüberraschung · Verdichtung",
+    "effectSummary": "Verursache 6 Schaden am Gegner. Bei Treffer: erschöpfe optional 1 gegnerische Formelkomponente. (verstärkt) Primärwert +1; verwendete Komponenten erhalten +1 Stabilität. Überformel: Primär +2 (fester Slice-1-Bonus). Überformel: Fetzladung wird verbraucht. Formelabwehr −1.",
+    "primary": {
+      "kind": "damage",
+      "value": 6,
+      "target": "opponent",
+      "offensive": true
+    },
+    "rider": {
+      "id": "rider-fluch",
+      "summary": "Bei Treffer: erschöpfe optional 1 gegnerische Formelkomponente. (verstärkt)",
+      "defenseSuppressible": true
+    },
+    "intensity": null,
+    "transformId": "xform-verdichtung",
+    "grantsFetz": false,
+    "catalystConsumed": true,
+    "overformulaPrimaryBonus": 2,
+    "overformulaIntensityBonus": null,
+    "formulaDefensePenalty": -1,
+    "summonConstructDefId": null
+  },
+  {
+    "recipeId": "v6-tek-ueberraschungsangriff-schatten-sofortzuender",
+    "kind": "tek",
+    "catalogSlice": "slice1",
+    "techniqueId": "v6-technik-ueberraschungsangriff",
+    "essenceId": "v6-essenz-schatten",
+    "catalystId": "v6-katalysator-sofortzuender",
+    "name": "Schattenüberraschung · Sofortzünder",
+    "effectSummary": "Verursache 2 Schaden am Gegner. Bei Treffer: erschöpfe optional 1 gegnerische Formelkomponente. Primärwert −1; danach ziehe 1 und wirf 1 ab. TEK: +1 Fetzladung (max 1×/Zug).",
+    "primary": {
+      "kind": "damage",
+      "value": 2,
+      "target": "opponent",
+      "offensive": true
+    },
+    "rider": {
+      "id": "rider-fluch",
+      "summary": "Bei Treffer: erschöpfe optional 1 gegnerische Formelkomponente.",
+      "defenseSuppressible": true
+    },
+    "intensity": null,
+    "transformId": "xform-sofortzuender",
+    "grantsFetz": true,
+    "catalystConsumed": true,
+    "overformulaPrimaryBonus": null,
+    "overformulaIntensityBonus": null,
+    "formulaDefensePenalty": null,
+    "summonConstructDefId": null
+  },
+  {
+    "recipeId": "v6-over-ueberraschungsangriff-schatten-sofortzuender",
+    "kind": "overformula",
+    "catalogSlice": "slice1",
+    "techniqueId": "v6-technik-ueberraschungsangriff",
+    "essenceId": "v6-essenz-schatten",
+    "catalystId": "v6-katalysator-sofortzuender",
+    "name": "Überformel Schattenüberraschung · Sofortzünder",
+    "effectSummary": "Verursache 4 Schaden am Gegner. Bei Treffer: erschöpfe optional 1 gegnerische Formelkomponente. (verstärkt) Primärwert −1; danach ziehe 1 und wirf 1 ab. Überformel: Primär +2 (fester Slice-1-Bonus). Überformel: Fetzladung wird verbraucht. Formelabwehr −1.",
+    "primary": {
+      "kind": "damage",
+      "value": 4,
+      "target": "opponent",
+      "offensive": true
+    },
+    "rider": {
+      "id": "rider-fluch",
+      "summary": "Bei Treffer: erschöpfe optional 1 gegnerische Formelkomponente. (verstärkt)",
+      "defenseSuppressible": true
+    },
+    "intensity": null,
+    "transformId": "xform-sofortzuender",
+    "grantsFetz": false,
+    "catalystConsumed": true,
+    "overformulaPrimaryBonus": 2,
+    "overformulaIntensityBonus": null,
+    "formulaDefensePenalty": -1,
+    "summonConstructDefId": null
+  },
+  {
+    "recipeId": "v6-tek-ueberraschungsangriff-schatten-opfergabe",
+    "kind": "tek",
+    "catalogSlice": "slice1",
+    "techniqueId": "v6-technik-ueberraschungsangriff",
+    "essenceId": "v6-essenz-schatten",
+    "catalystId": "v6-katalysator-opfergabe",
+    "name": "Schattenüberraschung · Opfergabe",
+    "effectSummary": "Verursache 3 Schaden am Gegner. Bei Treffer: erschöpfe optional 1 gegnerische Formelkomponente. Optional: wirf 1 Handkarte ab für Primärwert +2. TEK: +1 Fetzladung (max 1×/Zug).",
+    "primary": {
+      "kind": "damage",
+      "value": 3,
+      "target": "opponent",
+      "offensive": true
+    },
+    "rider": {
+      "id": "rider-fluch",
+      "summary": "Bei Treffer: erschöpfe optional 1 gegnerische Formelkomponente.",
+      "defenseSuppressible": true
+    },
+    "intensity": null,
+    "transformId": "xform-opfergabe",
+    "grantsFetz": true,
+    "catalystConsumed": true,
+    "overformulaPrimaryBonus": null,
+    "overformulaIntensityBonus": null,
+    "formulaDefensePenalty": null,
+    "summonConstructDefId": null
+  },
+  {
+    "recipeId": "v6-over-ueberraschungsangriff-schatten-opfergabe",
+    "kind": "overformula",
+    "catalogSlice": "slice1",
+    "techniqueId": "v6-technik-ueberraschungsangriff",
+    "essenceId": "v6-essenz-schatten",
+    "catalystId": "v6-katalysator-opfergabe",
+    "name": "Überformel Schattenüberraschung · Opfergabe",
+    "effectSummary": "Verursache 5 Schaden am Gegner. Bei Treffer: erschöpfe optional 1 gegnerische Formelkomponente. (verstärkt) Optional: wirf 1 Handkarte ab für Primärwert +2. Überformel: Primär +2 (fester Slice-1-Bonus). Überformel: Fetzladung wird verbraucht. Formelabwehr −1.",
+    "primary": {
+      "kind": "damage",
+      "value": 5,
+      "target": "opponent",
+      "offensive": true
+    },
+    "rider": {
+      "id": "rider-fluch",
+      "summary": "Bei Treffer: erschöpfe optional 1 gegnerische Formelkomponente. (verstärkt)",
+      "defenseSuppressible": true
+    },
+    "intensity": null,
+    "transformId": "xform-opfergabe",
+    "grantsFetz": false,
+    "catalystConsumed": true,
+    "overformulaPrimaryBonus": 2,
+    "overformulaIntensityBonus": null,
+    "formulaDefensePenalty": -1,
+    "summonConstructDefId": null
+  },
+  {
+    "recipeId": "v6-tek-schicksalmanifestation-feuer-ueberladung",
+    "kind": "tek",
+    "catalogSlice": "slice1",
+    "techniqueId": "v6-technik-schicksalmanifestation",
+    "essenceId": "v6-essenz-feuer",
+    "catalystId": "v6-katalysator-ueberladung",
+    "name": "Glutschicksal · Überladung",
+    "effectSummary": "Bereite Boost +4 vor. Bei Lebensschaden: Brennen, falls keine Reaktion. Primärwert +2; danach erleidest du 1 Selbstschaden. TEK: +1 Fetzladung (max 1×/Zug).",
+    "primary": {
+      "kind": "prep_boost",
+      "value": 4,
+      "target": "self"
+    },
+    "rider": {
+      "id": "rider-brennen",
+      "summary": "Bei Lebensschaden: Brennen, falls keine Reaktion.",
+      "defenseSuppressible": true
+    },
+    "intensity": 1,
+    "transformId": "xform-ueberladung",
+    "grantsFetz": true,
+    "catalystConsumed": true,
+    "overformulaPrimaryBonus": null,
+    "overformulaIntensityBonus": null,
+    "formulaDefensePenalty": null,
+    "summonConstructDefId": null
+  },
+  {
+    "recipeId": "v6-over-schicksalmanifestation-feuer-ueberladung",
+    "kind": "overformula",
+    "catalogSlice": "slice1",
+    "techniqueId": "v6-technik-schicksalmanifestation",
+    "essenceId": "v6-essenz-feuer",
+    "catalystId": "v6-katalysator-ueberladung",
+    "name": "Überformel Glutschicksal · Überladung",
+    "effectSummary": "Bereite Boost +4 vor. Bei Lebensschaden: Brennen, falls keine Reaktion. (verstärkt) Primärwert +2; danach erleidest du 1 Selbstschaden. Überformel: Intensität +1 (fester Slice-1-Bonus). Überformel: Fetzladung wird verbraucht. Formelabwehr −1.",
+    "primary": {
+      "kind": "prep_boost",
+      "value": 4,
+      "target": "self"
+    },
+    "rider": {
+      "id": "rider-brennen",
+      "summary": "Bei Lebensschaden: Brennen, falls keine Reaktion. (verstärkt)",
+      "defenseSuppressible": true
+    },
+    "intensity": 2,
+    "transformId": "xform-ueberladung",
+    "grantsFetz": false,
+    "catalystConsumed": true,
+    "overformulaPrimaryBonus": null,
+    "overformulaIntensityBonus": 1,
+    "formulaDefensePenalty": -1,
+    "summonConstructDefId": null
+  },
+  {
+    "recipeId": "v6-tek-schicksalmanifestation-feuer-verdichtung",
+    "kind": "tek",
+    "catalogSlice": "slice1",
+    "techniqueId": "v6-technik-schicksalmanifestation",
+    "essenceId": "v6-essenz-feuer",
+    "catalystId": "v6-katalysator-verdichtung",
+    "name": "Glutschicksal · Verdichtung",
+    "effectSummary": "Bereite Boost +3 vor. Bei Lebensschaden: Brennen, falls keine Reaktion. Primärwert +1; verwendete Komponenten erhalten +1 Stabilität. TEK: +1 Fetzladung (max 1×/Zug).",
+    "primary": {
+      "kind": "prep_boost",
+      "value": 3,
+      "target": "self"
+    },
+    "rider": {
+      "id": "rider-brennen",
+      "summary": "Bei Lebensschaden: Brennen, falls keine Reaktion.",
+      "defenseSuppressible": true
+    },
+    "intensity": 1,
+    "transformId": "xform-verdichtung",
+    "grantsFetz": true,
+    "catalystConsumed": true,
+    "overformulaPrimaryBonus": null,
+    "overformulaIntensityBonus": null,
+    "formulaDefensePenalty": null,
+    "summonConstructDefId": null
+  },
+  {
+    "recipeId": "v6-over-schicksalmanifestation-feuer-verdichtung",
+    "kind": "overformula",
+    "catalogSlice": "slice1",
+    "techniqueId": "v6-technik-schicksalmanifestation",
+    "essenceId": "v6-essenz-feuer",
+    "catalystId": "v6-katalysator-verdichtung",
+    "name": "Überformel Glutschicksal · Verdichtung",
+    "effectSummary": "Bereite Boost +3 vor. Bei Lebensschaden: Brennen, falls keine Reaktion. (verstärkt) Primärwert +1; verwendete Komponenten erhalten +1 Stabilität. Überformel: Intensität +1 (fester Slice-1-Bonus). Überformel: Fetzladung wird verbraucht. Formelabwehr −1.",
+    "primary": {
+      "kind": "prep_boost",
+      "value": 3,
+      "target": "self"
+    },
+    "rider": {
+      "id": "rider-brennen",
+      "summary": "Bei Lebensschaden: Brennen, falls keine Reaktion. (verstärkt)",
+      "defenseSuppressible": true
+    },
+    "intensity": 2,
+    "transformId": "xform-verdichtung",
+    "grantsFetz": false,
+    "catalystConsumed": true,
+    "overformulaPrimaryBonus": null,
+    "overformulaIntensityBonus": 1,
+    "formulaDefensePenalty": -1,
+    "summonConstructDefId": null
+  },
+  {
+    "recipeId": "v6-tek-schicksalmanifestation-feuer-sofortzuender",
+    "kind": "tek",
+    "catalogSlice": "slice1",
+    "techniqueId": "v6-technik-schicksalmanifestation",
+    "essenceId": "v6-essenz-feuer",
+    "catalystId": "v6-katalysator-sofortzuender",
+    "name": "Glutschicksal · Sofortzünder",
+    "effectSummary": "Bereite Boost +1 vor. Bei Lebensschaden: Brennen, falls keine Reaktion. Primärwert −1; danach ziehe 1 und wirf 1 ab. TEK: +1 Fetzladung (max 1×/Zug).",
+    "primary": {
+      "kind": "prep_boost",
+      "value": 1,
+      "target": "self"
+    },
+    "rider": {
+      "id": "rider-brennen",
+      "summary": "Bei Lebensschaden: Brennen, falls keine Reaktion.",
+      "defenseSuppressible": true
+    },
+    "intensity": 1,
+    "transformId": "xform-sofortzuender",
+    "grantsFetz": true,
+    "catalystConsumed": true,
+    "overformulaPrimaryBonus": null,
+    "overformulaIntensityBonus": null,
+    "formulaDefensePenalty": null,
+    "summonConstructDefId": null
+  },
+  {
+    "recipeId": "v6-over-schicksalmanifestation-feuer-sofortzuender",
+    "kind": "overformula",
+    "catalogSlice": "slice1",
+    "techniqueId": "v6-technik-schicksalmanifestation",
+    "essenceId": "v6-essenz-feuer",
+    "catalystId": "v6-katalysator-sofortzuender",
+    "name": "Überformel Glutschicksal · Sofortzünder",
+    "effectSummary": "Bereite Boost +1 vor. Bei Lebensschaden: Brennen, falls keine Reaktion. (verstärkt) Primärwert −1; danach ziehe 1 und wirf 1 ab. Überformel: Intensität +1 (fester Slice-1-Bonus). Überformel: Fetzladung wird verbraucht. Formelabwehr −1.",
+    "primary": {
+      "kind": "prep_boost",
+      "value": 1,
+      "target": "self"
+    },
+    "rider": {
+      "id": "rider-brennen",
+      "summary": "Bei Lebensschaden: Brennen, falls keine Reaktion. (verstärkt)",
+      "defenseSuppressible": true
+    },
+    "intensity": 2,
+    "transformId": "xform-sofortzuender",
+    "grantsFetz": false,
+    "catalystConsumed": true,
+    "overformulaPrimaryBonus": null,
+    "overformulaIntensityBonus": 1,
+    "formulaDefensePenalty": -1,
+    "summonConstructDefId": null
+  },
+  {
+    "recipeId": "v6-tek-schicksalmanifestation-feuer-opfergabe",
+    "kind": "tek",
+    "catalogSlice": "slice1",
+    "techniqueId": "v6-technik-schicksalmanifestation",
+    "essenceId": "v6-essenz-feuer",
+    "catalystId": "v6-katalysator-opfergabe",
+    "name": "Glutschicksal · Opfergabe",
+    "effectSummary": "Bereite Boost +2 vor. Bei Lebensschaden: Brennen, falls keine Reaktion. Optional: wirf 1 Handkarte ab für Primärwert +2. TEK: +1 Fetzladung (max 1×/Zug).",
+    "primary": {
+      "kind": "prep_boost",
+      "value": 2,
+      "target": "self"
+    },
+    "rider": {
+      "id": "rider-brennen",
+      "summary": "Bei Lebensschaden: Brennen, falls keine Reaktion.",
+      "defenseSuppressible": true
+    },
+    "intensity": 1,
+    "transformId": "xform-opfergabe",
+    "grantsFetz": true,
+    "catalystConsumed": true,
+    "overformulaPrimaryBonus": null,
+    "overformulaIntensityBonus": null,
+    "formulaDefensePenalty": null,
+    "summonConstructDefId": null
+  },
+  {
+    "recipeId": "v6-over-schicksalmanifestation-feuer-opfergabe",
+    "kind": "overformula",
+    "catalogSlice": "slice1",
+    "techniqueId": "v6-technik-schicksalmanifestation",
+    "essenceId": "v6-essenz-feuer",
+    "catalystId": "v6-katalysator-opfergabe",
+    "name": "Überformel Glutschicksal · Opfergabe",
+    "effectSummary": "Bereite Boost +2 vor. Bei Lebensschaden: Brennen, falls keine Reaktion. (verstärkt) Optional: wirf 1 Handkarte ab für Primärwert +2. Überformel: Intensität +1 (fester Slice-1-Bonus). Überformel: Fetzladung wird verbraucht. Formelabwehr −1.",
+    "primary": {
+      "kind": "prep_boost",
+      "value": 2,
+      "target": "self"
+    },
+    "rider": {
+      "id": "rider-brennen",
+      "summary": "Bei Lebensschaden: Brennen, falls keine Reaktion. (verstärkt)",
+      "defenseSuppressible": true
+    },
+    "intensity": 2,
+    "transformId": "xform-opfergabe",
+    "grantsFetz": false,
+    "catalystConsumed": true,
+    "overformulaPrimaryBonus": null,
+    "overformulaIntensityBonus": 1,
+    "formulaDefensePenalty": -1,
+    "summonConstructDefId": null
+  },
+  {
+    "recipeId": "v6-tek-schicksalmanifestation-wasser-ueberladung",
+    "kind": "tek",
+    "catalogSlice": "slice1",
+    "techniqueId": "v6-technik-schicksalmanifestation",
+    "essenceId": "v6-essenz-wasser",
+    "catalystId": "v6-katalysator-ueberladung",
+    "name": "Wellenschicksal · Überladung",
+    "effectSummary": "Bereite Boost +4 vor. Bei Heilung oder Schildgewinn: entferne optional eine Marke von dir. Primärwert +2; danach erleidest du 1 Selbstschaden. TEK: +1 Fetzladung (max 1×/Zug).",
+    "primary": {
+      "kind": "prep_boost",
+      "value": 4,
+      "target": "self"
+    },
+    "rider": {
+      "id": "rider-reinigen",
+      "summary": "Bei Heilung oder Schildgewinn: entferne optional eine Marke von dir.",
+      "defenseSuppressible": false
+    },
+    "intensity": 1,
+    "transformId": "xform-ueberladung",
+    "grantsFetz": true,
+    "catalystConsumed": true,
+    "overformulaPrimaryBonus": null,
+    "overformulaIntensityBonus": null,
+    "formulaDefensePenalty": null,
+    "summonConstructDefId": null
+  },
+  {
+    "recipeId": "v6-over-schicksalmanifestation-wasser-ueberladung",
+    "kind": "overformula",
+    "catalogSlice": "slice1",
+    "techniqueId": "v6-technik-schicksalmanifestation",
+    "essenceId": "v6-essenz-wasser",
+    "catalystId": "v6-katalysator-ueberladung",
+    "name": "Überformel Wellenschicksal · Überladung",
+    "effectSummary": "Bereite Boost +4 vor. Bei Heilung oder Schildgewinn: entferne optional eine Marke von dir. (verstärkt) Primärwert +2; danach erleidest du 1 Selbstschaden. Überformel: Intensität +1 (fester Slice-1-Bonus). Überformel: Fetzladung wird verbraucht. Formelabwehr −1.",
+    "primary": {
+      "kind": "prep_boost",
+      "value": 4,
+      "target": "self"
+    },
+    "rider": {
+      "id": "rider-reinigen",
+      "summary": "Bei Heilung oder Schildgewinn: entferne optional eine Marke von dir. (verstärkt)",
+      "defenseSuppressible": false
+    },
+    "intensity": 2,
+    "transformId": "xform-ueberladung",
+    "grantsFetz": false,
+    "catalystConsumed": true,
+    "overformulaPrimaryBonus": null,
+    "overformulaIntensityBonus": 1,
+    "formulaDefensePenalty": -1,
+    "summonConstructDefId": null
+  },
+  {
+    "recipeId": "v6-tek-schicksalmanifestation-wasser-verdichtung",
+    "kind": "tek",
+    "catalogSlice": "slice1",
+    "techniqueId": "v6-technik-schicksalmanifestation",
+    "essenceId": "v6-essenz-wasser",
+    "catalystId": "v6-katalysator-verdichtung",
+    "name": "Wellenschicksal · Verdichtung",
+    "effectSummary": "Bereite Boost +3 vor. Bei Heilung oder Schildgewinn: entferne optional eine Marke von dir. Primärwert +1; verwendete Komponenten erhalten +1 Stabilität. TEK: +1 Fetzladung (max 1×/Zug).",
+    "primary": {
+      "kind": "prep_boost",
+      "value": 3,
+      "target": "self"
+    },
+    "rider": {
+      "id": "rider-reinigen",
+      "summary": "Bei Heilung oder Schildgewinn: entferne optional eine Marke von dir.",
+      "defenseSuppressible": false
+    },
+    "intensity": 1,
+    "transformId": "xform-verdichtung",
+    "grantsFetz": true,
+    "catalystConsumed": true,
+    "overformulaPrimaryBonus": null,
+    "overformulaIntensityBonus": null,
+    "formulaDefensePenalty": null,
+    "summonConstructDefId": null
+  },
+  {
+    "recipeId": "v6-over-schicksalmanifestation-wasser-verdichtung",
+    "kind": "overformula",
+    "catalogSlice": "slice1",
+    "techniqueId": "v6-technik-schicksalmanifestation",
+    "essenceId": "v6-essenz-wasser",
+    "catalystId": "v6-katalysator-verdichtung",
+    "name": "Überformel Wellenschicksal · Verdichtung",
+    "effectSummary": "Bereite Boost +3 vor. Bei Heilung oder Schildgewinn: entferne optional eine Marke von dir. (verstärkt) Primärwert +1; verwendete Komponenten erhalten +1 Stabilität. Überformel: Intensität +1 (fester Slice-1-Bonus). Überformel: Fetzladung wird verbraucht. Formelabwehr −1.",
+    "primary": {
+      "kind": "prep_boost",
+      "value": 3,
+      "target": "self"
+    },
+    "rider": {
+      "id": "rider-reinigen",
+      "summary": "Bei Heilung oder Schildgewinn: entferne optional eine Marke von dir. (verstärkt)",
+      "defenseSuppressible": false
+    },
+    "intensity": 2,
+    "transformId": "xform-verdichtung",
+    "grantsFetz": false,
+    "catalystConsumed": true,
+    "overformulaPrimaryBonus": null,
+    "overformulaIntensityBonus": 1,
+    "formulaDefensePenalty": -1,
+    "summonConstructDefId": null
+  },
+  {
+    "recipeId": "v6-tek-schicksalmanifestation-wasser-sofortzuender",
+    "kind": "tek",
+    "catalogSlice": "slice1",
+    "techniqueId": "v6-technik-schicksalmanifestation",
+    "essenceId": "v6-essenz-wasser",
+    "catalystId": "v6-katalysator-sofortzuender",
+    "name": "Wellenschicksal · Sofortzünder",
+    "effectSummary": "Bereite Boost +1 vor. Bei Heilung oder Schildgewinn: entferne optional eine Marke von dir. Primärwert −1; danach ziehe 1 und wirf 1 ab. TEK: +1 Fetzladung (max 1×/Zug).",
+    "primary": {
+      "kind": "prep_boost",
+      "value": 1,
+      "target": "self"
+    },
+    "rider": {
+      "id": "rider-reinigen",
+      "summary": "Bei Heilung oder Schildgewinn: entferne optional eine Marke von dir.",
+      "defenseSuppressible": false
+    },
+    "intensity": 1,
+    "transformId": "xform-sofortzuender",
+    "grantsFetz": true,
+    "catalystConsumed": true,
+    "overformulaPrimaryBonus": null,
+    "overformulaIntensityBonus": null,
+    "formulaDefensePenalty": null,
+    "summonConstructDefId": null
+  },
+  {
+    "recipeId": "v6-over-schicksalmanifestation-wasser-sofortzuender",
+    "kind": "overformula",
+    "catalogSlice": "slice1",
+    "techniqueId": "v6-technik-schicksalmanifestation",
+    "essenceId": "v6-essenz-wasser",
+    "catalystId": "v6-katalysator-sofortzuender",
+    "name": "Überformel Wellenschicksal · Sofortzünder",
+    "effectSummary": "Bereite Boost +1 vor. Bei Heilung oder Schildgewinn: entferne optional eine Marke von dir. (verstärkt) Primärwert −1; danach ziehe 1 und wirf 1 ab. Überformel: Intensität +1 (fester Slice-1-Bonus). Überformel: Fetzladung wird verbraucht. Formelabwehr −1.",
+    "primary": {
+      "kind": "prep_boost",
+      "value": 1,
+      "target": "self"
+    },
+    "rider": {
+      "id": "rider-reinigen",
+      "summary": "Bei Heilung oder Schildgewinn: entferne optional eine Marke von dir. (verstärkt)",
+      "defenseSuppressible": false
+    },
+    "intensity": 2,
+    "transformId": "xform-sofortzuender",
+    "grantsFetz": false,
+    "catalystConsumed": true,
+    "overformulaPrimaryBonus": null,
+    "overformulaIntensityBonus": 1,
+    "formulaDefensePenalty": -1,
+    "summonConstructDefId": null
+  },
+  {
+    "recipeId": "v6-tek-schicksalmanifestation-wasser-opfergabe",
+    "kind": "tek",
+    "catalogSlice": "slice1",
+    "techniqueId": "v6-technik-schicksalmanifestation",
+    "essenceId": "v6-essenz-wasser",
+    "catalystId": "v6-katalysator-opfergabe",
+    "name": "Wellenschicksal · Opfergabe",
+    "effectSummary": "Bereite Boost +2 vor. Bei Heilung oder Schildgewinn: entferne optional eine Marke von dir. Optional: wirf 1 Handkarte ab für Primärwert +2. TEK: +1 Fetzladung (max 1×/Zug).",
+    "primary": {
+      "kind": "prep_boost",
+      "value": 2,
+      "target": "self"
+    },
+    "rider": {
+      "id": "rider-reinigen",
+      "summary": "Bei Heilung oder Schildgewinn: entferne optional eine Marke von dir.",
+      "defenseSuppressible": false
+    },
+    "intensity": 1,
+    "transformId": "xform-opfergabe",
+    "grantsFetz": true,
+    "catalystConsumed": true,
+    "overformulaPrimaryBonus": null,
+    "overformulaIntensityBonus": null,
+    "formulaDefensePenalty": null,
+    "summonConstructDefId": null
+  },
+  {
+    "recipeId": "v6-over-schicksalmanifestation-wasser-opfergabe",
+    "kind": "overformula",
+    "catalogSlice": "slice1",
+    "techniqueId": "v6-technik-schicksalmanifestation",
+    "essenceId": "v6-essenz-wasser",
+    "catalystId": "v6-katalysator-opfergabe",
+    "name": "Überformel Wellenschicksal · Opfergabe",
+    "effectSummary": "Bereite Boost +2 vor. Bei Heilung oder Schildgewinn: entferne optional eine Marke von dir. (verstärkt) Optional: wirf 1 Handkarte ab für Primärwert +2. Überformel: Intensität +1 (fester Slice-1-Bonus). Überformel: Fetzladung wird verbraucht. Formelabwehr −1.",
+    "primary": {
+      "kind": "prep_boost",
+      "value": 2,
+      "target": "self"
+    },
+    "rider": {
+      "id": "rider-reinigen",
+      "summary": "Bei Heilung oder Schildgewinn: entferne optional eine Marke von dir. (verstärkt)",
+      "defenseSuppressible": false
+    },
+    "intensity": 2,
+    "transformId": "xform-opfergabe",
+    "grantsFetz": false,
+    "catalystConsumed": true,
+    "overformulaPrimaryBonus": null,
+    "overformulaIntensityBonus": 1,
+    "formulaDefensePenalty": -1,
+    "summonConstructDefId": null
+  },
+  {
+    "recipeId": "v6-tek-schicksalmanifestation-erde-ueberladung",
+    "kind": "tek",
+    "catalogSlice": "slice1",
+    "techniqueId": "v6-technik-schicksalmanifestation",
+    "essenceId": "v6-essenz-erde",
+    "catalystId": "v6-katalysator-ueberladung",
+    "name": "Felsschicksal · Überladung",
+    "effectSummary": "Bereite Boost +4 vor. Verwendete Komponenten +1 Stabilität bis nächste Startphase. Primärwert +2; danach erleidest du 1 Selbstschaden. TEK: +1 Fetzladung (max 1×/Zug).",
+    "primary": {
+      "kind": "prep_boost",
+      "value": 4,
+      "target": "self"
+    },
+    "rider": {
+      "id": "rider-stabilitaet",
+      "summary": "Verwendete Komponenten +1 Stabilität bis nächste Startphase.",
+      "defenseSuppressible": false
+    },
+    "intensity": 1,
+    "transformId": "xform-ueberladung",
+    "grantsFetz": true,
+    "catalystConsumed": true,
+    "overformulaPrimaryBonus": null,
+    "overformulaIntensityBonus": null,
+    "formulaDefensePenalty": null,
+    "summonConstructDefId": null
+  },
+  {
+    "recipeId": "v6-over-schicksalmanifestation-erde-ueberladung",
+    "kind": "overformula",
+    "catalogSlice": "slice1",
+    "techniqueId": "v6-technik-schicksalmanifestation",
+    "essenceId": "v6-essenz-erde",
+    "catalystId": "v6-katalysator-ueberladung",
+    "name": "Überformel Felsschicksal · Überladung",
+    "effectSummary": "Bereite Boost +4 vor. Verwendete Komponenten +1 Stabilität bis nächste Startphase. (verstärkt) Primärwert +2; danach erleidest du 1 Selbstschaden. Überformel: Intensität +1 (fester Slice-1-Bonus). Überformel: Fetzladung wird verbraucht. Formelabwehr −1.",
+    "primary": {
+      "kind": "prep_boost",
+      "value": 4,
+      "target": "self"
+    },
+    "rider": {
+      "id": "rider-stabilitaet",
+      "summary": "Verwendete Komponenten +1 Stabilität bis nächste Startphase. (verstärkt)",
+      "defenseSuppressible": false
+    },
+    "intensity": 2,
+    "transformId": "xform-ueberladung",
+    "grantsFetz": false,
+    "catalystConsumed": true,
+    "overformulaPrimaryBonus": null,
+    "overformulaIntensityBonus": 1,
+    "formulaDefensePenalty": -1,
+    "summonConstructDefId": null
+  },
+  {
+    "recipeId": "v6-tek-schicksalmanifestation-erde-verdichtung",
+    "kind": "tek",
+    "catalogSlice": "slice1",
+    "techniqueId": "v6-technik-schicksalmanifestation",
+    "essenceId": "v6-essenz-erde",
+    "catalystId": "v6-katalysator-verdichtung",
+    "name": "Felsschicksal · Verdichtung",
+    "effectSummary": "Bereite Boost +3 vor. Verwendete Komponenten +1 Stabilität bis nächste Startphase. Primärwert +1; verwendete Komponenten erhalten +1 Stabilität. TEK: +1 Fetzladung (max 1×/Zug).",
+    "primary": {
+      "kind": "prep_boost",
+      "value": 3,
+      "target": "self"
+    },
+    "rider": {
+      "id": "rider-stabilitaet",
+      "summary": "Verwendete Komponenten +1 Stabilität bis nächste Startphase.",
+      "defenseSuppressible": false
+    },
+    "intensity": 1,
+    "transformId": "xform-verdichtung",
+    "grantsFetz": true,
+    "catalystConsumed": true,
+    "overformulaPrimaryBonus": null,
+    "overformulaIntensityBonus": null,
+    "formulaDefensePenalty": null,
+    "summonConstructDefId": null
+  },
+  {
+    "recipeId": "v6-over-schicksalmanifestation-erde-verdichtung",
+    "kind": "overformula",
+    "catalogSlice": "slice1",
+    "techniqueId": "v6-technik-schicksalmanifestation",
+    "essenceId": "v6-essenz-erde",
+    "catalystId": "v6-katalysator-verdichtung",
+    "name": "Überformel Felsschicksal · Verdichtung",
+    "effectSummary": "Bereite Boost +3 vor. Verwendete Komponenten +1 Stabilität bis nächste Startphase. (verstärkt) Primärwert +1; verwendete Komponenten erhalten +1 Stabilität. Überformel: Intensität +1 (fester Slice-1-Bonus). Überformel: Fetzladung wird verbraucht. Formelabwehr −1.",
+    "primary": {
+      "kind": "prep_boost",
+      "value": 3,
+      "target": "self"
+    },
+    "rider": {
+      "id": "rider-stabilitaet",
+      "summary": "Verwendete Komponenten +1 Stabilität bis nächste Startphase. (verstärkt)",
+      "defenseSuppressible": false
+    },
+    "intensity": 2,
+    "transformId": "xform-verdichtung",
+    "grantsFetz": false,
+    "catalystConsumed": true,
+    "overformulaPrimaryBonus": null,
+    "overformulaIntensityBonus": 1,
+    "formulaDefensePenalty": -1,
+    "summonConstructDefId": null
+  },
+  {
+    "recipeId": "v6-tek-schicksalmanifestation-erde-sofortzuender",
+    "kind": "tek",
+    "catalogSlice": "slice1",
+    "techniqueId": "v6-technik-schicksalmanifestation",
+    "essenceId": "v6-essenz-erde",
+    "catalystId": "v6-katalysator-sofortzuender",
+    "name": "Felsschicksal · Sofortzünder",
+    "effectSummary": "Bereite Boost +1 vor. Verwendete Komponenten +1 Stabilität bis nächste Startphase. Primärwert −1; danach ziehe 1 und wirf 1 ab. TEK: +1 Fetzladung (max 1×/Zug).",
+    "primary": {
+      "kind": "prep_boost",
+      "value": 1,
+      "target": "self"
+    },
+    "rider": {
+      "id": "rider-stabilitaet",
+      "summary": "Verwendete Komponenten +1 Stabilität bis nächste Startphase.",
+      "defenseSuppressible": false
+    },
+    "intensity": 1,
+    "transformId": "xform-sofortzuender",
+    "grantsFetz": true,
+    "catalystConsumed": true,
+    "overformulaPrimaryBonus": null,
+    "overformulaIntensityBonus": null,
+    "formulaDefensePenalty": null,
+    "summonConstructDefId": null
+  },
+  {
+    "recipeId": "v6-over-schicksalmanifestation-erde-sofortzuender",
+    "kind": "overformula",
+    "catalogSlice": "slice1",
+    "techniqueId": "v6-technik-schicksalmanifestation",
+    "essenceId": "v6-essenz-erde",
+    "catalystId": "v6-katalysator-sofortzuender",
+    "name": "Überformel Felsschicksal · Sofortzünder",
+    "effectSummary": "Bereite Boost +1 vor. Verwendete Komponenten +1 Stabilität bis nächste Startphase. (verstärkt) Primärwert −1; danach ziehe 1 und wirf 1 ab. Überformel: Intensität +1 (fester Slice-1-Bonus). Überformel: Fetzladung wird verbraucht. Formelabwehr −1.",
+    "primary": {
+      "kind": "prep_boost",
+      "value": 1,
+      "target": "self"
+    },
+    "rider": {
+      "id": "rider-stabilitaet",
+      "summary": "Verwendete Komponenten +1 Stabilität bis nächste Startphase. (verstärkt)",
+      "defenseSuppressible": false
+    },
+    "intensity": 2,
+    "transformId": "xform-sofortzuender",
+    "grantsFetz": false,
+    "catalystConsumed": true,
+    "overformulaPrimaryBonus": null,
+    "overformulaIntensityBonus": 1,
+    "formulaDefensePenalty": -1,
+    "summonConstructDefId": null
+  },
+  {
+    "recipeId": "v6-tek-schicksalmanifestation-erde-opfergabe",
+    "kind": "tek",
+    "catalogSlice": "slice1",
+    "techniqueId": "v6-technik-schicksalmanifestation",
+    "essenceId": "v6-essenz-erde",
+    "catalystId": "v6-katalysator-opfergabe",
+    "name": "Felsschicksal · Opfergabe",
+    "effectSummary": "Bereite Boost +2 vor. Verwendete Komponenten +1 Stabilität bis nächste Startphase. Optional: wirf 1 Handkarte ab für Primärwert +2. TEK: +1 Fetzladung (max 1×/Zug).",
+    "primary": {
+      "kind": "prep_boost",
+      "value": 2,
+      "target": "self"
+    },
+    "rider": {
+      "id": "rider-stabilitaet",
+      "summary": "Verwendete Komponenten +1 Stabilität bis nächste Startphase.",
+      "defenseSuppressible": false
+    },
+    "intensity": 1,
+    "transformId": "xform-opfergabe",
+    "grantsFetz": true,
+    "catalystConsumed": true,
+    "overformulaPrimaryBonus": null,
+    "overformulaIntensityBonus": null,
+    "formulaDefensePenalty": null,
+    "summonConstructDefId": null
+  },
+  {
+    "recipeId": "v6-over-schicksalmanifestation-erde-opfergabe",
+    "kind": "overformula",
+    "catalogSlice": "slice1",
+    "techniqueId": "v6-technik-schicksalmanifestation",
+    "essenceId": "v6-essenz-erde",
+    "catalystId": "v6-katalysator-opfergabe",
+    "name": "Überformel Felsschicksal · Opfergabe",
+    "effectSummary": "Bereite Boost +2 vor. Verwendete Komponenten +1 Stabilität bis nächste Startphase. (verstärkt) Optional: wirf 1 Handkarte ab für Primärwert +2. Überformel: Intensität +1 (fester Slice-1-Bonus). Überformel: Fetzladung wird verbraucht. Formelabwehr −1.",
+    "primary": {
+      "kind": "prep_boost",
+      "value": 2,
+      "target": "self"
+    },
+    "rider": {
+      "id": "rider-stabilitaet",
+      "summary": "Verwendete Komponenten +1 Stabilität bis nächste Startphase. (verstärkt)",
+      "defenseSuppressible": false
+    },
+    "intensity": 2,
+    "transformId": "xform-opfergabe",
+    "grantsFetz": false,
+    "catalystConsumed": true,
+    "overformulaPrimaryBonus": null,
+    "overformulaIntensityBonus": 1,
+    "formulaDefensePenalty": -1,
+    "summonConstructDefId": null
+  },
+  {
+    "recipeId": "v6-tek-schicksalmanifestation-luft-ueberladung",
+    "kind": "tek",
+    "catalogSlice": "slice1",
+    "techniqueId": "v6-technik-schicksalmanifestation",
+    "essenceId": "v6-essenz-luft",
+    "catalystId": "v6-katalysator-ueberladung",
+    "name": "Windschicksal · Überladung",
+    "effectSummary": "Bereite Boost +4 vor. Nächster eigener Aktions-W6 +1 (max +2). Primärwert +2; danach erleidest du 1 Selbstschaden. TEK: +1 Fetzladung (max 1×/Zug).",
+    "primary": {
+      "kind": "prep_boost",
+      "value": 4,
+      "target": "self"
+    },
+    "rider": {
+      "id": "rider-w6",
+      "summary": "Nächster eigener Aktions-W6 +1 (max +2).",
+      "defenseSuppressible": true
+    },
+    "intensity": 1,
+    "transformId": "xform-ueberladung",
+    "grantsFetz": true,
+    "catalystConsumed": true,
+    "overformulaPrimaryBonus": null,
+    "overformulaIntensityBonus": null,
+    "formulaDefensePenalty": null,
+    "summonConstructDefId": null
+  },
+  {
+    "recipeId": "v6-over-schicksalmanifestation-luft-ueberladung",
+    "kind": "overformula",
+    "catalogSlice": "slice1",
+    "techniqueId": "v6-technik-schicksalmanifestation",
+    "essenceId": "v6-essenz-luft",
+    "catalystId": "v6-katalysator-ueberladung",
+    "name": "Überformel Windschicksal · Überladung",
+    "effectSummary": "Bereite Boost +4 vor. Nächster eigener Aktions-W6 +1 (max +2). (verstärkt) Primärwert +2; danach erleidest du 1 Selbstschaden. Überformel: Intensität +1 (fester Slice-1-Bonus). Überformel: Fetzladung wird verbraucht. Formelabwehr −1.",
+    "primary": {
+      "kind": "prep_boost",
+      "value": 4,
+      "target": "self"
+    },
+    "rider": {
+      "id": "rider-w6",
+      "summary": "Nächster eigener Aktions-W6 +1 (max +2). (verstärkt)",
+      "defenseSuppressible": true
+    },
+    "intensity": 2,
+    "transformId": "xform-ueberladung",
+    "grantsFetz": false,
+    "catalystConsumed": true,
+    "overformulaPrimaryBonus": null,
+    "overformulaIntensityBonus": 1,
+    "formulaDefensePenalty": -1,
+    "summonConstructDefId": null
+  },
+  {
+    "recipeId": "v6-tek-schicksalmanifestation-luft-verdichtung",
+    "kind": "tek",
+    "catalogSlice": "slice1",
+    "techniqueId": "v6-technik-schicksalmanifestation",
+    "essenceId": "v6-essenz-luft",
+    "catalystId": "v6-katalysator-verdichtung",
+    "name": "Windschicksal · Verdichtung",
+    "effectSummary": "Bereite Boost +3 vor. Nächster eigener Aktions-W6 +1 (max +2). Primärwert +1; verwendete Komponenten erhalten +1 Stabilität. TEK: +1 Fetzladung (max 1×/Zug).",
+    "primary": {
+      "kind": "prep_boost",
+      "value": 3,
+      "target": "self"
+    },
+    "rider": {
+      "id": "rider-w6",
+      "summary": "Nächster eigener Aktions-W6 +1 (max +2).",
+      "defenseSuppressible": true
+    },
+    "intensity": 1,
+    "transformId": "xform-verdichtung",
+    "grantsFetz": true,
+    "catalystConsumed": true,
+    "overformulaPrimaryBonus": null,
+    "overformulaIntensityBonus": null,
+    "formulaDefensePenalty": null,
+    "summonConstructDefId": null
+  },
+  {
+    "recipeId": "v6-over-schicksalmanifestation-luft-verdichtung",
+    "kind": "overformula",
+    "catalogSlice": "slice1",
+    "techniqueId": "v6-technik-schicksalmanifestation",
+    "essenceId": "v6-essenz-luft",
+    "catalystId": "v6-katalysator-verdichtung",
+    "name": "Überformel Windschicksal · Verdichtung",
+    "effectSummary": "Bereite Boost +3 vor. Nächster eigener Aktions-W6 +1 (max +2). (verstärkt) Primärwert +1; verwendete Komponenten erhalten +1 Stabilität. Überformel: Intensität +1 (fester Slice-1-Bonus). Überformel: Fetzladung wird verbraucht. Formelabwehr −1.",
+    "primary": {
+      "kind": "prep_boost",
+      "value": 3,
+      "target": "self"
+    },
+    "rider": {
+      "id": "rider-w6",
+      "summary": "Nächster eigener Aktions-W6 +1 (max +2). (verstärkt)",
+      "defenseSuppressible": true
+    },
+    "intensity": 2,
+    "transformId": "xform-verdichtung",
+    "grantsFetz": false,
+    "catalystConsumed": true,
+    "overformulaPrimaryBonus": null,
+    "overformulaIntensityBonus": 1,
+    "formulaDefensePenalty": -1,
+    "summonConstructDefId": null
+  },
+  {
+    "recipeId": "v6-tek-schicksalmanifestation-luft-sofortzuender",
+    "kind": "tek",
+    "catalogSlice": "slice1",
+    "techniqueId": "v6-technik-schicksalmanifestation",
+    "essenceId": "v6-essenz-luft",
+    "catalystId": "v6-katalysator-sofortzuender",
+    "name": "Windschicksal · Sofortzünder",
+    "effectSummary": "Bereite Boost +1 vor. Nächster eigener Aktions-W6 +1 (max +2). Primärwert −1; danach ziehe 1 und wirf 1 ab. TEK: +1 Fetzladung (max 1×/Zug).",
+    "primary": {
+      "kind": "prep_boost",
+      "value": 1,
+      "target": "self"
+    },
+    "rider": {
+      "id": "rider-w6",
+      "summary": "Nächster eigener Aktions-W6 +1 (max +2).",
+      "defenseSuppressible": true
+    },
+    "intensity": 1,
+    "transformId": "xform-sofortzuender",
+    "grantsFetz": true,
+    "catalystConsumed": true,
+    "overformulaPrimaryBonus": null,
+    "overformulaIntensityBonus": null,
+    "formulaDefensePenalty": null,
+    "summonConstructDefId": null
+  },
+  {
+    "recipeId": "v6-over-schicksalmanifestation-luft-sofortzuender",
+    "kind": "overformula",
+    "catalogSlice": "slice1",
+    "techniqueId": "v6-technik-schicksalmanifestation",
+    "essenceId": "v6-essenz-luft",
+    "catalystId": "v6-katalysator-sofortzuender",
+    "name": "Überformel Windschicksal · Sofortzünder",
+    "effectSummary": "Bereite Boost +1 vor. Nächster eigener Aktions-W6 +1 (max +2). (verstärkt) Primärwert −1; danach ziehe 1 und wirf 1 ab. Überformel: Intensität +1 (fester Slice-1-Bonus). Überformel: Fetzladung wird verbraucht. Formelabwehr −1.",
+    "primary": {
+      "kind": "prep_boost",
+      "value": 1,
+      "target": "self"
+    },
+    "rider": {
+      "id": "rider-w6",
+      "summary": "Nächster eigener Aktions-W6 +1 (max +2). (verstärkt)",
+      "defenseSuppressible": true
+    },
+    "intensity": 2,
+    "transformId": "xform-sofortzuender",
+    "grantsFetz": false,
+    "catalystConsumed": true,
+    "overformulaPrimaryBonus": null,
+    "overformulaIntensityBonus": 1,
+    "formulaDefensePenalty": -1,
+    "summonConstructDefId": null
+  },
+  {
+    "recipeId": "v6-tek-schicksalmanifestation-luft-opfergabe",
+    "kind": "tek",
+    "catalogSlice": "slice1",
+    "techniqueId": "v6-technik-schicksalmanifestation",
+    "essenceId": "v6-essenz-luft",
+    "catalystId": "v6-katalysator-opfergabe",
+    "name": "Windschicksal · Opfergabe",
+    "effectSummary": "Bereite Boost +2 vor. Nächster eigener Aktions-W6 +1 (max +2). Optional: wirf 1 Handkarte ab für Primärwert +2. TEK: +1 Fetzladung (max 1×/Zug).",
+    "primary": {
+      "kind": "prep_boost",
+      "value": 2,
+      "target": "self"
+    },
+    "rider": {
+      "id": "rider-w6",
+      "summary": "Nächster eigener Aktions-W6 +1 (max +2).",
+      "defenseSuppressible": true
+    },
+    "intensity": 1,
+    "transformId": "xform-opfergabe",
+    "grantsFetz": true,
+    "catalystConsumed": true,
+    "overformulaPrimaryBonus": null,
+    "overformulaIntensityBonus": null,
+    "formulaDefensePenalty": null,
+    "summonConstructDefId": null
+  },
+  {
+    "recipeId": "v6-over-schicksalmanifestation-luft-opfergabe",
+    "kind": "overformula",
+    "catalogSlice": "slice1",
+    "techniqueId": "v6-technik-schicksalmanifestation",
+    "essenceId": "v6-essenz-luft",
+    "catalystId": "v6-katalysator-opfergabe",
+    "name": "Überformel Windschicksal · Opfergabe",
+    "effectSummary": "Bereite Boost +2 vor. Nächster eigener Aktions-W6 +1 (max +2). (verstärkt) Optional: wirf 1 Handkarte ab für Primärwert +2. Überformel: Intensität +1 (fester Slice-1-Bonus). Überformel: Fetzladung wird verbraucht. Formelabwehr −1.",
+    "primary": {
+      "kind": "prep_boost",
+      "value": 2,
+      "target": "self"
+    },
+    "rider": {
+      "id": "rider-w6",
+      "summary": "Nächster eigener Aktions-W6 +1 (max +2). (verstärkt)",
+      "defenseSuppressible": true
+    },
+    "intensity": 2,
+    "transformId": "xform-opfergabe",
+    "grantsFetz": false,
+    "catalystConsumed": true,
+    "overformulaPrimaryBonus": null,
+    "overformulaIntensityBonus": 1,
+    "formulaDefensePenalty": -1,
+    "summonConstructDefId": null
+  },
+  {
+    "recipeId": "v6-tek-schicksalmanifestation-licht-ueberladung",
+    "kind": "tek",
+    "catalogSlice": "slice1",
+    "techniqueId": "v6-technik-schicksalmanifestation",
+    "essenceId": "v6-essenz-licht",
+    "catalystId": "v6-katalysator-ueberladung",
+    "name": "Lichtschicksal · Überladung",
+    "effectSummary": "Bereite Boost +4 vor. Bei Schildgewinn: entferne optional eine Marke von dir. Primärwert +2; danach erleidest du 1 Selbstschaden. TEK: +1 Fetzladung (max 1×/Zug).",
+    "primary": {
+      "kind": "prep_boost",
+      "value": 4,
+      "target": "self"
+    },
+    "rider": {
+      "id": "rider-reinigen-licht",
+      "summary": "Bei Schildgewinn: entferne optional eine Marke von dir.",
+      "defenseSuppressible": false
+    },
+    "intensity": 1,
+    "transformId": "xform-ueberladung",
+    "grantsFetz": true,
+    "catalystConsumed": true,
+    "overformulaPrimaryBonus": null,
+    "overformulaIntensityBonus": null,
+    "formulaDefensePenalty": null,
+    "summonConstructDefId": null
+  },
+  {
+    "recipeId": "v6-over-schicksalmanifestation-licht-ueberladung",
+    "kind": "overformula",
+    "catalogSlice": "slice1",
+    "techniqueId": "v6-technik-schicksalmanifestation",
+    "essenceId": "v6-essenz-licht",
+    "catalystId": "v6-katalysator-ueberladung",
+    "name": "Überformel Lichtschicksal · Überladung",
+    "effectSummary": "Bereite Boost +4 vor. Bei Schildgewinn: entferne optional eine Marke von dir. (verstärkt) Primärwert +2; danach erleidest du 1 Selbstschaden. Überformel: Intensität +1 (fester Slice-1-Bonus). Überformel: Fetzladung wird verbraucht. Formelabwehr −1.",
+    "primary": {
+      "kind": "prep_boost",
+      "value": 4,
+      "target": "self"
+    },
+    "rider": {
+      "id": "rider-reinigen-licht",
+      "summary": "Bei Schildgewinn: entferne optional eine Marke von dir. (verstärkt)",
+      "defenseSuppressible": false
+    },
+    "intensity": 2,
+    "transformId": "xform-ueberladung",
+    "grantsFetz": false,
+    "catalystConsumed": true,
+    "overformulaPrimaryBonus": null,
+    "overformulaIntensityBonus": 1,
+    "formulaDefensePenalty": -1,
+    "summonConstructDefId": null
+  },
+  {
+    "recipeId": "v6-tek-schicksalmanifestation-licht-verdichtung",
+    "kind": "tek",
+    "catalogSlice": "slice1",
+    "techniqueId": "v6-technik-schicksalmanifestation",
+    "essenceId": "v6-essenz-licht",
+    "catalystId": "v6-katalysator-verdichtung",
+    "name": "Lichtschicksal · Verdichtung",
+    "effectSummary": "Bereite Boost +3 vor. Bei Schildgewinn: entferne optional eine Marke von dir. Primärwert +1; verwendete Komponenten erhalten +1 Stabilität. TEK: +1 Fetzladung (max 1×/Zug).",
+    "primary": {
+      "kind": "prep_boost",
+      "value": 3,
+      "target": "self"
+    },
+    "rider": {
+      "id": "rider-reinigen-licht",
+      "summary": "Bei Schildgewinn: entferne optional eine Marke von dir.",
+      "defenseSuppressible": false
+    },
+    "intensity": 1,
+    "transformId": "xform-verdichtung",
+    "grantsFetz": true,
+    "catalystConsumed": true,
+    "overformulaPrimaryBonus": null,
+    "overformulaIntensityBonus": null,
+    "formulaDefensePenalty": null,
+    "summonConstructDefId": null
+  },
+  {
+    "recipeId": "v6-over-schicksalmanifestation-licht-verdichtung",
+    "kind": "overformula",
+    "catalogSlice": "slice1",
+    "techniqueId": "v6-technik-schicksalmanifestation",
+    "essenceId": "v6-essenz-licht",
+    "catalystId": "v6-katalysator-verdichtung",
+    "name": "Überformel Lichtschicksal · Verdichtung",
+    "effectSummary": "Bereite Boost +3 vor. Bei Schildgewinn: entferne optional eine Marke von dir. (verstärkt) Primärwert +1; verwendete Komponenten erhalten +1 Stabilität. Überformel: Intensität +1 (fester Slice-1-Bonus). Überformel: Fetzladung wird verbraucht. Formelabwehr −1.",
+    "primary": {
+      "kind": "prep_boost",
+      "value": 3,
+      "target": "self"
+    },
+    "rider": {
+      "id": "rider-reinigen-licht",
+      "summary": "Bei Schildgewinn: entferne optional eine Marke von dir. (verstärkt)",
+      "defenseSuppressible": false
+    },
+    "intensity": 2,
+    "transformId": "xform-verdichtung",
+    "grantsFetz": false,
+    "catalystConsumed": true,
+    "overformulaPrimaryBonus": null,
+    "overformulaIntensityBonus": 1,
+    "formulaDefensePenalty": -1,
+    "summonConstructDefId": null
+  },
+  {
+    "recipeId": "v6-tek-schicksalmanifestation-licht-sofortzuender",
+    "kind": "tek",
+    "catalogSlice": "slice1",
+    "techniqueId": "v6-technik-schicksalmanifestation",
+    "essenceId": "v6-essenz-licht",
+    "catalystId": "v6-katalysator-sofortzuender",
+    "name": "Lichtschicksal · Sofortzünder",
+    "effectSummary": "Bereite Boost +1 vor. Bei Schildgewinn: entferne optional eine Marke von dir. Primärwert −1; danach ziehe 1 und wirf 1 ab. TEK: +1 Fetzladung (max 1×/Zug).",
+    "primary": {
+      "kind": "prep_boost",
+      "value": 1,
+      "target": "self"
+    },
+    "rider": {
+      "id": "rider-reinigen-licht",
+      "summary": "Bei Schildgewinn: entferne optional eine Marke von dir.",
+      "defenseSuppressible": false
+    },
+    "intensity": 1,
+    "transformId": "xform-sofortzuender",
+    "grantsFetz": true,
+    "catalystConsumed": true,
+    "overformulaPrimaryBonus": null,
+    "overformulaIntensityBonus": null,
+    "formulaDefensePenalty": null,
+    "summonConstructDefId": null
+  },
+  {
+    "recipeId": "v6-over-schicksalmanifestation-licht-sofortzuender",
+    "kind": "overformula",
+    "catalogSlice": "slice1",
+    "techniqueId": "v6-technik-schicksalmanifestation",
+    "essenceId": "v6-essenz-licht",
+    "catalystId": "v6-katalysator-sofortzuender",
+    "name": "Überformel Lichtschicksal · Sofortzünder",
+    "effectSummary": "Bereite Boost +1 vor. Bei Schildgewinn: entferne optional eine Marke von dir. (verstärkt) Primärwert −1; danach ziehe 1 und wirf 1 ab. Überformel: Intensität +1 (fester Slice-1-Bonus). Überformel: Fetzladung wird verbraucht. Formelabwehr −1.",
+    "primary": {
+      "kind": "prep_boost",
+      "value": 1,
+      "target": "self"
+    },
+    "rider": {
+      "id": "rider-reinigen-licht",
+      "summary": "Bei Schildgewinn: entferne optional eine Marke von dir. (verstärkt)",
+      "defenseSuppressible": false
+    },
+    "intensity": 2,
+    "transformId": "xform-sofortzuender",
+    "grantsFetz": false,
+    "catalystConsumed": true,
+    "overformulaPrimaryBonus": null,
+    "overformulaIntensityBonus": 1,
+    "formulaDefensePenalty": -1,
+    "summonConstructDefId": null
+  },
+  {
+    "recipeId": "v6-tek-schicksalmanifestation-licht-opfergabe",
+    "kind": "tek",
+    "catalogSlice": "slice1",
+    "techniqueId": "v6-technik-schicksalmanifestation",
+    "essenceId": "v6-essenz-licht",
+    "catalystId": "v6-katalysator-opfergabe",
+    "name": "Lichtschicksal · Opfergabe",
+    "effectSummary": "Bereite Boost +2 vor. Bei Schildgewinn: entferne optional eine Marke von dir. Optional: wirf 1 Handkarte ab für Primärwert +2. TEK: +1 Fetzladung (max 1×/Zug).",
+    "primary": {
+      "kind": "prep_boost",
+      "value": 2,
+      "target": "self"
+    },
+    "rider": {
+      "id": "rider-reinigen-licht",
+      "summary": "Bei Schildgewinn: entferne optional eine Marke von dir.",
+      "defenseSuppressible": false
+    },
+    "intensity": 1,
+    "transformId": "xform-opfergabe",
+    "grantsFetz": true,
+    "catalystConsumed": true,
+    "overformulaPrimaryBonus": null,
+    "overformulaIntensityBonus": null,
+    "formulaDefensePenalty": null,
+    "summonConstructDefId": null
+  },
+  {
+    "recipeId": "v6-over-schicksalmanifestation-licht-opfergabe",
+    "kind": "overformula",
+    "catalogSlice": "slice1",
+    "techniqueId": "v6-technik-schicksalmanifestation",
+    "essenceId": "v6-essenz-licht",
+    "catalystId": "v6-katalysator-opfergabe",
+    "name": "Überformel Lichtschicksal · Opfergabe",
+    "effectSummary": "Bereite Boost +2 vor. Bei Schildgewinn: entferne optional eine Marke von dir. (verstärkt) Optional: wirf 1 Handkarte ab für Primärwert +2. Überformel: Intensität +1 (fester Slice-1-Bonus). Überformel: Fetzladung wird verbraucht. Formelabwehr −1.",
+    "primary": {
+      "kind": "prep_boost",
+      "value": 2,
+      "target": "self"
+    },
+    "rider": {
+      "id": "rider-reinigen-licht",
+      "summary": "Bei Schildgewinn: entferne optional eine Marke von dir. (verstärkt)",
+      "defenseSuppressible": false
+    },
+    "intensity": 2,
+    "transformId": "xform-opfergabe",
+    "grantsFetz": false,
+    "catalystConsumed": true,
+    "overformulaPrimaryBonus": null,
+    "overformulaIntensityBonus": 1,
+    "formulaDefensePenalty": -1,
+    "summonConstructDefId": null
+  },
+  {
+    "recipeId": "v6-tek-schicksalmanifestation-schatten-ueberladung",
+    "kind": "tek",
+    "catalogSlice": "slice1",
+    "techniqueId": "v6-technik-schicksalmanifestation",
+    "essenceId": "v6-essenz-schatten",
+    "catalystId": "v6-katalysator-ueberladung",
+    "name": "Schattenschicksal · Überladung",
+    "effectSummary": "Bereite Boost +4 vor. Bei Treffer: erschöpfe optional 1 gegnerische Formelkomponente. Primärwert +2; danach erleidest du 1 Selbstschaden. TEK: +1 Fetzladung (max 1×/Zug).",
+    "primary": {
+      "kind": "prep_boost",
+      "value": 4,
+      "target": "self"
+    },
+    "rider": {
+      "id": "rider-fluch",
+      "summary": "Bei Treffer: erschöpfe optional 1 gegnerische Formelkomponente.",
+      "defenseSuppressible": true
+    },
+    "intensity": 1,
+    "transformId": "xform-ueberladung",
+    "grantsFetz": true,
+    "catalystConsumed": true,
+    "overformulaPrimaryBonus": null,
+    "overformulaIntensityBonus": null,
+    "formulaDefensePenalty": null,
+    "summonConstructDefId": null
+  },
+  {
+    "recipeId": "v6-over-schicksalmanifestation-schatten-ueberladung",
+    "kind": "overformula",
+    "catalogSlice": "slice1",
+    "techniqueId": "v6-technik-schicksalmanifestation",
+    "essenceId": "v6-essenz-schatten",
+    "catalystId": "v6-katalysator-ueberladung",
+    "name": "Überformel Schattenschicksal · Überladung",
+    "effectSummary": "Bereite Boost +4 vor. Bei Treffer: erschöpfe optional 1 gegnerische Formelkomponente. (verstärkt) Primärwert +2; danach erleidest du 1 Selbstschaden. Überformel: Intensität +1 (fester Slice-1-Bonus). Überformel: Fetzladung wird verbraucht. Formelabwehr −1.",
+    "primary": {
+      "kind": "prep_boost",
+      "value": 4,
+      "target": "self"
+    },
+    "rider": {
+      "id": "rider-fluch",
+      "summary": "Bei Treffer: erschöpfe optional 1 gegnerische Formelkomponente. (verstärkt)",
+      "defenseSuppressible": true
+    },
+    "intensity": 2,
+    "transformId": "xform-ueberladung",
+    "grantsFetz": false,
+    "catalystConsumed": true,
+    "overformulaPrimaryBonus": null,
+    "overformulaIntensityBonus": 1,
+    "formulaDefensePenalty": -1,
+    "summonConstructDefId": null
+  },
+  {
+    "recipeId": "v6-tek-schicksalmanifestation-schatten-verdichtung",
+    "kind": "tek",
+    "catalogSlice": "slice1",
+    "techniqueId": "v6-technik-schicksalmanifestation",
+    "essenceId": "v6-essenz-schatten",
+    "catalystId": "v6-katalysator-verdichtung",
+    "name": "Schattenschicksal · Verdichtung",
+    "effectSummary": "Bereite Boost +3 vor. Bei Treffer: erschöpfe optional 1 gegnerische Formelkomponente. Primärwert +1; verwendete Komponenten erhalten +1 Stabilität. TEK: +1 Fetzladung (max 1×/Zug).",
+    "primary": {
+      "kind": "prep_boost",
+      "value": 3,
+      "target": "self"
+    },
+    "rider": {
+      "id": "rider-fluch",
+      "summary": "Bei Treffer: erschöpfe optional 1 gegnerische Formelkomponente.",
+      "defenseSuppressible": true
+    },
+    "intensity": 1,
+    "transformId": "xform-verdichtung",
+    "grantsFetz": true,
+    "catalystConsumed": true,
+    "overformulaPrimaryBonus": null,
+    "overformulaIntensityBonus": null,
+    "formulaDefensePenalty": null,
+    "summonConstructDefId": null
+  },
+  {
+    "recipeId": "v6-over-schicksalmanifestation-schatten-verdichtung",
+    "kind": "overformula",
+    "catalogSlice": "slice1",
+    "techniqueId": "v6-technik-schicksalmanifestation",
+    "essenceId": "v6-essenz-schatten",
+    "catalystId": "v6-katalysator-verdichtung",
+    "name": "Überformel Schattenschicksal · Verdichtung",
+    "effectSummary": "Bereite Boost +3 vor. Bei Treffer: erschöpfe optional 1 gegnerische Formelkomponente. (verstärkt) Primärwert +1; verwendete Komponenten erhalten +1 Stabilität. Überformel: Intensität +1 (fester Slice-1-Bonus). Überformel: Fetzladung wird verbraucht. Formelabwehr −1.",
+    "primary": {
+      "kind": "prep_boost",
+      "value": 3,
+      "target": "self"
+    },
+    "rider": {
+      "id": "rider-fluch",
+      "summary": "Bei Treffer: erschöpfe optional 1 gegnerische Formelkomponente. (verstärkt)",
+      "defenseSuppressible": true
+    },
+    "intensity": 2,
+    "transformId": "xform-verdichtung",
+    "grantsFetz": false,
+    "catalystConsumed": true,
+    "overformulaPrimaryBonus": null,
+    "overformulaIntensityBonus": 1,
+    "formulaDefensePenalty": -1,
+    "summonConstructDefId": null
+  },
+  {
+    "recipeId": "v6-tek-schicksalmanifestation-schatten-sofortzuender",
+    "kind": "tek",
+    "catalogSlice": "slice1",
+    "techniqueId": "v6-technik-schicksalmanifestation",
+    "essenceId": "v6-essenz-schatten",
+    "catalystId": "v6-katalysator-sofortzuender",
+    "name": "Schattenschicksal · Sofortzünder",
+    "effectSummary": "Bereite Boost +1 vor. Bei Treffer: erschöpfe optional 1 gegnerische Formelkomponente. Primärwert −1; danach ziehe 1 und wirf 1 ab. TEK: +1 Fetzladung (max 1×/Zug).",
+    "primary": {
+      "kind": "prep_boost",
+      "value": 1,
+      "target": "self"
+    },
+    "rider": {
+      "id": "rider-fluch",
+      "summary": "Bei Treffer: erschöpfe optional 1 gegnerische Formelkomponente.",
+      "defenseSuppressible": true
+    },
+    "intensity": 1,
+    "transformId": "xform-sofortzuender",
+    "grantsFetz": true,
+    "catalystConsumed": true,
+    "overformulaPrimaryBonus": null,
+    "overformulaIntensityBonus": null,
+    "formulaDefensePenalty": null,
+    "summonConstructDefId": null
+  },
+  {
+    "recipeId": "v6-over-schicksalmanifestation-schatten-sofortzuender",
+    "kind": "overformula",
+    "catalogSlice": "slice1",
+    "techniqueId": "v6-technik-schicksalmanifestation",
+    "essenceId": "v6-essenz-schatten",
+    "catalystId": "v6-katalysator-sofortzuender",
+    "name": "Überformel Schattenschicksal · Sofortzünder",
+    "effectSummary": "Bereite Boost +1 vor. Bei Treffer: erschöpfe optional 1 gegnerische Formelkomponente. (verstärkt) Primärwert −1; danach ziehe 1 und wirf 1 ab. Überformel: Intensität +1 (fester Slice-1-Bonus). Überformel: Fetzladung wird verbraucht. Formelabwehr −1.",
+    "primary": {
+      "kind": "prep_boost",
+      "value": 1,
+      "target": "self"
+    },
+    "rider": {
+      "id": "rider-fluch",
+      "summary": "Bei Treffer: erschöpfe optional 1 gegnerische Formelkomponente. (verstärkt)",
+      "defenseSuppressible": true
+    },
+    "intensity": 2,
+    "transformId": "xform-sofortzuender",
+    "grantsFetz": false,
+    "catalystConsumed": true,
+    "overformulaPrimaryBonus": null,
+    "overformulaIntensityBonus": 1,
+    "formulaDefensePenalty": -1,
+    "summonConstructDefId": null
+  },
+  {
+    "recipeId": "v6-tek-schicksalmanifestation-schatten-opfergabe",
+    "kind": "tek",
+    "catalogSlice": "slice1",
+    "techniqueId": "v6-technik-schicksalmanifestation",
+    "essenceId": "v6-essenz-schatten",
+    "catalystId": "v6-katalysator-opfergabe",
+    "name": "Schattenschicksal · Opfergabe",
+    "effectSummary": "Bereite Boost +2 vor. Bei Treffer: erschöpfe optional 1 gegnerische Formelkomponente. Optional: wirf 1 Handkarte ab für Primärwert +2. TEK: +1 Fetzladung (max 1×/Zug).",
+    "primary": {
+      "kind": "prep_boost",
+      "value": 2,
+      "target": "self"
+    },
+    "rider": {
+      "id": "rider-fluch",
+      "summary": "Bei Treffer: erschöpfe optional 1 gegnerische Formelkomponente.",
+      "defenseSuppressible": true
+    },
+    "intensity": 1,
+    "transformId": "xform-opfergabe",
+    "grantsFetz": true,
+    "catalystConsumed": true,
+    "overformulaPrimaryBonus": null,
+    "overformulaIntensityBonus": null,
+    "formulaDefensePenalty": null,
+    "summonConstructDefId": null
+  },
+  {
+    "recipeId": "v6-over-schicksalmanifestation-schatten-opfergabe",
+    "kind": "overformula",
+    "catalogSlice": "slice1",
+    "techniqueId": "v6-technik-schicksalmanifestation",
+    "essenceId": "v6-essenz-schatten",
+    "catalystId": "v6-katalysator-opfergabe",
+    "name": "Überformel Schattenschicksal · Opfergabe",
+    "effectSummary": "Bereite Boost +2 vor. Bei Treffer: erschöpfe optional 1 gegnerische Formelkomponente. (verstärkt) Optional: wirf 1 Handkarte ab für Primärwert +2. Überformel: Intensität +1 (fester Slice-1-Bonus). Überformel: Fetzladung wird verbraucht. Formelabwehr −1.",
+    "primary": {
+      "kind": "prep_boost",
+      "value": 2,
+      "target": "self"
+    },
+    "rider": {
+      "id": "rider-fluch",
+      "summary": "Bei Treffer: erschöpfe optional 1 gegnerische Formelkomponente. (verstärkt)",
+      "defenseSuppressible": true
+    },
+    "intensity": 2,
+    "transformId": "xform-opfergabe",
+    "grantsFetz": false,
+    "catalystConsumed": true,
+    "overformulaPrimaryBonus": null,
+    "overformulaIntensityBonus": 1,
+    "formulaDefensePenalty": -1,
+    "summonConstructDefId": null
   },
   {
     "recipeId": "v6-tek-magiepanzer-feuer-ueberladung",
@@ -4148,7 +14386,8 @@ export const V6_GENERATED_FORMULA_RECIPES: readonly V6GeneratedFormulaRecipe[] =
     "catalystConsumed": true,
     "overformulaPrimaryBonus": null,
     "overformulaIntensityBonus": null,
-    "formulaDefensePenalty": null
+    "formulaDefensePenalty": null,
+    "summonConstructDefId": null
   },
   {
     "recipeId": "v6-over-magiepanzer-feuer-ueberladung",
@@ -4176,7 +14415,8 @@ export const V6_GENERATED_FORMULA_RECIPES: readonly V6GeneratedFormulaRecipe[] =
     "catalystConsumed": true,
     "overformulaPrimaryBonus": null,
     "overformulaIntensityBonus": 1,
-    "formulaDefensePenalty": -1
+    "formulaDefensePenalty": -1,
+    "summonConstructDefId": null
   },
   {
     "recipeId": "v6-tek-magiepanzer-feuer-verdichtung",
@@ -4204,7 +14444,8 @@ export const V6_GENERATED_FORMULA_RECIPES: readonly V6GeneratedFormulaRecipe[] =
     "catalystConsumed": true,
     "overformulaPrimaryBonus": null,
     "overformulaIntensityBonus": null,
-    "formulaDefensePenalty": null
+    "formulaDefensePenalty": null,
+    "summonConstructDefId": null
   },
   {
     "recipeId": "v6-over-magiepanzer-feuer-verdichtung",
@@ -4232,7 +14473,8 @@ export const V6_GENERATED_FORMULA_RECIPES: readonly V6GeneratedFormulaRecipe[] =
     "catalystConsumed": true,
     "overformulaPrimaryBonus": null,
     "overformulaIntensityBonus": 1,
-    "formulaDefensePenalty": -1
+    "formulaDefensePenalty": -1,
+    "summonConstructDefId": null
   },
   {
     "recipeId": "v6-tek-magiepanzer-feuer-sofortzuender",
@@ -4260,7 +14502,8 @@ export const V6_GENERATED_FORMULA_RECIPES: readonly V6GeneratedFormulaRecipe[] =
     "catalystConsumed": true,
     "overformulaPrimaryBonus": null,
     "overformulaIntensityBonus": null,
-    "formulaDefensePenalty": null
+    "formulaDefensePenalty": null,
+    "summonConstructDefId": null
   },
   {
     "recipeId": "v6-over-magiepanzer-feuer-sofortzuender",
@@ -4288,7 +14531,8 @@ export const V6_GENERATED_FORMULA_RECIPES: readonly V6GeneratedFormulaRecipe[] =
     "catalystConsumed": true,
     "overformulaPrimaryBonus": null,
     "overformulaIntensityBonus": 1,
-    "formulaDefensePenalty": -1
+    "formulaDefensePenalty": -1,
+    "summonConstructDefId": null
   },
   {
     "recipeId": "v6-tek-magiepanzer-feuer-opfergabe",
@@ -4316,7 +14560,8 @@ export const V6_GENERATED_FORMULA_RECIPES: readonly V6GeneratedFormulaRecipe[] =
     "catalystConsumed": true,
     "overformulaPrimaryBonus": null,
     "overformulaIntensityBonus": null,
-    "formulaDefensePenalty": null
+    "formulaDefensePenalty": null,
+    "summonConstructDefId": null
   },
   {
     "recipeId": "v6-over-magiepanzer-feuer-opfergabe",
@@ -4344,7 +14589,8 @@ export const V6_GENERATED_FORMULA_RECIPES: readonly V6GeneratedFormulaRecipe[] =
     "catalystConsumed": true,
     "overformulaPrimaryBonus": null,
     "overformulaIntensityBonus": 1,
-    "formulaDefensePenalty": -1
+    "formulaDefensePenalty": -1,
+    "summonConstructDefId": null
   },
   {
     "recipeId": "v6-tek-magiepanzer-wasser-ueberladung",
@@ -4371,7 +14617,8 @@ export const V6_GENERATED_FORMULA_RECIPES: readonly V6GeneratedFormulaRecipe[] =
     "catalystConsumed": true,
     "overformulaPrimaryBonus": null,
     "overformulaIntensityBonus": null,
-    "formulaDefensePenalty": null
+    "formulaDefensePenalty": null,
+    "summonConstructDefId": null
   },
   {
     "recipeId": "v6-over-magiepanzer-wasser-ueberladung",
@@ -4398,7 +14645,8 @@ export const V6_GENERATED_FORMULA_RECIPES: readonly V6GeneratedFormulaRecipe[] =
     "catalystConsumed": true,
     "overformulaPrimaryBonus": 2,
     "overformulaIntensityBonus": null,
-    "formulaDefensePenalty": -1
+    "formulaDefensePenalty": -1,
+    "summonConstructDefId": null
   },
   {
     "recipeId": "v6-tek-magiepanzer-wasser-verdichtung",
@@ -4425,7 +14673,8 @@ export const V6_GENERATED_FORMULA_RECIPES: readonly V6GeneratedFormulaRecipe[] =
     "catalystConsumed": true,
     "overformulaPrimaryBonus": null,
     "overformulaIntensityBonus": null,
-    "formulaDefensePenalty": null
+    "formulaDefensePenalty": null,
+    "summonConstructDefId": null
   },
   {
     "recipeId": "v6-over-magiepanzer-wasser-verdichtung",
@@ -4452,7 +14701,8 @@ export const V6_GENERATED_FORMULA_RECIPES: readonly V6GeneratedFormulaRecipe[] =
     "catalystConsumed": true,
     "overformulaPrimaryBonus": 2,
     "overformulaIntensityBonus": null,
-    "formulaDefensePenalty": -1
+    "formulaDefensePenalty": -1,
+    "summonConstructDefId": null
   },
   {
     "recipeId": "v6-tek-magiepanzer-wasser-sofortzuender",
@@ -4479,7 +14729,8 @@ export const V6_GENERATED_FORMULA_RECIPES: readonly V6GeneratedFormulaRecipe[] =
     "catalystConsumed": true,
     "overformulaPrimaryBonus": null,
     "overformulaIntensityBonus": null,
-    "formulaDefensePenalty": null
+    "formulaDefensePenalty": null,
+    "summonConstructDefId": null
   },
   {
     "recipeId": "v6-over-magiepanzer-wasser-sofortzuender",
@@ -4506,7 +14757,8 @@ export const V6_GENERATED_FORMULA_RECIPES: readonly V6GeneratedFormulaRecipe[] =
     "catalystConsumed": true,
     "overformulaPrimaryBonus": 2,
     "overformulaIntensityBonus": null,
-    "formulaDefensePenalty": -1
+    "formulaDefensePenalty": -1,
+    "summonConstructDefId": null
   },
   {
     "recipeId": "v6-tek-magiepanzer-wasser-opfergabe",
@@ -4533,7 +14785,8 @@ export const V6_GENERATED_FORMULA_RECIPES: readonly V6GeneratedFormulaRecipe[] =
     "catalystConsumed": true,
     "overformulaPrimaryBonus": null,
     "overformulaIntensityBonus": null,
-    "formulaDefensePenalty": null
+    "formulaDefensePenalty": null,
+    "summonConstructDefId": null
   },
   {
     "recipeId": "v6-over-magiepanzer-wasser-opfergabe",
@@ -4560,7 +14813,8 @@ export const V6_GENERATED_FORMULA_RECIPES: readonly V6GeneratedFormulaRecipe[] =
     "catalystConsumed": true,
     "overformulaPrimaryBonus": 2,
     "overformulaIntensityBonus": null,
-    "formulaDefensePenalty": -1
+    "formulaDefensePenalty": -1,
+    "summonConstructDefId": null
   },
   {
     "recipeId": "v6-tek-magiepanzer-erde-ueberladung",
@@ -4587,7 +14841,8 @@ export const V6_GENERATED_FORMULA_RECIPES: readonly V6GeneratedFormulaRecipe[] =
     "catalystConsumed": true,
     "overformulaPrimaryBonus": null,
     "overformulaIntensityBonus": null,
-    "formulaDefensePenalty": null
+    "formulaDefensePenalty": null,
+    "summonConstructDefId": null
   },
   {
     "recipeId": "v6-over-magiepanzer-erde-ueberladung",
@@ -4614,7 +14869,8 @@ export const V6_GENERATED_FORMULA_RECIPES: readonly V6GeneratedFormulaRecipe[] =
     "catalystConsumed": true,
     "overformulaPrimaryBonus": 2,
     "overformulaIntensityBonus": null,
-    "formulaDefensePenalty": -1
+    "formulaDefensePenalty": -1,
+    "summonConstructDefId": null
   },
   {
     "recipeId": "v6-tek-magiepanzer-erde-verdichtung",
@@ -4641,7 +14897,8 @@ export const V6_GENERATED_FORMULA_RECIPES: readonly V6GeneratedFormulaRecipe[] =
     "catalystConsumed": true,
     "overformulaPrimaryBonus": null,
     "overformulaIntensityBonus": null,
-    "formulaDefensePenalty": null
+    "formulaDefensePenalty": null,
+    "summonConstructDefId": null
   },
   {
     "recipeId": "v6-over-magiepanzer-erde-verdichtung",
@@ -4668,7 +14925,8 @@ export const V6_GENERATED_FORMULA_RECIPES: readonly V6GeneratedFormulaRecipe[] =
     "catalystConsumed": true,
     "overformulaPrimaryBonus": 2,
     "overformulaIntensityBonus": null,
-    "formulaDefensePenalty": -1
+    "formulaDefensePenalty": -1,
+    "summonConstructDefId": null
   },
   {
     "recipeId": "v6-tek-magiepanzer-erde-sofortzuender",
@@ -4695,7 +14953,8 @@ export const V6_GENERATED_FORMULA_RECIPES: readonly V6GeneratedFormulaRecipe[] =
     "catalystConsumed": true,
     "overformulaPrimaryBonus": null,
     "overformulaIntensityBonus": null,
-    "formulaDefensePenalty": null
+    "formulaDefensePenalty": null,
+    "summonConstructDefId": null
   },
   {
     "recipeId": "v6-over-magiepanzer-erde-sofortzuender",
@@ -4722,7 +14981,8 @@ export const V6_GENERATED_FORMULA_RECIPES: readonly V6GeneratedFormulaRecipe[] =
     "catalystConsumed": true,
     "overformulaPrimaryBonus": 2,
     "overformulaIntensityBonus": null,
-    "formulaDefensePenalty": -1
+    "formulaDefensePenalty": -1,
+    "summonConstructDefId": null
   },
   {
     "recipeId": "v6-tek-magiepanzer-erde-opfergabe",
@@ -4749,7 +15009,8 @@ export const V6_GENERATED_FORMULA_RECIPES: readonly V6GeneratedFormulaRecipe[] =
     "catalystConsumed": true,
     "overformulaPrimaryBonus": null,
     "overformulaIntensityBonus": null,
-    "formulaDefensePenalty": null
+    "formulaDefensePenalty": null,
+    "summonConstructDefId": null
   },
   {
     "recipeId": "v6-over-magiepanzer-erde-opfergabe",
@@ -4776,7 +15037,8 @@ export const V6_GENERATED_FORMULA_RECIPES: readonly V6GeneratedFormulaRecipe[] =
     "catalystConsumed": true,
     "overformulaPrimaryBonus": 2,
     "overformulaIntensityBonus": null,
-    "formulaDefensePenalty": -1
+    "formulaDefensePenalty": -1,
+    "summonConstructDefId": null
   },
   {
     "recipeId": "v6-tek-magiepanzer-luft-ueberladung",
@@ -4803,7 +15065,8 @@ export const V6_GENERATED_FORMULA_RECIPES: readonly V6GeneratedFormulaRecipe[] =
     "catalystConsumed": true,
     "overformulaPrimaryBonus": null,
     "overformulaIntensityBonus": null,
-    "formulaDefensePenalty": null
+    "formulaDefensePenalty": null,
+    "summonConstructDefId": null
   },
   {
     "recipeId": "v6-over-magiepanzer-luft-ueberladung",
@@ -4830,7 +15093,8 @@ export const V6_GENERATED_FORMULA_RECIPES: readonly V6GeneratedFormulaRecipe[] =
     "catalystConsumed": true,
     "overformulaPrimaryBonus": 2,
     "overformulaIntensityBonus": null,
-    "formulaDefensePenalty": -1
+    "formulaDefensePenalty": -1,
+    "summonConstructDefId": null
   },
   {
     "recipeId": "v6-tek-magiepanzer-luft-verdichtung",
@@ -4857,7 +15121,8 @@ export const V6_GENERATED_FORMULA_RECIPES: readonly V6GeneratedFormulaRecipe[] =
     "catalystConsumed": true,
     "overformulaPrimaryBonus": null,
     "overformulaIntensityBonus": null,
-    "formulaDefensePenalty": null
+    "formulaDefensePenalty": null,
+    "summonConstructDefId": null
   },
   {
     "recipeId": "v6-over-magiepanzer-luft-verdichtung",
@@ -4884,7 +15149,8 @@ export const V6_GENERATED_FORMULA_RECIPES: readonly V6GeneratedFormulaRecipe[] =
     "catalystConsumed": true,
     "overformulaPrimaryBonus": 2,
     "overformulaIntensityBonus": null,
-    "formulaDefensePenalty": -1
+    "formulaDefensePenalty": -1,
+    "summonConstructDefId": null
   },
   {
     "recipeId": "v6-tek-magiepanzer-luft-sofortzuender",
@@ -4911,7 +15177,8 @@ export const V6_GENERATED_FORMULA_RECIPES: readonly V6GeneratedFormulaRecipe[] =
     "catalystConsumed": true,
     "overformulaPrimaryBonus": null,
     "overformulaIntensityBonus": null,
-    "formulaDefensePenalty": null
+    "formulaDefensePenalty": null,
+    "summonConstructDefId": null
   },
   {
     "recipeId": "v6-over-magiepanzer-luft-sofortzuender",
@@ -4938,7 +15205,8 @@ export const V6_GENERATED_FORMULA_RECIPES: readonly V6GeneratedFormulaRecipe[] =
     "catalystConsumed": true,
     "overformulaPrimaryBonus": 2,
     "overformulaIntensityBonus": null,
-    "formulaDefensePenalty": -1
+    "formulaDefensePenalty": -1,
+    "summonConstructDefId": null
   },
   {
     "recipeId": "v6-tek-magiepanzer-luft-opfergabe",
@@ -4965,7 +15233,8 @@ export const V6_GENERATED_FORMULA_RECIPES: readonly V6GeneratedFormulaRecipe[] =
     "catalystConsumed": true,
     "overformulaPrimaryBonus": null,
     "overformulaIntensityBonus": null,
-    "formulaDefensePenalty": null
+    "formulaDefensePenalty": null,
+    "summonConstructDefId": null
   },
   {
     "recipeId": "v6-over-magiepanzer-luft-opfergabe",
@@ -4992,7 +15261,8 @@ export const V6_GENERATED_FORMULA_RECIPES: readonly V6GeneratedFormulaRecipe[] =
     "catalystConsumed": true,
     "overformulaPrimaryBonus": 2,
     "overformulaIntensityBonus": null,
-    "formulaDefensePenalty": -1
+    "formulaDefensePenalty": -1,
+    "summonConstructDefId": null
   },
   {
     "recipeId": "v6-tek-magiepanzer-licht-ueberladung",
@@ -5019,7 +15289,8 @@ export const V6_GENERATED_FORMULA_RECIPES: readonly V6GeneratedFormulaRecipe[] =
     "catalystConsumed": true,
     "overformulaPrimaryBonus": null,
     "overformulaIntensityBonus": null,
-    "formulaDefensePenalty": null
+    "formulaDefensePenalty": null,
+    "summonConstructDefId": null
   },
   {
     "recipeId": "v6-over-magiepanzer-licht-ueberladung",
@@ -5046,7 +15317,8 @@ export const V6_GENERATED_FORMULA_RECIPES: readonly V6GeneratedFormulaRecipe[] =
     "catalystConsumed": true,
     "overformulaPrimaryBonus": 2,
     "overformulaIntensityBonus": null,
-    "formulaDefensePenalty": -1
+    "formulaDefensePenalty": -1,
+    "summonConstructDefId": null
   },
   {
     "recipeId": "v6-tek-magiepanzer-licht-verdichtung",
@@ -5073,7 +15345,8 @@ export const V6_GENERATED_FORMULA_RECIPES: readonly V6GeneratedFormulaRecipe[] =
     "catalystConsumed": true,
     "overformulaPrimaryBonus": null,
     "overformulaIntensityBonus": null,
-    "formulaDefensePenalty": null
+    "formulaDefensePenalty": null,
+    "summonConstructDefId": null
   },
   {
     "recipeId": "v6-over-magiepanzer-licht-verdichtung",
@@ -5100,7 +15373,8 @@ export const V6_GENERATED_FORMULA_RECIPES: readonly V6GeneratedFormulaRecipe[] =
     "catalystConsumed": true,
     "overformulaPrimaryBonus": 2,
     "overformulaIntensityBonus": null,
-    "formulaDefensePenalty": -1
+    "formulaDefensePenalty": -1,
+    "summonConstructDefId": null
   },
   {
     "recipeId": "v6-tek-magiepanzer-licht-sofortzuender",
@@ -5127,7 +15401,8 @@ export const V6_GENERATED_FORMULA_RECIPES: readonly V6GeneratedFormulaRecipe[] =
     "catalystConsumed": true,
     "overformulaPrimaryBonus": null,
     "overformulaIntensityBonus": null,
-    "formulaDefensePenalty": null
+    "formulaDefensePenalty": null,
+    "summonConstructDefId": null
   },
   {
     "recipeId": "v6-over-magiepanzer-licht-sofortzuender",
@@ -5154,7 +15429,8 @@ export const V6_GENERATED_FORMULA_RECIPES: readonly V6GeneratedFormulaRecipe[] =
     "catalystConsumed": true,
     "overformulaPrimaryBonus": 2,
     "overformulaIntensityBonus": null,
-    "formulaDefensePenalty": -1
+    "formulaDefensePenalty": -1,
+    "summonConstructDefId": null
   },
   {
     "recipeId": "v6-tek-magiepanzer-licht-opfergabe",
@@ -5181,7 +15457,8 @@ export const V6_GENERATED_FORMULA_RECIPES: readonly V6GeneratedFormulaRecipe[] =
     "catalystConsumed": true,
     "overformulaPrimaryBonus": null,
     "overformulaIntensityBonus": null,
-    "formulaDefensePenalty": null
+    "formulaDefensePenalty": null,
+    "summonConstructDefId": null
   },
   {
     "recipeId": "v6-over-magiepanzer-licht-opfergabe",
@@ -5208,7 +15485,8 @@ export const V6_GENERATED_FORMULA_RECIPES: readonly V6GeneratedFormulaRecipe[] =
     "catalystConsumed": true,
     "overformulaPrimaryBonus": 2,
     "overformulaIntensityBonus": null,
-    "formulaDefensePenalty": -1
+    "formulaDefensePenalty": -1,
+    "summonConstructDefId": null
   },
   {
     "recipeId": "v6-tek-magiepanzer-schatten-ueberladung",
@@ -5236,7 +15514,8 @@ export const V6_GENERATED_FORMULA_RECIPES: readonly V6GeneratedFormulaRecipe[] =
     "catalystConsumed": true,
     "overformulaPrimaryBonus": null,
     "overformulaIntensityBonus": null,
-    "formulaDefensePenalty": null
+    "formulaDefensePenalty": null,
+    "summonConstructDefId": null
   },
   {
     "recipeId": "v6-over-magiepanzer-schatten-ueberladung",
@@ -5264,7 +15543,8 @@ export const V6_GENERATED_FORMULA_RECIPES: readonly V6GeneratedFormulaRecipe[] =
     "catalystConsumed": true,
     "overformulaPrimaryBonus": null,
     "overformulaIntensityBonus": 1,
-    "formulaDefensePenalty": -1
+    "formulaDefensePenalty": -1,
+    "summonConstructDefId": null
   },
   {
     "recipeId": "v6-tek-magiepanzer-schatten-verdichtung",
@@ -5292,7 +15572,8 @@ export const V6_GENERATED_FORMULA_RECIPES: readonly V6GeneratedFormulaRecipe[] =
     "catalystConsumed": true,
     "overformulaPrimaryBonus": null,
     "overformulaIntensityBonus": null,
-    "formulaDefensePenalty": null
+    "formulaDefensePenalty": null,
+    "summonConstructDefId": null
   },
   {
     "recipeId": "v6-over-magiepanzer-schatten-verdichtung",
@@ -5320,7 +15601,8 @@ export const V6_GENERATED_FORMULA_RECIPES: readonly V6GeneratedFormulaRecipe[] =
     "catalystConsumed": true,
     "overformulaPrimaryBonus": null,
     "overformulaIntensityBonus": 1,
-    "formulaDefensePenalty": -1
+    "formulaDefensePenalty": -1,
+    "summonConstructDefId": null
   },
   {
     "recipeId": "v6-tek-magiepanzer-schatten-sofortzuender",
@@ -5348,7 +15630,8 @@ export const V6_GENERATED_FORMULA_RECIPES: readonly V6GeneratedFormulaRecipe[] =
     "catalystConsumed": true,
     "overformulaPrimaryBonus": null,
     "overformulaIntensityBonus": null,
-    "formulaDefensePenalty": null
+    "formulaDefensePenalty": null,
+    "summonConstructDefId": null
   },
   {
     "recipeId": "v6-over-magiepanzer-schatten-sofortzuender",
@@ -5376,7 +15659,8 @@ export const V6_GENERATED_FORMULA_RECIPES: readonly V6GeneratedFormulaRecipe[] =
     "catalystConsumed": true,
     "overformulaPrimaryBonus": null,
     "overformulaIntensityBonus": 1,
-    "formulaDefensePenalty": -1
+    "formulaDefensePenalty": -1,
+    "summonConstructDefId": null
   },
   {
     "recipeId": "v6-tek-magiepanzer-schatten-opfergabe",
@@ -5404,7 +15688,8 @@ export const V6_GENERATED_FORMULA_RECIPES: readonly V6GeneratedFormulaRecipe[] =
     "catalystConsumed": true,
     "overformulaPrimaryBonus": null,
     "overformulaIntensityBonus": null,
-    "formulaDefensePenalty": null
+    "formulaDefensePenalty": null,
+    "summonConstructDefId": null
   },
   {
     "recipeId": "v6-over-magiepanzer-schatten-opfergabe",
@@ -5432,10 +15717,1355 @@ export const V6_GENERATED_FORMULA_RECIPES: readonly V6GeneratedFormulaRecipe[] =
     "catalystConsumed": true,
     "overformulaPrimaryBonus": null,
     "overformulaIntensityBonus": 1,
-    "formulaDefensePenalty": -1
+    "formulaDefensePenalty": -1,
+    "summonConstructDefId": null
+  },
+  {
+    "recipeId": "v6-tek-beschwoerungsritual-feuer-ueberladung",
+    "kind": "tek",
+    "catalogSlice": "slice1",
+    "techniqueId": "v6-technik-beschwoerungsritual",
+    "essenceId": "v6-essenz-feuer",
+    "catalystId": "v6-katalysator-ueberladung",
+    "name": "Glutbeschwörung · Überladung",
+    "effectSummary": "Beschwöre ein Konstrukt mit Haltbarkeit 5. Ersetzt ein bestehendes Konstrukt. Keine Fetzladung. Bei Lebensschaden: Brennen, falls keine Reaktion. Primärwert +2; danach erleidest du 1 Selbstschaden. TEK-Beschwörung: keine Fetzladung.",
+    "primary": {
+      "kind": "summon_construct",
+      "value": 5,
+      "target": "self"
+    },
+    "rider": {
+      "id": "rider-brennen",
+      "summary": "Bei Lebensschaden: Brennen, falls keine Reaktion.",
+      "defenseSuppressible": true
+    },
+    "intensity": null,
+    "transformId": "xform-ueberladung",
+    "grantsFetz": false,
+    "catalystConsumed": true,
+    "overformulaPrimaryBonus": null,
+    "overformulaIntensityBonus": null,
+    "formulaDefensePenalty": null,
+    "summonConstructDefId": "v6-konstrukt-spieltest-schattenpuppe"
+  },
+  {
+    "recipeId": "v6-over-beschwoerungsritual-feuer-ueberladung",
+    "kind": "overformula",
+    "catalogSlice": "slice1",
+    "techniqueId": "v6-technik-beschwoerungsritual",
+    "essenceId": "v6-essenz-feuer",
+    "catalystId": "v6-katalysator-ueberladung",
+    "name": "Überformel Glutbeschwörung · Überladung",
+    "effectSummary": "Beschwöre ein Konstrukt mit Haltbarkeit 7. Ersetzt ein bestehendes Konstrukt. Keine Fetzladung. Bei Lebensschaden: Brennen, falls keine Reaktion. (verstärkt) Primärwert +2; danach erleidest du 1 Selbstschaden. Überformel: Primär +2 (fester Slice-1-Bonus). Überformel: Fetzladung wird verbraucht. Formelabwehr −1.",
+    "primary": {
+      "kind": "summon_construct",
+      "value": 7,
+      "target": "self"
+    },
+    "rider": {
+      "id": "rider-brennen",
+      "summary": "Bei Lebensschaden: Brennen, falls keine Reaktion. (verstärkt)",
+      "defenseSuppressible": true
+    },
+    "intensity": null,
+    "transformId": "xform-ueberladung",
+    "grantsFetz": false,
+    "catalystConsumed": true,
+    "overformulaPrimaryBonus": 2,
+    "overformulaIntensityBonus": null,
+    "formulaDefensePenalty": -1,
+    "summonConstructDefId": "v6-konstrukt-spieltest-schattenpuppe"
+  },
+  {
+    "recipeId": "v6-tek-beschwoerungsritual-feuer-verdichtung",
+    "kind": "tek",
+    "catalogSlice": "slice1",
+    "techniqueId": "v6-technik-beschwoerungsritual",
+    "essenceId": "v6-essenz-feuer",
+    "catalystId": "v6-katalysator-verdichtung",
+    "name": "Glutbeschwörung · Verdichtung",
+    "effectSummary": "Beschwöre ein Konstrukt mit Haltbarkeit 4. Ersetzt ein bestehendes Konstrukt. Keine Fetzladung. Bei Lebensschaden: Brennen, falls keine Reaktion. Primärwert +1; verwendete Komponenten erhalten +1 Stabilität. TEK-Beschwörung: keine Fetzladung.",
+    "primary": {
+      "kind": "summon_construct",
+      "value": 4,
+      "target": "self"
+    },
+    "rider": {
+      "id": "rider-brennen",
+      "summary": "Bei Lebensschaden: Brennen, falls keine Reaktion.",
+      "defenseSuppressible": true
+    },
+    "intensity": null,
+    "transformId": "xform-verdichtung",
+    "grantsFetz": false,
+    "catalystConsumed": true,
+    "overformulaPrimaryBonus": null,
+    "overformulaIntensityBonus": null,
+    "formulaDefensePenalty": null,
+    "summonConstructDefId": "v6-konstrukt-spieltest-schattenpuppe"
+  },
+  {
+    "recipeId": "v6-over-beschwoerungsritual-feuer-verdichtung",
+    "kind": "overformula",
+    "catalogSlice": "slice1",
+    "techniqueId": "v6-technik-beschwoerungsritual",
+    "essenceId": "v6-essenz-feuer",
+    "catalystId": "v6-katalysator-verdichtung",
+    "name": "Überformel Glutbeschwörung · Verdichtung",
+    "effectSummary": "Beschwöre ein Konstrukt mit Haltbarkeit 6. Ersetzt ein bestehendes Konstrukt. Keine Fetzladung. Bei Lebensschaden: Brennen, falls keine Reaktion. (verstärkt) Primärwert +1; verwendete Komponenten erhalten +1 Stabilität. Überformel: Primär +2 (fester Slice-1-Bonus). Überformel: Fetzladung wird verbraucht. Formelabwehr −1.",
+    "primary": {
+      "kind": "summon_construct",
+      "value": 6,
+      "target": "self"
+    },
+    "rider": {
+      "id": "rider-brennen",
+      "summary": "Bei Lebensschaden: Brennen, falls keine Reaktion. (verstärkt)",
+      "defenseSuppressible": true
+    },
+    "intensity": null,
+    "transformId": "xform-verdichtung",
+    "grantsFetz": false,
+    "catalystConsumed": true,
+    "overformulaPrimaryBonus": 2,
+    "overformulaIntensityBonus": null,
+    "formulaDefensePenalty": -1,
+    "summonConstructDefId": "v6-konstrukt-spieltest-schattenpuppe"
+  },
+  {
+    "recipeId": "v6-tek-beschwoerungsritual-feuer-sofortzuender",
+    "kind": "tek",
+    "catalogSlice": "slice1",
+    "techniqueId": "v6-technik-beschwoerungsritual",
+    "essenceId": "v6-essenz-feuer",
+    "catalystId": "v6-katalysator-sofortzuender",
+    "name": "Glutbeschwörung · Sofortzünder",
+    "effectSummary": "Beschwöre ein Konstrukt mit Haltbarkeit 2. Ersetzt ein bestehendes Konstrukt. Keine Fetzladung. Bei Lebensschaden: Brennen, falls keine Reaktion. Primärwert −1; danach ziehe 1 und wirf 1 ab. TEK-Beschwörung: keine Fetzladung.",
+    "primary": {
+      "kind": "summon_construct",
+      "value": 2,
+      "target": "self"
+    },
+    "rider": {
+      "id": "rider-brennen",
+      "summary": "Bei Lebensschaden: Brennen, falls keine Reaktion.",
+      "defenseSuppressible": true
+    },
+    "intensity": null,
+    "transformId": "xform-sofortzuender",
+    "grantsFetz": false,
+    "catalystConsumed": true,
+    "overformulaPrimaryBonus": null,
+    "overformulaIntensityBonus": null,
+    "formulaDefensePenalty": null,
+    "summonConstructDefId": "v6-konstrukt-spieltest-schattenpuppe"
+  },
+  {
+    "recipeId": "v6-over-beschwoerungsritual-feuer-sofortzuender",
+    "kind": "overformula",
+    "catalogSlice": "slice1",
+    "techniqueId": "v6-technik-beschwoerungsritual",
+    "essenceId": "v6-essenz-feuer",
+    "catalystId": "v6-katalysator-sofortzuender",
+    "name": "Überformel Glutbeschwörung · Sofortzünder",
+    "effectSummary": "Beschwöre ein Konstrukt mit Haltbarkeit 4. Ersetzt ein bestehendes Konstrukt. Keine Fetzladung. Bei Lebensschaden: Brennen, falls keine Reaktion. (verstärkt) Primärwert −1; danach ziehe 1 und wirf 1 ab. Überformel: Primär +2 (fester Slice-1-Bonus). Überformel: Fetzladung wird verbraucht. Formelabwehr −1.",
+    "primary": {
+      "kind": "summon_construct",
+      "value": 4,
+      "target": "self"
+    },
+    "rider": {
+      "id": "rider-brennen",
+      "summary": "Bei Lebensschaden: Brennen, falls keine Reaktion. (verstärkt)",
+      "defenseSuppressible": true
+    },
+    "intensity": null,
+    "transformId": "xform-sofortzuender",
+    "grantsFetz": false,
+    "catalystConsumed": true,
+    "overformulaPrimaryBonus": 2,
+    "overformulaIntensityBonus": null,
+    "formulaDefensePenalty": -1,
+    "summonConstructDefId": "v6-konstrukt-spieltest-schattenpuppe"
+  },
+  {
+    "recipeId": "v6-tek-beschwoerungsritual-feuer-opfergabe",
+    "kind": "tek",
+    "catalogSlice": "slice1",
+    "techniqueId": "v6-technik-beschwoerungsritual",
+    "essenceId": "v6-essenz-feuer",
+    "catalystId": "v6-katalysator-opfergabe",
+    "name": "Glutbeschwörung · Opfergabe",
+    "effectSummary": "Beschwöre ein Konstrukt mit Haltbarkeit 3. Ersetzt ein bestehendes Konstrukt. Keine Fetzladung. Bei Lebensschaden: Brennen, falls keine Reaktion. Optional: wirf 1 Handkarte ab für Primärwert +2. TEK-Beschwörung: keine Fetzladung.",
+    "primary": {
+      "kind": "summon_construct",
+      "value": 3,
+      "target": "self"
+    },
+    "rider": {
+      "id": "rider-brennen",
+      "summary": "Bei Lebensschaden: Brennen, falls keine Reaktion.",
+      "defenseSuppressible": true
+    },
+    "intensity": null,
+    "transformId": "xform-opfergabe",
+    "grantsFetz": false,
+    "catalystConsumed": true,
+    "overformulaPrimaryBonus": null,
+    "overformulaIntensityBonus": null,
+    "formulaDefensePenalty": null,
+    "summonConstructDefId": "v6-konstrukt-spieltest-schattenpuppe"
+  },
+  {
+    "recipeId": "v6-over-beschwoerungsritual-feuer-opfergabe",
+    "kind": "overformula",
+    "catalogSlice": "slice1",
+    "techniqueId": "v6-technik-beschwoerungsritual",
+    "essenceId": "v6-essenz-feuer",
+    "catalystId": "v6-katalysator-opfergabe",
+    "name": "Überformel Glutbeschwörung · Opfergabe",
+    "effectSummary": "Beschwöre ein Konstrukt mit Haltbarkeit 5. Ersetzt ein bestehendes Konstrukt. Keine Fetzladung. Bei Lebensschaden: Brennen, falls keine Reaktion. (verstärkt) Optional: wirf 1 Handkarte ab für Primärwert +2. Überformel: Primär +2 (fester Slice-1-Bonus). Überformel: Fetzladung wird verbraucht. Formelabwehr −1.",
+    "primary": {
+      "kind": "summon_construct",
+      "value": 5,
+      "target": "self"
+    },
+    "rider": {
+      "id": "rider-brennen",
+      "summary": "Bei Lebensschaden: Brennen, falls keine Reaktion. (verstärkt)",
+      "defenseSuppressible": true
+    },
+    "intensity": null,
+    "transformId": "xform-opfergabe",
+    "grantsFetz": false,
+    "catalystConsumed": true,
+    "overformulaPrimaryBonus": 2,
+    "overformulaIntensityBonus": null,
+    "formulaDefensePenalty": -1,
+    "summonConstructDefId": "v6-konstrukt-spieltest-schattenpuppe"
+  },
+  {
+    "recipeId": "v6-tek-beschwoerungsritual-wasser-ueberladung",
+    "kind": "tek",
+    "catalogSlice": "slice1",
+    "techniqueId": "v6-technik-beschwoerungsritual",
+    "essenceId": "v6-essenz-wasser",
+    "catalystId": "v6-katalysator-ueberladung",
+    "name": "Wellenbeschwörung · Überladung",
+    "effectSummary": "Beschwöre ein Konstrukt mit Haltbarkeit 5. Ersetzt ein bestehendes Konstrukt. Keine Fetzladung. Bei Heilung oder Schildgewinn: entferne optional eine Marke von dir. Primärwert +2; danach erleidest du 1 Selbstschaden. TEK-Beschwörung: keine Fetzladung.",
+    "primary": {
+      "kind": "summon_construct",
+      "value": 5,
+      "target": "self"
+    },
+    "rider": {
+      "id": "rider-reinigen",
+      "summary": "Bei Heilung oder Schildgewinn: entferne optional eine Marke von dir.",
+      "defenseSuppressible": false
+    },
+    "intensity": null,
+    "transformId": "xform-ueberladung",
+    "grantsFetz": false,
+    "catalystConsumed": true,
+    "overformulaPrimaryBonus": null,
+    "overformulaIntensityBonus": null,
+    "formulaDefensePenalty": null,
+    "summonConstructDefId": "v6-konstrukt-spieltest-schattenpuppe"
+  },
+  {
+    "recipeId": "v6-over-beschwoerungsritual-wasser-ueberladung",
+    "kind": "overformula",
+    "catalogSlice": "slice1",
+    "techniqueId": "v6-technik-beschwoerungsritual",
+    "essenceId": "v6-essenz-wasser",
+    "catalystId": "v6-katalysator-ueberladung",
+    "name": "Überformel Wellenbeschwörung · Überladung",
+    "effectSummary": "Beschwöre ein Konstrukt mit Haltbarkeit 7. Ersetzt ein bestehendes Konstrukt. Keine Fetzladung. Bei Heilung oder Schildgewinn: entferne optional eine Marke von dir. (verstärkt) Primärwert +2; danach erleidest du 1 Selbstschaden. Überformel: Primär +2 (fester Slice-1-Bonus). Überformel: Fetzladung wird verbraucht. Formelabwehr −1.",
+    "primary": {
+      "kind": "summon_construct",
+      "value": 7,
+      "target": "self"
+    },
+    "rider": {
+      "id": "rider-reinigen",
+      "summary": "Bei Heilung oder Schildgewinn: entferne optional eine Marke von dir. (verstärkt)",
+      "defenseSuppressible": false
+    },
+    "intensity": null,
+    "transformId": "xform-ueberladung",
+    "grantsFetz": false,
+    "catalystConsumed": true,
+    "overformulaPrimaryBonus": 2,
+    "overformulaIntensityBonus": null,
+    "formulaDefensePenalty": -1,
+    "summonConstructDefId": "v6-konstrukt-spieltest-schattenpuppe"
+  },
+  {
+    "recipeId": "v6-tek-beschwoerungsritual-wasser-verdichtung",
+    "kind": "tek",
+    "catalogSlice": "slice1",
+    "techniqueId": "v6-technik-beschwoerungsritual",
+    "essenceId": "v6-essenz-wasser",
+    "catalystId": "v6-katalysator-verdichtung",
+    "name": "Wellenbeschwörung · Verdichtung",
+    "effectSummary": "Beschwöre ein Konstrukt mit Haltbarkeit 4. Ersetzt ein bestehendes Konstrukt. Keine Fetzladung. Bei Heilung oder Schildgewinn: entferne optional eine Marke von dir. Primärwert +1; verwendete Komponenten erhalten +1 Stabilität. TEK-Beschwörung: keine Fetzladung.",
+    "primary": {
+      "kind": "summon_construct",
+      "value": 4,
+      "target": "self"
+    },
+    "rider": {
+      "id": "rider-reinigen",
+      "summary": "Bei Heilung oder Schildgewinn: entferne optional eine Marke von dir.",
+      "defenseSuppressible": false
+    },
+    "intensity": null,
+    "transformId": "xform-verdichtung",
+    "grantsFetz": false,
+    "catalystConsumed": true,
+    "overformulaPrimaryBonus": null,
+    "overformulaIntensityBonus": null,
+    "formulaDefensePenalty": null,
+    "summonConstructDefId": "v6-konstrukt-spieltest-schattenpuppe"
+  },
+  {
+    "recipeId": "v6-over-beschwoerungsritual-wasser-verdichtung",
+    "kind": "overformula",
+    "catalogSlice": "slice1",
+    "techniqueId": "v6-technik-beschwoerungsritual",
+    "essenceId": "v6-essenz-wasser",
+    "catalystId": "v6-katalysator-verdichtung",
+    "name": "Überformel Wellenbeschwörung · Verdichtung",
+    "effectSummary": "Beschwöre ein Konstrukt mit Haltbarkeit 6. Ersetzt ein bestehendes Konstrukt. Keine Fetzladung. Bei Heilung oder Schildgewinn: entferne optional eine Marke von dir. (verstärkt) Primärwert +1; verwendete Komponenten erhalten +1 Stabilität. Überformel: Primär +2 (fester Slice-1-Bonus). Überformel: Fetzladung wird verbraucht. Formelabwehr −1.",
+    "primary": {
+      "kind": "summon_construct",
+      "value": 6,
+      "target": "self"
+    },
+    "rider": {
+      "id": "rider-reinigen",
+      "summary": "Bei Heilung oder Schildgewinn: entferne optional eine Marke von dir. (verstärkt)",
+      "defenseSuppressible": false
+    },
+    "intensity": null,
+    "transformId": "xform-verdichtung",
+    "grantsFetz": false,
+    "catalystConsumed": true,
+    "overformulaPrimaryBonus": 2,
+    "overformulaIntensityBonus": null,
+    "formulaDefensePenalty": -1,
+    "summonConstructDefId": "v6-konstrukt-spieltest-schattenpuppe"
+  },
+  {
+    "recipeId": "v6-tek-beschwoerungsritual-wasser-sofortzuender",
+    "kind": "tek",
+    "catalogSlice": "slice1",
+    "techniqueId": "v6-technik-beschwoerungsritual",
+    "essenceId": "v6-essenz-wasser",
+    "catalystId": "v6-katalysator-sofortzuender",
+    "name": "Wellenbeschwörung · Sofortzünder",
+    "effectSummary": "Beschwöre ein Konstrukt mit Haltbarkeit 2. Ersetzt ein bestehendes Konstrukt. Keine Fetzladung. Bei Heilung oder Schildgewinn: entferne optional eine Marke von dir. Primärwert −1; danach ziehe 1 und wirf 1 ab. TEK-Beschwörung: keine Fetzladung.",
+    "primary": {
+      "kind": "summon_construct",
+      "value": 2,
+      "target": "self"
+    },
+    "rider": {
+      "id": "rider-reinigen",
+      "summary": "Bei Heilung oder Schildgewinn: entferne optional eine Marke von dir.",
+      "defenseSuppressible": false
+    },
+    "intensity": null,
+    "transformId": "xform-sofortzuender",
+    "grantsFetz": false,
+    "catalystConsumed": true,
+    "overformulaPrimaryBonus": null,
+    "overformulaIntensityBonus": null,
+    "formulaDefensePenalty": null,
+    "summonConstructDefId": "v6-konstrukt-spieltest-schattenpuppe"
+  },
+  {
+    "recipeId": "v6-over-beschwoerungsritual-wasser-sofortzuender",
+    "kind": "overformula",
+    "catalogSlice": "slice1",
+    "techniqueId": "v6-technik-beschwoerungsritual",
+    "essenceId": "v6-essenz-wasser",
+    "catalystId": "v6-katalysator-sofortzuender",
+    "name": "Überformel Wellenbeschwörung · Sofortzünder",
+    "effectSummary": "Beschwöre ein Konstrukt mit Haltbarkeit 4. Ersetzt ein bestehendes Konstrukt. Keine Fetzladung. Bei Heilung oder Schildgewinn: entferne optional eine Marke von dir. (verstärkt) Primärwert −1; danach ziehe 1 und wirf 1 ab. Überformel: Primär +2 (fester Slice-1-Bonus). Überformel: Fetzladung wird verbraucht. Formelabwehr −1.",
+    "primary": {
+      "kind": "summon_construct",
+      "value": 4,
+      "target": "self"
+    },
+    "rider": {
+      "id": "rider-reinigen",
+      "summary": "Bei Heilung oder Schildgewinn: entferne optional eine Marke von dir. (verstärkt)",
+      "defenseSuppressible": false
+    },
+    "intensity": null,
+    "transformId": "xform-sofortzuender",
+    "grantsFetz": false,
+    "catalystConsumed": true,
+    "overformulaPrimaryBonus": 2,
+    "overformulaIntensityBonus": null,
+    "formulaDefensePenalty": -1,
+    "summonConstructDefId": "v6-konstrukt-spieltest-schattenpuppe"
+  },
+  {
+    "recipeId": "v6-tek-beschwoerungsritual-wasser-opfergabe",
+    "kind": "tek",
+    "catalogSlice": "slice1",
+    "techniqueId": "v6-technik-beschwoerungsritual",
+    "essenceId": "v6-essenz-wasser",
+    "catalystId": "v6-katalysator-opfergabe",
+    "name": "Wellenbeschwörung · Opfergabe",
+    "effectSummary": "Beschwöre ein Konstrukt mit Haltbarkeit 3. Ersetzt ein bestehendes Konstrukt. Keine Fetzladung. Bei Heilung oder Schildgewinn: entferne optional eine Marke von dir. Optional: wirf 1 Handkarte ab für Primärwert +2. TEK-Beschwörung: keine Fetzladung.",
+    "primary": {
+      "kind": "summon_construct",
+      "value": 3,
+      "target": "self"
+    },
+    "rider": {
+      "id": "rider-reinigen",
+      "summary": "Bei Heilung oder Schildgewinn: entferne optional eine Marke von dir.",
+      "defenseSuppressible": false
+    },
+    "intensity": null,
+    "transformId": "xform-opfergabe",
+    "grantsFetz": false,
+    "catalystConsumed": true,
+    "overformulaPrimaryBonus": null,
+    "overformulaIntensityBonus": null,
+    "formulaDefensePenalty": null,
+    "summonConstructDefId": "v6-konstrukt-spieltest-schattenpuppe"
+  },
+  {
+    "recipeId": "v6-over-beschwoerungsritual-wasser-opfergabe",
+    "kind": "overformula",
+    "catalogSlice": "slice1",
+    "techniqueId": "v6-technik-beschwoerungsritual",
+    "essenceId": "v6-essenz-wasser",
+    "catalystId": "v6-katalysator-opfergabe",
+    "name": "Überformel Wellenbeschwörung · Opfergabe",
+    "effectSummary": "Beschwöre ein Konstrukt mit Haltbarkeit 5. Ersetzt ein bestehendes Konstrukt. Keine Fetzladung. Bei Heilung oder Schildgewinn: entferne optional eine Marke von dir. (verstärkt) Optional: wirf 1 Handkarte ab für Primärwert +2. Überformel: Primär +2 (fester Slice-1-Bonus). Überformel: Fetzladung wird verbraucht. Formelabwehr −1.",
+    "primary": {
+      "kind": "summon_construct",
+      "value": 5,
+      "target": "self"
+    },
+    "rider": {
+      "id": "rider-reinigen",
+      "summary": "Bei Heilung oder Schildgewinn: entferne optional eine Marke von dir. (verstärkt)",
+      "defenseSuppressible": false
+    },
+    "intensity": null,
+    "transformId": "xform-opfergabe",
+    "grantsFetz": false,
+    "catalystConsumed": true,
+    "overformulaPrimaryBonus": 2,
+    "overformulaIntensityBonus": null,
+    "formulaDefensePenalty": -1,
+    "summonConstructDefId": "v6-konstrukt-spieltest-schattenpuppe"
+  },
+  {
+    "recipeId": "v6-tek-beschwoerungsritual-erde-ueberladung",
+    "kind": "tek",
+    "catalogSlice": "slice1",
+    "techniqueId": "v6-technik-beschwoerungsritual",
+    "essenceId": "v6-essenz-erde",
+    "catalystId": "v6-katalysator-ueberladung",
+    "name": "Felsbeschwörung · Überladung",
+    "effectSummary": "Beschwöre ein Konstrukt mit Haltbarkeit 5. Ersetzt ein bestehendes Konstrukt. Keine Fetzladung. Verwendete Komponenten +1 Stabilität bis nächste Startphase. Primärwert +2; danach erleidest du 1 Selbstschaden. TEK-Beschwörung: keine Fetzladung.",
+    "primary": {
+      "kind": "summon_construct",
+      "value": 5,
+      "target": "self"
+    },
+    "rider": {
+      "id": "rider-stabilitaet",
+      "summary": "Verwendete Komponenten +1 Stabilität bis nächste Startphase.",
+      "defenseSuppressible": false
+    },
+    "intensity": null,
+    "transformId": "xform-ueberladung",
+    "grantsFetz": false,
+    "catalystConsumed": true,
+    "overformulaPrimaryBonus": null,
+    "overformulaIntensityBonus": null,
+    "formulaDefensePenalty": null,
+    "summonConstructDefId": "v6-konstrukt-spieltest-schattenpuppe"
+  },
+  {
+    "recipeId": "v6-over-beschwoerungsritual-erde-ueberladung",
+    "kind": "overformula",
+    "catalogSlice": "slice1",
+    "techniqueId": "v6-technik-beschwoerungsritual",
+    "essenceId": "v6-essenz-erde",
+    "catalystId": "v6-katalysator-ueberladung",
+    "name": "Überformel Felsbeschwörung · Überladung",
+    "effectSummary": "Beschwöre ein Konstrukt mit Haltbarkeit 7. Ersetzt ein bestehendes Konstrukt. Keine Fetzladung. Verwendete Komponenten +1 Stabilität bis nächste Startphase. (verstärkt) Primärwert +2; danach erleidest du 1 Selbstschaden. Überformel: Primär +2 (fester Slice-1-Bonus). Überformel: Fetzladung wird verbraucht. Formelabwehr −1.",
+    "primary": {
+      "kind": "summon_construct",
+      "value": 7,
+      "target": "self"
+    },
+    "rider": {
+      "id": "rider-stabilitaet",
+      "summary": "Verwendete Komponenten +1 Stabilität bis nächste Startphase. (verstärkt)",
+      "defenseSuppressible": false
+    },
+    "intensity": null,
+    "transformId": "xform-ueberladung",
+    "grantsFetz": false,
+    "catalystConsumed": true,
+    "overformulaPrimaryBonus": 2,
+    "overformulaIntensityBonus": null,
+    "formulaDefensePenalty": -1,
+    "summonConstructDefId": "v6-konstrukt-spieltest-schattenpuppe"
+  },
+  {
+    "recipeId": "v6-tek-beschwoerungsritual-erde-verdichtung",
+    "kind": "tek",
+    "catalogSlice": "slice1",
+    "techniqueId": "v6-technik-beschwoerungsritual",
+    "essenceId": "v6-essenz-erde",
+    "catalystId": "v6-katalysator-verdichtung",
+    "name": "Felsbeschwörung · Verdichtung",
+    "effectSummary": "Beschwöre ein Konstrukt mit Haltbarkeit 4. Ersetzt ein bestehendes Konstrukt. Keine Fetzladung. Verwendete Komponenten +1 Stabilität bis nächste Startphase. Primärwert +1; verwendete Komponenten erhalten +1 Stabilität. TEK-Beschwörung: keine Fetzladung.",
+    "primary": {
+      "kind": "summon_construct",
+      "value": 4,
+      "target": "self"
+    },
+    "rider": {
+      "id": "rider-stabilitaet",
+      "summary": "Verwendete Komponenten +1 Stabilität bis nächste Startphase.",
+      "defenseSuppressible": false
+    },
+    "intensity": null,
+    "transformId": "xform-verdichtung",
+    "grantsFetz": false,
+    "catalystConsumed": true,
+    "overformulaPrimaryBonus": null,
+    "overformulaIntensityBonus": null,
+    "formulaDefensePenalty": null,
+    "summonConstructDefId": "v6-konstrukt-spieltest-schattenpuppe"
+  },
+  {
+    "recipeId": "v6-over-beschwoerungsritual-erde-verdichtung",
+    "kind": "overformula",
+    "catalogSlice": "slice1",
+    "techniqueId": "v6-technik-beschwoerungsritual",
+    "essenceId": "v6-essenz-erde",
+    "catalystId": "v6-katalysator-verdichtung",
+    "name": "Überformel Felsbeschwörung · Verdichtung",
+    "effectSummary": "Beschwöre ein Konstrukt mit Haltbarkeit 6. Ersetzt ein bestehendes Konstrukt. Keine Fetzladung. Verwendete Komponenten +1 Stabilität bis nächste Startphase. (verstärkt) Primärwert +1; verwendete Komponenten erhalten +1 Stabilität. Überformel: Primär +2 (fester Slice-1-Bonus). Überformel: Fetzladung wird verbraucht. Formelabwehr −1.",
+    "primary": {
+      "kind": "summon_construct",
+      "value": 6,
+      "target": "self"
+    },
+    "rider": {
+      "id": "rider-stabilitaet",
+      "summary": "Verwendete Komponenten +1 Stabilität bis nächste Startphase. (verstärkt)",
+      "defenseSuppressible": false
+    },
+    "intensity": null,
+    "transformId": "xform-verdichtung",
+    "grantsFetz": false,
+    "catalystConsumed": true,
+    "overformulaPrimaryBonus": 2,
+    "overformulaIntensityBonus": null,
+    "formulaDefensePenalty": -1,
+    "summonConstructDefId": "v6-konstrukt-spieltest-schattenpuppe"
+  },
+  {
+    "recipeId": "v6-tek-beschwoerungsritual-erde-sofortzuender",
+    "kind": "tek",
+    "catalogSlice": "slice1",
+    "techniqueId": "v6-technik-beschwoerungsritual",
+    "essenceId": "v6-essenz-erde",
+    "catalystId": "v6-katalysator-sofortzuender",
+    "name": "Felsbeschwörung · Sofortzünder",
+    "effectSummary": "Beschwöre ein Konstrukt mit Haltbarkeit 2. Ersetzt ein bestehendes Konstrukt. Keine Fetzladung. Verwendete Komponenten +1 Stabilität bis nächste Startphase. Primärwert −1; danach ziehe 1 und wirf 1 ab. TEK-Beschwörung: keine Fetzladung.",
+    "primary": {
+      "kind": "summon_construct",
+      "value": 2,
+      "target": "self"
+    },
+    "rider": {
+      "id": "rider-stabilitaet",
+      "summary": "Verwendete Komponenten +1 Stabilität bis nächste Startphase.",
+      "defenseSuppressible": false
+    },
+    "intensity": null,
+    "transformId": "xform-sofortzuender",
+    "grantsFetz": false,
+    "catalystConsumed": true,
+    "overformulaPrimaryBonus": null,
+    "overformulaIntensityBonus": null,
+    "formulaDefensePenalty": null,
+    "summonConstructDefId": "v6-konstrukt-spieltest-schattenpuppe"
+  },
+  {
+    "recipeId": "v6-over-beschwoerungsritual-erde-sofortzuender",
+    "kind": "overformula",
+    "catalogSlice": "slice1",
+    "techniqueId": "v6-technik-beschwoerungsritual",
+    "essenceId": "v6-essenz-erde",
+    "catalystId": "v6-katalysator-sofortzuender",
+    "name": "Überformel Felsbeschwörung · Sofortzünder",
+    "effectSummary": "Beschwöre ein Konstrukt mit Haltbarkeit 4. Ersetzt ein bestehendes Konstrukt. Keine Fetzladung. Verwendete Komponenten +1 Stabilität bis nächste Startphase. (verstärkt) Primärwert −1; danach ziehe 1 und wirf 1 ab. Überformel: Primär +2 (fester Slice-1-Bonus). Überformel: Fetzladung wird verbraucht. Formelabwehr −1.",
+    "primary": {
+      "kind": "summon_construct",
+      "value": 4,
+      "target": "self"
+    },
+    "rider": {
+      "id": "rider-stabilitaet",
+      "summary": "Verwendete Komponenten +1 Stabilität bis nächste Startphase. (verstärkt)",
+      "defenseSuppressible": false
+    },
+    "intensity": null,
+    "transformId": "xform-sofortzuender",
+    "grantsFetz": false,
+    "catalystConsumed": true,
+    "overformulaPrimaryBonus": 2,
+    "overformulaIntensityBonus": null,
+    "formulaDefensePenalty": -1,
+    "summonConstructDefId": "v6-konstrukt-spieltest-schattenpuppe"
+  },
+  {
+    "recipeId": "v6-tek-beschwoerungsritual-erde-opfergabe",
+    "kind": "tek",
+    "catalogSlice": "slice1",
+    "techniqueId": "v6-technik-beschwoerungsritual",
+    "essenceId": "v6-essenz-erde",
+    "catalystId": "v6-katalysator-opfergabe",
+    "name": "Felsbeschwörung · Opfergabe",
+    "effectSummary": "Beschwöre ein Konstrukt mit Haltbarkeit 3. Ersetzt ein bestehendes Konstrukt. Keine Fetzladung. Verwendete Komponenten +1 Stabilität bis nächste Startphase. Optional: wirf 1 Handkarte ab für Primärwert +2. TEK-Beschwörung: keine Fetzladung.",
+    "primary": {
+      "kind": "summon_construct",
+      "value": 3,
+      "target": "self"
+    },
+    "rider": {
+      "id": "rider-stabilitaet",
+      "summary": "Verwendete Komponenten +1 Stabilität bis nächste Startphase.",
+      "defenseSuppressible": false
+    },
+    "intensity": null,
+    "transformId": "xform-opfergabe",
+    "grantsFetz": false,
+    "catalystConsumed": true,
+    "overformulaPrimaryBonus": null,
+    "overformulaIntensityBonus": null,
+    "formulaDefensePenalty": null,
+    "summonConstructDefId": "v6-konstrukt-spieltest-schattenpuppe"
+  },
+  {
+    "recipeId": "v6-over-beschwoerungsritual-erde-opfergabe",
+    "kind": "overformula",
+    "catalogSlice": "slice1",
+    "techniqueId": "v6-technik-beschwoerungsritual",
+    "essenceId": "v6-essenz-erde",
+    "catalystId": "v6-katalysator-opfergabe",
+    "name": "Überformel Felsbeschwörung · Opfergabe",
+    "effectSummary": "Beschwöre ein Konstrukt mit Haltbarkeit 5. Ersetzt ein bestehendes Konstrukt. Keine Fetzladung. Verwendete Komponenten +1 Stabilität bis nächste Startphase. (verstärkt) Optional: wirf 1 Handkarte ab für Primärwert +2. Überformel: Primär +2 (fester Slice-1-Bonus). Überformel: Fetzladung wird verbraucht. Formelabwehr −1.",
+    "primary": {
+      "kind": "summon_construct",
+      "value": 5,
+      "target": "self"
+    },
+    "rider": {
+      "id": "rider-stabilitaet",
+      "summary": "Verwendete Komponenten +1 Stabilität bis nächste Startphase. (verstärkt)",
+      "defenseSuppressible": false
+    },
+    "intensity": null,
+    "transformId": "xform-opfergabe",
+    "grantsFetz": false,
+    "catalystConsumed": true,
+    "overformulaPrimaryBonus": 2,
+    "overformulaIntensityBonus": null,
+    "formulaDefensePenalty": -1,
+    "summonConstructDefId": "v6-konstrukt-spieltest-schattenpuppe"
+  },
+  {
+    "recipeId": "v6-tek-beschwoerungsritual-luft-ueberladung",
+    "kind": "tek",
+    "catalogSlice": "slice1",
+    "techniqueId": "v6-technik-beschwoerungsritual",
+    "essenceId": "v6-essenz-luft",
+    "catalystId": "v6-katalysator-ueberladung",
+    "name": "Windbeschwörung · Überladung",
+    "effectSummary": "Beschwöre ein Konstrukt mit Haltbarkeit 5. Ersetzt ein bestehendes Konstrukt. Keine Fetzladung. Nächster eigener Aktions-W6 +1 (max +2). Primärwert +2; danach erleidest du 1 Selbstschaden. TEK-Beschwörung: keine Fetzladung.",
+    "primary": {
+      "kind": "summon_construct",
+      "value": 5,
+      "target": "self"
+    },
+    "rider": {
+      "id": "rider-w6",
+      "summary": "Nächster eigener Aktions-W6 +1 (max +2).",
+      "defenseSuppressible": true
+    },
+    "intensity": null,
+    "transformId": "xform-ueberladung",
+    "grantsFetz": false,
+    "catalystConsumed": true,
+    "overformulaPrimaryBonus": null,
+    "overformulaIntensityBonus": null,
+    "formulaDefensePenalty": null,
+    "summonConstructDefId": "v6-konstrukt-spieltest-schattenpuppe"
+  },
+  {
+    "recipeId": "v6-over-beschwoerungsritual-luft-ueberladung",
+    "kind": "overformula",
+    "catalogSlice": "slice1",
+    "techniqueId": "v6-technik-beschwoerungsritual",
+    "essenceId": "v6-essenz-luft",
+    "catalystId": "v6-katalysator-ueberladung",
+    "name": "Überformel Windbeschwörung · Überladung",
+    "effectSummary": "Beschwöre ein Konstrukt mit Haltbarkeit 7. Ersetzt ein bestehendes Konstrukt. Keine Fetzladung. Nächster eigener Aktions-W6 +1 (max +2). (verstärkt) Primärwert +2; danach erleidest du 1 Selbstschaden. Überformel: Primär +2 (fester Slice-1-Bonus). Überformel: Fetzladung wird verbraucht. Formelabwehr −1.",
+    "primary": {
+      "kind": "summon_construct",
+      "value": 7,
+      "target": "self"
+    },
+    "rider": {
+      "id": "rider-w6",
+      "summary": "Nächster eigener Aktions-W6 +1 (max +2). (verstärkt)",
+      "defenseSuppressible": true
+    },
+    "intensity": null,
+    "transformId": "xform-ueberladung",
+    "grantsFetz": false,
+    "catalystConsumed": true,
+    "overformulaPrimaryBonus": 2,
+    "overformulaIntensityBonus": null,
+    "formulaDefensePenalty": -1,
+    "summonConstructDefId": "v6-konstrukt-spieltest-schattenpuppe"
+  },
+  {
+    "recipeId": "v6-tek-beschwoerungsritual-luft-verdichtung",
+    "kind": "tek",
+    "catalogSlice": "slice1",
+    "techniqueId": "v6-technik-beschwoerungsritual",
+    "essenceId": "v6-essenz-luft",
+    "catalystId": "v6-katalysator-verdichtung",
+    "name": "Windbeschwörung · Verdichtung",
+    "effectSummary": "Beschwöre ein Konstrukt mit Haltbarkeit 4. Ersetzt ein bestehendes Konstrukt. Keine Fetzladung. Nächster eigener Aktions-W6 +1 (max +2). Primärwert +1; verwendete Komponenten erhalten +1 Stabilität. TEK-Beschwörung: keine Fetzladung.",
+    "primary": {
+      "kind": "summon_construct",
+      "value": 4,
+      "target": "self"
+    },
+    "rider": {
+      "id": "rider-w6",
+      "summary": "Nächster eigener Aktions-W6 +1 (max +2).",
+      "defenseSuppressible": true
+    },
+    "intensity": null,
+    "transformId": "xform-verdichtung",
+    "grantsFetz": false,
+    "catalystConsumed": true,
+    "overformulaPrimaryBonus": null,
+    "overformulaIntensityBonus": null,
+    "formulaDefensePenalty": null,
+    "summonConstructDefId": "v6-konstrukt-spieltest-schattenpuppe"
+  },
+  {
+    "recipeId": "v6-over-beschwoerungsritual-luft-verdichtung",
+    "kind": "overformula",
+    "catalogSlice": "slice1",
+    "techniqueId": "v6-technik-beschwoerungsritual",
+    "essenceId": "v6-essenz-luft",
+    "catalystId": "v6-katalysator-verdichtung",
+    "name": "Überformel Windbeschwörung · Verdichtung",
+    "effectSummary": "Beschwöre ein Konstrukt mit Haltbarkeit 6. Ersetzt ein bestehendes Konstrukt. Keine Fetzladung. Nächster eigener Aktions-W6 +1 (max +2). (verstärkt) Primärwert +1; verwendete Komponenten erhalten +1 Stabilität. Überformel: Primär +2 (fester Slice-1-Bonus). Überformel: Fetzladung wird verbraucht. Formelabwehr −1.",
+    "primary": {
+      "kind": "summon_construct",
+      "value": 6,
+      "target": "self"
+    },
+    "rider": {
+      "id": "rider-w6",
+      "summary": "Nächster eigener Aktions-W6 +1 (max +2). (verstärkt)",
+      "defenseSuppressible": true
+    },
+    "intensity": null,
+    "transformId": "xform-verdichtung",
+    "grantsFetz": false,
+    "catalystConsumed": true,
+    "overformulaPrimaryBonus": 2,
+    "overformulaIntensityBonus": null,
+    "formulaDefensePenalty": -1,
+    "summonConstructDefId": "v6-konstrukt-spieltest-schattenpuppe"
+  },
+  {
+    "recipeId": "v6-tek-beschwoerungsritual-luft-sofortzuender",
+    "kind": "tek",
+    "catalogSlice": "slice1",
+    "techniqueId": "v6-technik-beschwoerungsritual",
+    "essenceId": "v6-essenz-luft",
+    "catalystId": "v6-katalysator-sofortzuender",
+    "name": "Windbeschwörung · Sofortzünder",
+    "effectSummary": "Beschwöre ein Konstrukt mit Haltbarkeit 2. Ersetzt ein bestehendes Konstrukt. Keine Fetzladung. Nächster eigener Aktions-W6 +1 (max +2). Primärwert −1; danach ziehe 1 und wirf 1 ab. TEK-Beschwörung: keine Fetzladung.",
+    "primary": {
+      "kind": "summon_construct",
+      "value": 2,
+      "target": "self"
+    },
+    "rider": {
+      "id": "rider-w6",
+      "summary": "Nächster eigener Aktions-W6 +1 (max +2).",
+      "defenseSuppressible": true
+    },
+    "intensity": null,
+    "transformId": "xform-sofortzuender",
+    "grantsFetz": false,
+    "catalystConsumed": true,
+    "overformulaPrimaryBonus": null,
+    "overformulaIntensityBonus": null,
+    "formulaDefensePenalty": null,
+    "summonConstructDefId": "v6-konstrukt-spieltest-schattenpuppe"
+  },
+  {
+    "recipeId": "v6-over-beschwoerungsritual-luft-sofortzuender",
+    "kind": "overformula",
+    "catalogSlice": "slice1",
+    "techniqueId": "v6-technik-beschwoerungsritual",
+    "essenceId": "v6-essenz-luft",
+    "catalystId": "v6-katalysator-sofortzuender",
+    "name": "Überformel Windbeschwörung · Sofortzünder",
+    "effectSummary": "Beschwöre ein Konstrukt mit Haltbarkeit 4. Ersetzt ein bestehendes Konstrukt. Keine Fetzladung. Nächster eigener Aktions-W6 +1 (max +2). (verstärkt) Primärwert −1; danach ziehe 1 und wirf 1 ab. Überformel: Primär +2 (fester Slice-1-Bonus). Überformel: Fetzladung wird verbraucht. Formelabwehr −1.",
+    "primary": {
+      "kind": "summon_construct",
+      "value": 4,
+      "target": "self"
+    },
+    "rider": {
+      "id": "rider-w6",
+      "summary": "Nächster eigener Aktions-W6 +1 (max +2). (verstärkt)",
+      "defenseSuppressible": true
+    },
+    "intensity": null,
+    "transformId": "xform-sofortzuender",
+    "grantsFetz": false,
+    "catalystConsumed": true,
+    "overformulaPrimaryBonus": 2,
+    "overformulaIntensityBonus": null,
+    "formulaDefensePenalty": -1,
+    "summonConstructDefId": "v6-konstrukt-spieltest-schattenpuppe"
+  },
+  {
+    "recipeId": "v6-tek-beschwoerungsritual-luft-opfergabe",
+    "kind": "tek",
+    "catalogSlice": "slice1",
+    "techniqueId": "v6-technik-beschwoerungsritual",
+    "essenceId": "v6-essenz-luft",
+    "catalystId": "v6-katalysator-opfergabe",
+    "name": "Windbeschwörung · Opfergabe",
+    "effectSummary": "Beschwöre ein Konstrukt mit Haltbarkeit 3. Ersetzt ein bestehendes Konstrukt. Keine Fetzladung. Nächster eigener Aktions-W6 +1 (max +2). Optional: wirf 1 Handkarte ab für Primärwert +2. TEK-Beschwörung: keine Fetzladung.",
+    "primary": {
+      "kind": "summon_construct",
+      "value": 3,
+      "target": "self"
+    },
+    "rider": {
+      "id": "rider-w6",
+      "summary": "Nächster eigener Aktions-W6 +1 (max +2).",
+      "defenseSuppressible": true
+    },
+    "intensity": null,
+    "transformId": "xform-opfergabe",
+    "grantsFetz": false,
+    "catalystConsumed": true,
+    "overformulaPrimaryBonus": null,
+    "overformulaIntensityBonus": null,
+    "formulaDefensePenalty": null,
+    "summonConstructDefId": "v6-konstrukt-spieltest-schattenpuppe"
+  },
+  {
+    "recipeId": "v6-over-beschwoerungsritual-luft-opfergabe",
+    "kind": "overformula",
+    "catalogSlice": "slice1",
+    "techniqueId": "v6-technik-beschwoerungsritual",
+    "essenceId": "v6-essenz-luft",
+    "catalystId": "v6-katalysator-opfergabe",
+    "name": "Überformel Windbeschwörung · Opfergabe",
+    "effectSummary": "Beschwöre ein Konstrukt mit Haltbarkeit 5. Ersetzt ein bestehendes Konstrukt. Keine Fetzladung. Nächster eigener Aktions-W6 +1 (max +2). (verstärkt) Optional: wirf 1 Handkarte ab für Primärwert +2. Überformel: Primär +2 (fester Slice-1-Bonus). Überformel: Fetzladung wird verbraucht. Formelabwehr −1.",
+    "primary": {
+      "kind": "summon_construct",
+      "value": 5,
+      "target": "self"
+    },
+    "rider": {
+      "id": "rider-w6",
+      "summary": "Nächster eigener Aktions-W6 +1 (max +2). (verstärkt)",
+      "defenseSuppressible": true
+    },
+    "intensity": null,
+    "transformId": "xform-opfergabe",
+    "grantsFetz": false,
+    "catalystConsumed": true,
+    "overformulaPrimaryBonus": 2,
+    "overformulaIntensityBonus": null,
+    "formulaDefensePenalty": -1,
+    "summonConstructDefId": "v6-konstrukt-spieltest-schattenpuppe"
+  },
+  {
+    "recipeId": "v6-tek-beschwoerungsritual-licht-ueberladung",
+    "kind": "tek",
+    "catalogSlice": "slice1",
+    "techniqueId": "v6-technik-beschwoerungsritual",
+    "essenceId": "v6-essenz-licht",
+    "catalystId": "v6-katalysator-ueberladung",
+    "name": "Lichtbeschwörung · Überladung",
+    "effectSummary": "Beschwöre ein Konstrukt mit Haltbarkeit 5. Ersetzt ein bestehendes Konstrukt. Keine Fetzladung. Bei Schildgewinn: entferne optional eine Marke von dir. Primärwert +2; danach erleidest du 1 Selbstschaden. TEK-Beschwörung: keine Fetzladung.",
+    "primary": {
+      "kind": "summon_construct",
+      "value": 5,
+      "target": "self"
+    },
+    "rider": {
+      "id": "rider-reinigen-licht",
+      "summary": "Bei Schildgewinn: entferne optional eine Marke von dir.",
+      "defenseSuppressible": false
+    },
+    "intensity": null,
+    "transformId": "xform-ueberladung",
+    "grantsFetz": false,
+    "catalystConsumed": true,
+    "overformulaPrimaryBonus": null,
+    "overformulaIntensityBonus": null,
+    "formulaDefensePenalty": null,
+    "summonConstructDefId": "v6-konstrukt-spieltest-schattenpuppe"
+  },
+  {
+    "recipeId": "v6-over-beschwoerungsritual-licht-ueberladung",
+    "kind": "overformula",
+    "catalogSlice": "slice1",
+    "techniqueId": "v6-technik-beschwoerungsritual",
+    "essenceId": "v6-essenz-licht",
+    "catalystId": "v6-katalysator-ueberladung",
+    "name": "Überformel Lichtbeschwörung · Überladung",
+    "effectSummary": "Beschwöre ein Konstrukt mit Haltbarkeit 7. Ersetzt ein bestehendes Konstrukt. Keine Fetzladung. Bei Schildgewinn: entferne optional eine Marke von dir. (verstärkt) Primärwert +2; danach erleidest du 1 Selbstschaden. Überformel: Primär +2 (fester Slice-1-Bonus). Überformel: Fetzladung wird verbraucht. Formelabwehr −1.",
+    "primary": {
+      "kind": "summon_construct",
+      "value": 7,
+      "target": "self"
+    },
+    "rider": {
+      "id": "rider-reinigen-licht",
+      "summary": "Bei Schildgewinn: entferne optional eine Marke von dir. (verstärkt)",
+      "defenseSuppressible": false
+    },
+    "intensity": null,
+    "transformId": "xform-ueberladung",
+    "grantsFetz": false,
+    "catalystConsumed": true,
+    "overformulaPrimaryBonus": 2,
+    "overformulaIntensityBonus": null,
+    "formulaDefensePenalty": -1,
+    "summonConstructDefId": "v6-konstrukt-spieltest-schattenpuppe"
+  },
+  {
+    "recipeId": "v6-tek-beschwoerungsritual-licht-verdichtung",
+    "kind": "tek",
+    "catalogSlice": "slice1",
+    "techniqueId": "v6-technik-beschwoerungsritual",
+    "essenceId": "v6-essenz-licht",
+    "catalystId": "v6-katalysator-verdichtung",
+    "name": "Lichtbeschwörung · Verdichtung",
+    "effectSummary": "Beschwöre ein Konstrukt mit Haltbarkeit 4. Ersetzt ein bestehendes Konstrukt. Keine Fetzladung. Bei Schildgewinn: entferne optional eine Marke von dir. Primärwert +1; verwendete Komponenten erhalten +1 Stabilität. TEK-Beschwörung: keine Fetzladung.",
+    "primary": {
+      "kind": "summon_construct",
+      "value": 4,
+      "target": "self"
+    },
+    "rider": {
+      "id": "rider-reinigen-licht",
+      "summary": "Bei Schildgewinn: entferne optional eine Marke von dir.",
+      "defenseSuppressible": false
+    },
+    "intensity": null,
+    "transformId": "xform-verdichtung",
+    "grantsFetz": false,
+    "catalystConsumed": true,
+    "overformulaPrimaryBonus": null,
+    "overformulaIntensityBonus": null,
+    "formulaDefensePenalty": null,
+    "summonConstructDefId": "v6-konstrukt-spieltest-schattenpuppe"
+  },
+  {
+    "recipeId": "v6-over-beschwoerungsritual-licht-verdichtung",
+    "kind": "overformula",
+    "catalogSlice": "slice1",
+    "techniqueId": "v6-technik-beschwoerungsritual",
+    "essenceId": "v6-essenz-licht",
+    "catalystId": "v6-katalysator-verdichtung",
+    "name": "Überformel Lichtbeschwörung · Verdichtung",
+    "effectSummary": "Beschwöre ein Konstrukt mit Haltbarkeit 6. Ersetzt ein bestehendes Konstrukt. Keine Fetzladung. Bei Schildgewinn: entferne optional eine Marke von dir. (verstärkt) Primärwert +1; verwendete Komponenten erhalten +1 Stabilität. Überformel: Primär +2 (fester Slice-1-Bonus). Überformel: Fetzladung wird verbraucht. Formelabwehr −1.",
+    "primary": {
+      "kind": "summon_construct",
+      "value": 6,
+      "target": "self"
+    },
+    "rider": {
+      "id": "rider-reinigen-licht",
+      "summary": "Bei Schildgewinn: entferne optional eine Marke von dir. (verstärkt)",
+      "defenseSuppressible": false
+    },
+    "intensity": null,
+    "transformId": "xform-verdichtung",
+    "grantsFetz": false,
+    "catalystConsumed": true,
+    "overformulaPrimaryBonus": 2,
+    "overformulaIntensityBonus": null,
+    "formulaDefensePenalty": -1,
+    "summonConstructDefId": "v6-konstrukt-spieltest-schattenpuppe"
+  },
+  {
+    "recipeId": "v6-tek-beschwoerungsritual-licht-sofortzuender",
+    "kind": "tek",
+    "catalogSlice": "slice1",
+    "techniqueId": "v6-technik-beschwoerungsritual",
+    "essenceId": "v6-essenz-licht",
+    "catalystId": "v6-katalysator-sofortzuender",
+    "name": "Lichtbeschwörung · Sofortzünder",
+    "effectSummary": "Beschwöre ein Konstrukt mit Haltbarkeit 2. Ersetzt ein bestehendes Konstrukt. Keine Fetzladung. Bei Schildgewinn: entferne optional eine Marke von dir. Primärwert −1; danach ziehe 1 und wirf 1 ab. TEK-Beschwörung: keine Fetzladung.",
+    "primary": {
+      "kind": "summon_construct",
+      "value": 2,
+      "target": "self"
+    },
+    "rider": {
+      "id": "rider-reinigen-licht",
+      "summary": "Bei Schildgewinn: entferne optional eine Marke von dir.",
+      "defenseSuppressible": false
+    },
+    "intensity": null,
+    "transformId": "xform-sofortzuender",
+    "grantsFetz": false,
+    "catalystConsumed": true,
+    "overformulaPrimaryBonus": null,
+    "overformulaIntensityBonus": null,
+    "formulaDefensePenalty": null,
+    "summonConstructDefId": "v6-konstrukt-spieltest-schattenpuppe"
+  },
+  {
+    "recipeId": "v6-over-beschwoerungsritual-licht-sofortzuender",
+    "kind": "overformula",
+    "catalogSlice": "slice1",
+    "techniqueId": "v6-technik-beschwoerungsritual",
+    "essenceId": "v6-essenz-licht",
+    "catalystId": "v6-katalysator-sofortzuender",
+    "name": "Überformel Lichtbeschwörung · Sofortzünder",
+    "effectSummary": "Beschwöre ein Konstrukt mit Haltbarkeit 4. Ersetzt ein bestehendes Konstrukt. Keine Fetzladung. Bei Schildgewinn: entferne optional eine Marke von dir. (verstärkt) Primärwert −1; danach ziehe 1 und wirf 1 ab. Überformel: Primär +2 (fester Slice-1-Bonus). Überformel: Fetzladung wird verbraucht. Formelabwehr −1.",
+    "primary": {
+      "kind": "summon_construct",
+      "value": 4,
+      "target": "self"
+    },
+    "rider": {
+      "id": "rider-reinigen-licht",
+      "summary": "Bei Schildgewinn: entferne optional eine Marke von dir. (verstärkt)",
+      "defenseSuppressible": false
+    },
+    "intensity": null,
+    "transformId": "xform-sofortzuender",
+    "grantsFetz": false,
+    "catalystConsumed": true,
+    "overformulaPrimaryBonus": 2,
+    "overformulaIntensityBonus": null,
+    "formulaDefensePenalty": -1,
+    "summonConstructDefId": "v6-konstrukt-spieltest-schattenpuppe"
+  },
+  {
+    "recipeId": "v6-tek-beschwoerungsritual-licht-opfergabe",
+    "kind": "tek",
+    "catalogSlice": "slice1",
+    "techniqueId": "v6-technik-beschwoerungsritual",
+    "essenceId": "v6-essenz-licht",
+    "catalystId": "v6-katalysator-opfergabe",
+    "name": "Lichtbeschwörung · Opfergabe",
+    "effectSummary": "Beschwöre ein Konstrukt mit Haltbarkeit 3. Ersetzt ein bestehendes Konstrukt. Keine Fetzladung. Bei Schildgewinn: entferne optional eine Marke von dir. Optional: wirf 1 Handkarte ab für Primärwert +2. TEK-Beschwörung: keine Fetzladung.",
+    "primary": {
+      "kind": "summon_construct",
+      "value": 3,
+      "target": "self"
+    },
+    "rider": {
+      "id": "rider-reinigen-licht",
+      "summary": "Bei Schildgewinn: entferne optional eine Marke von dir.",
+      "defenseSuppressible": false
+    },
+    "intensity": null,
+    "transformId": "xform-opfergabe",
+    "grantsFetz": false,
+    "catalystConsumed": true,
+    "overformulaPrimaryBonus": null,
+    "overformulaIntensityBonus": null,
+    "formulaDefensePenalty": null,
+    "summonConstructDefId": "v6-konstrukt-spieltest-schattenpuppe"
+  },
+  {
+    "recipeId": "v6-over-beschwoerungsritual-licht-opfergabe",
+    "kind": "overformula",
+    "catalogSlice": "slice1",
+    "techniqueId": "v6-technik-beschwoerungsritual",
+    "essenceId": "v6-essenz-licht",
+    "catalystId": "v6-katalysator-opfergabe",
+    "name": "Überformel Lichtbeschwörung · Opfergabe",
+    "effectSummary": "Beschwöre ein Konstrukt mit Haltbarkeit 5. Ersetzt ein bestehendes Konstrukt. Keine Fetzladung. Bei Schildgewinn: entferne optional eine Marke von dir. (verstärkt) Optional: wirf 1 Handkarte ab für Primärwert +2. Überformel: Primär +2 (fester Slice-1-Bonus). Überformel: Fetzladung wird verbraucht. Formelabwehr −1.",
+    "primary": {
+      "kind": "summon_construct",
+      "value": 5,
+      "target": "self"
+    },
+    "rider": {
+      "id": "rider-reinigen-licht",
+      "summary": "Bei Schildgewinn: entferne optional eine Marke von dir. (verstärkt)",
+      "defenseSuppressible": false
+    },
+    "intensity": null,
+    "transformId": "xform-opfergabe",
+    "grantsFetz": false,
+    "catalystConsumed": true,
+    "overformulaPrimaryBonus": 2,
+    "overformulaIntensityBonus": null,
+    "formulaDefensePenalty": -1,
+    "summonConstructDefId": "v6-konstrukt-spieltest-schattenpuppe"
+  },
+  {
+    "recipeId": "v6-tek-beschwoerungsritual-schatten-ueberladung",
+    "kind": "tek",
+    "catalogSlice": "slice1",
+    "techniqueId": "v6-technik-beschwoerungsritual",
+    "essenceId": "v6-essenz-schatten",
+    "catalystId": "v6-katalysator-ueberladung",
+    "name": "Schattenbeschwörung · Überladung",
+    "effectSummary": "Beschwöre ein Konstrukt mit Haltbarkeit 5. Ersetzt ein bestehendes Konstrukt. Keine Fetzladung. Bei Treffer: erschöpfe optional 1 gegnerische Formelkomponente. Primärwert +2; danach erleidest du 1 Selbstschaden. TEK-Beschwörung: keine Fetzladung.",
+    "primary": {
+      "kind": "summon_construct",
+      "value": 5,
+      "target": "self"
+    },
+    "rider": {
+      "id": "rider-fluch",
+      "summary": "Bei Treffer: erschöpfe optional 1 gegnerische Formelkomponente.",
+      "defenseSuppressible": true
+    },
+    "intensity": null,
+    "transformId": "xform-ueberladung",
+    "grantsFetz": false,
+    "catalystConsumed": true,
+    "overformulaPrimaryBonus": null,
+    "overformulaIntensityBonus": null,
+    "formulaDefensePenalty": null,
+    "summonConstructDefId": "v6-konstrukt-spieltest-schattenpuppe"
+  },
+  {
+    "recipeId": "v6-over-beschwoerungsritual-schatten-ueberladung",
+    "kind": "overformula",
+    "catalogSlice": "slice1",
+    "techniqueId": "v6-technik-beschwoerungsritual",
+    "essenceId": "v6-essenz-schatten",
+    "catalystId": "v6-katalysator-ueberladung",
+    "name": "Überformel Schattenbeschwörung · Überladung",
+    "effectSummary": "Beschwöre ein Konstrukt mit Haltbarkeit 7. Ersetzt ein bestehendes Konstrukt. Keine Fetzladung. Bei Treffer: erschöpfe optional 1 gegnerische Formelkomponente. (verstärkt) Primärwert +2; danach erleidest du 1 Selbstschaden. Überformel: Primär +2 (fester Slice-1-Bonus). Überformel: Fetzladung wird verbraucht. Formelabwehr −1.",
+    "primary": {
+      "kind": "summon_construct",
+      "value": 7,
+      "target": "self"
+    },
+    "rider": {
+      "id": "rider-fluch",
+      "summary": "Bei Treffer: erschöpfe optional 1 gegnerische Formelkomponente. (verstärkt)",
+      "defenseSuppressible": true
+    },
+    "intensity": null,
+    "transformId": "xform-ueberladung",
+    "grantsFetz": false,
+    "catalystConsumed": true,
+    "overformulaPrimaryBonus": 2,
+    "overformulaIntensityBonus": null,
+    "formulaDefensePenalty": -1,
+    "summonConstructDefId": "v6-konstrukt-spieltest-schattenpuppe"
+  },
+  {
+    "recipeId": "v6-tek-beschwoerungsritual-schatten-verdichtung",
+    "kind": "tek",
+    "catalogSlice": "slice1",
+    "techniqueId": "v6-technik-beschwoerungsritual",
+    "essenceId": "v6-essenz-schatten",
+    "catalystId": "v6-katalysator-verdichtung",
+    "name": "Schattenbeschwörung · Verdichtung",
+    "effectSummary": "Beschwöre ein Konstrukt mit Haltbarkeit 4. Ersetzt ein bestehendes Konstrukt. Keine Fetzladung. Bei Treffer: erschöpfe optional 1 gegnerische Formelkomponente. Primärwert +1; verwendete Komponenten erhalten +1 Stabilität. TEK-Beschwörung: keine Fetzladung.",
+    "primary": {
+      "kind": "summon_construct",
+      "value": 4,
+      "target": "self"
+    },
+    "rider": {
+      "id": "rider-fluch",
+      "summary": "Bei Treffer: erschöpfe optional 1 gegnerische Formelkomponente.",
+      "defenseSuppressible": true
+    },
+    "intensity": null,
+    "transformId": "xform-verdichtung",
+    "grantsFetz": false,
+    "catalystConsumed": true,
+    "overformulaPrimaryBonus": null,
+    "overformulaIntensityBonus": null,
+    "formulaDefensePenalty": null,
+    "summonConstructDefId": "v6-konstrukt-spieltest-schattenpuppe"
+  },
+  {
+    "recipeId": "v6-over-beschwoerungsritual-schatten-verdichtung",
+    "kind": "overformula",
+    "catalogSlice": "slice1",
+    "techniqueId": "v6-technik-beschwoerungsritual",
+    "essenceId": "v6-essenz-schatten",
+    "catalystId": "v6-katalysator-verdichtung",
+    "name": "Überformel Schattenbeschwörung · Verdichtung",
+    "effectSummary": "Beschwöre ein Konstrukt mit Haltbarkeit 6. Ersetzt ein bestehendes Konstrukt. Keine Fetzladung. Bei Treffer: erschöpfe optional 1 gegnerische Formelkomponente. (verstärkt) Primärwert +1; verwendete Komponenten erhalten +1 Stabilität. Überformel: Primär +2 (fester Slice-1-Bonus). Überformel: Fetzladung wird verbraucht. Formelabwehr −1.",
+    "primary": {
+      "kind": "summon_construct",
+      "value": 6,
+      "target": "self"
+    },
+    "rider": {
+      "id": "rider-fluch",
+      "summary": "Bei Treffer: erschöpfe optional 1 gegnerische Formelkomponente. (verstärkt)",
+      "defenseSuppressible": true
+    },
+    "intensity": null,
+    "transformId": "xform-verdichtung",
+    "grantsFetz": false,
+    "catalystConsumed": true,
+    "overformulaPrimaryBonus": 2,
+    "overformulaIntensityBonus": null,
+    "formulaDefensePenalty": -1,
+    "summonConstructDefId": "v6-konstrukt-spieltest-schattenpuppe"
+  },
+  {
+    "recipeId": "v6-tek-beschwoerungsritual-schatten-sofortzuender",
+    "kind": "tek",
+    "catalogSlice": "slice1",
+    "techniqueId": "v6-technik-beschwoerungsritual",
+    "essenceId": "v6-essenz-schatten",
+    "catalystId": "v6-katalysator-sofortzuender",
+    "name": "Schattenbeschwörung · Sofortzünder",
+    "effectSummary": "Beschwöre ein Konstrukt mit Haltbarkeit 2. Ersetzt ein bestehendes Konstrukt. Keine Fetzladung. Bei Treffer: erschöpfe optional 1 gegnerische Formelkomponente. Primärwert −1; danach ziehe 1 und wirf 1 ab. TEK-Beschwörung: keine Fetzladung.",
+    "primary": {
+      "kind": "summon_construct",
+      "value": 2,
+      "target": "self"
+    },
+    "rider": {
+      "id": "rider-fluch",
+      "summary": "Bei Treffer: erschöpfe optional 1 gegnerische Formelkomponente.",
+      "defenseSuppressible": true
+    },
+    "intensity": null,
+    "transformId": "xform-sofortzuender",
+    "grantsFetz": false,
+    "catalystConsumed": true,
+    "overformulaPrimaryBonus": null,
+    "overformulaIntensityBonus": null,
+    "formulaDefensePenalty": null,
+    "summonConstructDefId": "v6-konstrukt-spieltest-schattenpuppe"
+  },
+  {
+    "recipeId": "v6-over-beschwoerungsritual-schatten-sofortzuender",
+    "kind": "overformula",
+    "catalogSlice": "slice1",
+    "techniqueId": "v6-technik-beschwoerungsritual",
+    "essenceId": "v6-essenz-schatten",
+    "catalystId": "v6-katalysator-sofortzuender",
+    "name": "Überformel Schattenbeschwörung · Sofortzünder",
+    "effectSummary": "Beschwöre ein Konstrukt mit Haltbarkeit 4. Ersetzt ein bestehendes Konstrukt. Keine Fetzladung. Bei Treffer: erschöpfe optional 1 gegnerische Formelkomponente. (verstärkt) Primärwert −1; danach ziehe 1 und wirf 1 ab. Überformel: Primär +2 (fester Slice-1-Bonus). Überformel: Fetzladung wird verbraucht. Formelabwehr −1.",
+    "primary": {
+      "kind": "summon_construct",
+      "value": 4,
+      "target": "self"
+    },
+    "rider": {
+      "id": "rider-fluch",
+      "summary": "Bei Treffer: erschöpfe optional 1 gegnerische Formelkomponente. (verstärkt)",
+      "defenseSuppressible": true
+    },
+    "intensity": null,
+    "transformId": "xform-sofortzuender",
+    "grantsFetz": false,
+    "catalystConsumed": true,
+    "overformulaPrimaryBonus": 2,
+    "overformulaIntensityBonus": null,
+    "formulaDefensePenalty": -1,
+    "summonConstructDefId": "v6-konstrukt-spieltest-schattenpuppe"
+  },
+  {
+    "recipeId": "v6-tek-beschwoerungsritual-schatten-opfergabe",
+    "kind": "tek",
+    "catalogSlice": "slice1",
+    "techniqueId": "v6-technik-beschwoerungsritual",
+    "essenceId": "v6-essenz-schatten",
+    "catalystId": "v6-katalysator-opfergabe",
+    "name": "Schattenbeschwörung · Opfergabe",
+    "effectSummary": "Beschwöre ein Konstrukt mit Haltbarkeit 3. Ersetzt ein bestehendes Konstrukt. Keine Fetzladung. Bei Treffer: erschöpfe optional 1 gegnerische Formelkomponente. Optional: wirf 1 Handkarte ab für Primärwert +2. TEK-Beschwörung: keine Fetzladung.",
+    "primary": {
+      "kind": "summon_construct",
+      "value": 3,
+      "target": "self"
+    },
+    "rider": {
+      "id": "rider-fluch",
+      "summary": "Bei Treffer: erschöpfe optional 1 gegnerische Formelkomponente.",
+      "defenseSuppressible": true
+    },
+    "intensity": null,
+    "transformId": "xform-opfergabe",
+    "grantsFetz": false,
+    "catalystConsumed": true,
+    "overformulaPrimaryBonus": null,
+    "overformulaIntensityBonus": null,
+    "formulaDefensePenalty": null,
+    "summonConstructDefId": "v6-konstrukt-spieltest-schattenpuppe"
+  },
+  {
+    "recipeId": "v6-over-beschwoerungsritual-schatten-opfergabe",
+    "kind": "overformula",
+    "catalogSlice": "slice1",
+    "techniqueId": "v6-technik-beschwoerungsritual",
+    "essenceId": "v6-essenz-schatten",
+    "catalystId": "v6-katalysator-opfergabe",
+    "name": "Überformel Schattenbeschwörung · Opfergabe",
+    "effectSummary": "Beschwöre ein Konstrukt mit Haltbarkeit 5. Ersetzt ein bestehendes Konstrukt. Keine Fetzladung. Bei Treffer: erschöpfe optional 1 gegnerische Formelkomponente. (verstärkt) Optional: wirf 1 Handkarte ab für Primärwert +2. Überformel: Primär +2 (fester Slice-1-Bonus). Überformel: Fetzladung wird verbraucht. Formelabwehr −1.",
+    "primary": {
+      "kind": "summon_construct",
+      "value": 5,
+      "target": "self"
+    },
+    "rider": {
+      "id": "rider-fluch",
+      "summary": "Bei Treffer: erschöpfe optional 1 gegnerische Formelkomponente. (verstärkt)",
+      "defenseSuppressible": true
+    },
+    "intensity": null,
+    "transformId": "xform-opfergabe",
+    "grantsFetz": false,
+    "catalystConsumed": true,
+    "overformulaPrimaryBonus": 2,
+    "overformulaIntensityBonus": null,
+    "formulaDefensePenalty": -1,
+    "summonConstructDefId": "v6-konstrukt-spieltest-schattenpuppe"
   }
 ] as const;
 
 export const V6_GENERATED_CATALOG_VERSION = 1 as const;
 
-export const V6_GENERATED_RECIPE_COUNT = 198 as const;
+export const V6_GENERATED_RECIPE_COUNT = 604 as const;

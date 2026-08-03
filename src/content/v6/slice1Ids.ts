@@ -2,15 +2,22 @@
  * Binding Slice-1 card id set (V6 Rules Contract Slice 1).
  * Location: src/content/v6/slice1Ids.ts
  *
- * These 3T×6E×4K ids define the locked recipe catalog in
+ * These 10T×6E×4K ids define the locked recipe catalog in
  * `src/generated/v6/formulaRecipes.generated.ts`. Full 10T×10K matrix
- * later means adding new technique/catalyst ids — do not remove these.
+ * later means adding new catalyst ids — do not remove these.
  */
 
 export const V6_SLICE1_TECHNIQUE_IDS = [
   'v6-technik-impulsgeschoss',
   'v6-technik-adrenalinschrei',
+  'v6-technik-fintenschnitt',
+  'v6-technik-brechschlag',
+  'v6-technik-kettenfessel',
+  'v6-technik-bannkreis',
+  'v6-technik-ueberraschungsangriff',
+  'v6-technik-schicksalmanifestation',
   'v6-technik-magiepanzer',
+  'v6-technik-beschwoerungsritual',
 ] as const;
 
 export const V6_SLICE1_ESSENCE_IDS = [
