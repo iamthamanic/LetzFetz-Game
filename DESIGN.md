@@ -81,7 +81,7 @@ Definiert in `src/index.css` `@theme` — **immer diese Tokens**, keine ad-hoc H
 
 **Mysterium:** `character.id === 'mysterium'` → ein **??** Brand-Icon (`mystery`), keine Element-Icons.
 
-**Brand UI Icons:** Karten nutzen **Lucide** in Grunge-Ringen (`ElementIcon variant="grunge"`). HF-Raster-Icons optional via `scripts/icons/generate-element-icons.sh` (`variant="brand"` — nicht auf Karten).
+**Brand UI Icons:** Karten-Element-Badges nutzen **`ElementBadge`** (Lucide in dunklem Chip + Shimmer; Mysterium = Regenbogen). HF-Raster-Icons optional via `scripts/icons/generate-element-icons.sh` (`ElementIcon variant="brand"` — nicht auf Karten).
 
 **Global Play grunge:** `GrungeAppShell` in `PlayView`; `Panel tone="game"` für Spiel-Panels.
 

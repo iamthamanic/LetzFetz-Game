@@ -3,7 +3,8 @@
  * Location: src/components/cards/CardElementMarks.tsx
  */
 import React from 'react';
-import { ElementIcon, ELEMENT_LABELS_DE } from '../ui/ElementIcon';
+import { ElementBadge } from '../ui/ElementBadge';
+import { ELEMENT_LABELS_DE, type ElementIconKind } from '../ui/ElementIcon';
 import type { CardElementMarkInfo } from './elementMarks';
 import { ElementMarkToken } from './ElementMarkToken';
 
@@ -31,15 +32,13 @@ export function CardElementMarks({
     return null;
   }
 
-  const iconSize = 'sm' as const;
-
   return (
     <div className={`flex flex-col gap-1 ${className}`} data-testid={testId}>
       {showIcons && (info.icons.length > 0 || info.useMysteryIcon) ? (
         <div className={`flex flex-wrap items-center ${compact ? 'gap-0.5' : 'gap-1.5'}`}>
           {info.useMysteryIcon ? (
             <span className="inline-flex items-center gap-1">
-              <ElementIcon element="mystery" size={iconSize} variant="grunge" />
+              <ElementBadge element="mystery" compact={compact} />
               {!compact ? <span>Frei / Frei</span> : null}
             </span>
           ) : (
@@ -50,7 +49,7 @@ export function CardElementMarks({
                     /
                   </span>
                 ) : null}
-                <ElementIcon element={el} size={iconSize} variant="grunge" />
+                <ElementBadge element={el} compact={compact} />
                 {!compact ? (
                   <span className="text-on-parchment">{ELEMENT_LABELS_DE[el]}</span>
                 ) : null}
@@ -60,7 +59,11 @@ export function CardElementMarks({
           {!info.useMysteryIcon &&
             info.elements.length === 0 &&
             info.icons.map((icon) => (
-              <ElementIcon key={icon} element={icon} size={iconSize} variant="grunge" />
+              <ElementBadge
+                key={icon}
+                element={icon as ElementIconKind}
+                compact={compact}
+              />
             ))}
         </div>
       ) : null}

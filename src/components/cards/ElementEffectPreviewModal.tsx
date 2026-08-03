@@ -7,7 +7,7 @@ import { createPortal } from 'react-dom';
 import { X } from 'lucide-react';
 import type { Element, PrimaryMarkId } from '../../game/types';
 import { Button } from '../ui/Button';
-import { ElementIcon } from '../ui/ElementIcon';
+import { ElementBadge } from '../ui/ElementBadge';
 import { CardDividerBar } from './grungeCardParts';
 import { CardNamePlate } from '../ui/CardNamePlate';
 import { ElementEffectCard } from './ElementEffectCard';
@@ -92,7 +92,7 @@ export function ElementEffectPreviewModal({
                   <DetailRow label="Kartenart">Effekt</DetailRow>
                   <DetailRow label="Element">
                     <span className="inline-flex items-center gap-1.5">
-                      <ElementIcon element={element} size="sm" />
+                      <ElementBadge element={element} />
                       <span className="text-on-parchment font-semibold">{copy.elementLabel}</span>
                     </span>
                   </DetailRow>
