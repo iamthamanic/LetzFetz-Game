@@ -79,7 +79,7 @@ export const V6_GENERATED_FORMULA_RECIPES: readonly V6GeneratedFormulaRecipe[] =
     },
     "rider": {
       "id": "rider-reinigen",
-      "summary": "Bei Heilung/Schild: optional Marke entfernen (Slice-1 stub).",
+      "summary": "Bei Heilung oder Schildgewinn: entferne optional eine Marke von dir.",
       "defenseSuppressible": false
     },
     "intensity": null,
@@ -155,7 +155,7 @@ export const V6_GENERATED_FORMULA_RECIPES: readonly V6GeneratedFormulaRecipe[] =
     },
     "rider": {
       "id": "rider-reinigen",
-      "summary": "Bei Heilung/Schild: optional Marke entfernen (Slice-1 stub).",
+      "summary": "Bei Heilung oder Schildgewinn: entferne optional eine Marke von dir.",
       "defenseSuppressible": false
     },
     "intensity": 1,
@@ -230,7 +230,7 @@ export const V6_GENERATED_FORMULA_RECIPES: readonly V6GeneratedFormulaRecipe[] =
     },
     "rider": {
       "id": "rider-reinigen",
-      "summary": "Bei Heilung/Schild: optional Marke entfernen (Slice-1 stub).",
+      "summary": "Bei Heilung oder Schildgewinn: entferne optional eine Marke von dir.",
       "defenseSuppressible": false
     },
     "intensity": 1,
@@ -272,7 +272,7 @@ export const V6_GENERATED_FORMULA_RECIPES: readonly V6GeneratedFormulaRecipe[] =
     "techniqueId": "v6-technik-impulsgeschoss",
     "essenceId": null,
     "catalystId": "v6-katalysator-ueberladung",
-    "name": "TK impulsgeschoss+ueberladung",
+    "name": "Impuls · Überladung",
     "primary": {
       "kind": "damage",
       "value": 3,
@@ -294,7 +294,7 @@ export const V6_GENERATED_FORMULA_RECIPES: readonly V6GeneratedFormulaRecipe[] =
     "techniqueId": "v6-technik-impulsgeschoss",
     "essenceId": null,
     "catalystId": "v6-katalysator-verdichtung",
-    "name": "TK impulsgeschoss+verdichtung",
+    "name": "Impuls · Verdichtung",
     "primary": {
       "kind": "damage",
       "value": 2,
@@ -316,7 +316,7 @@ export const V6_GENERATED_FORMULA_RECIPES: readonly V6GeneratedFormulaRecipe[] =
     "techniqueId": "v6-technik-impulsgeschoss",
     "essenceId": null,
     "catalystId": "v6-katalysator-sofortzuender",
-    "name": "TK impulsgeschoss+sofortzuender",
+    "name": "Impuls · Sofortzünder",
     "primary": {
       "kind": "damage",
       "value": 0,
@@ -338,7 +338,7 @@ export const V6_GENERATED_FORMULA_RECIPES: readonly V6GeneratedFormulaRecipe[] =
     "techniqueId": "v6-technik-impulsgeschoss",
     "essenceId": null,
     "catalystId": "v6-katalysator-opfergabe",
-    "name": "TK impulsgeschoss+opfergabe",
+    "name": "Impuls · Opfergabe",
     "primary": {
       "kind": "damage",
       "value": 1,
@@ -360,7 +360,7 @@ export const V6_GENERATED_FORMULA_RECIPES: readonly V6GeneratedFormulaRecipe[] =
     "techniqueId": "v6-technik-adrenalinschrei",
     "essenceId": null,
     "catalystId": "v6-katalysator-ueberladung",
-    "name": "TK adrenalinschrei+ueberladung",
+    "name": "Schrei · Überladung",
     "primary": {
       "kind": "prep_attack",
       "value": 3,
@@ -381,7 +381,7 @@ export const V6_GENERATED_FORMULA_RECIPES: readonly V6GeneratedFormulaRecipe[] =
     "techniqueId": "v6-technik-adrenalinschrei",
     "essenceId": null,
     "catalystId": "v6-katalysator-verdichtung",
-    "name": "TK adrenalinschrei+verdichtung",
+    "name": "Schrei · Verdichtung",
     "primary": {
       "kind": "prep_attack",
       "value": 2,
@@ -402,7 +402,7 @@ export const V6_GENERATED_FORMULA_RECIPES: readonly V6GeneratedFormulaRecipe[] =
     "techniqueId": "v6-technik-adrenalinschrei",
     "essenceId": null,
     "catalystId": "v6-katalysator-sofortzuender",
-    "name": "TK adrenalinschrei+sofortzuender",
+    "name": "Schrei · Sofortzünder",
     "primary": {
       "kind": "prep_attack",
       "value": 0,
@@ -423,7 +423,7 @@ export const V6_GENERATED_FORMULA_RECIPES: readonly V6GeneratedFormulaRecipe[] =
     "techniqueId": "v6-technik-adrenalinschrei",
     "essenceId": null,
     "catalystId": "v6-katalysator-opfergabe",
-    "name": "TK adrenalinschrei+opfergabe",
+    "name": "Schrei · Opfergabe",
     "primary": {
       "kind": "prep_attack",
       "value": 1,
@@ -444,7 +444,7 @@ export const V6_GENERATED_FORMULA_RECIPES: readonly V6GeneratedFormulaRecipe[] =
     "techniqueId": "v6-technik-magiepanzer",
     "essenceId": null,
     "catalystId": "v6-katalysator-ueberladung",
-    "name": "TK magiepanzer+ueberladung",
+    "name": "Panzer · Überladung",
     "primary": {
       "kind": "shield",
       "value": 3,
@@ -465,7 +465,7 @@ export const V6_GENERATED_FORMULA_RECIPES: readonly V6GeneratedFormulaRecipe[] =
     "techniqueId": "v6-technik-magiepanzer",
     "essenceId": null,
     "catalystId": "v6-katalysator-verdichtung",
-    "name": "TK magiepanzer+verdichtung",
+    "name": "Panzer · Verdichtung",
     "primary": {
       "kind": "shield",
       "value": 2,
@@ -486,7 +486,7 @@ export const V6_GENERATED_FORMULA_RECIPES: readonly V6GeneratedFormulaRecipe[] =
     "techniqueId": "v6-technik-magiepanzer",
     "essenceId": null,
     "catalystId": "v6-katalysator-sofortzuender",
-    "name": "TK magiepanzer+sofortzuender",
+    "name": "Panzer · Sofortzünder",
     "primary": {
       "kind": "shield",
       "value": 0,
@@ -507,7 +507,7 @@ export const V6_GENERATED_FORMULA_RECIPES: readonly V6GeneratedFormulaRecipe[] =
     "techniqueId": "v6-technik-magiepanzer",
     "essenceId": null,
     "catalystId": "v6-katalysator-opfergabe",
-    "name": "TK magiepanzer+opfergabe",
+    "name": "Panzer · Opfergabe",
     "primary": {
       "kind": "shield",
       "value": 1,
@@ -528,7 +528,7 @@ export const V6_GENERATED_FORMULA_RECIPES: readonly V6GeneratedFormulaRecipe[] =
     "techniqueId": null,
     "essenceId": "v6-essenz-feuer",
     "catalystId": "v6-katalysator-ueberladung",
-    "name": "EK feuer+ueberladung",
+    "name": "Feuer-Ritual · Überladung",
     "primary": {
       "kind": "damage",
       "value": 3,
@@ -554,7 +554,7 @@ export const V6_GENERATED_FORMULA_RECIPES: readonly V6GeneratedFormulaRecipe[] =
     "techniqueId": null,
     "essenceId": "v6-essenz-feuer",
     "catalystId": "v6-katalysator-verdichtung",
-    "name": "EK feuer+verdichtung",
+    "name": "Feuer-Ritual · Verdichtung",
     "primary": {
       "kind": "damage",
       "value": 2,
@@ -580,7 +580,7 @@ export const V6_GENERATED_FORMULA_RECIPES: readonly V6GeneratedFormulaRecipe[] =
     "techniqueId": null,
     "essenceId": "v6-essenz-feuer",
     "catalystId": "v6-katalysator-sofortzuender",
-    "name": "EK feuer+sofortzuender",
+    "name": "Feuer-Ritual · Sofortzünder",
     "primary": {
       "kind": "damage",
       "value": 0,
@@ -606,7 +606,7 @@ export const V6_GENERATED_FORMULA_RECIPES: readonly V6GeneratedFormulaRecipe[] =
     "techniqueId": null,
     "essenceId": "v6-essenz-feuer",
     "catalystId": "v6-katalysator-opfergabe",
-    "name": "EK feuer+opfergabe",
+    "name": "Feuer-Ritual · Opfergabe",
     "primary": {
       "kind": "damage",
       "value": 1,
@@ -632,7 +632,7 @@ export const V6_GENERATED_FORMULA_RECIPES: readonly V6GeneratedFormulaRecipe[] =
     "techniqueId": null,
     "essenceId": "v6-essenz-wasser",
     "catalystId": "v6-katalysator-ueberladung",
-    "name": "EK wasser+ueberladung",
+    "name": "Wasser-Ritual · Überladung",
     "primary": {
       "kind": "heal",
       "value": 3,
@@ -640,7 +640,7 @@ export const V6_GENERATED_FORMULA_RECIPES: readonly V6GeneratedFormulaRecipe[] =
     },
     "rider": {
       "id": "rider-reinigen",
-      "summary": "Bei Heilung/Schild: optional Marke entfernen (Slice-1 stub).",
+      "summary": "Bei Heilung oder Schildgewinn: entferne optional eine Marke von dir.",
       "defenseSuppressible": false
     },
     "intensity": null,
@@ -657,7 +657,7 @@ export const V6_GENERATED_FORMULA_RECIPES: readonly V6GeneratedFormulaRecipe[] =
     "techniqueId": null,
     "essenceId": "v6-essenz-wasser",
     "catalystId": "v6-katalysator-verdichtung",
-    "name": "EK wasser+verdichtung",
+    "name": "Wasser-Ritual · Verdichtung",
     "primary": {
       "kind": "heal",
       "value": 2,
@@ -665,7 +665,7 @@ export const V6_GENERATED_FORMULA_RECIPES: readonly V6GeneratedFormulaRecipe[] =
     },
     "rider": {
       "id": "rider-reinigen",
-      "summary": "Bei Heilung/Schild: optional Marke entfernen (Slice-1 stub).",
+      "summary": "Bei Heilung oder Schildgewinn: entferne optional eine Marke von dir.",
       "defenseSuppressible": false
     },
     "intensity": null,
@@ -682,7 +682,7 @@ export const V6_GENERATED_FORMULA_RECIPES: readonly V6GeneratedFormulaRecipe[] =
     "techniqueId": null,
     "essenceId": "v6-essenz-wasser",
     "catalystId": "v6-katalysator-sofortzuender",
-    "name": "EK wasser+sofortzuender",
+    "name": "Wasser-Ritual · Sofortzünder",
     "primary": {
       "kind": "heal",
       "value": 0,
@@ -690,7 +690,7 @@ export const V6_GENERATED_FORMULA_RECIPES: readonly V6GeneratedFormulaRecipe[] =
     },
     "rider": {
       "id": "rider-reinigen",
-      "summary": "Bei Heilung/Schild: optional Marke entfernen (Slice-1 stub).",
+      "summary": "Bei Heilung oder Schildgewinn: entferne optional eine Marke von dir.",
       "defenseSuppressible": false
     },
     "intensity": null,
@@ -707,7 +707,7 @@ export const V6_GENERATED_FORMULA_RECIPES: readonly V6GeneratedFormulaRecipe[] =
     "techniqueId": null,
     "essenceId": "v6-essenz-wasser",
     "catalystId": "v6-katalysator-opfergabe",
-    "name": "EK wasser+opfergabe",
+    "name": "Wasser-Ritual · Opfergabe",
     "primary": {
       "kind": "heal",
       "value": 1,
@@ -715,7 +715,7 @@ export const V6_GENERATED_FORMULA_RECIPES: readonly V6GeneratedFormulaRecipe[] =
     },
     "rider": {
       "id": "rider-reinigen",
-      "summary": "Bei Heilung/Schild: optional Marke entfernen (Slice-1 stub).",
+      "summary": "Bei Heilung oder Schildgewinn: entferne optional eine Marke von dir.",
       "defenseSuppressible": false
     },
     "intensity": null,
@@ -732,7 +732,7 @@ export const V6_GENERATED_FORMULA_RECIPES: readonly V6GeneratedFormulaRecipe[] =
     "techniqueId": null,
     "essenceId": "v6-essenz-luft",
     "catalystId": "v6-katalysator-ueberladung",
-    "name": "EK luft+ueberladung",
+    "name": "Luft-Ritual · Überladung",
     "primary": {
       "kind": "prep_boost",
       "value": 3,
@@ -757,7 +757,7 @@ export const V6_GENERATED_FORMULA_RECIPES: readonly V6GeneratedFormulaRecipe[] =
     "techniqueId": null,
     "essenceId": "v6-essenz-luft",
     "catalystId": "v6-katalysator-verdichtung",
-    "name": "EK luft+verdichtung",
+    "name": "Luft-Ritual · Verdichtung",
     "primary": {
       "kind": "prep_boost",
       "value": 2,
@@ -782,7 +782,7 @@ export const V6_GENERATED_FORMULA_RECIPES: readonly V6GeneratedFormulaRecipe[] =
     "techniqueId": null,
     "essenceId": "v6-essenz-luft",
     "catalystId": "v6-katalysator-sofortzuender",
-    "name": "EK luft+sofortzuender",
+    "name": "Luft-Ritual · Sofortzünder",
     "primary": {
       "kind": "prep_boost",
       "value": 0,
@@ -807,7 +807,7 @@ export const V6_GENERATED_FORMULA_RECIPES: readonly V6GeneratedFormulaRecipe[] =
     "techniqueId": null,
     "essenceId": "v6-essenz-luft",
     "catalystId": "v6-katalysator-opfergabe",
-    "name": "EK luft+opfergabe",
+    "name": "Luft-Ritual · Opfergabe",
     "primary": {
       "kind": "prep_boost",
       "value": 1,
@@ -1049,7 +1049,7 @@ export const V6_GENERATED_FORMULA_RECIPES: readonly V6GeneratedFormulaRecipe[] =
     },
     "rider": {
       "id": "rider-reinigen",
-      "summary": "Bei Heilung/Schild: optional Marke entfernen (Slice-1 stub).",
+      "summary": "Bei Heilung oder Schildgewinn: entferne optional eine Marke von dir.",
       "defenseSuppressible": false
     },
     "intensity": null,
@@ -1075,7 +1075,7 @@ export const V6_GENERATED_FORMULA_RECIPES: readonly V6GeneratedFormulaRecipe[] =
     },
     "rider": {
       "id": "rider-reinigen",
-      "summary": "Bei Heilung/Schild: optional Marke entfernen (Slice-1 stub). (verstärkt)",
+      "summary": "Bei Heilung oder Schildgewinn: entferne optional eine Marke von dir. (verstärkt)",
       "defenseSuppressible": false
     },
     "intensity": null,
@@ -1101,7 +1101,7 @@ export const V6_GENERATED_FORMULA_RECIPES: readonly V6GeneratedFormulaRecipe[] =
     },
     "rider": {
       "id": "rider-reinigen",
-      "summary": "Bei Heilung/Schild: optional Marke entfernen (Slice-1 stub).",
+      "summary": "Bei Heilung oder Schildgewinn: entferne optional eine Marke von dir.",
       "defenseSuppressible": false
     },
     "intensity": null,
@@ -1127,7 +1127,7 @@ export const V6_GENERATED_FORMULA_RECIPES: readonly V6GeneratedFormulaRecipe[] =
     },
     "rider": {
       "id": "rider-reinigen",
-      "summary": "Bei Heilung/Schild: optional Marke entfernen (Slice-1 stub). (verstärkt)",
+      "summary": "Bei Heilung oder Schildgewinn: entferne optional eine Marke von dir. (verstärkt)",
       "defenseSuppressible": false
     },
     "intensity": null,
@@ -1153,7 +1153,7 @@ export const V6_GENERATED_FORMULA_RECIPES: readonly V6GeneratedFormulaRecipe[] =
     },
     "rider": {
       "id": "rider-reinigen",
-      "summary": "Bei Heilung/Schild: optional Marke entfernen (Slice-1 stub).",
+      "summary": "Bei Heilung oder Schildgewinn: entferne optional eine Marke von dir.",
       "defenseSuppressible": false
     },
     "intensity": null,
@@ -1179,7 +1179,7 @@ export const V6_GENERATED_FORMULA_RECIPES: readonly V6GeneratedFormulaRecipe[] =
     },
     "rider": {
       "id": "rider-reinigen",
-      "summary": "Bei Heilung/Schild: optional Marke entfernen (Slice-1 stub). (verstärkt)",
+      "summary": "Bei Heilung oder Schildgewinn: entferne optional eine Marke von dir. (verstärkt)",
       "defenseSuppressible": false
     },
     "intensity": null,
@@ -1205,7 +1205,7 @@ export const V6_GENERATED_FORMULA_RECIPES: readonly V6GeneratedFormulaRecipe[] =
     },
     "rider": {
       "id": "rider-reinigen",
-      "summary": "Bei Heilung/Schild: optional Marke entfernen (Slice-1 stub).",
+      "summary": "Bei Heilung oder Schildgewinn: entferne optional eine Marke von dir.",
       "defenseSuppressible": false
     },
     "intensity": null,
@@ -1231,7 +1231,7 @@ export const V6_GENERATED_FORMULA_RECIPES: readonly V6GeneratedFormulaRecipe[] =
     },
     "rider": {
       "id": "rider-reinigen",
-      "summary": "Bei Heilung/Schild: optional Marke entfernen (Slice-1 stub). (verstärkt)",
+      "summary": "Bei Heilung oder Schildgewinn: entferne optional eine Marke von dir. (verstärkt)",
       "defenseSuppressible": false
     },
     "intensity": null,
@@ -1664,7 +1664,7 @@ export const V6_GENERATED_FORMULA_RECIPES: readonly V6GeneratedFormulaRecipe[] =
     },
     "rider": {
       "id": "rider-reinigen",
-      "summary": "Bei Heilung/Schild: optional Marke entfernen (Slice-1 stub).",
+      "summary": "Bei Heilung oder Schildgewinn: entferne optional eine Marke von dir.",
       "defenseSuppressible": false
     },
     "intensity": 1,
@@ -1689,7 +1689,7 @@ export const V6_GENERATED_FORMULA_RECIPES: readonly V6GeneratedFormulaRecipe[] =
     },
     "rider": {
       "id": "rider-reinigen",
-      "summary": "Bei Heilung/Schild: optional Marke entfernen (Slice-1 stub). (verstärkt)",
+      "summary": "Bei Heilung oder Schildgewinn: entferne optional eine Marke von dir. (verstärkt)",
       "defenseSuppressible": false
     },
     "intensity": 2,
@@ -1714,7 +1714,7 @@ export const V6_GENERATED_FORMULA_RECIPES: readonly V6GeneratedFormulaRecipe[] =
     },
     "rider": {
       "id": "rider-reinigen",
-      "summary": "Bei Heilung/Schild: optional Marke entfernen (Slice-1 stub).",
+      "summary": "Bei Heilung oder Schildgewinn: entferne optional eine Marke von dir.",
       "defenseSuppressible": false
     },
     "intensity": 1,
@@ -1739,7 +1739,7 @@ export const V6_GENERATED_FORMULA_RECIPES: readonly V6GeneratedFormulaRecipe[] =
     },
     "rider": {
       "id": "rider-reinigen",
-      "summary": "Bei Heilung/Schild: optional Marke entfernen (Slice-1 stub). (verstärkt)",
+      "summary": "Bei Heilung oder Schildgewinn: entferne optional eine Marke von dir. (verstärkt)",
       "defenseSuppressible": false
     },
     "intensity": 2,
@@ -1764,7 +1764,7 @@ export const V6_GENERATED_FORMULA_RECIPES: readonly V6GeneratedFormulaRecipe[] =
     },
     "rider": {
       "id": "rider-reinigen",
-      "summary": "Bei Heilung/Schild: optional Marke entfernen (Slice-1 stub).",
+      "summary": "Bei Heilung oder Schildgewinn: entferne optional eine Marke von dir.",
       "defenseSuppressible": false
     },
     "intensity": 1,
@@ -1789,7 +1789,7 @@ export const V6_GENERATED_FORMULA_RECIPES: readonly V6GeneratedFormulaRecipe[] =
     },
     "rider": {
       "id": "rider-reinigen",
-      "summary": "Bei Heilung/Schild: optional Marke entfernen (Slice-1 stub). (verstärkt)",
+      "summary": "Bei Heilung oder Schildgewinn: entferne optional eine Marke von dir. (verstärkt)",
       "defenseSuppressible": false
     },
     "intensity": 2,
@@ -1814,7 +1814,7 @@ export const V6_GENERATED_FORMULA_RECIPES: readonly V6GeneratedFormulaRecipe[] =
     },
     "rider": {
       "id": "rider-reinigen",
-      "summary": "Bei Heilung/Schild: optional Marke entfernen (Slice-1 stub).",
+      "summary": "Bei Heilung oder Schildgewinn: entferne optional eine Marke von dir.",
       "defenseSuppressible": false
     },
     "intensity": 1,
@@ -1839,7 +1839,7 @@ export const V6_GENERATED_FORMULA_RECIPES: readonly V6GeneratedFormulaRecipe[] =
     },
     "rider": {
       "id": "rider-reinigen",
-      "summary": "Bei Heilung/Schild: optional Marke entfernen (Slice-1 stub). (verstärkt)",
+      "summary": "Bei Heilung oder Schildgewinn: entferne optional eine Marke von dir. (verstärkt)",
       "defenseSuppressible": false
     },
     "intensity": 2,
@@ -2264,7 +2264,7 @@ export const V6_GENERATED_FORMULA_RECIPES: readonly V6GeneratedFormulaRecipe[] =
     },
     "rider": {
       "id": "rider-reinigen",
-      "summary": "Bei Heilung/Schild: optional Marke entfernen (Slice-1 stub).",
+      "summary": "Bei Heilung oder Schildgewinn: entferne optional eine Marke von dir.",
       "defenseSuppressible": false
     },
     "intensity": 1,
@@ -2289,7 +2289,7 @@ export const V6_GENERATED_FORMULA_RECIPES: readonly V6GeneratedFormulaRecipe[] =
     },
     "rider": {
       "id": "rider-reinigen",
-      "summary": "Bei Heilung/Schild: optional Marke entfernen (Slice-1 stub). (verstärkt)",
+      "summary": "Bei Heilung oder Schildgewinn: entferne optional eine Marke von dir. (verstärkt)",
       "defenseSuppressible": false
     },
     "intensity": 1,
@@ -2314,7 +2314,7 @@ export const V6_GENERATED_FORMULA_RECIPES: readonly V6GeneratedFormulaRecipe[] =
     },
     "rider": {
       "id": "rider-reinigen",
-      "summary": "Bei Heilung/Schild: optional Marke entfernen (Slice-1 stub).",
+      "summary": "Bei Heilung oder Schildgewinn: entferne optional eine Marke von dir.",
       "defenseSuppressible": false
     },
     "intensity": 1,
@@ -2339,7 +2339,7 @@ export const V6_GENERATED_FORMULA_RECIPES: readonly V6GeneratedFormulaRecipe[] =
     },
     "rider": {
       "id": "rider-reinigen",
-      "summary": "Bei Heilung/Schild: optional Marke entfernen (Slice-1 stub). (verstärkt)",
+      "summary": "Bei Heilung oder Schildgewinn: entferne optional eine Marke von dir. (verstärkt)",
       "defenseSuppressible": false
     },
     "intensity": 1,
@@ -2364,7 +2364,7 @@ export const V6_GENERATED_FORMULA_RECIPES: readonly V6GeneratedFormulaRecipe[] =
     },
     "rider": {
       "id": "rider-reinigen",
-      "summary": "Bei Heilung/Schild: optional Marke entfernen (Slice-1 stub).",
+      "summary": "Bei Heilung oder Schildgewinn: entferne optional eine Marke von dir.",
       "defenseSuppressible": false
     },
     "intensity": 1,
@@ -2389,7 +2389,7 @@ export const V6_GENERATED_FORMULA_RECIPES: readonly V6GeneratedFormulaRecipe[] =
     },
     "rider": {
       "id": "rider-reinigen",
-      "summary": "Bei Heilung/Schild: optional Marke entfernen (Slice-1 stub). (verstärkt)",
+      "summary": "Bei Heilung oder Schildgewinn: entferne optional eine Marke von dir. (verstärkt)",
       "defenseSuppressible": false
     },
     "intensity": 1,
@@ -2414,7 +2414,7 @@ export const V6_GENERATED_FORMULA_RECIPES: readonly V6GeneratedFormulaRecipe[] =
     },
     "rider": {
       "id": "rider-reinigen",
-      "summary": "Bei Heilung/Schild: optional Marke entfernen (Slice-1 stub).",
+      "summary": "Bei Heilung oder Schildgewinn: entferne optional eine Marke von dir.",
       "defenseSuppressible": false
     },
     "intensity": 1,
@@ -2439,7 +2439,7 @@ export const V6_GENERATED_FORMULA_RECIPES: readonly V6GeneratedFormulaRecipe[] =
     },
     "rider": {
       "id": "rider-reinigen",
-      "summary": "Bei Heilung/Schild: optional Marke entfernen (Slice-1 stub). (verstärkt)",
+      "summary": "Bei Heilung oder Schildgewinn: entferne optional eine Marke von dir. (verstärkt)",
       "defenseSuppressible": false
     },
     "intensity": 1,

@@ -13,6 +13,17 @@ function isNonEmptyString(v: unknown): v is string {
   return typeof v === 'string' && v.trim() !== '';
 }
 
+/** Player-facing copy must not ship placeholders. */
+function assertPlayableCopy(path: string, text: unknown, errors: string[]): void {
+  if (!isNonEmptyString(text)) return;
+  if (/\bstub\b/i.test(text)) {
+    errors.push(`${path} must not contain stub placeholders`);
+  }
+  if (/^(TK|EK)\s/i.test(text.trim())) {
+    errors.push(`${path} must use a German display name (not TK/EK machine label)`);
+  }
+}
+
 function validatePrimary(
   primary: unknown,
   path: string,
@@ -59,7 +70,15 @@ export function validateV6FormulaAuthoring(catalog: unknown): string[] {
           errors.push(`teBases[${i}].${key} is required`);
         }
       }
+      assertPlayableCopy(`teBases[${i}].name`, r.name, errors);
       validatePrimary(r.primary, `teBases[${i}]`, errors);
+      if (r.rider !== undefined && r.rider !== null && typeof r.rider === 'object') {
+        assertPlayableCopy(
+          `teBases[${i}].rider.summary`,
+          (r.rider as Record<string, unknown>).summary,
+          errors,
+        );
+      }
     });
   }
 
@@ -77,6 +96,7 @@ export function validateV6FormulaAuthoring(catalog: unknown): string[] {
           errors.push(`tkBases[${i}].${key} is required`);
         }
       }
+      assertPlayableCopy(`tkBases[${i}].name`, r.name, errors);
       validatePrimary(r.primary, `tkBases[${i}]`, errors);
     });
   }
@@ -95,7 +115,15 @@ export function validateV6FormulaAuthoring(catalog: unknown): string[] {
           errors.push(`ekBases[${i}].${key} is required`);
         }
       }
+      assertPlayableCopy(`ekBases[${i}].name`, r.name, errors);
       validatePrimary(r.primary, `ekBases[${i}]`, errors);
+      if (r.rider !== undefined && r.rider !== null && typeof r.rider === 'object') {
+        assertPlayableCopy(
+          `ekBases[${i}].rider.summary`,
+          (r.rider as Record<string, unknown>).summary,
+          errors,
+        );
+      }
     });
   }
 
@@ -124,6 +152,7 @@ export function validateV6FormulaAuthoring(catalog: unknown): string[] {
       if (!isNonEmptyString(r.summary)) {
         errors.push(`catalystTransforms[${i}].summary is required`);
       }
+      assertPlayableCopy(`catalystTransforms[${i}].summary`, r.summary, errors);
     });
   }
 
