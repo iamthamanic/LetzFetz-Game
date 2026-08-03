@@ -7,7 +7,6 @@
  */
 import type { ContentPack, RulesetConfig } from '../../types';
 import { V6_RULESET } from '../../types';
-import { BASE_PACK } from '../base-pack';
 import {
   V6_SLICE1_ARENAS,
   V6_SLICE1_CATALYSTS,
@@ -18,6 +17,7 @@ import { V6_PLAYTEST_ECHO_DELAY_CATALYSTS } from '../../../content/v6/cards/play
 import { V6_PLAYTEST_BESCHWOERUNG_CATALYSTS } from '../../../content/v6/cards/playtestConstructCards';
 import { V6_ELEMENT_CARDS } from '../../../content/v6/cards/elementCards';
 import { V6_ITEMS } from '../../../content/v6/cards/itemCards';
+import { V6_STANDARD_GLITCHES } from '../../../content/v6/cards/glitchCards';
 import { V6_CHARACTERS } from './characters';
 
 /** V6 pack ruleset identity — INTERNAL only until PLAYABLE cutover. */
@@ -27,18 +27,19 @@ export const V6_PACK_RULESET: RulesetConfig = {
 
 /**
  * Slice-1 pack: Slice-1 formula cards + 6 V6 core arenas;
- * V6 characters (affinity + Macken); V6 hand-only element cards (§36); base glitches (no instant).
+ * V6 characters (affinity + Macken); V6 hand-only element cards (§36);
+ * Standard-Glitches with explicit timing (no Sofort-Negativ / Chaos).
  */
 export function buildV6CorePack(): ContentPack {
   return {
     id: 'v6-core',
     name: 'V6 Core Slice-1 (INTERNAL) — 105-Rezept-Katalog',
-    version: '0.1.4-slice1',
+    version: '0.1.5-slice1',
     characters: V6_CHARACTERS,
     ultimates: [],
     arenas: V6_SLICE1_ARENAS,
     elementCards: V6_ELEMENT_CARDS,
-    glitches: BASE_PACK.glitches.filter((g) => g.glitchType !== 'instant'),
+    glitches: V6_STANDARD_GLITCHES,
     techniques: V6_SLICE1_TECHNIQUES,
     essences: V6_SLICE1_ESSENCES,
     /** Slice-1 locked set + Echo/Delay/Beschwörung playtest catalysts (not in 105 matrix). */

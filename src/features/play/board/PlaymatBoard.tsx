@@ -22,8 +22,12 @@ import {
   findPlayGlitchAction,
   findPlayItemAction,
   findPoolActivateAction,
+  findTargetedPlayGlitchAction,
   formulaChallengeTargetIds,
   formulaChangeRequiresDiscard,
+  glitchDiscardOptions,
+  glitchRequiresTarget,
+  glitchTargetIds,
 } from './gameActionHelpers';
 import { CharacterDock, CombatStage, DeckPile, DiscardPile } from './zones';
 import { BoundCardRow } from './BoundCardRow';
@@ -256,6 +260,19 @@ export function PlaymatBoard({
   };
 
   const handleActivateDiscard = (handInstanceId: string) => {
+    if (pending?.type === 'glitch' && pending.targetBoundInstanceId) {
+      const action = findTargetedPlayGlitchAction(
+        view.legalActions,
+        pending.glitchInstanceId,
+        pending.targetBoundInstanceId,
+        handInstanceId,
+      );
+      if (action) {
+        onDispatch(action);
+        clearPending();
+      }
+      return;
+    }
     if (pending?.type === 'formula-paid-change') {
       const action = findPaidFormulaChangeAction(
         view.legalActions,
@@ -289,10 +306,53 @@ export function PlaymatBoard({
   };
 
   const handlePlayGlitch = (handInstanceId: string) => {
-    const action = findPlayGlitchAction(view.legalActions, handInstanceId);
-    if (action) {
-      onDispatch(action);
+    const simple = findPlayGlitchAction(view.legalActions, handInstanceId);
+    if (simple) {
+      onDispatch(simple);
       clearPending();
+      return;
+    }
+    if (glitchRequiresTarget(view.legalActions, handInstanceId)) {
+      onPendingChange({ type: 'glitch', glitchInstanceId: handInstanceId });
+    }
+  };
+
+  const handleGlitchFormulaTarget = (instanceId: string) => {
+    if (pending?.type !== 'glitch') return;
+    const withoutDiscard = findTargetedPlayGlitchAction(
+      view.legalActions,
+      pending.glitchInstanceId,
+      instanceId,
+    );
+    if (withoutDiscard) {
+      onDispatch(withoutDiscard);
+      clearPending();
+      return;
+    }
+    const discards = glitchDiscardOptions(
+      view.legalActions,
+      pending.glitchInstanceId,
+      instanceId,
+    );
+    if (discards.length === 1) {
+      const action = findTargetedPlayGlitchAction(
+        view.legalActions,
+        pending.glitchInstanceId,
+        instanceId,
+        discards[0],
+      );
+      if (action) {
+        onDispatch(action);
+        clearPending();
+      }
+      return;
+    }
+    if (discards.length > 1) {
+      onPendingChange({
+        type: 'glitch',
+        glitchInstanceId: pending.glitchInstanceId,
+        targetBoundInstanceId: instanceId,
+      });
     }
   };
 
@@ -326,6 +386,9 @@ export function PlaymatBoard({
     pending?.type === 'attack'
       ? formulaChallengeTargetIds(view.legalActions, pending.attackInstanceId)
       : [];
+
+  const formulaGlitchTargetIds =
+    pending?.type === 'glitch' ? glitchTargetIds(view.legalActions, pending.glitchInstanceId) : [];
 
   const formulaReturnIds =
     pending?.type === 'formula-return'
@@ -367,6 +430,10 @@ export function PlaymatBoard({
         return '2. Formeländerung: tippe eine Handkarte zum Abwerfen als Kosten.';
       case 'formula-return':
         return 'Rückbau: tippe eine Formelkomponente, die zurück auf die Hand soll.';
+      case 'glitch':
+        return pending.targetBoundInstanceId
+          ? 'Illegaler Download: tippe eine Handkarte zum Abwerfen.'
+          : 'Glitch: tippe eine Formelkomponente als Ziel.';
       default:
         return null;
     }
@@ -633,11 +700,21 @@ export function PlaymatBoard({
                     pack={pack}
                     equipment={readPlayerEquipment(state.players[botId])}
                     testId="opponent-formula-rig"
-                    targetableInstanceIds={formulaChallengeIds}
-                    selectedTargetId={
-                      pending?.type === 'attack' ? pending.targetBoundInstanceId : null
+                    targetableInstanceIds={
+                      pending?.type === 'glitch' ? formulaGlitchTargetIds : formulaChallengeIds
                     }
-                    onComponentClick={handleFormulaChallengeClick}
+                    selectedTargetId={
+                      pending?.type === 'attack'
+                        ? pending.targetBoundInstanceId
+                        : pending?.type === 'glitch'
+                          ? pending.targetBoundInstanceId
+                          : null
+                    }
+                    onComponentClick={
+                      pending?.type === 'glitch'
+                        ? handleGlitchFormulaTarget
+                        : handleFormulaChallengeClick
+                    }
                     echoDelayChips={botEchoDelayChips}
                     pendingCatalystTiming={botPendingCatalyst}
                   />
@@ -732,10 +809,20 @@ export function PlaymatBoard({
                           a.type === 'FORMULA_SCHNELLMIX',
                       )
                     }
-                    targetableInstanceIds={formulaReturnIds}
-                    selectedTargetId={null}
+                    targetableInstanceIds={
+                      pending?.type === 'glitch'
+                        ? formulaGlitchTargetIds
+                        : formulaReturnIds
+                    }
+                    selectedTargetId={
+                      pending?.type === 'glitch' ? pending.targetBoundInstanceId ?? null : null
+                    }
                     onComponentClick={
-                      pending?.type === 'formula-return' ? handleFormulaReturnClick : undefined
+                      pending?.type === 'glitch'
+                        ? handleGlitchFormulaTarget
+                        : pending?.type === 'formula-return'
+                          ? handleFormulaReturnClick
+                          : undefined
                     }
                     echoDelayChips={humanEchoDelayChips}
                     pendingCatalystTiming={humanPendingCatalyst}

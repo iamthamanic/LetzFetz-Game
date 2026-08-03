@@ -24,6 +24,7 @@ import type { PendingIntent } from './gameActionHelpers';
 import {
   buildRequiresReplace,
   findPaidFormulaChangeAction,
+  glitchDiscardOptions,
   isBuildReplaceTarget,
   isChallengeTargetForAttack,
   isActivateDiscardOption,
@@ -228,11 +229,7 @@ function handInteraction(
   // Prefer playing a glitch over the generic discard-to-draw free action.
   if (
     legalActions.some(
-      (a) =>
-        a.type === 'PLAY_GLITCH' &&
-        a.glitchInstanceId === instanceId &&
-        !a.discardHandInstanceId &&
-        !a.targetBoundInstanceId,
+      (a) => a.type === 'PLAY_GLITCH' && a.glitchInstanceId === instanceId,
     )
   ) {
     return 'play-glitch';
@@ -328,13 +325,23 @@ export function buildGameViewModel(
         isActivateDiscardOption(legalActions, pending.boundInstanceId, card.instanceId)) ||
       (pending?.type === 'formula-paid-change' &&
         findPaidFormulaChangeAction(legalActions, pending.cardInstanceId, card.instanceId) !==
-          null);
+          null) ||
+      (pending?.type === 'glitch' &&
+        Boolean(pending.targetBoundInstanceId) &&
+        glitchDiscardOptions(
+          legalActions,
+          pending.glitchInstanceId,
+          pending.targetBoundInstanceId!,
+        ).includes(card.instanceId));
 
     // Build phase: hand cards only become playable after "Engine bauen".
     // Action phase: hand action cards only after "Aktion spielen" (action-select / attack).
     // Improvisieren: any card with legal DISCARD_DRAW after "Improvisieren".
     const buildModeOpen = pending?.type === 'build-select' || pending?.type === 'build';
-    const actionModeOpen = pending?.type === 'action-select' || pending?.type === 'attack';
+    const actionModeOpen =
+      pending?.type === 'action-select' ||
+      pending?.type === 'attack' ||
+      pending?.type === 'glitch';
     const isActionHandPlay =
       interaction === 'attack' ||
       interaction === 'boost' ||
@@ -351,6 +358,8 @@ export function buildGameViewModel(
     } else if (state.phase === 'action' && isHumanTurn && !isHumanDefender) {
       if (improviseMode) {
         isPlayable = hasDiscardDraw;
+      } else if (pending?.type === 'glitch' && pending.targetBoundInstanceId) {
+        isPlayable = activateDiscard;
       } else {
         isPlayable = actionModeOpen && isActionHandPlay;
       }

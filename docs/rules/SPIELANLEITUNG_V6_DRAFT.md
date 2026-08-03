@@ -72,7 +72,9 @@ Katalysatoren richten sich **nicht** auf; nach Auflösung Ablage (Echo/Delay: bi
 
 ### Ziehen
 
-Genau 1 Karte. Stapel leer → Ablage mischen. Negative Sofort-Glitches nicht im V6-Core.
+Genau 1 Karte. Stapel leer → Ablage mischen. Negative Sofort-Glitches nicht im V6-Core (Chaos später: `V6_CHAOS_EXPANSION`).
+
+**Standard-Glitches (7):** Timing explizit Aktionsphase oder Reaktion. Aktionsphase: Riss · Kurzschluss · Empfang · Systemfehler · Download (Formelziele). Reaktion: Nein, Bruder · Rückkopplung.
 
 ### Formelphase
 

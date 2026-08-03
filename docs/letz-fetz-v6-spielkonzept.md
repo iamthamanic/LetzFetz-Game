@@ -391,7 +391,8 @@ Wertrollen: 2 Starter · 3 Standard · 4 bedingter Payoff · 6 Rohwert mit Nacht
 - Ausrüstung: Kaputter Rückspiegel, Werkzeugkoffer, Gezinkter Würfel (2 Slots).  
 - Verbrauch: Halbe Dose Energy, Verdächtiger Pilz, Kabelbinder Deluxe, Rostiger Nagel, Nasser Socken — **kein** dauerhafter Ausrüstungsslot für Nagel/Socken.  
 - **Engine (#377):** `player.equipment` (max 2); Verbrauch max 1 / eigener Zug unter `v6Formula`; Core-Pack `items` aus `src/content/v6/cards/itemCards.ts`.  
-- Standard-Glitches mit klarem Timing; Sofort-Negativ → später Chaos-Expansion.  
+- **Standard-Glitches (#378):** 7 spielbare Karten in `src/content/v6/cards/glitchCards.ts` mit Timing Aktionsphase/Reaktion; Kurzschluss/Systemfehler/Download → Formelkomponenten; keine Sofort-Negativ im Core.  
+- Sofort-Negativ → später Chaos-Expansion (`V6_CHAOS_EXPANSION` / #386).  
 - Artefakt-Auktion: optional, **standard aus**, kein Kernbalancing.
 
 ---
@@ -562,3 +563,4 @@ Bitte abhaken / korrigieren:
 | 2026-08-03 | Rest-Queue Issues #374–#388: P0 Improvisieren/Formelphase/Elemente · P1 Items/Glitches/Riss · P2 Content-Waves+Katalog · P3 Pool A/Überformel-Wahl/Chaos/Helden/V5-retire |
 | 2026-08-03 | #374 Improvisieren Play-UI: Button + pending-Modus; `DISCARD_DRAW` lastEvent „Improvisieren…“ |
 | 2026-08-03 | #375 Formelphase: max 2 Änderungen (2. kostet Abwurf); Rückbau beendet ohne Aktivierung; V6 bleibt in `build` |
+| 2026-08-03 | #378 Standard-Glitches: 7 playable mit Timing Aktionsphase/Reaktion; Formelziele; kein Sofort-Negativ (Chaos #386) |

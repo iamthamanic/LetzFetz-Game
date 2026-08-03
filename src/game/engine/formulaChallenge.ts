@@ -109,6 +109,22 @@ export function disturbFormulaComponent(
   return next;
 }
 
+/** Mark component exhausted in place; returns updated board. */
+export function exhaustFormulaComponent(
+  board: FormulaBoard,
+  instanceId: string,
+): FormulaBoard {
+  const next = { ...board };
+  for (const slot of FORMULA_SLOTS) {
+    const comp = next[slot];
+    if (comp?.instanceId === instanceId) {
+      next[slot] = { ...comp, exhausted: true };
+      break;
+    }
+  }
+  return next;
+}
+
 /**
  * Remove component from board; returns card for discard pile (or null if missing).
  */

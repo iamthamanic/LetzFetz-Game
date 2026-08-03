@@ -1608,7 +1608,7 @@ export function getLegalActions(state: GameState, ctx: PackContext): GameAction[
         }
       }
     }
-    actions.push(...listOwnTurnGlitchActions(state, ctx.playerId));
+    actions.push(...listOwnTurnGlitchActions(state, ctx.playerId, ruleset));
     if (state.meta.clubSwapAvailable) {
       actions.push(...listClubSwapActions(state, ctx.pack, ctx.playerId));
     }
