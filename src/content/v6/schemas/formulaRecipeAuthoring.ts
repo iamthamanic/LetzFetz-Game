@@ -14,7 +14,9 @@ export type V6PrimaryKind =
   | 'shield'
   | 'prep_attack'
   | 'prep_block'
-  | 'prep_boost';
+  | 'prep_boost'
+  /** V6 Slice-2: Fessel intensity on an enemy formula component. */
+  | 'fessel';
 
 export type V6EffectTarget = 'opponent' | 'self';
 

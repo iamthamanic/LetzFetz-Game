@@ -7,4 +7,16 @@ export { planFormulaActivation, revalidateFormulaPlan } from './planFormulaActiv
 export type { PlanFormulaActivationInput } from './planFormulaActivation';
 export { applyV6FormulaActivate, executeFormulaActivation } from './executeFormulaActivation';
 export { applyV6DefenseToPrimary, v6DefenseStagesFromRoll } from './formulaDefense';
+export {
+  applyFesselToBoard,
+  applyFesselToPlayer,
+  applyV6DefenseToIntensity,
+  tickFesselAndRestoreOwnerFormulaV6,
+} from './fessel';
 export { findV6Recipe, getV6RecipeById } from './recipeLookup';
+export {
+  applyV6AffinityMode,
+  formulaAffinityElement,
+  shouldOfferV6Affinity,
+  shouldOfferV6AffinityOnBlock,
+} from './affinity';

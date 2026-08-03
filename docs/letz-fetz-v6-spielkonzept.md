@@ -510,7 +510,7 @@ Bitte abhaken / korrigieren:
 - [ ] Generator-Output: JSON vs TS  
 - [ ] Heldenmodus: nur Notiz oder schon Flag-Name reservieren  
 - [ ] Ob V5-Menü-Kachel sofort „Legacy“ heißt oder „V5 Regression“  
-- [x] Exact Start: Affinität „pro Runde“ = **einmal pro eigenem Zug/Durchlauf** (Reset eigene Startphase; Spend auf eigenen Angriff/Challenge oder eigenen Block). Playtest-Default via #341 — nicht beide Halbzüge als eine gemeinsame Runde. 
+- [x] Exact Start: Affinität „pro Runde“ = **einmal pro eigenem Zug/Durchlauf** (Reset eigene Startphase; Spend auf eigenen Angriff/Challenge **oder Formelaktivierung**; Block-Affinität **nur im eigenen Aktionszug**, nicht bei Verteidigung gegen den Gegner). Playtest-Default via #341 / #356. 
 
 Nach deiner finalen Form: dieses Doc auf **verbindlich** setzen und `SPIELANLEITUNG_V6_DRAFT.md` + AGENTS-Kurzreferenz nachziehen.
 
@@ -524,3 +524,4 @@ Nach deiner finalen Form: dieses Doc auf **verbindlich** setzen und `SPIELANLEIT
 | 2026-08-03 | Slice 0 Issues #310–#313 getrackt; Play-Default bleibt V5 bis PLAYABLE |
 | 2026-08-03 | Slice 1 Issues #318–#322 getrackt; Play-Default bleibt V5 |
 | 2026-08-03 | #341 Affinität ±1 Engine: „pro Runde“ = eigener Zug/Durchlauf (§99 locked playtest default) |
+| 2026-08-03 | #342 Fessel Engine+UI (Stufen 1–3, Startphase-Tick); #356 Affinität auf Formel + Block nur eigener Aktionszug |

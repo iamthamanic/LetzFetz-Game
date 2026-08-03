@@ -20,7 +20,9 @@ export function isFormulaResolvable(board: FormulaBoard): boolean {
   if (countFilledFormulaSlots(board) < 2) return false;
   return SLOTS.some((slot) => {
     const comp = board[slot];
-    return Boolean(comp && !comp.exhausted && !comp.disturbed);
+    return Boolean(
+      comp && !comp.exhausted && !comp.disturbed && !comp.fesselBlocksActivation,
+    );
   });
 }
 
@@ -28,7 +30,9 @@ export function isFormulaResolvable(board: FormulaBoard): boolean {
 export function isFullFormulaActivatable(board: FormulaBoard): boolean {
   return SLOTS.every((slot) => {
     const comp = board[slot];
-    return Boolean(comp && !comp.exhausted && !comp.disturbed);
+    return Boolean(
+      comp && !comp.exhausted && !comp.disturbed && !comp.fesselBlocksActivation,
+    );
   });
 }
 

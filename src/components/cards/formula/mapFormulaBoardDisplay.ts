@@ -61,6 +61,10 @@ function occupantFromInstance(
     exhausted: Boolean(comp.exhausted),
     disturbed: Boolean(comp.disturbed),
     elementalCharge: Boolean(comp.elementalCharge),
+    fesselIntensity:
+      typeof comp.fesselIntensity === 'number' && comp.fesselIntensity > 0
+        ? comp.fesselIntensity
+        : undefined,
   };
 }
 

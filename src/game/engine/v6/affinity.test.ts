@@ -182,4 +182,119 @@ describe('V6 Affinity spend flow', () => {
     expect(state.pendingChoice).toBeNull();
     expect(state.combat).not.toBeNull();
   });
+
+  it('does not offer Affinity on Block when defending on opponent turn', () => {
+    let state = createGame({
+      pack: V6_CORE_PACK,
+      p1CharacterId: fireChar.id,
+      p2CharacterId: otherChar.id,
+      ruleset: V6_PACK_RULESET,
+      seed: 4,
+    });
+    const atk = fireAttackDef();
+    const blk = V6_CORE_PACK.elementCards.find(
+      (c) => c.cardType === 'block' && c.element === 'fire',
+    );
+    if (!blk) throw new Error('missing fire block');
+
+    // p1 attacks — p2 will defend (not active)
+    state = putAttackInHand(state, 'p1', atk.id);
+    state = applyAction(state, { type: 'PLAY_ATTACK', cardInstanceId: 'atk-1', diceRoll: 3 }, 'p1', {
+      pack: V6_CORE_PACK,
+      playerId: 'p1',
+    });
+    if (state.pendingChoice?.type === 'v6-affinity') {
+      state = applyAction(state, { type: 'PICK_V6_AFFINITY', mode: 'none' }, 'p1', {
+        pack: V6_CORE_PACK,
+        playerId: 'p1',
+      });
+    }
+    expect(state.combat?.defenderId).toBe('p2');
+    expect(state.activePlayer).toBe('p1');
+
+    state = {
+      ...state,
+      players: {
+        ...state.players,
+        p2: {
+          ...state.players.p2,
+          characterId: fireChar.id,
+          hand: [{ instanceId: 'blk-1', defId: blk.id }, ...state.players.p2.hand],
+        },
+      },
+      meta: {
+        ...state.meta,
+        v6AffinityAvailable: { p1: false, p2: true },
+      },
+    };
+
+    state = applyAction(state, { type: 'PLAY_BLOCK', cardInstanceId: 'blk-1', diceRoll: 4 }, 'p2', {
+      pack: V6_CORE_PACK,
+      playerId: 'p2',
+    });
+    expect(state.pendingChoice).toBeNull();
+  });
+
+  it('offers Affinity on formula activate with matching essence', () => {
+    let state = createGame({
+      pack: V6_CORE_PACK,
+      p1CharacterId: fireChar.id,
+      p2CharacterId: otherChar.id,
+      ruleset: V6_PACK_RULESET,
+      seed: 5,
+    });
+    expect(fireChar.elements.includes('fire')).toBe(true);
+    state = {
+      ...state,
+      phase: 'build',
+      activePlayer: 'p1',
+      players: {
+        ...state.players,
+        p1: {
+          ...state.players.p1,
+          formula: {
+            technik: {
+              instanceId: 't1',
+              defId: 'v6-technik-impulsgeschoss',
+              slot: 'technik',
+              exhausted: false,
+              disturbed: false,
+              stabilityBonus: 0,
+            },
+            essenz: {
+              instanceId: 'e1',
+              defId: 'v6-essenz-feuer',
+              slot: 'essenz',
+              exhausted: false,
+              disturbed: false,
+              stabilityBonus: 0,
+            },
+            katalysator: null,
+          },
+        },
+      },
+    };
+
+    state = applyAction(state, { type: 'FORMULA_ACTIVATE' }, 'p1', {
+      pack: V6_CORE_PACK,
+      playerId: 'p1',
+      rng: () => 0.01,
+    });
+    expect(state.pendingChoice?.type).toBe('v6-affinity');
+    if (state.pendingChoice?.type === 'v6-affinity') {
+      expect(state.pendingChoice.kind).toBe('formula');
+    }
+
+    const base =
+      state.pendingChoice?.type === 'v6-affinity' ? state.pendingChoice.baseValue : 0;
+    state = applyAction(state, { type: 'PICK_V6_AFFINITY', mode: 'value-plus' }, 'p1', {
+      pack: V6_CORE_PACK,
+      playerId: 'p1',
+      rng: () => 0.01,
+    });
+    expect(state.pendingChoice).toBeNull();
+    expect(state.meta.v6AffinityAvailable?.p1).toBe(false);
+    expect(state.lastEvent ?? '').toMatch(/Affinität/);
+    expect(state.players.p2.hp).toBeLessThanOrEqual(30 - (base + 1));
+  });
 });

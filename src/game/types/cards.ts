@@ -195,6 +195,15 @@ export interface FormulaComponentInstance extends CardInstance {
    * Absent/false on old saves = inactive. Persists across start-phase upright.
    */
   elementalCharge?: boolean;
+  /**
+   * V6 Fessel intensity 1–3 on this component (spielkonzept §33.5).
+   * Absent/0 = none. Decays −1 on owner's Startphase after effects apply.
+   */
+  fesselIntensity?: number;
+  /**
+   * V6: set during Startphase when Fessel was ≥2 — component cannot activate this cycle.
+   */
+  fesselBlocksActivation?: boolean;
 }
 
 export interface ContentPack {

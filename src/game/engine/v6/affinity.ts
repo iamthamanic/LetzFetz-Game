@@ -12,6 +12,8 @@ import type {
 import { isV6FormulaEnabled } from '../../types';
 import { getCharacterElements } from '../helpers';
 import { diceBonusFromRoll, modifyDieRoll } from '../dice';
+import { findEssenceDef } from '../formulaSlots';
+import { formulaComponentUsableForActivation } from './fessel';
 
 export type V6AffinityMode = 'none' | 'value-plus' | 'dice-plus' | 'dice-minus';
 
@@ -56,6 +58,31 @@ export function shouldOfferV6Affinity(
   if (!isV6AffinityAvailable(state, playerId)) return false;
   const characterId = state.players[playerId].characterId;
   return characterHasAffinityElement(pack, characterId, cardElement);
+}
+
+/**
+ * Block Affinity only on own action turn — not when defending on the opponent's turn.
+ */
+export function shouldOfferV6AffinityOnBlock(
+  state: GameState,
+  pack: ContentPack,
+  playerId: PlayerId,
+  cardElement: Element,
+  ruleset: RulesetConfig,
+): boolean {
+  if (state.activePlayer !== playerId) return false;
+  return shouldOfferV6Affinity(state, pack, playerId, cardElement, ruleset);
+}
+
+/** Essence element of the activating formula (TE/TEK/EK), if usable. */
+export function formulaAffinityElement(
+  pack: ContentPack,
+  state: GameState,
+  playerId: PlayerId,
+): Element | null {
+  const ess = state.players[playerId].formula.essenz;
+  if (!ess || !formulaComponentUsableForActivation(ess)) return null;
+  return findEssenceDef(pack, ess.defId)?.element ?? null;
 }
 
 /**

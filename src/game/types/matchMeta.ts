@@ -179,10 +179,10 @@ export type PendingChoice =
       subjectKind: 'element-card' | 'essence';
     }
   | {
-      /** V6 Affinity: choose spend after W6 on matching-element attack/block/challenge. */
+      /** V6 Affinity: choose spend after W6 on matching-element attack/block/challenge/formula. */
       type: 'v6-affinity';
       playerId: PlayerId;
-      kind: 'attack' | 'block' | 'challenge';
+      kind: 'attack' | 'block' | 'challenge' | 'formula';
       cardInstanceId: string;
       cardDefId: string;
       cardElement: Element;
@@ -191,6 +191,11 @@ export type PendingChoice =
       targetBoundInstanceId?: string;
       ignoreShield?: number;
       extraHitImpulse?: Element;
+      /** Formula activate: preserve defense roll / overformula for re-execute. */
+      formulaDefenseRoll?: number;
+      formulaAsOverformula?: boolean;
+      formulaOfferDiscard?: boolean;
+      formulaIntensity?: number | null;
     };
 
 export function createEmptyMeta(): MatchMeta {

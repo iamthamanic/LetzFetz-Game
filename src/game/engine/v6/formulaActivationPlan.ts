@@ -11,7 +11,8 @@ export type V6PrimaryKind =
   | 'shield'
   | 'prep_attack'
   | 'prep_block'
-  | 'prep_boost';
+  | 'prep_boost'
+  | 'fessel';
 
 export interface V6PlanPrimary {
   kind: V6PrimaryKind;
@@ -33,6 +34,8 @@ export interface V6FormulaDefensePreview {
   /** Defense stages from bands: 0 / 1 / 2. */
   stages: 0 | 1 | 2;
   primaryAfterDefense: number;
+  /** Intensity after defense (Fessel / non-numeric); null when recipe has no intensity. */
+  intensityAfterDefense: number | null;
   riderSuppressed: boolean;
 }
 

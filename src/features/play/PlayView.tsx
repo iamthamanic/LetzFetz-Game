@@ -1298,7 +1298,13 @@ export function PlayView({
           <PassiveChoiceModal
             open
             title="Affinität"
-            description={`Würfel ${state.pendingChoice.diceRoll} — einmal pro eigenem Zug: Wert +1 oder W6 ±1 (passendes Affinitätselement).`}
+            description={
+              state.pendingChoice.kind === 'formula'
+                ? `Formel — einmal pro eigenem Zug: Wert +1 oder W6 ±1 (passendes Affinitätselement).`
+                : state.pendingChoice.kind === 'block'
+                  ? `Würfel ${state.pendingChoice.diceRoll} — Affinität nur im eigenen Aktionszug (nicht bei Verteidigung gegen den Gegner).`
+                  : `Würfel ${state.pendingChoice.diceRoll} — einmal pro eigenem Zug: Wert +1 oder W6 ±1 (passendes Affinitätselement).`
+            }
             testId="v6-affinity-choice-modal"
             options={[
               { id: 'value-plus', labelDe: 'Wert +1' },
