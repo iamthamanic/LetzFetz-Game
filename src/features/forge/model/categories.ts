@@ -10,8 +10,8 @@ export const CARD_CATEGORIES = [
   { id: 'Element', label: 'Element', icon: '🃏', expectedCount: 60 },
   { id: 'Arena', label: 'Arena', icon: '🏟️', expectedCount: 6 },
   { id: 'Glitch', label: 'Glitch', icon: '🌀', expectedCount: 10 },
-  /** 25 V5 Bausteine + 198 V6 Slice-1 Katalog-Kombinationen (Combinate saves are dynamic). */
-  { id: 'Formula', label: 'Formeln', icon: '🧪', expectedCount: 223 },
+  /** 25 V5 Bausteine + 604 V6 Slice-1 Katalog-Kombinationen (Combinate saves are dynamic). */
+  { id: 'Formula', label: 'Formeln', icon: '🧪', expectedCount: 629 },
   { id: 'Item', label: 'Gegenstände', icon: '🎒', expectedCount: 8 },
 ] as const satisfies ReadonlyArray<{ id: CardKind; label: string; icon: string; expectedCount: number }>;
 

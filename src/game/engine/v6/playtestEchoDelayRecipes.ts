@@ -57,6 +57,7 @@ export const V6_PLAYTEST_ECHO_DELAY_RECIPES: readonly V6LookupRecipe[] = [
     formulaDefensePenalty: null,
     timingMode: 'echo',
     echoAmount: V6_ECHO_DEFAULT_AMOUNT,
+    summonConstructDefId: null,
   },
   {
     recipeId: 'v6-playtest-tek-impulsgeschoss-feuer-verzoegerung',
@@ -88,5 +89,6 @@ export const V6_PLAYTEST_ECHO_DELAY_RECIPES: readonly V6LookupRecipe[] = [
     formulaDefensePenalty: null,
     timingMode: 'delay',
     delayBonus: V6_DELAY_DEFAULT_BONUS,
+    summonConstructDefId: null,
   },
 ];

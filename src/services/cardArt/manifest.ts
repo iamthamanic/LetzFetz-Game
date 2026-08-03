@@ -106,8 +106,9 @@ export function illustrationKeyForCardId(cardId: string): string | null {
  * Keep tiny; prefer shipping `/cards/formula/{slug}.png` under the pack id slug.
  */
 const FORMULA_ART_SLUG_ALIASES: Readonly<Record<string, string>> = {
-  // Playtest Beschwörung (#346) — no dedicated PNG yet; reuse ritual catalyst art.
+  // Playtest Beschwörung catalyst (#346) + catalog Beschwörungsritual (#381) — reuse ritual art.
   beschwoerung: 'opfergabe',
+  beschwoerungsritual: 'opfergabe',
 };
 
 /** Public path for a V5/V6 Formelkomponente PNG under `/cards/formula/`. */

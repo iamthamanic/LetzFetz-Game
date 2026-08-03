@@ -2,9 +2,9 @@
  * Slice-1 formula authoring SoT (TE / TK / EK bases + catalyst transforms).
  * Location: src/content/v6/formulaAuthoring.slice1.ts
  *
- * Current catalog: 3 Techniken × 6 Essenzen × 4 Katalysatoren → 198 generated recipes.
+ * Current catalog: 10 Techniken × 6 Essenzen × 4 Katalysatoren → 604 generated recipes.
  * Generator expands TE×catalyst → TEK + Überformel. Missing required keys fail closed.
- * Full 10T×10K matrix is a later catalog-expansion issue — do not invent unsupported keys.
+ * Full 10T×10K matrix is catalog-expansion (#383) — do not invent unsupported catalysts.
  */
 import type {
   V6CatalystTransformAuthoring,
@@ -19,6 +19,7 @@ import {
   V6_SLICE1_ESSENCE_IDS,
   V6_SLICE1_TECHNIQUE_IDS,
 } from './slice1Ids';
+import { V6_PLAYTEST_CONSTRUCT_DEF_ID } from './cards/playtestConstructCards';
 
 type TechId = (typeof V6_SLICE1_TECHNIQUE_IDS)[number];
 type EssId = (typeof V6_SLICE1_ESSENCE_IDS)[number];
@@ -55,6 +56,54 @@ const TE_PRIMARY: Record<TechId, Record<EssId, V6PrimaryEffectAuthoring>> = {
     'v6-essenz-licht': { kind: 'prep_boost', value: 2, target: 'self' },
     'v6-essenz-schatten': { kind: 'prep_attack', value: 2, target: 'self' },
   },
+  'v6-technik-fintenschnitt': {
+    'v6-essenz-feuer': { kind: 'prep_block', value: 2, target: 'self' },
+    'v6-essenz-wasser': { kind: 'prep_block', value: 2, target: 'self' },
+    'v6-essenz-erde': { kind: 'prep_block', value: 2, target: 'self' },
+    'v6-essenz-luft': { kind: 'prep_block', value: 2, target: 'self' },
+    'v6-essenz-licht': { kind: 'prep_block', value: 2, target: 'self' },
+    'v6-essenz-schatten': { kind: 'prep_block', value: 2, target: 'self' },
+  },
+  'v6-technik-brechschlag': {
+    'v6-essenz-feuer': { kind: 'damage', value: 3, target: 'opponent', offensive: true },
+    'v6-essenz-wasser': { kind: 'damage', value: 2, target: 'opponent', offensive: true },
+    'v6-essenz-erde': { kind: 'damage', value: 3, target: 'opponent', offensive: true },
+    'v6-essenz-luft': { kind: 'damage', value: 2, target: 'opponent', offensive: true },
+    'v6-essenz-licht': { kind: 'damage', value: 2, target: 'opponent', offensive: true },
+    'v6-essenz-schatten': { kind: 'damage', value: 2, target: 'opponent', offensive: true },
+  },
+  'v6-technik-kettenfessel': {
+    'v6-essenz-feuer': { kind: 'fessel', value: 2, target: 'opponent', offensive: true },
+    'v6-essenz-wasser': { kind: 'fessel', value: 2, target: 'opponent', offensive: true },
+    'v6-essenz-erde': { kind: 'fessel', value: 2, target: 'opponent', offensive: true },
+    'v6-essenz-luft': { kind: 'fessel', value: 2, target: 'opponent', offensive: true },
+    'v6-essenz-licht': { kind: 'fessel', value: 2, target: 'opponent', offensive: true },
+    'v6-essenz-schatten': { kind: 'fessel', value: 2, target: 'opponent', offensive: true },
+  },
+  'v6-technik-bannkreis': {
+    'v6-essenz-feuer': { kind: 'shield', value: 2, target: 'self' },
+    'v6-essenz-wasser': { kind: 'heal', value: 2, target: 'self' },
+    'v6-essenz-erde': { kind: 'shield', value: 2, target: 'self' },
+    'v6-essenz-luft': { kind: 'shield', value: 2, target: 'self' },
+    'v6-essenz-licht': { kind: 'shield', value: 2, target: 'self' },
+    'v6-essenz-schatten': { kind: 'shield', value: 2, target: 'self' },
+  },
+  'v6-technik-ueberraschungsangriff': {
+    'v6-essenz-feuer': { kind: 'damage', value: 3, target: 'opponent', offensive: true },
+    'v6-essenz-wasser': { kind: 'damage', value: 2, target: 'opponent', offensive: true },
+    'v6-essenz-erde': { kind: 'damage', value: 2, target: 'opponent', offensive: true },
+    'v6-essenz-luft': { kind: 'damage', value: 3, target: 'opponent', offensive: true },
+    'v6-essenz-licht': { kind: 'damage', value: 2, target: 'opponent', offensive: true },
+    'v6-essenz-schatten': { kind: 'damage', value: 3, target: 'opponent', offensive: true },
+  },
+  'v6-technik-schicksalmanifestation': {
+    'v6-essenz-feuer': { kind: 'prep_boost', value: 2, target: 'self' },
+    'v6-essenz-wasser': { kind: 'prep_boost', value: 2, target: 'self' },
+    'v6-essenz-erde': { kind: 'prep_boost', value: 2, target: 'self' },
+    'v6-essenz-luft': { kind: 'prep_boost', value: 2, target: 'self' },
+    'v6-essenz-licht': { kind: 'prep_boost', value: 2, target: 'self' },
+    'v6-essenz-schatten': { kind: 'prep_boost', value: 2, target: 'self' },
+  },
   'v6-technik-magiepanzer': {
     /** Fessel TE — manual pick of occupied enemy formula slot (engine). Base 2 for Sofortzünder. */
     'v6-essenz-feuer': { kind: 'fessel', value: 2, target: 'opponent', offensive: true },
@@ -63,6 +112,14 @@ const TE_PRIMARY: Record<TechId, Record<EssId, V6PrimaryEffectAuthoring>> = {
     'v6-essenz-luft': { kind: 'shield', value: 2, target: 'self' },
     'v6-essenz-licht': { kind: 'shield', value: 2, target: 'self' },
     'v6-essenz-schatten': { kind: 'fessel', value: 2, target: 'opponent', offensive: true },
+  },
+  'v6-technik-beschwoerungsritual': {
+    'v6-essenz-feuer': { kind: 'summon_construct', value: 3, target: 'self' },
+    'v6-essenz-wasser': { kind: 'summon_construct', value: 3, target: 'self' },
+    'v6-essenz-erde': { kind: 'summon_construct', value: 3, target: 'self' },
+    'v6-essenz-luft': { kind: 'summon_construct', value: 3, target: 'self' },
+    'v6-essenz-licht': { kind: 'summon_construct', value: 3, target: 'self' },
+    'v6-essenz-schatten': { kind: 'summon_construct', value: 3, target: 'self' },
   },
 };
 
@@ -83,6 +140,54 @@ const TE_NAMES: Record<TechId, Record<EssId, string>> = {
     'v6-essenz-licht': 'Klarschrei',
     'v6-essenz-schatten': 'Fluchschrei',
   },
+  'v6-technik-fintenschnitt': {
+    'v6-essenz-feuer': 'Glutfinte',
+    'v6-essenz-wasser': 'Wellenfinte',
+    'v6-essenz-erde': 'Felsfinte',
+    'v6-essenz-luft': 'Windfinte',
+    'v6-essenz-licht': 'Lichtfinte',
+    'v6-essenz-schatten': 'Schattenfinte',
+  },
+  'v6-technik-brechschlag': {
+    'v6-essenz-feuer': 'Glutbruch',
+    'v6-essenz-wasser': 'Wellenbruch',
+    'v6-essenz-erde': 'Felsbruch',
+    'v6-essenz-luft': 'Windbruch',
+    'v6-essenz-licht': 'Lichtbruch',
+    'v6-essenz-schatten': 'Schattenbruch',
+  },
+  'v6-technik-kettenfessel': {
+    'v6-essenz-feuer': 'Glutkette',
+    'v6-essenz-wasser': 'Wellenkette',
+    'v6-essenz-erde': 'Felskette',
+    'v6-essenz-luft': 'Windkette',
+    'v6-essenz-licht': 'Lichtkette',
+    'v6-essenz-schatten': 'Schattenkette',
+  },
+  'v6-technik-bannkreis': {
+    'v6-essenz-feuer': 'Glutkreis',
+    'v6-essenz-wasser': 'Wellenkreis',
+    'v6-essenz-erde': 'Felskreis',
+    'v6-essenz-luft': 'Windkreis',
+    'v6-essenz-licht': 'Lichtkreis',
+    'v6-essenz-schatten': 'Schattenkreis',
+  },
+  'v6-technik-ueberraschungsangriff': {
+    'v6-essenz-feuer': 'Glutüberraschung',
+    'v6-essenz-wasser': 'Wellenüberraschung',
+    'v6-essenz-erde': 'Felsüberraschung',
+    'v6-essenz-luft': 'Windüberraschung',
+    'v6-essenz-licht': 'Lichtüberraschung',
+    'v6-essenz-schatten': 'Schattenüberraschung',
+  },
+  'v6-technik-schicksalmanifestation': {
+    'v6-essenz-feuer': 'Glutschicksal',
+    'v6-essenz-wasser': 'Wellenschicksal',
+    'v6-essenz-erde': 'Felsschicksal',
+    'v6-essenz-luft': 'Windschicksal',
+    'v6-essenz-licht': 'Lichtschicksal',
+    'v6-essenz-schatten': 'Schattenschicksal',
+  },
   'v6-technik-magiepanzer': {
     'v6-essenz-feuer': 'Glutfessel',
     'v6-essenz-wasser': 'Nasspanzer',
@@ -90,6 +195,14 @@ const TE_NAMES: Record<TechId, Record<EssId, string>> = {
     'v6-essenz-luft': 'Windpanzer',
     'v6-essenz-licht': 'Lichtpanzer',
     'v6-essenz-schatten': 'Schattenfessel',
+  },
+  'v6-technik-beschwoerungsritual': {
+    'v6-essenz-feuer': 'Glutbeschwörung',
+    'v6-essenz-wasser': 'Wellenbeschwörung',
+    'v6-essenz-erde': 'Felsbeschwörung',
+    'v6-essenz-luft': 'Windbeschwörung',
+    'v6-essenz-licht': 'Lichtbeschwörung',
+    'v6-essenz-schatten': 'Schattenbeschwörung',
   },
 };
 
@@ -143,11 +256,53 @@ const TK_NAMES: Record<TechId, Record<CatId, string>> = {
     'v6-katalysator-sofortzuender': 'Zündschrei',
     'v6-katalysator-opfergabe': 'Opferschrei',
   },
+  'v6-technik-fintenschnitt': {
+    'v6-katalysator-ueberladung': 'Überfinte',
+    'v6-katalysator-verdichtung': 'Dichtfinte',
+    'v6-katalysator-sofortzuender': 'Zündfinte',
+    'v6-katalysator-opfergabe': 'Opferfinte',
+  },
+  'v6-technik-brechschlag': {
+    'v6-katalysator-ueberladung': 'Überbruch',
+    'v6-katalysator-verdichtung': 'Dichtbruch',
+    'v6-katalysator-sofortzuender': 'Zündbruch',
+    'v6-katalysator-opfergabe': 'Opferbruch',
+  },
+  'v6-technik-kettenfessel': {
+    'v6-katalysator-ueberladung': 'Überkette',
+    'v6-katalysator-verdichtung': 'Dichtkette',
+    'v6-katalysator-sofortzuender': 'Zündkette',
+    'v6-katalysator-opfergabe': 'Opferkette',
+  },
+  'v6-technik-bannkreis': {
+    'v6-katalysator-ueberladung': 'Überkreis',
+    'v6-katalysator-verdichtung': 'Dichtkreis',
+    'v6-katalysator-sofortzuender': 'Zündkreis',
+    'v6-katalysator-opfergabe': 'Opferkreis',
+  },
+  'v6-technik-ueberraschungsangriff': {
+    'v6-katalysator-ueberladung': 'Überfallstoß',
+    'v6-katalysator-verdichtung': 'Dichtstoß',
+    'v6-katalysator-sofortzuender': 'Zündstoß',
+    'v6-katalysator-opfergabe': 'Opferstoß',
+  },
+  'v6-technik-schicksalmanifestation': {
+    'v6-katalysator-ueberladung': 'Überschicksal',
+    'v6-katalysator-verdichtung': 'Dichtschicksal',
+    'v6-katalysator-sofortzuender': 'Zündschicksal',
+    'v6-katalysator-opfergabe': 'Opferschicksal',
+  },
   'v6-technik-magiepanzer': {
     'v6-katalysator-ueberladung': 'Überpanzer',
     'v6-katalysator-verdichtung': 'Dichtpanzer',
     'v6-katalysator-sofortzuender': 'Zündpanzer',
     'v6-katalysator-opfergabe': 'Opferpanzer',
+  },
+  'v6-technik-beschwoerungsritual': {
+    'v6-katalysator-ueberladung': 'Überritual',
+    'v6-katalysator-verdichtung': 'Dichtritual',
+    'v6-katalysator-sofortzuender': 'Zündritual',
+    'v6-katalysator-opfergabe': 'Opferritual',
   },
 };
 
@@ -218,11 +373,14 @@ function buildTeBases(): V6TeBaseAuthoring[] {
         primary,
         rider: ESSENCE_RIDERS[e],
         intensity:
-          primary.kind === 'damage'
+          primary.kind === 'damage' || primary.kind === 'summon_construct'
             ? undefined
             : primary.kind === 'fessel'
               ? primary.value
               : 1,
+        ...(primary.kind === 'summon_construct'
+          ? { summonConstructDefId: V6_PLAYTEST_CONSTRUCT_DEF_ID }
+          : {}),
       });
     }
   }
@@ -240,7 +398,33 @@ function buildTkBases(): V6TkBaseAuthoring[] {
       offensive: true,
     },
     'v6-technik-adrenalinschrei': { kind: 'prep_attack', value: 2, target: 'self' },
+    'v6-technik-fintenschnitt': { kind: 'prep_block', value: 2, target: 'self' },
+    'v6-technik-brechschlag': {
+      kind: 'damage',
+      value: 2,
+      target: 'opponent',
+      offensive: true,
+    },
+    'v6-technik-kettenfessel': {
+      kind: 'fessel',
+      value: 2,
+      target: 'opponent',
+      offensive: true,
+    },
+    'v6-technik-bannkreis': { kind: 'shield', value: 2, target: 'self' },
+    'v6-technik-ueberraschungsangriff': {
+      kind: 'damage',
+      value: 2,
+      target: 'opponent',
+      offensive: true,
+    },
+    'v6-technik-schicksalmanifestation': { kind: 'prep_boost', value: 2, target: 'self' },
     'v6-technik-magiepanzer': { kind: 'shield', value: 2, target: 'self' },
+    'v6-technik-beschwoerungsritual': {
+      kind: 'summon_construct',
+      value: 3,
+      target: 'self',
+    },
   };
   for (const t of V6_SLICE1_TECHNIQUE_IDS) {
     for (const c of V6_SLICE1_CATALYST_IDS) {

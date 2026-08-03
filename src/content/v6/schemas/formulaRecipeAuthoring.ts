@@ -16,7 +16,9 @@ export type V6PrimaryKind =
   | 'prep_block'
   | 'prep_boost'
   /** V6 Slice-2: Fessel intensity on an enemy formula component. */
-  | 'fessel';
+  | 'fessel'
+  /** V6 Constructs (#381): summon construct; value = Haltbarkeit. */
+  | 'summon_construct';
 
 export type V6EffectTarget = 'opponent' | 'self';
 
@@ -45,6 +47,8 @@ export interface V6TeBaseAuthoring {
   primary: V6PrimaryEffectAuthoring;
   rider?: V6RiderAuthoring;
   intensity?: number;
+  /** Required when primary.kind === summon_construct. */
+  summonConstructDefId?: string;
 }
 
 /** Technique × Katalysator without Essenz (TK). */
