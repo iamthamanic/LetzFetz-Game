@@ -15,7 +15,8 @@ export const V6_STANDARD_GLITCHES: GlitchCardDef[] = [
     kind: 'glitch',
     glitchType: 'playable',
     timing: 'Aktionsphase (Hauptaktion)',
-    effectText: 'Wechsle die Arena. Ziehe eine neue Arena zufällig. Gilt sofort.',
+    effectText:
+      'Lege die aktuelle Arena ab und decke zufällig eine andere Arena auf. Die neue Arena gilt sofort; bereits ausgelöste Effekte der alten Arena bleiben bestehen.',
   },
   {
     id: 'glitch-nein',

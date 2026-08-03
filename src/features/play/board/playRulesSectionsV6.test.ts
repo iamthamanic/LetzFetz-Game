@@ -25,5 +25,7 @@ describe('V6_PLAY_RULE_SECTIONS', () => {
     expect(blob).toMatch(/max 1 pro Timing/);
     expect(blob).toMatch(/Ausrüstung/);
     expect(blob).toMatch(/Verbrauch/);
+    expect(blob).toMatch(/Riss in der Realität/);
+    expect(blob).toMatch(/nicht rückgängig/);
   });
 });

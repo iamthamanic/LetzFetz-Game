@@ -1,8 +1,8 @@
 {
   "runMode": "loop",
   "paused": false,
-  "activeIssue": 378,
-  "phase": "implement",
+  "activeIssue": 379,
+  "phase": "commit",
   "completedIssues": [
     130,
     131,
@@ -69,7 +69,8 @@
     374,
     375,
     376,
-    377
+    377,
+    378
   ],
   "mergedIssues": [
     130,
@@ -137,7 +138,8 @@
     374,
     375,
     376,
-    377
+    377,
+    378
   ],
   "prUrls": {
     "130": "https://github.com/iamthamanic/LetzFetz-Game/pull/135",
@@ -205,7 +207,8 @@
     "374": "https://github.com/iamthamanic/LetzFetz-Game/pull/389",
     "375": "https://github.com/iamthamanic/LetzFetz-Game/pull/390",
     "376": "https://github.com/iamthamanic/LetzFetz-Game/pull/391",
-    "377": "https://github.com/iamthamanic/LetzFetz-Game/pull/392"
+    "377": "https://github.com/iamthamanic/LetzFetz-Game/pull/392",
+    "378": "https://github.com/iamthamanic/LetzFetz-Game/pull/393"
   },
   "retries": {
     "implement": 0,
@@ -217,7 +220,6 @@
   "lastError": null,
   "repo": "iamthamanic/LetzFetz-Game",
   "queue": [
-    378,
     379,
     380,
     381,
@@ -225,6 +227,6 @@
     383,
     385
   ],
-  "updatedAt": "2026-08-03T21:10:00.000Z",
+  "updatedAt": "2026-08-03T21:20:30.000Z",
   "milestoneFilter": null
 }
