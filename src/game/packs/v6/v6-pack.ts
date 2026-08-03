@@ -28,8 +28,8 @@ export const V6_PACK_RULESET: RulesetConfig = {
 export function buildV6CorePack(): ContentPack {
   return {
     id: 'v6-core',
-    name: 'V6 Core Slice-1 (INTERNAL)',
-    version: '0.1.0-slice1',
+    name: 'V6 Core Slice-1 (INTERNAL) — 105-Rezept-Katalog',
+    version: '0.1.1-slice1',
     characters: V6_CHARACTERS,
     ultimates: [],
     arenas: V6_SLICE1_ARENAS,

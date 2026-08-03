@@ -75,19 +75,35 @@ describe('validateV6FormulaAuthoring', () => {
     expect(errors.some((e) => e.includes('stub placeholders'))).toBe(true);
   });
 
-  it('ships German TK/EK names without stub rider copy', () => {
+  it('ships standalone German TK/EK names without stub rider copy', () => {
     for (const row of V6_FORMULA_AUTHORING_SLICE1.tkBases) {
       expect(row.name).not.toMatch(/^TK /);
-      expect(row.name).toMatch(/·/);
+      expect(row.name).not.toContain('·');
+      expect(row.name.length).toBeGreaterThan(3);
     }
     for (const row of V6_FORMULA_AUTHORING_SLICE1.ekBases) {
       expect(row.name).not.toMatch(/^EK /);
-      expect(row.name).toMatch(/Ritual/);
+      expect(row.name).not.toContain('·');
+      expect(row.name.length).toBeGreaterThan(3);
     }
     const wasser = V6_FORMULA_AUTHORING_SLICE1.teBases.find(
       (r) => r.essenceId === 'v6-essenz-wasser',
     );
     expect(wasser?.rider?.summary).toBeDefined();
     expect(wasser?.rider?.summary).not.toMatch(/stub/i);
+  });
+
+  it('rejects TK/EK · compound labels', () => {
+    const bad = {
+      ...V6_FORMULA_AUTHORING_SLICE1,
+      tkBases: [
+        {
+          ...V6_FORMULA_AUTHORING_SLICE1.tkBases[0],
+          name: 'Impuls · Überladung',
+        },
+      ],
+    };
+    const errors = validateV6FormulaAuthoring(bad);
+    expect(errors.some((e) => e.includes('standalone German name'))).toBe(true);
   });
 });

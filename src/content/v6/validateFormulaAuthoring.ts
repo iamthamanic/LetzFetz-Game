@@ -13,7 +13,7 @@ function isNonEmptyString(v: unknown): v is string {
   return typeof v === 'string' && v.trim() !== '';
 }
 
-/** Player-facing copy must not ship placeholders. */
+/** Player-facing copy must not ship placeholders or machine labels. */
 function assertPlayableCopy(path: string, text: unknown, errors: string[]): void {
   if (!isNonEmptyString(text)) return;
   if (/\bstub\b/i.test(text)) {
@@ -21,6 +21,15 @@ function assertPlayableCopy(path: string, text: unknown, errors: string[]): void
   }
   if (/^(TK|EK)\s/i.test(text.trim())) {
     errors.push(`${path} must use a German display name (not TK/EK machine label)`);
+  }
+}
+
+/** TK/EK bases need real German names — not Tech·Cat / Ritual·Cat compounds. */
+function assertStandaloneGermanName(path: string, text: unknown, errors: string[]): void {
+  assertPlayableCopy(path, text, errors);
+  if (!isNonEmptyString(text)) return;
+  if (text.includes('·')) {
+    errors.push(`${path} must be a standalone German name (no · compound label)`);
   }
 }
 
@@ -96,7 +105,7 @@ export function validateV6FormulaAuthoring(catalog: unknown): string[] {
           errors.push(`tkBases[${i}].${key} is required`);
         }
       }
-      assertPlayableCopy(`tkBases[${i}].name`, r.name, errors);
+      assertStandaloneGermanName(`tkBases[${i}].name`, r.name, errors);
       validatePrimary(r.primary, `tkBases[${i}]`, errors);
     });
   }
@@ -115,7 +124,7 @@ export function validateV6FormulaAuthoring(catalog: unknown): string[] {
           errors.push(`ekBases[${i}].${key} is required`);
         }
       }
-      assertPlayableCopy(`ekBases[${i}].name`, r.name, errors);
+      assertStandaloneGermanName(`ekBases[${i}].name`, r.name, errors);
       validatePrimary(r.primary, `ekBases[${i}]`, errors);
       if (r.rider !== undefined && r.rider !== null && typeof r.rider === 'object') {
         assertPlayableCopy(

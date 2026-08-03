@@ -528,3 +528,4 @@ Nach deiner finalen Form: dieses Doc auf **verbindlich** setzen und `SPIELANLEIT
 | 2026-08-03 | #341 Affinität ±1 Engine: „pro Runde“ = eigener Zug/Durchlauf (§99 locked playtest default) |
 | 2026-08-03 | #342 Fessel Engine+UI (Stufen 1–3, Startphase-Tick); #356 Affinität auf Formel + Block nur eigener Aktionszug |
 | 2026-08-03 | Fessel/Kettenfessel Zielwahl **manuell** (besetzte Formelplätze; Pending `PICK_V6_FESSEL_TARGET`; §99) |
+| 2026-08-03 | #343 retarget: Slice-1 **105**-Rezept-Katalog gehärtet (DE Namen + effectSummary); volle 60×K-Matrix deferred |
