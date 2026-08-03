@@ -40,6 +40,18 @@ import {
   tickV6ConstructAtStart,
 } from './v6/constructs';
 import {
+  applyV6BasarPayDestroy,
+  applyV6SumpfFullBlockShield,
+  applyV6VulkanFirstDamageBonus,
+  shouldOfferV6BasarPayDestroy,
+  shouldQueueV6ClubReplaceFilter,
+  shouldSkipLegacySumpfW6,
+  shouldSkipLegacyVulkanW6,
+  v6ClubAirValueBonus,
+  v6FormulaChallengeOutcome,
+  v6KristallEssenceStabilityBonus,
+} from './v6/arenas';
+import {
   cloneState,
   discardFromHand,
   drawForPlayer,
@@ -150,6 +162,7 @@ import {
   isKristall,
   isClub,
   isSumpf,
+  isVulkan,
 } from './arena';
 import { listOwnTurnGlitchActions, applyPlayableGlitch } from './playableGlitches';
 
@@ -475,11 +488,11 @@ function opponentHasNeinBruder(state: GameState, boosterId: PlayerId): boolean {
   return state.players[opp].hand.some((c) => c.defId === 'glitch-nein');
 }
 
-/** Arena Späti/Sumpf: draw 1 then must discard 1 — not skippable. */
+/** Arena Späti/Sumpf/Club: draw 1 then must discard 1 — not skippable. */
 function applyMandatoryArenaDrawDiscard(
   state: GameState,
   playerId: PlayerId,
-  source: 'spaeti' | 'sumpf-full-block',
+  source: 'spaeti' | 'sumpf-full-block' | 'club-formula-replace',
   pack: ContentPack,
   rng: () => number,
   ruleset: RulesetConfig,
@@ -525,7 +538,12 @@ function queuePostBoostPending(
   if (isSpaeti(state) && !state.meta.spaetiFilterUsed[boosterId]) {
     return applyMandatoryArenaDrawDiscard(state, boosterId, 'spaeti', pack, rng, ruleset);
   }
-  if (isSpaeti(state) && state.meta.boostsPlayed[boosterId] === 3) {
+  // Bound-era Späti 3rd-boost build — skip under Formelboard (V5/V6).
+  if (
+    isSpaeti(state) &&
+    state.meta.boostsPlayed[boosterId] === 3 &&
+    !isFormulaBoardEnabled(ruleset)
+  ) {
     const next = cloneState(state);
     next.pendingChoice = { type: 'spaeti-extra-build', playerId: boosterId };
     next.lastEvent = `${next.lastEvent ?? ''} Extra-Bau (3. Boost).`.trim();
@@ -654,7 +672,11 @@ function applyPlayerAttackDamage(
   next.lastEvent = combatSummary;
 
   if (isSumpf(next) && pipeline.isFullBlock) {
-    next = applyMandatoryArenaDrawDiscard(next, defenderId, 'sumpf-full-block', pack, rng, ruleset);
+    if (isV6FormulaEnabled(ruleset)) {
+      next = applyV6SumpfFullBlockShield(next, defenderId, ruleset);
+    } else {
+      next = applyMandatoryArenaDrawDiscard(next, defenderId, 'sumpf-full-block', pack, rng, ruleset);
+    }
   }
 
   if (pipeline.isFullBlock) {
@@ -807,6 +829,11 @@ function applyPlayerAttackDamage(
   }
 
   next = afterHighAttackValue(next, attackerId, workingAttack, ruleset);
+  if (isV6FormulaEnabled(ruleset) && isVulkan(next) && pipeline.hpDamage <= 0) {
+    // V6 Vulkan: Angriff ohne Lebensschaden → Angreifer −1.
+    next.players[attackerId].hp = clampHp(next.players[attackerId].hp - 1, ruleset);
+    next.lastEvent = `${next.lastEvent ?? ''} Vulkan: kein Lebensschaden — Angreifer −1.`.trim();
+  }
   const hpBeforeTick = next.players[attackerId].hp;
   next = tickBrennenAfterMainAction(next, attackerId, ruleset);
   if (isV3CombatEnabled(ruleset) && next.players[attackerId].hp < hpBeforeTick) {
@@ -938,9 +965,17 @@ function resolveFormulaChallengeCombat(
   const target = findFormulaComponent(next.players[defenderId].formula, targetBoundInstanceId);
   if (!target) throw new Error('Challenge formula target not found');
 
-  const stability = formulaComponentStability(pack, target);
+  const stability =
+    formulaComponentStability(pack, target) +
+    v6KristallEssenceStabilityBonus(next, pack, target, ruleset);
   const defense = stability + blockValue;
-  const outcome = formulaChallengeOutcome(attackValue, defense, target.disturbed);
+  const outcome = v6FormulaChallengeOutcome(
+    next,
+    attackValue,
+    defense,
+    target.disturbed,
+    ruleset,
+  );
   const def = findFormulaComponentDef(pack, target.defId);
   const targetName = def?.name ?? target.defId;
 
@@ -962,6 +997,16 @@ function resolveFormulaChallengeCombat(
     );
     next.lastEvent = `Herausforderung — ${targetName} gestört (${attackValue} vs ${defense}).`;
     next = tryDripministerinFilter(next, attackerId, rng, ruleset);
+    if (shouldOfferV6BasarPayDestroy(next, ruleset) && next.players[attackerId].hp > 1) {
+      next.pendingChoice = {
+        type: 'v6-basar-pay-destroy',
+        playerId: attackerId,
+        defenderId,
+        targetInstanceId: target.instanceId,
+        targetName,
+      };
+      next.lastEvent = `${next.lastEvent} Basar: 1 Leben zahlen zum Zerstören?`.trim();
+    }
   } else {
     next.lastEvent = `Herausforderung wirkungslos (${attackValue} vs ${defense}).`;
   }
@@ -1049,6 +1094,8 @@ function pendingChoicePlayer(pending: PendingChoice): PlayerId {
     case 'v6-affinity':
       return pending.playerId;
     case 'v6-fessel-target':
+      return pending.playerId;
+    case 'v6-basar-pay-destroy':
       return pending.playerId;
     case 'pick-reaction':
       return pending.chooserId;
@@ -1205,6 +1252,12 @@ function getPendingLegalActions(state: GameState, ctx: PackContext): GameAction[
         { type: 'PICK_V6_AFFINITY', mode: 'value-plus' },
         { type: 'PICK_V6_AFFINITY', mode: 'dice-plus' },
         { type: 'PICK_V6_AFFINITY', mode: 'dice-minus' },
+      );
+      break;
+    case 'v6-basar-pay-destroy':
+      actions.push(
+        { type: 'PICK_V6_BASAR_DESTROY', pay: true },
+        { type: 'PICK_V6_BASAR_DESTROY', pay: false },
       );
       break;
     case 'v6-fessel-target': {
@@ -1707,6 +1760,7 @@ function applyPendingChoiceAction(
         case 'mysterium-element':
         case 'v6-affinity':
         case 'v6-fessel-target':
+        case 'v6-basar-pay-destroy':
           throw new Error('Arena effect cannot be skipped');
       }
       break;
@@ -1776,6 +1830,29 @@ function applyPendingChoiceAction(
         slot: action.slot,
       });
       return checkWinner(next);
+    }
+    case 'PICK_V6_BASAR_DESTROY': {
+      if (pending.type !== 'v6-basar-pay-destroy') throw new Error('Wrong pending type');
+      if (!action.pay) {
+        const next = cloneState(state);
+        next.pendingChoice = null;
+        next.phase = 'end';
+        next.lastEvent = `Basar: Störung belassen (${pending.targetName}).`;
+        return checkWinner(next);
+      }
+      if (state.players[pending.playerId].hp <= 1) {
+        throw new Error('Basar pay requires more than 1 life');
+      }
+      return checkWinner(
+        applyV6BasarPayDestroy(
+          state,
+          pending.playerId,
+          pending.defenderId,
+          pending.targetInstanceId,
+          ruleset,
+          destroyFormulaComponent,
+        ),
+      );
     }
     case 'TAKE_OPTIONAL_DRAW': {
       if (pending.type !== 'optional-draw-discard') throw new Error('Wrong pending type');
@@ -1952,6 +2029,16 @@ export function applyAction(
       if (builtId) {
         next = tryKnuspergnomFormulaFilter(next, pack, playerId, builtId, rng, ruleset);
       }
+      if (shouldQueueV6ClubReplaceFilter(next, ruleset) && !next.pendingChoice) {
+        next = applyMandatoryArenaDrawDiscard(
+          next,
+          playerId,
+          'club-formula-replace',
+          pack,
+          rng,
+          ruleset,
+        );
+      }
       return next;
     }
     case 'FORMULA_ACTIVATE': {
@@ -1999,8 +2086,12 @@ export function applyAction(
       }
 
       let diceRoll = action.diceRoll ?? rollD6(rng);
-      const vulkan = applyVulkanAttackRoll(state, playerId, diceRoll);
-      let working = vulkan.state;
+      let working = state;
+      if (!shouldSkipLegacyVulkanW6(state, ruleset)) {
+        const vulkan = applyVulkanAttackRoll(state, playerId, diceRoll);
+        working = vulkan.state;
+        diceRoll = vulkan.roll;
+      }
       working = {
         ...working,
         meta: {
@@ -2009,7 +2100,6 @@ export function applyAction(
           v3BlockShieldThisAction: false,
         },
       };
-      diceRoll = vulkan.roll;
 
       if (isV3CombatEnabled(ruleset) && action.diceRoll == null) {
         const fokus = tryConsumeFokusReroll(working, playerId);
@@ -2056,6 +2146,12 @@ export function applyAction(
         remainingPrep.w6Bonus = 0;
         remainingPrep.w6BonusMax = 0;
       }
+
+      const attackCardElement = peekMysteriumElement(working, playerId) ?? def.element;
+      attackValue += v6ClubAirValueBonus(working, attackCardElement, ruleset);
+      const vulkanV6 = applyV6VulkanFirstDamageBonus(working, playerId, attackValue, ruleset);
+      working = vulkanV6.state;
+      attackValue = vulkanV6.attackValue;
 
       if (isV3CombatEnabled(ruleset)) {
         const announce = runFetzPassiveTrigger(
@@ -2133,9 +2229,12 @@ export function applyAction(
       if (!def || def.cardType !== 'attack') throw new Error('Not an attack card');
 
       let diceRoll = action.diceRoll ?? rollD6(rng);
-      const vulkan = applyVulkanAttackRoll(state, playerId, diceRoll);
-      let working = vulkan.state;
-      diceRoll = vulkan.roll;
+      let working = state;
+      if (!shouldSkipLegacyVulkanW6(state, ruleset)) {
+        const vulkan = applyVulkanAttackRoll(state, playerId, diceRoll);
+        working = vulkan.state;
+        diceRoll = vulkan.roll;
+      }
       let attackValue = constructTarget
         ? computeAttackValueForPlayer(pack, working, playerId, def, diceRoll, ruleset)
         : formulaTarget
@@ -2161,6 +2260,16 @@ export function applyAction(
       const revenge = consumeStiernackenRevengeBonus(working, playerId);
       working = revenge.state;
       attackValue += revenge.bonus;
+
+      attackValue += v6ClubAirValueBonus(working, def.element, ruleset);
+      const vulkanV6Challenge = applyV6VulkanFirstDamageBonus(
+        working,
+        playerId,
+        attackValue,
+        ruleset,
+      );
+      working = vulkanV6Challenge.state;
+      attackValue = vulkanV6Challenge.attackValue;
 
       if (shouldOfferV6Affinity(working, pack, playerId, def.element, ruleset)) {
         return openV6AffinityPending(working, playerId, {
@@ -2533,9 +2642,12 @@ function applyCombatResponse(
     if (!def || def.cardType !== 'block') throw new Error('Not a block card');
 
     let diceRoll = action.diceRoll ?? rollD6(rng);
-    const sumpf = applySumpfBlockRoll(state, playerId, diceRoll);
-    let working = sumpf.state;
-    diceRoll = sumpf.roll;
+    let working = state;
+    if (!shouldSkipLegacySumpfW6(state, ruleset)) {
+      const sumpf = applySumpfBlockRoll(state, playerId, diceRoll);
+      working = sumpf.state;
+      diceRoll = sumpf.roll;
+    }
 
     if (isV3CombatEnabled(ruleset) && action.diceRoll == null) {
       const fokus = tryConsumeFokusReroll(working, playerId);
@@ -2584,6 +2696,7 @@ function applyCombatResponse(
     }
 
     const blockElement = peekMysteriumElement(working, playerId) ?? def.element;
+    blockValue += v6ClubAirValueBonus(working, blockElement, ruleset);
     if (shouldOfferV6AffinityOnBlock(working, pack, playerId, blockElement, ruleset)) {
       return openV6AffinityPending(working, playerId, {
         type: 'v6-affinity',

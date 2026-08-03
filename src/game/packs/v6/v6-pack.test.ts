@@ -25,7 +25,7 @@ import { V6_CORE_PACK, V6_PACK_RULESET, buildV6CorePack } from './v6-pack';
 const here = dirname(fileURLToPath(import.meta.url));
 
 describe('V6_CORE_PACK Slice-1 (INTERNAL)', () => {
-  it('exports Slice-1 formula cards + Späti/Vulkan only', () => {
+  it('exports Slice-1 formula cards + 6 V6 core arenas', () => {
     expect(V6_CORE_PACK.id).toBe('v6-core');
     expect(V6_CORE_PACK.techniques?.map((t) => t.id)).toEqual([...V6_SLICE1_TECHNIQUE_IDS]);
     expect(V6_CORE_PACK.essences?.map((e) => e.id)).toEqual([...V6_SLICE1_ESSENCE_IDS]);
@@ -36,6 +36,7 @@ describe('V6_CORE_PACK Slice-1 (INTERNAL)', () => {
       'v6-katalysator-beschwoerung',
     ]);
     expect(V6_CORE_PACK.arenas.map((a) => a.id).sort()).toEqual([...V6_SLICE1_ARENA_IDS].sort());
+    expect(V6_CORE_PACK.arenas.every((a) => !a.d6Variants)).toBe(true);
     expect(V6_CORE_PACK.ultimates).toEqual([]);
     expect(isV6FormulaEnabled(V6_PACK_RULESET)).toBe(true);
     expect(V6_PACK_RULESET.v5Formula).toBe(false);

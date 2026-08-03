@@ -17,5 +17,8 @@ describe('V6_PLAY_RULE_SECTIONS', () => {
     expect(blob).toMatch(/keine charaktergebundenen Großformeln/i);
     expect(blob).toMatch(/Überformel/);
     expect(blob).toMatch(/\+2 Primär/);
+    expect(blob).toMatch(/Arenen/);
+    expect(blob).toMatch(/Vulkan/);
+    expect(blob).toMatch(/max 1 pro Timing/);
   });
 });

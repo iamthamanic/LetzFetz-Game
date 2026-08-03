@@ -19,6 +19,8 @@ function actingPlayerForStep(state: GameState): PlayerId {
       case 'pillendoktora-boost':
       case 'mysterium-element':
       case 'v6-affinity':
+      case 'v6-fessel-target':
+      case 'v6-basar-pay-destroy':
         return state.pendingChoice.playerId;
       case 'pick-reaction':
         return state.pendingChoice.chooserId;

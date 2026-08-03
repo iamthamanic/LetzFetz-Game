@@ -26,7 +26,15 @@ export const V6_SLICE1_CATALYST_IDS = [
   'v6-katalysator-opfergabe',
 ] as const;
 
-export const V6_SLICE1_ARENA_IDS = ['arena-spaeti', 'arena-vulkan'] as const;
+/** V6 core arenas (#350) — full set under v6Formula; not tied to 105-recipe lock. */
+export const V6_SLICE1_ARENA_IDS = [
+  'arena-spaeti',
+  'arena-kristall',
+  'arena-vulkan',
+  'arena-sumpf',
+  'arena-club',
+  'arena-schattenbasar',
+] as const;
 
 export type V6Slice1TechniqueId = (typeof V6_SLICE1_TECHNIQUE_IDS)[number];
 export type V6Slice1EssenceId = (typeof V6_SLICE1_ESSENCE_IDS)[number];

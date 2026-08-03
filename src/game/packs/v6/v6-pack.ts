@@ -24,7 +24,7 @@ export const V6_PACK_RULESET: RulesetConfig = {
 };
 
 /**
- * Slice-1 INTERNAL pack: Slice-1 formula cards + Späti/Vulkan;
+ * Slice-1 INTERNAL pack: Slice-1 formula cards + 6 V6 core arenas;
  * V6 characters (affinity scaffold, no V5 passives/ultis); base elements/glitches for scaffolding.
  */
 export function buildV6CorePack(): ContentPack {

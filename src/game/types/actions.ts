@@ -79,6 +79,11 @@ export type GameAction =
       mode: 'none' | 'value-plus' | 'dice-plus' | 'dice-minus';
     }
   | {
+      /** V6 Schattenbasar: pay 1 life to destroy disturbed formula component. */
+      type: 'PICK_V6_BASAR_DESTROY';
+      pay: boolean;
+    }
+  | {
       /** V6 Fessel: pick occupied opponent formula slot. */
       type: 'PICK_V6_FESSEL_TARGET';
       slot: import('./cards').FormulaSlot;

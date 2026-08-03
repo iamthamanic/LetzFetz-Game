@@ -69,4 +69,17 @@ export const V6_PLAY_RULE_SECTIONS: RulesSection[] = [
       'Rückbau ohne Aktivierung möglich laut Engine/Slice-1 Lifecycle.',
     ].join('\n'),
   ),
+  section(
+    'v6-arenen',
+    'Arenen (V6)',
+    [
+      'Sechs Kern-Arenen: Späti · Kristall · Vulkan · Sumpf · Club · Schattenbasar — immer aktiv, symmetrisch.',
+      'Vulkan: erster gegnergerichteter Schadenseffekt/Zug +1; ohne Lebensschaden → Angreifer −1.',
+      'Sumpf: Vollblock → +1 Schild; Formel-Zerstörung erst ab Differenz 4.',
+      'Club: Luft-Karten +1 Arena-Wert; nach Formelersatz 1 ziehen / 1 abwerfen.',
+      'Schattenbasar: nach Formel-Störung optional 1 Leben zahlen → zerstören.',
+      'Elementreaktionen: max 1 pro Timing.',
+      'Riss in der Realität wechselt die Arena zufällig (sofort gültig).',
+    ].join('\n'),
+  ),
 ];
