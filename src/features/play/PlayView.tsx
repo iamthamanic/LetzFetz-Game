@@ -1370,6 +1370,28 @@ export function PlayView({
             }}
           />
         )}
+      {state?.pendingChoice?.type === 'v6-macke-scry' &&
+        state.pendingChoice.playerId === HUMAN && (
+          <PassiveChoiceModal
+            open
+            title="Macke — Scry"
+            description={`Oberste ${state.pendingChoice.revealedInstanceIds.length} Karte(n) ansehen (${state.pendingChoice.mackeId}).`}
+            testId="v6-macke-scry-modal"
+            options={[
+              { id: 'keep', labelDe: 'Reihenfolge behalten' },
+              { id: 'bottom', labelDe: 'Oberste unterlegen' },
+              ...(state.pendingChoice.revealedInstanceIds.length >= 2
+                ? [{ id: 'swap', labelDe: 'Oberste zwei tauschen' }]
+                : []),
+            ]}
+            onPick={(id) => {
+              handleDispatch({
+                type: 'PICK_V6_MACKE_SCRY',
+                mode: id as 'keep' | 'bottom' | 'swap',
+              });
+            }}
+          />
+        )}
       {state?.pendingChoice?.type === 'v6-fessel-target' &&
         state.pendingChoice.playerId === HUMAN && (() => {
           const fesselPending = state.pendingChoice;

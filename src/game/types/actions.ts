@@ -87,6 +87,11 @@ export type GameAction =
       /** V6 Fessel: pick occupied opponent formula slot. */
       type: 'PICK_V6_FESSEL_TARGET';
       slot: import('./cards').FormulaSlot;
+    }
+  | {
+      /** V6 Macke Scry: keep order, put first under, or swap top two. */
+      type: 'PICK_V6_MACKE_SCRY';
+      mode: 'keep' | 'bottom' | 'swap';
     };
 
 export interface ActionContext {

@@ -52,6 +52,18 @@ import {
   v6KristallEssenceStabilityBonus,
 } from './v6/arenas';
 import {
+  armV6FalscheFarbe,
+  canUseV6FalscheFarbe,
+  consumeV6FalscheFarbeIfArmed,
+  noteV6FormulaChange,
+  resolveV6MackeScry,
+  tryV6Dosisaenderung,
+  tryV6ErstMalGucken,
+  tryV6JetztErstRecht,
+  tryV6Nachjustiert,
+  tryV6SchwachstelleErkannt,
+} from './v6/mackes';
+import {
   cloneState,
   discardFromHand,
   drawForPlayer,
@@ -351,10 +363,15 @@ function computeFormulaChallengeAttackValue(
 
 function openV6AffinityPending(
   state: GameState,
+  pack: ContentPack,
   playerId: PlayerId,
   draft: Extract<PendingChoice, { type: 'v6-affinity' }>,
+  ruleset: RulesetConfig,
 ): GameState {
-  const next = cloneState(state);
+  let next = cloneState(state);
+  if (canUseV6FalscheFarbe(next, pack, playerId, draft.cardElement, ruleset)) {
+    next = armV6FalscheFarbe(next, playerId);
+  }
   next.pendingChoice = draft;
   next.lastEvent = `Würfel ${draft.diceRoll} — Affinität wählen (Wert +1 oder W6 ±1, oder überspringen).`;
   return next;
@@ -375,6 +392,7 @@ function finalizeV6AffinityAttack(
   if (applied.spent) {
     next = markV6AffinitySpent(next, playerId);
   }
+  next = consumeV6FalscheFarbeIfArmed(next, playerId, applied.spent);
   next = discardFromHand(next, playerId, pending.cardInstanceId);
   next = markAttackOrChallenge(next);
   const defenderId = opponentOf(playerId);
@@ -425,6 +443,7 @@ function finalizeV6AffinityBlock(
   if (applied.spent) {
     next = markV6AffinitySpent(next, playerId);
   }
+  next = consumeV6FalscheFarbeIfArmed(next, playerId, applied.spent);
   next = discardFromHand(next, playerId, pending.cardInstanceId);
   if (next.combat?.mode === 'challenge') {
     next = resolveChallengeCombat(next, pack, applied.value, ruleset, rng);
@@ -454,6 +473,7 @@ function finalizeV6AffinityFormula(
   if (applied.spent) {
     next = markV6AffinitySpent(next, playerId);
   }
+  next = consumeV6FalscheFarbeIfArmed(next, playerId, applied.spent);
   const intensityBase = pending.formulaIntensity ?? null;
   const intensityAdjusted =
     intensityBase == null
@@ -582,6 +602,7 @@ function resolveBoostAfterInterrupt(
   );
   if (hpGained > 0) {
     next = tryKokabellStabilityOnHeal(next, pending.boosterId, hpGained, ruleset);
+    next = tryV6Nachjustiert(next, pending.boosterId, hpGained, ruleset);
   }
   next = incrementBoostsPlayed(next, pending.boosterId);
   if (next.pendingChoice?.type === 'must-discard' && next.pendingChoice.source === 'air') {
@@ -591,6 +612,9 @@ function resolveBoostAfterInterrupt(
   next = queuePostBoostPending(next, pending.boosterId, pack, rng, ruleset);
   if (!next.pendingChoice) {
     next = tryOpenPillendoktoraBoost(next, pending.boosterId, ruleset);
+  }
+  if (!next.pendingChoice) {
+    next = tryV6Dosisaenderung(next, pending.boosterId, rng, ruleset);
   }
   return finishMainAction(next);
 }
@@ -673,7 +697,14 @@ function applyPlayerAttackDamage(
 
   if (isSumpf(next) && pipeline.isFullBlock) {
     if (isV6FormulaEnabled(ruleset)) {
+      const shieldBefore = next.players[defenderId].shield;
       next = applyV6SumpfFullBlockShield(next, defenderId, ruleset);
+      next = tryV6Nachjustiert(
+        next,
+        defenderId,
+        Math.max(0, next.players[defenderId].shield - shieldBefore),
+        ruleset,
+      );
     } else {
       next = applyMandatoryArenaDrawDiscard(next, defenderId, 'sumpf-full-block', pack, rng, ruleset);
     }
@@ -681,9 +712,11 @@ function applyPlayerAttackDamage(
 
   if (pipeline.isFullBlock) {
     next = trySchluckspechtFullBlockHeal(next, defenderId, ruleset);
+    next = tryV6ErstMalGucken(next, defenderId, ruleset);
   }
   if (pipeline.hpDamage > 0) {
     next = tryStiernackenRevengeBonus(next, defenderId, pipeline.hpDamage, ruleset);
+    next = tryV6JetztErstRecht(next, defenderId, pipeline.hpDamage, rng, ruleset);
   }
 
   const highBefore: Record<PlayerId, number> = {
@@ -997,6 +1030,7 @@ function resolveFormulaChallengeCombat(
     );
     next.lastEvent = `Herausforderung — ${targetName} gestört (${attackValue} vs ${defense}).`;
     next = tryDripministerinFilter(next, attackerId, rng, ruleset);
+    next = tryV6SchwachstelleErkannt(next, attackerId, ruleset);
     if (shouldOfferV6BasarPayDestroy(next, ruleset) && next.players[attackerId].hp > 1) {
       next.pendingChoice = {
         type: 'v6-basar-pay-destroy',
@@ -1096,6 +1130,8 @@ function pendingChoicePlayer(pending: PendingChoice): PlayerId {
     case 'v6-fessel-target':
       return pending.playerId;
     case 'v6-basar-pay-destroy':
+      return pending.playerId;
+    case 'v6-macke-scry':
       return pending.playerId;
     case 'pick-reaction':
       return pending.chooserId;
@@ -1264,6 +1300,14 @@ function getPendingLegalActions(state: GameState, ctx: PackContext): GameAction[
       const board = state.players[pending.targetPlayerId].formula;
       for (const slot of occupiedFesselSlots(board)) {
         actions.push({ type: 'PICK_V6_FESSEL_TARGET', slot });
+      }
+      break;
+    }
+    case 'v6-macke-scry': {
+      actions.push({ type: 'PICK_V6_MACKE_SCRY', mode: 'keep' });
+      actions.push({ type: 'PICK_V6_MACKE_SCRY', mode: 'bottom' });
+      if (pending.revealedInstanceIds.length >= 2) {
+        actions.push({ type: 'PICK_V6_MACKE_SCRY', mode: 'swap' });
       }
       break;
     }
@@ -1657,7 +1701,7 @@ function applyFormulaActivate(
     const el = formulaAffinityElement(pack, state, playerId);
     if (el && shouldOfferV6Affinity(state, pack, playerId, el, ruleset)) {
       const ess = state.players[playerId].formula.essenz;
-      return openV6AffinityPending(state, playerId, {
+      return openV6AffinityPending(state, pack, playerId, {
         type: 'v6-affinity',
         playerId,
         kind: 'formula',
@@ -1669,7 +1713,7 @@ function applyFormulaActivate(
         formulaDefenseRoll: plan.formulaDefense?.naturalRoll,
         formulaAsOverformula: plan.kind === 'overformula',
         formulaIntensity: plan.intensity,
-      });
+      }, ruleset);
     }
     return applyV6FormulaActivate(state, pack, playerId, ruleset, rng, {
       asOverformula: plan.kind === 'overformula',
@@ -1761,6 +1805,7 @@ function applyPendingChoiceAction(
         case 'v6-affinity':
         case 'v6-fessel-target':
         case 'v6-basar-pay-destroy':
+        case 'v6-macke-scry':
           throw new Error('Arena effect cannot be skipped');
       }
       break;
@@ -1817,6 +1862,10 @@ function applyPendingChoiceAction(
         ruleset,
         rng,
       );
+    }
+    case 'PICK_V6_MACKE_SCRY': {
+      if (pending.type !== 'v6-macke-scry') throw new Error('Wrong pending type');
+      return resolveV6MackeScry(state, playerId, action.mode);
     }
     case 'PICK_V6_FESSEL_TARGET': {
       if (pending.type !== 'v6-fessel-target') throw new Error('Wrong pending type');
@@ -2015,6 +2064,7 @@ export function applyAction(
       if (builtId) {
         next = tryKnuspergnomFormulaFilter(next, pack, playerId, builtId, rng, ruleset);
       }
+      next = noteV6FormulaChange(next, playerId, ruleset);
       return next;
     }
     case 'FORMULA_REPLACE': {
@@ -2029,6 +2079,7 @@ export function applyAction(
       if (builtId) {
         next = tryKnuspergnomFormulaFilter(next, pack, playerId, builtId, rng, ruleset);
       }
+      next = noteV6FormulaChange(next, playerId, ruleset);
       if (shouldQueueV6ClubReplaceFilter(next, ruleset) && !next.pendingChoice) {
         next = applyMandatoryArenaDrawDiscard(
           next,
@@ -2168,7 +2219,7 @@ export function applyAction(
 
       const cardElement = peekMysteriumElement(working, playerId) ?? def.element;
       if (shouldOfferV6Affinity(working, pack, playerId, cardElement, ruleset)) {
-        return openV6AffinityPending(working, playerId, {
+        return openV6AffinityPending(working, pack, playerId, {
           type: 'v6-affinity',
           playerId,
           kind: 'attack',
@@ -2179,7 +2230,7 @@ export function applyAction(
           baseValue: attackValue,
           ignoreShield: attackPrep.ignoreShield > 0 ? attackPrep.ignoreShield : undefined,
           extraHitImpulse: attackPrep.extraHitImpulse ?? undefined,
-        });
+        }, ruleset);
       }
 
       next = discardFromHand(working, playerId, action.cardInstanceId);
@@ -2272,7 +2323,7 @@ export function applyAction(
       attackValue = vulkanV6Challenge.attackValue;
 
       if (shouldOfferV6Affinity(working, pack, playerId, def.element, ruleset)) {
-        return openV6AffinityPending(working, playerId, {
+        return openV6AffinityPending(working, pack, playerId, {
           type: 'v6-affinity',
           playerId,
           kind: 'challenge',
@@ -2282,7 +2333,7 @@ export function applyAction(
           diceRoll,
           baseValue: attackValue,
           targetBoundInstanceId: action.targetBoundInstanceId,
-        });
+        }, ruleset);
       }
 
       next = discardFromHand(working, playerId, action.attackCardInstanceId);
@@ -2420,6 +2471,7 @@ export function applyAction(
       const hpGained = Math.max(0, next.players[playerId].hp - (state.players[playerId].hp));
       if (hpGained > 0) {
         next = tryKokabellStabilityOnHeal(next, playerId, hpGained, ruleset);
+        next = tryV6Nachjustiert(next, playerId, hpGained, ruleset);
       }
       next = incrementBoostsPlayed(next, playerId);
       if (next.pendingChoice?.type === 'must-discard' && next.pendingChoice.source === 'air') {
@@ -2429,6 +2481,9 @@ export function applyAction(
       next = queuePostBoostPending(next, playerId, pack, rng, ruleset);
       if (!next.pendingChoice) {
         next = tryOpenPillendoktoraBoost(next, playerId, ruleset);
+      }
+      if (!next.pendingChoice) {
+        next = tryV6Dosisaenderung(next, playerId, rng, ruleset);
       }
       return finishMainAction(next);
     }
@@ -2698,7 +2753,7 @@ function applyCombatResponse(
     const blockElement = peekMysteriumElement(working, playerId) ?? def.element;
     blockValue += v6ClubAirValueBonus(working, blockElement, ruleset);
     if (shouldOfferV6AffinityOnBlock(working, pack, playerId, blockElement, ruleset)) {
-      return openV6AffinityPending(working, playerId, {
+      return openV6AffinityPending(working, pack, playerId, {
         type: 'v6-affinity',
         playerId,
         kind: 'block',
@@ -2707,7 +2762,7 @@ function applyCombatResponse(
         cardElement: blockElement,
         diceRoll,
         baseValue: blockValue,
-      });
+      }, ruleset);
     }
 
     let next = discardFromHand(working, playerId, action.cardInstanceId);
