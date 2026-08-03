@@ -14,6 +14,7 @@ import { getCharacterElements } from '../helpers';
 import { diceBonusFromRoll, modifyDieRoll } from '../dice';
 import { findEssenceDef } from '../formulaSlots';
 import { formulaComponentUsableForActivation } from './fessel';
+import { canUseV6FalscheFarbe } from './mackes';
 
 export type V6AffinityMode = 'none' | 'value-plus' | 'dice-plus' | 'dice-minus';
 
@@ -57,7 +58,9 @@ export function shouldOfferV6Affinity(
   if (!isV6FormulaEnabled(ruleset) && !state.meta.v6FormulaEnabled) return false;
   if (!isV6AffinityAvailable(state, playerId)) return false;
   const characterId = state.players[playerId].characterId;
-  return characterHasAffinityElement(pack, characterId, cardElement);
+  if (characterHasAffinityElement(pack, characterId, cardElement)) return true;
+  // Falsche Farbe (#349): once, treat non-affinity element as affinity for this spend.
+  return canUseV6FalscheFarbe(state, pack, playerId, cardElement, ruleset);
 }
 
 /**

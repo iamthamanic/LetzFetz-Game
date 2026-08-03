@@ -21,6 +21,7 @@ function actingPlayerForStep(state: GameState): PlayerId {
       case 'v6-affinity':
       case 'v6-fessel-target':
       case 'v6-basar-pay-destroy':
+      case 'v6-macke-scry':
         return state.pendingChoice.playerId;
       case 'pick-reaction':
         return state.pendingChoice.chooserId;

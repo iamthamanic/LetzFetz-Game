@@ -315,7 +315,7 @@ Vor der Partie wählt jeder Spieler **eine Macke** aus einem **gemeinsamen, neut
 
 **Alternative B (falls Pool zu spät):** feste Mikro-Passive pro Charakter (Knuspergnom Resteverwertung, Schluckspecht Erst mal gucken, …) — ebenfalls Budget-konform, aber stärker charaktergekoppelt.
 
-Finale Form: User entscheidet A vs B in der Review. **Beide** erfüllen: keine V5-Passiven, kein direkter Schaden/Heil-Engine, kein Fetz, keine Extra-Aktion.
+**Finale Form (Playtest #349):** **Option B — feste Mikro-Passive pro Charakter.** Pool A deferred (keine Draft-UI für first playable). Beide Modelle erfüllen weiterhin: keine V5-Passiven, kein direkter Schaden/Heil-Engine, kein Fetz, keine Extra-Aktion.
 
 ### 28.4 Power-Budget (jede Passive / Macke)
 
@@ -512,8 +512,8 @@ Arena immer · kein Schrott · Improvisieren 1→2
 
 Bitte abhaken / korrigieren:
 
-- [ ] Passive-Modell: **A Pool vor Match** (empfohlen) vs **B feste Charakter-Mikro-Passiven** vs Hybrid  
-- [ ] Ob Passive-Pool **vor** Charakterwahl, **danach**, oder parallel zur Arena-Reveal  
+- [x] Passive-Modell: **B feste Charakter-Mikro-Passiven** (Playtest-Default #349). A Pool deferred — einfacher für first playable (keine Draft-UI; 1 feste Macke pro Charakter).  
+- [ ] Ob Passive-Pool **vor** Charakterwahl, **danach**, oder parallel zur Arena-Reveal *(nur relevant wenn A später)*  
 - [ ] Ob erste playable Version Überformel schon enthält oder Slice-1 ohne  
 - [ ] Ob `V6_PACK` physisch unter `src/content/v6` + `src/generated/v6` liegt (Pfad ok?)  
 - [ ] Generator-Output: JSON vs TS  
@@ -526,6 +526,8 @@ Bitte abhaken / korrigieren:
 - [x] Konstrukte Engine (#346): `player.construct`; Startphase Haltbarkeit −1; Playtest-EK Beschwörung; Herausfordern stören/zerstören; 105-Katalog unverändert.
 - [x] Konstrukt Play-UI (#347): Zone am Playmat; Haltbarkeit sichtbar; gestört-Overlay; Ziel-Button; Toast bei Ersetzen; Aktivierung über Formel aktivieren.
 - [x] Überformel Play-UI (#348): Button/Confirm/Preview bei Fetz=3 + TEK; fester +2 Primär; generische Overlay-Texte; resolve via Engine.
+- [x] Arenen V6 Core (#350): 6 Kern-Arenen + Reaktions-Cap unter `v6Formula`.
+- [x] Passives / Macken (#349): **Option B feste Macken** end-to-end (Daten + Engine-Hooks + DE-UI); Pool A deferred.
 
 Nach deiner finalen Form: dieses Doc auf **verbindlich** setzen und `SPIELANLEITUNG_V6_DRAFT.md` + AGENTS-Kurzreferenz nachziehen.
 
@@ -546,3 +548,6 @@ Nach deiner finalen Form: dieses Doc auf **verbindlich** setzen und `SPIELANLEIT
 | 2026-08-03 | #345 Echo/Delay Play-UI: Queue-Anzeige + Katalysator-Badge; feste Echo-1 / Delay-+2 |
 | 2026-08-03 | #346 Konstrukte Engine: Board-Feld, Startphase-Tick, Playtest-Beschwörung, Herausfordern vs Haltbarkeit |
 | 2026-08-03 | #347 Konstrukt Play-UI: Zone am Playmat, Haltbarkeit, gestört, Challenge-Ziel, Replace-Toast |
+| 2026-08-03 | #348 Überformel Play-UI: Button/Confirm/Preview; fester +2 Primär |
+| 2026-08-03 | #350 V6 Core-Arenen + Reaktions-Cap unter `v6Formula` |
+| 2026-08-03 | #349 Passives: **Option B feste Macken** gelockt; Engine-Hooks + DE-UI; Pool A deferred |

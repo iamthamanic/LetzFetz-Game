@@ -58,6 +58,15 @@ export interface MatchMeta {
    * Missing / true = available; false = already spent this cycle.
    */
   v6AffinityAvailable?: Record<PlayerId, boolean>;
+  /** V6 Macken (#349 Option B) already used this own turn cycle (macke ids). */
+  v6MackeUsed?: Record<PlayerId, string[]>;
+  /** V6 Formeländerungen this own turn (Resteverwertung fires on 2nd). */
+  v6FormulaChangesThisTurn?: Record<PlayerId, number>;
+  /**
+   * V6 Falsche Farbe: Affinity spend this action used the Macke expand.
+   * Cleared when pending affinity resolves / action ends.
+   */
+  v6FalscheFarbeArmed?: Record<PlayerId, boolean>;
   /** V6 Echo queue — resolve in own Startphase (§8 step 3). */
   v6EchoQueue?: Record<PlayerId, V6EchoQueueEntry[]>;
   /** V6 Delay queue — resolve in own Startphase (§8 step 4). */
@@ -153,7 +162,7 @@ export type PendingChoice =
       /** After draw(s) — must discard 1 (player chooses). */
       type: 'must-discard';
       playerId: PlayerId;
-      source: 'spaeti' | 'sumpf-full-block' | 'air' | 'dripministerin' | 'club-formula-replace';
+      source: 'spaeti' | 'sumpf-full-block' | 'air' | 'dripministerin' | 'club-formula-replace' | 'v6-dosisaenderung';
     }
   | {
       type: 'spaeti-extra-build';
@@ -216,6 +225,14 @@ export type PendingChoice =
       defenderId: PlayerId;
       targetInstanceId: string;
       targetName: string;
+    }
+  | {
+      /** V6 Macke Scry: top deck cards revealed; choose keep / bottom / swap. */
+      type: 'v6-macke-scry';
+      playerId: PlayerId;
+      mackeId: string;
+      /** Top-of-deck order at reveal (length 1 or 2). */
+      revealedInstanceIds: string[];
     };
 
 export function createEmptyMeta(): MatchMeta {
@@ -262,6 +279,18 @@ export function resetTurnMeta(meta: MatchMeta, activePlayer: PlayerId): MatchMet
     v6AffinityAvailable: {
       p1: activePlayer === 'p1' ? true : (meta.v6AffinityAvailable?.p1 ?? true),
       p2: activePlayer === 'p2' ? true : (meta.v6AffinityAvailable?.p2 ?? true),
+    },
+    v6MackeUsed: {
+      p1: activePlayer === 'p1' ? [] : (meta.v6MackeUsed?.p1 ?? []),
+      p2: activePlayer === 'p2' ? [] : (meta.v6MackeUsed?.p2 ?? []),
+    },
+    v6FormulaChangesThisTurn: {
+      p1: activePlayer === 'p1' ? 0 : (meta.v6FormulaChangesThisTurn?.p1 ?? 0),
+      p2: activePlayer === 'p2' ? 0 : (meta.v6FormulaChangesThisTurn?.p2 ?? 0),
+    },
+    v6FalscheFarbeArmed: {
+      p1: activePlayer === 'p1' ? false : (meta.v6FalscheFarbeArmed?.p1 ?? false),
+      p2: activePlayer === 'p2' ? false : (meta.v6FalscheFarbeArmed?.p2 ?? false),
     },
   };
 }

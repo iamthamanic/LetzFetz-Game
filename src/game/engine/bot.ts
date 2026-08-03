@@ -410,6 +410,13 @@ export function chooseBotAction(state: GameState, pack: ContentPack): GameAction
         affinity[0]
       );
     }
+    const mackeScry = actions.filter(
+      (a): a is Extract<GameAction, { type: 'PICK_V6_MACKE_SCRY' }> =>
+        a.type === 'PICK_V6_MACKE_SCRY',
+    );
+    if (mackeScry.length > 0) {
+      return mackeScry.find((a) => a.mode === 'keep') ?? mackeScry[0];
+    }
     // Fessel target: prefer Katalysator (timing/one-shot), then Essenz, then Technik.
     const fesselTargets = actions.filter(
       (a): a is Extract<GameAction, { type: 'PICK_V6_FESSEL_TARGET' }> =>

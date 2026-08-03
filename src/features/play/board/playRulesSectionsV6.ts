@@ -58,7 +58,7 @@ export const V6_PLAY_RULE_SECTIONS: RulesSection[] = [
     [
       'Zwei Affinitätselemente pro Charakter. 1× pro eigenem Zug/Durchlauf: Wert +1 oder eigenen W6 ±1 auf passende Elementkarte (nach dem Wurf).',
       'Keine V5-Charakterpassiven und keine Ultis in V6.',
-      'Mikro-Passive / Macken-Pool: noch nicht spielbar (Konzept §28).',
+      'Feste Macke pro Charakter (Option B): 1×/eigener Zug, Budget §28 — Info/Filter/Flex, kein Fetz, keine Extra-Aktion. Affinität und Macke nicht als doppelter ±1-Stack auf dieselbe Aktion (Falsche Farbe erweitert nur Affinität-Eligibilität).',
     ].join('\n'),
   ),
   section(
