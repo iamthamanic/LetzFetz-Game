@@ -23,13 +23,15 @@ test.describe('V6 setup playable flag', () => {
     await shot(page, '01-v6-hidden.png');
   });
 
-  test('shows V6 tile when localStorage flag is set', async ({ page }) => {
+  test('shows V6 tile when localStorage flag is set but keeps V5 selected', async ({ page }) => {
     await page.addInitScript(() => {
       localStorage.setItem('letz-fetz:v6-playable', '1');
     });
     await openPlaySetup(page);
     await selectBotMode(page);
     await expect(page.getByTestId('game-pack-v6')).toBeVisible();
+    await expect(page.getByTestId('game-setup-v6-flag-hint')).toBeVisible();
+    await expect(page.getByTestId('game-pack-v5')).toHaveAttribute('aria-pressed', 'true');
     await page.getByTestId('game-pack-v6').click();
     await expect(page.getByTestId('game-pack-v6')).toHaveAttribute('aria-pressed', 'true');
     await shot(page, '02-v6-visible.png');

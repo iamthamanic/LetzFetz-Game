@@ -4,8 +4,13 @@
  *
  * Default OFF — Play-Default remains V5 until explicit cutover.
  * Enable: `VITE_V6_PLAYABLE=true` or localStorage `letz-fetz:v6-playable=1`.
+ * When enabled, Setup shows a V6 tile but initial selection stays V5.
  */
 export const V6_PLAYABLE_STORAGE_KEY = 'letz-fetz:v6-playable';
+
+/** German one-liner for Setup hint / docs. */
+export const V6_PLAYABLE_ENABLE_HINT_DE =
+  'V6-Kachel: VITE_V6_PLAYABLE=true oder localStorage letz-fetz:v6-playable=1 (Standard bleibt V5).';
 
 /** Test-only override; null = consult env/storage. */
 let testOverride: boolean | null = null;

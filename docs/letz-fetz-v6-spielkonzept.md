@@ -10,7 +10,7 @@
 
 **PLAYABLE-Prep tracking (GitHub):** #333 characters/affinity scaffold · #334 recipe authoring harden · #335 Spielregeln/Katalog V6 · #336 setup flag polish. Play-Default remains **V5**. Affinity ±1 engine deferred.
 
-**V6_PLAYABLE:** Setup tile `v6` only when `VITE_V6_PLAYABLE=true` or `localStorage['letz-fetz:v6-playable']='1'`. Default pack choice stays **V5**.
+**V6_PLAYABLE:** Setup tile `v6` only when `VITE_V6_PLAYABLE=true` or `localStorage['letz-fetz:v6-playable']='1'`. Default pack choice stays **V5** even when the tile is visible (flag ≠ cutover). Combo visual = T+E+K component arts (not a blocker).
 
 > **Leitsatz:** Der Charakter bestimmt den Rahmen. Die Karten bestimmen die Möglichkeiten. Der Spieler bestimmt das Ergebnis.
 

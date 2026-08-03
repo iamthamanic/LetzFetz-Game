@@ -66,8 +66,10 @@ function prefersReducedMotion(): boolean {
   );
 }
 
-function defaultPackChoice(v6Playable: boolean): GamePackChoice {
-  return v6Playable ? 'v6' : 'v5';
+/** Initial pack selection — always V5 until PLAYABLE cutover (flag only reveals V6 tile). */
+export function defaultPackChoice(_v6Playable?: boolean): GamePackChoice {
+  void _v6Playable;
+  return 'v5';
 }
 
 export interface BotMatchStart {
@@ -412,6 +414,19 @@ export function GameSetup({
                     Kartenset
                   </p>
                   <div className="grid grid-cols-1 gap-2">
+                    <PackChoiceButton
+                      choice="v5"
+                      active={packChoice === 'v5'}
+                      onSelect={setPackChoice}
+                      testId="game-pack-v5"
+                      icon={<Sparkles className="h-4 w-4 text-emerald-400" aria-hidden />}
+                      badge={
+                        packChoice === 'v5' ? <Badge variant="success">Standard</Badge> : null
+                      }
+                      title="V5 Formel"
+                      subtitle="Play-Default · Formel · Gegenstände · 30 Leben"
+                      activeClass="border-emerald-500/60 bg-emerald-950/30"
+                    />
                     {v6Playable ? (
                       <PackChoiceButton
                         choice="v6"
@@ -420,31 +435,23 @@ export function GameSetup({
                         testId="game-pack-v6"
                         icon={<Sparkles className="h-4 w-4 text-amber-400" aria-hidden />}
                         badge={
-                          packChoice === 'v6' ? <Badge variant="success">Standard</Badge> : null
+                          packChoice === 'v6' ? <Badge variant="accent">INTERNAL</Badge> : (
+                            <Badge variant="default">Opt-in</Badge>
+                          )
                         }
                         title="V6 Formel"
-                        subtitle="Play-Default · Formelkern · 30 Leben"
+                        subtitle="Slice-1 INTERNAL · Rezepte · nicht Play-Default"
                         activeClass="border-amber-500/60 bg-amber-950/30"
                       />
                     ) : null}
-                    <PackChoiceButton
-                      choice="v5"
-                      active={packChoice === 'v5'}
-                      onSelect={setPackChoice}
-                      testId="game-pack-v5"
-                      icon={<Sparkles className="h-4 w-4 text-emerald-400" aria-hidden />}
-                      badge={
-                        packChoice === 'v5' ? (
-                          <Badge variant={v6Playable ? 'accent' : 'success'}>
-                            {v6Playable ? 'Alternative' : 'Standard'}
-                          </Badge>
-                        ) : null
-                      }
-                      title="V5 Formel"
-                      subtitle="Formel · Gegenstände · 30 Leben"
-                      activeClass="border-emerald-500/60 bg-emerald-950/30"
-                    />
                   </div>
+                  {v6Playable ? (
+                    <p className="text-xs text-stone-500" data-testid="game-setup-v6-flag-hint">
+                      V6-Kachel aktiv (Flag). Enable: <code className="text-stone-400">VITE_V6_PLAYABLE=true</code>{' '}
+                      oder localStorage <code className="text-stone-400">letz-fetz:v6-playable=1</code>. Standard
+                      bleibt V5 bis Cutover. Combo-Art = T+E+K-Komponentenbilder.
+                    </p>
+                  ) : null}
                   <button
                     type="button"
                     className="text-xs text-stone-400 underline-offset-2 hover:text-stone-200 hover:underline"
