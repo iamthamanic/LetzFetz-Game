@@ -101,9 +101,9 @@ export function illustrationKeyForCardId(cardId: string): string | null {
   return null;
 }
 
-/** Public path for a V5 Formelkomponente PNG under `/cards/formula/`. */
+/** Public path for a V5/V6 Formelkomponente PNG under `/cards/formula/`. */
 export function resolveFormulaCardArtPath(cardId: string): string {
-  const match = cardId.match(/^v5-(?:technik|essenz|katalysator)-([a-z0-9-]+)$/);
+  const match = cardId.match(/^v[56]-(?:technik|essenz|katalysator)-([a-z0-9-]+)$/);
   if (!match) return '';
   return publicAssetUrl(`/cards/formula/${match[1]}.png`);
 }

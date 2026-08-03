@@ -111,6 +111,7 @@ function LibraryCardFace({
       stats_json={card.stats_json}
       effects={card.effects}
       image_asset={card.image_asset}
+      componentImages={card.component_images}
       gameElements={characterDef?.elements}
       role={characterDef?.role ?? formulaRole}
       size={size}
@@ -543,7 +544,7 @@ export function CardLibrary({
             }
             subtitle={
               formulaRoleFilter === 'Kombination'
-                ? 'Kombinationen in Combinate speichern (Build → Combinate).'
+                ? 'Der V6 Katalog sollte hier erscheinen. Sonst Kombinationen in Combinate speichern (Build → Combinate).'
                 : searchTerm
                   ? 'Andere Suchbegriffe ausprobieren'
                   : undefined

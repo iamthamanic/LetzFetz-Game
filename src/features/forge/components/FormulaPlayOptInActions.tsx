@@ -51,6 +51,27 @@ export function FormulaPlayOptInActions({ card }: FormulaPlayOptInActionsProps) 
   if (card.type !== 'Formula') return null;
 
   if (isKombinationForgeCard(card)) {
+    const isCatalog = card.effects?.some((e) => e === 'Quelle: V6 Katalog') ?? false;
+    if (isCatalog) {
+      return (
+        <div
+          className="mt-3 space-y-2 rounded-lg border border-violet-800/40 bg-violet-950/20 p-3"
+          data-testid="formula-recipe-catalog-panel"
+        >
+          <div className="flex flex-wrap items-center gap-2">
+            <Layers className="h-4 w-4 shrink-0 text-violet-300" aria-hidden />
+            <span className="text-xs font-medium text-stone-200">V6 Katalog</span>
+            <Badge variant="accent" className="normal-case">
+              Katalog
+            </Badge>
+          </div>
+          <p className="text-xs text-stone-400">
+            Engine-Rezept aus dem Slice-1-Katalog — im Spiel über das Formelbrett bauen und
+            aktivieren. Keine separate Combinate-Aktivierung nötig.
+          </p>
+        </div>
+      );
+    }
     return <KombinationActivateActions card={card} />;
   }
 
