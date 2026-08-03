@@ -12,6 +12,7 @@ describe('V6_PLAY_RULE_SECTIONS', () => {
     expect(blob).toMatch(/Rezept/);
     expect(blob).toMatch(/Katalysator/);
     expect(blob).toMatch(/Echo/);
+    expect(blob).toMatch(/Konstrukt/);
     expect(blob).toMatch(/Affinität/);
     expect(blob).toMatch(/keine charaktergebundenen Großformeln/i);
   });

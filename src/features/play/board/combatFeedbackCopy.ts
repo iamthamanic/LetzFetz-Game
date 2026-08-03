@@ -8,7 +8,8 @@ export type CombatFeedbackKind =
   | 'auto-reaction'
   | 'shield-absorb'
   | 'echo-resolve'
-  | 'delay-resolve';
+  | 'delay-resolve'
+  | 'construct-summon';
 
 export interface CombatFeedbackToastItem {
   kind: CombatFeedbackKind;
@@ -89,6 +90,18 @@ export function parseCombatFeedbackToasts(
         ? 'Primäreffekt in der nächsten Startphase. Katalysator bleibt bis Auflösung.'
         : lastEvent.replace(/^.*?(Verzögerung:)/, '$1').trim(),
       testId: 'combat-feedback-delay',
+    });
+  }
+
+  if (lastEvent.includes('Konstrukt beschworen')) {
+    const replaced = lastEvent.includes('vorheriges abgelegt');
+    toasts.push({
+      kind: 'construct-summon',
+      title: replaced ? 'Konstrukt ersetzt' : 'Konstrukt beschworen',
+      body: replaced
+        ? 'Neues Konstrukt steht — das vorherige wurde abgelegt.'
+        : lastEvent.replace(/^.*?(Konstrukt beschworen)/, 'Konstrukt beschworen').trim(),
+      testId: 'combat-feedback-construct',
     });
   }
 

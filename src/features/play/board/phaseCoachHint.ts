@@ -3,8 +3,9 @@
  * Location: src/features/play/board/phaseCoachHint.ts
  */
 import type { GameState } from '../../../game';
-import { isV5FormulaEnabled } from '../../../game';
+import { isV5FormulaEnabled, isV6FormulaEnabled } from '../../../game';
 import { rulesetFromState } from '../../../game/engine/rulesetFromState';
+import { V6_PLAYTEST_BESCHWOERUNG_CATALYST_ID } from '../../../game/engine/v6';
 import type { PendingIntent } from './gameActionHelpers';
 import type { GameViewModel } from './buildGameViewModel';
 import { formulaChallengeTargetIds } from './gameActionHelpers';
@@ -44,16 +45,20 @@ export function buildPhaseCoachHint({
     return 'Wähle eine Aktionskarte auf der Hand — Angriff, Boost, Glitch oder Gegenstand.';
   }
   if (pending?.type === 'attack') {
-    const v5 = isV5FormulaEnabled(rulesetFromState(state));
-    const hasTargets = v5
+    const ruleset = rulesetFromState(state);
+    const v5 = isV5FormulaEnabled(ruleset);
+    const v6 = isV6FormulaEnabled(ruleset);
+    const hasTargets = v5 || v6
       ? formulaChallengeTargetIds(view.legalActions, pending.attackInstanceId).length > 0
       : view.botBoundSlots.some((s) => s.isTargetable);
     if (hasTargets) {
       return pending.targetBoundInstanceId
         ? 'Ziel gewählt — unten „Herausfordern“ oder „Direkt angreifen“.'
-        : v5
-          ? 'Gegner-Formelkomponente antippen als Ziel, dann unten „Herausfordern“ — oder „Direkt angreifen“.'
-          : 'Gegner-Engine antippen als Ziel, dann unten „Herausfordern“ — oder „Direkt angreifen“.';
+        : v6
+          ? 'Gegner-Formel oder Konstrukt („Ziel“) antippen, dann unten „Herausfordern“ — oder „Direkt angreifen“.'
+          : v5
+            ? 'Gegner-Formelkomponente antippen als Ziel, dann unten „Herausfordern“ — oder „Direkt angreifen“.'
+            : 'Gegner-Engine antippen als Ziel, dann unten „Herausfordern“ — oder „Direkt angreifen“.';
     }
     return 'Kein Herausforderungsziel — unten „Direkt angreifen“ gegen die LP des Gegners.';
   }
@@ -92,7 +97,9 @@ export function buildPhaseCoachHint({
         ? 'Ziehe eine Karte vom Nachziehstapel.'
         : 'Ziehphase — keine Karte verfügbar.';
     case 'build': {
-      const v5 = isV5FormulaEnabled(rulesetFromState(state));
+      const ruleset = rulesetFromState(state);
+      const v5 = isV5FormulaEnabled(ruleset);
+      const v6 = isV6FormulaEnabled(ruleset);
       const canBuild = legal.some(
         (a) =>
           a.type === 'BUILD_CARD' ||
@@ -107,6 +114,10 @@ export function buildPhaseCoachHint({
           : 'Tippe „Engine bauen“, um eine Karte in die Engine zu legen — oder „Skip Bau-Phase“.';
       }
       if (canActivate) {
+        const katalysatorDefId = state.players[view.human].formula.katalysator?.defId;
+        if (v6 && katalysatorDefId === V6_PLAYTEST_BESCHWOERUNG_CATALYST_ID) {
+          return 'Tippe „Formel aktivieren“ — Beschwörung stellt ein Konstrukt auf (ersetzt ggf. das alte).';
+        }
         return 'Tippe „Formel aktivieren“, um aufgerichtete Komponenten zu aktivieren — oder „Skip Formelphase“.';
       }
       if (legal.some((a) => a.type === 'SKIP_BUILD')) {

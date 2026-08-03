@@ -10,6 +10,8 @@ import { formulaChallengeOutcome, type FormulaChallengeOutcome } from '../formul
 import { cloneState } from '../helpers';
 import { nextInstanceId } from '../deck';
 
+export { V6_PLAYTEST_BESCHWOERUNG_CATALYST_ID } from '../../../content/v6/cards/playtestConstructCards';
+
 export type ConstructChallengeOutcome = FormulaChallengeOutcome;
 
 export function constructDisplayName(defId: string): string {
