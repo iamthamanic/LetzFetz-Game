@@ -15,6 +15,7 @@ import {
   findDiscardDrawAction,
   findPlayGlitchAction,
   findPoolActivateAction,
+  formulaChangeRequiresDiscard,
   hasChallengeForAttack,
 } from './gameActionHelpers';
 import { CharacterPlate } from './CharacterPlate';
