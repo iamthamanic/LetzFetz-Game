@@ -3,7 +3,7 @@ import { getLegalActions, findElementDef, applyAction, type PackContext } from '
 import { FESSEL_BOT_SLOT_PRIORITY } from './v6/fessel';
 import { rulesetFromState } from './rulesetFromState';
 import { diceBonusFromRoll, rollD6 } from './dice';
-import { DEFAULT_RULESET, isV5FormulaEnabled } from '../types';
+import { DEFAULT_RULESET, isV5FormulaEnabled, isV6FormulaEnabled } from '../types';
 import { calculateCombatValue, resolveDamage, challengeSucceeded } from './combat';
 import { challengeTargetResistance } from './phraseBonuses';
 import {
@@ -12,6 +12,7 @@ import {
   formulaComponentStability,
 } from './formulaChallenge';
 import { getCharacterElements } from './helpers';
+import { pickBeneficialV6AffinityMode } from './v6BotPlaybook';
 
 const BOT_ID: PlayerId = 'p2';
 const HUMAN_ID: PlayerId = 'p1';
@@ -118,14 +119,19 @@ function bestBlockAction(
 }
 
 function pickBestBuild(state: GameState, pack: ContentPack, actions: GameAction[]): GameAction {
-  const v5 = isV5FormulaEnabled(rulesetFromState(state));
+  const ruleset = rulesetFromState(state);
+  const formulaMode = isV5FormulaEnabled(ruleset) || isV6FormulaEnabled(ruleset);
 
-  if (v5) {
+  if (formulaMode) {
     const activate = actions.find((a) => a.type === 'FORMULA_ACTIVATE');
     if (activate) {
       const board = state.players[BOT_ID].formula;
       const filled = [board.technik, board.essenz, board.katalysator].filter(Boolean).length;
-      if (filled >= 2) return activate;
+      // V6: prefer activate when Fetz is full (Überformel) or ≥2 slots filled.
+      const fetzFull =
+        isV6FormulaEnabled(ruleset) &&
+        state.players[BOT_ID].fetzCharge >= 3;
+      if (filled >= 2 || fetzFull) return activate;
     }
 
     const builds = actions.filter(
@@ -236,7 +242,8 @@ function pickBestChallenge(
 ): Extract<GameAction, { type: 'CHALLENGE' }> | null {
   if (actions.length === 0) return null;
 
-  const v5 = isV5FormulaEnabled(rulesetFromState(state));
+  const ruleset = rulesetFromState(state);
+  const formulaMode = isV5FormulaEnabled(ruleset) || isV6FormulaEnabled(ruleset);
   let best = actions[0];
   let bestScore = -Infinity;
 
@@ -249,12 +256,26 @@ function pickBestChallenge(
       maxAtk = Math.max(maxAtk, attackValue(state, pack, BOT_ID, atkDef, roll));
     }
 
-    if (v5) {
+    if (formulaMode) {
       const target = findFormulaComponent(
         state.players[HUMAN_ID].formula,
         action.targetBoundInstanceId,
       );
-      if (!target) continue;
+      if (!target) {
+        const construct = state.players[HUMAN_ID].construct;
+        if (
+          isV6FormulaEnabled(ruleset) &&
+          construct &&
+          construct.instanceId === action.targetBoundInstanceId
+        ) {
+          const score = maxAtk + construct.durability * 1.5;
+          if (score > bestScore) {
+            bestScore = score;
+            best = action;
+          }
+        }
+        continue;
+      }
       const stability = formulaComponentStability(pack, target);
       const outcome = formulaChallengeOutcome(maxAtk, stability, target.disturbed);
       let score = maxAtk + stability * (outcome === 'destroy' ? 2 : outcome === 'disturb' ? 1.2 : 0.3);
@@ -282,8 +303,16 @@ function pickBestChallenge(
     }
   }
 
-  if (v5) {
+  if (formulaMode) {
     const target = findFormulaComponent(state.players[HUMAN_ID].formula, best.targetBoundInstanceId);
+    // V6: may also challenge constructs (not on formula board).
+    if (!target && isV6FormulaEnabled(ruleset)) {
+      const construct = state.players[HUMAN_ID].construct;
+      if (construct && construct.instanceId === best.targetBoundInstanceId) {
+        return { ...best, diceRoll: rollD6() };
+      }
+      return null;
+    }
     if (!target) return null;
     const stability = formulaComponentStability(pack, target);
     if (stability < 2) return null;
@@ -404,6 +433,17 @@ export function chooseBotAction(state: GameState, pack: ContentPack): GameAction
         a.type === 'PICK_V6_AFFINITY',
     );
     if (affinity.length > 0) {
+      const pending = state.pendingChoice;
+      if (pending?.type === 'v6-affinity') {
+        const mode = pickBeneficialV6AffinityMode(
+          pending,
+          state,
+          rulesetFromState(state),
+          BOT_ID,
+          HUMAN_ID,
+        );
+        return affinity.find((a) => a.mode === mode) ?? affinity[0];
+      }
       return (
         affinity.find((a) => a.mode === 'value-plus') ??
         affinity.find((a) => a.mode === 'dice-plus') ??
@@ -454,9 +494,11 @@ export function chooseBotAction(state: GameState, pack: ContentPack): GameAction
     const humanHp = state.players[HUMAN_ID].hp;
     const botHp = state.players[BOT_ID].hp;
 
-    if (state.players[BOT_ID].ultimateAvailable) {
+    const ruleset = rulesetFromState(state);
+    // V6: no character ultimates — Überformel is via FORMULA_ACTIVATE at Fetz=3.
+    if (!isV6FormulaEnabled(ruleset) && state.players[BOT_ID].ultimateAvailable) {
       const ulti = actions.find((a) => a.type === 'PLAY_ULTIMATE');
-      const v5 = isV5FormulaEnabled(rulesetFromState(state));
+      const v5 = isV5FormulaEnabled(ruleset);
       const chargeOk =
         !v5 || state.players[BOT_ID].fetzCharge >= 3;
       if (

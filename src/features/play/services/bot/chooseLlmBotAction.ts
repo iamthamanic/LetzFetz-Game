@@ -8,7 +8,7 @@ import { chooseBotAction } from '../../../../game/engine/bot';
 import { buildBotPublicView, withBotDiceRoll } from '../../../../game/engine/botView';
 import { rollD6 } from '../../../../game/engine/dice';
 import { parseLlmBotResponse } from './parseLlmBotResponse';
-import { buildLlmBotUserPrompt, LLM_BOT_SYSTEM } from './llmBotPrompt';
+import { buildLlmBotUserPrompt, buildLlmBotSystemPrompt } from './llmBotPrompt';
 
 export type BotDecisionSource = 'llm' | 'heuristic';
 
@@ -35,7 +35,7 @@ export async function chooseLlmBotAction(
       method: 'POST',
       headers: { 'Content-Type': 'application/json' },
       body: JSON.stringify({
-        system: LLM_BOT_SYSTEM,
+        system: buildLlmBotSystemPrompt(state),
         user: buildLlmBotUserPrompt(view, legal),
         actionCount: legal.length,
       }),
