@@ -9,21 +9,22 @@ import {
 } from './formulaCardCatalog';
 
 describe('formulaCardCatalog', () => {
-  it('exports 12+12+12 V5 formula Bausteine', () => {
+  it('exports 9+6+10 V5 formula Bausteine', () => {
     resetFormulaCardCatalogCache();
     const catalog = loadFormulaCardCatalog();
-    expect(catalog).toHaveLength(36);
-    expect(catalog.filter((c) => c.role === 'technik')).toHaveLength(12);
-    expect(catalog.filter((c) => c.role === 'essenz')).toHaveLength(12);
-    expect(catalog.filter((c) => c.role === 'katalysator')).toHaveLength(12);
+    expect(catalog).toHaveLength(25);
+    expect(catalog.filter((c) => c.role === 'technik')).toHaveLength(9);
+    expect(catalog.filter((c) => c.role === 'essenz')).toHaveLength(6);
+    expect(catalog.filter((c) => c.role === 'katalysator')).toHaveLength(10);
   });
 
   it('assigns card art paths under /cards/formula/', () => {
     resetFormulaCardCatalogCache();
-    const durchschuss = loadFormulaCardCatalog().find(
-      (c) => c.id === 'v5-technik-durchschuss',
+    const impuls = loadFormulaCardCatalog().find(
+      (c) => c.id === 'v5-technik-impulsgeschoss',
     );
-    expect(durchschuss?.imageUrl).toBe('/cards/formula/durchschuss.png');
+    expect(impuls?.name).toBe('Impulsgeschoss');
+    expect(impuls?.imageUrl).toBe('/cards/formula/impulsgeschoss.png');
   });
 
   it('carries element on Essenz cards only', () => {

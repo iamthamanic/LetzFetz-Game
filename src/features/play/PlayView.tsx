@@ -53,7 +53,7 @@ import type { PendingIntent } from './board/gameActionHelpers';
 import { formulaChallengeTargetIds } from './board/gameActionHelpers';
 import { Button } from '../../components/ui/Button';
 import { Badge } from '../../components/ui/Badge';
-import { ScrollText } from 'lucide-react';
+import { BookOpen, ScrollText } from 'lucide-react';
 import { isPlaytestMode } from './services/playtest/isPlaytestMode';
 import { PlaytestCheatbox } from './PlaytestCheatbox';
 import {
@@ -120,9 +120,11 @@ function readBotMode(): BotMode {
 interface PlayViewProps {
   /** True only when match is on the board after MatchIntro continues (Iron Surge). */
   onBattleMusicActiveChange?: (active: boolean) => void;
+  /** Opens shared Spielregeln modal (composition root). */
+  onOpenRules?: () => void;
 }
 
-export function PlayView({ onBattleMusicActiveChange }: PlayViewProps) {
+export function PlayView({ onBattleMusicActiveChange, onOpenRules }: PlayViewProps) {
   const playtestMode = isPlaytestMode();
   const { push } = useAppHistory();
   const [matchPack, setMatchPack] = useState<ContentPack>(BASE_PACK);
@@ -1103,6 +1105,17 @@ export function PlayView({ onBattleMusicActiveChange }: PlayViewProps) {
                 <option value="llm">LLM (Ollama)</option>
               </select>
             </label>
+            {onOpenRules ? (
+              <Button
+                variant="secondary"
+                size="sm"
+                icon={<BookOpen className="h-4 w-4" />}
+                onClick={onOpenRules}
+                data-testid="play-rules-open"
+              >
+                Spielregeln
+              </Button>
+            ) : null}
             <Button
               variant="secondary"
               size="sm"

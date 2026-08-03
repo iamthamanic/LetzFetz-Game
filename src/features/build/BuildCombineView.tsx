@@ -6,7 +6,6 @@ import React, { useEffect, useRef, useState } from 'react';
 import { FormulaLibraryPanel } from './FormulaLibraryPanel';
 import { BuildSlotsPanel } from './BuildSlotsPanel';
 import { BuildPreviewPane } from './BuildPreviewPane';
-import { mapCombinateSlotsToPresetLayers } from './vfx/preview/visualRecipePresetLayers';
 import { BuildResultCard } from './BuildResultCard';
 import { BuildSlotConnectionOverlay } from './BuildSlotConnectionOverlay';
 import { loadFormulaCardCatalog } from './data/formulaCardCatalog';
@@ -17,15 +16,15 @@ import {
   getFilledSlotRoles,
   type FormulaCatalogCard,
 } from './model/combinateFormula';
-import { suggestCombinationNameWithAi } from './model/combinateNameSuggest';
 import { buildFormulaRecipeFromSlots } from './model/combinateSave';
 import {
+  BUILD_SLOT_ORDER,
   type BuildSession,
   type BuildSlotRole,
 } from './model/buildTypes';
 import { loadBuildSession, saveBuildSession } from './storage/buildSessionStorage';
 import { saveFormulaRecipe } from './vfx/registry';
-import type { VfxSharedPreviewHandle } from './vfx/preview';
+import { findFormulaCombinationBySlots } from '../../game/packs/v5/formulaCombinations';
 
 interface BuildCombineViewProps {
   /** True while Build → Combinate is visible. */
@@ -59,22 +58,20 @@ function clearSlot(session: BuildSession, role: BuildSlotRole): BuildSession {
   };
 }
 
-export function BuildCombineView({ active }: BuildCombineViewProps) {
+export function BuildCombineView({ active: _active }: BuildCombineViewProps) {
   const catalogRef = useRef(loadFormulaCardCatalog());
   const catalog = catalogRef.current;
-  const previewRef = useRef<VfxSharedPreviewHandle>(null);
   const combineStageRef = useRef<HTMLDivElement>(null);
   const previewTargetRef = useRef<HTMLDivElement>(null);
   const slotAnchorRefs = useRef<Partial<Record<BuildSlotRole, HTMLElement | null>>>({});
   const [session, setSession] = useState<BuildSession>(() => loadBuildSession().session);
-  const [savedHeroUrl, setSavedHeroUrl] = useState<string | null>(null);
   const [saving, setSaving] = useState(false);
   const [saveMessage, setSaveMessage] = useState<string | null>(null);
-  const [suggestingName, setSuggestingName] = useState(false);
   const [suggestNameError, setSuggestNameError] = useState<string | null>(null);
   const saveTimerRef = useRef<ReturnType<typeof setTimeout> | null>(null);
   const saveFeedbackTimerRef = useRef<ReturnType<typeof setTimeout> | null>(null);
-  const suggestRequestRef = useRef(0);
+  /** Combo id whose catalog name was last applied; resets when slots resolve a new entry. */
+  const syncedComboIdRef = useRef<string | null>(null);
 
   useEffect(() => {
     if (saveTimerRef.current) clearTimeout(saveTimerRef.current);
@@ -95,50 +92,45 @@ export function BuildCombineView({ active }: BuildCombineViewProps) {
   const combinationLabel = buildCombinationLabel(session.slots);
   const previewRoles = getFilledSlotRoles(session.slots);
   const filledSlotCount = countFilledSlots(session.slots);
-  const previewPreset = mapCombinateSlotsToPresetLayers(session.slots, catalog);
-  const singleSlotted =
-    previewRoles.length === 1
-      ? findFormulaCard(catalog, session.slots[previewRoles[0]])
+  const previewCards = BUILD_SLOT_ORDER.map((role) =>
+    findFormulaCard(catalog, session.slots[role]),
+  ).filter((card): card is FormulaCatalogCard => card != null);
+
+  const techCard = findFormulaCard(catalog, session.slots.technik);
+  const essCard = findFormulaCard(catalog, session.slots.essenz);
+  const katCard = findFormulaCard(catalog, session.slots.katalysator);
+  const catalogCombination =
+    filledSlotCount >= 2
+      ? findFormulaCombinationBySlots({
+          techniqueName: techCard?.name ?? null,
+          essenceName: essCard?.name ?? null,
+          catalystName: katCard?.name ?? null,
+        })
       : null;
 
-  const handleSuggestName = () => {
-    if (countFilledSlots(session.slots) < 2) {
-      setSuggestNameError('Mindestens zwei Formelplätze belegen.');
+  // Catalog name is the default display/save name whenever the resolved combo changes.
+  useEffect(() => {
+    if (!catalogCombination) {
+      syncedComboIdRef.current = null;
       return;
     }
-    if (suggestingName) return;
+    if (syncedComboIdRef.current === catalogCombination.id) return;
+    syncedComboIdRef.current = catalogCombination.id;
+    setSession((prev) =>
+      prev.name === catalogCombination.name
+        ? prev
+        : { ...prev, name: catalogCombination.name },
+    );
+  }, [catalogCombination?.id, catalogCombination?.name]);
 
-    const requestId = suggestRequestRef.current + 1;
-    suggestRequestRef.current = requestId;
-    setSuggestingName(true);
+  const handleApplyCatalogName = () => {
+    if (!catalogCombination) {
+      setSuggestNameError('Keine Katalog-Kombination für diese Slots.');
+      return;
+    }
     setSuggestNameError(null);
-
-    const slotsSnapshot = {
-      technik: session.slots.technik,
-      essenz: session.slots.essenz,
-      katalysator: session.slots.katalysator,
-    };
-
-    void suggestCombinationNameWithAi(slotsSnapshot, catalog)
-      .then((aiName) => {
-        if (suggestRequestRef.current !== requestId) return;
-        if (!aiName) {
-          setSuggestNameError('Kein Name erhalten.');
-          return;
-        }
-        setSession((prev) => ({ ...prev, name: aiName }));
-      })
-      .catch((error: unknown) => {
-        if (suggestRequestRef.current !== requestId) return;
-        const message =
-          error instanceof Error ? error.message : 'Namen erzeugen fehlgeschlagen.';
-        setSuggestNameError(message.slice(0, 160));
-      })
-      .finally(() => {
-        if (suggestRequestRef.current === requestId) {
-          setSuggestingName(false);
-        }
-      });
+    syncedComboIdRef.current = catalogCombination.id;
+    setSession((prev) => ({ ...prev, name: catalogCombination.name }));
   };
 
   const handleSaveCombination = () => {
@@ -147,11 +139,10 @@ export function BuildCombineView({ active }: BuildCombineViewProps) {
     setSaving(true);
     setSaveMessage(null);
 
-    const heroFrame = previewRef.current?.captureHeroFrame() ?? null;
     const recipe = buildFormulaRecipeFromSlots({
       slots: session.slots,
       name: session.name,
-      heroFrame,
+      heroFrame: null,
     });
     if (!recipe) {
       setSaving(false);
@@ -159,9 +150,6 @@ export function BuildCombineView({ active }: BuildCombineViewProps) {
     }
 
     saveFormulaRecipe(recipe);
-    if (heroFrame?.url) {
-      setSavedHeroUrl(heroFrame.url);
-    }
     setSaving(false);
     setSaveMessage('Kombination gespeichert — sichtbar unter Material → Formeln.');
 
@@ -199,14 +187,12 @@ export function BuildCombineView({ active }: BuildCombineViewProps) {
 
           <div className="relative z-[1] flex min-h-0 flex-[0.9] flex-col overflow-visible pb-1">
             <BuildPreviewPane
-              ref={previewRef}
               connectionTargetRef={previewTargetRef}
-              active={active}
-              focusLabel={singleSlotted?.name ?? 'Vorschau'}
               previewRoles={previewRoles}
               combinationLabel={combinationLabel}
-              hasSlottedCards={filledSlotCount > 0}
-              presetId={previewPreset.primaryPresetId}
+              previewCards={previewCards}
+              catalogCombination={catalogCombination}
+              displayName={session.name}
             />
           </div>
 
@@ -231,12 +217,13 @@ export function BuildCombineView({ active }: BuildCombineViewProps) {
         onNameChange={(name) => setSession((prev) => ({ ...prev, name }))}
         slots={session.slots}
         catalog={catalog}
-        heroFrameUrl={savedHeroUrl}
+        catalogCombination={catalogCombination}
+        heroFrameUrl={null}
         onSave={handleSaveCombination}
         saving={saving}
         saveMessage={saveMessage}
-        onSuggestName={handleSuggestName}
-        suggestingName={suggestingName}
+        onSuggestName={handleApplyCatalogName}
+        suggestingName={false}
         suggestNameError={suggestNameError}
       />
     </div>

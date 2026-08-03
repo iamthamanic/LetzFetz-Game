@@ -1,5 +1,6 @@
 /**
  * Color-coded icon for Letz Fetz elements (Feuer, Wasser, …) + mystery ??.
+ * Card chrome badges: use `ElementBadge` (shimmer). `grunge` raster variant is legacy.
  * Location: src/components/ui/ElementIcon.tsx
  */
 import React, { useState } from 'react';
@@ -178,7 +179,7 @@ function GrungeElementIcon({
   );
 }
 
-/** Legacy HF/placeholder raster icons — not used on cards (use `grunge`). */
+/** Legacy HF/placeholder raster icons — not used on card badges (use `ElementBadge`). */
 function BrandElementImage({
   element,
   size,

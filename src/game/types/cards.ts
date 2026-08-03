@@ -136,11 +136,20 @@ export interface CatalystCardDef extends CardBase {
   formulaEffect?: import('./formulaEffects').FormulaCatalystEffect;
 }
 
-/** V5 Gegenstand — one-shot tactical card. */
+/** V5 Gegenstand — consumable (hand, once) or permanent equipment (board slots). */
+export type ItemPermanence = 'consumable' | 'equipment';
+
+/** V5 Gegenstand — one-shot tactical card or permanent equipment. */
 export interface ItemCardDef extends CardBase {
   kind: 'item';
   timing: 'action' | 'reaction';
   effectText: string;
+  /**
+   * `consumable` (default): play from hand, discard immediately.
+   * `equipment`: equip to board slots (not formula); stays until replaced
+   *   (or consumed — e.g. Rostiger Nagel on attack that takes ignore-shield prep).
+   */
+  permanence?: ItemPermanence;
 }
 
 export type CardDef =
@@ -181,6 +190,11 @@ export interface FormulaComponentInstance extends CardInstance {
   disturbed: boolean;
   /** Temporary stability delta until owner's next start (can be negative). */
   stabilityBonus: number;
+  /**
+   * V5 Elementarladung — only meaningful on Essenz.
+   * Absent/false on old saves = inactive. Persists across start-phase upright.
+   */
+  elementalCharge?: boolean;
 }
 
 export interface ContentPack {

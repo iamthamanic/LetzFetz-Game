@@ -1,8 +1,9 @@
 /**
- * Full V5 formula + item card defs (§12–14, §21) — 12+12+12+6.
+ * V5 formula + item card defs — 9 Technik + 6 Essenz + 10 Katalysator + 6 Items.
  * Location: src/game/packs/v5/formulaCards.ts
  *
- * Every technique/essence/catalyst ships a resolving `formulaEffect` (§12–14).
+ * Direct-formula cutover: Technik offense uses formula_damage (W6 defend);
+ * Magiepanzer engine = 1 Schild (catalog hygiene). Schatten → Verflucht mark.
  */
 import type {
   CatalystCardDef,
@@ -32,131 +33,101 @@ function techVisual(
   };
 }
 
+/** Basic Technik set — display names match `/cards/formula/<slug>.png` (no Technik-prefix). */
 export const V5_TECHNIQUES: TechniqueCardDef[] = [
   {
     kind: 'technique',
-    id: 'v5-technik-rueckhandtechnik',
-    name: 'Rückhandtechnik',
+    id: 'v5-technik-impulsgeschoss',
+    name: 'Impulsgeschoss',
     stability: 3,
-    activationMode: 'prep_attack',
-    effectText: 'Der nächste Angriff erhält +1.',
-    formulaEffect: { kind: 'prep_attack', combatBonus: 1 },
-    visual: techVisual('rueckhandtechnik', 'melee', 'slash', 'hand', 'x'),
+    activationMode: 'instant',
+    effectText: 'Verursache 2 Formelschaden.',
+    formulaEffect: { kind: 'formula_damage', amount: 2 },
+    visual: techVisual('impulsgeschoss', 'projectile', 'drill', 'hand', 'z'),
   },
   {
     kind: 'technique',
-    id: 'v5-technik-durchschuss',
-    name: 'Durchschuss',
+    id: 'v5-technik-adrenalinschrei',
+    name: 'Adrenalinschrei',
     stability: 3,
-    activationMode: 'prep_attack',
-    effectText: 'Der nächste Angriff ignoriert 1 Schild.',
-    formulaEffect: { kind: 'prep_attack', ignoreShield: 1 },
-    visual: techVisual('durchschuss', 'beam', 'drill', 'hand', 'z'),
+    activationMode: 'prep_boost',
+    effectText:
+      'Deine nächste Aktionskarte mit Zahlenwert erhält +2; ohne Zahlenwert ziehst du danach 1 und wirfst 1 ab.',
+    formulaEffect: { kind: 'prep_boost', valueBonus: 2, filterHandIfNoValue: true },
+    visual: techVisual('adrenalinschrei', 'area', 'sphere', 'self', 'y'),
   },
   {
     kind: 'technique',
-    id: 'v5-technik-faecherstoss',
-    name: 'Fächerstoß',
+    id: 'v5-technik-fintenschnitt',
+    name: 'Fintenschnitt',
     stability: 2,
-    activationMode: 'prep_attack',
-    effectText:
-      'Der nächste Angriff erhält −1 Kampfwert, erzeugt seinen Elementimpuls aber bereits bei Gleichstand.',
-    formulaEffect: { kind: 'prep_attack', combatBonus: -1, impulseOnTie: true },
-    visual: techVisual('faecherstoss', 'area', 'cone', 'hand', 'x'),
+    activationMode: 'instant',
+    effectText: 'Der nächste gegen dich gerichtete Aktionsangriff erhält −2 Kampfwert.',
+    formulaEffect: { kind: 'enemy_next_attack_penalty', amount: 2 },
+    visual: techVisual('fintenschnitt', 'melee', 'slash', 'hand', 'x'),
   },
   {
     kind: 'technique',
-    id: 'v5-technik-kettenhieb',
-    name: 'Kettenhieb',
+    id: 'v5-technik-brechschlag',
+    name: 'Brechschlag',
     stability: 3,
-    activationMode: 'prep_attack',
-    effectText:
-      'Verursacht der nächste Angriff Lebensschaden, verliert der Gegner zusätzlich 1 Schild.',
-    formulaEffect: { kind: 'prep_attack', stripShieldOnHpDamage: 1 },
-    visual: techVisual('kettenhieb', 'melee', 'slash', 'hand', 'x'),
+    activationMode: 'instant',
+    effectText: 'Verursache 1 Formelschaden und entferne zusätzlich 2 Schild.',
+    formulaEffect: { kind: 'formula_damage', amount: 1, stripShield: 2 },
+    visual: techVisual('brechschlag', 'melee', 'slash', 'hand', 'x'),
   },
   {
     kind: 'technique',
-    id: 'v5-technik-notfallbarriere',
-    name: 'Notfallbarriere',
+    id: 'v5-technik-kettenfessel',
+    name: 'Kettenfessel',
+    stability: 3,
+    activationMode: 'instant',
+    effectText:
+      'Wähle eine gegnerische Formelkomponente. Sie kann in der nächsten Formelphase nicht aktiviert werden.',
+    formulaEffect: { kind: 'lock_enemy_formula_component' },
+    visual: techVisual('kettenfessel', 'melee', 'slash', 'hand', 'x'),
+  },
+  {
+    kind: 'technique',
+    id: 'v5-technik-bannkreis',
+    name: 'Bannkreis',
+    stability: 4,
+    activationMode: 'instant',
+    effectText:
+      'Der nächste gegen dich gerichtete Formeleffekt wird um 1 Punkt reduziert.',
+    formulaEffect: { kind: 'enemy_next_formula_mitigation', amount: 1 },
+    visual: techVisual('bannkreis', 'area', 'wall', 'self', 'y'),
+  },
+  {
+    kind: 'technique',
+    id: 'v5-technik-ueberraschungsangriff',
+    name: 'Überraschungsangriff',
+    stability: 3,
+    activationMode: 'instant',
+    effectText:
+      'Verursache 2 Formelschaden. Der gegnerische Formel-Abwehrwurf erhält −1.',
+    formulaEffect: { kind: 'formula_damage', amount: 2, defendPenalty: 1 },
+    visual: techVisual('ueberraschungsangriff', 'melee', 'slash', 'hand', 'z'),
+  },
+  {
+    kind: 'technique',
+    id: 'v5-technik-schicksalmanifestation',
+    name: 'Schicksalmanifestation',
+    stability: 2,
+    activationMode: 'instant',
+    effectText: 'Ziehe 2 Karten, behalte 1 davon und lege die andere auf den Ablagestapel.',
+    formulaEffect: { kind: 'instant_draw_keep_one', draw: 2 },
+    visual: techVisual('schicksalmanifestation', 'projectile', 'sphere', 'hand', 'z'),
+  },
+  {
+    kind: 'technique',
+    id: 'v5-technik-magiepanzer',
+    name: 'Magiepanzer',
     stability: 4,
     activationMode: 'instant',
     effectText: 'Erhalte 1 Schild.',
     formulaEffect: { kind: 'instant_shield', amount: 1 },
-    visual: techVisual('notfallbarriere', 'area', 'wall', 'self', 'y'),
-  },
-  {
-    kind: 'technique',
-    id: 'v5-technik-retourkutsche',
-    name: 'Retourkutsche',
-    stability: 3,
-    activationMode: 'prep_block',
-    effectText: 'Der nächste Block erhält +1. Bei Vollblock erleidet der Angreifer 1 Schaden.',
-    formulaEffect: { kind: 'prep_block', combatBonus: 1, thornsOnFullBlock: 1 },
-    visual: techVisual('retourkutsche', 'barrier', 'wall', 'self', 'y'),
-  },
-  {
-    kind: 'technique',
-    id: 'v5-technik-erste-hilfe-ritual',
-    name: 'Erste-Hilfe-Ritual',
-    stability: 2,
-    activationMode: 'instant',
-    effectText: 'Heile 1.',
-    formulaEffect: { kind: 'instant_heal', amount: 1 },
-    visual: techVisual('erste-hilfe-ritual', 'area', 'sphere', 'self', 'y'),
-  },
-  {
-    kind: 'technique',
-    id: 'v5-technik-klarspueler',
-    name: 'Klarspüler',
-    stability: 3,
-    activationMode: 'instant',
-    effectText: 'Entferne eine eigene Primärmarke.',
-    formulaEffect: { kind: 'instant_clear_own_mark' },
-    visual: techVisual('klarspueler', 'area', 'sphere', 'self', 'y'),
-  },
-  {
-    kind: 'technique',
-    id: 'v5-technik-fokuskurbel',
-    name: 'Fokuskurbel',
-    stability: 3,
-    activationMode: 'prep_boost',
-    effectText:
-      'Der nächste Boost mit Zahlenwert erhält +1; ohne Zahlenwert ziehst du danach 1 und wirfst 1 ab.',
-    formulaEffect: { kind: 'prep_boost', valueBonus: 1, filterHandIfNoValue: true },
-    visual: techVisual('fokuskurbel', 'projectile', 'sphere', 'hand', 'z'),
-  },
-  {
-    kind: 'technique',
-    id: 'v5-technik-sperrkreis',
-    name: 'Sperrkreis',
-    stability: 4,
-    activationMode: 'instant',
-    effectText: 'Der nächste gegnerische Angriff erhält −1 Kampfwert.',
-    formulaEffect: { kind: 'enemy_next_attack_penalty', amount: 1 },
-    visual: techVisual('sperrkreis', 'area', 'wall', 'self', 'y'),
-  },
-  {
-    kind: 'technique',
-    id: 'v5-technik-soggriff',
-    name: 'Soggriff',
-    stability: 2,
-    activationMode: 'instant',
-    effectText:
-      'Eine gegnerische Formelkomponente erhält bis zu deren nächster Startphase −1 Stabilität.',
-    formulaEffect: { kind: 'instant_enemy_stability', amount: -1 },
-    visual: techVisual('soggriff', 'melee', 'slash', 'hand', 'z'),
-  },
-  {
-    kind: 'technique',
-    id: 'v5-technik-rueckrufzeichen',
-    name: 'Rückrufzeichen',
-    stability: 2,
-    activationMode: 'instant',
-    effectText:
-      'Nimm eine Formelkarte aus dem Ablagestapel auf die Hand und wirf danach 1 Handkarte ab.',
-    formulaEffect: { kind: 'instant_retrieve_formula' },
-    visual: techVisual('rueckrufzeichen', 'projectile', 'sphere', 'hand', 'z'),
+    visual: techVisual('magiepanzer', 'barrier', 'wall', 'self', 'y'),
   },
 ];
 
@@ -178,135 +149,69 @@ function essVisual(
   };
 }
 
+/** Basic Essenz set — display names = element labels matching `/cards/formula/<slug>.png`. */
 export const V5_ESSENCES: EssenceCardDef[] = [
   {
     kind: 'essence',
-    id: 'v5-essenz-eingekochte-glut',
-    name: 'Eingekochte Glut',
+    id: 'v5-essenz-feuer',
+    name: 'Feuer',
     element: 'fire',
     stability: 2,
     effectText:
       'Fügt die Formel Lebensschaden zu und entsteht keine Reaktion, erhält das Ziel Brennen.',
     formulaEffect: { kind: 'mark_if_no_reaction', mark: 'brennen' },
-    visual: essVisual('eingekochte-glut', 'fire', 'ember', 'sparks', 'heat', 'burn'),
+    visual: essVisual('feuer', 'fire', 'ember', 'sparks', 'heat', 'burn'),
   },
   {
     kind: 'essence',
-    id: 'v5-essenz-explosionspueree',
-    name: 'Explosionspüree',
-    element: 'fire',
-    stability: 2,
-    effectText:
-      'Die erste durch diese Formel ausgelöste Reaktion verursacht +1 Schaden. Danach erhalten die verwendeten Formelkomponenten bis zur nächsten Startphase −1 Stabilität.',
-    formulaEffect: {
-      kind: 'reaction_bonus_then_stability',
-      reactionDamageBonus: 1,
-      stabilityDelta: -1,
-    },
-    visual: essVisual('explosionspueree', 'fire', 'blast', 'embers', 'shock', 'burst'),
-  },
-  {
-    kind: 'essence',
-    id: 'v5-essenz-ueberdrucktes-kondensat',
-    name: 'Überdrucktes Kondensat',
+    id: 'v5-essenz-wasser',
+    name: 'Wasser',
     element: 'water',
     stability: 3,
     effectText: 'Entsteht keine Reaktion, erhält das Ziel Durchnässt.',
     formulaEffect: { kind: 'mark_if_no_reaction', mark: 'durchnaesst' },
-    visual: essVisual('ueberdrucktes-kondensat', 'water', 'mist', 'droplets', 'vapor', 'splash'),
+    visual: essVisual('wasser', 'water', 'mist', 'droplets', 'vapor', 'splash'),
   },
   {
     kind: 'essence',
-    id: 'v5-essenz-tiefenwasserextrakt',
-    name: 'Tiefenwasserextrakt',
-    element: 'water',
-    stability: 3,
-    effectText: 'Heilt die Formel oder erzeugt Schild, erhöht sich der erste Zahlenwert um 1.',
-    formulaEffect: { kind: 'amplify_heal_or_shield', amount: 1 },
-    visual: essVisual('tiefenwasserextrakt', 'water', 'deep', 'bubbles', 'current', 'soak'),
-  },
-  {
-    kind: 'essence',
-    id: 'v5-essenz-kraeuterstaub',
-    name: 'Kräuterstaub',
+    id: 'v5-essenz-erde',
+    name: 'Erde',
     element: 'earth',
     stability: 2,
     effectText: 'Entsteht keine Reaktion, erhält das Ziel High.',
     formulaEffect: { kind: 'mark_if_no_reaction', mark: 'high' },
-    visual: essVisual('kraeuterstaub', 'earth', 'pollen', 'dust', 'haze', 'settle'),
+    visual: essVisual('erde', 'earth', 'stone', 'dust', 'quake', 'settle'),
   },
   {
     kind: 'essence',
-    id: 'v5-essenz-betonkern',
-    name: 'Betonkern',
-    element: 'earth',
-    stability: 4,
-    effectText:
-      'Alle bei der Aktivierung verwendeten Formelkomponenten erhalten bis zur nächsten Startphase +1 Stabilität.',
-    formulaEffect: { kind: 'stability_buff_used', amount: 1 },
-    visual: essVisual('betonkern', 'earth', 'stone', 'grit', 'quake', 'crack'),
-  },
-  {
-    kind: 'essence',
-    id: 'v5-essenz-wirbelluft',
-    name: 'Wirbelluft',
+    id: 'v5-essenz-luft',
+    name: 'Luft',
     element: 'air',
     stability: 2,
     effectText: 'Entsteht keine Reaktion, erhält das Ziel Verwirbelt.',
     formulaEffect: { kind: 'mark_if_no_reaction', mark: 'aufgewirbelt' },
-    visual: essVisual('wirbelluft', 'air', 'gale', 'wisps', 'spiral', 'gust'),
+    visual: essVisual('luft', 'air', 'gale', 'wisps', 'spiral', 'gust'),
   },
   {
     kind: 'essence',
-    id: 'v5-essenz-druckluftkonzentrat',
-    name: 'Druckluftkonzentrat',
-    element: 'air',
-    stability: 3,
-    effectText:
-      'Der nächste zugehörige Angriff oder Block erhält +1 auf seinen W6-Bonus, maximal +2.',
-    formulaEffect: { kind: 'w6_bonus', amount: 1, max: 2 },
-    visual: essVisual('druckluftkonzentrat', 'air', 'pressure', 'jets', 'stream', 'blast'),
-  },
-  {
-    kind: 'essence',
-    id: 'v5-essenz-prismalicht',
-    name: 'Prismalicht',
+    id: 'v5-essenz-licht',
+    name: 'Licht',
     element: 'light',
     stability: 2,
     effectText: 'Entsteht keine Reaktion, erhält das Ziel Verstrahlt.',
     formulaEffect: { kind: 'mark_if_no_reaction', mark: 'erleuchtet' },
-    visual: essVisual('prismalicht', 'light', 'prism', 'shards', 'beam', 'flare'),
+    visual: essVisual('licht', 'light', 'prism', 'shards', 'beam', 'flare'),
   },
   {
     kind: 'essence',
-    id: 'v5-essenz-reinlicht',
-    name: 'Reinlicht',
-    element: 'light',
+    id: 'v5-essenz-schatten',
+    name: 'Schatten',
+    element: 'shadow',
     stability: 3,
     effectText:
-      'Entferne bei Aktivierung eine eigene Primärmarke. Gibt es keine, erhältst du 1 Schild.',
-    formulaEffect: { kind: 'clear_mark_or_shield' },
-    visual: essVisual('reinlicht', 'light', 'pure', 'motes', 'glow', 'cleanse'),
-  },
-  {
-    kind: 'essence',
-    id: 'v5-essenz-fluchruss',
-    name: 'Fluchruß',
-    element: 'shadow',
-    stability: 2,
-    effectText: 'Entsteht keine Reaktion, erhält das Ziel Verflucht.',
+      'Bei gegnergerichteter Formelwirkung entsteht Verflucht, sofern keine Elementreaktion entsteht.',
     formulaEffect: { kind: 'mark_if_no_reaction', mark: 'verflucht' },
-    visual: essVisual('fluchruss', 'shadow', 'soot', 'ash', 'smoke', 'curse'),
-  },
-  {
-    kind: 'essence',
-    id: 'v5-essenz-sogschatten',
-    name: 'Sogschatten',
-    element: 'shadow',
-    stability: 3,
-    effectText: 'Fügt die Formel Lebensschaden zu, heile 1. Maximal einmal pro Aktivierung.',
-    formulaEffect: { kind: 'lifesteal_on_hp', amount: 1 },
-    visual: essVisual('sogschatten', 'shadow', 'void', 'wisps', 'drain', 'siphon'),
+    visual: essVisual('schatten', 'shadow', 'void', 'wisps', 'drain', 'siphon'),
   },
 ];
 
@@ -331,22 +236,12 @@ export const V5_CATALYSTS: CatalystCardDef[] = [
   },
   {
     kind: 'catalyst',
-    id: 'v5-katalysator-doppelecho',
-    name: 'Doppelecho',
-    stability: 2,
-    effectText:
-      'Wiederhole zu Beginn deines nächsten Zuges bis zu 2 Punkte des Primärwerts. Dieser Katalysator bleibt in deiner nächsten Startphase erschöpft.',
-    formulaEffect: { kind: 'echo_next_start', amount: 2, stayExhausted: true },
-    visual: catVisual('doppelecho', 'delayed', 'duplicate', 'double-echo'),
-  },
-  {
-    kind: 'catalyst',
-    id: 'v5-katalysator-ueberladung',
-    name: 'Überladung',
+    id: 'v5-katalysator-ueberspannung',
+    name: 'Überspannung',
     stability: 2,
     effectText: 'Erhöhe den Primärwert um 2. Nach vollständiger Auflösung verlierst du 1 Leben.',
     formulaEffect: { kind: 'primary_bonus', amount: 2, selfDamage: 1 },
-    visual: catVisual('ueberladung', 'instant', 'overcharge', 'surge'),
+    visual: catVisual('ueberspannung', 'instant', 'overcharge', 'surge'),
   },
   {
     kind: 'catalyst',
@@ -354,8 +249,13 @@ export const V5_CATALYSTS: CatalystCardDef[] = [
     name: 'Verdichtung',
     stability: 4,
     effectText:
-      'Erhöhe den Primärwert um 1. Alle verwendeten Formelkomponenten erhalten bis zur nächsten Startphase +1 Stabilität.',
-    formulaEffect: { kind: 'primary_bonus', amount: 1, stabilityBuffUsed: 1 },
+      'Erhöhe den Primärwert um 1. Deine nächste Elementarkarte (Angriff, Block oder Boost) mit Zahlenwert erhält ebenfalls +1. Alle verwendeten Formelkomponenten erhalten bis zur nächsten Startphase +1 Stabilität.',
+    formulaEffect: {
+      kind: 'primary_bonus',
+      amount: 1,
+      stabilityBuffUsed: 1,
+      nextActionValueBonus: 1,
+    },
     visual: catVisual('verdichtung', 'instant', 'overcharge', 'compress'),
   },
   {
@@ -374,7 +274,7 @@ export const V5_CATALYSTS: CatalystCardDef[] = [
     name: 'Kettenkopplung',
     stability: 3,
     effectText:
-      'Wird die vorbereitete Aktion erfolgreich, erhält deine nächste Aktion desselben Typs +1.',
+      'Wird die Formel erfolgreich, erhält deine nächste Aktion desselben Typs +1.',
     formulaEffect: { kind: 'chain_same_action', amount: 1 },
     visual: catVisual('kettenkopplung', 'continuous', 'chain', 'chain-link'),
   },
@@ -428,41 +328,34 @@ export const V5_CATALYSTS: CatalystCardDef[] = [
     formulaEffect: { kind: 'offer_discard_for_bonus', amount: 2 },
     visual: catVisual('opfergabe', 'instant', 'overcharge', 'offering'),
   },
-  {
-    kind: 'catalyst',
-    id: 'v5-katalysator-sicherheitsventil',
-    name: 'Sicherheitsventil',
-    stability: 4,
-    effectText:
-      'Verhindere den ersten Selbstschaden oder Kartenabwurf, den die eigene Formel verursachen würde. Entferne danach eine eigene Primärmarke.',
-    formulaEffect: { kind: 'safety_valve' },
-    visual: catVisual('sicherheitsventil', 'continuous', 'reflect', 'valve'),
-  },
 ];
 
-/** §21 Gegenstände (6). */
+/** §21 Gegenstände — consumables + permanent equipment (not formula). */
 export const V5_ITEMS: ItemCardDef[] = [
   {
     kind: 'item',
     id: 'v5-item-nasser-socken',
     name: 'Nasser Socken',
     timing: 'action',
+    permanence: 'equipment',
     effectText:
-      'Die nächste von dir gespielte Elementkarte erhält zusätzlich Wasser. Verursacht sie einen erfolgreichen Treffer, entsteht mindestens Durchnässt, sofern keine Reaktion entsteht.',
+      'Ausrüstung (einmalig). Belegt einen Ausrüstungsslot. Dein nächster Angriff erhält zusätzlich Wasser; bei erfolgreichem Treffer ohne Reaktion mindestens Durchnässt — danach Ablage.',
   },
   {
     kind: 'item',
     id: 'v5-item-kaputter-rueckspiegel',
     name: 'Kaputter Rückspiegel',
     timing: 'reaction',
+    permanence: 'equipment',
     effectText:
-      'Wenn du angegriffen wirst: Angriffswert −1. Bei Vollblock erhält der Angreifer Verstrahlt.',
+      'Ausrüstung. Einmal pro Runde, wenn du angegriffen wirst: Angriffswert −1. Bei Vollblock erhält der Angreifer Verstrahlt.',
   },
   {
     kind: 'item',
     id: 'v5-item-halbe-dose-energy',
     name: 'Halbe Dose Energy',
     timing: 'action',
+    permanence: 'consumable',
     effectText: 'Ziehe 2 Karten. Zu Beginn deines nächsten Zuges verlierst du 1 Leben.',
   },
   {
@@ -470,13 +363,16 @@ export const V5_ITEMS: ItemCardDef[] = [
     id: 'v5-item-rostiger-nagel',
     name: 'Rostiger Nagel',
     timing: 'action',
-    effectText: 'Dein nächster Angriff ignoriert 2 Schild.',
+    permanence: 'equipment',
+    effectText:
+      'Ausrüstung (einmalig). Belegt einen Ausrüstungsslot. Dein nächster Angriff ignoriert 2 Schild; danach wird der Nagel abgelegt.',
   },
   {
     kind: 'item',
     id: 'v5-item-verdaechtiger-pilz',
     name: 'Verdächtiger Pilz',
     timing: 'action',
+    permanence: 'consumable',
     effectText: 'Erhalte 2 Schild und High.',
   },
   {
@@ -484,25 +380,40 @@ export const V5_ITEMS: ItemCardDef[] = [
     id: 'v5-item-kabelbinder-deluxe',
     name: 'Kabelbinder Deluxe',
     timing: 'action',
+    permanence: 'consumable',
     effectText: 'Störe eine gegnerische Formelkomponente mit Stabilität 3 oder weniger.',
+  },
+  {
+    kind: 'item',
+    id: 'v5-item-werkzeugkoffer',
+    name: 'Werkzeugkoffer',
+    timing: 'action',
+    permanence: 'equipment',
+    effectText: 'Ausrüstung. Einmal pro Runde: Wirf 1 Handkarte ab und ziehe 1 Karte.',
+  },
+  {
+    kind: 'item',
+    id: 'v5-item-gezinkter-wuerfel',
+    name: 'Gezinkter Würfel',
+    timing: 'reaction',
+    permanence: 'equipment',
+    effectText:
+      'Ausrüstung. Einmal pro Runde: Verändere deinen Abwehrwurf gegen einen Formelangriff um ±1.',
   },
 ];
 
+
 /** MVP subset aliases (first 3 of each) — prefer V5_* for new code. */
 export const V5_MVP_TECHNIQUES = V5_TECHNIQUES.filter((c) =>
-  ['v5-technik-durchschuss', 'v5-technik-notfallbarriere', 'v5-technik-rueckhandtechnik'].includes(
+  ['v5-technik-impulsgeschoss', 'v5-technik-bannkreis', 'v5-technik-adrenalinschrei'].includes(
     c.id,
   ),
 );
 export const V5_MVP_ESSENCES = V5_ESSENCES.filter((c) =>
-  [
-    'v5-essenz-eingekochte-glut',
-    'v5-essenz-ueberdrucktes-kondensat',
-    'v5-essenz-kraeuterstaub',
-  ].includes(c.id),
+  ['v5-essenz-feuer', 'v5-essenz-wasser', 'v5-essenz-erde'].includes(c.id),
 );
 export const V5_MVP_CATALYSTS = V5_CATALYSTS.filter((c) =>
-  ['v5-katalysator-echo', 'v5-katalysator-ueberladung', 'v5-katalysator-spiegelung'].includes(
+  ['v5-katalysator-echo', 'v5-katalysator-ueberspannung', 'v5-katalysator-spiegelung'].includes(
     c.id,
   ),
 );

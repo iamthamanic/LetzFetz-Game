@@ -2,12 +2,13 @@
  * Pre-match setup — mode first, then character carousel (bot) or online notice.
  * Location: src/features/play/setup/GameSetup.tsx
  */
-import React, { useEffect, useState } from 'react';
+import React, { useEffect, useRef, useState } from 'react';
 import { ArrowLeft, Bot, Globe, Layers, Package, Sparkles, WifiOff, AlertTriangle } from 'lucide-react';
 import { BASE_PACK } from '../../../game';
 import { Button } from '../../../components/ui/Button';
 import { BrandLogoText } from '../../../components/ui/BrandLogoText';
 import { CharacterCarousel } from './CharacterCarousel';
+import { CharacterRandomSpin } from './CharacterRandomSpin';
 import { Badge } from '../../../components/ui/Badge';
 import { Panel } from '../../../components/ui/Panel';
 import { useAppHistory } from '../../../services/history/AppHistoryContext';
@@ -24,6 +25,28 @@ import { createFormulaPlayVersionResolvers } from '../../../services/storage/for
 export type GameSetupMode = 'bot' | 'online';
 export type GameSetupPhase = 'mode' | 'bot' | 'online';
 export type { GamePackChoice };
+
+export const DEFAULT_SETUP_CHARACTER_ID = BASE_PACK.characters[0].id;
+
+/** Uniform pick from the setup character list; avoids the current id when alternatives exist. */
+function pickRandomSetupCharacterId(
+  excludeId?: string,
+  rng: () => number = Math.random,
+): string {
+  const list = BASE_PACK.characters;
+  if (list.length === 0) return DEFAULT_SETUP_CHARACTER_ID;
+  const pool =
+    list.length >= 2 && excludeId ? list.filter((c) => c.id !== excludeId) : list;
+  const usable = pool.length > 0 ? pool : list;
+  return usable[Math.floor(rng() * usable.length)].id;
+}
+
+function prefersReducedMotion(): boolean {
+  return (
+    typeof window !== 'undefined' &&
+    window.matchMedia('(prefers-reduced-motion: reduce)').matches
+  );
+}
 
 export interface BotMatchStart {
   mode: 'bot';
@@ -50,6 +73,10 @@ export function GameSetup({
   const [packChoice, setPackChoice] = useState<GamePackChoice>('v5');
   const [optInTick, setOptInTick] = useState(0);
   const v6Playable = isV6PlayableEnabled();
+  const [spinTargetId, setSpinTargetId] = useState<string | null>(null);
+  const spinning = spinTargetId !== null;
+  const spinLockRef = useRef(false);
+  const startMatchAnchorRef = useRef<HTMLDivElement>(null);
 
   useEffect(() => {
     const refresh = () => setOptInTick((n) => n + 1);
@@ -89,6 +116,36 @@ export function GameSetup({
       redo: () => onSelectCharacter(id),
     });
     onSelectCharacter(id);
+  };
+
+  const scrollStartMatchIntoView = () => {
+    requestAnimationFrame(() => {
+      requestAnimationFrame(() => {
+        startMatchAnchorRef.current?.scrollIntoView({
+          behavior: prefersReducedMotion() ? 'auto' : 'smooth',
+          block: 'nearest',
+        });
+      });
+    });
+  };
+
+  const startRandomCharacterSpin = () => {
+    if (spinLockRef.current || spinning) return;
+    const nextId = pickRandomSetupCharacterId(selectedId);
+    if (prefersReducedMotion()) {
+      selectCharacter(nextId);
+      scrollStartMatchIntoView();
+      return;
+    }
+    spinLockRef.current = true;
+    setSpinTargetId(nextId);
+  };
+
+  const finishRandomCharacterSpin = (characterId: string) => {
+    selectCharacter(characterId);
+    setSpinTargetId(null);
+    spinLockRef.current = false;
+    scrollStartMatchIntoView();
   };
 
   if (phase === 'mode') {
@@ -326,17 +383,36 @@ export function GameSetup({
               ) : null}
             </Panel>
 
-            <CharacterCarousel
-              characters={BASE_PACK.characters}
-              selectedId={selectedId}
-              onSelect={selectCharacter}
-            />
+            <div
+              className="relative"
+              aria-busy={spinning}
+              data-testid="game-setup-character-picker"
+            >
+              <div className={spinning ? 'pointer-events-none select-none' : undefined} aria-hidden={spinning}>
+                <CharacterCarousel
+                  characters={BASE_PACK.characters}
+                  selectedId={selectedId}
+                  onSelect={spinning ? () => undefined : selectCharacter}
+                  onRandom={startRandomCharacterSpin}
+                  randomDisabled={spinning}
+                  randomBusy={spinning}
+                />
+              </div>
+              {spinTargetId ? (
+                <CharacterRandomSpin
+                  characters={BASE_PACK.characters}
+                  targetId={spinTargetId}
+                  onComplete={finishRandomCharacterSpin}
+                />
+              ) : null}
+            </div>
 
-            <div className="-mt-6 mx-auto w-full max-w-md">
+            <div ref={startMatchAnchorRef} className="-mt-6 mx-auto w-full max-w-md">
               <Button
                 variant="accent"
                 className="btn-brand-shimmer w-full py-2.5 text-base"
                 data-testid="start-bot-match"
+                disabled={spinning}
                 onClick={() =>
                   onStart({ mode: 'bot', humanCharacterId: selectedId, packChoice })
                 }
@@ -355,5 +431,3 @@ export function GameSetup({
     </div>
   );
 }
-
-export const DEFAULT_SETUP_CHARACTER_ID = BASE_PACK.characters[0].id;

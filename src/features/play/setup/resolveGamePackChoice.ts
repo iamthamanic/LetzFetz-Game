@@ -40,7 +40,7 @@ export function resolveGamePackChoice(choice: GamePackChoice): ResolvedGamePackC
     case 'v5': {
       const optIn = loadFormulaPlayOptInStore();
       const pack = mergeFormulaPlayOverlay(V5_PACK, optIn.deckOptIns);
-      return { pack, ruleset: V5_PACK_RULESET, playtestHpCap: 20 };
+      return { pack, ruleset: V5_PACK_RULESET, playtestHpCap: 30 };
     }
     case 'p100':
       return { pack: V2_P100_PACK, ruleset: P100_RULESET, playtestHpCap: 30 };

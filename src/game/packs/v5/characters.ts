@@ -32,8 +32,8 @@ const V5_PASSIVE: Record<string, { role: string; passiveText: string; strategyHi
   pillendoktora: {
     role: 'Risiko und Tempo',
     passiveText:
-      'Einmal pro Zug, wenn du einen Boost spielst, wähle: Ziehe 1 und verliere 1 Leben / Füge dem Gegner 1 Schaden zu / Heile 1.',
-    strategyHint: 'Boosts für Tempo und flexible Risiken.',
+      'Einmal pro Zug nach einem Boost: Ziehe 1 und verliere 1 Leben, oder heile 1. Nur nach einem Boost mit Zahlenwert darfst du stattdessen 1 Schaden zufügen.',
+    strategyHint: 'Zahlen-Boosts für Druck; sonst eher Heilen oder Tempo.',
   },
   dripministerin: {
     role: 'Kontrolle und Formelstörung',

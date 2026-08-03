@@ -2,8 +2,8 @@
  * V5 formula + item card defs — re-exports from full §12–14 set.
  * Location: src/game/packs/v5/mvpCards.ts
  *
- * `V5_MVP_*` remains the original 3+3+3 smoke subset for callers that still
- * want the playtest nine; pack content uses the full arrays.
+ * `V5_MVP_*` remains the smoke subset for callers that still want the playtest nine;
+ * pack content uses the full arrays.
  */
 export {
   V5_TECHNIQUES,

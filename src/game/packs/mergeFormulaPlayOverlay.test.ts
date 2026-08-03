@@ -20,7 +20,7 @@ describe('mergeFormulaPlayOverlay', () => {
   it('does not duplicate shipped V5 bausteine', () => {
     const merged = mergeFormulaPlayOverlay(V5_PACK, [
       {
-        cardId: 'v5-technik-durchschuss',
+        cardId: 'v5-technik-impulsgeschoss',
         role: 'technik',
         name: 'Durchschuss',
         pinnedVersion: 1,

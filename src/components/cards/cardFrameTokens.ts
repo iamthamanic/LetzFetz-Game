@@ -34,6 +34,22 @@ export const KIND_LABELS: Record<CardKind, string> = {
   Item: 'GEGENSTAND',
 };
 
+/** Formel role tags — matches Combinate slot colors (Technik / Essenz / Katalysator). */
+export const FORMULA_ROLE_BADGE: Record<string, string> = {
+  Technik: 'text-emerald-200 border-emerald-500/60 bg-emerald-950/90',
+  Essenz: 'text-sky-200 border-sky-500/60 bg-sky-950/90',
+  Katalysator: 'text-amber-200 border-amber-500/60 bg-amber-950/90',
+  Kombination: 'text-violet-200 border-violet-400/60 bg-violet-950/90',
+};
+
+const DEFAULT_PORTRAIT_BADGE = 'text-amber-100 border-amber-950/40 bg-stone-950/80';
+
+/** Portrait art-corner badge classes; Formel roles get slot colors. */
+export function portraitBadgeClass(label: string | null | undefined): string {
+  if (!label) return DEFAULT_PORTRAIT_BADGE;
+  return FORMULA_ROLE_BADGE[label] ?? DEFAULT_PORTRAIT_BADGE;
+}
+
 export const ELEMENT_ACCENTS: Record<CardElement, { stripe: string; glow: string; badge: string }> = {
   Fire: {
     stripe: 'bg-red-600',

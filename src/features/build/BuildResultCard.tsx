@@ -19,18 +19,21 @@ import {
   type FormulaCatalogCard,
 } from './model/combinateFormula';
 import { ImageWithFallback } from '../../components/figma/ImageWithFallback';
+import type { FormulaCombinationEntry } from '../../game/packs/v5/formulaCombinations';
 
 interface BuildResultCardProps {
   name: string;
   onNameChange: (name: string) => void;
   slots: BuildSlots;
   catalog: FormulaCatalogCard[];
+  /** Resolved catalog combination for current slots. */
+  catalogCombination?: FormulaCombinationEntry | null;
   /** Optional captured hero-frame URL from preview save. */
   heroFrameUrl?: string | null;
   onSave?: () => void;
   saving?: boolean;
   saveMessage?: string | null;
-  /** Request a new KI combination name (Ollama). */
+  /** Apply catalog combination name into the name field. */
   onSuggestName?: () => void;
   suggestingName?: boolean;
   suggestNameError?: string | null;
@@ -47,6 +50,7 @@ export function BuildResultCard({
   onNameChange,
   slots,
   catalog,
+  catalogCombination = null,
   heroFrameUrl = null,
   onSave,
   saving = false,
@@ -93,6 +97,12 @@ export function BuildResultCard({
 
   /** Only the saved/captured combination hero — never a single Baustein as stand-in. */
   const hero = heroFrameUrl ?? null;
+  /** Filled Bausteine only (2er/3er) — order Technik → Essenz → Katalysator. */
+  const comboPieces = BUILD_SLOT_ORDER.map((role) => {
+    const cardId = slots[role];
+    if (!cardId) return null;
+    return { role, card: findFormulaCard(catalog, cardId) };
+  }).filter((piece): piece is { role: BuildSlotRole; card: FormulaCatalogCard | null } => piece != null);
 
   return (
     <aside
@@ -103,12 +113,12 @@ export function BuildResultCard({
         <h2 className="font-brand text-xs uppercase tracking-wide text-amber-100 sm:text-sm">
           Kombination
         </h2>
-        <p className="mt-0.5 text-[10px] text-stone-500">Rezept + Hero-Frame speichern</p>
+        <p className="mt-0.5 text-[10px] text-stone-500">Name anpassen und speichern</p>
       </header>
 
       <div className="flex min-h-0 flex-1 flex-col overflow-hidden p-2 sm:p-2.5">
         <div className="flex min-h-0 flex-1 flex-col overflow-hidden rounded-xl border border-amber-700/35 bg-gradient-to-b from-stone-800 to-stone-950 shadow-lg">
-          <div className="relative min-h-0 flex-[1.35] bg-stone-900" data-testid="build-result-hero">
+          <div className="relative min-h-0 flex-[1.35] overflow-y-auto bg-stone-900" data-testid="build-result-hero">
             {hero ? (
               <ImageWithFallback
                 src={hero}
@@ -116,24 +126,36 @@ export function BuildResultCard({
                 className="h-full w-full object-contain p-3"
               />
             ) : (
-              <div className="flex h-full flex-col items-center justify-center gap-1.5 px-3 text-center">
-                <p className="text-[11px] text-stone-500">Noch kein Ergebnisbild</p>
-                <p className="text-[10px] leading-snug text-stone-600">
-                  Beim Speichern wird das Hero-Frame aus der Live-Vorschau übernommen.
-                </p>
+              <div
+                role="group"
+                className="flex h-full flex-col items-stretch justify-center gap-1.5 px-2 py-2"
+                data-testid="build-result-combo-effect"
+                aria-label={name.trim() || catalogCombination?.name || combinationLabel}
+              >
+                {comboPieces.map(({ role, card }) => (
+                  <div
+                    key={role}
+                    className="min-h-0 flex-1 overflow-hidden rounded-md border border-stone-700/60 bg-stone-950/70"
+                    data-testid={`build-result-combo-piece-${role}`}
+                  >
+                    {card?.imageUrl ? (
+                      <ImageWithFallback
+                        src={card.imageUrl}
+                        alt={`${BUILD_SLOT_LABEL_DE[role]}: ${card.name}`}
+                        className="h-full w-full object-contain p-1"
+                      />
+                    ) : (
+                      <div
+                        role="img"
+                        className="h-full min-h-[3.5rem] w-full bg-stone-900/80"
+                        aria-label={`${BUILD_SLOT_LABEL_DE[role]}: leer`}
+                        data-testid={`build-result-combo-piece-empty-${role}`}
+                      />
+                    )}
+                  </div>
+                ))}
               </div>
             )}
-            <div className="pointer-events-none absolute inset-x-0 bottom-0 bg-gradient-to-t from-stone-950 via-stone-950/85 to-transparent px-2.5 pb-2 pt-10">
-              <p className="font-brand text-sm uppercase leading-none tracking-wide text-brand-cream sm:text-base">
-                {name.trim() || 'Unbenannt'}
-              </p>
-              <p
-                className="mt-1 text-[9px] uppercase tracking-widest text-amber-500/80"
-                data-testid="build-result-combination-label"
-              >
-                {combinationLabel}
-              </p>
-            </div>
           </div>
 
           <div className="flex-none space-y-2 border-t border-stone-800 p-2 sm:p-2.5">
@@ -151,7 +173,7 @@ export function BuildResultCard({
               type="button"
               variant="accent"
               size="sm"
-              disabled={!onSuggestName || suggestingName}
+              disabled={!onSuggestName || suggestingName || !catalogCombination}
               aria-busy={suggestingName}
               onClick={() => onSuggestName?.()}
               data-testid="build-result-suggest-name"
@@ -164,16 +186,8 @@ export function BuildResultCard({
               }
               className="w-full text-[10px]"
             >
-              {suggestingName ? 'KI erzeugt Namen…' : 'Namen erzeugen'}
+              Katalogname übernehmen
             </Button>
-            {suggestingName ? (
-              <p
-                className="text-center text-[10px] text-violet-300/90"
-                data-testid="build-result-suggest-pending"
-              >
-                Kimi denkt nach — kann ein paar Sekunden dauern.
-              </p>
-            ) : null}
             {suggestNameError ? (
               <p
                 className="text-center text-[10px] leading-snug text-red-400"

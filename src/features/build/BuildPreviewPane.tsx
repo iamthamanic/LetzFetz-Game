@@ -1,15 +1,14 @@
 /**
- * Center preview: shared VFX viewport for formula combinations (#257).
+ * Center Combinate preview: catalog combination name + effect.
  * Location: src/features/build/BuildPreviewPane.tsx
  */
-import React, { forwardRef, useEffect, useState } from 'react';
-import { Maximize2 } from 'lucide-react';
-import { Modal } from '../../components/ui/Modal';
+import React from 'react';
 import {
   BUILD_SLOT_LABEL_DE,
   type BuildSlotRole,
 } from './model/buildTypes';
-import { VfxSharedPreview, type VfxSharedPreviewHandle } from './vfx/preview';
+import type { FormulaCatalogCard } from './model/combinateFormula';
+import type { FormulaCombinationEntry } from '../../game/packs/v5/formulaCombinations';
 
 const ROLE_BADGE: Record<BuildSlotRole, string> = {
   technik: 'border-emerald-500/60 bg-emerald-950/90 text-emerald-200',
@@ -30,47 +29,28 @@ const ROLE_PORT: Record<BuildSlotRole, string> = {
 };
 
 interface BuildPreviewPaneProps {
-  /** False while Build tab is hidden. */
-  active: boolean;
-  /** Label for single slotted card (badge only — never card art over VFX). */
-  focusLabel: string;
-  /** Filled roles driving badges + connections (≥1). */
   previewRoles: BuildSlotRole[];
-  /** Accessible / modal title when ≥2 slots form a combination. */
   combinationLabel: string | null;
-  /** True when at least one formula slot is filled. */
-  hasSlottedCards?: boolean;
-  /** Effekseer preset from VisualRecipe / MVP-9 mapper. */
-  presetId?: string;
-  /** Bottom-edge anchor for Combinate connection overlay. */
+  previewCards: FormulaCatalogCard[];
+  /** Resolved catalog combination (≥2 slots), or null. */
+  catalogCombination: FormulaCombinationEntry | null;
+  /** Editable combination name from the result panel (overrides catalog title in UI). */
+  displayName?: string;
   connectionTargetRef?: React.Ref<HTMLDivElement>;
 }
 
-export const BuildPreviewPane = forwardRef<VfxSharedPreviewHandle, BuildPreviewPaneProps>(
-  function BuildPreviewPane(
-    {
-      active,
-      focusLabel,
-      previewRoles,
-      combinationLabel,
-      hasSlottedCards = false,
-      presetId = 'aura',
-      connectionTargetRef,
-    },
-    ref,
-  ) {
-  const [fullscreen, setFullscreen] = useState(false);
-
-  useEffect(() => {
-    if (!active) setFullscreen(false);
-  }, [active]);
-
-  const canExpand = hasSlottedCards;
+export function BuildPreviewPane({
+  previewRoles,
+  combinationLabel,
+  previewCards,
+  catalogCombination,
+  displayName = '',
+  connectionTargetRef,
+}: BuildPreviewPaneProps) {
   const isCombination = previewRoles.length >= 2;
   const singleRole = previewRoles.length === 1 ? previewRoles[0] : null;
-  const showPreview = hasSlottedCards || Boolean(combinationLabel);
   const showConnection = previewRoles.length >= 1;
-  const modalTitle = combinationLabel ?? (focusLabel || 'Vorschau');
+  const focusCard = previewCards.length === 1 ? previewCards[0] : null;
 
   const frameClass = isCombination
     ? 'border-violet-400/80 shadow-[0_0_32px_rgba(167,139,250,0.35)]'
@@ -97,19 +77,6 @@ export const BuildPreviewPane = forwardRef<VfxSharedPreviewHandle, BuildPreviewP
           data-testid="build-preview-connection-port"
         />
       ) : null}
-      <div className="absolute left-2 top-2 z-30">
-        <button
-          type="button"
-          disabled={!canExpand}
-          data-testid="build-preview-fullscreen"
-          aria-label="Vollbild-Vorschau öffnen"
-          title="Vollbild"
-          onClick={() => setFullscreen(true)}
-          className="rounded border border-amber-600/50 bg-stone-950/85 p-1.5 text-amber-200 hover:border-amber-400/70 hover:bg-stone-900 hover:text-amber-100 disabled:cursor-not-allowed disabled:opacity-40"
-        >
-          <Maximize2 className="h-3.5 w-3.5" aria-hidden />
-        </button>
-      </div>
 
       <div className="absolute right-2 top-2 z-30 flex max-w-[min(100%,22rem)] flex-wrap items-center justify-end gap-1.5">
         {isCombination ? (
@@ -139,7 +106,7 @@ export const BuildPreviewPane = forwardRef<VfxSharedPreviewHandle, BuildPreviewP
           <div
             className="flex flex-wrap items-center justify-end gap-1"
             data-testid="build-preview-single"
-            title={focusLabel}
+            title={focusCard?.name}
           >
             <span
               className={`rounded border px-1.5 py-0.5 text-[9px] font-semibold uppercase tracking-wide ${ROLE_BADGE[singleRole]}`}
@@ -147,9 +114,9 @@ export const BuildPreviewPane = forwardRef<VfxSharedPreviewHandle, BuildPreviewP
             >
               {BUILD_SLOT_LABEL_DE[singleRole]}
             </span>
-            {focusLabel ? (
+            {focusCard?.name ? (
               <span className="max-w-[10rem] truncate rounded border border-stone-700/80 bg-stone-950/85 px-1.5 py-0.5 text-[9px] font-medium text-stone-200">
-                {focusLabel}
+                {focusCard.name}
               </span>
             ) : null}
           </div>
@@ -164,52 +131,73 @@ export const BuildPreviewPane = forwardRef<VfxSharedPreviewHandle, BuildPreviewP
       </div>
 
       <div className="relative flex h-full min-h-0 flex-col overflow-hidden rounded-xl p-2 pt-9">
-        {showPreview ? (
-          <div className="relative min-h-0 flex-1 overflow-hidden rounded-lg">
-            <VfxSharedPreview
-              ref={ref}
-              active={active}
-              presetId={presetId}
-              className="h-full min-h-0 [&_[data-testid=vfx-shared-preview-preset-label]]:opacity-50"
-              showTimeline={false}
-              emptyMessage="Formel-Bausteine in die Formelplätze legen"
-            />
+        {catalogCombination ? (
+          <div
+            className="min-h-0 flex-1 overflow-y-auto overscroll-contain px-2 py-1"
+            data-testid="build-preview-catalog-combo"
+          >
+            <div className="flex min-h-full flex-col justify-center gap-2 py-1">
+              <p
+                className="font-brand text-base uppercase leading-tight tracking-wide text-violet-100 sm:text-lg"
+                data-testid="build-preview-combo-name"
+              >
+                {displayName.trim() || catalogCombination.name}
+              </p>
+              {(catalogCombination.role || catalogCombination.primaryValue) && (
+                <p className="text-[10px] uppercase tracking-widest text-stone-500">
+                  {[catalogCombination.role, catalogCombination.primaryValue]
+                    .filter(Boolean)
+                    .join(' · ')}
+                </p>
+              )}
+              <p
+                className="text-[12px] leading-snug text-stone-200"
+                data-testid="build-preview-combo-effect"
+              >
+                {catalogCombination.effect}
+              </p>
+              {catalogCombination.status ? (
+                <p className="text-[9px] text-stone-600">{catalogCombination.status}</p>
+              ) : null}
+            </div>
+          </div>
+        ) : isCombination ? (
+          <div
+            className="flex h-full flex-col items-center justify-center gap-2 p-4 text-center"
+            data-testid="build-preview-combo-missing"
+          >
+            <p className="text-sm text-stone-400">Keine Katalog-Kombination</p>
+            <p className="text-xs text-stone-600">
+              Für diese Slot-Belegung gibt es noch keinen Eintrag im Kombi-Katalog.
+            </p>
+          </div>
+        ) : focusCard ? (
+          <div
+            className="min-h-0 flex-1 overflow-y-auto overscroll-contain px-2 py-1"
+            data-testid="build-preview-single-card"
+          >
+            <div className="flex min-h-full flex-col justify-center gap-2 py-1">
+              <p className="font-brand text-base uppercase tracking-wide text-stone-100">
+                {focusCard.name}
+              </p>
+              <p className="text-[12px] leading-snug text-stone-300">{focusCard.effectText}</p>
+              <p className="text-[10px] text-stone-500">
+                Zweiten Formelplatz belegen, um die Kombination zu sehen.
+              </p>
+            </div>
           </div>
         ) : (
           <div
             className="flex h-full flex-col items-center justify-center gap-2 p-4 text-center text-sm text-stone-500"
             data-testid="build-preview-empty"
           >
-            <span>Live-Vorschau</span>
+            <span>Kombinations-Vorschau</span>
             <span className="text-xs text-stone-600">
-              Formel-Bausteine in die Formelplätze legen
+              Mindestens zwei Formelplätze belegen
             </span>
           </div>
         )}
       </div>
-
-      <Modal
-        open={fullscreen && canExpand}
-        onClose={() => setFullscreen(false)}
-        title={modalTitle}
-        size="full"
-        testId="build-preview-fullscreen-modal"
-        bodyClassName="flex min-h-0 flex-1 flex-col overflow-hidden p-0"
-      >
-        <div className="relative min-h-0 flex-1 w-full bg-stone-950 p-3">
-          <div className="relative h-full min-h-0 overflow-hidden rounded-lg">
-            <VfxSharedPreview
-              ref={ref}
-              active={active && fullscreen}
-              presetId={presetId}
-              className="h-full min-h-0"
-              showTimeline={false}
-              emptyMessage="Formel-Bausteine in die Formelplätze legen"
-            />
-          </div>
-        </div>
-      </Modal>
     </div>
   );
-  },
-);
+}

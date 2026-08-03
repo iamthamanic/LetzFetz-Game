@@ -17,44 +17,11 @@ import {
 } from './model/combinateFormula';
 import { ImageWithFallback } from '../../components/figma/ImageWithFallback';
 import { FormulaCardDetailModal } from './FormulaCardDetailModal';
+import { FORMULA_SLOT_THEME } from '../../components/cards/formula';
 
 const SLOT_DRAG_MIME = 'application/x-letz-fetz-build-slot';
 
-const SLOT_THEME: Record<
-  BuildSlotRole,
-  {
-    empty: string;
-    filled: string;
-    label: string;
-    port: string;
-    header: string;
-  }
-> = {
-  technik: {
-    empty: 'border-emerald-700/50 bg-stone-900/70',
-    filled:
-      'border-emerald-400/90 bg-gradient-to-b from-emerald-950/80 to-stone-950 shadow-[0_0_24px_rgba(52,211,153,0.22)]',
-    label: 'text-emerald-300',
-    port: 'bg-emerald-400 shadow-[0_0_10px_rgba(52,211,153,0.7)]',
-    header: 'border-emerald-800/60 bg-emerald-950/40',
-  },
-  essenz: {
-    empty: 'border-sky-700/50 bg-stone-900/70',
-    filled:
-      'border-sky-400/90 bg-gradient-to-b from-sky-950/80 to-stone-950 shadow-[0_0_24px_rgba(56,189,248,0.22)]',
-    label: 'text-sky-300',
-    port: 'bg-sky-400 shadow-[0_0_10px_rgba(56,189,248,0.7)]',
-    header: 'border-sky-800/60 bg-sky-950/40',
-  },
-  katalysator: {
-    empty: 'border-amber-700/50 bg-stone-900/70',
-    filled:
-      'border-amber-400/90 bg-gradient-to-b from-amber-950/70 to-stone-950 shadow-[0_0_24px_rgba(251,191,36,0.2)]',
-    label: 'text-amber-300',
-    port: 'bg-amber-400 shadow-[0_0_10px_rgba(251,191,36,0.65)]',
-    header: 'border-amber-800/60 bg-amber-950/35',
-  },
-};
+const SLOT_THEME = FORMULA_SLOT_THEME;
 
 interface BuildSlotsPanelProps {
   slots: BuildSlots;
@@ -80,6 +47,8 @@ export function BuildSlotsPanel({
   onSlotAnchorRef,
 }: BuildSlotsPanelProps) {
   const droppedOnSlotRef = useRef(false);
+  /** True only after HTML5 drag actually moved — avoids clearing a slot on click. */
+  const didDragRef = useRef(false);
   const [detailCard, setDetailCard] = useState<FormulaCatalogCard | null>(null);
 
   return (
@@ -151,26 +120,33 @@ export function BuildSlotsPanel({
                     type="button"
                     draggable
                     className="flex min-h-0 flex-1 cursor-grab flex-col overflow-hidden active:cursor-grabbing"
-                    aria-label={`${card.name} verschieben`}
+                    aria-label={`${card.name} Details öffnen (ziehen zum Verschieben)`}
+                    data-testid={`build-slot-card-${role}`}
+                    onClick={() => setDetailCard(card)}
                     onDragStart={(event) => {
                       droppedOnSlotRef.current = false;
+                      didDragRef.current = false;
                       event.dataTransfer.setData(FORMULA_CARD_DRAG_MIME, card.id);
                       event.dataTransfer.setData(SLOT_DRAG_MIME, role);
                       event.dataTransfer.setData('text/plain', card.id);
                       event.dataTransfer.effectAllowed = 'move';
                     }}
+                    onDrag={() => {
+                      didDragRef.current = true;
+                    }}
                     onDragEnd={() => {
-                      if (!droppedOnSlotRef.current) {
+                      if (didDragRef.current && !droppedOnSlotRef.current) {
                         onClear(role);
                       }
                       droppedOnSlotRef.current = false;
+                      didDragRef.current = false;
                     }}
                   >
                     <div className="min-h-0 flex-1 bg-stone-950/60 p-2">
                       <ImageWithFallback
                         src={card.imageUrl}
                         alt={card.name}
-                        className="h-full w-full object-contain drop-shadow-md"
+                        className="pointer-events-none h-full w-full object-contain drop-shadow-md"
                       />
                     </div>
                   </button>

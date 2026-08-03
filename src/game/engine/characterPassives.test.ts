@@ -71,7 +71,7 @@ describe('V5 character passives', () => {
           hand: [
             {
               instanceId: 'ess-fire',
-              defId: 'v5-essenz-eingekochte-glut',
+              defId: 'v5-essenz-feuer',
             },
             { instanceId: 'spare', defId: 'fire-attack-3' },
           ],
@@ -85,7 +85,7 @@ describe('V5 character passives', () => {
       'p1',
       V5_CTX,
     );
-    expect(state.players.p1.formula.essenz?.defId).toBe('v5-essenz-eingekochte-glut');
+    expect(state.players.p1.formula.essenz?.defId).toBe('v5-essenz-feuer');
     expect(state.lastEvent).toMatch(/Knuspergnom/);
     expect(state.meta.v5PassiveUsed?.p1).toContain('knuspergnom-filter');
   });
@@ -127,7 +127,7 @@ describe('V5 character passives', () => {
               technik: null,
               essenz: {
                 instanceId: 'e1',
-                defId: 'v5-essenz-eingekochte-glut',
+                defId: 'v5-essenz-feuer',
                 slot: 'essenz',
                 exhausted: false,
                 disturbed: false,

@@ -16,8 +16,10 @@ import {
 import { ImageWithFallback } from '../../components/figma/ImageWithFallback';
 import { Input } from '../../components/ui/Input';
 import { Select } from '../../components/ui/Select';
-import { ElementIcon, ELEMENT_LABELS_DE } from '../../components/ui/ElementIcon';
+import { ElementBadge } from '../../components/ui/ElementBadge';
+import { ELEMENT_LABELS_DE } from '../../components/ui/ElementIcon';
 import type { Element } from '../../game/types/elements';
+import { FormulaCardDetailModal } from './FormulaCardDetailModal';
 
 interface FormulaLibraryPanelProps {
   cards: FormulaCatalogCard[];
@@ -64,7 +66,13 @@ function cardMatchesQuery(card: FormulaCatalogCard, query: string): boolean {
   return haystack.includes(q);
 }
 
-function FormulaCardTile({ card }: { card: FormulaCatalogCard }) {
+function FormulaCardTile({
+  card,
+  onOpen,
+}: {
+  card: FormulaCatalogCard;
+  onOpen: (card: FormulaCatalogCard) => void;
+}) {
   const elementLabel = card.element ? ELEMENT_LABELS_DE[card.element] : 'Neutral';
 
   return (
@@ -76,6 +84,8 @@ function FormulaCardTile({ card }: { card: FormulaCatalogCard }) {
         type="button"
         draggable
         title={`${card.name} · ${elementLabel} · Stabilität ${card.stability}`}
+        aria-label={`${card.name} Details öffnen`}
+        onClick={() => onOpen(card)}
         onDragStart={(event) => {
           event.dataTransfer.setData(FORMULA_CARD_DRAG_MIME, card.id);
           event.dataTransfer.setData('text/plain', card.id);
@@ -83,18 +93,20 @@ function FormulaCardTile({ card }: { card: FormulaCatalogCard }) {
         }}
         className="group relative flex cursor-grab flex-col text-left active:cursor-grabbing"
       >
-        <div className="absolute left-0.5 top-0.5 z-10 rounded bg-stone-950/85 p-0.5 ring-1 ring-stone-700/80">
+        <div className="absolute left-0.5 top-0.5 z-10">
           {card.element ? (
-            <ElementIcon element={card.element} size="sm" variant="lucide" />
+            <ElementBadge element={card.element} compact />
           ) : (
-            <span className="block px-0.5 text-[9px] font-semibold text-stone-400">T/K</span>
+            <span className="block rounded border border-stone-600/80 bg-black/90 px-0.5 py-0.5 text-[9px] font-semibold text-stone-400 shadow-md">
+              T/K
+            </span>
           )}
         </div>
         <div className="aspect-[2/3] bg-stone-950">
           <ImageWithFallback
             src={card.imageUrl}
             alt={card.name}
-            className="h-full w-full object-contain p-1 pb-5"
+            className="pointer-events-none h-full w-full object-contain p-1 pb-5"
           />
         </div>
         <div className="border-t border-stone-800 px-1 py-0.5">
@@ -121,6 +133,7 @@ export function FormulaLibraryPanel({ cards }: FormulaLibraryPanelProps) {
   const [elementFilter, setElementFilter] = useState('');
   const [roleFilter, setRoleFilter] = useState('');
   const [sectionOpen, setSectionOpen] = useState(DEFAULT_SECTION_OPEN);
+  const [detailCard, setDetailCard] = useState<FormulaCatalogCard | null>(null);
 
   const filtered = cards.filter((card) => {
     if (!cardMatchesQuery(card, query)) return false;
@@ -151,7 +164,7 @@ export function FormulaLibraryPanel({ cards }: FormulaLibraryPanelProps) {
         <h2 className="font-brand text-xs uppercase tracking-wide text-amber-100 sm:text-sm">
           Formel-Bausteine
         </h2>
-        <p className="text-[9px] text-stone-500">V5 Material · 36 Karten</p>
+        <p className="text-[9px] text-stone-500">V5 Material · {cards.length} Karten</p>
         <Input
           label="Suche"
           value={query}
@@ -234,7 +247,11 @@ export function FormulaLibraryPanel({ cards }: FormulaLibraryPanelProps) {
                       ) : (
                         <div className="flex flex-wrap gap-1.5">
                           {group.map((card) => (
-                            <FormulaCardTile key={card.id} card={card} />
+                            <FormulaCardTile
+                              key={card.id}
+                              card={card}
+                              onOpen={setDetailCard}
+                            />
                           ))}
                         </div>
                       )}
@@ -246,6 +263,10 @@ export function FormulaLibraryPanel({ cards }: FormulaLibraryPanelProps) {
           </div>
         )}
       </div>
+
+      {detailCard ? (
+        <FormulaCardDetailModal card={detailCard} onClose={() => setDetailCard(null)} />
+      ) : null}
     </aside>
   );
 }

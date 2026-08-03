@@ -4,6 +4,7 @@ import { BuildView } from './features/build/BuildView';
 import { Notes } from './features/shell/Notes';
 import { PlayView } from './features/play/PlayView';
 import { PlaymatZonePreview } from './features/play/board/PlaymatZonePreview';
+import { PlayRulesModal } from './features/play/board/PlayRulesModal';
 import { AppBrand } from './features/shell/AppBrand';
 import { AppNav, type AppView } from './features/shell/AppNav';
 import { MainMenu } from './features/shell/MainMenu';
@@ -21,6 +22,7 @@ import { Modal } from './components/ui/Modal';
 function AppShell() {
   const [currentView, setCurrentView] = useState<AppView>('menu');
   const [notesOpen, setNotesOpen] = useState(false);
+  const [rulesOpen, setRulesOpen] = useState(false);
   const [settingsOpen, setSettingsOpen] = useState(false);
   const [playSessionKey, setPlaySessionKey] = useState(0);
   /** True only while Play has a live board after MatchIntro (from PlayView). */
@@ -30,6 +32,12 @@ function AppShell() {
 
   const openSettings = () => setSettingsOpen(true);
   const closeSettings = () => setSettingsOpen(false);
+
+  const openRules = () => {
+    closeSettings();
+    setNotesOpen(false);
+    setRulesOpen(true);
+  };
 
   const handleViewChange = (view: AppView) => {
     if (view === currentView) return;
@@ -99,6 +107,7 @@ function AppShell() {
           <PlayView
             key={playSessionKey}
             onBattleMusicActiveChange={setBattleMusicActive}
+            onOpenRules={openRules}
           />
         </div>
       </main>
@@ -116,10 +125,12 @@ function AppShell() {
             closeSettings();
             setNotesOpen(true);
           }}
+          onOpenRules={openRules}
         />
       </Modal>
 
       <Notes isOpen={notesOpen} onClose={() => setNotesOpen(false)} />
+      <PlayRulesModal open={rulesOpen} onClose={() => setRulesOpen(false)} />
     </div>
   );
 }

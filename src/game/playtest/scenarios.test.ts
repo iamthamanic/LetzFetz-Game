@@ -141,7 +141,7 @@ describe('playtest patches', () => {
     expect(result.state?.phase).toBe('build');
     expect(result.state?.meta.v5FormulaEnabled).toBe(true);
     expect(
-      result.state?.players.p1.hand.some((c) => c.defId === 'v5-technik-durchschuss'),
+      result.state?.players.p1.hand.some((c) => c.defId === 'v5-technik-impulsgeschoss'),
     ).toBe(true);
     expect(result.state?.players.p1.hand.some((c) => c.defId === 'fire-attack-6')).toBe(true);
   });

@@ -15,6 +15,7 @@ import {
   resolveCharacterIdleVideoPath,
   resolveElementAttackVideoPath,
   resolveEnginePartArtPath,
+  resolveFormulaCombinationArtPath,
   ELEMENT_ATTACK_VIDEO_MANIFEST,
 } from './manifest';
 
@@ -50,10 +51,21 @@ describe('card art manifest', () => {
   });
 
   it('resolves V5 formula component art under /cards/formula/', () => {
-    expect(resolveCardArtPath('v5-technik-durchschuss')).toBe('/cards/formula/durchschuss.png');
-    expect(resolveCardArtPath('v5-essenz-wirbelluft')).toBe('/cards/formula/wirbelluft.png');
-    expect(resolveCardArtPath('v5-essenz-sogschatten')).toBe('/cards/formula/sogschatten.png');
+    expect(resolveCardArtPath('v5-technik-impulsgeschoss')).toBe('/cards/formula/impulsgeschoss.png');
+    expect(resolveCardArtPath('v5-essenz-luft')).toBe('/cards/formula/luft.png');
+    expect(resolveCardArtPath('v5-essenz-schatten')).toBe('/cards/formula/schatten.png');
     expect(resolveCardArtPath('v5-katalysator-spiegelung')).toBe('/cards/formula/spiegelung.png');
+  });
+
+  it('resolves V5 formula combination art from catalog slug', () => {
+    expect(resolveFormulaCombinationArtPath('raubhiebsirenen')).toBe(
+      '/cards/formula/raubhiebsirenen.png',
+    );
+    expect(resolveFormulaCombinationArtPath(' RaubhiebSirenen ')).toBe(
+      '/cards/formula/raubhiebsirenen.png',
+    );
+    expect(resolveFormulaCombinationArtPath('')).toBe('');
+    expect(resolveFormulaCombinationArtPath('../evil')).toBe('');
   });
 
   it('resolves V5 item art under /cards/item/', () => {

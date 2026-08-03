@@ -35,7 +35,7 @@ function cardFromDef(
   };
 }
 
-/** All V5 formula Bausteine (12 Technik + 12 Essenz + 12 Katalysator), sorted by role then name. */
+/** All V5 formula Bausteine (9 Technik + 6 Essenz + 10 Katalysator), sorted by role then name. */
 export function loadFormulaCardCatalog(): FormulaCatalogCard[] {
   if (cachedCatalog) return cachedCatalog;
 

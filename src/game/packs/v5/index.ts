@@ -20,3 +20,13 @@ export {
   V5_MVP_CATALYSTS,
   V5_MVP_ITEMS,
 } from './mvpCards';
+
+export {
+  FORMULA_COMPONENT_NAME_ALIASES,
+  canonicalizeFormulaComponentName,
+  findFormulaCombinationBySlots,
+  getFormulaCombinationCatalogVersion,
+  listFormulaCombinations,
+  type FormulaCombinationEntry,
+} from './formulaCombinations';
+
