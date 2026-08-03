@@ -27,5 +27,6 @@ describe('V6_PLAY_RULE_SECTIONS', () => {
     expect(blob).toMatch(/Verbrauch/);
     expect(blob).toMatch(/Riss in der Realität/);
     expect(blob).toMatch(/nicht rückgängig/);
+    expect(blob).toMatch(/Sechs Essenzen|Erde \(Stabilität\)/);
   });
 });

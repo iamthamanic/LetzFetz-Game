@@ -381,7 +381,7 @@ function main(): void {
  * Produced by scripts/generate-v6-formula-recipes.ts
  * Location: src/generated/v6/formulaRecipes.generated.ts
  *
- * Catalog: V6 Slice-1 (3 Techniken × 3 Essenzen × 4 Katalysatoren).
+ * Catalog: V6 Slice-1 (3 Techniken × 6 Essenzen × 4 Katalysatoren).
  * These ${recipes.length} recipes are the locked current set — later expansion
  * adds new ids; do not renumber or replace Slice-1 recipeIds.
  */
@@ -424,7 +424,7 @@ export interface V6GeneratedFormulaRecipe {
 /** Meta for the locked Slice-1 recipe catalog (not the future 60×K matrix). */
 export const V6_SLICE1_RECIPE_CATALOG = {
   id: 'v6-slice1',
-  label: 'V6 Slice-1 Formelkatalog (3T×3E×4K)',
+  label: 'V6 Slice-1 Formelkatalog (3T×6E×4K)',
   recipeCount: ${recipes.length},
   breakdown: ${JSON.stringify(byKind)},
 } as const;

@@ -36,6 +36,7 @@ export const V6_PLAY_RULE_SECTIONS: RulesSection[] = [
     'Formel & Rezepte',
     [
       'Aktivierung über Authoring-Rezepte (TE / TK / EK / TEK). Fehlende Pflichtkombination = Build-Fehler, kein Runtime-Raten.',
+      'Sechs Essenzen: Feuer (Druck) · Wasser (Heilung) · Erde (Stabilität) · Luft (Tempo) · Licht (Schild) · Schatten (Fluch).',
       'Katalysator wird bei Verwendung abgelegt (verbraucht) — außer Echo/Verzögerung: bleibt bis Startphase-Auflösung.',
       'Echo: Primär sofort, dann fest +1 desselben Primärs in der nächsten Startphase. Verzögerung: Primär + fester +2 in der nächsten Startphase.',
       'Konstrukte: max 1 pro Spieler; eigene Zone neben dem Formelgestell. Beschwörung (EK) über „Formel aktivieren“. Haltbarkeit −1 in der Startphase; herausforderbar (stören/zerstören, kein LP-Schaden). Neu ersetzt alt.',

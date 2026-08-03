@@ -8,7 +8,7 @@
 
 **Full integration (GitHub, closed):** #341 Affinität ±1 Engine · #342 Fessel-UI · #343 recipe catalog (Slice-1) · #344 Echo/Delay · #345 Echo UI · #346 Konstrukte · #347 Konstrukt UI · #348 Überformel · #349 Passives (A/B) · #350 Arenas · #351 Bot · #352 SPIELANLEITUNG · #353 Default cutover · #354 V5 Legacy.
 
-**Playtest-Slice-1:** done (Default V6, ~105 Rezepte, Kern-Mechaniken). **Noch offen bis Konzept-Vollständigkeit** (priorisierte Queue):
+**Playtest-Slice-1:** done (Default V6, **198** Rezepte mit 6 Essenzen, Kern-Mechaniken). **Noch offen bis Konzept-Vollständigkeit** (priorisierte Queue):
 
 | Prio | Issues |
 |------|--------|
@@ -375,6 +375,8 @@ Umkehrung, Opfergabe, Echo-Teile, Spread-Ziele: **nie generisch geraten** — nu
 Vollständige Kartentabellen: Quelle ist das Authoring unter `src/content/v6/` (nach Anlage); dieses Spielkonzept hält die **Regeln**, nicht jede Zeile der 60×Katalysator-Matrix.
 
 Essenz-Identitäten (Designregel): Feuer Druck · Wasser Heilung/Reinigung · Erde Stabilität · Luft Tempo/Würfel · Licht Schild/Reinigung · Schatten Fluch/Erschöpfung.
+
+**Engine (#380):** Slice-1 shippt alle **6 Essenzen** (Erde/Licht/Schatten ergänzt). Art unter `public/cards/formula/{erde,licht,schatten}.png`. Locked Katalog **3T×6E×4K = 198** Rezepte (bestehende Feuer/Wasser/Luft-IDs stabil). Volle 10T×10K-Matrix bleibt Katalog-Expansion.
 
 ---
 

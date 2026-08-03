@@ -18,8 +18,8 @@ describe('v6FormulaRecipesToForgeCards', () => {
   it('maps the locked Slice-1 catalog count', () => {
     const cards = v6FormulaRecipesToForgeCards();
     expect(cards).toHaveLength(V6_SLICE1_RECIPE_CATALOG.recipeCount);
-    expect(cards).toHaveLength(105);
-    expect(V6_GENERATED_FORMULA_RECIPES).toHaveLength(105);
+    expect(cards).toHaveLength(198);
+    expect(V6_GENERATED_FORMULA_RECIPES).toHaveLength(198);
   });
 
   it('maps Glutimpuls as Formel-Kombination with V6 Katalog source', () => {
