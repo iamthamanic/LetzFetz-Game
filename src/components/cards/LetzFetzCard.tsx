@@ -9,7 +9,8 @@ import { Badge } from '../ui/Badge';
 import { CardGrungeOverlay } from '../ui/CardGrungeOverlay';
 import { CardNamePlate } from '../ui/CardNamePlate';
 import { CharacterCardGlitch } from '../ui/CharacterCardGlitch';
-import { ElementIcon } from '../ui/ElementIcon';
+import { ElementBadge } from '../ui/ElementBadge';
+import type { ElementIconKind } from '../ui/ElementIcon';
 import type { CardElement, CardKind } from './cardTypes';
 import { cardElementToBrandIconKey } from '../../services/icons/elementIcons';
 import { buildCardDisplayModel } from './cardDisplayModel';
@@ -22,6 +23,7 @@ import {
   CHARACTER_ELEMENT_STRIPE_TO,
   ELEMENT_ACCENTS,
   KIND_LABELS,
+  portraitBadgeClass,
 } from './cardFrameTokens';
 import { CardDividerBar, CardFrameCorners } from './grungeCardParts';
 import { CardBackFace } from './CardBackFace';
@@ -218,10 +220,14 @@ export function LetzFetzCard({
         <div className="parchment-bar-stain" aria-hidden />
         <div className="relative z-[1] flex items-center justify-center gap-1">
           {presentation.useMysteryIcon ? (
-            <ElementIcon element="mystery" size="sm" variant="grunge" />
+            <ElementBadge element="mystery" compact={compact || size === 'sm'} />
           ) : (
             presentation.headerIcons.map((icon) => (
-              <ElementIcon key={icon} element={icon} size="sm" variant="grunge" />
+              <ElementBadge
+                key={icon}
+                element={icon as ElementIconKind}
+                compact={compact || size === 'sm'}
+              />
             ))
           )}
         </div>
@@ -240,7 +246,7 @@ export function LetzFetzCard({
         >
           {KIND_LABELS[type]}
         </span>
-        <ElementIcon element={brandIcon} size="sm" variant="grunge" />
+        <ElementBadge element={brandIcon as ElementIconKind} compact={compact || size === 'sm'} />
       </div>
       <CardDividerBar className={`relative z-[1] ${compact ? 'mt-1' : 'mt-1.5'}`} />
     </div>
@@ -275,7 +281,7 @@ export function LetzFetzCard({
         >
           {presentation.typeBadge ? (
             <div
-              className={`rounded border border-amber-950/40 bg-stone-950/80 font-black uppercase tracking-wide text-amber-100 shadow ${
+              className={`rounded border border-stone-500/50 bg-stone-950/85 font-black uppercase tracking-wide text-white shadow ${
                 size === 'sm' ? 'px-1 py-px text-[7px]' : 'px-1.5 py-0.5 text-[9px]'
               }`}
               data-testid="card-type-badge"
@@ -284,14 +290,22 @@ export function LetzFetzCard({
             </div>
           ) : null}
           {presentation.elementBadge ? (
-            <div
-              className={`rounded border border-amber-950/40 bg-stone-950/80 font-black uppercase tracking-wide text-amber-100 shadow ${
-                size === 'sm' ? 'px-1 py-px text-[7px]' : 'px-1.5 py-0.5 text-[9px]'
-              }`}
-              data-testid="card-element-badge"
-            >
-              {presentation.elementBadge}
-            </div>
+            type === 'Element' && brandIcon !== 'mystery' ? (
+              <ElementBadge
+                element={brandIcon as ElementIconKind}
+                compact={size === 'sm' || compact}
+                data-testid="card-element-badge"
+              />
+            ) : (
+              <div
+                className={`rounded border font-black uppercase tracking-wide shadow ${portraitBadgeClass(
+                  presentation.elementBadge,
+                )} ${size === 'sm' ? 'px-1 py-px text-[7px]' : 'px-1.5 py-0.5 text-[9px]'}`}
+                data-testid="card-element-badge"
+              >
+                {presentation.elementBadge}
+              </div>
+            )
           ) : null}
         </div>
       )}

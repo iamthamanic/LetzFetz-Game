@@ -7,9 +7,11 @@ import type { CharacterCardDef, UltimateCardDef } from '../../game';
 import { CardIllustrationLoop } from '../ui/CardIllustrationLoop';
 import { CardNamePlate } from '../ui/CardNamePlate';
 import { CardGrungeOverlay } from '../ui/CardGrungeOverlay';
-import { ElementIcon, ELEMENT_LABELS_DE } from '../ui/ElementIcon';
+import { ElementBadge } from '../ui/ElementBadge';
+import { ELEMENT_LABELS_DE } from '../ui/ElementIcon';
 import { characterUsesMysteryIcon } from '../../services/icons/elementIcons';
 import { CardDividerBar } from '../cards/grungeCardParts';
+import { EffectTextWithMarks } from '../cards/EffectTextWithMarks';
 
 export type CharacterDetailTab = 'info' | 'ulti';
 
@@ -36,7 +38,7 @@ function CharacterElementsRow({ character }: { character: CharacterCardDef }) {
   if (characterUsesMysteryIcon(character.id)) {
     return (
       <div className="flex flex-wrap items-center gap-1.5 text-on-parchment">
-        <ElementIcon element="mystery" size="sm" variant="grunge" />
+        <ElementBadge element="mystery" />
         <span>Frei / Frei</span>
       </div>
     );
@@ -46,14 +48,14 @@ function CharacterElementsRow({ character }: { character: CharacterCardDef }) {
   return (
     <div className="flex flex-wrap items-center gap-x-2 gap-y-1 text-on-parchment">
       <span className="inline-flex items-center gap-1">
-        <ElementIcon element={elA} size="sm" variant="grunge" />
+        <ElementBadge element={elA} />
         {ELEMENT_LABELS_DE[elA]}
       </span>
       <span aria-hidden className="opacity-70">
         /
       </span>
       <span className="inline-flex items-center gap-1">
-        <ElementIcon element={elB} size="sm" variant="grunge" />
+        <ElementBadge element={elB} />
         {ELEMENT_LABELS_DE[elB]}
       </span>
     </div>
@@ -89,7 +91,9 @@ export function CharacterDetailPanel({
               <CharacterElementsRow character={character} />
             </DetailRow>
             <DetailRow label="Rolle">{character.role}</DetailRow>
-            <DetailRow label="Passiv">{character.passiveText}</DetailRow>
+            <DetailRow label="Passiv">
+              <EffectTextWithMarks text={character.passiveText} />
+            </DetailRow>
             <DetailRow label="Strategie">{character.strategyHint}</DetailRow>
           </div>
         </div>
@@ -133,7 +137,7 @@ export function CharacterDetailPanel({
               {ultimate.name}
             </p>
             <p className="text-on-parchment-muted relative z-[1] mx-auto mt-1.5 max-w-[95%] text-center text-[10px] leading-snug md:text-xs">
-              {ultimate.effectText}
+              <EffectTextWithMarks text={ultimate.effectText} />
             </p>
           </div>
         </>

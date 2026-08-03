@@ -8,7 +8,7 @@ import type { Element, PrimaryMarkId } from '../../game/types';
 import { ImageWithFallback } from '../figma/ImageWithFallback';
 import { CardGrungeOverlay } from '../ui/CardGrungeOverlay';
 import { CardNamePlate } from '../ui/CardNamePlate';
-import { ElementIcon, ELEMENT_LABELS_DE } from '../ui/ElementIcon';
+import { ElementBadge } from '../ui/ElementBadge';
 import { CardDividerBar } from './grungeCardParts';
 import {
   PRIMARY_MARK_LABEL_DE,
@@ -72,21 +72,7 @@ export function ElementEffectCard({
           >
             Effekt
           </span>
-          <span
-            className={`element-badge element-badge-${element} element-badge-shimmer inline-flex items-center rounded border border-stone-600/80 bg-black/90 shadow-md ${
-              compact ? 'gap-0.5 px-1 py-0.5' : 'gap-1 px-1.5 py-1'
-            }`}
-            data-testid="element-badge"
-            data-element={element}
-            aria-label={ELEMENT_LABELS_DE[element]}
-          >
-            <ElementIcon
-              element={element}
-              size="sm"
-              className={compact ? '!p-0.5 scale-[0.72]' : '!p-0.5 scale-[0.85]'}
-            />
-            <span className="element-badge-shimmer__shine" aria-hidden />
-          </span>
+          <ElementBadge element={element} compact={compact} />
         </div>
       </div>
 

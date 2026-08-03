@@ -4,7 +4,8 @@
  */
 import React from 'react';
 import type { Element, PrimaryMarkId } from '../../game/types';
-import { ElementIcon, ELEMENT_LABELS_DE } from '../ui/ElementIcon';
+import { ElementBadge } from '../ui/ElementBadge';
+import { ELEMENT_LABELS_DE } from '../ui/ElementIcon';
 import {
   PRIMARY_MARK_LABEL_DE,
   resolvePrimaryMarkArtPath,
@@ -38,7 +39,7 @@ export function ElementEffectTile({
         />
       </div>
       <figcaption className="flex items-center gap-1.5 border-t border-stone-700/60 px-2 py-1.5">
-        <ElementIcon element={element} size="sm" />
+        <ElementBadge element={element} compact />
         <div className="min-w-0">
           <p className="truncate text-[11px] font-semibold text-stone-100">{label}</p>
           <p className="truncate text-[9px] text-stone-500">{ELEMENT_LABELS_DE[element]}</p>
