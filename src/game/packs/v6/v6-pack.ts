@@ -14,6 +14,7 @@ import {
   V6_SLICE1_ESSENCES,
   V6_SLICE1_TECHNIQUES,
 } from '../../../content/v6/cards/slice1Cards';
+import { V6_PLAYTEST_ECHO_DELAY_CATALYSTS } from '../../../content/v6/cards/playtestEchoDelayCards';
 import { V6_CHARACTERS } from './characters';
 
 /** V6 pack ruleset identity — INTERNAL only until PLAYABLE cutover. */
@@ -37,7 +38,8 @@ export function buildV6CorePack(): ContentPack {
     glitches: BASE_PACK.glitches.filter((g) => g.glitchType !== 'instant'),
     techniques: V6_SLICE1_TECHNIQUES,
     essences: V6_SLICE1_ESSENCES,
-    catalysts: V6_SLICE1_CATALYSTS,
+    /** Slice-1 locked set + Echo/Delay playtest catalysts (#344; not in 105 matrix). */
+    catalysts: [...V6_SLICE1_CATALYSTS, ...V6_PLAYTEST_ECHO_DELAY_CATALYSTS],
     items: [],
   };
 }

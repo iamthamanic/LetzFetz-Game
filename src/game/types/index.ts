@@ -8,5 +8,6 @@ export * from './engineVisual';
 export * from './formulaVisual';
 export * from './formulaEffects';
 export * from './matchMeta';
+export * from './v6EchoDelay';
 export * from './game';
 export * from './actions';

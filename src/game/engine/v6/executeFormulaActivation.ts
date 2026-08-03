@@ -16,6 +16,12 @@ import {
   type PlanFormulaActivationInput,
 } from './planFormulaActivation';
 import { occupiedFesselSlots } from './fessel';
+import {
+  enqueueV6Delay,
+  enqueueV6Echo,
+  V6_DELAY_DEFAULT_BONUS,
+  V6_ECHO_DEFAULT_AMOUNT,
+} from './echoDelay';
 
 function ensureV6Meta(state: GameState): GameState {
   const next = cloneState(state);
@@ -144,12 +150,22 @@ export function executeFormulaActivation(
   const { pack, playerId, ruleset, rng } = input;
 
   let next = ensureV6Meta(input.state);
-  next = applyPrimary(next, validated, ruleset);
+
+  const timing = validated.timingMode;
+  const deferPrimary = timing === 'delay';
+
+  if (!deferPrimary) {
+    next = applyPrimary(next, validated, ruleset);
+  }
 
   let pendingFessel:
     | { chooserId: PlayerId; targetPlayerId: PlayerId; intensity: number }
     | null = null;
-  if (validated.primary.kind === 'fessel' && validated.primary.value > 0) {
+  if (
+    !deferPrimary &&
+    validated.primary.kind === 'fessel' &&
+    validated.primary.value > 0
+  ) {
     const foe = opponentOf(validated.actorId);
     if (occupiedFesselSlots(next.players[foe].formula).length > 0) {
       pendingFessel = {
@@ -186,6 +202,34 @@ export function executeFormulaActivation(
   }
   void pack;
 
+  if (timing === 'echo') {
+    const echoAmt = Math.min(
+      validated.echoAmount || V6_ECHO_DEFAULT_AMOUNT,
+      Math.max(0, validated.primary.value),
+    );
+    next = enqueueV6Echo(next, playerId, {
+      recipeId: validated.recipeId,
+      recipeName: validated.name,
+      kind: validated.primary.kind,
+      value: validated.primary.value,
+      target: validated.primary.target,
+      offensive: validated.primary.offensive,
+      catalystInstanceId: validated.catalystInstanceId,
+      echoAmount: echoAmt,
+    });
+  } else if (timing === 'delay') {
+    const bonus = validated.delayBonus || V6_DELAY_DEFAULT_BONUS;
+    next = enqueueV6Delay(next, playerId, {
+      recipeId: validated.recipeId,
+      recipeName: validated.name,
+      kind: validated.primary.kind,
+      value: Math.max(0, validated.primary.value + bonus),
+      target: validated.primary.target,
+      offensive: validated.primary.offensive,
+      catalystInstanceId: validated.catalystInstanceId,
+    });
+  }
+
   if (validated.catalystConsumed && validated.catalystInstanceId) {
     next = discardCatalyst(next, playerId, validated.catalystInstanceId);
   }
@@ -217,6 +261,12 @@ export function executeFormulaActivation(
       intensity: pendingFessel.intensity,
     };
     next.lastEvent = `${validated.eventSummary} · Fessel ${pendingFessel.intensity} — Ziel wählen.`;
+  } else if (timing === 'echo') {
+    const q = next.meta.v6EchoQueue?.[playerId] ?? [];
+    next.lastEvent = `${validated.eventSummary} · Echo in Warteschlange (${q.length}).`;
+  } else if (timing === 'delay') {
+    const q = next.meta.v6DelayQueue?.[playerId] ?? [];
+    next.lastEvent = `${validated.eventSummary} · Verzögerung in Warteschlange (${q.length}).`;
   } else {
     next.lastEvent =
       validated.primary.kind === 'fessel' && validated.primary.value > 0

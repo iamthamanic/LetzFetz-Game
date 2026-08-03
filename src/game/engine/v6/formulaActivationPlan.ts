@@ -4,6 +4,7 @@
  */
 import type { PlayerId } from '../../types';
 import type { V6GeneratedRecipeKind } from '../../../generated/v6/formulaRecipes.generated';
+import type { V6RecipeTimingMode } from './echoDelay';
 
 export type V6PrimaryKind =
   | 'damage'
@@ -61,5 +62,11 @@ export interface FormulaActivationPlan {
   drawDiscardAfter: boolean;
   stabilityBuffUsed: number;
   formulaDefensePenalty: number;
+  /** Echo / Delay timing (§8). Default immediate. */
+  timingMode: V6RecipeTimingMode;
+  /** Echo: points of primary to replay next Startphase. */
+  echoAmount: number;
+  /** Delay: bonus added to deferred primary value. */
+  delayBonus: number;
   eventSummary: string;
 }

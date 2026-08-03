@@ -13,6 +13,11 @@ import { applyV6DefenseToPrimary, v6DefenseStagesFromRoll } from './formulaDefen
 import { applyV6DefenseToIntensity, formulaComponentUsableForActivation } from './fessel';
 import { findV6Recipe } from './recipeLookup';
 import { V6_FORMULA_AUTHORING_SLICE1 } from '../../../content/v6/formulaAuthoring.slice1';
+import {
+  V6_DELAY_DEFAULT_BONUS,
+  V6_ECHO_DEFAULT_AMOUNT,
+  type V6RecipeTimingMode,
+} from './echoDelay';
 
 export interface PlanFormulaActivationInput {
   state: GameState;
@@ -173,6 +178,13 @@ export function planFormulaActivation(input: PlanFormulaActivationInput): Formul
   const fetzAlreadyThisTurn = state.meta.v6FetzGainedThisTurn?.[playerId] === true;
   const fetzDelta = grantsFetz && !fetzAlreadyThisTurn ? 1 : 0;
 
+  const timingMode: V6RecipeTimingMode = recipe.timingMode ?? 'immediate';
+  const echoAmount = recipe.echoAmount ?? V6_ECHO_DEFAULT_AMOUNT;
+  const delayBonus = recipe.delayBonus ?? V6_DELAY_DEFAULT_BONUS;
+  /** Echo/Delay: catalyst discard deferred to Startphase resolve. */
+  const catalystConsumed =
+    timingMode === 'immediate' ? recipe.catalystConsumed === true : false;
+
   const lock: FormulaActivationPlan['postFormulaActionLock'] =
     kind === 'tek' || kind === 'overformula'
       ? offensive
@@ -185,11 +197,20 @@ export function planFormulaActivation(input: PlanFormulaActivationInput): Formul
   const techName = techniqueId
     ? findFormulaComponentDef(pack, techniqueId)?.name ?? techniqueId
     : '—';
+  const timingLabel =
+    timingMode === 'echo'
+      ? `Echo geplant (+${echoAmount} nächste Startphase)`
+      : timingMode === 'delay'
+        ? `Verzögert (+${delayBonus} nächste Startphase)`
+        : null;
   const eventSummary = [
     `V6 ${recipe.name}`,
     `(${recipe.kind})`,
-    `${recipe.primary.kind} ${primaryValue}`,
-    recipe.catalystConsumed ? 'Katalysator verbraucht' : null,
+    timingMode === 'delay'
+      ? `${recipe.primary.kind} ${primaryValue + delayBonus} (verzögert)`
+      : `${recipe.primary.kind} ${primaryValue}`,
+    catalystConsumed ? 'Katalysator verbraucht' : timingMode !== 'immediate' ? 'Katalysator bleibt' : null,
+    timingLabel,
     fetzDelta > 0 ? `+${fetzDelta} Fetz` : null,
     lock === 'attack_and_challenge' ? 'Angriff/Herausfordern gesperrt' : null,
   ]
@@ -209,7 +230,7 @@ export function planFormulaActivation(input: PlanFormulaActivationInput): Formul
     },
     rider,
     intensity: intensityAfterDefense,
-    catalystConsumed: recipe.catalystConsumed,
+    catalystConsumed,
     catalystInstanceId: kat?.instanceId ?? null,
     grantsFetz,
     fetzDelta,
@@ -231,6 +252,9 @@ export function planFormulaActivation(input: PlanFormulaActivationInput): Formul
     drawDiscardAfter: xform.drawDiscardAfter,
     stabilityBuffUsed: xform.stabilityBuffUsed,
     formulaDefensePenalty: defensePenalty,
+    timingMode,
+    echoAmount,
+    delayBonus,
     eventSummary: `${eventSummary} [${techName}]`,
   };
 }
