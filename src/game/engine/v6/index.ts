@@ -20,3 +20,7 @@ export {
   shouldOfferV6Affinity,
   shouldOfferV6AffinityOnBlock,
 } from './affinity';
+export {
+  constructDisplayName,
+  V6_PLAYTEST_BESCHWOERUNG_CATALYST_ID,
+} from './constructs';

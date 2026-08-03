@@ -149,7 +149,7 @@ Startphase → Ziehphase → Formelphase → Aktionsphase → Endphase
 
 **Verzögerung (Engine + Play-UI):** Primäreffekt geschieht **nicht** sofort; zu Beginn des nächsten eigenen Zuges mit festem **+2** auf den (bereits abwehrreduzierten) Primärwert. Keine zusätzliche Fetzladung. Katalysator bleibt bis Auflösung, dann Ablage — gleiche UI-Pattern wie Echo.
 
-**Konstrukte (Engine #346):** Max 1 pro Spieler auf `player.construct` (instanceId + defId + Haltbarkeit). Einstieg Playtest-EK „Beschwörung“ (außerhalb 105-Katalog). Startphase Schritt 5: Haltbarkeit −1; bei 0 Ablage. Neu ersetzt alt sofort. Herausfordern: Kampfwert vs Haltbarkeit → stören/zerstören (Margin wie Formel); kein Lebensschaden. Keine Fetz; nicht Ausrüstung/Formelkomponente. Play-UI → #347.
+**Konstrukte (Engine #346 + Play-UI #347):** Max 1 pro Spieler auf `player.construct` (instanceId + defId + Haltbarkeit). Einstieg Playtest-EK „Beschwörung“ (außerhalb 105-Katalog). Startphase Schritt 5: Haltbarkeit −1; bei 0 Ablage. Neu ersetzt alt sofort. Herausfordern: Kampfwert vs Haltbarkeit → stören/zerstören (Margin wie Formel); kein Lebensschaden. Keine Fetz; nicht Ausrüstung/Formelkomponente. Play: eigene Zone neben Formelgestell; Ziel-Button; gestört-Overlay; Toast bei Ersetzen.
 
 ---
 
@@ -522,6 +522,7 @@ Bitte abhaken / korrigieren:
 - [x] Echo/Delay Engine (#344): Warteschlangen in Meta; Startphase Echo → Verzögerung; Katalysator-Ablage nach Auflösung; Playtest-Hooks (volle Katalysator-Matrix später).
 - [x] Echo/Delay Play-UI (#345): Queue-Chips + Katalysator „bleibt bis Auflösung“; feste Echo-1 / Delay-+2.
 - [x] Konstrukte Engine (#346): `player.construct`; Startphase Haltbarkeit −1; Playtest-EK Beschwörung; Herausfordern stören/zerstören; 105-Katalog unverändert.
+- [x] Konstrukt Play-UI (#347): Zone am Playmat; Haltbarkeit sichtbar; gestört-Overlay; Ziel-Button; Toast bei Ersetzen; Aktivierung über Formel aktivieren.
 
 Nach deiner finalen Form: dieses Doc auf **verbindlich** setzen und `SPIELANLEITUNG_V6_DRAFT.md` + AGENTS-Kurzreferenz nachziehen.
 
@@ -541,3 +542,4 @@ Nach deiner finalen Form: dieses Doc auf **verbindlich** setzen und `SPIELANLEIT
 | 2026-08-03 | #344 Echo/Delay Engine: Warteschlangen + Startphase §8 Schritte 3–4; Katalysator-Ablage nach Auflösung; 2 Playtest-Rezepte (kein Matrix-Expand) |
 | 2026-08-03 | #345 Echo/Delay Play-UI: Queue-Anzeige + Katalysator-Badge; feste Echo-1 / Delay-+2 |
 | 2026-08-03 | #346 Konstrukte Engine: Board-Feld, Startphase-Tick, Playtest-Beschwörung, Herausfordern vs Haltbarkeit |
+| 2026-08-03 | #347 Konstrukt Play-UI: Zone am Playmat, Haltbarkeit, gestört, Challenge-Ziel, Replace-Toast |

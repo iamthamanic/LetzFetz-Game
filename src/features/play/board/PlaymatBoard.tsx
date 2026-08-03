@@ -25,6 +25,7 @@ import {
 import { CharacterDock, CombatStage, DeckPile, DiscardPile } from './zones';
 import { BoundCardRow } from './BoundCardRow';
 import { FormulaRig } from './FormulaRig';
+import { ConstructZone } from './ConstructZone';
 import { HandFan } from './HandFan';
 import { ArenaPlaymat } from './ArenaPlaymat';
 import { ArenaPlaymatBadge } from './ArenaPlaymatBadge';
@@ -311,9 +312,11 @@ export function PlaymatBoard({
         return hasChallengeTargets
           ? pending.targetBoundInstanceId
             ? 'Ziel gewählt — unten „Herausfordern“ oder „Direkt angreifen“.'
-            : v5Formula
-              ? 'Gegner-Formelkomponente antippen als Ziel, dann unten „Herausfordern“ — oder „Direkt angreifen“.'
-              : 'Gegner-Engine antippen als Ziel, dann unten „Herausfordern“ — oder „Direkt angreifen“.'
+            : v6Formula
+              ? 'Gegner-Formel oder Konstrukt („Ziel“) antippen, dann unten „Herausfordern“ — oder „Direkt angreifen“.'
+              : v5Formula
+                ? 'Gegner-Formelkomponente antippen als Ziel, dann unten „Herausfordern“ — oder „Direkt angreifen“.'
+                : 'Gegner-Engine antippen als Ziel, dann unten „Herausfordern“ — oder „Direkt angreifen“.'
           : 'Kein Herausforderungsziel — unten „Direkt angreifen“.';
       case 'build': {
         if (v5Formula) {
@@ -531,20 +534,50 @@ export function PlaymatBoard({
 
           <section className="flex flex-none flex-col gap-2">
             {shouldShowFormulaGestellCompose(formulaBoard) ? (
-              <FormulaRig
-                label="Gegner-Formel"
-                formula={state.players[botId].formula}
-                pack={pack}
-                equipment={readPlayerEquipment(state.players[botId])}
-                testId="opponent-formula-rig"
-                targetableInstanceIds={formulaChallengeIds}
-                selectedTargetId={
-                  pending?.type === 'attack' ? pending.targetBoundInstanceId : null
-                }
-                onComponentClick={handleFormulaChallengeClick}
-                echoDelayChips={botEchoDelayChips}
-                pendingCatalystTiming={botPendingCatalyst}
-              />
+              <div className="flex min-w-0 items-start gap-2 sm:gap-3">
+                <div className="min-w-0 flex-1">
+                  <FormulaRig
+                    label="Gegner-Formel"
+                    formula={state.players[botId].formula}
+                    pack={pack}
+                    equipment={readPlayerEquipment(state.players[botId])}
+                    testId="opponent-formula-rig"
+                    targetableInstanceIds={formulaChallengeIds}
+                    selectedTargetId={
+                      pending?.type === 'attack' ? pending.targetBoundInstanceId : null
+                    }
+                    onComponentClick={handleFormulaChallengeClick}
+                    echoDelayChips={botEchoDelayChips}
+                    pendingCatalystTiming={botPendingCatalyst}
+                  />
+                </div>
+                {v6Formula ? (
+                  <ConstructZone
+                    label="Gegner-Konstrukt"
+                    construct={state.players[botId].construct}
+                    testId="opponent-construct-zone"
+                    targetable={
+                      Boolean(state.players[botId].construct) &&
+                      formulaChallengeIds.includes(
+                        state.players[botId].construct!.instanceId,
+                      )
+                    }
+                    selected={
+                      pending?.type === 'attack' &&
+                      pending.targetBoundInstanceId ===
+                        state.players[botId].construct?.instanceId
+                    }
+                    onSelect={
+                      state.players[botId].construct
+                        ? () =>
+                            handleFormulaChallengeClick(
+                              state.players[botId].construct!.instanceId,
+                            )
+                        : undefined
+                    }
+                  />
+                ) : null}
+              </div>
             ) : (
               <BoundCardRow
                 label="Gegner-Engine"
@@ -587,25 +620,36 @@ export function PlaymatBoard({
 
           <section className="flex min-w-0 flex-none flex-col gap-2 border-t border-stone-800/80 pt-3">
             {shouldShowFormulaGestellCompose(formulaBoard) ? (
-              <FormulaRig
-                label="Deine Formel"
-                formula={state.players[humanId].formula}
-                pack={pack}
-                equipment={readPlayerEquipment(state.players[humanId])}
-                testId="human-formula-rig"
-                formulaDropEnabled={
-                  state.phase === 'build' &&
-                  view.isHumanTurn &&
-                  view.legalActions.some(
-                    (a) =>
-                      a.type === 'FORMULA_BUILD' ||
-                      a.type === 'FORMULA_REPLACE' ||
-                      a.type === 'FORMULA_SCHNELLMIX',
-                  )
-                }
-                echoDelayChips={humanEchoDelayChips}
-                pendingCatalystTiming={humanPendingCatalyst}
-              />
+              <div className="flex min-w-0 items-start gap-2 sm:gap-3">
+                <div className="min-w-0 flex-1">
+                  <FormulaRig
+                    label="Deine Formel"
+                    formula={state.players[humanId].formula}
+                    pack={pack}
+                    equipment={readPlayerEquipment(state.players[humanId])}
+                    testId="human-formula-rig"
+                    formulaDropEnabled={
+                      state.phase === 'build' &&
+                      view.isHumanTurn &&
+                      view.legalActions.some(
+                        (a) =>
+                          a.type === 'FORMULA_BUILD' ||
+                          a.type === 'FORMULA_REPLACE' ||
+                          a.type === 'FORMULA_SCHNELLMIX',
+                      )
+                    }
+                    echoDelayChips={humanEchoDelayChips}
+                    pendingCatalystTiming={humanPendingCatalyst}
+                  />
+                </div>
+                {v6Formula ? (
+                  <ConstructZone
+                    label="Dein Konstrukt"
+                    construct={state.players[humanId].construct}
+                    testId="human-construct-zone"
+                  />
+                ) : null}
+              </div>
             ) : (
               <BoundCardRow
                 key={`human-engine-thumbs-${liveSnapshotEpoch}`}
@@ -664,9 +708,11 @@ export function PlaymatBoard({
             {pending?.type === 'attack' && (
               <p className="text-center text-[11px] text-stone-400 sm:text-xs">
                 {hasChallengeTargets
-                  ? v5Formula
-                    ? 'Herausfordern: Gegner-Formelkomponente anklicken. Direktangriff trifft die LP des Gegners.'
-                    : 'Herausfordern: Gegner-Engine-Slot anklicken. Direktangriff trifft die LP des Gegners.'
+                  ? v6Formula
+                    ? 'Herausfordern: Gegner-Formelkomponente oder Konstrukt („Ziel“) anklicken. Direktangriff trifft die LP des Gegners.'
+                    : v5Formula
+                      ? 'Herausfordern: Gegner-Formelkomponente anklicken. Direktangriff trifft die LP des Gegners.'
+                      : 'Herausfordern: Gegner-Engine-Slot anklicken. Direktangriff trifft die LP des Gegners.'
                   : 'Kein Herausforderungsziel — nur Direktangriff möglich.'}
               </p>
             )}

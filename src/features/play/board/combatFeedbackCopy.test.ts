@@ -76,4 +76,21 @@ describe('combatFeedbackCopy', () => {
         ?.kind,
     ).toBe('delay-resolve');
   });
+
+  it('emits construct summon / replace toasts', () => {
+    expect(
+      parseCombatFeedbackToasts(
+        'Konstrukt beschworen: Schattenpuppe (Haltbarkeit 3).',
+      )[0],
+    ).toMatchObject({
+      kind: 'construct-summon',
+      title: 'Konstrukt beschworen',
+      testId: 'combat-feedback-construct',
+    });
+    expect(
+      parseCombatFeedbackToasts(
+        'Konstrukt beschworen: Schattenpuppe (Haltbarkeit 3) — vorheriges abgelegt.',
+      )[0]?.title,
+    ).toBe('Konstrukt ersetzt');
+  });
 });

@@ -24,6 +24,7 @@ export function formatV6FormulaPlanPreview(plan: FormulaActivationPlan): V6Formu
     prep_block: 'Blockvorbereitung',
     prep_boost: 'Boostvorbereitung',
     fessel: 'Fessel',
+    summon_construct: 'Konstrukt beschwören',
   };
   const targetDe = plan.primary.target === 'opponent' ? 'Gegner' : 'Du';
   const intensityNote =

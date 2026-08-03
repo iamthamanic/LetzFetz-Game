@@ -31,6 +31,9 @@ function toneClass(kind: CombatFeedbackToastItem['kind']): string {
   if (kind === 'echo-resolve') {
     return 'border-cyan-500/55 bg-cyan-950/90 text-cyan-100';
   }
+  if (kind === 'construct-summon') {
+    return 'border-violet-500/55 bg-violet-950/90 text-violet-100';
+  }
   return 'border-cyan-500/55 bg-cyan-950/90 text-cyan-100';
 }
 

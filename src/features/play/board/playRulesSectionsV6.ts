@@ -37,6 +37,7 @@ export const V6_PLAY_RULE_SECTIONS: RulesSection[] = [
       'Aktivierung über Authoring-Rezepte (TE / TK / EK / TEK). Fehlende Pflichtkombination = Build-Fehler, kein Runtime-Raten.',
       'Katalysator wird bei Verwendung abgelegt (verbraucht) — außer Echo/Verzögerung: bleibt bis Startphase-Auflösung.',
       'Echo: Primär sofort, dann fest +1 desselben Primärs in der nächsten Startphase. Verzögerung: Primär + fester +2 in der nächsten Startphase.',
+      'Konstrukte: max 1 pro Spieler; eigene Zone neben dem Formelgestell. Beschwörung (EK) über „Formel aktivieren“. Haltbarkeit −1 in der Startphase; herausforderbar (stören/zerstören, kein LP-Schaden). Neu ersetzt alt.',
       'Fetzladung +1 nur durch vollständige TEK-Fusion (max 3; max 1 / eigener Zug).',
       'Nach offensiver TEK: in derselben Aktionsphase kein normaler Angriff und keine Herausforderung.',
       'Keine charaktergebundenen Großformeln / Ultis — Überformel folgt später aus aktueller TEK.',
