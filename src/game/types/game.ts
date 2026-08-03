@@ -83,6 +83,9 @@ export interface InstantReveal {
   resolution: string;
 }
 
+/** Seat winner, timed equal-LP draw, or null while the match is open. */
+export type MatchWinner = PlayerId | 'draw';
+
 export interface GameState {
   players: Record<PlayerId, PlayerState>;
   piles: SharedPiles;
@@ -90,7 +93,7 @@ export interface GameState {
   activePlayer: PlayerId;
   phase: TurnPhase;
   turnNumber: number;
-  winner: PlayerId | null;
+  winner: MatchWinner | null;
   /** When set, defender must PLAY_BLOCK or PASS_BLOCK. */
   combat: PendingCombat | null;
   /** Interrupt / optional choice window (arena & glitch). */

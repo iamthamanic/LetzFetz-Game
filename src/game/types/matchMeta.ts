@@ -2,6 +2,9 @@ import type { PlayerId } from './ruleset';
 import type { Element } from './elements';
 import type { PrimaryMarkId } from './status';
 
+/** How the match ends: LP to 0 (default) or wall-clock timer. */
+export type MatchEndMode = 'standard' | 'timed';
+
 /** Playtest LP caps (D35 / O11). Cap = start; heals clamp here. */
 export type PlaytestHpCap = 20 | 25 | 30;
 
@@ -95,6 +98,18 @@ export interface MatchMeta {
   v5MysteriumElement?: Record<PlayerId, Element | null>;
   /** V5 Halbe Dose Energy: HP to lose at start of that player's next turn. */
   v5EnergyHangover?: Record<PlayerId, number>;
+  /** Match end: standard (0 LP) or timed wall-clock. Default / omit = standard. */
+  matchEndMode?: MatchEndMode;
+  /** Timed mode: wall-clock duration in ms (from matchStartedAtMs). */
+  matchDurationMs?: number;
+  /** Timed mode: epoch ms when the match clock started (createGame / footer dock). */
+  matchStartedAtMs?: number;
+  /** Timed mode: settled soft-pause duration in ms (excluded from countdown). */
+  matchPausedTotalMs?: number;
+  /** Timed mode: epoch ms when the current soft-pause began (open segment). */
+  matchPauseStartedAtMs?: number;
+  /** Match: enable V5 artifact auction (mirrors ruleset; set at createGame). */
+  v5ArtifactAuctionEnabled?: boolean;
 }
 
 export type PendingChoice =

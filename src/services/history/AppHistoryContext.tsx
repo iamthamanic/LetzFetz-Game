@@ -15,6 +15,8 @@ interface AppHistoryValue {
   push: (entry: HistoryEntry) => void;
   goBack: () => void;
   goForward: () => void;
+  /** Drop the entire stack (e.g. when a live match starts). */
+  clear: () => void;
   /** True while applying undo/redo — skip nested push. */
   isApplying: () => boolean;
 }
@@ -67,12 +69,19 @@ export function AppHistoryProvider({ children }: { children: React.ReactNode }) 
 
   const isApplying = useCallback(() => applyingRef.current, []);
 
+  const clear = useCallback(() => {
+    stackRef.current = [];
+    indexRef.current = -1;
+    bump();
+  }, [bump]);
+
   const value: AppHistoryValue = {
     canGoBack: indexRef.current >= 0,
     canGoForward: indexRef.current < stackRef.current.length - 1,
     push,
     goBack,
     goForward,
+    clear,
     isApplying,
   };
 

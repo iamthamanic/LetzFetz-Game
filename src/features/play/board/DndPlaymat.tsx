@@ -20,7 +20,7 @@ import {
   type DragEndEvent,
 } from '@dnd-kit/core';
 import type { ContentPack, GameAction, GameState, PlayerId } from '../../../game';
-import { findElementDef } from '../../../game';
+import { findElementDef, findFormulaComponentDef } from '../../../game';
 import type { GameViewModel, BoundSlotView } from './buildGameViewModel';
 import type { HandCardView } from './buildGameViewModel';
 import { BoardCard } from './BoardCard';
@@ -73,6 +73,29 @@ export function DndPlaymat({
       if (!dragData) return;
 
       const dropId = over.id as string;
+      if (dropId.startsWith('formula-slot-')) {
+        const handCard = state.players[humanId].hand.find(
+          (c) => c.instanceId === dragData.cardInstanceId,
+        );
+        const formulaDef = handCard
+          ? findFormulaComponentDef(pack, handCard.defId)
+          : undefined;
+        const buildingTk =
+          formulaDef?.kind === 'technique' || formulaDef?.kind === 'catalyst';
+        if (
+          buildingTk &&
+          state.players[humanId].formula.essenz?.elementalCharge &&
+          typeof window !== 'undefined' &&
+          !window.confirm(
+            'Elementarladung verwerfen? Technik/Katalysator löscht die geladene Essenz-Ladung sofort.',
+          )
+        ) {
+          return;
+        }
+        const action = findDirectBuildAction(view.legalActions, dragData.cardInstanceId);
+        if (action) onDispatch(action);
+        return;
+      }
       if (dropId.startsWith('human-slot-')) {
         const slotIndex = parseInt(dropId.replace('human-slot-', ''), 10);
         const slot = view.humanBoundSlots[slotIndex];
@@ -105,7 +128,7 @@ export function DndPlaymat({
         }
       }
     },
-    [view, onDispatch],
+    [state, pack, view, humanId, onDispatch],
   );
 
   const activeCard = activeDrag
@@ -181,6 +204,35 @@ export function DroppableSlot({
       ref={setNodeRef}
       data-drop-over={isOver ? 'true' : undefined}
       className={isOver ? 'ring-2 ring-emerald-400 ring-offset-2 ring-offset-stone-950 rounded-xl' : ''}
+    >
+      {children}
+    </div>
+  );
+}
+
+/** Droppable wrapper for V5/V6 Formelplatz faces (Technik / Essenz / Katalysator). */
+export function DroppableFormulaSlot({
+  role,
+  isTarget,
+  children,
+}: {
+  role: string;
+  isTarget: boolean;
+  children: React.ReactNode;
+}) {
+  const { setNodeRef, isOver } = useDroppable({
+    id: `formula-slot-${role}`,
+    disabled: !isTarget,
+  });
+
+  return (
+    <div
+      ref={setNodeRef}
+      data-testid={`formula-drop-${role}`}
+      data-drop-over={isOver ? 'true' : undefined}
+      className={
+        isOver ? 'ring-2 ring-emerald-400 ring-offset-2 ring-offset-stone-950 rounded-xl' : ''
+      }
     >
       {children}
     </div>

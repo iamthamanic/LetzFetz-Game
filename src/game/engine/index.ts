@@ -2,6 +2,7 @@ export * from './dice';
 export * from './combat';
 export * from './deck';
 export * from './createGame';
+export * from './timedMatch';
 export * from './actions';
 export * from './helpers';
 export * from './effects';

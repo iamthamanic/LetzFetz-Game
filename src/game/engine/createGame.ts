@@ -1,4 +1,11 @@
-import type { CardInstance, ContentPack, GameState, PlayerId, RulesetConfig } from '../types';
+import type {
+  CardInstance,
+  ContentPack,
+  GameState,
+  MatchEndMode,
+  PlayerId,
+  RulesetConfig,
+} from '../types';
 import { DEFAULT_RULESET, assertExclusiveFormulaRuleset, createEmptyMeta } from '../types';
 import {
   buildMainDeckInstances,
@@ -8,6 +15,7 @@ import {
   resetInstanceIdCounter,
 } from './deck';
 import { findGlitchDef } from './lookup';
+import { clampTimedMatchMinutes, DEFAULT_TIMED_MATCH_MINUTES } from './timedMatch';
 
 export interface CreateGameConfig {
   pack: ContentPack;
@@ -20,6 +28,14 @@ export interface CreateGameConfig {
   ruleset?: RulesetConfig;
   seed?: number;
   rng?: Rng;
+  /** When true and ruleset allows, mark artifact auction enabled (engine auction TBD). */
+  enableArtifactAuction?: boolean;
+  /** Match end mode; omit / standard = play until 0 LP. */
+  matchEndMode?: MatchEndMode;
+  /** Timed mode duration in minutes (clamped 1–60). Default 30. */
+  timedMatchMinutes?: number;
+  /** Override clock start (tests); default Date.now(). */
+  matchStartedAtMs?: number;
 }
 
 function rollW6(rng: Rng): number {
@@ -171,6 +187,25 @@ export function createGame(config: CreateGameConfig): GameState {
   }
   if (ruleset.v6Formula === true) {
     state.meta.v6FormulaEnabled = true;
+  }
+  if (
+    config.enableArtifactAuction === true &&
+    ruleset.v5Formula === true &&
+    ruleset.v5ArtifactAuction !== false
+  ) {
+    state.meta.v5ArtifactAuctionEnabled = true;
+  }
+
+  const matchEndMode: MatchEndMode = config.matchEndMode === 'timed' ? 'timed' : 'standard';
+  if (matchEndMode === 'timed') {
+    const minutes = clampTimedMatchMinutes(
+      config.timedMatchMinutes ?? DEFAULT_TIMED_MATCH_MINUTES,
+    );
+    state.meta.matchEndMode = 'timed';
+    state.meta.matchDurationMs = minutes * 60_000;
+    state.meta.matchStartedAtMs = config.matchStartedAtMs ?? Date.now();
+  } else {
+    state.meta.matchEndMode = 'standard';
   }
 
   const skippedInstants: CardInstance[] = [];

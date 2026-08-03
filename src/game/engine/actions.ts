@@ -19,6 +19,7 @@ import {
 import { calculateCombatValue, resolveDamage, challengeSucceeded, counterBonus } from './combat';
 import { diceBonusFromRoll, rollD6 } from './dice';
 import { opponentOf, checkWinner } from './createGame';
+import { resolveTimedMatchExpiry } from './timedMatch';
 import {
   cloneState,
   discardFromHand,
@@ -1587,6 +1588,7 @@ export function applyAction(
   state = ensureMeta(state);
   // Fresh reveal list for this action — UI/chat must show any Sofort-Glitches.
   state = { ...state, instantReveals: [] };
+  state = resolveTimedMatchExpiry(state, Date.now());
   if (state.winner) return state;
   const pack = ctx.pack;
   const ruleset = rulesetOf(ctx, state);

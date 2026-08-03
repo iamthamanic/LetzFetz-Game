@@ -17,6 +17,7 @@ import {
   isV5FormulaEnabled,
   isV6FormulaEnabled,
   planFormulaActivation,
+  applyTimedMatchPause,
   type GameState,
   type GameAction,
   type PlayerId,
@@ -33,6 +34,7 @@ import {
   GameSetup,
   DEFAULT_SETUP_CHARACTER_ID,
   type GameSetupPhase,
+  type BotMatchStart,
 } from './setup/GameSetup';
 import { resolveGamePackChoice } from './setup/resolveGamePackChoice';
 import { GrungeAppShell } from '../../components/ui/GrungeAppShell';
@@ -122,9 +124,23 @@ interface PlayViewProps {
   onBattleMusicActiveChange?: (active: boolean) => void;
   /** Opens shared Spielregeln modal (composition root). */
   onOpenRules?: () => void;
+  /** Live board after MatchIntro — enables AppNav pause / quit / restart. */
+  onMatchActiveChange?: (active: boolean) => void;
+  /** Soft pause from AppNav (stops bot auto-play). */
+  matchPaused?: boolean;
+  onMatchPausedChange?: (paused: boolean) => void;
+  /** Bumped by AppNav restart — rematch with last BotMatchStart. */
+  matchRestartNonce?: number;
 }
 
-export function PlayView({ onBattleMusicActiveChange, onOpenRules }: PlayViewProps) {
+export function PlayView({
+  onBattleMusicActiveChange,
+  onOpenRules,
+  onMatchActiveChange,
+  matchPaused = false,
+  onMatchPausedChange,
+  matchRestartNonce = 0,
+}: PlayViewProps) {
   const playtestMode = isPlaytestMode();
   const { push } = useAppHistory();
   const [matchPack, setMatchPack] = useState<ContentPack>(BASE_PACK);
@@ -137,6 +153,8 @@ export function PlayView({ onBattleMusicActiveChange, onOpenRules }: PlayViewPro
   const [actionError, setActionError] = useState<string | null>(null);
   const [introOpen, setIntroOpen] = useState(false);
   const [botPaused, setBotPaused] = useState(false);
+  /** Last successful setup options for AppNav rematch. */
+  const lastMatchStartRef = useRef<BotMatchStart | null>(null);
   /** Playtest: force MVP×3 Live-3D in board Engine-Zone. */
   const [enginePreviewMvp, setEnginePreviewMvp] = useState(false);
   /** Remount/refresh board thumbs after auto snapshot warmup. */
@@ -290,6 +308,24 @@ export function PlayView({ onBattleMusicActiveChange, onOpenRules }: PlayViewPro
     botPausedRef.current = botPaused;
   }, [botPaused]);
 
+  /** AppNav soft-pause owns botPaused outside playtest cheatbox. */
+  useEffect(() => {
+    setBotPaused(matchPaused);
+  }, [matchPaused]);
+
+  useEffect(() => {
+    const active = Boolean(state) && !introOpen;
+    onMatchActiveChange?.(active);
+  }, [state, introOpen, onMatchActiveChange]);
+
+  useEffect(() => {
+    if (!state || state.meta.matchEndMode !== 'timed') return;
+    setState((prev) => {
+      if (!prev || prev.meta.matchEndMode !== 'timed') return prev;
+      return applyTimedMatchPause(prev, matchPaused, Date.now());
+    });
+  }, [matchPaused]);
+
   useEffect(() => {
     botModeRef.current = botMode;
     try {
@@ -437,6 +473,79 @@ export function PlayView({ onBattleMusicActiveChange, onOpenRules }: PlayViewPro
     [push, resetPresentationVisuals],
   );
 
+  const beginMatchFromSetup = useCallback(
+    (options: BotMatchStart) => {
+      audioManager.unlock();
+      setPendingIntent(null);
+      setActionError(null);
+      openingDealRunRef.current = false;
+      openingDealCompleteRef.current = false;
+      setOpeningDealStarted(false);
+      setOpeningDealFinished(false);
+      setTurnStartAnnounceDone(false);
+      setDealReveal({ p1: 0, p2: 0 });
+      setHeldBackHandCards({});
+      prevStateRef.current = null;
+      onMatchPausedChange?.(false);
+      lastMatchStartRef.current = options;
+      const { pack: selectedPack, ruleset, playtestHpCap } = resolveGamePackChoice(
+        options.packChoice,
+      );
+      setMatchPack(selectedPack);
+      const seed = Date.now();
+      matchSeedRef.current = seed;
+      const rng = createSeededRng(seed);
+      const botCharacterId = pickOpponentCharacter(
+        selectedPack,
+        options.humanCharacterId,
+        rng,
+      );
+      const next = createGame({
+        pack: selectedPack,
+        p1CharacterId: options.humanCharacterId,
+        p2CharacterId: botCharacterId,
+        startingPlayer: options.startingPlayer ?? HUMAN,
+        ruleset,
+        seed,
+        enableArtifactAuction: options.enableArtifactAuction,
+        matchEndMode: options.matchEndMode,
+        ...(options.matchEndMode === 'timed' && options.timedMatchMinutes != null
+          ? { timedMatchMinutes: options.timedMatchMinutes }
+          : {}),
+      });
+      if (playtestHpCap !== undefined) {
+        next.meta = { ...next.meta, playtestHpCap };
+      }
+      push({
+        undo: () => {
+          botRunning.current = false;
+          resetPresentationVisuals();
+          setIntroOpen(false);
+          setState(null);
+        },
+        redo: () => {
+          botRunning.current = false;
+          resetPresentationVisuals();
+          setState(next);
+          setIntroOpen(true);
+        },
+      });
+      setState(next);
+      setIntroOpen(true);
+    },
+    [push, resetPresentationVisuals, onMatchPausedChange],
+  );
+
+  const matchRestartHandled = useRef(0);
+  useEffect(() => {
+    if (matchRestartNonce <= 0 || matchRestartNonce === matchRestartHandled.current) {
+      return;
+    }
+    matchRestartHandled.current = matchRestartNonce;
+    const opts = lastMatchStartRef.current;
+    if (opts) beginMatchFromSetup(opts);
+  }, [matchRestartNonce, beginMatchFromSetup]);
+
   const dispatch = useCallback(
     (action: GameAction, playerId: PlayerId = HUMAN) => {
       setState((prev) => {
@@ -481,7 +590,7 @@ export function PlayView({ onBattleMusicActiveChange, onOpenRules }: PlayViewPro
     // Wait for match intro + deal + start announce + footer spectacle before the bot moves.
     if (introOpen || !coachFooterReveal) return;
     if (presentation.isInputLocked) return;
-    if (playtestMode && botPausedRef.current) return;
+    if (botPausedRef.current) return;
     if (!botNeedsToAct(state, BOT)) return;
 
     botRunning.current = true;
@@ -715,7 +824,7 @@ export function PlayView({ onBattleMusicActiveChange, onOpenRules }: PlayViewPro
 
   const botWouldAct = state ? botNeedsToAct(state, BOT) : false;
   const botThinking =
-    botRunning.current || (botWouldAct && !(playtestMode && botPaused));
+    botRunning.current || (botWouldAct && !botPaused);
 
   const openingDealActive = openingDealStarted && !openingDealFinished;
 
@@ -742,52 +851,7 @@ export function PlayView({ onBattleMusicActiveChange, onOpenRules }: PlayViewPro
           selectedId={setupSelectedId}
           onPhaseChange={setSetupPhase}
           onSelectCharacter={setSetupSelectedId}
-          onStart={({ humanCharacterId, packChoice }) => {
-            audioManager.unlock();
-            setPendingIntent(null);
-            setActionError(null);
-            openingDealRunRef.current = false;
-            openingDealCompleteRef.current = false;
-            setOpeningDealStarted(false);
-            setOpeningDealFinished(false);
-            setTurnStartAnnounceDone(false);
-            setDealReveal({ p1: 0, p2: 0 });
-            setHeldBackHandCards({});
-            prevStateRef.current = null;
-            const { pack: selectedPack, ruleset, playtestHpCap } = resolveGamePackChoice(packChoice);
-            setMatchPack(selectedPack);
-            const seed = Date.now();
-            matchSeedRef.current = seed;
-            const rng = createSeededRng(seed);
-            const botCharacterId = pickOpponentCharacter(selectedPack, humanCharacterId, rng);
-            const next = createGame({
-              pack: selectedPack,
-              p1CharacterId: humanCharacterId,
-              p2CharacterId: botCharacterId,
-              startingPlayer: HUMAN,
-              ruleset,
-              seed,
-            });
-            if (playtestHpCap !== undefined) {
-              next.meta = { ...next.meta, playtestHpCap };
-            }
-            push({
-              undo: () => {
-                botRunning.current = false;
-                resetPresentationVisuals();
-                setIntroOpen(false);
-                setState(null);
-              },
-              redo: () => {
-                botRunning.current = false;
-                resetPresentationVisuals();
-                setState(next);
-                setIntroOpen(true);
-              },
-            });
-            setState(next);
-            setIntroOpen(true);
-          }}
+          onStart={beginMatchFromSetup}
         />
       </GrungeAppShell>
     );
@@ -797,6 +861,17 @@ export function PlayView({ onBattleMusicActiveChange, onOpenRules }: PlayViewPro
     <GrungeAppShell>
       <div className="flex h-full flex-col overflow-hidden bg-stone-950 text-stone-100">
       <div className="relative flex min-h-0 flex-1 overflow-hidden">
+        {matchPaused ? (
+          <div
+            className="pointer-events-none absolute inset-x-0 top-2 z-30 flex justify-center px-3"
+            data-testid="match-paused-banner"
+            role="status"
+          >
+            <div className="rounded-lg border border-amber-500/50 bg-amber-950/90 px-3 py-1.5 text-xs font-medium text-amber-100 shadow-lg backdrop-blur-sm">
+              Pause — Spiel eingefroren. „Weiter“ in der Kopfzeile zum Fortsetzen.
+            </div>
+          </div>
+        ) : null}
         <PlaymatBoard
           state={state}
           pack={matchPack}
@@ -936,7 +1011,10 @@ export function PlayView({ onBattleMusicActiveChange, onOpenRules }: PlayViewPro
             pack={matchPack}
             state={state}
             botPaused={botPaused}
-            onBotPausedChange={setBotPaused}
+            onBotPausedChange={(paused) => {
+              setBotPaused(paused);
+              onMatchPausedChange?.(paused);
+            }}
             onApplyState={handleApplyPlaytestState}
             onError={setActionError}
             enginePreviewMvp={enginePreviewMvp}
@@ -1105,24 +1183,24 @@ export function PlayView({ onBattleMusicActiveChange, onOpenRules }: PlayViewPro
                 <option value="llm">LLM (Ollama)</option>
               </select>
             </label>
-            {onOpenRules ? (
-              <Button
-                variant="secondary"
-                size="sm"
-                icon={<BookOpen className="h-4 w-4" />}
-                onClick={onOpenRules}
-                data-testid="play-rules-open"
-              >
-                Spielregeln
-              </Button>
-            ) : null}
             <Button
               variant="secondary"
               size="sm"
               icon={<ScrollText className="h-4 w-4" />}
               onClick={() => setLogOpen(!logOpen)}
+              data-testid="play-match-log-open"
             >
               {logOpen ? 'Log aus' : 'Log'}
+            </Button>
+            <Button
+              variant="secondary"
+              size="sm"
+              icon={<BookOpen className="h-4 w-4" />}
+              onClick={() => onOpenRules?.()}
+              disabled={!onOpenRules}
+              data-testid="play-rules-open"
+            >
+              Spielregeln
             </Button>
           </>
         }
