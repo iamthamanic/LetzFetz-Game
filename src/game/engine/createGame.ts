@@ -175,30 +175,62 @@ export function createGame(config: CreateGameConfig): GameState {
 
   const skippedInstants: CardInstance[] = [];
 
+  const openingDrawFor = (keepCount: number): number =>
+    ruleset.openingDrawCount ?? keepCount;
+
+  const applyOpeningKeep = (
+    drawn: CardInstance[],
+    keepCount: number,
+  ): { kept: CardInstance[]; returned: CardInstance[] } => {
+    if (drawn.length <= keepCount) {
+      return { kept: drawn, returned: [] };
+    }
+    // INTERNAL auto-keep: first N drawn; remainder reshuffled into deck (no scrap).
+    return {
+      kept: drawn.slice(0, keepCount),
+      returned: drawn.slice(keepCount),
+    };
+  };
+
+  const firstKeep = ruleset.p1StartingHand;
+  const secondKeep = ruleset.p2SecondHand;
+
   const firstDraw = drawOpeningHand(
     config.pack,
     deck,
     discard,
-    ruleset.p1StartingHand,
+    openingDrawFor(firstKeep),
     rng,
   );
   deck = firstDraw.deck;
   discard = firstDraw.discard;
   skippedInstants.push(...firstDraw.skippedInstants);
-  state.players[startingPlayer].hand = firstDraw.drawn;
+  {
+    const { kept, returned } = applyOpeningKeep(firstDraw.drawn, firstKeep);
+    state.players[startingPlayer].hand = kept;
+    if (returned.length > 0) {
+      deck = shuffle([...deck, ...returned], rng);
+    }
+  }
   applyDeckEmptyDamage(state, startingPlayer, firstDraw.deckEmptyHits, ruleset);
 
   const secondDraw = drawOpeningHand(
     config.pack,
     deck,
     discard,
-    ruleset.p2SecondHand,
+    openingDrawFor(secondKeep),
     rng,
   );
   deck = secondDraw.deck;
   discard = secondDraw.discard;
   skippedInstants.push(...secondDraw.skippedInstants);
-  state.players[secondPlayer].hand = secondDraw.drawn;
+  {
+    const { kept, returned } = applyOpeningKeep(secondDraw.drawn, secondKeep);
+    state.players[secondPlayer].hand = kept;
+    if (returned.length > 0) {
+      deck = shuffle([...deck, ...returned], rng);
+    }
+  }
   applyDeckEmptyDamage(state, secondPlayer, secondDraw.deckEmptyHits, ruleset);
 
   // Sofort-Glitches stay in the shared deck for later draws — never opening-dealt.
