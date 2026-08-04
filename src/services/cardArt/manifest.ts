@@ -109,6 +109,8 @@ const FORMULA_ART_SLUG_ALIASES: Readonly<Record<string, string>> = {
   // Playtest Beschwörung catalyst (#346) + catalog Beschwörungsritual (#381) — reuse ritual art.
   beschwoerung: 'opfergabe',
   beschwoerungsritual: 'opfergabe',
+  // V6 Überladung ↔ V5 Überspannung — same white line-art (avoid leftover colored ueberladung.png).
+  ueberladung: 'ueberspannung',
 };
 
 /** Public path for a V5/V6 Formelkomponente PNG under `/cards/formula/`. */
