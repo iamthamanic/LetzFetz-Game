@@ -10,7 +10,7 @@
 
 ## 1. Identität & Sieg
 
-1-gegen-1-Kartenduell, gemeinsamer Hauptstapel. Jeder Spieler steuert einen Charakter (**zwei Affinitätselemente** + feste Mikro-Macke), baut eine **Formel** (Technik / Essenz / Katalysator) und kämpft mit Angriff, Block, Boost.
+1-gegen-1-Kartenduell, gemeinsamer Hauptstapel. Jeder Spieler steuert einen Charakter (**zwei Affinitätselemente** + feste Mikro-Passive-Skill), baut eine **Formel** (Technik / Essenz / Katalysator) und kämpft mit Angriff, Block, Boost.
 
 **Sieg:** Gegner auf **0 oder weniger** Leben.  
 **Zeit (optional):** mehr Leben → sonst mehr Schild → sonst Unentschieden.
@@ -42,7 +42,7 @@ Kein Schrottplatz. Match = strikt V6 **oder** strikt V5 — nie mischen.
 
 ## 3. Partie-Aufbau
 
-1. Charaktere wählen (feste Macke pro Charakter — Option B)  
+1. Charaktere wählen (fester Passive-Skill pro Charakter — Option B)  
 2. Startspieler zufällig  
 3. Arena aufdecken (**vor** Kartenwahl)  
 4. Beide ziehen 7; behalten 5 bzw. 6; Rest zurückmischen  
@@ -151,7 +151,7 @@ Zwei Affinitätselemente. 1× / eigener Zug auf passende Karte/Formel:
 1. numerischen Wert +1, **oder**  
 2. eigenen W6 nach dem Wurf ±1  
 
-Spend auf eigenen Angriff / Herausforderung / Formelaktivierung; Block-Affinität nur im **eigenen** Aktionszug. Nicht zusammen mit Macke auf dieselbe Aktion. Unter V6 kein automatisches Charakter-Element-+1 mehr.
+Spend auf eigenen Angriff / Herausforderung / Formelaktivierung; Block-Affinität nur im **eigenen** Aktionszug. Nicht zusammen mit Passive-Skill auf dieselbe Aktion. Unter V6 kein automatisches Charakter-Element-+1 mehr.
 
 ---
 

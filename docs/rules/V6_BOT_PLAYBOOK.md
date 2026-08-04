@@ -13,7 +13,7 @@
 1. **Formelphase:** TEK/TE/EK/TK bauen wenn möglich; bei ≥2 Slots aktivieren (Überformel wenn Fetz=3 automatisch via Engine).
 2. **Affinität (1× / eigener Zug):** nur ausgeben wenn der Spend den Kampf-/Formelwert **erhöht**; sonst `none` (Budget behalten).
 3. **Aktion:** Herausforderung vor schwachen Angriffen; Improvisieren (DISCARD_DRAW) bei voller Hand; kein Charakter-Ulti (V6).
-4. **Pending:** Fessel-Ziel Katalysator → Essenz → Technik; Macke-Scry `keep`; Affinität laut § Affinität unten.
+4. **Pending:** Fessel-Ziel Katalysator → Essenz → Technik; Passive-Skill-Scry `keep`; Affinität laut § Affinität unten.
 
 ---
 

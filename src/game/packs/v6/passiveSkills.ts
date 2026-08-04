@@ -1,18 +1,19 @@
 /**
- * V6 feste Charakter-Macken (Option B — issue #349).
- * Location: src/game/packs/v6/mackes.ts
+ * V6 feste Charakter-Passive-Skills (Option B — issue #349).
+ * Location: src/game/packs/v6/passiveSkills.ts
  *
+ * Player-facing term: **Passive-Skill** (historical grill alias: „Macke“).
  * Power budget: docs/letz-fetz-v6-spielkonzept.md §28.4–28.6 Alt-B grill texts.
  */
-export interface V6MackeDef {
+export interface V6PassiveSkillDef {
   id: string;
   name: string;
   /** German effect text shown as character passiveText. */
   text: string;
 }
 
-/** One feste Macke per V6 roster id. */
-export const V6_CHARACTER_MACKES: Record<string, V6MackeDef> = {
+/** One fester Passive-Skill per V6 roster id (code ids: passiveSkill*). */
+export const V6_CHARACTER_PASSIVE_SKILLS: Record<string, V6PassiveSkillDef> = {
   knuspergnom: {
     id: 'resteverwertung',
     name: 'Resteverwertung',
@@ -56,6 +57,6 @@ export const V6_CHARACTER_MACKES: Record<string, V6MackeDef> = {
   },
 };
 
-export function getV6MackeForCharacter(characterId: string): V6MackeDef | undefined {
-  return V6_CHARACTER_MACKES[characterId];
+export function getV6PassiveSkillForCharacter(characterId: string): V6PassiveSkillDef | undefined {
+  return V6_CHARACTER_PASSIVE_SKILLS[characterId];
 }

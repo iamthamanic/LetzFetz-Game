@@ -3,17 +3,17 @@
  * Location: src/features/play/board/buildGameViewModel.ts
  */
 import {
-  findElementDef,
   findEnginePartDef,
-  findFormulaComponentDef,
   getLegalActions,
   isV2Pack,
   PHASE_LABELS,
   type ContentPack,
   type ElementCardDef,
+  type FormulaComponentDef,
   type GameAction,
   type GameState,
   type GlitchCardDef,
+  type ItemCardDef,
   type PendingCombat,
   type PhraseSlot,
   type PlayerId,
@@ -29,6 +29,7 @@ import {
   isChallengeTargetForAttack,
   isActivateDiscardOption,
 } from './gameActionHelpers';
+import { resolveHandCardDefs } from './resolveHandCardDefs';
 
 const MAX_BOUND_SLOTS = 4;
 
@@ -52,8 +53,11 @@ export interface HandCardView {
   instanceId: string;
   defId: string;
   def: ElementCardDef | null;
+  /** @deprecated Prefer itemDef / formulaDef / glitchDef; kept for HandFan name fallback. */
   glitchName: string | null;
   glitchDef: GlitchCardDef | null;
+  itemDef: ItemCardDef | null;
+  formulaDef: FormulaComponentDef | null;
   isPlayable: boolean;
   interaction: 'attack' | 'boost' | 'build' | 'block' | 'discard-draw' | 'activate-discard' | 'play-glitch' | 'play-item' | null;
   buildNeedsReplace: boolean;
@@ -304,10 +308,11 @@ export function buildGameViewModel(
   const isHumanDefender = state.combat?.defenderId === humanId;
 
   const handCards: HandCardView[] = state.players[humanId].hand.map((card) => {
-    const def = findElementDef(pack, card.defId);
-    const glitch = def ? null : (pack.glitches.find((g) => g.id === card.defId) ?? null);
-    const formula =
-      def || glitch ? null : (findFormulaComponentDef(pack, card.defId) ?? null);
+    const resolved = resolveHandCardDefs(pack, card.defId);
+    const def = resolved.elementDef;
+    const glitch = resolved.glitchDef;
+    const formula = resolved.formulaDef;
+    const item = resolved.itemDef;
     const baseInteraction = handInteraction(card.instanceId, legalActions);
     const hasDiscardDraw = legalActions.some(
       (a) =>
@@ -375,8 +380,10 @@ export function buildGameViewModel(
       instanceId: card.instanceId,
       defId: card.defId,
       def: def ?? null,
-      glitchName: glitch?.name ?? formula?.name ?? null,
+      glitchName: resolved.displayName,
       glitchDef: glitch,
+      itemDef: item,
+      formulaDef: formula,
       isPlayable,
       interaction: activateDiscard ? 'activate-discard' : interaction,
       buildNeedsReplace,

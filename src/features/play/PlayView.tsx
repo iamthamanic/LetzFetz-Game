@@ -1393,13 +1393,13 @@ export function PlayView({
             }}
           />
         )}
-      {state?.pendingChoice?.type === 'v6-macke-scry' &&
+      {state?.pendingChoice?.type === 'v6-passive-skill-scry' &&
         state.pendingChoice.playerId === HUMAN && (
           <PassiveChoiceModal
             open
-            title="Macke — Scry"
-            description={`Oberste ${state.pendingChoice.revealedInstanceIds.length} Karte(n) ansehen (${state.pendingChoice.mackeId}).`}
-            testId="v6-macke-scry-modal"
+            title="Passive-Skill — Scry"
+            description={`Oberste ${state.pendingChoice.revealedInstanceIds.length} Karte(n) ansehen (${state.pendingChoice.passiveSkillId}).`}
+            testId="v6-passive-skill-scry-modal"
             options={[
               { id: 'keep', labelDe: 'Reihenfolge behalten' },
               { id: 'bottom', labelDe: 'Oberste unterlegen' },
@@ -1409,7 +1409,7 @@ export function PlayView({
             ]}
             onPick={(id) => {
               handleDispatch({
-                type: 'PICK_V6_MACKE_SCRY',
+                type: 'PICK_V6_PASSIVE_SKILL_SCRY',
                 mode: id as 'keep' | 'bottom' | 'swap',
               });
             }}

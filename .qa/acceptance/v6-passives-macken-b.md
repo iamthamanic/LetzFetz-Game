@@ -1,18 +1,18 @@
-# Feature: V6 Passives / Macken — Option B feste Charakter-Macken
+# Feature: V6 Passives / Macken — Option B feste Charakter-Passive-Skills
 
 <!-- issue #349 — @implement -->
 
 ## Intent
-Lock **Option B** (feste Mikro-Passive pro Charakter) per spielkonzept §28 / §99 for first playable V6. No shared pre-match pool UI. No Play-Default flip. No V5 delete.
+Lock **Option B** (feste Mikro-Passive-Skill pro Charakter) per spielkonzept §28 / §99 for first playable V6. No shared pre-match pool UI. No Play-Default flip. No V5 delete.
 
 ## Preconditions
 - Match with `ruleset.v6Formula === true` / `meta.v6FormulaEnabled`
-- V6 character has `mackeId` + `mackeName` + Macke `passiveText`
+- V6 character has `passiveSkillId` + `passiveSkillName` + Macke `passiveText`
 - Affinity scaffold (#341) already present on `elements`
 
 ## Happy Path
-- [ ] Each V6 character ships exactly one feste Macke (grill Alt-B texts)
-- [ ] Engine hooks fire 1×/own turn cycle under budget (§28.4); tracked via `meta.v6MackeUsed`
+- [ ] Each V6 character ships exactly one fester Passive-Skill (grill Alt-B texts)
+- [ ] Engine hooks fire 1×/own turn cycle under budget (§28.4); tracked via `meta.v6PassiveSkillUsed`
 - [ ] German UI shows Macke on character detail; match plate shows Macke name; Spielregeln updated
 - [ ] §99 records decision **B** (+ reason: simpler first playable)
 - [ ] Unit tests in `src/game/`; `npm run checks` green
@@ -33,7 +33,7 @@ Lock **Option B** (feste Mikro-Passive pro Charakter) per spielkonzept §28 / §
 
 ## Assumptions
 - Prefer B over A for ship despite §28.3 “bevorzugt A” — user + first-playable YAGNI (no pool UI)
-- Scry: pending `v6-macke-scry` with keep / bottom / swap
+- Scry: pending `v6-passive-skill-scry` with keep / bottom / swap
 - Same-action mutex: trigger-Macken after resolution; Falsche Farbe enables Affinity rather than stacking a second combat modifier
 
 ## Security Coverage
@@ -52,8 +52,8 @@ Lock **Option B** (feste Mikro-Passive pro Charakter) per spielkonzept §28 / §
 
 ## Implementation Notes
 - Option B locked in `docs/letz-fetz-v6-spielkonzept.md` §28.3 / §99
-- Data: `src/game/packs/v6/mackes.ts` + `mackeId`/`mackeName` on `CharacterCardDef`
-- Engine: `src/game/engine/v6/mackes.ts` — hooks + `v6-macke-scry` pending; Affinity expand via Falsche Farbe
+- Data: `src/game/packs/v6/mackes.ts` + `passiveSkillId`/`passiveSkillName` on `CharacterCardDef`
+- Engine: `src/game/engine/v6/mackes.ts` — hooks + `v6-passive-skill-scry` pending; Affinity expand via Falsche Farbe
 - UI: Character detail label „Macke“, plate badge, Scry modal, Spielregeln V6 text
 - Tests: `mackes.test.ts` + updated `v6-pack.test.ts`
 - No Default-Flip; V5 passives untouched

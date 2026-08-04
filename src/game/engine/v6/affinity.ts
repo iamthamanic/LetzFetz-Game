@@ -14,7 +14,7 @@ import { getCharacterElements } from '../helpers';
 import { diceBonusFromRoll, modifyDieRoll } from '../dice';
 import { findEssenceDef } from '../formulaSlots';
 import { formulaComponentUsableForActivation } from './fessel';
-import { canUseV6FalscheFarbe } from './mackes';
+import { canUseV6FalscheFarbe } from './passiveSkills';
 
 export type V6AffinityMode = 'none' | 'value-plus' | 'dice-plus' | 'dice-minus';
 

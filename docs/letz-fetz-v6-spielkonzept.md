@@ -67,7 +67,7 @@ Jeder Spieler:
 | V5-Problem | V6-Antwort |
 |------------|------------|
 | Effekte = Textaddition → Utility/Kontrolle oft wirkungslos | Handgefertigte TE-Basen + explizite Katalysator-Transformationen |
-| Starke Charakterpassiven + feste Ultis diktieren Strategie | Affinität ±1 + Mikro-Passive / Pre-Match-Mack; Überformel aus aktueller Fusion |
+| Starke Charakterpassiven + feste Ultis diktieren Strategie | Affinität ±1 + Mikro-Passive-Skill / Pre-Match-Mack; Überformel aus aktueller Fusion |
 | Katalysatoren richten sich wieder auf → Wiederhol-Fusionen | Katalysator bei Verwendung **ablegen** |
 | Elementkarten beim Bauen oft identisch | Elementkarten nur Handaktionen; Wertrollen differenziert |
 | Formelabwehr 5–6 löscht teure Fusionen zu oft | Abgestufte Reduktion, selten vollständige Vernichtung |
@@ -309,20 +309,22 @@ Hard-remove aus `V6_PACK` und V6-Schema. Bleiben nur in V5 / später optional He
 
 ### 28.3 Passive-Modell (Empfehlung zur Review)
 
+**Naming:** Player-facing term is **Passive-Skill** / **Passive-Skills**. Grill history used the alias „Macke“ — keep that only as a historical note; prefer **Passive-Skill** in UI and rules.
+
 **Bevorzugt (User-Richtung: wie Artefaktwahl / Waffenwahl vor Match):**
 
-Vor der Partie wählt jeder Spieler **eine Macke** aus einem **gemeinsamen, neutralen Passive-Pool** (sichtbar, begrenzt, symmetrische Power).
+Vor der Partie wählt jeder Spieler **einen Passive-Skill** aus einem **gemeinsamen, neutralen Passive-Pool** (sichtbar, begrenzt, symmetrische Power). Pool A = **Passive-Draft** (#384).
 
 - Charakter liefert: Optik, Affinitäten, Überformel-Präsentation.  
-- Macke liefert: genau eine Mikro-Passive für die Partie.  
+- Passive-Skill liefert: genau eine Mikro-Passive für die Partie.  
 - Keine exklusiven Rezepte pro Charakter.  
-- Gleiches Power-Budget für alle Macken (unten).
+- Gleiches Power-Budget für alle Passive-Skills (unten).
 
-**Alternative B (falls Pool zu spät):** feste Mikro-Passive pro Charakter (Knuspergnom Resteverwertung, Schluckspecht Erst mal gucken, …) — ebenfalls Budget-konform, aber stärker charaktergekoppelt.
+**Alternative B (falls Pool zu spät):** feste Mikro-Passive-Skill pro Charakter (Knuspergnom Resteverwertung, Schluckspecht Erst mal gucken, …) — ebenfalls Budget-konform, aber stärker charaktergekoppelt.
 
-**Finale Form (Playtest #349):** **Option B — feste Mikro-Passive pro Charakter.** Pool A deferred (keine Draft-UI für first playable). Beide Modelle erfüllen weiterhin: keine V5-Passiven, kein direkter Schaden/Heil-Engine, kein Fetz, keine Extra-Aktion.
+**Finale Form (Playtest #349):** **Option B — feste Mikro-Passive-Skill pro Charakter.** Pool A deferred (keine Draft-UI für first playable). Beide Modelle erfüllen weiterhin: keine V5-Passiven, kein direkter Schaden/Heil-Engine, kein Fetz, keine Extra-Aktion.
 
-### 28.4 Power-Budget (jede Passive / Macke)
+### 28.4 Power-Budget (jeder Passive-Skill)
 
 1. max 1× / Runde  
 2. kein Stapeln/Speichern über Runden hinaus (außer explizit designed und budgetiert)  
@@ -339,8 +341,8 @@ Information · Flexibilität · Risikokontrolle — keine „zweite Engine“.
 
 ### 28.6 Beispiel-Pool (Draft — Namen/Texte reviewbar)
 
-| Macke | Effekt (1×/Runde bzw. wie angegeben) |
-|-------|--------------------------------------|
+| Passive-Skill | Effekt (1×/Runde bzw. wie angegeben) |
+|---------|--------------------------------------|
 | Bastler | Nach zweiter Formeländerung: Scry 1 (oben lassen oder unterlegen) |
 | Zocker | Eigenen W6 ±1 |
 | Hamster | Beim Abwerfen: Karte unter Stapel statt Ablage (1×) |
@@ -489,7 +491,7 @@ Eigene Bewertungsmodelle für TE/TK/EK/TEK/Überformel/Improvisieren/Herausforde
 6. Formelabwehr V6; Offensivsperre  
 7. Anfangshand 7→5/6; zweite Formeländerung; Improvisieren  
 8. Elementkarten V6-only; Arenen V6  
-9. Passive-Pool oder feste Mikro-Passiven (§28)  
+9. Passive-Pool oder feste Mikro-Passive-Skills (§28)  
 10. Formelvorschau = Plan; `PLAYABLE` + Default V6  
 11. Überformel; Echo/Delay; Konstrukte (eigene Slices)  
 12. Bot + Telemetrie  
@@ -499,7 +501,7 @@ Eigene Bewertungsmodelle für TE/TK/EK/TEK/Überformel/Improvisieren/Herausforde
 
 ## 52. Playtest-Messwerte (behalten)
 
-Kartenqualität · Formelvielfalt · Entscheidungstiefe · Charakter-/Macken-Balance · Arenen · Tempo (erste Fusion / 3 Fetz / Überformel / Partiedauer).
+Kartenqualität · Formelvielfalt · Entscheidungstiefe · Charakter-/Passive-Balance · Arenen · Tempo (erste Fusion / 3 Fetz / Überformel / Partiedauer).
 
 ---
 
@@ -514,7 +516,7 @@ Offensive TEK: kein Angriff/Herausfordern
 Formelabwehr: 1–2 voll · 3–4 −1 · 5–6 −2 & Rider weg
 Aktion: nur Block
 Überformel: 3 Fetz + aktuelle TEK verstärkt
-Charakter: Affinitäten + Macke/Passive (Budget)
+Charakter: Affinitäten + Passive-Skill (Budget)
 Arena immer · kein Schrott · Improvisieren 1→2
 ```
 
@@ -524,7 +526,7 @@ Arena immer · kein Schrott · Improvisieren 1→2
 
 Bitte abhaken / korrigieren:
 
-- [x] Passive-Modell: **B feste Charakter-Mikro-Passiven** (Playtest-Default #349). A Pool deferred → Issue **#384**.  
+- [x] Passive-Modell: **B feste Charakter-Mikro-Passive-Skills** (Playtest-Default #349). A Pool deferred → Issue **#384**.  
 - [ ] Ob Passive-Pool **vor** Charakterwahl, **danach**, oder parallel zur Arena-Reveal *(nur relevant für #384)*  
 - [x] Erste playable Version **enthält Überformel** (#348); Spielerwahl +2 Primär XOR +1 Intensität (#385).  
 - [x] `V6_PACK` unter `src/content/v6` + `src/generated/v6` (Pfad ok).  
@@ -560,7 +562,7 @@ Bitte abhaken / korrigieren:
 | 2026-08-03 | #347 Konstrukt Play-UI: Zone am Playmat, Haltbarkeit, gestört, Challenge-Ziel, Replace-Toast |
 | 2026-08-03 | #348 Überformel Play-UI: Button/Confirm/Preview; fester +2 Primär |
 | 2026-08-03 | #350 V6 Core-Arenen + Reaktions-Cap unter `v6Formula` |
-| 2026-08-03 | #349 Passives: **Option B feste Macken** gelockt; Engine-Hooks + DE-UI; Pool A deferred |
+| 2026-08-03 | #349 Passives: **Option B feste Passive-Skills** gelockt; Engine-Hooks + DE-UI; Pool A deferred |
 | 2026-08-03 | #351 Solo-Bot: Affinität beneficial + V6 Playbook Digest (`V6_BOT_PLAYBOOK.md`) |
 | 2026-08-03 | #352 `SPIELANLEITUNG_V6_DRAFT.md` + AGENTS / `.cursor/rules` Kurzreferenz |
 | 2026-08-03 | #353 Play-Default → V6; V5 Legacy-Kachel; `VITE_V6_PLAYABLE` relaxed |
@@ -574,3 +576,4 @@ Bitte abhaken / korrigieren:
 | 2026-08-03 | #382 Katalysatoren auf 10 (Echo…Opfergabe); Echo/Delay in Katalog; 4 unsupported Transforms |
 | 2026-08-03 | #383 Katalog-Expansion 10T×6E×10K = 1420; unsupported explizit; Material-Seed; Play fail-closed |
 | 2026-08-03 | #385 Überformel Spielerwahl: +2 Primär XOR +1 Intensität; Bot-Heuristik; Fallback +2 Primär |
+| 2026-08-04 | Naming: player term **Passive-Skill** (grill alias „Macke“ historical only); code `passiveSkill*` / `passiveSkills.ts`; hand BoardCard type fix (Gegenstand/Katalysator ≠ Glitch) |
