@@ -5,9 +5,6 @@
 import React, { useState, useEffect, useRef, useCallback, useMemo } from 'react';
 import {
   BASE_PACK,
-  P100_RULESET,
-  V3_RULESET,
-  V5_PACK_RULESET,
   createGame,
   applyAction,
   chooseBotAction,
@@ -37,6 +34,7 @@ import {
   type BotMatchStart,
 } from './setup/GameSetup';
 import { resolveGamePackChoice } from './setup/resolveGamePackChoice';
+import { rulesetForMatchRebuild } from './setup/rulesetForMatchRebuild';
 import { GrungeAppShell } from '../../components/ui/GrungeAppShell';
 import { PhaseCoachBanner } from './board/PhaseCoachBanner';
 import { PhaseCoachFooter, FOOTER_REVEAL_TOTAL_MS } from './board/PhaseCoachFooter';
@@ -983,14 +981,19 @@ export function PlayView({
                 seed,
                 arenaId: state.arena.arenaId,
                 d6Variant: state.arena.d6Variant,
-                ruleset:
-                  state.meta.v5FormulaEnabled === true
-                    ? V5_PACK_RULESET
-                    : state.meta.v3CombatEnabled === true
-                      ? V3_RULESET
-                      : matchPack.id === 'v2-p100'
-                        ? P100_RULESET
-                        : undefined,
+                // V6 sets v3Combat + v6Formula — prefer V6 so Formelgestell is not wiped to Bound-4.
+                ruleset: rulesetForMatchRebuild(state, matchPack),
+                enableArtifactAuction: state.meta.v5ArtifactAuctionEnabled === true,
+                matchEndMode: state.meta.matchEndMode,
+                ...(state.meta.matchEndMode === 'timed' && state.meta.matchDurationMs != null
+                  ? {
+                      timedMatchMinutes: Math.max(
+                        1,
+                        Math.round(state.meta.matchDurationMs / 60_000),
+                      ),
+                      matchStartedAtMs: state.meta.matchStartedAtMs,
+                    }
+                  : {}),
               });
               if (state.meta.playtestHpCap !== undefined) {
                 rebuilt.meta = { ...rebuilt.meta, playtestHpCap: state.meta.playtestHpCap };
