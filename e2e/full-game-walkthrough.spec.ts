@@ -131,7 +131,7 @@ test.describe('Full game walkthrough documentation', () => {
       await logState(page, 'After selecting attack card');
       await shot(page, '13-attack-selected.png');
       await expect(page.getByRole('button', { name: 'Direkt angreifen' })).toBeVisible();
-      await expect(page.getByTestId('targeting-arrow')).toHaveCount(0);
+      await expect(page.getByTestId('targeting-arrow')).toBeVisible();
     } else {
       await shot(page, '13-no-attack-card.png');
     }

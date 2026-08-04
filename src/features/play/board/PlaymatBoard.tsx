@@ -29,7 +29,9 @@ import {
   glitchRequiresTarget,
   glitchTargetIds,
 } from './gameActionHelpers';
-import { CharacterDock, CombatStage, DeckPile, DiscardPile } from './zones';
+import { CharacterDock, CombatStage, DeckPile, DiscardPile, TargetingArrow } from './zones';
+import type { TargetingArrowCoords } from './zones/TargetingArrow';
+import { measureTargetingArrowCoords } from './zones/measureTargetingArrowCoords';
 import { BoundCardRow } from './BoundCardRow';
 import { FormulaRig } from './FormulaRig';
 import { ConstructZone } from './ConstructZone';
@@ -120,7 +122,13 @@ export function PlaymatBoard({
   const v5Formula = isV5FormulaEnabled(rulesetFromState(state));
   const v6Formula = isV6FormulaEnabled(rulesetFromState(state));
   const formulaBoard = v5Formula || v6Formula;
+  const playmatRef = useRef<HTMLDivElement>(null);
   const duelTableauRef = useRef<HTMLDivElement>(null);
+  const [rootRect, setRootRect] = useState<{ width: number; height: number }>({
+    width: 0,
+    height: 0,
+  });
+  const [arrowCoords, setArrowCoords] = useState<TargetingArrowCoords | null>(null);
   const [chargeConfirm, setChargeConfirm] = useState<{
     boundInstanceId: string;
     partName: string;
@@ -397,9 +405,43 @@ export function PlaymatBoard({
           .map((a) => a.formulaInstanceId)
       : [];
 
-  const hasChallengeTargets = v5Formula
+  const hasChallengeTargets = formulaBoard
     ? formulaChallengeIds.length > 0
     : view.botBoundSlots.some((s) => s.isTargetable);
+  const targetingArrowTargetableCount = formulaBoard
+    ? formulaChallengeIds.length
+    : view.botBoundSlots.filter((s) => s.isTargetable).length;
+
+  useEffect(() => {
+    const root = playmatRef.current;
+    if (!root) return;
+
+    const update = () => {
+      if (pending?.type !== 'attack') {
+        setArrowCoords(null);
+        const rect = root.getBoundingClientRect();
+        setRootRect({ width: rect.width, height: rect.height });
+        return;
+      }
+
+      const measured = measureTargetingArrowCoords({
+        root,
+        attackInstanceId: pending.attackInstanceId,
+        targetBoundInstanceId: pending.targetBoundInstanceId,
+      });
+      setRootRect(measured.rootRect);
+      setArrowCoords(measured.coords);
+    };
+
+    update();
+    const tableau = duelTableauRef.current;
+    window.addEventListener('resize', update);
+    tableau?.addEventListener('scroll', update);
+    return () => {
+      window.removeEventListener('resize', update);
+      tableau?.removeEventListener('scroll', update);
+    };
+  }, [pending]);
   const buildHasFreeSlot = view.humanBoundSlots.some((s) => !s.instanceId);
 
   const pendingHint = (() => {
@@ -554,7 +596,10 @@ export function PlaymatBoard({
         </div>
       )}
 
-      <div className="relative flex min-h-0 flex-1 overflow-hidden">
+      <div
+        ref={playmatRef}
+        className="relative flex min-h-0 flex-1 overflow-hidden"
+      >
         {openingDealActive && (
           <div data-testid="opening-deal-in-progress" className="sr-only" aria-live="polite">
             Eröffnungskarten werden verteilt
@@ -567,6 +612,15 @@ export function PlaymatBoard({
         )}
 
         {view.arena && !state.winner && <ArenaPlaymat arenaId={view.arena.id} />}
+
+        {pending?.type === 'attack' && !state.winner && arrowCoords && rootRect.width > 0 && (
+          <TargetingArrow
+            rootRect={rootRect}
+            coords={arrowCoords}
+            hasChallengeTargets={hasChallengeTargets}
+            targetableCount={targetingArrowTargetableCount}
+          />
+        )}
 
         <OpeningDealFly
           activeStep={activePresentationStep}

@@ -162,8 +162,8 @@ test.describe('Game Duel Board UI — Sprint 1', () => {
       await expect(page.getByRole('button', { name: 'Direkt angreifen' })).toBeEnabled({
         timeout: 3000,
       });
-      await expect(page.getByTestId('targeting-arrow')).toHaveCount(0);
-      await shot(page, '08-action-phase-attack.png');
+      await expect(page.getByTestId('targeting-arrow')).toBeVisible({ timeout: 3000 });
+      await shot(page, '08-targeting-arrow.png');
     }
   });
 
