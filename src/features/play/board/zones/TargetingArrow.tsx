@@ -4,7 +4,6 @@
  * Location: src/features/play/board/zones/TargetingArrow.tsx
  */
 import React from 'react';
-import type { BoundSlotView } from '../buildGameViewModel';
 
 export interface TargetingArrowCoords {
   source: { x: number; y: number };
@@ -17,19 +16,18 @@ interface TargetingArrowProps {
   /** Source and target coordinates relative to the playmat root. */
   coords: TargetingArrowCoords;
   hasChallengeTargets: boolean;
-  opponentSlots: BoundSlotView[];
+  /** Bound slots, formula components, and/or construct targets. */
+  targetableCount: number;
 }
 
 export function TargetingArrow({
   rootRect,
   coords,
   hasChallengeTargets,
-  opponentSlots,
+  targetableCount,
 }: TargetingArrowProps) {
   const { source, target } = coords;
   const controlY = (source.y + target.y) / 2 - Math.min(rootRect.height * 0.08, 60);
-
-  const targetableCount = opponentSlots.filter((s) => s.isTargetable).length;
 
   return (
     <svg
