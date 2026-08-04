@@ -2,11 +2,17 @@
  * Human hand row with playable / dimmed card states and multi-step intents.
  * Location: src/features/play/board/HandFan.tsx
  */
-import React, { useEffect, useRef } from 'react';
+import React, { useEffect, useRef, useState } from 'react';
+import { ChevronLeft, ChevronRight } from 'lucide-react';
 import { BoardCard } from './BoardCard';
 import { DraggableHandCard } from './DndPlaymat';
 import type { HandCardView } from './buildGameViewModel';
 import type { PendingIntent } from './gameActionHelpers';
+import {
+  HAND_SCROLL_STEP_RATIO,
+  measureHandScrollHints,
+  pickHandScrollHint,
+} from './handScrollHints';
 
 interface HandFanProps {
   cards: HandCardView[];
@@ -47,17 +53,56 @@ export function HandFan({
   onPlayItem,
 }: HandFanProps) {
   const scrollRef = useRef<HTMLDivElement>(null);
+  const [canScrollLeft, setCanScrollLeft] = useState(false);
+  const [canScrollRight, setCanScrollRight] = useState(false);
   const shown = (visibleCount !== undefined ? cards.slice(0, visibleCount) : cards).filter(
     (card) => !hiddenInstanceIds?.includes(card.instanceId),
   );
   const reserveEndSlot = Boolean(hiddenInstanceIds?.length) || dealRevealActive;
+  const hintDirection = pickHandScrollHint(canScrollLeft, canScrollRight);
 
-  // Keep the newest (rightmost) cards in view when the hand overflows.
+  // Keep the newest (rightmost) cards in view when the hand overflows; track scroll hints.
   useEffect(() => {
     const el = scrollRef.current;
     if (!el) return;
+
+    const updateHint = () => {
+      const next = measureHandScrollHints({
+        scrollLeft: el.scrollLeft,
+        clientWidth: el.clientWidth,
+        scrollWidth: el.scrollWidth,
+      });
+      setCanScrollLeft(next.canScrollLeft);
+      setCanScrollRight(next.canScrollRight);
+    };
+
     el.scrollLeft = el.scrollWidth;
+    updateHint();
+
+    el.addEventListener('scroll', updateHint, { passive: true });
+    const ro = new ResizeObserver(updateHint);
+    ro.observe(el);
+    const inner = el.firstElementChild;
+    if (inner instanceof HTMLElement) ro.observe(inner);
+
+    return () => {
+      el.removeEventListener('scroll', updateHint);
+      ro.disconnect();
+    };
   }, [shown.length, reserveEndSlot, dealRevealActive]);
+
+  const scrollByDirection = (direction: 'left' | 'right') => {
+    const el = scrollRef.current;
+    if (!el) return;
+    const step = Math.max(1, Math.round(el.clientWidth * HAND_SCROLL_STEP_RATIO));
+    const prefersReduced =
+      typeof window !== 'undefined' &&
+      window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+    el.scrollBy({
+      left: direction === 'right' ? step : -step,
+      behavior: prefersReduced ? 'auto' : 'smooth',
+    });
+  };
 
   if (shown.length === 0 && !reserveEndSlot) {
     return (
@@ -70,8 +115,31 @@ export function HandFan({
   return (
     <div
       data-testid="player-hand"
-      className="min-w-0 max-w-full rounded-xl border border-stone-600/50 bg-stone-900/50 px-2 py-2 shadow-inner sm:px-3"
+      className="relative min-w-0 max-w-full rounded-xl border border-stone-600/50 bg-stone-900/50 px-2 py-2 shadow-inner sm:px-3"
     >
+      {hintDirection === 'right' && (
+        <button
+          type="button"
+          data-testid="player-hand-scroll-hint-right"
+          aria-label="Nach rechts scrollen"
+          className="absolute right-2 top-1 z-10 border-0 bg-transparent p-0 text-red-500"
+          onClick={() => scrollByDirection('right')}
+        >
+          <ChevronRight className="hand-scroll-hint-arrow hand-scroll-hint-arrow--right h-5 w-5 stroke-[2.5]" />
+        </button>
+      )}
+      {hintDirection === 'left' && (
+        <button
+          type="button"
+          data-testid="player-hand-scroll-hint-left"
+          aria-label="Nach links scrollen"
+          className="absolute left-2 top-1 z-10 border-0 bg-transparent p-0 text-red-500"
+          onClick={() => scrollByDirection('left')}
+        >
+          <ChevronLeft className="hand-scroll-hint-arrow hand-scroll-hint-arrow--left h-5 w-5 stroke-[2.5]" />
+        </button>
+      )}
+
       {shown.length === 0 && dealRevealActive && (
         <p className="mb-1 text-center text-xs font-medium uppercase tracking-wider text-stone-500">
           Karten werden verteilt…
