@@ -40,6 +40,8 @@ export interface FormulaBoardRackProps {
   onEquipmentClick?: (item: EquipmentDisplayCard) => void;
   equipmentActivatableIds?: string[];
   equipmentReplaceTargetIds?: string[];
+  /** V6: Konstrukt zone rendered immediately right of Ausrüstung. */
+  trailingAside?: React.ReactNode;
 }
 
 export function FormulaBoardRack({
@@ -57,6 +59,7 @@ export function FormulaBoardRack({
   onEquipmentClick,
   equipmentActivatableIds = [],
   equipmentReplaceTargetIds = [],
+  trailingAside = null,
 }: FormulaBoardRackProps) {
   const stageRef = useRef<HTMLDivElement>(null);
   const previewTargetRef = useRef<HTMLDivElement>(null);
@@ -101,7 +104,7 @@ export function FormulaBoardRack({
 
         <div
           className={`relative z-[1] flex min-h-0 gap-2 sm:gap-3 ${
-            showEquipment ? 'flex-row items-stretch' : ''
+            showEquipment || trailingAside ? 'flex-row items-stretch' : ''
           }`}
         >
           <div
@@ -158,6 +161,10 @@ export function FormulaBoardRack({
                 replaceTargetIds={equipmentReplaceTargetIds}
               />
             </div>
+          ) : null}
+
+          {trailingAside ? (
+            <div className="flex flex-none items-stretch self-stretch">{trailingAside}</div>
           ) : null}
         </div>
       </div>

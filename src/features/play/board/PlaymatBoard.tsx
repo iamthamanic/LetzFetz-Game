@@ -746,60 +746,58 @@ export function PlaymatBoard({
 
           <section className="flex flex-none flex-col gap-2">
             {shouldShowFormulaGestellCompose(formulaBoard) ? (
-              <div className="flex min-w-0 items-start gap-2 sm:gap-3">
-                <div className="min-w-0 flex-1">
-                  <FormulaRig
-                    label="Gegner-Formel"
-                    formula={state.players[botId].formula}
-                    pack={pack}
-                    equipment={readPlayerEquipment(state.players[botId])}
-                    testId="opponent-formula-rig"
-                    targetableInstanceIds={
-                      pending?.type === 'glitch' ? formulaGlitchTargetIds : formulaChallengeIds
-                    }
-                    selectedTargetId={
-                      pending?.type === 'attack'
-                        ? pending.targetBoundInstanceId
-                        : pending?.type === 'glitch'
-                          ? pending.targetBoundInstanceId
-                          : null
-                    }
-                    onComponentClick={
-                      pending?.type === 'glitch'
-                        ? handleGlitchFormulaTarget
-                        : handleFormulaChallengeClick
-                    }
-                    echoDelayChips={botEchoDelayChips}
-                    pendingCatalystTiming={botPendingCatalyst}
-                  />
-                </div>
-                {v6Formula ? (
-                  <ConstructZone
-                    label="Gegner-Konstrukt"
-                    construct={state.players[botId].construct}
-                    testId="opponent-construct-zone"
-                    targetable={
-                      Boolean(state.players[botId].construct) &&
-                      formulaChallengeIds.includes(
-                        state.players[botId].construct!.instanceId,
-                      )
-                    }
-                    selected={
-                      pending?.type === 'attack' &&
-                      pending.targetBoundInstanceId ===
-                        state.players[botId].construct?.instanceId
-                    }
-                    onSelect={
-                      state.players[botId].construct
-                        ? () =>
-                            handleFormulaChallengeClick(
-                              state.players[botId].construct!.instanceId,
-                            )
-                        : undefined
-                    }
-                  />
-                ) : null}
-              </div>
+              <FormulaRig
+                label="Gegner-Formel"
+                formula={state.players[botId].formula}
+                pack={pack}
+                equipment={readPlayerEquipment(state.players[botId])}
+                testId="opponent-formula-rig"
+                targetableInstanceIds={
+                  pending?.type === 'glitch' ? formulaGlitchTargetIds : formulaChallengeIds
+                }
+                selectedTargetId={
+                  pending?.type === 'attack'
+                    ? pending.targetBoundInstanceId
+                    : pending?.type === 'glitch'
+                      ? pending.targetBoundInstanceId
+                      : null
+                }
+                onComponentClick={
+                  pending?.type === 'glitch'
+                    ? handleGlitchFormulaTarget
+                    : handleFormulaChallengeClick
+                }
+                echoDelayChips={botEchoDelayChips}
+                pendingCatalystTiming={botPendingCatalyst}
+                constructAside={
+                  v6Formula ? (
+                    <ConstructZone
+                      label="Gegner-Konstrukt"
+                      construct={state.players[botId].construct}
+                      testId="opponent-construct-zone"
+                      targetable={
+                        Boolean(state.players[botId].construct) &&
+                        formulaChallengeIds.includes(
+                          state.players[botId].construct!.instanceId,
+                        )
+                      }
+                      selected={
+                        pending?.type === 'attack' &&
+                        pending.targetBoundInstanceId ===
+                          state.players[botId].construct?.instanceId
+                      }
+                      onSelect={
+                        state.players[botId].construct
+                          ? () =>
+                              handleFormulaChallengeClick(
+                                state.players[botId].construct!.instanceId,
+                              )
+                          : undefined
+                      }
+                    />
+                  ) : null
+                }
+              />
             ) : (
               <BoundCardRow
                 label="Gegner-Engine"
@@ -842,54 +840,50 @@ export function PlaymatBoard({
 
           <section className="flex min-w-0 flex-none flex-col gap-2 border-t border-stone-800/80 pt-3">
             {shouldShowFormulaGestellCompose(formulaBoard) ? (
-              <div className="flex min-w-0 items-start gap-2 sm:gap-3">
-                <div className="min-w-0 flex-1">
-                  <FormulaRig
-                    label="Deine Formel"
-                    formula={state.players[humanId].formula}
-                    pack={pack}
-                    equipment={readPlayerEquipment(state.players[humanId])}
-                    testId="human-formula-rig"
-                    equipmentActivatableIds={equipmentActivatableIds}
-                    equipmentReplaceTargetIds={equipmentReplaceTargetIds}
-                    onEquipmentClick={handleEquipmentClick}
-                    formulaDropEnabled={
-                      state.phase === 'build' &&
-                      view.isHumanTurn &&
-                      view.legalActions.some(
-                        (a) =>
-                          a.type === 'FORMULA_BUILD' ||
-                          a.type === 'FORMULA_REPLACE' ||
-                          a.type === 'FORMULA_SCHNELLMIX',
-                      )
-                    }
-                    targetableInstanceIds={
-                      pending?.type === 'glitch'
-                        ? formulaGlitchTargetIds
-                        : formulaReturnIds
-                    }
-                    selectedTargetId={
-                      pending?.type === 'glitch' ? pending.targetBoundInstanceId ?? null : null
-                    }
-                    onComponentClick={
-                      pending?.type === 'glitch'
-                        ? handleGlitchFormulaTarget
-                        : pending?.type === 'formula-return'
-                          ? handleFormulaReturnClick
-                          : undefined
-                    }
-                    echoDelayChips={humanEchoDelayChips}
-                    pendingCatalystTiming={humanPendingCatalyst}
-                  />
-                </div>
-                {v6Formula ? (
-                  <ConstructZone
-                    label="Dein Konstrukt"
-                    construct={state.players[humanId].construct}
-                    testId="human-construct-zone"
-                  />
-                ) : null}
-              </div>
+              <FormulaRig
+                label="Deine Formel"
+                formula={state.players[humanId].formula}
+                pack={pack}
+                equipment={readPlayerEquipment(state.players[humanId])}
+                testId="human-formula-rig"
+                equipmentActivatableIds={equipmentActivatableIds}
+                equipmentReplaceTargetIds={equipmentReplaceTargetIds}
+                onEquipmentClick={handleEquipmentClick}
+                formulaDropEnabled={
+                  state.phase === 'build' &&
+                  view.isHumanTurn &&
+                  view.legalActions.some(
+                    (a) =>
+                      a.type === 'FORMULA_BUILD' ||
+                      a.type === 'FORMULA_REPLACE' ||
+                      a.type === 'FORMULA_SCHNELLMIX',
+                  )
+                }
+                targetableInstanceIds={
+                  pending?.type === 'glitch' ? formulaGlitchTargetIds : formulaReturnIds
+                }
+                selectedTargetId={
+                  pending?.type === 'glitch' ? pending.targetBoundInstanceId ?? null : null
+                }
+                onComponentClick={
+                  pending?.type === 'glitch'
+                    ? handleGlitchFormulaTarget
+                    : pending?.type === 'formula-return'
+                      ? handleFormulaReturnClick
+                      : undefined
+                }
+                echoDelayChips={humanEchoDelayChips}
+                pendingCatalystTiming={humanPendingCatalyst}
+                constructAside={
+                  v6Formula ? (
+                    <ConstructZone
+                      label="Dein Konstrukt"
+                      construct={state.players[humanId].construct}
+                      testId="human-construct-zone"
+                    />
+                  ) : null
+                }
+              />
             ) : (
               <BoundCardRow
                 key={`human-engine-thumbs-${liveSnapshotEpoch}`}

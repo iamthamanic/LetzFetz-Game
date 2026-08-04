@@ -39,6 +39,8 @@ interface FormulaRigProps {
   echoDelayChips?: V6EchoDelayChip[];
   /** V6: seated catalyst waiting for Echo/Delay Startphase resolve. */
   pendingCatalystTiming?: V6EchoDelayKind | null;
+  /** V6: Konstrukt zone — rendered right of Ausrüstung. */
+  constructAside?: React.ReactNode;
 }
 
 export function FormulaRig({
@@ -56,6 +58,7 @@ export function FormulaRig({
   equipmentReplaceTargetIds = [],
   echoDelayChips = [],
   pendingCatalystTiming = null,
+  constructAside = null,
 }: FormulaRigProps) {
   const slots = mapFormulaSlotsForDisplay(pack, formula);
   if (pendingCatalystTiming && slots.katalysator) {
@@ -93,6 +96,7 @@ export function FormulaRig({
         onEquipmentClick={onEquipmentClick}
         equipmentActivatableIds={equipmentActivatableIds}
         equipmentReplaceTargetIds={equipmentReplaceTargetIds}
+        trailingAside={constructAside}
       />
     </div>
   );
