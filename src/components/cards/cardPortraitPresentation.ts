@@ -178,11 +178,12 @@ export function buildCardPortraitPresentation(input: CardPortraitInput): CardPor
     case 'Formula': {
       showHeader = false;
       headerIcons = [];
-      typeBadge = 'Formel';
-      elementBadge =
+      // Prefer Technik / Essenz / Katalysator as the primary badge (not generic Formel).
+      typeBadge =
         input.role ??
         effectField(input.effects, 'Rolle: ') ??
-        null;
+        'Formel';
+      elementBadge = null;
       subtitle = null;
       effectLine =
         firstLine(effectField(input.effects, 'Effekt: ')) ??

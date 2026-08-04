@@ -1,18 +1,18 @@
 /**
- * V6 feste Macken engine tests (#349 Option B).
- * Location: src/game/engine/v6/mackes.test.ts
+ * V6 feste Passive-Skills engine tests (#349 Option B).
+ * Location: src/game/engine/v6/passiveSkills.test.ts
  */
 import { describe, expect, it } from 'vitest';
 import { createGame } from '../createGame';
 import { applyAction, getLegalActions } from '../actions';
 import { V6_CORE_PACK, V6_PACK_RULESET } from '../../packs/v6';
-import { V6_CHARACTER_MACKES } from '../../packs/v6/mackes';
+import { V6_CHARACTER_PASSIVE_SKILLS } from '../../packs/v6/passiveSkills';
 import {
   noteV6FormulaChange,
-  resolveV6MackeScry,
+  resolveV6PassiveSkillScry,
   tryV6JetztErstRecht,
   tryV6Nachjustiert,
-} from './mackes';
+} from './passiveSkills';
 import type { GameState } from '../../types';
 import { createSeededRng } from '../deck';
 
@@ -34,14 +34,14 @@ function gameWithChar(characterId: string): GameState {
   });
 }
 
-describe('V6_CHARACTER_MACKES data', () => {
-  it('ships one feste Macke for every V6 character', () => {
+describe('V6_CHARACTER_PASSIVE_SKILLS data', () => {
+  it('ships one fester Passive-Skill for every V6 character', () => {
     for (const ch of V6_CORE_PACK.characters) {
-      const macke = V6_CHARACTER_MACKES[ch.id];
-      expect(macke, ch.id).toBeDefined();
-      expect(ch.mackeId).toBe(macke.id);
-      expect(ch.mackeName).toBe(macke.name);
-      expect(ch.passiveText).toContain(macke.name);
+      const skill = V6_CHARACTER_PASSIVE_SKILLS[ch.id];
+      expect(skill, ch.id).toBeDefined();
+      expect(ch.passiveSkillId).toBe(skill.id);
+      expect(ch.passiveSkillName).toBe(skill.name);
+      expect(ch.passiveText).toContain(skill.name);
       expect(ch.ultimateId).toBe('');
       expect(ch.passiveText).not.toMatch(/Keine V5-Passive/);
     }
@@ -65,20 +65,20 @@ describe('Resteverwertung (2nd formula change → scry 1)', () => {
     expect(state.meta.v6FormulaChangesThisTurn?.p1).toBe(1);
 
     state = noteV6FormulaChange(state, 'p1', V6_PACK_RULESET);
-    expect(state.pendingChoice?.type).toBe('v6-macke-scry');
-    if (state.pendingChoice?.type !== 'v6-macke-scry') throw new Error('expected scry');
-    expect(state.pendingChoice.mackeId).toBe('resteverwertung');
+    expect(state.pendingChoice?.type).toBe('v6-passive-skill-scry');
+    if (state.pendingChoice?.type !== 'v6-passive-skill-scry') throw new Error('expected scry');
+    expect(state.pendingChoice.passiveSkillId).toBe('resteverwertung');
     expect(state.pendingChoice.revealedInstanceIds[0]).toBe('top-1');
 
     const legal = getLegalActions(state, CTX);
-    expect(legal.some((a) => a.type === 'PICK_V6_MACKE_SCRY' && a.mode === 'keep')).toBe(
+    expect(legal.some((a) => a.type === 'PICK_V6_PASSIVE_SKILL_SCRY' && a.mode === 'keep')).toBe(
       true,
     );
 
-    state = applyAction(state, { type: 'PICK_V6_MACKE_SCRY', mode: 'bottom' }, 'p1', CTX);
+    state = applyAction(state, { type: 'PICK_V6_PASSIVE_SKILL_SCRY', mode: 'bottom' }, 'p1', CTX);
     expect(state.pendingChoice).toBeNull();
     expect(state.piles.deck[state.piles.deck.length - 1]?.instanceId).toBe('top-1');
-    expect(state.meta.v6MackeUsed?.p1).toContain('resteverwertung');
+    expect(state.meta.v6PassiveSkillUsed?.p1).toContain('resteverwertung');
 
     // Second trigger same cycle blocked
     const again = noteV6FormulaChange(
@@ -105,7 +105,7 @@ describe('Jetzt erst recht / Nachjustiert', () => {
     ];
     const deckBefore = state.piles.deck.length;
     state = tryV6JetztErstRecht(state, 'p1', 2, createSeededRng(7), V6_PACK_RULESET);
-    expect(state.meta.v6MackeUsed?.p1).toContain('jetzt-erst-recht');
+    expect(state.meta.v6PassiveSkillUsed?.p1).toContain('jetzt-erst-recht');
     expect(state.piles.deck.length).toBe(deckBefore); // −1 under + draw from same pile net ~same or -0
     expect(state.players.p1.hand.some((c) => c.instanceId === 'h2')).toBe(false);
   });
@@ -126,11 +126,11 @@ describe('Jetzt erst recht / Nachjustiert', () => {
     };
     state = tryV6Nachjustiert(state, 'p1', 1, V6_PACK_RULESET);
     expect(state.players.p1.formula.technik?.stabilityBonus).toBe(1);
-    expect(state.meta.v6MackeUsed?.p1).toContain('nachjustiert');
+    expect(state.meta.v6PassiveSkillUsed?.p1).toContain('nachjustiert');
   });
 });
 
-describe('resolveV6MackeScry swap', () => {
+describe('resolveV6PassiveSkillScry swap', () => {
   it('swaps top two', () => {
     let state = gameWithChar('schluckspecht');
     state.piles.deck = [
@@ -139,12 +139,12 @@ describe('resolveV6MackeScry swap', () => {
       { instanceId: 'c', defId: 'block-earth-1' },
     ];
     state.pendingChoice = {
-      type: 'v6-macke-scry',
+      type: 'v6-passive-skill-scry',
       playerId: 'p1',
-      mackeId: 'erst-mal-gucken',
+      passiveSkillId: 'erst-mal-gucken',
       revealedInstanceIds: ['a', 'b'],
     };
-    state = resolveV6MackeScry(state, 'p1', 'swap');
+    state = resolveV6PassiveSkillScry(state, 'p1', 'swap');
     expect(state.piles.deck.map((c) => c.instanceId).slice(0, 3)).toEqual(['b', 'a', 'c']);
   });
 });

@@ -3,12 +3,14 @@
  * Location: src/features/play/board/BoardCard.tsx
  */
 import React from 'react';
-import type { ElementCardDef, GlitchCardDef } from '../../../game/types';
+import type { ElementCardDef, GlitchCardDef, ItemCardDef } from '../../../game/types';
+import type { FormulaComponentDef } from '../../../game';
 import { LetzFetzCard, type LetzFetzCardSize } from '../../../components/cards/LetzFetzCard';
 import { elementDefToCardProps } from '../../../components/cards/cardDisplayModel';
 import { lookupEnginePartAsset } from '../../../services/engineAssets/partRegistry';
 import { resolveBoardCardArtPath } from '../engine3d/rendering/resolveEnginePartThumb';
 import { CardEffectTooltip } from './CardEffectTooltip';
+import { formulaRoleDe } from './resolveHandCardDefs';
 
 export type BoardCardSize = 'hand' | 'bound' | 'opponentBound' | 'combat' | 'showcase';
 
@@ -55,6 +57,8 @@ function handMotionClass(size: BoardCardSize, playable: boolean, dimmed: boolean
 export interface BoardCardProps {
   def?: ElementCardDef;
   glitchDef?: GlitchCardDef | null;
+  itemDef?: ItemCardDef | null;
+  formulaDef?: FormulaComponentDef | null;
   defId?: string;
   name?: string;
   size?: BoardCardSize;
@@ -73,9 +77,16 @@ export interface BoardCardProps {
   onClick?: () => void;
 }
 
+const ITEM_TIMING_DE = {
+  action: 'Aktion',
+  reaction: 'Reaktion',
+} as const;
+
 export function BoardCard({
   def,
   glitchDef,
+  itemDef,
+  formulaDef,
   defId,
   name,
   size = 'hand',
@@ -97,9 +108,15 @@ export function BoardCard({
 
   const wrapTooltip = (node: React.ReactNode) => {
     if (!showEffectTooltip || faceDown) return node;
-    if (!def && !glitchDef) return node;
+    if (!def && !glitchDef && !itemDef && !formulaDef) return node;
     return (
-      <CardEffectTooltip def={def} glitchDef={glitchDef} hint={tooltipHint}>
+      <CardEffectTooltip
+        def={def}
+        glitchDef={glitchDef}
+        itemDef={itemDef}
+        formulaDef={formulaDef}
+        hint={tooltipHint}
+      >
         {node}
       </CardEffectTooltip>
     );
@@ -116,6 +133,63 @@ export function BoardCard({
         faceDown
         className={`flex-none ${sizeOverride}`}
       />
+    );
+  }
+
+  const chrome = `flex-none ${sizeOverride} ${ringClass(selected, targetable, playable, size)} ${handMotionClass(size, playable, dimmed)} ${dimmed ? 'opacity-55 saturate-75' : ''}`;
+
+  if (itemDef) {
+    const artPath = resolveBoardCardArtPath(itemDef.id);
+    return wrapTooltip(
+      <LetzFetzCard
+        id={itemDef.id}
+        name={itemDef.name}
+        type="Item"
+        element="Neutral"
+        size={letzSize}
+        effects={[
+          `Timing: ${ITEM_TIMING_DE[itemDef.timing] ?? itemDef.timing}`,
+          `Effekt: ${itemDef.effectText}`,
+        ]}
+        image_asset={artPath || undefined}
+        data-interaction={dataInteraction}
+        className={chrome}
+        onClick={onClick}
+        disabled={cardDisabled}
+      />,
+    );
+  }
+
+  if (formulaDef) {
+    const role = formulaRoleDe(formulaDef);
+    const artPath = resolveBoardCardArtPath(formulaDef.id);
+    const effects =
+      formulaDef.kind === 'essence'
+        ? [
+            `Rolle: ${role}`,
+            `Stabilität: ${formulaDef.stability}`,
+            `Effekt: ${formulaDef.effectText}`,
+          ]
+        : [
+            `Rolle: ${role}`,
+            `Stabilität: ${formulaDef.stability}`,
+            `Effekt: ${formulaDef.effectText}`,
+          ];
+    return wrapTooltip(
+      <LetzFetzCard
+        id={formulaDef.id}
+        name={formulaDef.name}
+        type="Formula"
+        element="Neutral"
+        role={role}
+        size={letzSize}
+        effects={effects}
+        image_asset={artPath || undefined}
+        data-interaction={dataInteraction}
+        className={chrome}
+        onClick={onClick}
+        disabled={cardDisabled}
+      />,
     );
   }
 
@@ -137,7 +211,7 @@ export function BoardCard({
         effects={glitchEffects}
         image_asset={artPath || undefined}
         data-interaction={dataInteraction}
-        className={`flex-none ${sizeOverride} ${ringClass(selected, targetable, playable, size)} ${handMotionClass(size, playable, dimmed)} ${dimmed ? 'opacity-55 saturate-75' : ''}`}
+        className={chrome}
         onClick={onClick}
         disabled={cardDisabled}
       />,

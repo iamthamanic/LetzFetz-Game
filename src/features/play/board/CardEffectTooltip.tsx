@@ -4,10 +4,12 @@
  */
 import React, { useEffect, useRef, useState } from 'react';
 import { createPortal } from 'react-dom';
-import type { ElementCardDef, GlitchCardDef } from '../../../game/types';
+import type { ElementCardDef, GlitchCardDef, ItemCardDef } from '../../../game/types';
+import type { FormulaComponentDef } from '../../../game';
 import { getElementSynergy } from '../../../game/rules/elementSynergies';
 import { ELEMENT_LABELS_DE } from '../../../components/ui/ElementIcon';
 import { formatImpulseTooltipLine } from '../../../components/cards/impulseKeywordCopy';
+import { formulaRoleDe } from './resolveHandCardDefs';
 
 const CARD_TYPE_DE: Record<ElementCardDef['cardType'], string> = {
   attack: 'Angriff',
@@ -23,6 +25,8 @@ const GLITCH_TYPE_DE: Record<GlitchCardDef['glitchType'], string> = {
 interface CardEffectTooltipProps {
   def?: ElementCardDef | null;
   glitchDef?: GlitchCardDef | null;
+  itemDef?: ItemCardDef | null;
+  formulaDef?: FormulaComponentDef | null;
   /** Extra line (e.g. attack targeting hint). */
   hint?: string;
   children: React.ReactNode;
@@ -32,6 +36,8 @@ interface CardEffectTooltipProps {
 export function CardEffectTooltip({
   def,
   glitchDef,
+  itemDef,
+  formulaDef,
   hint,
   children,
   className = '',
@@ -67,7 +73,7 @@ export function CardEffectTooltip({
     };
   }, [open]);
 
-  if (!def && !glitchDef) {
+  if (!def && !glitchDef && !itemDef && !formulaDef) {
     return <div className={className}>{children}</div>;
   }
 
@@ -90,6 +96,8 @@ export function CardEffectTooltip({
             style={{ top: pos.top, left: pos.left }}
           >
             {def ? <ElementTooltipBody def={def} hint={hint} /> : null}
+            {itemDef ? <ItemTooltipBody item={itemDef} hint={hint} /> : null}
+            {formulaDef ? <FormulaTooltipBody formula={formulaDef} hint={hint} /> : null}
             {glitchDef ? <GlitchTooltipBody glitch={glitchDef} hint={hint} /> : null}
           </div>,
           document.body,
@@ -196,6 +204,53 @@ function GlitchTooltipBody({ glitch, hint }: { glitch: GlitchCardDef; hint?: str
         <div>
           <dt className="font-semibold text-emerald-400/90">Effekt</dt>
           <dd className="mt-0.5 whitespace-pre-wrap">{glitch.effectText}</dd>
+        </div>
+      </dl>
+      {hint && (
+        <p className="mt-2 border-t border-stone-700 pt-2 text-[11px] text-amber-200/90">{hint}</p>
+      )}
+    </>
+  );
+}
+
+function ItemTooltipBody({ item, hint }: { item: ItemCardDef; hint?: string }) {
+  return (
+    <>
+      <p className="text-sm font-bold text-stone-100">{item.name}</p>
+      <p className="mt-0.5 text-[11px] font-semibold uppercase tracking-wide text-amber-400/90">
+        Gegenstand · {item.timing === 'reaction' ? 'Reaktion' : 'Aktion'}
+      </p>
+      <dl className="mt-2 space-y-2 text-xs leading-snug text-stone-200">
+        <div>
+          <dt className="font-semibold text-emerald-400/90">Effekt</dt>
+          <dd className="mt-0.5 whitespace-pre-wrap">{item.effectText}</dd>
+        </div>
+      </dl>
+      {hint && (
+        <p className="mt-2 border-t border-stone-700 pt-2 text-[11px] text-amber-200/90">{hint}</p>
+      )}
+    </>
+  );
+}
+
+function FormulaTooltipBody({
+  formula,
+  hint,
+}: {
+  formula: FormulaComponentDef;
+  hint?: string;
+}) {
+  const role = formulaRoleDe(formula);
+  return (
+    <>
+      <p className="text-sm font-bold text-stone-100">{formula.name}</p>
+      <p className="mt-0.5 text-[11px] font-semibold uppercase tracking-wide text-amber-400/90">
+        {role} · Stabilität {formula.stability}
+      </p>
+      <dl className="mt-2 space-y-2 text-xs leading-snug text-stone-200">
+        <div>
+          <dt className="font-semibold text-emerald-400/90">Effekt</dt>
+          <dd className="mt-0.5 whitespace-pre-wrap">{formula.effectText}</dd>
         </div>
       </dl>
       {hint && (

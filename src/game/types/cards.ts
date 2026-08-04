@@ -34,10 +34,10 @@ export interface CharacterCardDef extends CardBase {
   elements: [Element, Element];
   role: string;
   passiveText: string;
-  /** V6 Option B: feste Macke id (absent on V5). */
-  mackeId?: string;
-  /** V6 Option B: German Macke display name. */
-  mackeName?: string;
+  /** V6 Option B: fester Passive-Skill id (absent on V5). */
+  passiveSkillId?: string;
+  /** V6 Option B: German Passive-Skill display name. */
+  passiveSkillName?: string;
   ultimateId: string;
   strategyHint: string;
 }

@@ -117,7 +117,7 @@ describe('cardPortraitPresentation', () => {
     expect(model.elementBadge).toBe('Glitch');
   });
 
-  it('shows Formel + role badges for formula cards', () => {
+  it('shows Formel role as primary type badge for formula cards', () => {
     const model = buildCardPortraitPresentation({
       id: 'v5-technik-durchschuss',
       type: 'Formula',
@@ -126,8 +126,8 @@ describe('cardPortraitPresentation', () => {
     });
 
     expect(model.showHeader).toBe(false);
-    expect(model.typeBadge).toBe('Formel');
-    expect(model.elementBadge).toBe('Technik');
+    expect(model.typeBadge).toBe('Technik');
+    expect(model.elementBadge).toBeNull();
     expect(model.effectLine).toContain('Schild');
   });
 });

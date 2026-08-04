@@ -26,7 +26,7 @@ export const V6_PACK_RULESET: RulesetConfig = {
 
 /**
  * Slice-1 pack: Slice-1 formula cards + 6 V6 core arenas;
- * V6 characters (affinity + Macken); V6 hand-only element cards (§36);
+ * V6 characters (affinity + Passive-Skills); V6 hand-only element cards (§36);
  * Standard-Glitches with explicit timing (no Sofort-Negativ / Chaos).
  */
 export function buildV6CorePack(): ContentPack {

@@ -145,6 +145,8 @@ export function HandFan({
               <BoardCard
                 def={card.def ?? undefined}
                 glitchDef={card.glitchDef}
+                itemDef={card.itemDef}
+                formulaDef={card.formulaDef}
                 defId={card.defId}
                 name={card.glitchName ?? undefined}
                 size="hand"

@@ -58,14 +58,14 @@ export interface MatchMeta {
    * Missing / true = available; false = already spent this cycle.
    */
   v6AffinityAvailable?: Record<PlayerId, boolean>;
-  /** V6 Macken (#349 Option B) already used this own turn cycle (macke ids). */
-  v6MackeUsed?: Record<PlayerId, string[]>;
+  /** V6 Passive-Skills (#349 Option B) already used this own turn cycle (passive skill ids). */
+  v6PassiveSkillUsed?: Record<PlayerId, string[]>;
   /** V6 Formeländerungen this own turn (Resteverwertung fires on 2nd). */
   v6FormulaChangesThisTurn?: Record<PlayerId, number>;
   /** V6: Rückbau used this turn — Formelphase already ended without activate. */
   v6FormulaRueckbauThisTurn?: Record<PlayerId, boolean>;
   /**
-   * V6 Falsche Farbe: Affinity spend this action used the Macke expand.
+   * V6 Falsche Farbe: Affinity spend this action used the Passive-Skill expand.
    * Cleared when pending affinity resolves / action ends.
    */
   v6FalscheFarbeArmed?: Record<PlayerId, boolean>;
@@ -234,10 +234,10 @@ export type PendingChoice =
       targetName: string;
     }
   | {
-      /** V6 Macke Scry: top deck cards revealed; choose keep / bottom / swap. */
-      type: 'v6-macke-scry';
+      /** V6 Passive-Skill Scry: top deck cards revealed; choose keep / bottom / swap. */
+      type: 'v6-passive-skill-scry';
       playerId: PlayerId;
-      mackeId: string;
+      passiveSkillId: string;
       /** Top-of-deck order at reveal (length 1 or 2). */
       revealedInstanceIds: string[];
     };
@@ -287,9 +287,9 @@ export function resetTurnMeta(meta: MatchMeta, activePlayer: PlayerId): MatchMet
       p1: activePlayer === 'p1' ? true : (meta.v6AffinityAvailable?.p1 ?? true),
       p2: activePlayer === 'p2' ? true : (meta.v6AffinityAvailable?.p2 ?? true),
     },
-    v6MackeUsed: {
-      p1: activePlayer === 'p1' ? [] : (meta.v6MackeUsed?.p1 ?? []),
-      p2: activePlayer === 'p2' ? [] : (meta.v6MackeUsed?.p2 ?? []),
+    v6PassiveSkillUsed: {
+      p1: activePlayer === 'p1' ? [] : (meta.v6PassiveSkillUsed?.p1 ?? []),
+      p2: activePlayer === 'p2' ? [] : (meta.v6PassiveSkillUsed?.p2 ?? []),
     },
     v6FormulaChangesThisTurn: {
       p1: activePlayer === 'p1' ? 0 : (meta.v6FormulaChangesThisTurn?.p1 ?? 0),

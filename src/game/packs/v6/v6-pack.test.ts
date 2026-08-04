@@ -48,14 +48,14 @@ describe('V6_CORE_PACK Slice-1 (INTERNAL)', () => {
     expect(buildV6CorePack().version).toBe(V6_CORE_PACK.version);
   });
 
-  it('ships V6 characters with feste Macken and no V5 passives/ultis', () => {
+  it('ships V6 characters with feste Passive-Skills and no V5 passives/ultis', () => {
     expect(V6_CORE_PACK.characters.length).toBeGreaterThanOrEqual(2);
     for (const ch of V6_CORE_PACK.characters) {
       expect(ch.elements).toHaveLength(2);
       expect(ch.ultimateId).toBe('');
-      expect(ch.mackeId).toBeTruthy();
-      expect(ch.mackeName).toBeTruthy();
-      expect(ch.passiveText).toContain(ch.mackeName!);
+      expect(ch.passiveSkillId).toBeTruthy();
+      expect(ch.passiveSkillName).toBeTruthy();
+      expect(ch.passiveText).toContain(ch.passiveSkillName!);
       expect(ch.passiveText).not.toMatch(/Einmal pro Zug, wenn du Feuer oder Erde baust/);
     }
   });

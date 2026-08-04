@@ -37,7 +37,7 @@ export function CharacterPlate({
   const isActive = state.activePlayer === playerId && !state.winner;
   const isHuman = side === 'human';
   const name = characterName(pack, player.characterId);
-  const mackeName = pack.characters.find((c) => c.id === player.characterId)?.mackeName;
+  const passiveSkillName = pack.characters.find((c) => c.id === player.characterId)?.passiveSkillName;
   const testId = isHuman ? 'human-plate' : 'opponent-plate';
 
   return (
@@ -62,9 +62,9 @@ export function CharacterPlate({
           </span>
           {isActive && <Badge variant={isHuman ? 'success' : 'warning'}>Am Zug</Badge>}
           {isHuman && player.ultimateAvailable && <Badge variant="accent">Ulti bereit</Badge>}
-          {mackeName && (
-            <Badge variant="info" data-testid={`${testId}-macke`}>
-              Macke: {mackeName}
+          {passiveSkillName && (
+            <Badge variant="info" data-testid={`${testId}-passive-skill`}>
+              Passive-Skill: {passiveSkillName}
             </Badge>
           )}
         </div>

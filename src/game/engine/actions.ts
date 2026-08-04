@@ -69,13 +69,13 @@ import {
   canUseV6FalscheFarbe,
   consumeV6FalscheFarbeIfArmed,
   noteV6FormulaChange,
-  resolveV6MackeScry,
+  resolveV6PassiveSkillScry,
   tryV6Dosisaenderung,
   tryV6ErstMalGucken,
   tryV6JetztErstRecht,
   tryV6Nachjustiert,
   tryV6SchwachstelleErkannt,
-} from './v6/mackes';
+} from './v6/passiveSkills';
 import {
   cloneState,
   discardFromHand,
@@ -1164,7 +1164,7 @@ function pendingChoicePlayer(pending: PendingChoice): PlayerId {
       return pending.playerId;
     case 'v6-basar-pay-destroy':
       return pending.playerId;
-    case 'v6-macke-scry':
+    case 'v6-passive-skill-scry':
       return pending.playerId;
     case 'pick-reaction':
       return pending.chooserId;
@@ -1360,11 +1360,11 @@ function getPendingLegalActions(state: GameState, ctx: PackContext): GameAction[
       }
       break;
     }
-    case 'v6-macke-scry': {
-      actions.push({ type: 'PICK_V6_MACKE_SCRY', mode: 'keep' });
-      actions.push({ type: 'PICK_V6_MACKE_SCRY', mode: 'bottom' });
+    case 'v6-passive-skill-scry': {
+      actions.push({ type: 'PICK_V6_PASSIVE_SKILL_SCRY', mode: 'keep' });
+      actions.push({ type: 'PICK_V6_PASSIVE_SKILL_SCRY', mode: 'bottom' });
       if (pending.revealedInstanceIds.length >= 2) {
-        actions.push({ type: 'PICK_V6_MACKE_SCRY', mode: 'swap' });
+        actions.push({ type: 'PICK_V6_PASSIVE_SKILL_SCRY', mode: 'swap' });
       }
       break;
     }
@@ -2008,7 +2008,7 @@ function applyPendingChoiceAction(
         case 'v6-affinity':
         case 'v6-fessel-target':
         case 'v6-basar-pay-destroy':
-        case 'v6-macke-scry':
+        case 'v6-passive-skill-scry':
           throw new Error('Arena effect cannot be skipped');
       }
       break;
@@ -2066,9 +2066,9 @@ function applyPendingChoiceAction(
         rng,
       );
     }
-    case 'PICK_V6_MACKE_SCRY': {
-      if (pending.type !== 'v6-macke-scry') throw new Error('Wrong pending type');
-      return resolveV6MackeScry(state, playerId, action.mode);
+    case 'PICK_V6_PASSIVE_SKILL_SCRY': {
+      if (pending.type !== 'v6-passive-skill-scry') throw new Error('Wrong pending type');
+      return resolveV6PassiveSkillScry(state, playerId, action.mode);
     }
     case 'PICK_V6_FESSEL_TARGET': {
       if (pending.type !== 'v6-fessel-target') throw new Error('Wrong pending type');

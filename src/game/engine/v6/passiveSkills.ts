@@ -1,7 +1,8 @@
 /**
- * V6 feste Macken engine hooks (Option B, #349).
- * Location: src/game/engine/v6/mackes.ts
+ * V6 fester Passive-Skill engine hooks (Option B, #349).
+ * Location: src/game/engine/v6/passiveSkills.ts
  *
+ * Player-facing term: Passive-Skill. Pending type: `v6-passive-skill-scry`.
  * Do not extend V5 characterPassives.ts — separate budget and triggers.
  */
 import type {
@@ -15,43 +16,43 @@ import { isV6FormulaEnabled } from '../../types';
 import { cloneState, drawForPlayer, getCharacterElements } from '../helpers';
 import { listFormulaComponents } from '../formulaChallenge';
 import type { Rng } from '../deck';
-import { getV6MackeForCharacter } from '../../packs/v6/mackes';
+import { getV6PassiveSkillForCharacter } from '../../packs/v6/passiveSkills';
 
-export type V6MackeScryMode = 'keep' | 'bottom' | 'swap';
+export type V6PassiveSkillScryMode = 'keep' | 'bottom' | 'swap';
 
 function isV6(state: GameState, ruleset: RulesetConfig): boolean {
   return isV6FormulaEnabled(ruleset) || state.meta.v6FormulaEnabled === true;
 }
 
-function mackeUsed(state: GameState, playerId: PlayerId, mackeId: string): boolean {
-  return (state.meta.v6MackeUsed?.[playerId] ?? []).includes(mackeId);
+function passiveSkillUsed(state: GameState, playerId: PlayerId, passiveSkillId: string): boolean {
+  return (state.meta.v6PassiveSkillUsed?.[playerId] ?? []).includes(passiveSkillId);
 }
 
-function markMackeUsed(state: GameState, playerId: PlayerId, mackeId: string): GameState {
+function markPassiveSkillUsed(state: GameState, playerId: PlayerId, passiveSkillId: string): GameState {
   const next = cloneState(state);
-  const prev = next.meta.v6MackeUsed ?? { p1: [], p2: [] };
-  next.meta.v6MackeUsed = {
+  const prev = next.meta.v6PassiveSkillUsed ?? { p1: [], p2: [] };
+  next.meta.v6PassiveSkillUsed = {
     p1: [...(prev.p1 ?? [])],
     p2: [...(prev.p2 ?? [])],
-    [playerId]: [...(prev[playerId] ?? []), mackeId],
+    [playerId]: [...(prev[playerId] ?? []), passiveSkillId],
   };
   return next;
 }
 
-function characterMackeId(state: GameState, playerId: PlayerId): string | undefined {
+function characterPassiveSkillId(state: GameState, playerId: PlayerId): string | undefined {
   const characterId = state.players[playerId].characterId;
-  return getV6MackeForCharacter(characterId)?.id;
+  return getV6PassiveSkillForCharacter(characterId)?.id;
 }
 
 function canTrigger(
   state: GameState,
   playerId: PlayerId,
-  mackeId: string,
+  passiveSkillId: string,
   ruleset: RulesetConfig,
 ): boolean {
   if (!isV6(state, ruleset)) return false;
-  if (characterMackeId(state, playerId) !== mackeId) return false;
-  if (mackeUsed(state, playerId, mackeId)) return false;
+  if (characterPassiveSkillId(state, playerId) !== passiveSkillId) return false;
+  if (passiveSkillUsed(state, playerId, passiveSkillId)) return false;
   return true;
 }
 
@@ -63,22 +64,22 @@ function peekDeckTop(state: GameState, count: number): string[] {
 function openScry(
   state: GameState,
   playerId: PlayerId,
-  mackeId: string,
+  passiveSkillId: string,
   count: number,
   label: string,
 ): GameState {
   if (state.pendingChoice) return state;
   const revealed = peekDeckTop(state, count);
   if (revealed.length === 0) {
-    const next = markMackeUsed(state, playerId, mackeId);
+    const next = markPassiveSkillUsed(state, playerId, passiveSkillId);
     next.lastEvent = `${next.lastEvent ?? ''} ${label}: Deck leer.`.trim();
     return next;
   }
-  let next = markMackeUsed(state, playerId, mackeId);
+  let next = markPassiveSkillUsed(state, playerId, passiveSkillId);
   next.pendingChoice = {
-    type: 'v6-macke-scry',
+    type: 'v6-passive-skill-scry',
     playerId,
-    mackeId,
+    passiveSkillId,
     revealedInstanceIds: revealed,
   };
   next.lastEvent = `${next.lastEvent ?? ''} ${label}: Scry ${revealed.length}.`.trim();
@@ -86,21 +87,21 @@ function openScry(
 }
 
 /** Apply scry choice: keep order, move first to bottom, or swap top two. */
-export function resolveV6MackeScry(
+export function resolveV6PassiveSkillScry(
   state: GameState,
   playerId: PlayerId,
-  mode: V6MackeScryMode,
+  mode: V6PassiveSkillScryMode,
 ): GameState {
   const pending = state.pendingChoice;
-  if (pending?.type !== 'v6-macke-scry') throw new Error('No V6 Macke scry pending');
-  if (pending.playerId !== playerId) throw new Error('Not Macke scry chooser');
+  if (pending?.type !== 'v6-passive-skill-scry') throw new Error('No V6 Passive-Skill scry pending');
+  if (pending.playerId !== playerId) throw new Error('Not Passive-Skill scry chooser');
 
   const next = cloneState(state);
   next.pendingChoice = null;
   const ids = pending.revealedInstanceIds;
   const deck = next.piles.deck;
   if (ids.length === 0 || deck.length === 0) {
-    next.lastEvent = 'Macke Scry: nichts zu ordnen.';
+    next.lastEvent = 'Passive-Skill Scry: nichts zu ordnen.';
     return next;
   }
 
@@ -110,7 +111,7 @@ export function resolveV6MackeScry(
   const byId = new Map(top.map((c) => [c.instanceId, c]));
   const ordered = ids.map((id) => byId.get(id)).filter((c): c is (typeof top)[number] => Boolean(c));
   if (ordered.length === 0) {
-    next.lastEvent = 'Macke Scry: Karten nicht mehr oben.';
+    next.lastEvent = 'Passive-Skill Scry: Karten nicht mehr oben.';
     return next;
   }
 
@@ -119,7 +120,7 @@ export function resolveV6MackeScry(
     const [first, ...mid] = ordered;
     newTop = [...mid];
     next.piles.deck = [...newTop, ...rest, first];
-    next.lastEvent = 'Macke Scry: oberste Karte unterlegt.';
+    next.lastEvent = 'Passive-Skill Scry: oberste Karte unterlegt.';
     return next;
   }
   if (mode === 'swap' && ordered.length >= 2) {
@@ -127,7 +128,7 @@ export function resolveV6MackeScry(
   }
   next.piles.deck = [...newTop, ...rest];
   next.lastEvent =
-    mode === 'swap' ? 'Macke Scry: oberste zwei getauscht.' : 'Macke Scry: Reihenfolge behalten.';
+    mode === 'swap' ? 'Passive-Skill Scry: oberste zwei getauscht.' : 'Passive-Skill Scry: Reihenfolge behalten.';
   return next;
 }
 
@@ -172,7 +173,7 @@ export function tryV6JetztErstRecht(
   if (hpDamage <= 0) return state;
   if (!canTrigger(state, damagedPlayerId, 'jetzt-erst-recht', ruleset)) return state;
 
-  let next = markMackeUsed(state, damagedPlayerId, 'jetzt-erst-recht');
+  let next = markPassiveSkillUsed(state, damagedPlayerId, 'jetzt-erst-recht');
   const hand = next.players[damagedPlayerId].hand;
   if (hand.length > 0) {
     const card = hand.pop();
@@ -196,7 +197,7 @@ export function tryV6Nachjustiert(
   const comps = listFormulaComponents(state.players[playerId].formula);
   if (comps.length === 0) return state;
 
-  let next = markMackeUsed(state, playerId, 'nachjustiert');
+  let next = markPassiveSkillUsed(state, playerId, 'nachjustiert');
   const first = comps[0];
   const c = next.players[playerId].formula[first.slot];
   if (c) {
@@ -219,7 +220,7 @@ export function tryV6Dosisaenderung(
   if (!canTrigger(state, playerId, 'dosisaenderung', ruleset)) return state;
   if (state.pendingChoice) return state;
 
-  let next = markMackeUsed(state, playerId, 'dosisaenderung');
+  let next = markPassiveSkillUsed(state, playerId, 'dosisaenderung');
   next = drawForPlayer(next, playerId, 1, rng, ruleset, { allowExtra: true });
   if (next.players[playerId].hand.length === 0) {
     next.lastEvent = `${next.lastEvent ?? ''} Dosisänderung: gezogen (nichts abzuwerfen).`.trim();
@@ -286,7 +287,7 @@ export function consumeV6FalscheFarbeIfArmed(
     return next;
   }
   if (!state.meta.v6FalscheFarbeArmed?.[playerId]) return state;
-  let next = markMackeUsed(state, playerId, 'falsche-farbe');
+  let next = markPassiveSkillUsed(state, playerId, 'falsche-farbe');
   next.meta.v6FalscheFarbeArmed = {
     p1: next.meta.v6FalscheFarbeArmed?.p1 ?? false,
     p2: next.meta.v6FalscheFarbeArmed?.p2 ?? false,

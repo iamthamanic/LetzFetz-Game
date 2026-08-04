@@ -14,7 +14,7 @@ describe('V6_PLAY_RULE_SECTIONS', () => {
     expect(blob).toMatch(/Echo/);
     expect(blob).toMatch(/Konstrukt/);
     expect(blob).toMatch(/Affinität/);
-    expect(blob).toMatch(/feste Macke/i);
+    expect(blob).toMatch(/fester Passive-Skill/i);
     expect(blob).toMatch(/keine charaktergebundenen Großformeln/i);
     expect(blob).toMatch(/Überformel/);
     expect(blob).toMatch(/\+2 Primär/);

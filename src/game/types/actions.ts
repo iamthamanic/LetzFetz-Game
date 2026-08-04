@@ -117,8 +117,8 @@ export type GameAction =
       slot: import('./cards').FormulaSlot;
     }
   | {
-      /** V6 Macke Scry: keep order, put first under, or swap top two. */
-      type: 'PICK_V6_MACKE_SCRY';
+      /** V6 Passive-Skill Scry: keep order, put first under, or swap top two. */
+      type: 'PICK_V6_PASSIVE_SKILL_SCRY';
       mode: 'keep' | 'bottom' | 'swap';
     };
 

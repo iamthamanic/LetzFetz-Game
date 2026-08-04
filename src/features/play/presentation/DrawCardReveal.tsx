@@ -5,11 +5,11 @@
  */
 import React, { useEffect, useRef, useState } from 'react';
 import type { ContentPack, PlayerId } from '../../../game/types';
-import { findElementDef, findGlitchDef } from '../../../game';
 import { BoardCard } from '../board/BoardCard';
 import { prefersReducedMotion } from './prefersReducedMotion';
 import type { PresentationStep } from './types';
 import { DRAW_CARD_FLY_MS, DRAW_CARD_REVEAL_MS, isDrawCardStep } from './buildDrawCardStep';
+import { resolveHandCardDefs } from '../board/resolveHandCardDefs';
 
 interface DrawCardRevealProps {
   activeStep: PresentationStep | null;
@@ -104,8 +104,7 @@ export function DrawCardReveal({ activeStep, pack, humanPlayerId }: DrawCardReve
 
   if (!isActive || !cardDefId) return null;
 
-  const def = findElementDef(pack, cardDefId);
-  const glitch = def ? null : findGlitchDef(pack, cardDefId);
+  const resolved = resolveHandCardDefs(pack, cardDefId);
 
   return (
     <div
@@ -139,10 +138,12 @@ export function DrawCardReveal({ activeStep, pack, humanPlayerId }: DrawCardReve
           Gezogen
         </p>
         <BoardCard
-          def={def ?? undefined}
-          glitchDef={glitch}
+          def={resolved.elementDef ?? undefined}
+          glitchDef={resolved.glitchDef}
+          itemDef={resolved.itemDef}
+          formulaDef={resolved.formulaDef}
           defId={cardDefId}
-          name={glitch?.name}
+          name={resolved.displayName ?? undefined}
           size="showcase"
           showEffectTooltip={false}
         />

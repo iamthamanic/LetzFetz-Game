@@ -91,7 +91,7 @@ export function CharacterDetailPanel({
               <CharacterElementsRow character={character} />
             </DetailRow>
             <DetailRow label="Rolle">{character.role}</DetailRow>
-            <DetailRow label={character.mackeName ? 'Macke' : 'Passiv'}>
+            <DetailRow label={character.passiveSkillName ? 'Passive-Skill' : 'Passiv'}>
               <EffectTextWithMarks text={character.passiveText} />
             </DetailRow>
             <DetailRow label="Strategie">{character.strategyHint}</DetailRow>
