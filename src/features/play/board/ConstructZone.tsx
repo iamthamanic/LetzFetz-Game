@@ -2,7 +2,8 @@
  * V6 Konstrukt zone on the playmat — empty or occupied face (max 1).
  * Location: src/features/play/board/ConstructZone.tsx
  *
- * Public board info. Challenge Ziel button when legal. Haltbarkeit always shown.
+ * Public board info. Sits right of Ausrüstung in the Formelgestell row.
+ * Challenge Ziel button when legal. Haltbarkeit always shown.
  */
 import React from 'react';
 import { Ghost } from 'lucide-react';
