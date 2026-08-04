@@ -48,11 +48,24 @@ describe('formula component art files', () => {
 
   it('resolves V5/V6 katalysator ids to root formula white-line-art PNGs', () => {
     expect(resolveCardArtPath('v5-katalysator-spiegelung')).toBe('/cards/formula/spiegelung.png');
+    expect(resolveCardArtPath('v5-katalysator-ueberspannung')).toBe(
+      '/cards/formula/ueberspannung.png',
+    );
+    expect(resolveCardArtPath('v6-katalysator-ueberladung')).toBe(
+      '/cards/formula/ueberspannung.png',
+    );
     expect(resolveCardArtPath('v6-katalysator-verdichtung')).toBe('/cards/formula/verdichtung.png');
     expect(resolveCardArtPath('v6-katalysator-ausbreitung')).toBe('/cards/formula/ausbreitung.png');
     expect(publicPngExists('/cards/formula/spiegelung.png')).toBe(true);
+    expect(publicPngExists('/cards/formula/ueberspannung.png')).toBe(true);
     expect(publicPngExists('/cards/formula/verdichtung.png')).toBe(true);
     expect(publicPngExists('/cards/formula/ausbreitung.png')).toBe(true);
+  });
+
+  it('does not ship leftover full-color catalyst orphans', () => {
+    expect(publicPngExists('/cards/formula/ueberladung.png')).toBe(false);
+    expect(publicPngExists('/cards/formula/doppelecho.png')).toBe(false);
+    expect(publicPngExists('/cards/formula/sicherheitsventil.png')).toBe(false);
   });
 
   it('does not ship z-image katalysator alternate arts', () => {
@@ -63,5 +76,21 @@ describe('formula component art files', () => {
     const path = resolveFormulaCardArtPath(V6_PLAYTEST_BESCHWOERUNG_CATALYST_ID);
     expect(path).toBe('/cards/formula/opfergabe.png');
     expect(publicPngExists(path)).toBe(true);
+  });
+
+  it('maps every V6 catalog catalyst slot to a shipped formula PNG', () => {
+    const recipesWithCatalyst = V6_GENERATED_FORMULA_RECIPES.filter((r) => r.catalystId);
+    expect(recipesWithCatalyst.length).toBeGreaterThan(0);
+    for (const recipe of recipesWithCatalyst) {
+      const path = resolveFormulaCardArtPath(recipe.catalystId!);
+      expect(path, `${recipe.recipeId} catalyst ${recipe.catalystId}`).toMatch(
+        /^\/cards\/formula\/[a-z0-9-]+\.png$/,
+      );
+      expect(publicPngExists(path), `${recipe.catalystId} → ${path}`).toBe(true);
+      expect(path).not.toContain('z-image');
+      expect(path).not.toBe('/cards/formula/ueberladung.png');
+      expect(path).not.toBe('/cards/formula/doppelecho.png');
+      expect(path).not.toBe('/cards/formula/sicherheitsventil.png');
+    }
   });
 });

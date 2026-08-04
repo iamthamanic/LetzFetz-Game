@@ -44,6 +44,20 @@ describe('v6FormulaRecipesToForgeCards', () => {
     expect(card.image_asset).toBe(technikArt);
   });
 
+  it('maps Überladung catalyst slot to white ueberspannung art', () => {
+    const recipe = V6_GENERATED_FORMULA_RECIPES.find(
+      (r) => r.recipeId === 'v6-tk-impulsgeschoss-ueberladung',
+    );
+    expect(recipe).toBeDefined();
+    if (!recipe) return;
+
+    const card = v6GeneratedRecipeToForgeCard(recipe);
+    const technikArt = resolveFormulaCardArtPath('v6-technik-impulsgeschoss');
+    const catalystArt = resolveFormulaCardArtPath('v6-katalysator-ueberladung');
+    expect(catalystArt).toBe('/cards/formula/ueberspannung.png');
+    expect(card.component_images).toEqual([technikArt, catalystArt]);
+  });
+
   it('builds stable slot keys for dedup', () => {
     expect(formulaSlotKey('t', 'e', null)).toBe('t|e|');
     expect(formulaSlotKey(null, 'e', 'k')).toBe('|e|k');

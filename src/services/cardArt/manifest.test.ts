@@ -66,7 +66,9 @@ describe('card art manifest', () => {
     expect(resolveCardArtPath('v6-katalysator-verdichtung')).toBe(
       '/cards/formula/verdichtung.png',
     );
-    expect(resolveCardArtPath('v6-katalysator-ueberladung')).toBe('/cards/formula/ueberladung.png');
+    expect(resolveCardArtPath('v6-katalysator-ueberladung')).toBe(
+      '/cards/formula/ueberspannung.png',
+    );
     expect(resolveCardArtPath('v6-katalysator-beschwoerung')).toBe('/cards/formula/opfergabe.png');
     expect(resolveCardArtPath('v6-technik-beschwoerungsritual')).toBe(
       '/cards/formula/opfergabe.png',
