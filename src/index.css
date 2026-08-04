@@ -1230,6 +1230,42 @@ html[data-lf-reduced-motion='1'] *::after {
   background: transparent;
 }
 
+@keyframes hand-scroll-hint-nudge-right {
+  0%,
+  100% {
+    transform: translateX(0);
+    opacity: 0.55;
+  }
+  50% {
+    transform: translateX(3px);
+    opacity: 1;
+  }
+}
+
+@keyframes hand-scroll-hint-nudge-left {
+  0%,
+  100% {
+    transform: translateX(0);
+    opacity: 0.55;
+  }
+  50% {
+    transform: translateX(-3px);
+    opacity: 1;
+  }
+}
+
+.hand-scroll-hint-arrow {
+  filter: drop-shadow(0 1px 2px rgb(0 0 0 / 0.85));
+}
+
+.hand-scroll-hint-arrow--right {
+  animation: hand-scroll-hint-nudge-right 1.25s ease-in-out infinite;
+}
+
+.hand-scroll-hint-arrow--left {
+  animation: hand-scroll-hint-nudge-left 1.25s ease-in-out infinite;
+}
+
 @media (prefers-reduced-motion: reduce) {
   .draw-card-reveal--hold,
   .draw-card-reveal--fly-hand,
@@ -1237,6 +1273,12 @@ html[data-lf-reduced-motion='1'] *::after {
   .opening-deal-fly-card--fly,
   .hand-deal-enter {
     animation: none;
+  }
+
+  .hand-scroll-hint-arrow--right,
+  .hand-scroll-hint-arrow--left {
+    animation: none;
+    opacity: 0.85;
   }
 
   .hand-draw-slot {
