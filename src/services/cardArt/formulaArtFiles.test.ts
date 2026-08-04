@@ -1,8 +1,11 @@
 /**
  * V6/V5 formula component PNGs on disk for Material Kombination strips.
  * Location: src/services/cardArt/formulaArtFiles.test.ts
+ *
+ * Default Material/Play catalyst art is white line-art under /cards/formula/*.png
+ * (restored after PR #373 briefly replaced some with full-color z-image sources).
  */
-import { existsSync, readFileSync } from 'node:fs';
+import { existsSync } from 'node:fs';
 import { resolve } from 'node:path';
 import { describe, expect, it } from 'vitest';
 import { V6_GENERATED_FORMULA_RECIPES } from '../../generated/v6/formulaRecipes.generated';
@@ -14,23 +17,6 @@ function publicPngExists(publicPath: string): boolean {
   const relative = publicPath.replace(/^\//, '');
   return existsSync(resolve(process.cwd(), 'public', relative));
 }
-
-function publicFile(relativeUnderPublic: string): string {
-  return resolve(process.cwd(), 'public', relativeUnderPublic);
-}
-
-/** Catalyst slugs with full-color arts under z-image/katalysator/ (not white-bg line art). */
-const Z_IMAGE_CATALYST_SLUGS = [
-  'ausbreitung',
-  'echo',
-  'kettenkopplung',
-  'opfergabe',
-  'sofortzuender',
-  'spiegelung',
-  'umkehrung',
-  'verdichtung',
-  'verzoegerung',
-] as const;
 
 describe('formula component art files', () => {
   it('ships PNGs for every V6 catalog recipe component (T/E/K)', () => {
@@ -60,14 +46,17 @@ describe('formula component art files', () => {
     }
   });
 
-  it('keeps Material catalyst PNGs in sync with z-image full-color sources', () => {
-    for (const slug of Z_IMAGE_CATALYST_SLUGS) {
-      const root = publicFile(`cards/formula/${slug}.png`);
-      const source = publicFile(`cards/formula/z-image/katalysator/${slug}.png`);
-      expect(existsSync(root), root).toBe(true);
-      expect(existsSync(source), source).toBe(true);
-      expect(readFileSync(root).equals(readFileSync(source)), slug).toBe(true);
-    }
+  it('resolves V5/V6 katalysator ids to root formula white-line-art PNGs', () => {
+    expect(resolveCardArtPath('v5-katalysator-spiegelung')).toBe('/cards/formula/spiegelung.png');
+    expect(resolveCardArtPath('v6-katalysator-verdichtung')).toBe('/cards/formula/verdichtung.png');
+    expect(resolveCardArtPath('v6-katalysator-ausbreitung')).toBe('/cards/formula/ausbreitung.png');
+    expect(publicPngExists('/cards/formula/spiegelung.png')).toBe(true);
+    expect(publicPngExists('/cards/formula/verdichtung.png')).toBe(true);
+    expect(publicPngExists('/cards/formula/ausbreitung.png')).toBe(true);
+  });
+
+  it('does not ship z-image katalysator alternate arts', () => {
+    expect(existsSync(resolve(process.cwd(), 'public/cards/formula/z-image'))).toBe(false);
   });
 
   it('resolves playtest Beschwörung via art alias to an existing PNG', () => {
